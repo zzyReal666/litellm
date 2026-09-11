@@ -147,3 +147,8 @@ crash.*.log
 
 ui/litellm-dashboard/out/
 litellm.log
+
+# Local working directories: agent team state, build artifacts, git worktrees
+.agent-teams/
+.build-logs/
+.worktrees/
