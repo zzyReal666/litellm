@@ -152,3 +152,5 @@ litellm.log
 .agent-teams/
 .build-logs/
 .worktrees/
+
+.doc-work/
