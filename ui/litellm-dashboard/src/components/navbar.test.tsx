@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { renderWithProviders, screen, waitFor } from "../../tests/test-utils";
+import { renderWithI18n, screen, waitFor } from "../../tests/test-utils";
 import Navbar from "./navbar";
 
 // Mock the hooks and utilities
@@ -143,22 +143,22 @@ describe("Navbar", () => {
     isPublicPage: false,
   };
 
-  it("should render without crashing", () => {
-    renderWithProviders(<Navbar {...defaultProps} />);
+  it("should render without crashing", async () => {
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     expect(screen.getByRole("button", { name: /^notifications$/i })).toBeInTheDocument();
     expect(screen.getByText("Docs")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /open account menu/i })).toBeInTheDocument();
   });
 
-  it("should link the logo to the UI home route rather than the proxy origin", () => {
-    renderWithProviders(<Navbar {...defaultProps} />);
+  it("should link the logo to the UI home route rather than the proxy origin", async () => {
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     expect(screen.getByRole("link", { name: /litellm brand/i })).toHaveAttribute("href", "/ui");
   });
 
-  it("pairs the logo with a dark-mode variant that swaps on the dark class", () => {
-    renderWithProviders(<Navbar {...defaultProps} />);
+  it("pairs the logo with a dark-mode variant that swaps on the dark class", async () => {
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     const [light, dark] = Array.from(screen.getByRole("link", { name: /litellm brand/i }).querySelectorAll("img"));
     const classesOf = (el: Element) => new Set(el.className.split(/\s+/));
@@ -174,7 +174,7 @@ describe("Navbar", () => {
 
   it("should display user information in dropdown", async () => {
     const user = userEvent.setup();
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     await user.click(screen.getByRole("button", { name: /open account menu/i }));
 
@@ -185,9 +185,9 @@ describe("Navbar", () => {
     expect(screen.getByText("test@example.com")).toBeInTheDocument();
   });
 
-  it("should show sidebar toggle button when onToggleSidebar is provided", () => {
+  it("should show sidebar toggle button when onToggleSidebar is provided", async () => {
     const mockToggle = vi.fn();
-    renderWithProviders(<Navbar {...defaultProps} onToggleSidebar={mockToggle} />);
+    await renderWithI18n(<Navbar {...defaultProps} onToggleSidebar={mockToggle} />);
 
     const toggleButton = screen.getByTitle("Collapse sidebar");
     expect(toggleButton).toBeInTheDocument();
@@ -196,7 +196,7 @@ describe("Navbar", () => {
   it("should call onToggleSidebar when sidebar button is clicked", async () => {
     const mockToggle = vi.fn();
     const user = userEvent.setup();
-    renderWithProviders(<Navbar {...defaultProps} onToggleSidebar={mockToggle} />);
+    await renderWithI18n(<Navbar {...defaultProps} onToggleSidebar={mockToggle} />);
 
     const toggleButton = screen.getByTitle("Collapse sidebar");
     await user.click(toggleButton);
@@ -213,7 +213,7 @@ describe("Navbar", () => {
       userRole: "Admin",
       premiumUser: true,
     });
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     await user.click(screen.getByRole("button", { name: /open account menu/i }));
 
@@ -225,10 +225,10 @@ describe("Navbar", () => {
     mockUserDropdownData.current = originalCurrent;
   });
 
-  it("should show version badge when health data contains version", () => {
+  it("should show version badge when health data contains version", async () => {
     mockUseHealthReadinessDetailsImpl = () => ({ data: { litellm_version: "1.0.0" } });
 
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     expect(screen.getByText("v1.0.0")).toBeInTheDocument();
 
@@ -236,26 +236,26 @@ describe("Navbar", () => {
     mockUseHealthReadinessDetailsImpl = () => ({ data: null });
   });
 
-  it("should forward accessToken to the readiness hook", () => {
+  it("should forward accessToken to the readiness hook", async () => {
     useHealthReadinessDetailsSpy.mockClear();
 
-    renderWithProviders(<Navbar {...defaultProps} accessToken="my-token" />);
+    await renderWithI18n(<Navbar {...defaultProps} accessToken="my-token" />);
 
     expect(useHealthReadinessDetailsSpy).toHaveBeenCalledWith("my-token");
   });
 
-  it("should forward a null accessToken to the readiness hook (disables the hook)", () => {
+  it("should forward a null accessToken to the readiness hook (disables the hook)", async () => {
     useHealthReadinessDetailsSpy.mockClear();
 
-    renderWithProviders(<Navbar {...defaultProps} accessToken={null} />);
+    await renderWithI18n(<Navbar {...defaultProps} accessToken={null} />);
 
     expect(useHealthReadinessDetailsSpy).toHaveBeenCalledWith(null);
   });
 
-  it("should use custom logo from theme context", () => {
+  it("should use custom logo from theme context", async () => {
     mockUseThemeImpl = () => ({ logoUrl: "https://example.com/custom-logo.png" });
 
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     const logoImg = screen.getByAltText("LiteLLM Brand");
     expect(logoImg).toHaveAttribute("src", "https://example.com/custom-logo.png");
@@ -264,9 +264,9 @@ describe("Navbar", () => {
     mockUseThemeImpl = () => ({ logoUrl: null });
   });
 
-  it("should hide user dropdown and notifications on public pages", () => {
+  it("should hide user dropdown and notifications on public pages", async () => {
     const publicPageProps = { ...defaultProps, isPublicPage: true };
-    renderWithProviders(<Navbar {...publicPageProps} />);
+    await renderWithI18n(<Navbar {...publicPageProps} />);
 
     expect(screen.queryByRole("button", { name: /open account menu/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^notifications$/i })).not.toBeInTheDocument();
@@ -281,7 +281,7 @@ describe("Navbar", () => {
       return null;
     };
 
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     await user.click(screen.getByRole("button", { name: /open account menu/i }));
 
@@ -306,7 +306,7 @@ describe("Navbar", () => {
   it("should handle logout functionality", async () => {
     const user = userEvent.setup();
 
-    renderWithProviders(<Navbar {...defaultProps} />);
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     await user.click(screen.getByRole("button", { name: /open account menu/i }));
 
@@ -324,10 +324,22 @@ describe("Navbar", () => {
     });
   });
 
-  it("should not render dark mode toggle slider", () => {
-    renderWithProviders(<Navbar {...defaultProps} />);
+  it("should not render dark mode toggle slider", async () => {
+    await renderWithI18n(<Navbar {...defaultProps} />);
 
     // DO NOT RENDER THIS UNTIL ALL COMPONENTS ARE CONFIRMED TO SUPPORT DARK MODE STYLES. IT IS AN ISSUE IF THIS TEST FAILS.
     expect(screen.queryByTestId("dark-mode-toggle")).not.toBeInTheDocument();
+  });
+
+  it("should switch the interface language from the navbar entry", async () => {
+    const user = userEvent.setup();
+    await renderWithI18n(<Navbar {...defaultProps} />);
+
+    expect(screen.getByRole("group", { name: "Language" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "简体中文" }));
+
+    expect(await screen.findByRole("group", { name: "语言" })).toBeInTheDocument();
+    expect(localStorage.getItem("litellm.locale")).toBe("zh-CN");
   });
 });

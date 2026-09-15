@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter, OnUrlUpdateFunction } from "nuqs/adapters/testing";
 import { expect } from "vitest";
 
+import { getI18n, I18nProvider, type Locale } from "@/i18n";
+import { LOCALE_STORAGE_KEY } from "@/i18n/localePreferences";
+
 // Create a client for testing
 export const testQueryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +38,28 @@ export const renderWithProviders = (ui: React.ReactElement, options?: RenderOpti
     </NuqsTestingAdapter>
   );
   return render(ui, { wrapper: Providers, ...renderOptions });
+};
+
+interface I18nRenderOptions extends ProviderOptions {
+  locale?: Locale;
+}
+
+/**
+ * Render inside the real `I18nProvider`, which keeps its subtree unmounted until
+ * the i18next instance is ready and only then syncs `<html lang>`. Clearing that
+ * attribute first makes the sync a strict "subtree is rendered" signal, so callers
+ * can query synchronously after awaiting this helper.
+ */
+export const renderWithI18n = async (ui: React.ReactElement, options?: RenderOptions & I18nRenderOptions) => {
+  const { locale = "en", ...renderOptions } = options ?? {};
+  localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  const instance = await getI18n();
+  await instance.changeLanguage(locale);
+
+  document.documentElement.lang = "";
+  const result = renderWithProviders(<I18nProvider>{ui}</I18nProvider>, renderOptions);
+  await waitFor(() => expect(document.documentElement.lang).toBe(locale));
+  return result;
 };
 
 const pointerBlocked = (element: HTMLElement): boolean => {
