@@ -13,6 +13,7 @@ import { BlogDropdown } from "@/components/Navbar/BlogDropdown/BlogDropdown";
 import { DocsLink } from "@/components/Navbar/DocsLink/DocsLink";
 import { CommunityEngagementButtons } from "@/components/Navbar/CommunityEngagementButtons/CommunityEngagementButtons";
 import { NotificationsBell } from "@/components/Navbar/NotificationsBell/NotificationsBell";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher/LanguageSwitcher";
 import ViewSwitcher from "@/components/Navbar/ViewSwitcher";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import WorkerDropdown from "@/components/Navbar/WorkerDropdown/WorkerDropdown";
@@ -63,6 +64,7 @@ export function DashboardHeader() {
         <BlogDropdown />
         {!hideCommunityLinks && <CommunityEngagementButtons />}
         <ToolbarSeparator />
+        <LanguageSwitcher />
         <ThemeToggle />
         <NotificationsBell />
       </div>

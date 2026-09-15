@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/react";
 import { DashboardHeader } from "./DashboardHeader";
 import { NAV_PRODUCT_LINK_CLASS } from "@/components/Navbar/navProductLinkClass";
+import { renderWithI18n } from "../../tests/test-utils";
 
 const { mockUsePluginMode, mockUseUISettings, state } = vi.hoisted(() => {
   const state = {
@@ -35,44 +37,43 @@ describe("DashboardHeader breadcrumb", () => {
     state.pathname = "/ui/logs";
   });
 
-  it("titles the breadcrumb from the current route, not from a sidebar page id", () => {
+  it("titles the breadcrumb from the current route, not from a sidebar page id", async () => {
     state.pathname = "/ui/models-and-endpoints";
-    render(<DashboardHeader />);
+    await renderWithI18n(<DashboardHeader />);
 
     expect(screen.getByText("Models + Endpoints")).toBeInTheDocument();
   });
 
-  it("titles the dashboard root as Virtual Keys", () => {
+  it("titles the dashboard root as Virtual Keys", async () => {
     state.pathname = "/ui/";
-    render(<DashboardHeader />);
+    await renderWithI18n(<DashboardHeader />);
 
     expect(screen.getByText("Virtual Keys")).toBeInTheDocument();
   });
 
   it("roots the breadcrumb in the AI Gateway selector (with a Chat option) and drops the static section crumb when the selector is available", async () => {
     state.enableChatUI = true;
-    render(<DashboardHeader />);
+    await renderWithI18n(<DashboardHeader />);
 
     expect(screen.getByText("Logs")).toBeInTheDocument();
     expect(screen.queryByText("Observability")).not.toBeInTheDocument();
 
-    const selector = screen.getByRole("button", { name: /AI Gateway/i });
-    act(() => {
-      fireEvent.click(selector);
-    });
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: /AI Gateway/i }));
+
     expect(await screen.findByText("Chat")).toBeInTheDocument();
   });
 
-  it("keeps the AI Gateway selector at the root even when there is nothing to switch to (discovery)", () => {
-    render(<DashboardHeader />);
+  it("keeps the AI Gateway selector at the root even when there is nothing to switch to (discovery)", async () => {
+    await renderWithI18n(<DashboardHeader />);
 
     expect(screen.getByRole("button", { name: /AI Gateway/i })).toBeInTheDocument();
     expect(screen.getByText("Logs")).toBeInTheDocument();
     expect(screen.queryByText("Observability")).not.toBeInTheDocument();
   });
 
-  it("styles Docs with the shared product-link class instead of a muted toolbar button", () => {
-    render(<DashboardHeader />);
+  it("styles Docs with the shared product-link class instead of a muted toolbar button", async () => {
+    await renderWithI18n(<DashboardHeader />);
 
     const docs = screen.getByRole("link", { name: "Docs" });
     for (const cls of NAV_PRODUCT_LINK_CLASS.trim().split(/\s+/)) {
@@ -81,12 +82,24 @@ describe("DashboardHeader breadcrumb", () => {
     expect(docs).not.toHaveClass("text-muted-foreground");
   });
 
-  it("renders the tools divider centered rather than stretched to the top of the row", () => {
-    const { container } = render(<DashboardHeader />);
+  it("renders the tools divider centered rather than stretched to the top of the row", async () => {
+    const { container } = await renderWithI18n(<DashboardHeader />);
 
     const separators = container.querySelectorAll('[data-slot="separator"][data-orientation="vertical"]');
     expect(separators).toHaveLength(1);
     expect(separators[0].className).not.toMatch(/self-stretch/);
     expect(separators[0].className).toContain("data-vertical:self-center");
+  });
+
+  it("switches the interface language from the header entry", async () => {
+    const user = userEvent.setup();
+    await renderWithI18n(<DashboardHeader />);
+
+    expect(screen.getByRole("group", { name: "Language" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "简体中文" }));
+
+    expect(await screen.findByRole("group", { name: "语言" })).toBeInTheDocument();
+    expect(localStorage.getItem("litellm.locale")).toBe("zh-CN");
   });
 });
