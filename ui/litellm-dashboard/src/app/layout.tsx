@@ -6,6 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "next-themes";
 
 import { AuthProvider } from "@/contexts/AuthContext";
+import { I18nInit } from "@/contexts/I18nInit";
 import ReactQueryProvider from "@/contexts/ReactQueryProvider";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -30,7 +31,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <NuqsAdapter>
             <ReactQueryProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <I18nInit>
+                <AuthProvider>{children}</AuthProvider>
+              </I18nInit>
               <Toaster />
             </ReactQueryProvider>
           </NuqsAdapter>

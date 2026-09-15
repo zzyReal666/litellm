@@ -1,5 +1,6 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { renderWithProviders } from "../../tests/test-utils";
 import Sidebar, { menuGroups, getBreadcrumb } from "./leftnav";
 
@@ -113,6 +114,28 @@ describe("Sidebar (leftnav)", () => {
     mockUseOrganizations.mockReset();
     mockUseThemeImpl = unbrandedTheme;
     navState.pathname = "/ui/api-keys";
+  });
+
+  describe("localisation", () => {
+    afterEach(async () => {
+      await i18n.changeLanguage("en");
+    });
+
+    it("renders the navigation in the active language", async () => {
+      await i18n.changeLanguage("zh-CN");
+      renderWithProviders(<Sidebar {...defaultProps} />);
+
+      expect(await screen.findByText("虚拟密钥")).toBeInTheDocument();
+      expect(screen.getByText("AI 网关")).toBeInTheDocument();
+      expect(screen.queryByText("Virtual Keys")).not.toBeInTheDocument();
+    });
+
+    it("keeps the English labels when English is active", () => {
+      renderWithProviders(<Sidebar {...defaultProps} />);
+
+      expect(screen.getByText("Virtual Keys")).toBeInTheDocument();
+      expect(screen.getByText("AI GATEWAY")).toBeInTheDocument();
+    });
   });
 
   it("should link the logo to the UI home route rather than the proxy origin", () => {
@@ -621,5 +644,20 @@ describe("getBreadcrumb", () => {
 
   it("falls back to a prettified title with no section for unknown routes", () => {
     expect(getBreadcrumb("/ui/some-unknown-page")).toEqual({ section: null, title: "Some Unknown Page" });
+  });
+
+  it("translates the section and the title with the active translator", () => {
+    expect(getBreadcrumb("/ui/api-keys", i18n.getFixedT("zh-CN"))).toEqual({ section: "AI 网关", title: "虚拟密钥" });
+    expect(getBreadcrumb("/ui/router-settings", i18n.getFixedT("zh-CN"))).toEqual({
+      section: "设置",
+      title: "路由设置",
+    });
+  });
+
+  it("keeps the pretty English fallback for routes the catalog does not know", () => {
+    expect(getBreadcrumb("/ui/some-unknown-page", i18n.getFixedT("zh-CN"))).toEqual({
+      section: null,
+      title: "Some Unknown Page",
+    });
   });
 });

@@ -89,4 +89,10 @@ describe("DashboardHeader breadcrumb", () => {
     expect(separators[0].className).not.toMatch(/self-stretch/);
     expect(separators[0].className).toContain("data-vertical:self-center");
   });
+
+  it("offers the language switcher in the header", () => {
+    render(<DashboardHeader />);
+
+    expect(screen.getByRole("button", { name: "Language" })).toBeInTheDocument();
+  });
 });
