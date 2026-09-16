@@ -48,6 +48,12 @@
     "uiTheme": "UI Theme"
   },
   "navbar": {
+    "aiGateway": "AI Gateway",
+    "modeChat": "Chat",
+    "adminsCanEnableInSettings": "Admins can enable in Settings",
+    "liteLLMHome": "LiteLLM home",
+    "noMatchingWorkers": "No matching workers",
+    "blogLoading": "loading",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
     "docs": "Docs",
@@ -63,6 +69,9 @@
     "githubRepo": "LiteLLM on GitHub",
     "language": "Language",
     "notificationsBell": {
+      "autoRouterTitle": "LiteLLM Auto Router",
+      "autoRouterDescription": "Route every request to the cheapest model that can handle it, no prompt changes needed.",
+      "readTheDocs": "Read the docs",
       "notifications": "Notifications",
       "agentPlatformDesc": "Open-source agent infra — sandboxes, durable sessions, and workers on AWS Fargate.",
       "markAsRead": "Mark as read"
@@ -71,6 +80,13 @@
     "productDocsAriaLabel": "Product documentation"
   },
   "user": {
+    "tier": "Tier",
+    "copyEmail": "Copy email",
+    "copyUserId": "Copy user ID",
+    "changePassword": "Change Password",
+    "unknownRole": "Unknown role",
+    "unknownIdentity": "unknown",
+    "accountMenuLabel": "Account menu — {{role}} — signed in as {{identity}}",
     "logout": "Logout",
     "premium": "Premium",
     "standard": "Standard",

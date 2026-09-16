@@ -48,6 +48,12 @@
     "uiTheme": "界面主题"
   },
   "navbar": {
+    "aiGateway": "AI 网关",
+    "modeChat": "对话",
+    "adminsCanEnableInSettings": "管理员可在设置中启用",
+    "liteLLMHome": "LiteLLM 首页",
+    "noMatchingWorkers": "没有匹配的 Worker",
+    "blogLoading": "加载中",
     "expandSidebar": "展开侧边栏",
     "collapseSidebar": "收起侧边栏",
     "docs": "文档",
@@ -63,6 +69,9 @@
     "githubRepo": "LiteLLM 的 GitHub 仓库",
     "language": "语言",
     "notificationsBell": {
+      "autoRouterTitle": "LiteLLM 自动路由",
+      "autoRouterDescription": "把每个请求都路由到能处理它的最便宜模型，无需修改提示词。",
+      "readTheDocs": "阅读文档",
       "notifications": "通知",
       "agentPlatformDesc": "开源 Agent 基础设施 — 沙箱、持久会话以及运行在 AWS Fargate 上的 worker。",
       "markAsRead": "标记为已读"
@@ -71,6 +80,13 @@
     "productDocsAriaLabel": "产品文档"
   },
   "user": {
+    "tier": "套餐",
+    "copyEmail": "复制邮箱",
+    "copyUserId": "复制用户 ID",
+    "changePassword": "修改密码",
+    "unknownRole": "未知角色",
+    "unknownIdentity": "未知",
+    "accountMenuLabel": "账号菜单 — {{role}} — 已登录为 {{identity}}",
     "logout": "退出登录",
     "premium": "高级版",
     "standard": "标准版",

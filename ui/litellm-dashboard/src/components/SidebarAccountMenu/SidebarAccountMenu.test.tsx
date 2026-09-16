@@ -1,5 +1,7 @@
+import { cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders, screen, waitFor } from "../../../tests/test-utils";
 import SidebarAccountMenu from "./SidebarAccountMenu";
 
@@ -339,5 +341,39 @@ describe("SidebarAccountMenu", () => {
     await openMenu(user);
 
     expect(screen.getByText("-")).toBeInTheDocument();
+  });
+});
+
+describe("SidebarAccountMenu localisation", () => {
+  const mockOnLogout = vi.fn();
+
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("labels the account menu, tier, role and actions in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    mockUseAuthorizedImpl = () => ({
+      userId: "test-user-id",
+      userEmail: "test@example.com",
+      userRoleLabel: "Admin",
+      premiumUser: false,
+      accessToken: "test-token",
+      loginMethod: "username_password",
+    });
+    const user = userEvent.setup();
+    renderWithProviders(<SidebarAccountMenu onLogout={mockOnLogout} />);
+
+    await user.click(screen.getByRole("button", { name: /账号菜单/ }));
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-account-menu-panel")).toBeInTheDocument();
+    });
+
+    expect(screen.getByText("套餐")).toBeInTheDocument();
+    expect(screen.getByText("角色")).toBeInTheDocument();
+    expect(screen.getByText("标准版")).toBeInTheDocument();
+    expect(screen.getByText("修改密码")).toBeInTheDocument();
+    expect(screen.getByText("退出登录")).toBeInTheDocument();
   });
 });
