@@ -1784,6 +1784,9 @@
     "local/filename-pascal-case": {
       "count": 1
     },
+    "max-lines": {
+      "count": 1
+    },
     "prefer-const": {
       "count": 5
     },

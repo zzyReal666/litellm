@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
@@ -40,16 +41,22 @@ type ModelTabSlug =
 
 const BASE_TAB_KEY = "all-models";
 
-const TAB_LABELS: Record<ModelTabSlug, string> = {
-  add: "Add Model",
-  "auto-routers": "Auto-Routers",
-  "llm-credentials": "LLM Credentials",
-  "pass-through": "Pass-Through Endpoints",
-  health: "Health Status",
-  "retry-settings": "Model Retry Settings",
-  "model-group-alias": "Model Group Alias",
-  "access-group-budgets": "Model Access Group Budgets",
-  "price-data": "Price Data Reload",
+const TAB_LABEL_KEYS: Record<ModelTabSlug, { key: string; defaultValue: string }> = {
+  add: { key: "pages.modelsAndEndpoints.tabAddModel", defaultValue: "Add Model" },
+  "auto-routers": { key: "pages.modelsAndEndpoints.tabAutoRouters", defaultValue: "Auto-Routers" },
+  "llm-credentials": { key: "pages.modelsAndEndpoints.tabLLMCredentials", defaultValue: "LLM Credentials" },
+  "pass-through": { key: "pages.modelsAndEndpoints.tabPassThrough", defaultValue: "Pass-Through Endpoints" },
+  health: { key: "pages.modelsAndEndpoints.tabHealthStatus", defaultValue: "Health Status" },
+  "retry-settings": {
+    key: "pages.modelsAndEndpoints.tabModelRetrySettings",
+    defaultValue: "Model Retry Settings",
+  },
+  "model-group-alias": { key: "pages.modelsAndEndpoints.tabModelGroupAlias", defaultValue: "Model Group Alias" },
+  "access-group-budgets": {
+    key: "pages.modelsAndEndpoints.tabModelAccessGroupBudgets",
+    defaultValue: "Model Access Group Budgets",
+  },
+  "price-data": { key: "pages.modelsAndEndpoints.tabPriceDataReload", defaultValue: "Price Data Reload" },
 };
 
 const renderPanel = (key: string) => {
@@ -80,6 +87,7 @@ const renderPanel = (key: string) => {
 };
 
 export default function ModelsAndEndpointsPage() {
+  const { t } = useTranslation();
   const { accessToken, userRole, userId: userID, premiumUser, isViewOnly } = useAuthorized();
   const { data: teams } = useTeams();
   const { data: uiSettings } = useUISettings();
@@ -118,17 +126,20 @@ export default function ModelsAndEndpointsPage() {
     [canCreate, isAdmin, isViewOnly],
   );
 
-  const allModelsLabel = isAdmin ? "All Models" : "Your Models";
+  const allModelsLabel = isAdmin
+    ? t("pages.modelsAndEndpoints.tabAllModels", { defaultValue: "All Models" })
+    : t("pages.modelsAndEndpoints.tabYourModels", { defaultValue: "Your Models" });
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
     if (!slug) return allModelsLabel;
+    const label = t(TAB_LABEL_KEYS[slug].key, { defaultValue: TAB_LABEL_KEYS[slug].defaultValue });
     if (slug === "auto-routers" || slug === "access-group-budgets") {
       return (
         <span className="flex items-center gap-2">
-          {TAB_LABELS[slug]} <BetaBadge />
+          {label} <BetaBadge />
         </span>
       );
     }
-    return TAB_LABELS[slug];
+    return label;
   };
 
   const handleRefreshClick = () => {
@@ -161,11 +172,21 @@ export default function ModelsAndEndpointsPage() {
       <div className="mt-2 flex w-full flex-col gap-2 p-8">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Model Management</h2>
+            <h2 className="text-lg font-semibold">
+              {t("pages.modelsAndEndpoints.modelManagement", { defaultValue: "Model Management" })}
+            </h2>
             {isAdmin ? (
-              <p className="text-sm text-muted-foreground">Add and manage models for the proxy</p>
+              <p className="text-sm text-muted-foreground">
+                {t("pages.modelsAndEndpoints.addAndManageModels", {
+                  defaultValue: "Add and manage models for the proxy",
+                })}
+              </p>
             ) : (
-              <p className="text-sm text-muted-foreground">Add models for teams you are an admin for.</p>
+              <p className="text-sm text-muted-foreground">
+                {t("pages.modelsAndEndpoints.addModelsForTeams", {
+                  defaultValue: "Add models for teams you are an admin for.",
+                })}
+              </p>
             )}
           </div>
         </div>
@@ -200,9 +221,19 @@ export default function ModelsAndEndpointsPage() {
               </div>
               <div className="flex shrink-0 items-center gap-2 pb-1">
                 {lastRefreshed && (
-                  <span className="text-xs text-muted-foreground">Last Refreshed: {lastRefreshed}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("pages.modelsAndEndpoints.lastRefreshed", {
+                      time: lastRefreshed,
+                      defaultValue: "Last Refreshed: {{time}}",
+                    })}
+                  </span>
                 )}
-                <Button variant="ghost" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh models">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleRefreshClick}
+                  aria-label={t("pages.modelsAndEndpoints.refreshModels", { defaultValue: "Refresh models" })}
+                >
                   <RefreshCw />
                 </Button>
               </div>

@@ -1,8 +1,9 @@
 /* @vitest-environment jsdom */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import ModelsAndEndpointsPage from "./page";
 
 vi.mock("./panels/AllModelsPanel", () => ({ default: () => <div data-testid="panel-all-models" /> }));
@@ -193,6 +194,35 @@ describe("ModelsAndEndpointsPage", () => {
       mockUseAuthorized.mockReturnValue(NON_ADMIN);
       renderPage();
 
+      expect(screen.queryByRole("tab", { name: /Auto-Routers/ })).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("shows the page title, its description and the tabs in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      renderPage();
+
+      expect(screen.getByRole("heading", { name: "模型管理" })).toBeInTheDocument();
+      expect(screen.getByText("为代理添加和管理模型")).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: /全部模型/ })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: /添加模型/ })).toBeInTheDocument();
+      expect(screen.queryByText("Model Management")).not.toBeInTheDocument();
+    });
+
+    it("labels the auto router and access group budget tabs in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      renderPage();
+
+      expect(screen.getByRole("tab", { name: /自动路由/ })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: /模型访问组预算/ })).toBeInTheDocument();
       expect(screen.queryByRole("tab", { name: /Auto-Routers/ })).not.toBeInTheDocument();
     });
   });

@@ -1,8 +1,9 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { ModelData } from "@/components/model_dashboard/types";
+import i18n from "@/lib/i18n";
 
 import { AllModelsTable } from "./AllModelsTable";
 
@@ -454,5 +455,42 @@ describe("AllModelsTable", () => {
     render(<AllModelsTable {...baseProps} data={[]} rowCount={0} />);
 
     expect(screen.getByText("No models found")).toBeInTheDocument();
+  });
+
+  describe("Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("shows the column headers, the view selector and the toolbar affordances in Chinese", async () => {
+      const user = userEvent.setup();
+      await i18n.changeLanguage("zh-CN");
+
+      render(<AllModelsTable {...baseProps} />);
+
+      expect(screen.getByRole("columnheader", { name: /模型信息/ })).toBeInTheDocument();
+      expect(screen.getByRole("columnheader", { name: /凭据/ })).toBeInTheDocument();
+      expect(screen.getByRole("columnheader", { name: /费用/ })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "模型设置" })).toBeInTheDocument();
+
+      await user.click(screen.getByTestId("models-view-select"));
+      expect(await screen.findByRole("option", { name: "当前团队模型" })).toBeInTheDocument();
+    });
+
+    it("shows the cost shorthand and the source column in Chinese", async () => {
+      const user = userEvent.setup();
+      await i18n.changeLanguage("zh-CN");
+
+      render(<AllModelsTable {...baseProps} />);
+
+      expect(screen.getByRole("columnheader", { name: /费用/ })).toBeInTheDocument();
+      expect(screen.getByText("输入")).toBeInTheDocument();
+      expect(screen.getByText("输出")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: /列/ }));
+      await user.click(await screen.findByRole("menuitemcheckbox", { name: /^(source|来源)$/i }));
+      expect(await screen.findByText("数据库模型")).toBeInTheDocument();
+    });
   });
 });

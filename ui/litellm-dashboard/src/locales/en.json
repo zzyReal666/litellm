@@ -201,7 +201,8 @@
       "resumeTooltip": "Resume model — restore normal routing.",
       "pauseTooltip": "Pause model — stop routing requests until resumed.",
       "configNoDelete": "Config model cannot be deleted on the dashboard. Please delete it from the config file.",
-      "deleteModel": "Delete model"
+      "deleteModel": "Delete model",
+      "source": "Source"
     },
     "notificationsManager": {
       "authenticationError": "Authentication Error",
@@ -2195,7 +2196,12 @@
     "modelDeleteSuccess": "Model deleted successfully",
     "modelDeleteFailed": "Failed to delete model",
     "placeholderModelInfo": "{\"gpt-4\": 100, \"claude-v1\": 200}",
-    "placeholderLitellmParams": "{\"rpm\": 100, \"timeout\": 0, \"stream_timeout\": 0}"
+    "placeholderLitellmParams": "{\"rpm\": 100, \"timeout\": 0, \"stream_timeout\": 0}",
+    "deleteAutoRouter": "Delete Auto-Router",
+    "noComplexityTiers": "No complexity tiers are configured yet, so there is nothing to test.",
+    "copyModelId": "Copy model ID",
+    "updateApiKey": "Update API Key",
+    "deleteAutoRouterMessage": "Are you sure you want to delete this auto-router?"
   },
   "common": {
     "neverExpires": "Never",
@@ -8714,10 +8720,39 @@
       "lastRefreshed": "Last Refreshed: {{time}}",
       "fileUploadSuccess": "{{name}} file uploaded successfully",
       "fileUploadFailed": "{{name}} file upload failed.",
-      "globalRetrySaved": "Global retry settings saved successfully",
+      "globalRetrySaved": "Retry settings saved successfully",
       "modelGroupRetrySaved": "Retry settings saved successfully for {{modelGroup}}",
       "failedToSaveRetry": "Failed to save retry settings",
-      "validationError": "Please fill in the following required fields: {{fields}}"
+      "validationError": "Please fill in the following required fields: {{fields}}",
+      "filtersDrawerDescription": "Narrow down models + endpoints",
+      "autoRouterDeleted": "Deleted auto router: {{name}}",
+      "autoRouterDeleteFailed": "Failed to delete auto router: {{error}}",
+      "autoRoutersTitle": "Auto routers",
+      "autoRoutersDescription": "Auto routers sit above your deployments and pick a model per request. They are called like any other model, so clients keep using a single model name.",
+      "addAutoRouter": "Add Auto Router",
+      "addAutoRouterDescription": "Routes each request to a model by classifying its complexity. Called like any other model, so clients keep using a single model name.",
+      "deleteAutoRouter": "Delete Auto Router",
+      "deleteAutoRouterMessage": "Are you sure you want to delete \"{{name}}\"? Any client still calling this model name will start failing.",
+      "autoRouterTitle": "Auto router",
+      "idLabel": "ID",
+      "noAutoRouters": "No auto routers yet",
+      "noAutoRoutersCreate": "Create an auto router to pick the right model per request instead of pinning one.",
+      "noAutoRoutersDescription": "An auto router picks the right model per request instead of pinning one.",
+      "loadingAutoRouters": "Loading auto routers…",
+      "openActionsFor": "Open actions for {{name}}",
+      "deleteAutoRouterAction": "Delete auto router",
+      "routesTo": "Routes to",
+      "defaultModel": "Default model",
+      "created": "Created",
+      "copyLitellmModelName": "Copy LiteLLM model name",
+      "litellmModelNameCopied": "LiteLLM model name copied",
+      "aboutCredentialTypes": "About credential types",
+      "costInShort": "IN",
+      "costOutShort": "OUT",
+      "moreCount": "+{{count}} more",
+      "refreshModels": "Refresh models",
+      "tabAutoRouters": "Auto-Routers",
+      "tabModelAccessGroupBudgets": "Model Access Group Budgets"
     },
     "allModelsTab": {
       "currentTeam": "Current Team:",
@@ -8749,7 +8784,14 @@
       "notSet": "Not Set",
       "modelDeletedSuccess": "Model deleted successfully",
       "modelPaused": "Model paused",
-      "modelResumed": "Model resumed"
+      "modelResumed": "Model resumed",
+      "virtualKeysPageLink": "Virtual Keys page",
+      "emptyStateDescription": "No models match your search or filters. Try resetting them.",
+      "loadingModels": "Loading models…",
+      "searchPlaceholderEllipsis": "Search model names…",
+      "currentTeamAria": "Current team",
+      "teamLabel": "Team",
+      "noModelAccessGroups": "No model access groups found"
     },
     "modelRetrySettings": {
       "retryScopeLabel": "Retry Policy Scope:",
@@ -8758,7 +8800,8 @@
       "globalRetryPolicyDesc": "Default retry settings applied to all model groups unless overridden",
       "modelRetryPolicyTitle": "Retry Policy for {{modelGroup}}",
       "modelRetryPolicyDesc": "Model-specific retry settings. Falls back to global defaults if not set.",
-      "globalValue": "(Global: {{value}})"
+      "globalValue": "(Global: {{value}})",
+      "retryCountLabel": "{{exceptionType}} retry count"
     },
     "priceDataManagement": {
       "title": "Price Data Management",
@@ -8798,7 +8841,37 @@
       "passwordHelpReset": "Enter your new password",
       "passwordHelpSignup": "Create a password for your account"
     },
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "accessGroupBudgets": {
+      "onlyAdminCanChange": "Only a proxy admin can change an access group budget",
+      "slashGroupNoBudget": "A budget cannot be set on a group whose name contains a slash",
+      "openBudgetActionsFor": "Open budget actions for {{name}}",
+      "setBudget": "Set budget",
+      "noBudgetToClear": "This access group has no budget to clear",
+      "clearBudget": "Clear budget",
+      "accessGroup": "Access Group",
+      "models": "Models",
+      "deployments": "Deployments",
+      "sharedSpend": "Shared Spend",
+      "resets": "Resets",
+      "validationError": "Set at least one of max budget, soft budget or reset window",
+      "editBudgetFor": "Edit budget for \"{{accessGroup}}\"",
+      "setBudgetFor": "Set budget for \"{{accessGroup}}\"",
+      "maxBudgetHint": "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused",
+      "softBudgetHint": "Fires an alert when the group's spend reaches this. Requests keep succeeding",
+      "resetBudgetHint": "How often the group's spend resets. Leave empty for a budget that never resets",
+      "blankFieldHint": "A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself.",
+      "saveBudget": "Save Budget",
+      "modalDescription": "Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it.",
+      "emptyTitle": "No model access groups yet",
+      "emptyDescription": "Put a deployment in an access group from its model settings, then give the group a shared budget here.",
+      "budgetSaved": "Budget saved for \"{{accessGroup}}\"",
+      "budgetCleared": "Budget cleared for \"{{accessGroup}}\"",
+      "description": "A model access group can carry one budget that every key granted the group by name draws from together. Keys that reach the group's models through a wildcard or all-proxy-models are not charged against it.",
+      "loadingAccessGroups": "Loading model access groups…",
+      "clearBudgetTitle": "Clear Budget",
+      "clearBudgetMessage": "Are you sure you want to clear this access group's budget? The recorded shared spend is cleared with it, and the group's models stay available."
+    }
   },
   "networking": {
     "sessionExpired": "UI Session Expired. Logging out.",

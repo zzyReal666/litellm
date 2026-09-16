@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Copy, Info, Loader2, Pencil, RefreshCw, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { ProviderLogo } from "@/components/molecules/models/ProviderLogo";
 import { ModelData } from "@/components/model_dashboard/types";
@@ -42,6 +44,7 @@ const formatShortDate = (value: string | null | undefined): string | null => {
 };
 
 function ModelInformationCell({ model, displayName }: { model: ModelData; displayName: string }) {
+  const { t } = useTranslation();
   const litellmModelName = model.litellm_model_name || "-";
 
   return (
@@ -71,26 +74,39 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             {model.provider ? <ProviderLogo provider={model.provider} className="size-4 shrink-0" /> : null}
-            <span className="truncate text-xs text-muted-foreground">{model.provider || "Unknown provider"}</span>
+            <span className="truncate text-xs text-muted-foreground">
+              {model.provider || t("molecules.modelsColumns.unknownProvider", { defaultValue: "Unknown provider" })}
+            </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">Public Model Name</span>
+            <span className="text-xs text-muted-foreground">
+              {t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" })}
+            </span>
             <span className="truncate text-sm font-medium text-foreground" title={displayName}>
               {displayName}
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">LiteLLM Model Name</span>
+            <span className="text-xs text-muted-foreground">
+              {t("molecules.modelsColumns.litellmModelName", { defaultValue: "LiteLLM Model Name" })}
+            </span>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate font-mono text-sm text-foreground" title={litellmModelName}>
                 {litellmModelName}
               </span>
               <button
                 type="button"
-                aria-label="Copy LiteLLM model name"
+                aria-label={t("pages.modelsAndEndpoints.copyLitellmModelName", {
+                  defaultValue: "Copy LiteLLM model name",
+                })}
                 data-testid={`copy-litellm-model-name-${model.model_info.id}`}
                 className="shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
-                onClick={() => void copyToClipboard(litellmModelName, "LiteLLM model name copied")}
+                onClick={() =>
+                  void copyToClipboard(
+                    litellmModelName,
+                    t("pages.modelsAndEndpoints.litellmModelNameCopied", { defaultValue: "LiteLLM model name copied" }),
+                  )
+                }
               >
                 <Copy className="size-3.5" />
               </button>
@@ -103,15 +119,18 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
 }
 
 function CredentialsHeader() {
+  const { t } = useTranslation();
   return (
     <span className="flex items-center gap-1">
-      Credentials
+      {t("molecules.modelsColumns.credentials", { defaultValue: "Credentials" })}
       <HoverCard>
         <HoverCardTrigger
           render={
             <button
               type="button"
-              aria-label="About credential types"
+              aria-label={t("pages.modelsAndEndpoints.aboutCredentialTypes", {
+                defaultValue: "About credential types",
+              })}
               data-testid="credentials-header-info"
               className="cursor-pointer text-muted-foreground hover:text-foreground"
             />
@@ -121,23 +140,29 @@ function CredentialsHeader() {
         </HoverCardTrigger>
         <HoverCardContent align="start" className="w-80">
           <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium text-foreground">Credential types</span>
+            <span className="text-sm font-medium text-foreground">
+              {t("molecules.modelsColumns.credentialTypes", { defaultValue: "Credential types" })}
+            </span>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-info">
                 <RefreshCw className="size-3.5" />
-                Reusable
+                {t("molecules.modelsColumns.reusable", { defaultValue: "Reusable" })}
               </span>
               <span className="text-xs text-muted-foreground">
-                Credentials saved in LiteLLM that can be added to models repeatedly.
+                {t("molecules.modelsColumns.reusableDescription", {
+                  defaultValue: "Credentials saved in LiteLLM that can be added to models repeatedly.",
+                })}
               </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                 <Pencil className="size-3.5" />
-                Manual
+                {t("molecules.modelsColumns.manual", { defaultValue: "Manual" })}
               </span>
               <span className="text-xs text-muted-foreground">
-                Credentials added directly during model creation or defined in the config file.
+                {t("molecules.modelsColumns.manualDescription", {
+                  defaultValue: "Credentials added directly during model creation or defined in the config file.",
+                })}
               </span>
             </div>
           </div>
@@ -148,11 +173,12 @@ function CredentialsHeader() {
 }
 
 function CredentialsCell({ credentialName }: { credentialName: string | undefined }) {
+  const { t } = useTranslation();
   if (!credentialName) {
     return (
       <Badge variant="outline" className="gap-1 font-normal text-muted-foreground">
         <Pencil className="size-3" />
-        Manual
+        {t("molecules.modelsColumns.manual", { defaultValue: "Manual" })}
       </Badge>
     );
   }
@@ -166,10 +192,13 @@ function CredentialsCell({ credentialName }: { credentialName: string | undefine
 }
 
 function CreatedByCell({ model }: { model: ModelData }) {
+  const { t } = useTranslation();
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
-  const primary = isConfigModel ? "Defined in config" : model.model_info.created_by || "Unknown";
-  const secondaryForDbModel = createdAt ?? "Unknown date";
+  const primary = isConfigModel
+    ? t("molecules.modelsColumns.definedInConfig", { defaultValue: "Defined in config" })
+    : model.model_info.created_by || t("common.unknown", { defaultValue: "Unknown" });
+  const secondaryForDbModel = createdAt ?? t("molecules.modelsColumns.unknownDate", { defaultValue: "Unknown date" });
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
@@ -182,6 +211,7 @@ function CreatedByCell({ model }: { model: ModelData }) {
 }
 
 function CostsCell({ model }: { model: ModelData }) {
+  const { t } = useTranslation();
   const { input_cost: inputCost, output_cost: outputCost } = model;
 
   if (inputCost == null && outputCost == null) {
@@ -190,18 +220,22 @@ function CostsCell({ model }: { model: ModelData }) {
 
   return (
     <CellTooltip
-      content="Cost per 1M tokens"
+      content={t("molecules.modelsColumns.costPerMTokens", { defaultValue: "Cost per 1M tokens" })}
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
           {inputCost != null && (
             <span className="flex items-baseline gap-1.5">
-              <span className="text-[10px] font-semibold tracking-wider text-muted-foreground">IN</span>
+              <span className="text-[10px] font-semibold tracking-wider text-muted-foreground">
+                {t("pages.modelsAndEndpoints.costInShort", { defaultValue: "IN" })}
+              </span>
               <span className="text-xs font-medium tabular-nums text-foreground">${inputCost}</span>
             </span>
           )}
           {outputCost != null && (
             <span className="flex items-baseline gap-1.5">
-              <span className="text-[10px] font-semibold tracking-wider text-muted-foreground">OUT</span>
+              <span className="text-[10px] font-semibold tracking-wider text-muted-foreground">
+                {t("pages.modelsAndEndpoints.costOutShort", { defaultValue: "OUT" })}
+              </span>
               <span className="text-xs font-medium tabular-nums text-foreground">${outputCost}</span>
             </span>
           )}
@@ -212,6 +246,7 @@ function CostsCell({ model }: { model: ModelData }) {
 }
 
 function AccessGroupsCell({ accessGroups }: { accessGroups: string[] | null }) {
+  const { t } = useTranslation();
   if (!accessGroups || accessGroups.length === 0) {
     return <span className="text-sm text-muted-foreground">-</span>;
   }
@@ -234,7 +269,10 @@ function AccessGroupsCell({ accessGroups }: { accessGroups: string[] | null }) {
           }
           trigger={
             <Badge variant="outline" className="shrink-0 cursor-default font-normal">
-              +{overflow.length} more
+              {t("pages.modelsAndEndpoints.moreCount", {
+                count: overflow.length,
+                defaultValue: `+${overflow.length} more`,
+              })}
             </Badge>
           }
         />
@@ -262,6 +300,7 @@ function ModelRowActions({
   onDeleteClick,
   onTogglePauseClick,
 }: ModelRowActionsProps) {
+  const { t } = useTranslation();
   const modelId = model.model_info?.id;
   const isConfigModel = !model.model_info?.db_model;
   const isAdmin = userRole === "Admin" && !isViewOnly;
@@ -271,17 +310,27 @@ function ModelRowActions({
 
   const resolvePauseTooltip = (): string => {
     if (isConfigModel) {
-      return "Config models cannot be paused from the dashboard. Pause is DB-backed.";
+      return t("molecules.modelsColumns.configNoPause", {
+        defaultValue: "Config models cannot be paused from the dashboard. Pause is DB-backed.",
+      });
     }
     if (!isAdmin) {
-      return "Only proxy admins can pause or resume a model.";
+      return t("molecules.modelsColumns.nonAdminNoPause", {
+        defaultValue: "Only proxy admins can pause or resume a model.",
+      });
     }
-    return isBlocked ? "Resume model — restore normal routing." : "Pause model — stop routing requests until resumed.";
+    return isBlocked
+      ? t("molecules.modelsColumns.resumeTooltip", { defaultValue: "Resume model — restore normal routing." })
+      : t("molecules.modelsColumns.pauseTooltip", {
+          defaultValue: "Pause model — stop routing requests until resumed.",
+        });
   };
 
   const deleteTooltip = isConfigModel
-    ? "Config model cannot be deleted on the dashboard. Please delete it from the config file."
-    : "Delete model";
+    ? t("molecules.modelsColumns.configNoDelete", {
+        defaultValue: "Config model cannot be deleted on the dashboard. Please delete it from the config file.",
+      })
+    : t("molecules.modelsColumns.deleteModel", { defaultValue: "Delete model" });
 
   return (
     <div className="flex items-center justify-end gap-1.5">
@@ -300,7 +349,11 @@ function ModelRowActions({
                   size="sm"
                   checked={!isBlocked}
                   disabled={!isPauseToggleable}
-                  aria-label={isBlocked ? "Resume model" : "Pause model"}
+                  aria-label={
+                    isBlocked
+                      ? t("molecules.modelsColumns.resumeModel", { defaultValue: "Resume model" })
+                      : t("molecules.modelsColumns.pauseModel", { defaultValue: "Pause model" })
+                  }
                   data-testid={`model-pause-toggle-${modelId}`}
                   onCheckedChange={(nextChecked) => {
                     if (isPauseToggleable && onTogglePauseClick && modelId) {
@@ -320,7 +373,7 @@ function ModelRowActions({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Delete model"
+              aria-label={t("molecules.modelsColumns.deleteModel", { defaultValue: "Delete model" })}
               data-testid={`model-delete-${modelId}`}
               disabled={isConfigModel || !canEditModel}
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -348,6 +401,7 @@ export interface ModelsTableColumnDeps {
   onDeleteClick?: (modelId: string) => void;
   onTogglePauseClick?: (modelId: string, blocked: boolean) => void | Promise<void>;
   pausingModelId?: string | null;
+  t: TFunction;
 }
 
 export const getModelsTableColumns = ({
@@ -359,135 +413,150 @@ export const getModelsTableColumns = ({
   onDeleteClick,
   onTogglePauseClick,
   pausingModelId,
-}: ModelsTableColumnDeps): ColumnDef<ModelData>[] => [
-  {
-    id: MODEL_ID_COLUMN_ID,
-    accessorFn: (row) => row.model_info.id,
-    meta: { title: "Model ID" },
-    header: "Model ID",
-    enableSorting: false,
-    size: 140,
-    minSize: 90,
-    cell: ({ row }) => (
-      <IdCell
-        value={row.original.model_info.id}
-        onClick={onModelIdClick}
-        dataTestId={`model-id-${row.original.model_info.id}`}
-      />
-    ),
-  },
-  {
-    id: MODEL_NAME_COLUMN_ID,
-    accessorFn: (row) => row.model_name ?? "",
-    meta: { title: "Model Information", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model Information" />,
-    enableSorting: true,
-    size: 280,
-    minSize: 160,
-    cell: ({ row }) => (
-      <ModelInformationCell model={row.original} displayName={getDisplayModelName(row.original) || "-"} />
-    ),
-  },
-  {
-    id: CREDENTIALS_COLUMN_ID,
-    accessorFn: (row) => row.litellm_params?.litellm_credential_name ?? "",
-    meta: { title: "Credentials" },
-    header: () => <CredentialsHeader />,
-    enableSorting: false,
-    size: 180,
-    minSize: 110,
-    cell: ({ row }) => <CredentialsCell credentialName={row.original.litellm_params?.litellm_credential_name} />,
-  },
-  {
-    id: CREATED_BY_COLUMN_ID,
-    accessorFn: (row) => row.model_info.created_by ?? "",
-    meta: { title: "Created By", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created By" />,
-    enableSorting: true,
-    size: 180,
-    minSize: 110,
-    cell: ({ row }) => <CreatedByCell model={row.original} />,
-  },
-  {
-    id: UPDATED_AT_COLUMN_ID,
-    accessorFn: (row) => row.model_info.updated_at ?? "",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
-    enableSorting: true,
-    size: 140,
-    minSize: 100,
-    cell: ({ row }) => <DateCell value={row.original.model_info.updated_at} precision="date" />,
-  },
-  {
-    id: COSTS_COLUMN_ID,
-    accessorFn: (row) => row.input_cost,
-    meta: { title: "Costs" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Costs" />,
-    enableSorting: true,
-    size: 130,
-    minSize: 90,
-    cell: ({ row }) => <CostsCell model={row.original} />,
-  },
-  {
-    id: TEAM_ID_COLUMN_ID,
-    accessorFn: (row) => row.model_info.team_id ?? "",
-    meta: { title: "Team ID" },
-    header: "Team ID",
-    enableSorting: false,
-    size: 140,
-    minSize: 90,
-    cell: ({ row }) => (
-      <IdCell
-        value={row.original.model_info.team_id}
-        onClick={onTeamIdClick}
-        dataTestId={`model-team-id-${row.original.model_info.id}`}
-      />
-    ),
-  },
-  {
-    id: ACCESS_GROUPS_COLUMN_ID,
-    accessorFn: (row) => row.model_info.access_groups ?? [],
-    meta: { title: "Model Access Group", skeleton: "chips" },
-    header: "Model Access Group",
-    enableSorting: false,
-    size: 200,
-    minSize: 120,
-    cell: ({ row }) => <AccessGroupsCell accessGroups={row.original.model_info.access_groups} />,
-  },
-  {
-    id: STATUS_COLUMN_ID,
-    accessorFn: (row) => row.model_info.db_model,
-    meta: { title: "Source", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Source" />,
-    enableSorting: true,
-    size: 140,
-    minSize: 100,
-    cell: ({ row }) =>
-      row.original.model_info.db_model ? (
-        <StatusBadge tone="info" label="DB Model" />
-      ) : (
-        <StatusBadge tone="neutral" label="Config Model" />
+  t,
+}: ModelsTableColumnDeps): ColumnDef<ModelData>[] => {
+  const modelIdTitle = t("molecules.modelsColumns.modelId", { defaultValue: "Model ID" });
+  const modelInformationTitle = t("molecules.modelsColumns.modelInformation", { defaultValue: "Model Information" });
+  const createdByTitle = t("molecules.modelsColumns.createdBy", { defaultValue: "Created By" });
+  const updatedAtTitle = t("common.updatedAt", { defaultValue: "Updated At" });
+  const costsTitle = t("molecules.modelsColumns.costs", { defaultValue: "Costs" });
+  const teamIdTitle = t("molecules.modelsColumns.teamId", { defaultValue: "Team ID" });
+  const modelAccessGroupTitle = t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" });
+  const sourceTitle = t("molecules.modelsColumns.source", { defaultValue: "Source" });
+  const actionsTitle = t("common.actions", { defaultValue: "Actions" });
+  return [
+    {
+      id: MODEL_ID_COLUMN_ID,
+      accessorFn: (row) => row.model_info.id,
+      meta: { title: modelIdTitle },
+      header: modelIdTitle,
+      enableSorting: false,
+      size: 140,
+      minSize: 90,
+      cell: ({ row }) => (
+        <IdCell
+          value={row.original.model_info.id}
+          onClick={onModelIdClick}
+          dataTestId={`model-id-${row.original.model_info.id}`}
+        />
       ),
-  },
-  {
-    id: "actions",
-    meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
-    header: "Actions",
-    enableSorting: false,
-    enableHiding: false,
-    enableResizing: false,
-    size: 110,
-    minSize: 110,
-    cell: ({ row }) => (
-      <ModelRowActions
-        model={row.original}
-        userRole={userRole}
-        userID={userID}
-        isViewOnly={isViewOnly}
-        isPausing={pausingModelId === row.original.model_info?.id}
-        onDeleteClick={onDeleteClick}
-        onTogglePauseClick={onTogglePauseClick}
-      />
-    ),
-  },
-];
+    },
+    {
+      id: MODEL_NAME_COLUMN_ID,
+      accessorFn: (row) => row.model_name ?? "",
+      meta: { title: modelInformationTitle, skeleton: "twoLine" },
+      header: ({ column }) => <DataTableSortHeader column={column} title={modelInformationTitle} />,
+      enableSorting: true,
+      size: 280,
+      minSize: 160,
+      cell: ({ row }) => (
+        <ModelInformationCell model={row.original} displayName={getDisplayModelName(row.original) || "-"} />
+      ),
+    },
+    {
+      id: CREDENTIALS_COLUMN_ID,
+      accessorFn: (row) => row.litellm_params?.litellm_credential_name ?? "",
+      meta: { title: t("molecules.modelsColumns.credentials", { defaultValue: "Credentials" }) },
+      header: () => <CredentialsHeader />,
+      enableSorting: false,
+      size: 180,
+      minSize: 110,
+      cell: ({ row }) => <CredentialsCell credentialName={row.original.litellm_params?.litellm_credential_name} />,
+    },
+    {
+      id: CREATED_BY_COLUMN_ID,
+      accessorFn: (row) => row.model_info.created_by ?? "",
+      meta: { title: createdByTitle, skeleton: "twoLine" },
+      header: ({ column }) => <DataTableSortHeader column={column} title={createdByTitle} />,
+      enableSorting: true,
+      size: 180,
+      minSize: 110,
+      cell: ({ row }) => <CreatedByCell model={row.original} />,
+    },
+    {
+      id: UPDATED_AT_COLUMN_ID,
+      accessorFn: (row) => row.model_info.updated_at ?? "",
+      meta: { title: updatedAtTitle },
+      header: ({ column }) => <DataTableSortHeader column={column} title={updatedAtTitle} />,
+      enableSorting: true,
+      size: 140,
+      minSize: 100,
+      cell: ({ row }) => <DateCell value={row.original.model_info.updated_at} precision="date" />,
+    },
+    {
+      id: COSTS_COLUMN_ID,
+      accessorFn: (row) => row.input_cost,
+      meta: { title: costsTitle },
+      header: ({ column }) => <DataTableSortHeader column={column} title={costsTitle} />,
+      enableSorting: true,
+      size: 130,
+      minSize: 90,
+      cell: ({ row }) => <CostsCell model={row.original} />,
+    },
+    {
+      id: TEAM_ID_COLUMN_ID,
+      accessorFn: (row) => row.model_info.team_id ?? "",
+      meta: { title: teamIdTitle },
+      header: teamIdTitle,
+      enableSorting: false,
+      size: 140,
+      minSize: 90,
+      cell: ({ row }) => (
+        <IdCell
+          value={row.original.model_info.team_id}
+          onClick={onTeamIdClick}
+          dataTestId={`model-team-id-${row.original.model_info.id}`}
+        />
+      ),
+    },
+    {
+      id: ACCESS_GROUPS_COLUMN_ID,
+      accessorFn: (row) => row.model_info.access_groups ?? [],
+      meta: { title: modelAccessGroupTitle, skeleton: "chips" },
+      header: modelAccessGroupTitle,
+      enableSorting: false,
+      size: 200,
+      minSize: 120,
+      cell: ({ row }) => <AccessGroupsCell accessGroups={row.original.model_info.access_groups} />,
+    },
+    {
+      id: STATUS_COLUMN_ID,
+      accessorFn: (row) => row.model_info.db_model,
+      meta: { title: sourceTitle, skeleton: "badge" },
+      header: ({ column }) => <DataTableSortHeader column={column} title={sourceTitle} />,
+      enableSorting: true,
+      size: 140,
+      minSize: 100,
+      cell: ({ row }) =>
+        row.original.model_info.db_model ? (
+          <StatusBadge tone="info" label={t("molecules.modelsColumns.dbModel", { defaultValue: "DB Model" })} />
+        ) : (
+          <StatusBadge
+            tone="neutral"
+            label={t("molecules.modelsColumns.configModel", { defaultValue: "Config Model" })}
+          />
+        ),
+    },
+    {
+      id: "actions",
+      meta: { title: actionsTitle, className: "text-right", headerClassName: "text-right" },
+      header: actionsTitle,
+      enableSorting: false,
+      enableHiding: false,
+      enableResizing: false,
+      size: 110,
+      minSize: 110,
+      cell: ({ row }) => (
+        <ModelRowActions
+          model={row.original}
+          userRole={userRole}
+          userID={userID}
+          isViewOnly={isViewOnly}
+          isPausing={pausingModelId === row.original.model_info?.id}
+          onDeleteClick={onDeleteClick}
+          onTogglePauseClick={onTogglePauseClick}
+        />
+      ),
+    },
+  ];
+};
