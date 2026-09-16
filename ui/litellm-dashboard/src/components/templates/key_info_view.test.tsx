@@ -1,9 +1,10 @@
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { renderWithProviders } from "../../../tests/test-utils";
-import { screen, waitFor } from "@testing-library/react";
+import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { KeyResponse, Team } from "../key_team_helpers/key_list";
 import { keyDeleteCall, keyUpdateCall } from "../networking";
 import { QueryClient } from "@tanstack/react-query";
@@ -1291,6 +1292,35 @@ describe("KeyInfoView", () => {
       });
 
       invalidateSpy.mockRestore();
+    });
+  });
+
+  describe("Chinese locale", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("shows the drawer tabs, field labels and header labels in Chinese", async () => {
+      vi.mocked(useAuthorized).mockReturnValue({ ...baseUseAuthorizedMock, userRole: "proxy_admin" });
+      await i18n.changeLanguage("zh-CN");
+
+      renderWithProviders(<KeyInfoView keyData={MOCK_KEY_DATA} onClose={() => {}} keyId="test-key-id" teams={[]} />);
+
+      expect(await screen.findByRole("tab", { name: "概览" })).toBeInTheDocument();
+      expect(screen.getByText("密钥设置")).toBeInTheDocument();
+      expect(screen.getByText("密钥值")).toBeInTheDocument();
+      expect(screen.getByText("最近活跃")).toBeInTheDocument();
+      expect(screen.getAllByText("未设置").length).toBeGreaterThan(0);
+      expect(screen.queryByText("Key Settings")).not.toBeInTheDocument();
+
+      const actionsLabel = i18n.t("templates.keyInfoHeader.moreKeyActions", { defaultValue: "More key actions" });
+      await userEvent.click(await screen.findByRole("button", { name: actionsLabel }));
+      await userEvent.click(await screen.findByRole("menuitem", { name: "重置花费" }));
+
+      expect(await screen.findByText("重置密钥花费")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toHaveTextContent("将 asdasdas 的花费重置为 $0？");
+      expect(screen.getByRole("dialog")).toHaveTextContent("当前花费：$0.0000");
     });
   });
 });

@@ -1,6 +1,7 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { chooseSelectOption, renderWithProviders, testQueryClient } from "../../../tests/test-utils";
 import { KeyResponse } from "../key_team_helpers/key_list";
 import { MODEL_MAX_BUDGET_PREMIUM_HINT } from "../key_team_helpers/ModelMaxBudgetEditor";
@@ -2479,5 +2480,34 @@ describe("KeyEditView", () => {
         expect(onSubmitMock.mock.calls[0][0]).toStrictEqual({ token: "test-token-123", rpm_limit: "25" });
       },
     );
+  });
+
+  describe("simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("shows field labels and the save action in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+      renderWithProviders(
+        <KeyEditView
+          keyData={MOCK_KEY_DATA}
+          onCancel={() => {}}
+          onSubmit={async () => {}}
+          accessToken=""
+          userID=""
+          userRole=""
+          premiumUser={false}
+        />,
+      );
+
+      expect(await screen.findByLabelText("密钥别名")).toBeInTheDocument();
+      expect(screen.getByLabelText("密钥类型")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "保存更改" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "取消" })).toBeInTheDocument();
+      expect(screen.queryByText("Save Changes")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Key Alias")).not.toBeInTheDocument();
+    });
   });
 });

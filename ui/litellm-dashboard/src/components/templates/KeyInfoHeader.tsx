@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   ArrowLeftRight,
@@ -68,12 +69,15 @@ interface KeyInfoHeaderProps {
 }
 
 function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null; userEmail: string; userId: string }) {
+  const { t } = useTranslation();
   const labelEl = (
     <div className="flex items-center gap-1">
       <span className="text-muted-foreground">
         <User className="size-3.5" />
       </span>
-      <span className="text-xs uppercase tracking-[0.05em] text-muted-foreground">User</span>
+      <span className="text-xs uppercase tracking-[0.05em] text-muted-foreground">
+        {t("templates.keyInfoHeader.user", { defaultValue: "User" })}
+      </span>
     </div>
   );
 
@@ -95,9 +99,9 @@ function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null
   const popoverContent = (
     <div className="flex flex-col gap-2 text-xs min-w-[200px] max-w-[300px]">
       {[
-        { label: "User Alias", value: userAlias ?? null },
-        { label: "User Email", value: userEmail || null },
-        { label: "User ID", value: userId || null },
+        { label: t("templates.keyInfoHeader.userAlias", { defaultValue: "User Alias" }), value: userAlias ?? null },
+        { label: t("templates.keyInfoHeader.userEmail", { defaultValue: "User Email" }), value: userEmail || null },
+        { label: t("templates.keyInfoHeader.userId", { defaultValue: "User ID" }), value: userId || null },
       ].map(({ label, value }) => (
         <div key={label} className="flex flex-col min-w-0">
           <span className="text-muted-foreground">{label}</span>
@@ -106,7 +110,11 @@ function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null
               <span className="min-w-0 flex-1 truncate font-mono text-xs" title={value}>
                 {value}
               </span>
-              <CopyButton value={value} label={`Copy ${label}`} iconClassName="size-3.5" />
+              <CopyButton
+                value={value}
+                label={t("templates.keyInfoHeader.copyField", { field: label, defaultValue: `Copy ${label}` })}
+                iconClassName="size-3.5"
+              />
             </div>
           ) : (
             <span className="font-mono">-</span>
@@ -169,15 +177,16 @@ export function KeyInfoHeader({
   onToggleBlocked,
   isBlocked = false,
   canModifyKey = true,
-  backButtonText = "Back to Keys",
+  backButtonText,
   regenerateDisabled = false,
   regenerateTooltip,
 }: KeyInfoHeaderProps) {
+  const { t } = useTranslation();
   const regenerateButton = (
     <span>
       <Button variant="outline" onClick={onRegenerate} disabled={regenerateDisabled}>
         <RefreshCw className="size-3.5" />
-        Regenerate Key
+        {t("templates.keyInfoHeader.regenerateKey", { defaultValue: "Regenerate Key" })}
       </Button>
     </span>
   );
@@ -188,7 +197,7 @@ export function KeyInfoHeader({
         <div style={{ marginBottom: 16 }}>
           <Button onClick={onCreateNew}>
             <Plus className="size-3.5" />
-            Create New Key
+            {t("templates.keyInfoHeader.createNewKey", { defaultValue: "Create New Key" })}
           </Button>
         </div>
       )}
@@ -196,7 +205,7 @@ export function KeyInfoHeader({
       <div style={{ marginBottom: 16 }}>
         <Button variant="ghost" onClick={onBack}>
           <ArrowLeft className="size-3.5" />
-          {backButtonText}
+          {backButtonText ?? t("templates.keyInfoHeader.backToKeys", { defaultValue: "Back to Keys" })}
         </Button>
       </div>
 
@@ -205,18 +214,28 @@ export function KeyInfoHeader({
           <div className="flex items-center gap-2">
             <h3 className="m-0 flex items-center gap-1 text-2xl font-semibold">
               {data.keyName}
-              <CopyButton value={data.keyName} label="Copy Key Alias" iconClassName="size-4" />
+              <CopyButton
+                value={data.keyName}
+                label={t("templates.keyInfoHeader.copyKeyAlias", { defaultValue: "Copy Key Alias" })}
+                iconClassName="size-4"
+              />
             </h3>
             {isBlocked && (
               <Badge variant="destructive">
                 <Ban className="size-3" />
-                Blocked
+                {t("templates.keyInfoHeader.blocked", { defaultValue: "Blocked" })}
               </Badge>
             )}
           </div>
           <div className="flex min-w-0 items-center gap-1">
-            <span className="min-w-0 break-words text-muted-foreground">Key ID: {data.keyId}</span>
-            <CopyButton value={data.keyId} label="Copy Key ID" iconClassName="size-3.5" />
+            <span className="min-w-0 break-words text-muted-foreground">
+              {t("templates.keyInfoHeader.keyId", { keyId: data.keyId, defaultValue: `Key ID: ${data.keyId}` })}
+            </span>
+            <CopyButton
+              value={data.keyId}
+              label={t("templates.keyInfoHeader.copyKeyId", { defaultValue: "Copy Key ID" })}
+              iconClassName="size-3.5"
+            />
           </div>
         </div>
         {canModifyKey && (
@@ -232,7 +251,15 @@ export function KeyInfoHeader({
               regenerateButton
             )}
             <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="outline" size="icon" aria-label="More key actions" />}>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label={t("templates.keyInfoHeader.moreKeyActions", { defaultValue: "More key actions" })}
+                  />
+                }
+              >
                 <MoreVertical className="size-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-auto">
@@ -240,23 +267,23 @@ export function KeyInfoHeader({
                   (isBlocked ? (
                     <DropdownMenuItem onClick={onToggleBlocked}>
                       <CircleCheck className="size-3.5" />
-                      Unblock Key
+                      {t("templates.keyInfoHeader.unblockKey", { defaultValue: "Unblock Key" })}
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem variant="destructive" onClick={onToggleBlocked}>
                       <Ban className="size-3.5" />
-                      Block Key
+                      {t("templates.keyInfoHeader.blockKey", { defaultValue: "Block Key" })}
                     </DropdownMenuItem>
                   ))}
                 {onResetSpend && (
                   <DropdownMenuItem variant="destructive" onClick={onResetSpend}>
                     <ArrowLeftRight className="size-3.5" />
-                    Reset Spend
+                    {t("templates.keyInfoHeader.resetSpend", { defaultValue: "Reset Spend" })}
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem variant="destructive" onClick={onDelete}>
                   <Trash2 className="size-3.5" />
-                  Delete Key
+                  {t("templates.keyInfoHeader.deleteKey", { defaultValue: "Delete Key" })}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -267,15 +294,23 @@ export function KeyInfoHeader({
       <div className="flex items-stretch gap-10" style={{ marginBottom: 40 }}>
         <div className="flex min-w-0 flex-col gap-4">
           <UserField userAlias={data.userAlias} userEmail={data.userEmail} userId={data.userId} />
-          <LabeledField label="Expires" value={data.expires} icon={<Timer className="size-3.5" />} />
+          <LabeledField
+            label={t("templates.keyInfoHeader.expires", { defaultValue: "Expires" })}
+            value={data.expires}
+            icon={<Timer className="size-3.5" />}
+          />
         </div>
 
         <Separator orientation="vertical" />
 
         <div className="flex min-w-0 flex-col gap-4">
-          <LabeledField label="Created At" value={data.createdAt} icon={<Calendar className="size-3.5" />} />
           <LabeledField
-            label="Created By"
+            label={t("templates.keyInfoHeader.createdAt", { defaultValue: "Created At" })}
+            value={data.createdAt}
+            icon={<Calendar className="size-3.5" />}
+          />
+          <LabeledField
+            label={t("templates.keyInfoHeader.createdBy", { defaultValue: "Created By" })}
             value={data.createdBy}
             icon={<ShieldCheck className="size-3.5" />}
             href={data.createdById ? userDetailHref(data.createdById) : undefined}
@@ -288,22 +323,30 @@ export function KeyInfoHeader({
         <Separator orientation="vertical" />
 
         <div className="flex min-w-0 flex-col gap-4">
-          <LabeledField label="Last Updated" value={data.lastUpdated} icon={<Clock className="size-3.5" />} />
-          <LabeledField label="Last Active" value={data.lastActive} icon={<Zap className="size-3.5" />} />
+          <LabeledField
+            label={t("templates.keyInfoHeader.lastUpdated", { defaultValue: "Last Updated" })}
+            value={data.lastUpdated}
+            icon={<Clock className="size-3.5" />}
+          />
+          <LabeledField
+            label={t("templates.keyInfoHeader.lastActive", { defaultValue: "Last Active" })}
+            value={data.lastActive}
+            icon={<Zap className="size-3.5" />}
+          />
         </div>
 
         <Separator orientation="vertical" />
 
         <div className="flex min-w-0 flex-col gap-4">
           <LabeledField
-            label="Team"
+            label={t("templates.keyInfoHeader.team", { defaultValue: "Team" })}
             value={data.teamAlias || data.teamId}
             icon={<Users className="size-3.5" />}
             href={data.teamId ? teamDetailHref(data.teamId) : undefined}
             truncate
           />
           <LabeledField
-            label="Organization"
+            label={t("templates.keyInfoHeader.organization", { defaultValue: "Organization" })}
             value={data.orgAlias || data.orgId}
             icon={<Building2 className="size-3.5" />}
             href={data.orgId ? orgDetailHref(data.orgId) : undefined}

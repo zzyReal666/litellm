@@ -1,6 +1,7 @@
 import type { Organization, Team } from "@/components/networking";
 import { isOrgAdminForAnyOrg, isProxyAdminRole } from "@/utils/roles";
 import { useId } from "react";
+import { useTranslation } from "react-i18next";
 import { useProjects } from "@/app/(dashboard)/hooks/projects/useProjects";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -16,22 +17,28 @@ type KeyProjectFieldProps = {
 
 export function KeyProjectField({ projectId, canDetach, pending, disabled, onToggle }: KeyProjectFieldProps) {
   const id = useId();
+  const { t } = useTranslation();
   const { data: projects } = useProjects();
   const alias = projects?.find((project) => project.project_id === projectId)?.project_alias;
   const display = alias ? `${alias} (${projectId})` : projectId;
   return (
     <Field>
-      <FieldLabel htmlFor={id}>Project</FieldLabel>
+      <FieldLabel htmlFor={id}>{t("templates.keyEditView.project", { defaultValue: "Project" })}</FieldLabel>
       <Input id={id} value={display ?? ""} disabled readOnly />
       {canDetach && (
         <>
           {pending && (
             <p className="text-sm text-muted-foreground">
-              The project will be removed when you save. Team, organization, and key limits will stay the same.
+              {t("templates.keyEditView.detachProjectNotice", {
+                defaultValue:
+                  "The project will be removed when you save. Team, organization, and key limits will stay the same.",
+              })}
             </p>
           )}
           <Button type="button" variant="outline" disabled={disabled} onClick={onToggle}>
-            {pending ? "Keep project" : "Detach from project"}
+            {pending
+              ? t("templates.keyEditView.keepProject", { defaultValue: "Keep project" })
+              : t("templates.keyEditView.detachFromProject", { defaultValue: "Detach from project" })}
           </Button>
         </>
       )}

@@ -318,7 +318,7 @@ export const getKeyTableColumns = ({
       <DateCell
         value={info.getValue() as string | null}
         precision="date"
-        fallback={t("common.never", { defaultValue: "Never" })}
+        fallback={t("common.neverExpires", { defaultValue: "Never" })}
       />
     ),
   },
@@ -358,7 +358,7 @@ export const getKeyTableColumns = ({
     size: 130,
     enableSorting: false,
     cell: (info) => (
-      <DateCell value={info.getValue() as string | null} fallback={t("common.never", { defaultValue: "Never" })} />
+      <DateCell value={info.getValue() as string | null} fallback={t("common.neverResets", { defaultValue: "Never" })} />
     ),
   },
   {

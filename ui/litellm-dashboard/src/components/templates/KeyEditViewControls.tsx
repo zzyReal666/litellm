@@ -1,5 +1,6 @@
 import React from "react";
 import { Control } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { CircleHelp } from "lucide-react";
@@ -20,9 +21,27 @@ export const labelWithHint = (label: React.ReactNode, hint: string): React.React
 );
 
 const KEY_TYPE_OPTIONS = [
-  { value: "default", label: "Full Access", hint: "Can call all routes (AI APIs, Management, and read-only)" },
-  { value: "llm_api", label: "AI APIs", hint: "Can call only AI API routes (chat/completions, embeddings, etc.)" },
-  { value: "management", label: "Management", hint: "Can call only management routes (user/team/key management)" },
+  {
+    value: "default",
+    labelKey: "templates.keyEditView.fullAccess",
+    label: "Full Access",
+    hintKey: "templates.keyEditView.fullAccessDesc",
+    hint: "Can call all routes (AI APIs, Management, and read-only)",
+  },
+  {
+    value: "llm_api",
+    labelKey: "templates.keyEditView.aiApis",
+    label: "AI APIs",
+    hintKey: "templates.keyEditView.aiApisDesc",
+    hint: "Can call only AI API routes (chat/completions, embeddings, etc.)",
+  },
+  {
+    value: "management",
+    labelKey: "templates.keyEditView.management",
+    label: "Management",
+    hintKey: "templates.keyEditView.managementDesc",
+    hint: "Can call only management routes (user/team/key management)",
+  },
 ];
 
 export const KeyTypeSelect = ({
@@ -33,30 +52,35 @@ export const KeyTypeSelect = ({
   id: string;
   value: string;
   onChange: (value: string) => void;
-}) => (
-  <Select
-    items={Object.fromEntries(KEY_TYPE_OPTIONS.map((option) => [option.value, option.label]))}
-    value={value}
-    onValueChange={(next: string | null) => next != null && onChange(next)}
-  >
-    <SelectTrigger id={id} className="w-full">
-      <SelectValue placeholder="Select key type" />
-    </SelectTrigger>
-    <SelectContent>
-      {KEY_TYPE_OPTIONS.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
-          <div className="py-1">
-            <div className="font-medium">{option.label}</div>
-            <div className="mt-0.5 text-[11px] text-muted-foreground">{option.hint}</div>
-          </div>
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-);
-
-const SKILLS_HINT =
-  "Enabled skills are visible to every key. Grant disabled (private) Claude Code plugins to this key here.";
+}) => {
+  const { t } = useTranslation();
+  const keyTypeOptions = KEY_TYPE_OPTIONS.map((option) => ({
+    ...option,
+    label: t(option.labelKey, { defaultValue: option.label }),
+    hint: t(option.hintKey, { defaultValue: option.hint }),
+  }));
+  return (
+    <Select
+      items={Object.fromEntries(keyTypeOptions.map((option) => [option.value, option.label]))}
+      value={value}
+      onValueChange={(next: string | null) => next != null && onChange(next)}
+    >
+      <SelectTrigger id={id} className="w-full">
+        <SelectValue placeholder={t("templates.keyEditView.selectKeyType", { defaultValue: "Select key type" })} />
+      </SelectTrigger>
+      <SelectContent>
+        {keyTypeOptions.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            <div className="py-1">
+              <div className="font-medium">{option.label}</div>
+              <div className="mt-0.5 text-[11px] text-muted-foreground">{option.hint}</div>
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
 
 export const KeyAgentAndSkillFields = ({
   control,
@@ -64,26 +88,45 @@ export const KeyAgentAndSkillFields = ({
 }: {
   control: Control<KeyEditFormValues>;
   accessToken: string;
-}) => (
-  <>
-    <FormField control={control} name="agents_and_groups" label="Agents / Access Groups">
-      {({ value, onChange }) => (
-        <AgentSelector
-          onChange={onChange}
-          value={value as AgentsAndGroups | undefined}
-          accessToken={accessToken}
-          placeholder="Select agents or access groups (optional)"
-        />
-      )}
-    </FormField>
+}) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <FormField
+        control={control}
+        name="agents_and_groups"
+        label={t("templates.keyEditView.agents", { defaultValue: "Agents / Access Groups" })}
+      >
+        {({ value, onChange }) => (
+          <AgentSelector
+            onChange={onChange}
+            value={value as AgentsAndGroups | undefined}
+            accessToken={accessToken}
+            placeholder={t("templates.keyEditView.selectAgents", {
+              defaultValue: "Select agents or access groups (optional)",
+            })}
+          />
+        )}
+      </FormField>
 
-    <FormField control={control} name="skills" label={labelWithHint("Skills", SKILLS_HINT)}>
-      {({ value, onChange }) => (
-        <SkillSelector onChange={onChange} value={value as string[] | undefined} accessToken={accessToken} />
-      )}
-    </FormField>
-  </>
-);
+      <FormField
+        control={control}
+        name="skills"
+        label={labelWithHint(
+          t("templates.keyEditView.skills", { defaultValue: "Skills" }),
+          t("templates.keyEditView.skillsTooltip", {
+            defaultValue:
+              "Enabled skills are visible to every key. Grant disabled (private) Claude Code plugins to this key here.",
+          }),
+        )}
+      >
+        {({ value, onChange }) => (
+          <SkillSelector onChange={onChange} value={value as string[] | undefined} accessToken={accessToken} />
+        )}
+      </FormField>
+    </>
+  );
+};
 
 export const KeyBudgetNumberField = ({
   control,
