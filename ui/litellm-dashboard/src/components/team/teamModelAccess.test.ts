@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
 import { computeTeamModelBadges, normalizeTeamModelSelection, TeamAccessGroupModelGrant } from "./teamModelAccess";
 
 const GRANTS: TeamAccessGroupModelGrant[] = [
@@ -20,7 +21,7 @@ describe("normalizeTeamModelSelection", () => {
 
 describe("computeTeamModelBadges", () => {
   it("attributes group-only models to the groups granting them", () => {
-    const badges = computeTeamModelBadges(["sonnet-direct"], [], GRANTS);
+    const badges = computeTeamModelBadges(["sonnet-direct"], [], GRANTS, i18n.t);
     expect(badges).toEqual([
       {
         label: "sonnet-direct",
@@ -34,7 +35,7 @@ describe("computeTeamModelBadges", () => {
   });
 
   it("marks a model both direct and group-granted on the direct badge, without a duplicate badge", () => {
-    const badges = computeTeamModelBadges(["haiku"], [], GRANTS);
+    const badges = computeTeamModelBadges(["haiku"], [], GRANTS, i18n.t);
     expect(badges).toEqual([
       {
         label: "haiku",
@@ -47,7 +48,7 @@ describe("computeTeamModelBadges", () => {
   });
 
   it("shows the no-default-models sentinel as its own badge and keeps group badges visible", () => {
-    const badges = computeTeamModelBadges(["no-default-models"], [], [GRANTS[0]]);
+    const badges = computeTeamModelBadges(["no-default-models"], [], [GRANTS[0]], i18n.t);
     expect(badges.map((b) => [b.label, b.kind])).toEqual([
       ["No default models", "no-default"],
       ["haiku", "access-group"],
@@ -56,7 +57,7 @@ describe("computeTeamModelBadges", () => {
   });
 
   it("still shows group badges when the empty model list grants everything", () => {
-    const badges = computeTeamModelBadges([], [], [GRANTS[0]]);
+    const badges = computeTeamModelBadges([], [], [GRANTS[0]], i18n.t);
     expect(badges[0]).toEqual({
       label: "All proxy models",
       kind: "all-proxy",
@@ -66,7 +67,7 @@ describe("computeTeamModelBadges", () => {
   });
 
   it("distinguishes the all-proxy-models sentinel from an empty list in the tooltip", () => {
-    const badges = computeTeamModelBadges(["all-proxy-models"], [], []);
+    const badges = computeTeamModelBadges(["all-proxy-models"], [], [], i18n.t);
     expect(badges).toEqual([
       {
         label: "All proxy models",
@@ -77,7 +78,7 @@ describe("computeTeamModelBadges", () => {
   });
 
   it("falls back to the flat access_group_models list when per-group details are absent", () => {
-    const badges = computeTeamModelBadges(["direct-model"], ["haiku"], undefined);
+    const badges = computeTeamModelBadges(["direct-model"], ["haiku"], undefined, i18n.t);
     expect(badges).toEqual([
       { label: "direct-model", kind: "direct", tooltip: "Granted directly in the team's model list" },
       { label: "haiku", kind: "access-group", tooltip: "Granted via an access group" },

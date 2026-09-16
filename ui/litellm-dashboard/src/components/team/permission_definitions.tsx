@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 export interface PermissionInfo {
   method: string;
   endpoint: string;
@@ -25,6 +27,22 @@ export const PERMISSION_DESCRIPTIONS: Record<string, string> = {
   "/spend/logs": "Member can view spend logs for the entire team (not just their own)",
 };
 
+const PERMISSION_DESCRIPTION_KEYS: Record<string, string> = {
+  "/key/generate": "teamPage.memberPermissions.permDescKeyGenerate",
+  "/key/service-account/generate": "teamPage.memberPermissions.permDescKeyServiceAccountGenerate",
+  "/key/update": "teamPage.memberPermissions.permDescKeyUpdate",
+  "/key/delete": "teamPage.memberPermissions.permDescKeyDelete",
+  "/key/info": "teamPage.memberPermissions.permDescKeyInfo",
+  "/key/regenerate": "teamPage.memberPermissions.permDescKeyRegenerate",
+  "/key/{key_id}/regenerate": "teamPage.memberPermissions.permDescKeyIdRegenerate",
+  "/key/list": "teamPage.memberPermissions.permDescKeyList",
+  "/key/block": "teamPage.memberPermissions.permDescKeyBlock",
+  "/key/unblock": "teamPage.memberPermissions.permDescKeyUnblock",
+  "/key/access_group_assignment": "teamPage.memberPermissions.permDescKeyAccessGroupAssignment",
+  "/team/daily/activity": "teamPage.memberPermissions.permDescTeamDailyActivity",
+  "/spend/logs": "teamPage.memberPermissions.permDescSpendLogs",
+};
+
 /**
  * Determines the HTTP method for a given permission endpoint
  */
@@ -43,18 +61,20 @@ export const getMethodForEndpoint = (endpoint: string): string => {
 /**
  * Parses a permission string into a structured PermissionInfo object
  */
-export const getPermissionInfo = (permission: string): PermissionInfo => {
+export const getPermissionInfo = (permission: string, t: TFunction): PermissionInfo => {
   const method = getMethodForEndpoint(permission);
   const endpoint = permission;
 
   // Find exact match or fallback to default description
   let description = PERMISSION_DESCRIPTIONS[permission];
+  let descriptionKey = PERMISSION_DESCRIPTION_KEYS[permission];
 
   // If no exact match, try to find a partial match based on patterns
   if (!description) {
     for (const [pattern, desc] of Object.entries(PERMISSION_DESCRIPTIONS)) {
       if (permission.includes(pattern)) {
         description = desc;
+        descriptionKey = PERMISSION_DESCRIPTION_KEYS[pattern];
         break;
       }
     }
@@ -62,13 +82,21 @@ export const getPermissionInfo = (permission: string): PermissionInfo => {
 
   // Fallback if no match found
   if (!description) {
-    description = `Access ${permission}`;
+    return {
+      method,
+      endpoint,
+      description: t("teamPage.memberPermissions.permDescFallback", {
+        endpoint,
+        defaultValue: `Access ${endpoint}`,
+      }),
+      route: permission,
+    };
   }
 
   return {
     method,
     endpoint,
-    description,
+    description: t(descriptionKey, { defaultValue: description }),
     route: permission,
   };
 };

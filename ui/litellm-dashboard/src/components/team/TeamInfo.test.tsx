@@ -1,6 +1,7 @@
 import { useTeamMetadataSchema } from "@/app/(dashboard)/hooks/teams/useTeamMetadataSchema";
 import * as networking from "@/components/networking";
-import { fireEvent, screen, waitFor, within } from "@testing-library/react";
+import i18n from "@/lib/i18n";
+import { cleanup, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { chooseSelectOption, renderWithProviders, testQueryClient } from "../../../tests/test-utils";
@@ -338,9 +339,11 @@ describe("TeamInfoView", () => {
 
   beforeEach(seedDefaultMocks);
 
-  afterEach(() => {
+  afterEach(async () => {
+    cleanup();
     vi.clearAllMocks();
     authState.userRole = "Admin";
+    await i18n.changeLanguage("en");
   });
 
   describe("display and rendering", () => {
@@ -644,6 +647,20 @@ describe("TeamInfoView", () => {
       });
 
       expect(screen.queryByRole("tab", { name: "Members" })).not.toBeInTheDocument();
+    });
+
+    it("should render the team view in Chinese when the language is zh-CN", async () => {
+      vi.mocked(networking.teamInfoCall).mockResolvedValue(createMockTeamData());
+
+      await i18n.changeLanguage("zh-CN");
+
+      renderWithProviders(<TeamInfoView {...defaultProps} />);
+
+      expect(await screen.findByRole("tab", { name: "概览" })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: "设置" })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: "成员" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "返回团队列表" })).toBeInTheDocument();
+      expect(screen.queryByRole("tab", { name: "Overview" })).not.toBeInTheDocument();
     });
 
     it("should show settings tab when user can edit team", async () => {

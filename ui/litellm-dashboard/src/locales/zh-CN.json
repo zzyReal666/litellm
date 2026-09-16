@@ -6543,7 +6543,9 @@
       "failureOnly": "仅失败",
       "successAndFailure": "成功与失败",
       "emptyTitle": "未配置日志集成",
-      "emptySubtitle": "点击「添加集成」为此团队配置日志"
+      "emptySubtitle": "点击「添加集成」为此团队配置日志",
+      "hidePassword": "隐藏密码",
+      "showPassword": "显示密码"
     },
     "myUserTab": {
       "loadingText": "正在加载您的成员信息…",
@@ -6564,7 +6566,8 @@
       "totalSpendTooltip": "此团队所有预算周期的累计花费。",
       "modelScopeLabel": "模型范围",
       "modelScopeTooltip": "您在此团队中可访问的模型。",
-      "allTeamModels": "所有团队模型"
+      "allTeamModels": "所有团队模型",
+      "labelInfoAria": "{{label}} 信息"
     },
     "teamInfo": {
       "failedToLoadTeam": "加载团队信息失败",
@@ -6737,7 +6740,30 @@
       "emailLabel": "邮箱",
       "roleLabel": "角色",
       "globalGuardrailAriaLabel": "全局护栏",
-      "vaultConfigPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}"
+      "vaultConfigPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+      "accessGroupListLoadFailed": "无法加载访问组列表",
+      "estimatedOutputTokens": "预估输出令牌数：{{value}}",
+      "estimatedOutputTokensLabel": "预估输出令牌数",
+      "estimatedOutputTokensPerModel": "每个模型的预估输出令牌数：{{value}}",
+      "estimatedOutputTokensPerModelLabel": "每个模型的预估输出令牌数",
+      "guardrailsHint": "选择适用于该团队的安全护栏。全局护栏默认启用，取消勾选即可退出。其他护栏需要手动启用。",
+      "inheritTeamResetPeriod": "继承团队重置周期",
+      "invalidEstimatedTokensJson": "每个模型的预估输出令牌数不是合法的 JSON",
+      "mcpInventoryStillLoading": "MCP 服务器清单仍在加载",
+      "mcpServerListLoadFailed": "无法加载 MCP 服务器列表",
+      "mcpToolsetListLoadFailed": "无法加载 MCP 工具集列表",
+      "mcpUnresolvableSaveError": "因为{{reason}}，无法保存 MCP 工具权限。请等页面加载完毕后重试",
+      "metadataHelp": "取值以文本保存。需要带类型的值请用 JSON，例如 3、true 或 {\"region\": \"us\"}。",
+      "modelAliasesTooltip": "把自定义别名映射到某个底层模型。团队成员在 API 请求里可以直接调用别名，而不必使用真实模型名。",
+      "modelsDescription": "留空表示不直接授予任何模型。团队仍保留通过访问组获得的模型",
+      "neverResetsPlaceholder": "永不重置",
+      "noGuardrailsFound": "未找到安全护栏",
+      "noMatchingOrganizations": "没有匹配的组织",
+      "noModelAliases": "还没有配置模型别名",
+      "removeModelLimitAria": "移除模型限制",
+      "skillsLabel": "技能",
+      "skillsPlaceholder": "选择技能（可选）",
+      "skillsTooltip": "已启用的技能对所有团队可见。在这里把未启用（私有）的 Claude Code 插件授予该团队。"
     },
     "teamMemberTab": {
       "noLimits": "无限制",
@@ -6755,7 +6781,8 @@
       "rateLimitsTitle": "团队成员速率限制",
       "rateLimitsTooltip": "该成员在此团队内的速率限制。",
       "roleColumnTitle": "团队角色",
-      "roleTooltip": "此角色仅适用于当前团队，与用户的代理级角色相互独立。"
+      "roleTooltip": "此角色仅适用于当前团队，与用户的代理级角色相互独立。",
+      "labelInfoAria": "{{label}} 信息"
     },
     "teamVirtualKeysTable": {
       "colKeyId": "密钥 ID",
@@ -6788,7 +6815,16 @@
       "filterKeyAlias": "密钥别名",
       "filterUserId": "用户 ID",
       "tpmLabel": "TPM：",
-      "rpmLabel": "RPM："
+      "rpmLabel": "RPM：",
+      "collapseModels": "收起模型",
+      "enterKeyId": "输入密钥 ID…",
+      "expandModels": "展开模型",
+      "filterByUserId": "按用户 ID 筛选…",
+      "filterDrawerDescription": "缩小 {{team}} 的密钥范围",
+      "noModelAccess": "无模型访问权限",
+      "scopedToRoutes": "限定在 {{routes}} 条路由上；该密钥不能调用任何模型",
+      "searchPlaceholder": "按密钥别名或 ID 搜索…",
+      "thisTeam": "该团队"
     },
     "availableTeams": {
       "colTeamName": "团队名称",
@@ -6800,7 +6836,12 @@
       "joinTeam": "加入团队",
       "joinedSuccess": "成功加入团队",
       "joinFailed": "加入团队失败",
-      "noTeamsAvailable": "暂无可加入的团队。查看如何设置可用团队，请点击<lnk>此处</lnk>。"
+      "noTeamsAvailable": "暂无可加入的团队。查看如何设置可用团队，请点击<lnk>此处</lnk>。",
+      "emptyTitle": "没有可加入的团队",
+      "joinTeamAction": "加入团队",
+      "loadingTeams": "正在加载可加入的团队…",
+      "openTeamActions": "打开团队操作",
+      "emptyHint": "如何设置可加入的团队，见<lnk>此处</lnk>"
     },
     "memberPermissions": {
       "loadingPermissions": "正在加载权限...",
@@ -6813,7 +6854,21 @@
       "noPermissions": "暂无可用权限",
       "loadFailed": "加载权限失败",
       "saveSuccess": "权限更新成功",
-      "saveFailed": "更新权限失败"
+      "saveFailed": "更新权限失败",
+      "permDescFallback": "访问 {{endpoint}}"
+    },
+    "accordions": {
+      "modelAliases": "模型别名"
+    },
+    "teamModelAccess": {
+      "allProxyEmptyList": "团队的模型列表为空，因此可以访问代理上的所有模型",
+      "allProxyFromEntry": "由团队模型列表里的“所有代理模型”条目授予",
+      "anAccessGroup": "某个访问组",
+      "grantedDirectly": "在团队模型列表中直接授予",
+      "grantedDirectlyAndVia": "在团队模型列表中直接授予，同时也通过{{source}}授予",
+      "grantedVia": "通过{{source}}授予",
+      "noDefaultModels": "没有默认模型",
+      "noDefaultTooltip": "没有直接授予任何模型，访问权限仅来自访问组"
     }
   },
   "aiHub": {

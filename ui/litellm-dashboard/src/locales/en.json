@@ -6543,7 +6543,9 @@
       "failureOnly": "Failure Only",
       "successAndFailure": "Success & Failure",
       "emptyTitle": "No logging integrations configured",
-      "emptySubtitle": "Click \"Add Integration\" to configure logging for this team"
+      "emptySubtitle": "Click \"Add Integration\" to configure logging for this team",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password"
     },
     "myUserTab": {
       "loadingText": "Loading your membership info…",
@@ -6564,7 +6566,8 @@
       "totalSpendTooltip": "Cumulative spend across all budget cycles within this team.",
       "modelScopeLabel": "Model Scope",
       "modelScopeTooltip": "Models you can access within this team.",
-      "allTeamModels": "All Team Models"
+      "allTeamModels": "All Team Models",
+      "labelInfoAria": "{{label}} information"
     },
     "teamInfo": {
       "failedToLoadTeam": "Failed to load team information",
@@ -6737,7 +6740,30 @@
       "emailLabel": "Email",
       "roleLabel": "Role",
       "globalGuardrailAriaLabel": "Global guardrail",
-      "vaultConfigPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}"
+      "vaultConfigPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+      "accessGroupListLoadFailed": "the access group list could not be loaded",
+      "estimatedOutputTokens": "Estimated Output Tokens: {{value}}",
+      "estimatedOutputTokensLabel": "Estimated Output Tokens",
+      "estimatedOutputTokensPerModel": "Estimated Output Tokens Per Model: {{value}}",
+      "estimatedOutputTokensPerModelLabel": "Estimated Output Tokens Per Model",
+      "guardrailsHint": "Select which guardrails apply to this team. Global guardrails are enabled by default, uncheck to opt out. Other guardrails are opt-in.",
+      "inheritTeamResetPeriod": "Inherit team reset period",
+      "invalidEstimatedTokensJson": "Invalid JSON in estimated output tokens per model",
+      "mcpInventoryStillLoading": "the MCP server inventory is still loading",
+      "mcpServerListLoadFailed": "the MCP server list could not be loaded",
+      "mcpToolsetListLoadFailed": "the MCP toolset list could not be loaded",
+      "mcpUnresolvableSaveError": "Cannot save MCP tool permissions because {{reason}}. Retry once the page has finished loading",
+      "metadataHelp": "Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {\"region\": \"us\"}.",
+      "modelAliasesTooltip": "Map a custom alias to an underlying model. Team members can call the alias in API requests instead of the real model name.",
+      "modelsDescription": "Leave empty to grant no models directly. The team keeps any models granted through its access groups",
+      "neverResetsPlaceholder": "Never resets",
+      "noGuardrailsFound": "No guardrails found",
+      "noMatchingOrganizations": "No matching organizations",
+      "noModelAliases": "No model aliases configured",
+      "removeModelLimitAria": "Remove model limit",
+      "skillsLabel": "Skills",
+      "skillsPlaceholder": "Select skills (optional)",
+      "skillsTooltip": "Enabled skills are visible to every team. Grant disabled (private) Claude Code plugins to this team here."
     },
     "teamMemberTab": {
       "noLimits": "No Limits",
@@ -6755,7 +6781,8 @@
       "rateLimitsTitle": "Team Member Rate Limits",
       "rateLimitsTooltip": "Rate limits for this member's usage within this team.",
       "roleColumnTitle": "Team Role",
-      "roleTooltip": "This role applies only to this team and is independent from the user's proxy-level role."
+      "roleTooltip": "This role applies only to this team and is independent from the user's proxy-level role.",
+      "labelInfoAria": "{{label}} information"
     },
     "teamVirtualKeysTable": {
       "colKeyId": "Key ID",
@@ -6788,7 +6815,16 @@
       "filterKeyAlias": "Key Alias",
       "filterUserId": "User ID",
       "tpmLabel": "TPM:",
-      "rpmLabel": "RPM:"
+      "rpmLabel": "RPM:",
+      "collapseModels": "Collapse models",
+      "enterKeyId": "Enter Key ID…",
+      "expandModels": "Expand models",
+      "filterByUserId": "Filter by user ID…",
+      "filterDrawerDescription": "Narrow down keys for {{team}}",
+      "noModelAccess": "No model access",
+      "scopedToRoutes": "Scoped to {{routes}} routes; this key cannot call any models",
+      "searchPlaceholder": "Search by key alias or ID…",
+      "thisTeam": "this team"
     },
     "availableTeams": {
       "colTeamName": "Team Name",
@@ -6800,7 +6836,12 @@
       "joinTeam": "Join Team",
       "joinedSuccess": "Successfully joined team",
       "joinFailed": "Failed to join team",
-      "noTeamsAvailable": "No available teams to join. See how to set available teams <lnk>here</lnk>."
+      "noTeamsAvailable": "No available teams to join. See how to set available teams <lnk>here</lnk>.",
+      "emptyTitle": "No available teams to join",
+      "joinTeamAction": "Join team",
+      "loadingTeams": "Loading available teams…",
+      "openTeamActions": "Open team actions",
+      "emptyHint": "See how to set available teams <lnk>here</lnk>"
     },
     "memberPermissions": {
       "loadingPermissions": "Loading permissions...",
@@ -6813,7 +6854,21 @@
       "noPermissions": "No permissions available",
       "loadFailed": "Failed to load permissions",
       "saveSuccess": "Permissions updated successfully",
-      "saveFailed": "Failed to update permissions"
+      "saveFailed": "Failed to update permissions",
+      "permDescFallback": "Access {{endpoint}}"
+    },
+    "accordions": {
+      "modelAliases": "Model Aliases"
+    },
+    "teamModelAccess": {
+      "allProxyEmptyList": "The team's model list is empty, so it can access every model on the proxy",
+      "allProxyFromEntry": "Granted by the All Proxy Models entry in the team's model list",
+      "anAccessGroup": "an access group",
+      "grantedDirectly": "Granted directly in the team's model list",
+      "grantedDirectlyAndVia": "Granted directly in the team's model list, and also via {{source}}",
+      "grantedVia": "Granted via {{source}}",
+      "noDefaultModels": "No default models",
+      "noDefaultTooltip": "No models are granted directly. Access comes only from access groups"
     }
   },
   "aiHub": {

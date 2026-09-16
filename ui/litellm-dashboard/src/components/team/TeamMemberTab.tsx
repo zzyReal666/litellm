@@ -8,6 +8,7 @@ import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { isProxyAdminRole, isUserTeamAdminForSingleTeam } from "@/utils/roles";
 import { CircleHelp } from "lucide-react";
 import type { ComponentProps } from "react";
+import { useTranslation } from "react-i18next";
 import { TeamData } from "./TeamInfo";
 
 interface TeamMemberTabProps {
@@ -27,6 +28,7 @@ export default function TeamMemberTab({
   setIsEditMemberModalVisible,
   setIsAddMemberModalVisible,
 }: TeamMemberTabProps) {
+  const { t } = useTranslation();
   const formatNumber = (value: number | null): string => {
     if (value === null || value === undefined) return "0";
 
@@ -66,7 +68,7 @@ export default function TeamMemberTab({
 
   // Helper function to get rate limits for a user
   const getUserRateLimits = (userId: string | null): string => {
-    if (!userId) return "No Limits";
+    if (!userId) return t("teamPage.teamMemberTab.noLimits", { defaultValue: "No Limits" });
     const membership = teamData.team_memberships.find((tm) => tm.user_id === userId);
     const rpmLimit = membership?.litellm_budget_table?.rpm_limit;
     const tpmLimit = membership?.litellm_budget_table?.tpm_limit;
@@ -75,7 +77,7 @@ export default function TeamMemberTab({
     const tpmText = tpmLimit != null ? `${formatNumber(tpmLimit)} TPM` : null;
 
     const limits = [rpmText, tpmText].filter(Boolean);
-    return limits.length > 0 ? limits.join(" / ") : "No Limits";
+    return limits.length > 0 ? limits.join(" / ") : t("teamPage.teamMemberTab.noLimits", { defaultValue: "No Limits" });
   };
 
   const { data: uiSettingsData } = useUISettings();
@@ -101,9 +103,19 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Model Scope
-          <SimpleTooltip content="Models this member can access. Empty means they inherit all team models.">
-            <CircleHelp className="size-4" aria-label="Model scope information" />
+          {t("teamPage.teamMemberTab.modelScopeTitle", { defaultValue: "Model Scope" })}
+          <SimpleTooltip
+            content={t("teamPage.teamMemberTab.modelScopeTooltip", {
+              defaultValue: "Models this member can access. Empty means they inherit all team models.",
+            })}
+          >
+            <CircleHelp
+              className="size-4"
+              aria-label={t("teamPage.teamMemberTab.labelInfoAria", {
+                label: t("teamPage.teamMemberTab.modelScopeTitle", { defaultValue: "Model Scope" }),
+                defaultValue: "{{label}} information",
+              })}
+            />
           </SimpleTooltip>
         </span>
       ),
@@ -111,7 +123,11 @@ export default function TeamMemberTab({
       render: (record: Member) => {
         const models = getUserAllowedModels(record.user_id);
         if (!models) {
-          return <span className="text-muted-foreground">(all team models)</span>;
+          return (
+            <span className="text-muted-foreground">
+              {t("teamPage.teamMemberTab.allTeamModels", { defaultValue: "(all team models)" })}
+            </span>
+          );
         }
         const displayed = models.slice(0, 2);
         const remaining = models.length - displayed.length;
@@ -124,7 +140,9 @@ export default function TeamMemberTab({
             ))}
             {remaining > 0 && (
               <SimpleTooltip content={models.slice(2).join(", ")}>
-                <span className="text-muted-foreground">+{remaining} more</span>
+                <span className="text-muted-foreground">
+                  {t("teamPage.teamMemberTab.moreModels", { count: remaining, defaultValue: "+{{count}} more" })}
+                </span>
               </SimpleTooltip>
             )}
           </div>
@@ -134,9 +152,22 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Current Cycle Spend (USD)
-          <SimpleTooltip content="Spend for the current budget cycle. Resets to $0 when the member's budget window rolls over. This is the value checked against the member's budget.">
-            <CircleHelp className="size-4" aria-label="Current cycle spend information" />
+          {t("teamPage.teamMemberTab.currentCycleSpendTitle", { defaultValue: "Current Cycle Spend (USD)" })}
+          <SimpleTooltip
+            content={t("teamPage.teamMemberTab.currentCycleSpendTooltip", {
+              defaultValue:
+                "Spend for the current budget cycle. Resets to $0 when the member's budget window rolls over. This is the value checked against the member's budget.",
+            })}
+          >
+            <CircleHelp
+              className="size-4"
+              aria-label={t("teamPage.teamMemberTab.labelInfoAria", {
+                label: t("teamPage.teamMemberTab.currentCycleSpendTitle", {
+                  defaultValue: "Current Cycle Spend (USD)",
+                }),
+                defaultValue: "{{label}} information",
+              })}
+            />
           </SimpleTooltip>
         </span>
       ),
@@ -147,9 +178,20 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Total Spend (USD)
-          <SimpleTooltip content="Cumulative spend by this member within this team, across all budget cycles. Tracking began 2026-04-21; spend from before that date is not included.">
-            <CircleHelp className="size-4" aria-label="Total spend information" />
+          {t("teamPage.teamMemberTab.totalSpendTitle", { defaultValue: "Total Spend (USD)" })}
+          <SimpleTooltip
+            content={t("teamPage.teamMemberTab.totalSpendTooltip", {
+              defaultValue:
+                "Cumulative spend by this member within this team, across all budget cycles. Tracking began 2026-04-21; spend from before that date is not included.",
+            })}
+          >
+            <CircleHelp
+              className="size-4"
+              aria-label={t("teamPage.teamMemberTab.labelInfoAria", {
+                label: t("teamPage.teamMemberTab.totalSpendTitle", { defaultValue: "Total Spend (USD)" }),
+                defaultValue: "{{label}} information",
+              })}
+            />
           </SimpleTooltip>
         </span>
       ),
@@ -158,15 +200,20 @@ export default function TeamMemberTab({
       render: (record: Member) => <MoneyCell value={getUserTotalSpend(record.user_id)} decimals={2} />,
     },
     {
-      title: "Team Member Budget (USD)",
+      title: t("teamPage.teamMemberTab.memberBudgetTitle", { defaultValue: "Team Member Budget (USD)" }),
       key: "budget",
       sortValue: (record: Member) => getUserBudget(record.user_id),
       render: (record: Member) => (
-        <MoneyCell value={getUserBudget(record.user_id)} decimals={2} emptyText="Unlimited" showZero />
+        <MoneyCell
+          value={getUserBudget(record.user_id)}
+          decimals={2}
+          emptyText={t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}
+          showZero
+        />
       ),
     },
     {
-      title: "Budget Reset",
+      title: t("teamPage.teamMemberTab.budgetResetTitle", { defaultValue: "Budget Reset" }),
       key: "budget_reset",
       sortValue: (record: Member) => getUserBudgetReset(record.user_id),
       render: (record: Member) => <DateCell value={getUserBudgetReset(record.user_id)} precision="date" />,
@@ -174,9 +221,19 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Team Member Rate Limits
-          <SimpleTooltip content="Rate limits for this member's usage within this team.">
-            <CircleHelp className="size-4" aria-label="Team member rate limits information" />
+          {t("teamPage.teamMemberTab.rateLimitsTitle", { defaultValue: "Team Member Rate Limits" })}
+          <SimpleTooltip
+            content={t("teamPage.teamMemberTab.rateLimitsTooltip", {
+              defaultValue: "Rate limits for this member's usage within this team.",
+            })}
+          >
+            <CircleHelp
+              className="size-4"
+              aria-label={t("teamPage.teamMemberTab.labelInfoAria", {
+                label: t("teamPage.teamMemberTab.rateLimitsTitle", { defaultValue: "Team Member Rate Limits" }),
+                defaultValue: "{{label}} information",
+              })}
+            />
           </SimpleTooltip>
         </span>
       ),
@@ -205,8 +262,10 @@ export default function TeamMemberTab({
       }}
       onDelete={handleMemberDelete}
       onAddMember={() => setIsAddMemberModalVisible(true)}
-      roleColumnTitle="Team Role"
-      roleTooltip="This role applies only to this team and is independent from the user's proxy-level role."
+      roleColumnTitle={t("teamPage.teamMemberTab.roleColumnTitle", { defaultValue: "Team Role" })}
+      roleTooltip={t("teamPage.teamMemberTab.roleTooltip", {
+        defaultValue: "This role applies only to this team and is independent from the user's proxy-level role.",
+      })}
       extraColumns={extraColumns}
       showDeleteForMember={() =>
         isProxyAdmin || (canEditTeam && !isUserTeamAdmin) || (isUserTeamAdmin && !disableTeamAdminDeleteTeamUser)
