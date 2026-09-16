@@ -17,7 +17,6 @@ interface LabeledFieldProps {
 }
 
 export default function LabeledField({
-  const { t } = useTranslation();
   label,
   value,
   icon,
@@ -26,6 +25,7 @@ export default function LabeledField({
   copyable = false,
   defaultUserIdCheck = false,
 }: LabeledFieldProps) {
+  const { t } = useTranslation();
   const isEmpty = !value;
   const isDefaultUser = defaultUserIdCheck && value === DEFAULT_PROXY_ADMIN_USER_ID;
   const displayValue = isEmpty ? "-" : value;
@@ -45,11 +45,8 @@ export default function LabeledField({
           {displayValue}
         </strong>
       )}
-{isCopyable && (
-        <CopyButton
-          value={value}
-          label={t("common.copyField", { field: label, defaultValue: `Copy ${label}` })}
-        />
+      {isCopyable && (
+        <CopyButton value={value} label={t("common.copyField", { field: label, defaultValue: `Copy ${label}` })} />
       )}
     </span>
   );
