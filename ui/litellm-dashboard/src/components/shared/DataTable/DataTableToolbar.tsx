@@ -126,7 +126,7 @@ export function DataTableToolbar<TData>({
         {onOpenFilters !== undefined && (
           <Button variant="outline" size="sm" onClick={onOpenFilters} data-testid="datatable-filters-trigger">
             <SlidersHorizontal />
-            Filters
+            {t("molecules.filter.filters", { defaultValue: "Filters" })}
             {filters.length > 0 && (
               <Badge className="ml-1 h-5 min-w-5 justify-center rounded-full px-1" data-testid="datatable-filter-count">
                 {filters.length}

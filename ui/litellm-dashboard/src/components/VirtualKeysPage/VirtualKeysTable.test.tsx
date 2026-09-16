@@ -176,7 +176,10 @@ const keysResult = (keys: KeyResponse[], data: Partial<KeysResponse> = {}, extra
     ...extra,
   }) as any;
 
-const openFilters = () => fireEvent.click(screen.getByRole("button", { name: "Filters" }));
+const openFilters = () =>
+  fireEvent.click(
+    screen.getByRole("button", { name: i18n.t("molecules.filter.filters", { defaultValue: "Filters" }) }),
+  );
 
 const lastSearchParam = (onUrlUpdate: Mock<OnUrlUpdateFunction>, name: string) =>
   onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get(name);
