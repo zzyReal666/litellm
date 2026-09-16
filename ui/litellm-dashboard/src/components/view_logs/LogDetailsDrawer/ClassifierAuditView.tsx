@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import CopyButton from "@/components/shared/CopyButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ReactNode } from "react";
@@ -25,6 +26,7 @@ export function ClassifierAuditView({ request, response }: ClassifierAuditViewPr
 }
 
 function AuditField({ title, value, children }: { title: string; value: unknown; children: ReactNode }) {
+  const { t } = useTranslation();
   const serialized = JSON.stringify(value);
   const truncated = serialized?.includes("litellm_truncated") ?? false;
 
@@ -32,7 +34,10 @@ function AuditField({ title, value, children }: { title: string; value: unknown;
     <Card size="sm" role="region" aria-label={title}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {value != null && <CopyButton value={JSON.stringify(value, null, 2)} label={`Copy ${title}`} />}
+        <CopyButton
+          value={JSON.stringify(value, null, 2)}
+          label={t("common.copyField", { field: title, defaultValue: `Copy ${title}` })}
+        />
       </CardHeader>
       <CardContent>
         <p className="mb-3 text-sm text-muted-foreground">{children}</p>

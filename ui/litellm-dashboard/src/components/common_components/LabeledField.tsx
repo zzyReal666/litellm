@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import CopyButton from "@/components/shared/CopyButton";
 import { EntityLink } from "@/components/shared/EntityLink";
 import { cx } from "@/lib/cva.config";
@@ -16,6 +17,7 @@ interface LabeledFieldProps {
 }
 
 export default function LabeledField({
+  const { t } = useTranslation();
   label,
   value,
   icon,
@@ -43,7 +45,12 @@ export default function LabeledField({
           {displayValue}
         </strong>
       )}
-      {isCopyable && <CopyButton value={value} label={`Copy ${label}`} />}
+{isCopyable && (
+        <CopyButton
+          value={value}
+          label={t("common.copyField", { field: label, defaultValue: `Copy ${label}` })}
+        />
+      )}
     </span>
   );
   return (

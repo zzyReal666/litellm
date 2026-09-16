@@ -305,7 +305,8 @@
       "memberCount_other": "{{count}} 位成员",
       "editMember": "编辑成员",
       "deleteMember": "删除成员",
-      "addMember": "添加成员"
+      "addMember": "添加成员",
+      "userAlias": "用户别名"
     },
     "modelAliasManager": {
       "bothRequired": "请同时提供别名名称和目标模型",
@@ -2273,7 +2274,8 @@
     "deleteConfirmNamed": "确定要删除 {{name}} 吗？",
     "createdAt": "创建时间",
     "updatedAt": "更新时间",
-    "comingSoon": "即将推出"
+    "comingSoon": "即将推出",
+    "copyField": "复制{{field}}"
   },
   "publicModelHub": {
     "copiedToClipboard": "已复制到剪贴板！",
@@ -8068,7 +8070,6 @@
     "keyInfoHeader": {
       "blockKey": "封禁密钥",
       "blocked": "已封禁",
-      "copyField": "复制{{field}}",
       "createdAt": "创建时间",
       "moreKeyActions": "更多密钥操作",
       "organization": "组织",

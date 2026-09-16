@@ -305,7 +305,8 @@
       "memberCount_other": "{{count}} Members",
       "editMember": "Edit member",
       "deleteMember": "Delete member",
-      "addMember": "Add Member"
+      "addMember": "Add Member",
+      "userAlias": "User Alias"
     },
     "modelAliasManager": {
       "bothRequired": "Please provide both alias name and target model",
@@ -2273,7 +2274,8 @@
     "deleteConfirmNamed": "Are you sure you want to delete {{name}}?",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "copyField": "Copy {{field}}"
   },
   "publicModelHub": {
     "copiedToClipboard": "Copied to clipboard!",
@@ -8068,7 +8070,6 @@
     "keyInfoHeader": {
       "blockKey": "Block Key",
       "blocked": "Blocked",
-      "copyField": "Copy {{field}}",
       "createdAt": "Created At",
       "moreKeyActions": "More key actions",
       "organization": "Organization",

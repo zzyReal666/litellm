@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { fireEvent, renderWithProviders, screen } from "../../../tests/test-utils";
+import i18n from "@/lib/i18n";
 import DeleteResourceModal from "./DeleteResourceModal";
 
 describe("DeleteResourceModal", () => {
@@ -197,5 +199,27 @@ describe("DeleteResourceModal", () => {
   it("should not render modal when isOpen is false", () => {
     renderWithProviders(<DeleteResourceModal {...defaultProps} isOpen={false} />);
     expect(screen.queryByText("Delete Resource")).not.toBeInTheDocument();
+  });
+
+  describe("in Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("asks for the typed confirmation and labels the buttons in Chinese", async () => {
+      const user = userEvent.setup();
+      await i18n.changeLanguage("zh-CN");
+
+      renderWithProviders(<DeleteResourceModal {...defaultProps} requiredConfirmation="DELETE" />);
+
+      expect(screen.getByText(/请输入/)).toBeInTheDocument();
+      expect(screen.getByText(/以确认删除/)).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "取消" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "删除" })).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "取消" }));
+      expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    });
   });
 });

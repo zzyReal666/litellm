@@ -112,7 +112,7 @@ function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null
               </span>
               <CopyButton
                 value={value}
-                label={t("templates.keyInfoHeader.copyField", { field: label, defaultValue: `Copy ${label}` })}
+                label={t("common.copyField", { field: label, defaultValue: `Copy ${label}` })}
                 iconClassName="size-3.5"
               />
             </div>
