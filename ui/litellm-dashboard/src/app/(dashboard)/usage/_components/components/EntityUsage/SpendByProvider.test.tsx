@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import i18n from "@/lib/i18n";
 import SpendByProvider from "./SpendByProvider";
 
 vi.mock("@/components/shared/chart_loader", () => ({
@@ -284,5 +285,36 @@ describe("SpendByProvider", () => {
     render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={providerSpendWithMixed} />);
     expect(screen.getAllByText("provider1").length).toBeGreaterThan(0);
     expect(screen.queryByText("provider2")).not.toBeInTheDocument();
+  });
+
+  describe("in Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("should render the card title, column headers and toggles in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={mockProviderSpend} />);
+
+      expect(screen.getByText("按提供商统计花费")).toBeInTheDocument();
+      expect(screen.getByText("提供商")).toBeInTheDocument();
+      expect(screen.getByText("花费")).toBeInTheDocument();
+      expect(screen.getByText("成功")).toBeInTheDocument();
+      expect(screen.getByText("失败")).toBeInTheDocument();
+      expect(screen.getByText("显示零花费")).toBeInTheDocument();
+      expect(screen.getByText("显示未知")).toBeInTheDocument();
+    });
+
+    it("should keep provider names, spend amounts and token counts unchanged", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      render(<SpendByProvider loading={false} isDateChanging={false} providerSpend={mockProviderSpend} />);
+
+      expect(screen.getAllByText("openai").length).toBeGreaterThan(0);
+      expect(screen.getByText("$150.50")).toBeInTheDocument();
+      expect(screen.getByText("50,000")).toBeInTheDocument();
+    });
   });
 });

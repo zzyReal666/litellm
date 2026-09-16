@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Download } from "lucide-react";
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { teamSpendByUserCall } from "@/components/networking";
 import { DataTable } from "@/components/shared/DataTable";
@@ -27,35 +29,45 @@ interface TeamUserSpendCardProps {
   teamIds: string[];
 }
 
-const columns: ColumnDef<TeamUserSpendRow>[] = [
-  { header: "Team", accessorFn: teamLabel, id: "team", cell: ({ row }) => teamLabel(row.original) },
-  { header: "User", accessorFn: userLabel, id: "user", cell: ({ row }) => userLabel(row.original) },
+const getColumns = (t: TFunction): ColumnDef<TeamUserSpendRow>[] => [
   {
-    header: "Spend",
+    header: t("usagePage.teamUserSpend.colTeam", { defaultValue: "Team" }),
+    accessorFn: teamLabel,
+    id: "team",
+    cell: ({ row }) => teamLabel(row.original),
+  },
+  {
+    header: t("usagePage.teamUserSpend.colUser", { defaultValue: "User" }),
+    accessorFn: userLabel,
+    id: "user",
+    cell: ({ row }) => userLabel(row.original),
+  },
+  {
+    header: t("usagePage.teamUserSpend.colSpend", { defaultValue: "Spend" }),
     accessorKey: "spend",
     meta: { numeric: true },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
   },
   {
-    header: "Requests",
+    header: t("usagePage.teamUserSpend.colRequests", { defaultValue: "Requests" }),
     accessorKey: "api_requests",
     meta: { numeric: true },
     cell: ({ row }) => row.original.api_requests.toLocaleString(),
   },
   {
-    header: "Successful",
+    header: t("usagePage.teamUserSpend.colSuccessful", { defaultValue: "Successful" }),
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-success" },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: "Failed",
+    header: t("usagePage.teamUserSpend.colFailed", { defaultValue: "Failed" }),
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-destructive" },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: "Tokens",
+    header: t("usagePage.teamUserSpend.colTokens", { defaultValue: "Tokens" }),
     accessorKey: "total_tokens",
     meta: { numeric: true },
     cell: ({ row }) => row.original.total_tokens.toLocaleString(),
@@ -63,6 +75,8 @@ const columns: ColumnDef<TeamUserSpendRow>[] = [
 ];
 
 const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, startTime, endTime, teamIds }) => {
+  const { t } = useTranslation();
+  const columns = getColumns(t);
   const hasTeams = teamIds.length > 0;
   const { data, isLoading } = useQuery({
     queryKey: ["teamSpendByUser", startTime?.toISOString(), endTime?.toISOString(), teamIds],
@@ -77,9 +91,14 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
       <CardContent className="flex flex-col space-y-4">
         <div className="flex items-start justify-between">
           <div className="flex flex-col space-y-2">
-            <h3 className="text-lg font-medium text-foreground">Spend Per User Within Team</h3>
+            <h3 className="text-lg font-medium text-foreground">
+              {t("usagePage.teamUserSpend.title", { defaultValue: "Spend Per User Within Team" })}
+            </h3>
             <p className="text-xs text-muted-foreground">
-              Attributed per request from spend logs, so it includes JWT/SSO traffic that does not use a virtual key
+              {t("usagePage.teamUserSpend.description", {
+                defaultValue:
+                  "Attributed per request from spend logs, so it includes JWT/SSO traffic that does not use a virtual key",
+              })}
             </p>
           </div>
           <Button
@@ -89,7 +108,7 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
             onClick={() => data && downloadCsv(buildTeamUserSpendCsv(data), teamUserSpendCsvFileName(data))}
           >
             <Download />
-            Download CSV
+            {t("usagePage.teamUserSpend.downloadCsv", { defaultValue: "Download CSV" })}
           </Button>
         </div>
         <DataTable
@@ -98,7 +117,11 @@ const TeamUserSpendCard: React.FC<TeamUserSpendCardProps> = ({ accessToken, star
           getRowId={teamUserSpendRowId}
           isLoading={isLoading}
           maxBodyHeight={320}
-          noDataMessage={teamIds.length === 0 ? "Select a team to see spend per user" : "No user spend in this range"}
+          noDataMessage={
+            teamIds.length === 0
+              ? t("usagePage.teamUserSpend.selectTeam", { defaultValue: "Select a team to see spend per user" })
+              : t("usagePage.teamUserSpend.noSpend", { defaultValue: "No user spend in this range" })
+          }
           size="compact"
         />
       </CardContent>

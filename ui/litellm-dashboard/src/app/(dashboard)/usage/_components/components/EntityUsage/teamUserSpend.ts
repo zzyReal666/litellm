@@ -1,5 +1,6 @@
 import Papa from "papaparse";
 
+import i18n from "@/lib/i18n";
 import type { TeamUserSpendResponse } from "@/components/networking";
 
 export type TeamUserSpendRow = TeamUserSpendResponse["results"][number];
@@ -8,7 +9,7 @@ export const NO_USER_LABEL = "(no user)";
 
 export const userLabel = (row: TeamUserSpendRow): string => {
   const identity = row.user_email || row.user_alias;
-  return identity || row.user_id || NO_USER_LABEL;
+  return identity || row.user_id || i18n.t("usagePage.teamUserSpend.noUser", { defaultValue: NO_USER_LABEL });
 };
 
 export const teamLabel = (row: TeamUserSpendRow): string => row.team_alias || row.team_id;

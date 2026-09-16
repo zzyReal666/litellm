@@ -5872,7 +5872,9 @@
       "enterToSend": "Enter to send",
       "filterLabel": "Filter: {{filter}}",
       "errorPrefix": "Error: {{message}}",
-      "fallbackError": "Failed to get response. Please try again."
+      "fallbackError": "Failed to get response. Please try again.",
+      "loadingModels": "Loading models…",
+      "noModelsFound": "No models found"
     },
     "usagePageView": {
       "filterByUser": "Filter by user",
@@ -5914,7 +5916,10 @@
       "stopButton": "Stop",
       "credentialBannerMessage": "Reusable credentials are automatically tracked as tags",
       "credentialBannerDescription": "When a reusable credential is used, it will appear as a tag prefixed with <code>Credential: </code> in this view.",
-      "exportUsageDataTitle": "Export Usage Data"
+      "exportUsageDataTitle": "Export Usage Data",
+      "gatewayCountedTooltip": "Counted by the gateway when it answers a request, independent of spend logging. Deployment-wide, so it will not match the per-key or per-model breakdowns below.",
+      "gatewayRequestsByEndpoint": "Gateway Requests by Endpoint",
+      "gatewayRequestsByEndpointTooltip": "Counted by the gateway middleware as each request is answered. Covers LLM, MCP and A2A endpoints across the whole deployment."
     },
     "endpointUsageBarChart": {
       "title": "Success vs Failed Requests by Endpoint"
@@ -5968,7 +5973,29 @@
       "topModels": "Top Models",
       "topAgentsDrivingSpend": "Top Agents Driving Spend",
       "providerUsage": "Provider Usage",
-      "providerLogoAlt": "{{provider}} logo"
+      "providerLogoAlt": "{{provider}} logo",
+      "entityTag": "Tag",
+      "entityTeam": "Team",
+      "entityOrganization": "Organization",
+      "entityCustomer": "Customer",
+      "entityAgent": "Agent",
+      "entityUser": "User",
+      "entityTagLower": "tag",
+      "entityTeamLower": "team",
+      "entityOrganizationLower": "organization",
+      "entityCustomerLower": "customer",
+      "entityAgentLower": "agent",
+      "entityUserLower": "user",
+      "totalCost": "Total Cost",
+      "totalCostTooltip": "Request cost plus flat cost for reserved capacity. Select this tile to see the breakdown.",
+      "requestCost": "Request Cost",
+      "requestCostTooltip": "Usage-based cost of the requests this entity sent during the selected period, priced per token.",
+      "flatCost": "Flat Cost",
+      "flatCostTooltip": "Reserved provisioned throughput, billed per hour whether or not requests are sent. Reported here only; it does not count toward team, key, user, or organization budgets.",
+      "tooltipRequestCost": "Request cost: ${{amount}}",
+      "tooltipFlatCost": "Flat cost: ${{amount}}",
+      "tooltipTotalCost": "Total cost: ${{amount}}",
+      "noSpendData": "No {{entity}} spend data"
     },
     "spendByProvider": {
       "title": "Spend by Provider",
@@ -5979,7 +6006,8 @@
       "colSpend": "Spend",
       "colSuccessful": "Successful",
       "colFailed": "Failed",
-      "colTokens": "Tokens"
+      "colTokens": "Tokens",
+      "noData": "No provider usage data"
     },
     "topKeyView": {
       "colKeyId": "Key ID",
@@ -6003,7 +6031,9 @@
       "colFailed": "Failed",
       "colTokens": "Tokens",
       "tableView": "Table View",
-      "chartView": "Chart View"
+      "chartView": "Chart View",
+      "numberOfModelsAria": "Number of models to show",
+      "viewModeAria": "Top model view mode"
     },
     "keyModelUsageView": {
       "title": "Model Usage",
@@ -6014,6 +6044,31 @@
       "colTokens": "Tokens",
       "tableView": "Table",
       "chartView": "Chart"
+    },
+    "endpointUsageTable": {
+      "colEndpoint": "Endpoint",
+      "colSuccessfulFailed": "Successful / Failed",
+      "colTotalRequests": "Total Request",
+      "colSuccessRate": "Success Rate",
+      "colTotalTokens": "Total Tokens",
+      "colSpend": "Spend",
+      "successfulRequestsAria": "Successful requests",
+      "noData": "No endpoint usage data"
+    },
+    "teamUserSpend": {
+      "title": "Spend Per User Within Team",
+      "description": "Attributed per request from spend logs, so it includes JWT/SSO traffic that does not use a virtual key",
+      "downloadCsv": "Download CSV",
+      "colTeam": "Team",
+      "colUser": "User",
+      "colSpend": "Spend",
+      "colRequests": "Requests",
+      "colSuccessful": "Successful",
+      "colFailed": "Failed",
+      "colTokens": "Tokens",
+      "selectTeam": "Select a team to see spend per user",
+      "noSpend": "No user spend in this range",
+      "noUser": "(no user)"
     }
   },
   "vectorStoreProviders": {

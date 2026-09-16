@@ -4,9 +4,10 @@ import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useIsOrgAdmin from "@/app/(dashboard)/hooks/useIsOrgAdmin";
 import { useCurrentUser } from "@/app/(dashboard)/hooks/users/useCurrentUser";
 import { useInfiniteUsers } from "@/app/(dashboard)/hooks/users/useUsers";
-import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { renderWithProviders } from "@/../tests/test-utils";
 import type { Organization } from "@/components/networking";
 import * as networking from "@/components/networking";
@@ -1363,6 +1364,43 @@ describe("UsagePage", () => {
       expect(screen.getByText("Key Activity")).toBeInTheDocument();
       expect(screen.getByText("MCP Server Activity")).toBeInTheDocument();
       expect(screen.getByText("Endpoint Activity")).toBeInTheDocument();
+    });
+  });
+
+  describe("in Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("should render the tabs, user filter, export button and metrics heading in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      renderWithProviders(<UsagePage {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(mockUserDailyActivityAggregatedCall).toHaveBeenCalled();
+      });
+
+      expect(screen.getByRole("tab", { name: "花费" })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: "模型活动" })).toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: "端点活动" })).toBeInTheDocument();
+      expect(screen.getByText("按用户筛选")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "导出数据" })).toBeInTheDocument();
+      expect(screen.getByText("用量指标")).toBeInTheDocument();
+    });
+
+    it("should keep request counts on screen while the labels are translated", async () => {
+      await i18n.changeLanguage("zh-CN");
+
+      renderWithProviders(<UsagePage {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(screen.getAllByText("424,242").length).toBeGreaterThan(0);
+      });
+
+      expect(screen.getByText("总请求数")).toBeInTheDocument();
+      expect(screen.getByText("成功请求数")).toBeInTheDocument();
     });
   });
 });

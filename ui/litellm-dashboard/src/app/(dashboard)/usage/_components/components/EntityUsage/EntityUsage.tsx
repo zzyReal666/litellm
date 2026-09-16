@@ -21,6 +21,7 @@ import PaginationStatusAlerts from "@/components/shared/PaginationStatusAlerts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import React, { type ReactNode, useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import TeamMultiSelect from "@/components/common_components/team_multi_select";
 import UserDropdown from "@/components/common_components/UserDropdown";
 import { ActivityMetrics, processActivityData } from "@/components/activity_metrics";
@@ -45,6 +46,7 @@ import TopKeyView from "@/components/UsagePage/components/EntityUsage/TopKeyView
 import KeyActivityPanel from "@/components/UsagePage/components/KeyActivityPanel";
 import TopModelView from "./TopModelView";
 import TeamUserSpendCard from "./TeamUserSpendCard";
+import { ENTITY_NAME_KEYS } from "./entityUsageNames";
 
 interface EntityMetrics {
   metrics: {
@@ -110,6 +112,13 @@ const ENTITY_CAPABILITIES: Partial<Record<EntityType, Capability>> = {
   agent: "viewAgentUsage",
 };
 
+const spendTrackingDocsLink = (
+  <a
+    href="https://docs.litellm.ai/docs/proxy/enterprise#spend-tracking"
+    className="text-info hover:text-info/80 ml-1"
+  />
+);
+
 const EntityUsage: React.FC<EntityUsageProps> = ({
   accessToken,
   entityType,
@@ -119,6 +128,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   dateValue,
   isOrgAdmin = false,
 }) => {
+  const { t } = useTranslation();
   const { teams } = useTeams();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [modelViewType, setModelViewType] = useState<ModelViewType>("groups");
@@ -260,11 +270,17 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   };
 
   const getFilterLabel = (entityType: string) => {
-    return `Filter by ${entityType}`;
+    return t("usagePage.entityUsage.filterLabel", {
+      entityType: entityNameLower,
+      defaultValue: `Filter by ${entityType}`,
+    });
   };
 
   const getFilterPlaceholder = (entityType: string) => {
-    return `Select ${entityType} to filter...`;
+    return t("usagePage.entityUsage.filterPlaceholder", {
+      entityType: entityNameLower,
+      defaultValue: `Select ${entityType} to filter...`,
+    });
   };
 
   const entityFilterSlots: Partial<Record<EntityType, ReactNode>> = {
@@ -276,6 +292,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const filterSlot = entityFilterSlots[entityType];
 
   const capitalizedEntityLabel = entityType.charAt(0).toUpperCase() + entityType.slice(1);
+  const [entityNameKey, entityNameLowerKey] = ENTITY_NAME_KEYS[entityType];
+  const entityName = t(entityNameKey, { defaultValue: capitalizedEntityLabel });
+  const entityNameLower = t(entityNameLowerKey, { defaultValue: entityType });
   const showFlatCost = entityType === "team" && hasFlatCost(spendData.metadata);
   const userSpendTeamIds = useMemo(
     () =>
@@ -288,41 +307,41 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const entityBreakdownColumns = useMemo<ColumnDef<EntityMetricWithMetadata>[]>(
     () => [
       {
-        header: capitalizedEntityLabel,
+        header: entityName,
         accessorKey: "metadata.alias",
         cell: ({ row }) => row.original.metadata.alias,
       },
       {
-        header: "Spend",
+        header: t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }),
         accessorKey: "metrics.spend",
         meta: { numeric: true },
         cell: ({ row }) => <MoneyCell value={row.original.metrics.spend} decimals={4} />,
       },
       {
-        header: "Successful",
+        header: t("usagePage.entityUsage.colSuccessful", { defaultValue: "Successful" }),
         accessorKey: "metrics.successful_requests",
         meta: { numeric: true, className: "text-success" },
         cell: ({ row }) => row.original.metrics.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: t("usagePage.entityUsage.colFailed", { defaultValue: "Failed" }),
         accessorKey: "metrics.failed_requests",
         meta: { numeric: true, className: "text-destructive" },
         cell: ({ row }) => row.original.metrics.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }),
         accessorKey: "metrics.total_tokens",
         meta: { numeric: true },
         cell: ({ row }) => row.original.metrics.total_tokens.toLocaleString(),
       },
     ],
-    [capitalizedEntityLabel],
+    [entityName, t],
   );
   const providerSpendColumns = useMemo<ColumnDef<ProviderSpendRow>[]>(
     () => [
       {
-        header: "Provider",
+        header: t("usagePage.entityUsage.colProvider", { defaultValue: "Provider" }),
         accessorKey: "provider",
         cell: ({ row }) => (
           <div className="flex items-center space-x-2">
@@ -332,37 +351,37 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         ),
       },
       {
-        header: "Spend",
+        header: t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }),
         accessorKey: "spend",
         meta: { numeric: true },
         cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
       },
       {
-        header: "Successful",
+        header: t("usagePage.entityUsage.colSuccessful", { defaultValue: "Successful" }),
         accessorKey: "successful_requests",
         meta: { numeric: true, className: "text-success" },
         cell: ({ row }) => row.original.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: t("usagePage.entityUsage.colFailed", { defaultValue: "Failed" }),
         accessorKey: "failed_requests",
         meta: { numeric: true, className: "text-destructive" },
         cell: ({ row }) => row.original.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }),
         accessorKey: "tokens",
         meta: { numeric: true },
         cell: ({ row }) => row.original.tokens.toLocaleString(),
       },
     ],
-    [],
+    [t],
   );
 
   const chev = "size-3 text-muted-foreground";
   const expandIcon = showCostBreakdown ? <ChevronDown className={chev} /> : <ChevronRight className={chev} />;
 
-  const renderSummaryTile = ({ title, value, className, tooltip, expandable }: SummaryTile) => (
+  const renderSummaryTile = ({ title, titleKey, value, className, tooltip, tooltipKey, expandable }: SummaryTile) => (
     <ShadcnCard
       key={title}
       className={expandable ? "cursor-pointer hover:bg-accent transition-colors" : undefined}
@@ -370,11 +389,11 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
     >
       <CardContent>
         <div className="flex items-center gap-2">
-          <h3 className="text-lg font-medium text-foreground">{title}</h3>
-          {tooltip ? (
+          <h3 className="text-lg font-medium text-foreground">{t(titleKey, { defaultValue: title })}</h3>
+          {tooltip && tooltipKey ? (
             <Tooltip>
               <TooltipTrigger render={<Info className="size-4 text-muted-foreground hover:text-foreground" />} />
-              <TooltipContent>{tooltip}</TooltipContent>
+              <TooltipContent>{t(tooltipKey, { defaultValue: tooltip })}</TooltipContent>
             </Tooltip>
           ) : null}
           {expandable ? expandIcon : null}
@@ -387,14 +406,22 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const breakdownTiles = showFlatCost && showCostBreakdown ? buildCostBreakdownTiles(spendData.metadata) : [];
   const summaryTiles = [...buildSummaryTiles(spendData.metadata, showFlatCost), ...breakdownTiles];
 
-  const modelViewTitle = modelViewType === "groups" ? "Top Public Model Names" : "Top Litellm Models";
+  const modelViewTitle =
+    modelViewType === "groups"
+      ? t("usagePage.usagePageView.topPublicModelNames", { defaultValue: "Top Public Model Names" })
+      : t("usagePage.usagePageView.topLitellmModels", { defaultValue: "Top Litellm Models" });
 
   const costPanel = (
     <div className="grid grid-cols-2 gap-2 w-full">
       <div className="col-span-2">
         <ShadcnCard>
           <CardContent>
-            <h3 className="text-lg font-medium text-foreground">{capitalizedEntityLabel} Spend Overview</h3>
+            <h3 className="text-lg font-medium text-foreground">
+              {t("usagePage.entityUsage.spendOverview", {
+                entity: entityName,
+                defaultValue: `${capitalizedEntityLabel} Spend Overview`,
+              })}
+            </h3>
             <div className="grid grid-cols-5 gap-4 mt-4">{summaryTiles.map(renderSummaryTile)}</div>
           </CardContent>
         </ShadcnCard>
@@ -404,7 +431,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div className="col-span-2">
         <ShadcnCard>
           <CardHeader>
-            <CardTitle className="text-base font-semibold">Daily Spend</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              {t("usagePage.entityUsage.dailySpend", { defaultValue: "Daily Spend" })}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <BarChart
@@ -433,24 +462,71 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                     <p className="font-bold">{data.date}</p>
                     {showFlatCost ? (
                       <>
-                        <p className="text-info">Request cost: ${formatNumberWithCommas(requestSpend, 2)}</p>
-                        <p className="text-violet-500">Flat cost: ${formatNumberWithCommas(flatCost, 2)}</p>
+                        <p className="text-info">
+                          {t("usagePage.entityUsage.tooltipRequestCost", {
+                            amount: formatNumberWithCommas(requestSpend, 2),
+                            defaultValue: `Request cost: $${formatNumberWithCommas(requestSpend, 2)}`,
+                          })}
+                        </p>
+                        <p className="text-violet-500">
+                          {t("usagePage.entityUsage.tooltipFlatCost", {
+                            amount: formatNumberWithCommas(flatCost, 2),
+                            defaultValue: `Flat cost: $${formatNumberWithCommas(flatCost, 2)}`,
+                          })}
+                        </p>
                         <p className="font-semibold">
-                          Total cost: ${formatNumberWithCommas(requestSpend + flatCost, 2)}
+                          {t("usagePage.entityUsage.tooltipTotalCost", {
+                            amount: formatNumberWithCommas(requestSpend + flatCost, 2),
+                            defaultValue: `Total cost: $${formatNumberWithCommas(requestSpend + flatCost, 2)}`,
+                          })}
                         </p>
                       </>
                     ) : (
-                      <p className="text-info">Total Spend: ${formatNumberWithCommas(data.metrics.spend, 2)}</p>
+                      <p className="text-info">
+                        {t("usagePage.entityUsage.tooltipTotalSpend", {
+                          amount: formatNumberWithCommas(data.metrics.spend, 2),
+                          defaultValue: `Total Spend: $${formatNumberWithCommas(data.metrics.spend, 2)}`,
+                        })}
+                      </p>
                     )}
-                    <p className="text-muted-foreground">Total Requests: {data.metrics.api_requests}</p>
-                    <p className="text-muted-foreground">Successful: {data.metrics.successful_requests}</p>
-                    <p className="text-muted-foreground">Failed: {data.metrics.failed_requests}</p>
-                    <p className="text-muted-foreground">Total Tokens: {data.metrics.total_tokens}</p>
                     <p className="text-muted-foreground">
-                      Total {capitalizedEntityLabel}s: {entityCount}
+                      {t("usagePage.entityUsage.tooltipTotalRequests", {
+                        count: data.metrics.api_requests,
+                        defaultValue: `Total Requests: ${data.metrics.api_requests}`,
+                      })}
+                    </p>
+                    <p className="text-muted-foreground">
+                      {t("usagePage.entityUsage.tooltipSuccessful", {
+                        count: data.metrics.successful_requests,
+                        defaultValue: `Successful: ${data.metrics.successful_requests}`,
+                      })}
+                    </p>
+                    <p className="text-muted-foreground">
+                      {t("usagePage.entityUsage.tooltipFailed", {
+                        count: data.metrics.failed_requests,
+                        defaultValue: `Failed: ${data.metrics.failed_requests}`,
+                      })}
+                    </p>
+                    <p className="text-muted-foreground">
+                      {t("usagePage.entityUsage.tooltipTotalTokens", {
+                        count: data.metrics.total_tokens,
+                        defaultValue: `Total Tokens: ${data.metrics.total_tokens}`,
+                      })}
+                    </p>
+                    <p className="text-muted-foreground">
+                      {t("usagePage.entityUsage.tooltipTotalEntities", {
+                        entity: entityName,
+                        count: entityCount,
+                        defaultValue: `Total ${capitalizedEntityLabel}s: ${entityCount}`,
+                      })}
                     </p>
                     <div className="mt-2 border-t pt-2">
-                      <p className="font-semibold">Spend by {capitalizedEntityLabel}:</p>
+                      <p className="font-semibold">
+                        {t("usagePage.entityUsage.tooltipSpendByEntity", {
+                          entity: entityName,
+                          defaultValue: `Spend by ${capitalizedEntityLabel}:`,
+                        })}
+                      </p>
                       {Object.entries(data.breakdown.entities || {})
                         .sort(([, a], [, b]) => {
                           const spendA = (a as EntityMetrics).metrics.spend;
@@ -468,7 +544,12 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                           );
                         })}
                       {entityCount > 5 && (
-                        <p className="text-sm text-muted-foreground italic">...and {entityCount - 5} more</p>
+                        <p className="text-sm text-muted-foreground italic">
+                          {t("usagePage.entityUsage.tooltipAndMore", {
+                            count: entityCount - 5,
+                            defaultValue: `...and ${entityCount - 5} more`,
+                          })}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -484,16 +565,22 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <ShadcnCard>
           <CardContent className="flex flex-col space-y-4">
             <div className="flex flex-col space-y-2">
-              <h3 className="text-lg font-medium text-foreground">Spend Per {capitalizedEntityLabel}</h3>
-              <p className="text-xs text-muted-foreground">Showing Top 5 by Spend</p>
+              <h3 className="text-lg font-medium text-foreground">
+                {t("usagePage.entityUsage.spendPerEntity", {
+                  entity: entityName,
+                  defaultValue: `Spend Per ${capitalizedEntityLabel}`,
+                })}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {t("usagePage.entityUsage.showingTop5BySpend", { defaultValue: "Showing Top 5 by Spend" })}
+              </p>
               <div className="flex items-center text-sm text-muted-foreground">
-                <span>Get Started by Tracking cost per {capitalizedEntityLabel} </span>
-                <a
-                  href="https://docs.litellm.ai/docs/proxy/enterprise#spend-tracking"
-                  className="text-info hover:text-info/80 ml-1"
-                >
-                  here
-                </a>
+                <Trans
+                  i18nKey="usagePage.entityUsage.getStartedTracking"
+                  values={{ entity: entityName }}
+                  defaults="Get Started by Tracking cost per {{entity}} <a>here</a>"
+                  components={{ a: spendTrackingDocsLink }}
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-6">
@@ -514,11 +601,36 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                     return (
                       <div className="bg-card p-4 shadow-lg rounded-lg border">
                         <p className="font-bold">{data.metadata.alias}</p>
-                        <p className="text-info">Spend: ${formatNumberWithCommas(data.metrics.spend, 4)}</p>
-                        <p className="text-muted-foreground">Requests: {data.metrics.api_requests.toLocaleString()}</p>
-                        <p className="text-success">Successful: {data.metrics.successful_requests.toLocaleString()}</p>
-                        <p className="text-destructive">Failed: {data.metrics.failed_requests.toLocaleString()}</p>
-                        <p className="text-muted-foreground">Tokens: {data.metrics.total_tokens.toLocaleString()}</p>
+                        <p className="text-info">
+                          {t("usagePage.entityUsage.tooltipSpend", {
+                            amount: formatNumberWithCommas(data.metrics.spend, 4),
+                            defaultValue: `Spend: $${formatNumberWithCommas(data.metrics.spend, 4)}`,
+                          })}
+                        </p>
+                        <p className="text-muted-foreground">
+                          {t("usagePage.entityUsage.tooltipRequests", {
+                            count: data.metrics.api_requests.toLocaleString(),
+                            defaultValue: `Requests: ${data.metrics.api_requests.toLocaleString()}`,
+                          })}
+                        </p>
+                        <p className="text-success">
+                          {t("usagePage.entityUsage.tooltipSuccessful", {
+                            count: data.metrics.successful_requests.toLocaleString(),
+                            defaultValue: `Successful: ${data.metrics.successful_requests.toLocaleString()}`,
+                          })}
+                        </p>
+                        <p className="text-destructive">
+                          {t("usagePage.entityUsage.tooltipFailed", {
+                            count: data.metrics.failed_requests.toLocaleString(),
+                            defaultValue: `Failed: ${data.metrics.failed_requests.toLocaleString()}`,
+                          })}
+                        </p>
+                        <p className="text-muted-foreground">
+                          {t("usagePage.entityUsage.tooltipTokens", {
+                            count: data.metrics.total_tokens.toLocaleString(),
+                            defaultValue: `Tokens: ${data.metrics.total_tokens.toLocaleString()}`,
+                          })}
+                        </p>
                       </div>
                     );
                   }}
@@ -530,7 +642,10 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                   data={getEntityBreakdown().filter((entity) => entity.metrics.spend > 0)}
                   getRowId={(row) => row.metadata.id}
                   maxBodyHeight={208}
-                  noDataMessage={`No ${entityType} spend data`}
+                  noDataMessage={t("usagePage.entityUsage.noSpendData", {
+                    entity: entityNameLower,
+                    defaultValue: `No ${entityType} spend data`,
+                  })}
                   size="compact"
                 />
               </div>
@@ -554,7 +669,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div>
         <ShadcnCard>
           <CardContent>
-            <h3 className="text-lg font-medium text-foreground">Top Virtual Keys</h3>
+            <h3 className="text-lg font-medium text-foreground">
+              {t("usagePage.entityUsage.topVirtualKeys", { defaultValue: "Top Virtual Keys" })}
+            </h3>
             <TopKeyView
               topKeys={getTopAPIKeys(spendData.results, topKeysLimit)}
               teams={null}
@@ -572,7 +689,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           <CardContent>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-foreground">
-                {entityType === "agent" ? "Top Agents" : modelViewTitle}
+                {entityType === "agent"
+                  ? t("usagePage.entityUsage.topAgents", { defaultValue: "Top Agents" })
+                  : modelViewTitle}
               </h3>
               <ModelViewToggle value={modelViewType} onChange={setModelViewType} />
             </div>
@@ -589,7 +708,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <div className="col-span-2">
           <ShadcnCard>
             <CardContent>
-              <h3 className="text-lg font-medium text-foreground">Top Agents Driving Spend</h3>
+              <h3 className="text-lg font-medium text-foreground">
+                {t("usagePage.entityUsage.topAgentsDrivingSpend", { defaultValue: "Top Agents Driving Spend" })}
+              </h3>
               <TopModelView
                 topModels={getTopAgents(agentSpendData.results, topAgentsLimit)}
                 topModelsLimit={topAgentsLimit}
@@ -604,7 +725,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div className="col-span-2">
         <ShadcnCard>
           <CardContent className="flex flex-col space-y-4">
-            <h3 className="text-lg font-medium text-foreground">Provider Usage</h3>
+            <h3 className="text-lg font-medium text-foreground">
+              {t("usagePage.entityUsage.providerUsage", { defaultValue: "Provider Usage" })}
+            </h3>
             <div className="grid grid-cols-2">
               <div>
                 <DonutChart
@@ -624,7 +747,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                   columns={providerSpendColumns}
                   data={providerSpend}
                   getRowId={(row) => row.provider}
-                  noDataMessage="No provider usage data"
+                  noDataMessage={t("usagePage.spendByProvider.noData", { defaultValue: "No provider usage data" })}
                   size="compact"
                 />
               </div>
@@ -636,10 +759,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   );
 
   const tabs: readonly { key: string; label: string; content: ReactNode }[] = [
-    { key: "cost", label: "Cost", content: costPanel },
+    { key: "cost", label: t("usagePage.entityUsage.tabCost", { defaultValue: "Cost" }), content: costPanel },
     {
       key: "models",
-      label: entityType === "agent" ? "Request / Token Consumption" : "Model Activity",
+      label:
+        entityType === "agent"
+          ? t("usagePage.entityUsage.tabRequestTokenConsumption", { defaultValue: "Request / Token Consumption" })
+          : t("usagePage.entityUsage.tabModelActivity", { defaultValue: "Model Activity" }),
       content: (
         <>
           <div className="flex justify-end mt-2 mb-4">
@@ -650,14 +776,24 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       ),
     },
     ...(showAgentBreakdown
-      ? [{ key: "agents", label: "Agent Activity", content: <ActivityMetrics modelMetrics={agentMetrics} /> }]
+      ? [
+          {
+            key: "agents",
+            label: t("usagePage.entityUsage.tabAgentActivity", { defaultValue: "Agent Activity" }),
+            content: <ActivityMetrics modelMetrics={agentMetrics} />,
+          },
+        ]
       : []),
     {
       key: "keys",
-      label: "Key Activity",
+      label: t("usagePage.entityUsage.tabKeyActivity", { defaultValue: "Key Activity" }),
       content: <KeyActivityPanel keyMetrics={keyMetrics} hidePromptCachingMetrics={entityType === "agent"} />,
     },
-    { key: "endpoints", label: "Endpoint Activity", content: <EndpointUsage userSpendData={spendData} /> },
+    {
+      key: "endpoints",
+      label: t("usagePage.entityUsage.tabEndpointActivity", { defaultValue: "Endpoint Activity" }),
+      content: <EndpointUsage userSpendData={spendData} />,
+    },
   ];
 
   return (

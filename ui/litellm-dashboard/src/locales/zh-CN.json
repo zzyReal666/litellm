@@ -5872,7 +5872,9 @@
       "enterToSend": "按 Enter 发送",
       "filterLabel": "筛选：{{filter}}",
       "errorPrefix": "错误：{{message}}",
-      "fallbackError": "获取响应失败，请重试。"
+      "fallbackError": "获取响应失败，请重试。",
+      "loadingModels": "正在加载模型…",
+      "noModelsFound": "未找到模型"
     },
     "usagePageView": {
       "filterByUser": "按用户筛选",
@@ -5914,7 +5916,10 @@
       "stopButton": "停止",
       "credentialBannerMessage": "可复用凭据会自动作为标签进行追踪",
       "credentialBannerDescription": "当可复用凭据被使用时，将以 <code>Credential: </code> 前缀的标签形式出现在此视图中。",
-      "exportUsageDataTitle": "导出用量数据"
+      "exportUsageDataTitle": "导出用量数据",
+      "gatewayCountedTooltip": "由网关在应答请求时计数，与消费日志无关。统计范围是整个部署，因此不会与下面的按密钥或按模型明细一致。",
+      "gatewayRequestsByEndpoint": "按端点统计的网关请求",
+      "gatewayRequestsByEndpointTooltip": "由网关中间件在每次请求被应答时计数。覆盖整个部署的 LLM、MCP 和 A2A 端点。"
     },
     "endpointUsageBarChart": {
       "title": "按端点统计成功与失败请求"
@@ -5968,7 +5973,29 @@
       "topModels": "热门模型",
       "topAgentsDrivingSpend": "花费最高的 Agent",
       "providerUsage": "提供商用量",
-      "providerLogoAlt": "{{provider}} 图标"
+      "providerLogoAlt": "{{provider}} 图标",
+      "entityTag": "标签",
+      "entityTeam": "团队",
+      "entityOrganization": "组织",
+      "entityCustomer": "客户",
+      "entityAgent": "智能体",
+      "entityUser": "用户",
+      "entityTagLower": "标签",
+      "entityTeamLower": "团队",
+      "entityOrganizationLower": "组织",
+      "entityCustomerLower": "客户",
+      "entityAgentLower": "智能体",
+      "entityUserLower": "用户",
+      "totalCost": "总花费",
+      "totalCostTooltip": "请求花费加上预留容量的固定花费。选择该卡片可查看明细。",
+      "requestCost": "请求花费",
+      "requestCostTooltip": "该实体在所选时间段内发出的请求按令牌计价产生的花费。",
+      "flatCost": "固定花费",
+      "flatCostTooltip": "预留的预置吞吐量，无论是否发送请求都按小时计费。这里只做展示，不计入团队、密钥、用户或组织的预算。",
+      "tooltipRequestCost": "请求花费：${{amount}}",
+      "tooltipFlatCost": "固定花费：${{amount}}",
+      "tooltipTotalCost": "总花费：${{amount}}",
+      "noSpendData": "没有{{entity}}消费数据"
     },
     "spendByProvider": {
       "title": "按提供商统计花费",
@@ -5979,7 +6006,8 @@
       "colSpend": "花费",
       "colSuccessful": "成功",
       "colFailed": "失败",
-      "colTokens": "Token"
+      "colTokens": "Token",
+      "noData": "没有提供商用量数据"
     },
     "topKeyView": {
       "colKeyId": "密钥 ID",
@@ -6003,7 +6031,9 @@
       "colFailed": "失败",
       "colTokens": "Token",
       "tableView": "表格视图",
-      "chartView": "图表视图"
+      "chartView": "图表视图",
+      "numberOfModelsAria": "显示的模型数量",
+      "viewModeAria": "Top 模型视图模式"
     },
     "keyModelUsageView": {
       "title": "模型用量",
@@ -6014,6 +6044,31 @@
       "colTokens": "Token",
       "tableView": "表格",
       "chartView": "图表"
+    },
+    "endpointUsageTable": {
+      "colEndpoint": "端点",
+      "colSuccessfulFailed": "成功 / 失败",
+      "colTotalRequests": "总请求数",
+      "colSuccessRate": "成功率",
+      "colTotalTokens": "总令牌数",
+      "colSpend": "花费",
+      "successfulRequestsAria": "成功请求数",
+      "noData": "没有端点用量数据"
+    },
+    "teamUserSpend": {
+      "title": "团队内按用户统计花费",
+      "description": "按请求从消费日志归属，因此包含不使用虚拟密钥的 JWT/SSO 流量",
+      "downloadCsv": "下载 CSV",
+      "colTeam": "团队",
+      "colUser": "用户",
+      "colSpend": "花费",
+      "colRequests": "请求数",
+      "colSuccessful": "成功",
+      "colFailed": "失败",
+      "colTokens": "令牌数",
+      "selectTeam": "选择一个团队以查看按用户统计的花费",
+      "noSpend": "该时间范围内没有用户消费",
+      "noUser": "（无用户）"
     }
   },
   "vectorStoreProviders": {
