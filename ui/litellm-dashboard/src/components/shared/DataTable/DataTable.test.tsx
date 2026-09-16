@@ -2,8 +2,9 @@ import type { ColumnDef, ExpandedState, OnChangeFn, PaginationState } from "@tan
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import i18n from "@/lib/i18n";
 import { DataTable } from "./DataTable";
 import { DataTableMultiSortHeader, DataTableSortHeader } from "./DataTableSortHeader";
 import { DataTableViewOptions } from "./DataTableViewOptions";
@@ -235,6 +236,34 @@ describe("DataTable layout", () => {
 
     // width pins the natural column total (horizontal scroll on overflow); minWidth:100% fills the gap on underflow.
     expect(screen.getByRole("table")).toHaveStyle({ minWidth: "100%" });
+  });
+});
+
+describe("DataTable localisation", () => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
+  it("renders the empty state in the active language", async () => {
+    await i18n.changeLanguage("zh-CN");
+    render(<DataTable data={[]} columns={nameCellColumns} />);
+
+    expect(screen.getByText("无结果")).toBeInTheDocument();
+    expect(screen.getByText("没有符合搜索或筛选条件的行")).toBeInTheDocument();
+  });
+
+  it("renders the default loading message in the active language", async () => {
+    await i18n.changeLanguage("zh-CN");
+    render(<DataTable data={[]} columns={nameCellColumns} isLoading />);
+
+    expect(screen.getByText("加载中…")).toBeInTheDocument();
+  });
+
+  it("lets a caller supplied loading message win over the translated default", () => {
+    render(<DataTable data={[]} columns={nameCellColumns} isLoading loadingMessage="Fetching keys" />);
+
+    expect(screen.getByText("Fetching keys")).toBeInTheDocument();
+    expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
   });
 });
 

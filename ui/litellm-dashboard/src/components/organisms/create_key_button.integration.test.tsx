@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, renderWithProviders, screen, testQueryClient, waitFor } from "../../../tests/test-utils";
 import type { Team } from "../key_team_helpers/key_list";
 import { keyCreateCall, keyCreateServiceAccountCall, modelAvailableCall, userFilterUICall } from "../networking";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 import CreateKey from "./create_key_button";
 
@@ -251,8 +252,9 @@ describe("CreateKey", () => {
     );
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    await i18n.changeLanguage("en");
   });
 
   describe("submit payload contract", () => {
@@ -1234,6 +1236,20 @@ describe("CreateKey", () => {
       await submit();
 
       expect((await createdPayload()).enable_prompt_caching).toBe(true);
+    });
+  });
+
+  describe("localization", () => {
+    it("shows the modal's section headings, field label and submit button in Simplified Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+      renderCreateKey();
+      await userEvent.click(screen.getByTestId("create-key-button"));
+
+      expect(await screen.findByText("密钥归属")).toBeInTheDocument();
+      expect(screen.getByText("密钥详情")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "可选设置" })).toBeInTheDocument();
+      expect(screen.getByText("归属方")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "创建密钥" })).toBeInTheDocument();
     });
   });
 });

@@ -28,6 +28,7 @@ import {
 import { SearchX } from "lucide-react";
 import * as React from "react";
 import { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -327,13 +328,18 @@ function MessageRow({ colSpan, children }: { colSpan: number; children: React.Re
 }
 
 function DefaultEmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <SearchX className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No results</div>
-      <div className="text-sm text-muted-foreground">No rows match your search or filters.</div>
+      <div className="text-sm font-medium text-foreground">
+        {t("commonComponents.dataTable.noResults", { defaultValue: "No results" })}
+      </div>
+      <div className="text-sm text-muted-foreground">
+        {t("commonComponents.dataTable.noMatchingRows", { defaultValue: "No rows match your search or filters." })}
+      </div>
     </div>
   );
 }
@@ -535,11 +541,12 @@ function useDataTableInstance<TData extends RowData, TValue>(
 }
 
 export function DataTable<TData extends RowData, TValue>(props: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const resolved: DataTableResolvedProps<TData, TValue> = props;
 
   const {
     isLoading = false,
-    loadingMessage = "Loading…",
+    loadingMessage,
     skeletonRowCount = 8,
     noDataMessage,
     paginationMode = "none",
@@ -595,7 +602,7 @@ export function DataTable<TData extends RowData, TValue>(props: DataTableProps<T
           rowCount={skeletonRowCount}
           columns={table.getVisibleLeafColumns()}
           size={size}
-          message={loadingMessage}
+          message={loadingMessage ?? t("commonComponents.dataTable.loading", { defaultValue: "Loading…" })}
         />
       );
     }

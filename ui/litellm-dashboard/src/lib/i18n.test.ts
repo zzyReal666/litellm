@@ -1,4 +1,7 @@
+import { render } from "@testing-library/react";
 import dayjs from "dayjs";
+import React from "react";
+import { Trans } from "react-i18next";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "@/locales/en.json";
 import zhCN from "@/locales/zh-CN.json";
@@ -83,5 +86,26 @@ describe("locale files", () => {
 
   it("keeps en and zh-CN key sets identical, so fallbackLng never papers over a missing translation", () => {
     expect(flattenKeys(zhCN).sort()).toEqual(flattenKeys(en).sort());
+  });
+
+  // i18next parses the placeholder as HTML, and treats link as a void element, so a
+  // catalog entry written with <link> renders an empty anchor with the text left outside.
+  it.each([
+    ["en", "documentation"],
+    ["zh-CN", "文档"],
+  ])("keeps the %s tooltip link text inside the anchor", async (language, linkText) => {
+    await i18n.changeLanguage(language);
+    const { container } = render(
+      React.createElement(Trans, {
+        i18nKey: "organisms.createKeyButton.advancedSettingsTooltipDoc",
+        components: { doc: React.createElement("a", { href: "/docs" }) },
+      }),
+    );
+
+    expect(container.querySelector("a")).toHaveTextContent(linkText);
+  });
+
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
   });
 });

@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { RefreshCw, Search, SlidersHorizontal, X } from "lucide-react";
 import type * as React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export function DataTableToolbar<TData>({
   table,
   searchValue,
   onSearchChange,
-  searchPlaceholder = "Search",
+  searchPlaceholder,
   onOpenFilters,
   onRefresh,
   isRefreshing = false,
@@ -47,6 +48,9 @@ export function DataTableToolbar<TData>({
   children,
   className,
 }: DataTableToolbarProps<TData>) {
+  const { t } = useTranslation();
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? t("commonComponents.dataTable.searchPlaceholder", { defaultValue: "Search" });
   const filters = table.getState().columnFilters;
 
   const labelFor = (columnId: string): string =>
@@ -63,7 +67,7 @@ export function DataTableToolbar<TData>({
             <Input
               value={searchValue ?? ""}
               onChange={(event) => onSearchChange(event.target.value)}
-              placeholder={searchPlaceholder}
+              placeholder={resolvedSearchPlaceholder}
               className="h-8 w-56 pl-8"
               data-testid="datatable-search"
             />
@@ -75,7 +79,10 @@ export function DataTableToolbar<TData>({
             {valueFor(filter.id, filter.value)}
             <button
               type="button"
-              aria-label={`Remove ${labelFor(filter.id)} filter`}
+              aria-label={t("commonComponents.dataTable.removeFilter", {
+                label: labelFor(filter.id),
+                defaultValue: `Remove ${labelFor(filter.id)} filter`,
+              })}
               data-testid={`filter-chip-remove-${filter.id}`}
               onClick={() => table.setColumnFilters((previous) => previous.filter((entry) => entry.id !== filter.id))}
               className="ml-0.5 rounded-full text-muted-foreground hover:text-foreground"
@@ -91,7 +98,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.setColumnFilters([])}
             data-testid="datatable-clear-filters"
           >
-            Clear all
+            {t("commonComponents.dataTable.clearAll", { defaultValue: "Clear all" })}
           </Button>
         )}
       </div>
@@ -103,14 +110,19 @@ export function DataTableToolbar<TData>({
             size="icon-sm"
             onClick={onRefresh}
             disabled={isRefreshing}
-            aria-label="Refresh"
-            title="Refresh"
+            aria-label={t("common.refresh", { defaultValue: "Refresh" })}
+            title={t("common.refresh", { defaultValue: "Refresh" })}
             data-testid="datatable-refresh"
           >
             <RefreshCw className={isRefreshing ? "animate-spin" : ""} />
           </Button>
         )}
-        {showViewOptions && <DataTableViewOptions table={table} label="Columns" />}
+        {showViewOptions && (
+          <DataTableViewOptions
+            table={table}
+            label={t("commonComponents.dataTable.columnsLabel", { defaultValue: "Columns" })}
+          />
+        )}
         {onOpenFilters !== undefined && (
           <Button variant="outline" size="sm" onClick={onOpenFilters} data-testid="datatable-filters-trigger">
             <SlidersHorizontal />

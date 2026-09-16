@@ -1,7 +1,7 @@
-import { screen, waitFor, within, fireEvent } from "@testing-library/react";
+import { cleanup, screen, waitFor, within, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { OnUrlUpdateFunction } from "nuqs/adapters/testing";
-import { vi, it, expect, beforeEach, describe, Mock, MockedFunction } from "vitest";
+import { vi, it, expect, beforeEach, afterEach, describe, Mock, MockedFunction } from "vitest";
 import { chooseSelectOption, renderWithProviders } from "../../../tests/test-utils";
 import { VirtualKeysTable } from "./VirtualKeysTable";
 import { KEY_TABLE_SORT_FIELDS } from "./keyTableColumns";
@@ -10,6 +10,7 @@ import { useKeyInfo } from "@/app/(dashboard)/hooks/keys/useKeyInfo";
 import { KeysResponse, useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { regenerateKeyCall } from "../networking";
+import i18n from "@/lib/i18n";
 
 // Resolve debounced values synchronously so an applied filter lands in the useKeys query within the test tick.
 vi.mock("@tanstack/react-pacer/debouncer", async () => {
@@ -938,5 +939,43 @@ describe("table state lives in the URL so it survives leaving and returning to t
     await waitFor(() => {
       expect(lastSearchParam(onUrlUpdate, "key_search")).toBeNull();
     });
+  });
+});
+
+describe("Simplified Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("shows the page title and column headers in Chinese", async () => {
+    const user = userEvent.setup();
+    await i18n.changeLanguage("zh-CN");
+
+    renderWithProviders(<VirtualKeysTable />);
+
+    expect(screen.getByRole("heading", { name: "虚拟密钥" })).toBeInTheDocument();
+    expect(screen.getByText("团队")).toBeInTheDocument();
+    expect(screen.getByText("预算重置")).toBeInTheDocument();
+
+    // The Key ID column is hidden by default, so its translated label has to reach the column menu too.
+    await user.click(screen.getByTestId("view-options-trigger"));
+    expect(await screen.findByText("密钥 ID")).toBeInTheDocument();
+    await user.click(screen.getByTestId("view-option-token"));
+    await user.keyboard("{Escape}");
+
+    expect(await screen.findByRole("button", { name: "密钥 ID" })).toBeInTheDocument();
+  });
+
+  it("shows the filter drawer's field labels in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWithProviders(<VirtualKeysTable />);
+
+    openFilters();
+
+    const drawer = within(await screen.findByTestId("filter-drawer-body"));
+    expect(drawer.getByText("用户 ID")).toBeInTheDocument();
+    expect(drawer.getByText("密钥 ID")).toBeInTheDocument();
   });
 });

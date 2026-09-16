@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import i18n from "@/lib/i18n";
 import { DataTablePagination } from "./DataTablePagination";
 
 const baseProps = {
@@ -64,5 +65,28 @@ describe("DataTablePagination", () => {
     render(<DataTablePagination {...baseProps} page={1} isLoading />);
     expect(screen.getByTestId("pagination-next")).toBeDisabled();
     expect(screen.getByTestId("pagination-prev")).toBeDisabled();
+  });
+
+  describe("localisation", () => {
+    afterEach(async () => {
+      await i18n.changeLanguage("en");
+    });
+
+    it("renders the pagination chrome in the active language", async () => {
+      await i18n.changeLanguage("zh-CN");
+      render(<DataTablePagination {...baseProps} page={1} />);
+
+      expect(screen.getByText("每页行数")).toBeInTheDocument();
+      expect(screen.getByTestId("pagination-range")).toHaveTextContent("显示第 26-50 条，共 100 条");
+      expect(screen.getByTestId("pagination-page")).toHaveTextContent("第 2 页，共 4 页");
+      expect(screen.getByRole("button", { name: "下一页" })).toBeInTheDocument();
+    });
+
+    it("translates the empty state of the range", async () => {
+      await i18n.changeLanguage("zh-CN");
+      render(<DataTablePagination {...baseProps} rowCount={0} />);
+
+      expect(screen.getByTestId("pagination-range")).toHaveTextContent("无结果");
+    });
   });
 });
