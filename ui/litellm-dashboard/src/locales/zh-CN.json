@@ -499,7 +499,7 @@
     "teamDropdown": {
       "placeholder": "搜索或选择团队",
       "notFound": "未找到团队",
-      "loading": "正在加载团队…"
+      "loading": "加载团队中…"
     },
     "userSearchModal": {
       "title": "添加团队成员",
@@ -539,7 +539,7 @@
       "placeholder": "按别名搜索团队..."
     },
     "userDropdown": {
-      "loading": "正在加载用户…",
+      "loading": "加载用户中…",
       "placeholder": "按邮箱搜索用户…"
     }
   },
