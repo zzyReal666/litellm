@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -23,6 +24,7 @@ interface ClaudeCodePluginsPanelProps {
 }
 
 const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessToken, userRole }) => {
+  const { t } = useTranslation();
   const [pluginsList, setPluginsList] = useState<Plugin[]>([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,11 +68,16 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
     setIsDeleting(true);
     try {
       await deleteClaudeCodePlugin(accessToken, pluginToDelete.name);
-      toast.success(`Skill "${pluginToDelete.displayName}" deleted successfully`);
+      toast.success(
+        t("claudeCodePlugins.deleteSuccess", {
+          name: pluginToDelete.displayName,
+          defaultValue: 'Skill "{{name}}" deleted successfully',
+        }),
+      );
       fetchPlugins();
     } catch (error) {
       console.error("Error deleting skill:", error);
-      toast.error("Failed to delete skill");
+      toast.error(t("claudeCodePlugins.deleteFailed", { defaultValue: "Failed to delete skill" }));
     } finally {
       setIsDeleting(false);
       setPluginToDelete(null);
@@ -90,14 +97,17 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
       ) : (
         <>
           <div className="flex flex-col gap-2 mb-4">
-            <h1 className="text-2xl font-bold">Skills</h1>
+            <h1 className="text-2xl font-bold">{t("claudeCodePlugins.skillsTitle", { defaultValue: "Skills" })}</h1>
             <p className="text-sm text-muted-foreground">
-              Register Claude Code skills. Published skills appear in the Skill Hub for all users and are served via{" "}
-              <code className="bg-muted px-1 rounded-sm">/claude-code/marketplace.json</code>.
+              <Trans
+                i18nKey="claudeCodePlugins.skillsDescription"
+                values={{ endpoint: "/claude-code/marketplace.json" }}
+                defaults="Register Claude Code skills. Published skills appear in the Skill Hub for all users and are served via {{endpoint}}."
+              />
             </p>
             <div className="mt-2 flex gap-2">
               <Button onClick={() => setIsAddModalVisible(true)} disabled={!accessToken || !isAdmin}>
-                + Add Skill
+                {t("claudeCodePlugins.addSkill", { defaultValue: "+ Add Skill" })}
               </Button>
             </div>
           </div>
@@ -131,16 +141,25 @@ const ClaudeCodePluginsPanel: React.FC<ClaudeCodePluginsPanelProps> = ({ accessT
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Skill</AlertDialogTitle>
+              <AlertDialogTitle>
+                {t("claudeCodePlugins.deleteSkillTitle", { defaultValue: "Delete Skill" })}
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete skill: <strong>{pluginToDelete.displayName}</strong>?
+                <Trans
+                  i18nKey="claudeCodePlugins.deleteConfirmMessage"
+                  values={{ name: pluginToDelete.displayName }}
+                  components={{ strong: <strong /> }}
+                  defaults="Are you sure you want to delete skill: <strong>{{name}}</strong>?"
+                />
               </AlertDialogDescription>
-              <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+              <p className="text-sm text-muted-foreground">
+                {t("claudeCodePlugins.cannotUndone", { defaultValue: "This action cannot be undone." })}
+              </p>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t("common.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>
               <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
-                Delete
+                {t("common.delete", { defaultValue: "Delete" })}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

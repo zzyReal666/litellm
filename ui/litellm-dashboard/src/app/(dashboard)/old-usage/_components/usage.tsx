@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import ViewUserSpend from "@/components/view_user_spend";
 import { ProxySettings } from "@/app/(dashboard)/hooks/proxySettings/useProxySettings";
@@ -94,6 +95,7 @@ const TeamSpendBarList: React.FC<{ data: TeamSpendTotal[] }> = ({ data }) => {
 };
 
 const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, userID, keys, premiumUser }) => {
+  const { t } = useTranslation();
   const anchor = useComboboxAnchor();
   const canViewGlobalSpend = hasCapability(userRole, "viewGlobalSpend");
   const currentDate = new Date();
@@ -129,12 +131,14 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
     .map((key: any) => ({ token: String(key["token"]), alias: String(key["key_alias"]) }));
 
   const tagOptions: TagOption[] = [
-    { value: ALL_TAGS, label: "All Tags", disabled: false },
+    { value: ALL_TAGS, label: t("usage.allTags", { defaultValue: "All Tags" }), disabled: false },
     ...allTagNames
       .filter((tag) => tag !== ALL_TAGS)
       .map((tag) => ({
         value: tag,
-        label: premiumUser ? tag : `✨ ${tag} (Enterprise only Feature)`,
+        label: premiumUser
+          ? tag
+          : `✨ ${tag} ${t("usage.enterpriseOnlyFeature", { defaultValue: "(Enterprise only Feature)" })}`,
         disabled: !premiumUser,
       })),
   ];
@@ -509,11 +513,13 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
       <div className="w-full p-8">
         <Card>
           <CardHeader>
-            <CardTitle>Usage</CardTitle>
+            <CardTitle>{t("nav.usage", { defaultValue: "Usage" })}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Proxy-wide usage is only available to admin users. Your own usage is on the Usage page.
+              {t("usage.adminOnlyDesc", {
+                defaultValue: "Proxy-wide usage is only available to admin users. Your own usage is on the Usage page.",
+              })}
             </p>
           </CardContent>
         </Card>
@@ -526,18 +532,23 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
       <div className="w-full p-8">
         <Card>
           <CardHeader>
-            <CardTitle>Database Query Limit Reached</CardTitle>
+            <CardTitle>{t("usage.dbLimitTitle", { defaultValue: "Database Query Limit Reached" })}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-start gap-4">
             <p className="text-sm text-muted-foreground">
-              SpendLogs in DB has {proxySettings.NUM_SPEND_LOGS_ROWS} rows.
+              {t("usage.dbLimitRows", {
+                count: proxySettings.NUM_SPEND_LOGS_ROWS,
+                defaultValue: "SpendLogs in DB has {{count}} rows.",
+              })}
               <br></br>
-              Please follow our guide to view usage when SpendLogs has more than 1M rows.
+              {t("usage.dbLimitGuide", {
+                defaultValue: "Please follow our guide to view usage when SpendLogs has more than 1M rows.",
+              })}
             </p>
             <Button
               render={
                 <a href="https://docs.litellm.ai/docs/proxy/cost_tracking" target="_blank" rel="noreferrer">
-                  View Usage Guide
+                  {t("usage.viewUsageGuide", { defaultValue: "View Usage Guide" })}
                 </a>
               }
             />
@@ -551,13 +562,19 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
     <div className="w-full p-8">
       <Tabs defaultValue="all-up">
         <TabsList variant="line" className="mt-2">
-          <TabsTrigger value="all-up">All Up</TabsTrigger>
+          <TabsTrigger value="all-up">{t("usage.tabAllUp", { defaultValue: "All Up" })}</TabsTrigger>
 
           {isAdminOrAdminViewer(userRole) && (
             <>
-              <TabsTrigger value="team-based-usage">Team Based Usage</TabsTrigger>
-              <TabsTrigger value="customer-usage">Customer Usage</TabsTrigger>
-              <TabsTrigger value="tag-based-usage">Tag Based Usage</TabsTrigger>
+              <TabsTrigger value="team-based-usage">
+                {t("usage.tabTeamBased", { defaultValue: "Team Based Usage" })}
+              </TabsTrigger>
+              <TabsTrigger value="customer-usage">
+                {t("usage.tabCustomer", { defaultValue: "Customer Usage" })}
+              </TabsTrigger>
+              <TabsTrigger value="tag-based-usage">
+                {t("usage.tabTagBased", { defaultValue: "Tag Based Usage" })}
+              </TabsTrigger>
             </>
           )}
         </TabsList>
@@ -565,23 +582,26 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
         <TabsContent value="all-up" keepMounted>
           <Tabs defaultValue="cost">
             <TabsList className="mt-1">
-              <TabsTrigger value="cost">Cost</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
+              <TabsTrigger value="cost">{t("usage.tabCost", { defaultValue: "Cost" })}</TabsTrigger>
+              <TabsTrigger value="activity">{t("usage.tabActivity", { defaultValue: "Activity" })}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="cost" keepMounted>
               <div className="grid h-screen w-full grid-cols-2 gap-2">
                 <div className="col-span-2">
                   <p className="mt-2 mb-2 text-lg text-muted-foreground">
-                    Project Spend {new Date().toLocaleString("default", { month: "long" })} 1 -{" "}
-                    {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
+                    {t("usage.projectSpend", {
+                      month: new Date().toLocaleString("default", { month: "long" }),
+                      days: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(),
+                      defaultValue: "Project Spend {{month}} 1 - {{days}}",
+                    })}
                   </p>
                   <ViewUserSpend userSpend={totalMonthlySpend} selectedTeam={null} userMaxBudget={null} />
                 </div>
                 <div className="col-span-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Monthly Spend</CardTitle>
+                      <CardTitle>{t("usage.monthlySpend", { defaultValue: "Monthly Spend" })}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <BarChart
@@ -599,7 +619,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 <div className="col-span-1">
                   <Card className="h-full">
                     <CardHeader>
-                      <CardTitle>Top Virtual Keys</CardTitle>
+                      <CardTitle>{t("usage.topVirtualKeys", { defaultValue: "Top Virtual Keys" })}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <TopKeyView topKeys={topKeys} teams={null} topKeysLimit={5} setTopKeysLimit={() => {}} />
@@ -609,7 +629,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 <div className="col-span-1">
                   <Card className="h-full">
                     <CardHeader>
-                      <CardTitle>Top Models</CardTitle>
+                      <CardTitle>{t("usage.topModels", { defaultValue: "Top Models" })}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <BarChart
@@ -631,7 +651,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 <div className="col-span-2">
                   <Card className="mb-2">
                     <CardHeader>
-                      <CardTitle>Spend by Provider</CardTitle>
+                      <CardTitle>{t("usage.spendByProvider", { defaultValue: "Spend by Provider" })}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2">
@@ -650,8 +670,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Provider</TableHead>
-                                <TableHead>Spend</TableHead>
+                                <TableHead>{t("usage.colProvider", { defaultValue: "Provider" })}</TableHead>
+                                <TableHead>{t("usage.colSpend", { defaultValue: "Spend" })}</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -677,13 +697,16 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
               <div className="grid h-[75vh] w-full grid-cols-1 gap-2">
                 <Card>
                   <CardHeader>
-                    <CardTitle>All Up</CardTitle>
+                    <CardTitle>{t("usage.tabAllUp", { defaultValue: "All Up" })}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-2">
                       <div>
                         <p className="text-[15px] font-normal text-muted-foreground">
-                          API Requests {valueFormatterNumbers(globalActivity.sum_api_requests)}
+                          {t("usage.apiRequests", {
+                            count: valueFormatterNumbers(globalActivity.sum_api_requests),
+                            defaultValue: "API Requests {{count}}",
+                          })}
                         </p>
                         <AreaChart
                           className="h-40"
@@ -696,7 +719,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                       </div>
                       <div>
                         <p className="text-[15px] font-normal text-muted-foreground">
-                          Tokens {valueFormatterNumbers(globalActivity.sum_total_tokens)}
+                          {t("usage.tokens", {
+                            count: valueFormatterNumbers(globalActivity.sum_total_tokens),
+                            defaultValue: "Tokens {{count}}",
+                          })}
                         </p>
                         <BarChart
                           className="h-40"
@@ -720,7 +746,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                       <div className="grid grid-cols-2">
                         <div>
                           <p className="text-[15px] font-normal text-muted-foreground">
-                            API Requests {valueFormatterNumbers(globalActivity.sum_api_requests)}
+                            {t("usage.apiRequests", {
+                              count: valueFormatterNumbers(globalActivity.sum_api_requests),
+                              defaultValue: "API Requests {{count}}",
+                            })}
                           </p>
                           <AreaChart
                             className="h-40"
@@ -733,7 +762,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                         </div>
                         <div>
                           <p className="text-[15px] font-normal text-muted-foreground">
-                            Tokens {valueFormatterNumbers(globalActivity.sum_total_tokens)}
+                            {t("usage.tokens", {
+                              count: valueFormatterNumbers(globalActivity.sum_total_tokens),
+                              defaultValue: "Tokens {{count}}",
+                            })}
                           </p>
                           <BarChart
                             className="h-40"
@@ -758,7 +790,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
             <div className="col-span-2">
               <Card className="mb-2">
                 <CardHeader>
-                  <CardTitle>Total Spend Per Team</CardTitle>
+                  <CardTitle>{t("usage.totalSpendPerTeam", { defaultValue: "Total Spend Per Team" })}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TeamSpendBarList data={totalSpendPerTeam} />
@@ -766,7 +798,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Daily Spend Per Team</CardTitle>
+                  <CardTitle>{t("usage.dailySpendPerTeam", { defaultValue: "Daily Spend Per Team" })}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <BarChart
@@ -786,15 +818,20 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
 
         <TabsContent value="customer-usage" keepMounted>
           <p className="mb-2 text-[12px] text-muted-foreground italic">
-            Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls{" "}
-            <a
-              className="text-primary"
-              href="https://docs.litellm.ai/docs/proxy/users"
-              target="_blank"
-              rel="noreferrer"
-            >
-              docs here
-            </a>
+            <Trans
+              i18nKey="usage.customersDesc"
+              defaults="Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls <docsLink>docs here</docsLink>"
+              components={{
+                docsLink: (
+                  <a
+                    className="text-primary"
+                    href="https://docs.litellm.ai/docs/proxy/users"
+                    target="_blank"
+                    rel="noreferrer"
+                  />
+                ),
+              }}
+            />
           </p>
           <div className="grid grid-cols-2">
             <div>
@@ -808,7 +845,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
               />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Select Key</p>
+              <p className="text-sm text-muted-foreground">{t("usage.selectKey", { defaultValue: "Select Key" })}</p>
               <Select
                 value={selectedKeyToken}
                 onValueChange={(value: string | null) => {
@@ -817,12 +854,15 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="All Keys">
-                    {(token: string | null) => selectableKeys.find((key) => key.token === token)?.alias ?? "All Keys"}
+                  <SelectValue placeholder={t("usage.allKeys", { defaultValue: "All Keys" })}>
+                    {(token: string | null) =>
+                      selectableKeys.find((key) => key.token === token)?.alias ??
+                      t("usage.allKeys", { defaultValue: "All Keys" })
+                    }
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={null}>All Keys</SelectItem>
+                  <SelectItem value={null}>{t("usage.allKeys", { defaultValue: "All Keys" })}</SelectItem>
                   {selectableKeys.map((key) => (
                     <SelectItem key={key.token} value={key.token}>
                       {key.alias}
@@ -839,9 +879,9 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Spend</TableHead>
-                      <TableHead>Total Events</TableHead>
+                      <TableHead>{t("usage.colCustomer", { defaultValue: "Customer" })}</TableHead>
+                      <TableHead>{t("usage.colSpend", { defaultValue: "Spend" })}</TableHead>
+                      <TableHead>{t("usage.colTotalEvents", { defaultValue: "Total Events" })}</TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -895,10 +935,12 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                       ))
                     }
                   </ComboboxValue>
-                  <ComboboxChipsInput placeholder="Select tags" />
+                  <ComboboxChipsInput placeholder={t("usage.selectTags", { defaultValue: "Select tags" })} />
                 </ComboboxChips>
                 <ComboboxContent anchor={anchor}>
-                  <ComboboxEmpty>No tags found</ComboboxEmpty>
+                  <ComboboxEmpty>
+                    {t("tagManagement.tagTable.noTagsFound", { defaultValue: "No tags found" })}
+                  </ComboboxEmpty>
                   <ComboboxList>
                     {(option: TagOption) => (
                       <ComboboxItem key={option.value} value={option} disabled={option.disabled}>
@@ -914,19 +956,24 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
             <div className="col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Spend Per Tag</CardTitle>
+                  <CardTitle>{t("usage.spendPerTag", { defaultValue: "Spend Per Tag" })}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
                   <p className="text-sm text-muted-foreground">
-                    Get Started by Tracking cost per tag{" "}
-                    <a
-                      className="text-primary"
-                      href="https://docs.litellm.ai/docs/proxy/cost_tracking"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      here
-                    </a>
+                    <Trans
+                      i18nKey="usage.spendPerTagDesc"
+                      defaults="Get Started by Tracking cost per tag <docsLink>here</docsLink>"
+                      components={{
+                        docsLink: (
+                          <a
+                            className="text-primary"
+                            href="https://docs.litellm.ai/docs/proxy/cost_tracking"
+                            target="_blank"
+                            rel="noreferrer"
+                          />
+                        ),
+                      }}
+                    />
                   </p>
                   <BarChart className="h-72" data={topTagsData} index="name" categories={["spend"]} colors={["cyan"]} />
                 </CardContent>
