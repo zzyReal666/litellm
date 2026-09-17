@@ -21,6 +21,16 @@ export const DIMENSION_LABELS: Record<string, string> = {
   questionComplexity: "Question complexity",
 };
 
+export const DIMENSION_LABEL_KEYS: Record<string, string> = {
+  codePresence: "addModel.heuristicScoring.dimensionCodePresence",
+  reasoningMarkers: "addModel.heuristicScoring.dimensionReasoningMarkers",
+  technicalTerms: "addModel.heuristicScoring.dimensionTechnicalTerms",
+  tokenCount: "addModel.heuristicScoring.dimensionTokenCount",
+  simpleIndicators: "addModel.heuristicScoring.dimensionSimpleIndicators",
+  multiStepPatterns: "addModel.heuristicScoring.dimensionMultiStepPatterns",
+  questionComplexity: "addModel.heuristicScoring.dimensionQuestionComplexity",
+};
+
 export const dimensionLabel = (key: string): string => DIMENSION_LABELS[key] ?? key;
 
 const asRecord = (raw: unknown): Record<string, unknown> | undefined =>

@@ -1,5 +1,6 @@
 import { fireEvent, renderWithProviders, screen } from "../../../tests/test-utils";
 import { vi } from "vitest";
+import i18n from "@/lib/i18n";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 import StallEscalationConfig, { stallEscalationBlockedReason } from "./StallEscalationConfig";
 
@@ -20,15 +21,19 @@ const toggle = () => screen.getByRole("switch", { name: "Escalate a stalled task
 
 describe("stallEscalationBlockedReason", () => {
   it("blocks on session pinning, which replays a model instead of classifying", () => {
-    expect(stallEscalationBlockedReason({ ...baseValue, session_affinity: true })).toContain("Classification Method");
+    expect(stallEscalationBlockedReason({ ...baseValue, session_affinity: true }, i18n.t)).toContain(
+      "Classification Method",
+    );
   });
 
   it("blocks on user-turn classification, which skips the agent-loop turns a stall shows up in", () => {
-    expect(stallEscalationBlockedReason({ ...baseValue, classification_mode: "user_turn" })).toContain("every request");
+    expect(stallEscalationBlockedReason({ ...baseValue, classification_mode: "user_turn" }, i18n.t)).toContain(
+      "every request",
+    );
   });
 
   it("allows the default every-request router", () => {
-    expect(stallEscalationBlockedReason(baseValue)).toBeNull();
+    expect(stallEscalationBlockedReason(baseValue, i18n.t)).toBeNull();
   });
 });
 

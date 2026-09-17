@@ -1,4 +1,5 @@
 import type { ComplexityTier } from "./KeywordTierRules";
+import type { TFunction } from "i18next";
 import type { ModelGroup } from "@/components/llm_calls/fetch_models";
 import { ALL_BUILT_IN_TIERS, TIER_ORDER } from "./tier_rows";
 
@@ -152,7 +153,24 @@ export const DEFAULT_TIER_LABELS: Record<ComplexityTier, string> = {
   REASONING: "Reasoning",
 };
 
+export const DEFAULT_TIER_LABEL_KEYS: Record<ComplexityTier, string> = {
+  NON_REASONING: "addModel.complexityRouterConfig.nonReasoningTierLabel",
+  SIMPLE: "addModel.complexityRouterConfig.simpleTierLabel",
+  MEDIUM: "addModel.complexityRouterConfig.mediumTierLabel",
+  COMPLEX: "addModel.complexityRouterConfig.complexTierLabel",
+  REASONING: "addModel.complexityRouterConfig.reasoningTierLabel",
+};
+
 const isBuiltInTier = (tier: string): tier is ComplexityTier => (ALL_BUILT_IN_TIERS as string[]).includes(tier);
+
+/**
+ * A built-in tier still showing its shipped display label reads from the catalog; an operator-renamed
+ * tier keeps their own name, which is data and must never be translated.
+ */
+export const translatedDefaultTierLabel = (tier: string, label: string, t: TFunction): string =>
+  isBuiltInTier(tier) && label === DEFAULT_TIER_LABELS[tier]
+    ? t(DEFAULT_TIER_LABEL_KEYS[tier], { defaultValue: label })
+    : label;
 
 const builtInTierLabel = (
   tierLabels: Partial<Record<ComplexityTier, string>> | undefined,

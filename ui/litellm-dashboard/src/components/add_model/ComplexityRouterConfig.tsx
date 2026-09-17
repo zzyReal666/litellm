@@ -3,6 +3,8 @@ import { MultiSelect } from "@/components/shared/MultiSelect";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { ChevronRight, Info, Plus, Trash2, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import type { TFunction } from "i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { AffinityControls } from "./AffinityControls";
 import NonReasoningTierToggle from "./NonReasoningTierToggle";
@@ -100,36 +102,46 @@ export const DEFAULT_CLASSIFICATION_RUBRIC: ClassificationRubric = "legacy";
  */
 export const NEW_CLASSIFIER_CLASSIFICATION_RUBRIC: ClassificationRubric = "agentic";
 
-export const CLASSIFICATION_RUBRIC_DESCRIPTIONS: Record<ClassificationRubric, { label: string; description: string }> =
-  {
-    legacy: {
-      label: "Legacy (uncalibrated)",
-      description:
-        "The rubric as it shipped before calibration examples, with no worked examples at all. Routers created " +
-        "before this setting existed use it, so their tier decisions and spend are unchanged. It over-routes " +
-        "ordinary engineering to the most expensive tier.",
-    },
-    agentic: {
-      label: "Agentic",
-      description:
-        "Anchors routine installs, builds, multi-file edits, and standard debugging at " +
-        "Medium, so ordinary engineering does not route to your most expensive tier. Suits agent, terminal, and " +
-        "coding-assistant traffic, and mixed traffic.",
-    },
-    chat: {
-      label: "Chat",
-      description:
-        "Drops the engineering examples, for a router serving only conversational traffic that never sees those " +
-        "requests.",
-    },
-    business: {
-      label: "Business",
-      description:
-        "Business and sales examples plus business-oriented tier definitions: routine drafting and summarizing " +
-        "stay at Medium, data-determined analysis is Complex, and only decisions under conflicting tradeoffs " +
-        "reach Reasoning. Suits sales, support, and go-to-market traffic.",
-    },
-  };
+export const CLASSIFICATION_RUBRIC_DESCRIPTIONS: Record<
+  ClassificationRubric,
+  { labelKey: string; label: string; descriptionKey: string; description: string }
+> = {
+  legacy: {
+    labelKey: "addModel.complexityRouterConfig.rubricLegacyLabel",
+    label: "Legacy (uncalibrated)",
+    descriptionKey: "addModel.complexityRouterConfig.rubricLegacyDescription",
+    description:
+      "The rubric as it shipped before calibration examples, with no worked examples at all. Routers created " +
+      "before this setting existed use it, so their tier decisions and spend are unchanged. It over-routes " +
+      "ordinary engineering to the most expensive tier.",
+  },
+  agentic: {
+    labelKey: "addModel.complexityRouterConfig.rubricAgenticLabel",
+    label: "Agentic",
+    descriptionKey: "addModel.complexityRouterConfig.rubricAgenticDescription",
+    description:
+      "Anchors routine installs, builds, multi-file edits, and standard debugging at " +
+      "Medium, so ordinary engineering does not route to your most expensive tier. Suits agent, terminal, and " +
+      "coding-assistant traffic, and mixed traffic.",
+  },
+  chat: {
+    labelKey: "addModel.complexityRouterConfig.rubricChatLabel",
+    label: "Chat",
+    descriptionKey: "addModel.complexityRouterConfig.rubricChatDescription",
+    description:
+      "Drops the engineering examples, for a router serving only conversational traffic that never sees those " +
+      "requests.",
+  },
+  business: {
+    labelKey: "addModel.complexityRouterConfig.rubricBusinessLabel",
+    label: "Business",
+    descriptionKey: "addModel.complexityRouterConfig.rubricBusinessDescription",
+    description:
+      "Business and sales examples plus business-oriented tier definitions: routine drafting and summarizing " +
+      "stay at Medium, data-determined analysis is Complex, and only decisions under conflicting tradeoffs " +
+      "reach Reasoning. Suits sales, support, and go-to-market traffic.",
+  },
+};
 
 export const CLASSIFICATION_RUBRIC_KEYS = Object.keys(CLASSIFICATION_RUBRIC_DESCRIPTIONS) as ClassificationRubric[];
 
@@ -190,20 +202,39 @@ export const effectiveClassifierType = (
   value: Pick<ComplexityRouterConfigValue, "custom_tier_set" | "classifier_type">,
 ): ClassifierType => (value.custom_tier_set ? "llm" : value.classifier_type);
 
-const rowOrigin = (row: TierRow, editing: boolean): string => {
+const rowOrigin = (row: TierRow, editing: boolean, t: TFunction): string => {
   if (!editing) return row.id;
-  return isBuiltInTierName(row.name) ? "built-in" : "custom";
+  return isBuiltInTierName(row.name)
+    ? t("addModel.complexityRouterConfig.tierOriginBuiltIn", { defaultValue: "built-in" })
+    : t("addModel.complexityRouterConfig.tierOriginCustom", { defaultValue: "custom" });
 };
 
-const defaultModelPlaceholderFor = (derivedDefaultModel: string | undefined, isCustomSet: boolean): string => {
-  if (derivedDefaultModel) return `Derived from tiers: ${derivedDefaultModel}`;
-  return isCustomSet ? "Add a model to your fallback tier" : "Add a model to the Simple or Medium tier";
+const defaultModelPlaceholderFor = (
+  derivedDefaultModel: string | undefined,
+  isCustomSet: boolean,
+  t: TFunction,
+): string => {
+  if (derivedDefaultModel)
+    return t("addModel.complexityRouterConfig.derivedDefaultModelPlaceholder", {
+      defaultValue: "Derived from tiers: {{model}}",
+      model: derivedDefaultModel,
+    });
+  return isCustomSet
+    ? t("addModel.complexityRouterConfig.addModelToFallbackTier", {
+        defaultValue: "Add a model to your fallback tier",
+      })
+    : t("addModel.complexityRouterConfig.addModelToSimpleOrMediumTier", {
+        defaultValue: "Add a model to the Simple or Medium tier",
+      });
 };
 
-const builtInTierInfo = (rowId: string): { label: string; description: string; examples: string } | undefined => {
+const builtInTierInfo = (rowId: string): TierDescription | undefined => {
   const builtIn = ALL_BUILT_IN_TIERS.find((tier) => tier === rowId);
   return builtIn ? TIER_DESCRIPTIONS[builtIn] : undefined;
 };
+
+const translatedTierLabel = (tierInfo: TierDescription | undefined, label: string, t: TFunction): string =>
+  tierInfo && label === tierInfo.label ? t(tierInfo.labelKey, { defaultValue: tierInfo.label }) : label;
 
 const TierSetToolbar: React.FC<{
   editing: boolean;
@@ -214,69 +245,91 @@ const TierSetToolbar: React.FC<{
   onEditingChange: ((editing: boolean) => void) | undefined;
   onAdd: () => void;
   onRestore: () => void;
-}> = ({ editing, isCustomSet, rowCount, rowsError, keywordRulesError, onEditingChange, onAdd, onRestore }) => (
-  <>
-    <div className="mt-4 flex flex-wrap items-center gap-2">
-      {editing ? (
-        <>
-          <Button variant="outline" onClick={onAdd} disabled={rowCount >= MAX_TIER_COUNT}>
-            <Plus />
-            Add tier
-          </Button>
-          <SimpleTooltip content={rowsError || undefined}>
-            <Button variant="outline" disabled={Boolean(rowsError)} onClick={() => onEditingChange?.(false)}>
-              Done
+}> = ({ editing, isCustomSet, rowCount, rowsError, keywordRulesError, onEditingChange, onAdd, onRestore }) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        {editing ? (
+          <>
+            <Button variant="outline" onClick={onAdd} disabled={rowCount >= MAX_TIER_COUNT}>
+              <Plus />
+              {t("addModel.complexityRouterConfig.addTier", { defaultValue: "Add tier" })}
             </Button>
-          </SimpleTooltip>
-          {isCustomSet && (
-            <Button variant="outline" size="sm" onClick={onRestore}>
-              Restore defaults
+            <SimpleTooltip content={rowsError || undefined}>
+              <Button variant="outline" disabled={Boolean(rowsError)} onClick={() => onEditingChange?.(false)}>
+                {t("common.done", { defaultValue: "Done" })}
+              </Button>
+            </SimpleTooltip>
+            {isCustomSet && (
+              <Button variant="outline" size="sm" onClick={onRestore}>
+                {t("addModel.complexityRouterConfig.restoreDefaults", { defaultValue: "Restore defaults" })}
+              </Button>
+            )}
+          </>
+        ) : (
+          onEditingChange && (
+            <Button variant="outline" onClick={() => onEditingChange(true)}>
+              {t("addModel.complexityRouterConfig.editTiers", { defaultValue: "Edit tiers" })}
             </Button>
-          )}
-        </>
-      ) : (
-        onEditingChange && (
-          <Button variant="outline" onClick={() => onEditingChange(true)}>
-            Edit tiers
-          </Button>
-        )
+          )
+        )}
+      </div>
+      {editing && (
+        <span className="block mt-1 text-xs text-muted-foreground">
+          {t("addModel.complexityRouterConfig.editingHint", {
+            defaultValue:
+              "Add or remove tiers to define your own set. Every custom tier needs a definition the LLM classifier routes on, and an edited set requires the LLM classification method",
+          })}
+        </span>
       )}
-    </div>
-    {editing && (
-      <span className="block mt-1 text-xs text-muted-foreground">
-        Add or remove tiers to define your own set. Every custom tier needs a definition the LLM classifier routes on,
-        and an edited set requires the LLM classification method
-      </span>
-    )}
-    {editing && keywordRulesError && (
-      <span className="block mt-1 text-xs text-destructive">
-        {keywordRulesError}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back
-      </span>
-    )}
-  </>
-);
+      {editing && keywordRulesError && (
+        <span className="block mt-1 text-xs text-destructive">
+          {t("addModel.complexityRouterConfig.keywordRulesError", {
+            defaultValue: "{{error}}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back",
+            error: keywordRulesError,
+          })}
+        </span>
+      )}
+    </>
+  );
+};
 
 const FallbackTierField: React.FC<{
   rows: readonly TierRow[];
   fallbackTierId: string;
   onValueChange: (rowId: string) => void;
-}> = ({ rows, fallbackTierId, onValueChange }) => (
-  <div className="mt-4">
-    <div className="flex items-center gap-2 mb-2">
-      <strong className="text-base font-semibold">Fallback Tier</strong>
-      <SimpleTooltip content="Where requests route when the LLM classifier errors, times out, or returns an unparseable reply. Required for an edited tier set: the heuristic scorer cannot produce your tiers.">
-        <Info className="size-4 text-muted-foreground" />
-      </SimpleTooltip>
+}> = ({ rows, fallbackTierId, onValueChange }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="mt-4">
+      <div className="flex items-center gap-2 mb-2">
+        <strong className="text-base font-semibold">
+          {t("addModel.complexityRouterConfig.fallbackTierTitle", { defaultValue: "Fallback Tier" })}
+        </strong>
+        <SimpleTooltip
+          content={t("addModel.complexityRouterConfig.fallbackTierTooltip", {
+            defaultValue:
+              "Where requests route when the LLM classifier errors, times out, or returns an unparseable reply. Required for an edited tier set: the heuristic scorer cannot produce your tiers.",
+          })}
+        >
+          <Info className="size-4 text-muted-foreground" />
+        </SimpleTooltip>
+      </div>
+      <TierRowSelect
+        label={t("addModel.complexityRouterConfig.fallbackTierLabel", { defaultValue: "Fallback tier" })}
+        options={rows
+          .filter((row) => activeTierName(row))
+          .map((row) => ({ value: row.id, label: activeTierName(row) }))}
+        value={fallbackTierId || null}
+        onValueChange={onValueChange}
+        placeholder={t("addModel.complexityRouterConfig.fallbackTierPlaceholder", {
+          defaultValue: "Pick the tier classifier failures route to",
+        })}
+      />
     </div>
-    <TierRowSelect
-      label="Fallback tier"
-      options={rows.filter((row) => activeTierName(row)).map((row) => ({ value: row.id, label: activeTierName(row) }))}
-      value={fallbackTierId || null}
-      onValueChange={onValueChange}
-      placeholder="Pick the tier classifier failures route to"
-    />
-  </div>
-);
+  );
+};
 
 const TierRowHeader: React.FC<{
   row: TierRow;
@@ -287,72 +340,108 @@ const TierRowHeader: React.FC<{
   editing: boolean;
   isCustomSet: boolean;
   onRemove: () => void;
-}> = ({ row, index, rowCount, label, description, editing, isCustomSet, onRemove }) => (
-  <div className="flex items-center gap-2 mb-2">
-    <strong className="text-base font-semibold">{label} Tier</strong>
-    <SimpleTooltip
-      content={
-        row.definition.trim() ||
-        description ||
-        "A tier you defined. The classifier routes requests matching its definition here."
-      }
-    >
-      <Info className="size-4 text-muted-foreground" />
-    </SimpleTooltip>
-    <span className="text-xs text-muted-foreground">
-      Tier {index + 1} of {rowCount} &middot; {rowOrigin(row, isCustomSet)}
-    </span>
-    {editing && (
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-destructive hover:text-destructive/80"
-        aria-label={`Remove the ${activeTierName(row) || `tier ${index + 1}`} tier`}
-        disabled={rowCount <= MIN_TIER_COUNT}
-        onClick={onRemove}
+}> = ({ row, index, rowCount, label, description, editing, isCustomSet, onRemove }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-center gap-2 mb-2">
+      <strong className="text-base font-semibold">
+        {t("addModel.complexityRouterConfig.tierLabel", { defaultValue: "{{label}} Tier", label })}
+      </strong>
+      <SimpleTooltip
+        content={
+          row.definition.trim() ||
+          description ||
+          t("addModel.complexityRouterConfig.customTierTooltip", {
+            defaultValue: "A tier you defined. The classifier routes requests matching its definition here.",
+          })
+        }
       >
-        <Trash2 />
-        Remove
-      </Button>
-    )}
-  </div>
-);
+        <Info className="size-4 text-muted-foreground" />
+      </SimpleTooltip>
+      <span className="text-xs text-muted-foreground">
+        <Trans
+          i18nKey="addModel.complexityRouterConfig.tierPosition"
+          defaults="Tier {{index}} of {{count}} · {{origin}}"
+          values={{ index: index + 1, count: rowCount, origin: rowOrigin(row, isCustomSet, t) }}
+        />
+      </span>
+      {editing && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-destructive hover:text-destructive/80"
+          aria-label={t("addModel.complexityRouterConfig.removeTierAriaLabel", {
+            defaultValue: "Remove the {{tier}} tier",
+            tier:
+              activeTierName(row) ||
+              t("addModel.complexityRouterConfig.tierFallbackName", {
+                defaultValue: "tier {{index}}",
+                index: index + 1,
+              }),
+          })}
+          disabled={rowCount <= MIN_TIER_COUNT}
+          onClick={onRemove}
+        >
+          <Trash2 />
+          {t("common.remove", { defaultValue: "Remove" })}
+        </Button>
+      )}
+    </div>
+  );
+};
 
 const TierRowEditFields: React.FC<{
   row: TierRow;
   index: number;
   definitionMissing: boolean;
   onPatch: (patch: Partial<Omit<TierRow, "id">>) => void;
-}> = ({ row, index, definitionMissing, onPatch }) => (
-  <>
-    <Input
-      value={row.name}
-      onChange={(event) => onPatch({ name: event.target.value })}
-      placeholder="Tier name, e.g. SECURITY_REVIEW"
-      aria-label={`Name for tier ${index + 1}`}
-      maxLength={MAX_TIER_NAME_CHARS}
-      className="mb-2"
-    />
-    <Textarea
-      value={row.definition}
-      onChange={(event) => onPatch({ definition: event.target.value.replace(/[\r\n]+/g, " ") })}
-      placeholder={
-        isBuiltInTierName(row.name)
-          ? "Leave blank to keep the built-in definition"
-          : "What belongs in this tier, e.g. requests asking for a security audit"
-      }
-      aria-label={`Definition for tier ${index + 1}`}
-      maxLength={MAX_TIER_DEFINITION_CHARS}
-      rows={2}
-      className={definitionMissing ? "mb-2 border-destructive" : "mb-2"}
-    />
-    {definitionMissing && (
-      <span className="mb-2 block text-xs text-destructive">
-        A definition is required: it is the rubric the classifier routes on for this tier
-      </span>
-    )}
-  </>
-);
+}> = ({ row, index, definitionMissing, onPatch }) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Input
+        value={row.name}
+        onChange={(event) => onPatch({ name: event.target.value })}
+        placeholder={t("addModel.complexityRouterConfig.tierNamePlaceholder", {
+          defaultValue: "Tier name, e.g. SECURITY_REVIEW",
+        })}
+        aria-label={t("addModel.complexityRouterConfig.tierNameAriaLabel", {
+          defaultValue: "Name for tier {{index}}",
+          index: index + 1,
+        })}
+        maxLength={MAX_TIER_NAME_CHARS}
+        className="mb-2"
+      />
+      <Textarea
+        value={row.definition}
+        onChange={(event) => onPatch({ definition: event.target.value.replace(/[\r\n]+/g, " ") })}
+        placeholder={
+          isBuiltInTierName(row.name)
+            ? t("addModel.complexityRouterConfig.keepBuiltInDefinitionPlaceholder", {
+                defaultValue: "Leave blank to keep the built-in definition",
+              })
+            : t("addModel.complexityRouterConfig.tierDefinitionPlaceholder", {
+                defaultValue: "What belongs in this tier, e.g. requests asking for a security audit",
+              })
+        }
+        aria-label={t("addModel.complexityRouterConfig.tierDefinitionAriaLabel", {
+          defaultValue: "Definition for tier {{index}}",
+          index: index + 1,
+        })}
+        maxLength={MAX_TIER_DEFINITION_CHARS}
+        rows={2}
+        className={definitionMissing ? "mb-2 border-destructive" : "mb-2"}
+      />
+      {definitionMissing && (
+        <span className="mb-2 block text-xs text-destructive">
+          {t("addModel.complexityRouterConfig.tierDefinitionRequired", {
+            defaultValue: "A definition is required: it is the rubric the classifier routes on for this tier",
+          })}
+        </span>
+      )}
+    </>
+  );
+};
 
 export type AdaptiveEligible = "all" | "classified_tier";
 
@@ -479,33 +568,54 @@ interface ComplexityRouterConfigProps {
   showValidationErrors?: boolean;
 }
 
-export const TIER_DESCRIPTIONS: Record<
-  keyof ComplexityTiers,
-  { label: string; description: string; examples: string }
-> = {
+export interface TierDescription {
+  labelKey: string;
+  label: string;
+  descriptionKey: string;
+  description: string;
+  examplesKey: string;
+  examples: string;
+}
+
+export const TIER_DESCRIPTIONS: Record<keyof ComplexityTiers, TierDescription> = {
   NON_REASONING: {
+    labelKey: "addModel.complexityRouterConfig.nonReasoningTierLabel",
     label: "Non-reasoning",
+    descriptionKey: "addModel.complexityRouterConfig.nonReasoningTierDescription",
     description: "Operational relay work: passing information along with no judgment about it",
+    examplesKey: "addModel.complexityRouterConfig.nonReasoningTierExamples",
     examples: '"Reformat this tool output", "Acknowledge the write succeeded"',
   },
   SIMPLE: {
+    labelKey: "addModel.complexityRouterConfig.simpleTierLabel",
     label: "Simple",
+    descriptionKey: "addModel.complexityRouterConfig.simpleTierDescription",
     description: "Basic questions, greetings, simple factual queries",
+    examplesKey: "addModel.complexityRouterConfig.simpleTierExamples",
     examples: '"Hello!", "What is Python?", "Thanks!"',
   },
   MEDIUM: {
+    labelKey: "addModel.complexityRouterConfig.mediumTierLabel",
     label: "Medium",
+    descriptionKey: "addModel.complexityRouterConfig.mediumTierDescription",
     description: "Standard queries requiring some reasoning or explanation",
+    examplesKey: "addModel.complexityRouterConfig.mediumTierExamples",
     examples: '"Explain how REST APIs work", "Debug this error"',
   },
   COMPLEX: {
+    labelKey: "addModel.complexityRouterConfig.complexTierLabel",
     label: "Complex",
+    descriptionKey: "addModel.complexityRouterConfig.complexTierDescription",
     description: "Technical, multi-part requests requiring deep knowledge",
+    examplesKey: "addModel.complexityRouterConfig.complexTierExamples",
     examples: '"Design a microservices architecture", "Implement a rate limiter"',
   },
   REASONING: {
+    labelKey: "addModel.complexityRouterConfig.reasoningTierLabel",
     label: "Reasoning",
+    descriptionKey: "addModel.complexityRouterConfig.reasoningTierDescription",
     description: "Chain-of-thought, analysis, explicit reasoning requests",
+    examplesKey: "addModel.complexityRouterConfig.reasoningTierExamples",
     examples: '"Think step by step...", "Analyze the pros and cons..."',
   },
 };
@@ -530,39 +640,52 @@ const PlanModeOverrideControls: React.FC<{
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
   planModeTierOptions: { value: string; label: string }[];
-}> = ({ value, onChange, planModeTierOptions }) => (
-  <>
-    <div className="flex items-center gap-2 mb-2">
-      <Switch
-        checked={value.plan_mode_min_tier !== undefined}
-        disabled={planModeTierOptions.length === 0}
-        onCheckedChange={(enabled) =>
-          onChange({
-            ...value,
-            plan_mode_min_tier: enabled ? planModeTierOptions.at(-1)?.value : undefined,
-          })
-        }
-        aria-label="Route plan-mode requests to a minimum tier"
-      />
-      <strong className="font-semibold">Route plan-mode requests to a minimum tier</strong>
-    </div>
-    <span className="block text-xs mb-3 text-muted-foreground">
-      Requests from coding agents in plan mode (Claude Code, GitHub Copilot) route to at least this tier. The classifier
-      still wins when it picks higher, and the override only lasts while plan mode is active.
-      {planModeTierOptions.length === 0 && " Add models to a tier to enable this."}
-    </span>
-    {value.plan_mode_min_tier !== undefined && (
-      <div style={{ maxWidth: 320 }}>
-        <TierRowSelect
-          label="Plan-mode minimum tier"
-          options={planModeTierOptions}
-          value={value.plan_mode_min_tier ?? null}
-          onValueChange={(tier) => onChange({ ...value, plan_mode_min_tier: tier })}
+}> = ({ value, onChange, planModeTierOptions }) => {
+  const { t } = useTranslation();
+  const planModeLabel = t("addModel.complexityRouterConfig.planModeTierLabel", {
+    defaultValue: "Route plan-mode requests to a minimum tier",
+  });
+  return (
+    <>
+      <div className="flex items-center gap-2 mb-2">
+        <Switch
+          checked={value.plan_mode_min_tier !== undefined}
+          disabled={planModeTierOptions.length === 0}
+          onCheckedChange={(enabled) =>
+            onChange({
+              ...value,
+              plan_mode_min_tier: enabled ? planModeTierOptions.at(-1)?.value : undefined,
+            })
+          }
+          aria-label={planModeLabel}
         />
+        <strong className="font-semibold">{planModeLabel}</strong>
       </div>
-    )}
-  </>
-);
+      <span className="block text-xs mb-3 text-muted-foreground">
+        {t("addModel.complexityRouterConfig.planModeTierHint", {
+          defaultValue:
+            "Requests from coding agents in plan mode (Claude Code, GitHub Copilot) route to at least this tier. The classifier still wins when it picks higher, and the override only lasts while plan mode is active.",
+        })}
+        {planModeTierOptions.length === 0 &&
+          t("addModel.complexityRouterConfig.planModeTierUnavailable", {
+            defaultValue: " Add models to a tier to enable this.",
+          })}
+      </span>
+      {value.plan_mode_min_tier !== undefined && (
+        <div style={{ maxWidth: 320 }}>
+          <TierRowSelect
+            label={t("addModel.complexityRouterConfig.planModeMinTierLabel", {
+              defaultValue: "Plan-mode minimum tier",
+            })}
+            options={planModeTierOptions}
+            value={value.plan_mode_min_tier ?? null}
+            onValueChange={(tier) => onChange({ ...value, plan_mode_min_tier: tier })}
+          />
+        </div>
+      )}
+    </>
+  );
+};
 
 const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
   modelInfo,
@@ -587,17 +710,18 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
   onAutoRouterCompressionChange,
   showValidationErrors = false,
 }) => {
+  const { t } = useTranslation();
   const customTierSet = value.custom_tier_set;
   const tierRows = activeTierRows(value);
-  const tierRowsError = customTierSet ? getCustomTierRowsError(customTierSet) : null;
+  const tierRowsError = customTierSet ? getCustomTierRowsError(customTierSet, t) : null;
 
   const planModeRows = tierRows.filter((row) => row.models.length > 0);
   const planModeTierOptions = planModeRows.map((row) => ({
     value: row.id,
-    label: tierRowLabel(row, value.tier_labels),
+    label: translatedTierLabel(builtInTierInfo(row.id), tierRowLabel(row, value.tier_labels), t),
   }));
   const derivedDefaultModel = resolveComplexityDefaultModel(value);
-  const defaultModelPlaceholder = defaultModelPlaceholderFor(derivedDefaultModel, Boolean(customTierSet));
+  const defaultModelPlaceholder = defaultModelPlaceholderFor(derivedDefaultModel, Boolean(customTierSet), t);
   const defaultModel = resolveComplexityDefaultModel(value, value.default_model);
 
   const dispatch = (action: TierSetAction) => {
@@ -646,8 +770,15 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
   return (
     <div className="w-full max-w-none">
       <div className="inline-flex items-center gap-2 mb-4">
-        <h4 className="m-0 text-xl font-semibold text-foreground">Complexity Tier Configuration</h4>
-        <SimpleTooltip content="Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.">
+        <h4 className="m-0 text-xl font-semibold text-foreground">
+          {t("addModel.complexityRouterConfig.title", { defaultValue: "Complexity Tier Configuration" })}
+        </h4>
+        <SimpleTooltip
+          content={t("addModel.complexityRouterConfig.tierMappingTooltip", {
+            defaultValue:
+              "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.",
+          })}
+        >
           <Info className="size-4 text-muted-foreground" />
         </SimpleTooltip>
       </div>
@@ -662,7 +793,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
 
           {tierRows.map((row, index) => {
             const tierInfo = builtInTierInfo(row.id);
-            const label = tierRowLabel(row, value.tier_labels);
+            const label = translatedTierLabel(tierInfo, tierRowLabel(row, value.tier_labels), t);
             const tierMissing = showValidationErrors && row.models.length === 0;
             const needsDefinition = Boolean(customTierSet) && !row.definition.trim() && !isBuiltInTierName(row.name);
             const definitionMissing = showValidationErrors && needsDefinition;
@@ -676,13 +807,20 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                     index={index}
                     rowCount={tierRows.length}
                     label={label}
-                    description={tierInfo?.description}
+                    description={
+                      tierInfo ? t(tierInfo.descriptionKey, { defaultValue: tierInfo.description }) : undefined
+                    }
                     editing={editingTiers}
                     isCustomSet={Boolean(customTierSet)}
                     onRemove={() => removeTierRow(row.id)}
                   />
                   {tierInfo && !customTierSet && (
-                    <span className="block mb-2 text-xs text-muted-foreground">Examples: {tierInfo.examples}</span>
+                    <span className="block mb-2 text-xs text-muted-foreground">
+                      {t("addModel.complexityRouterConfig.examplesLabel", {
+                        defaultValue: "Examples: {{examples}}",
+                        examples: t(tierInfo.examplesKey, { defaultValue: tierInfo.examples }),
+                      })}
+                    </span>
                   )}
                   {editingTiers && (
                     <TierRowEditFields
@@ -697,14 +835,23 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                       <InputGroupInput
                         value={value.tier_labels?.[row.id as keyof ComplexityTiers] ?? ""}
                         onChange={(event) => handleTierLabelChange(row.id as keyof ComplexityTiers, event.target.value)}
-                        placeholder={`Display name (default: ${tierInfo.label})`}
-                        aria-label={`Display name for the ${tierInfo.label} tier`}
+                        placeholder={t("addModel.complexityRouterConfig.displayNamePlaceholder", {
+                          defaultValue: "Display name (default: {{label}})",
+                          label: t(tierInfo.labelKey, { defaultValue: tierInfo.label }),
+                        })}
+                        aria-label={t("addModel.complexityRouterConfig.displayNameAriaLabel", {
+                          defaultValue: "Display name for the {{label}} tier",
+                          label: t(tierInfo.labelKey, { defaultValue: tierInfo.label }),
+                        })}
                       />
                       {value.tier_labels?.[row.id as keyof ComplexityTiers] && (
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
                             size="icon-xs"
-                            aria-label={`Clear display name for the ${tierInfo.label} tier`}
+                            aria-label={t("addModel.complexityRouterConfig.clearDisplayNameAriaLabel", {
+                              defaultValue: "Clear display name for the {{label}} tier",
+                              label: t(tierInfo.labelKey, { defaultValue: tierInfo.label }),
+                            })}
                             onClick={() => handleTierLabelChange(row.id as keyof ComplexityTiers, "")}
                           >
                             <X />
@@ -717,8 +864,11 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                     options={modelOptions}
                     value={row.models}
                     onValueChange={(models: string[]) => setRowModels(row, models)}
-                    placeholder={`Select model(s) for ${label.toLowerCase()} queries`}
-                    emptyText="No models found"
+                    placeholder={t("addModel.complexityRouterConfig.selectTierModelsPlaceholder", {
+                      defaultValue: "Select model(s) for {{label}} queries",
+                      label: label.toLowerCase(),
+                    })}
+                    emptyText={t("modelDashboard.table.noModels", { defaultValue: "No models found" })}
                     className={tierMissing ? "w-full border-destructive" : "w-full"}
                   />
                   <TierModelEffortRows
@@ -730,11 +880,20 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                   />
                   {row.models.length > 1 && (
                     <span className="text-xs text-muted-foreground">
-                      Multiple models selected: the router randomly picks among them per request (or Thompson-samples
-                      within the pool when adaptive routing is on).
+                      {t("addModel.complexityRouterConfig.multipleModelsHint", {
+                        defaultValue:
+                          "Multiple models selected: the router randomly picks among them per request (or Thompson-samples within the pool when adaptive routing is on).",
+                      })}
                     </span>
                   )}
-                  {tierMissing && <span className="text-xs text-destructive">The {label} tier is required</span>}
+                  {tierMissing && (
+                    <span className="text-xs text-destructive">
+                      {t("addModel.complexityRouterConfig.tierRequired", {
+                        defaultValue: "The {{label}} tier is required",
+                        label,
+                      })}
+                    </span>
+                  )}
                 </div>
               </div>
             );
@@ -763,8 +922,15 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
 
           <div className="mb-2">
             <div className="flex items-center gap-2 mb-2">
-              <strong className="text-base font-semibold">Default Model</strong>
-              <SimpleTooltip content="Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.">
+              <strong className="text-base font-semibold">
+                {t("addModel.addAutoRouterTab.defaultModelLabel", { defaultValue: "Default Model" })}
+              </strong>
+              <SimpleTooltip
+                content={t("addModel.complexityRouterConfig.defaultModelTooltip", {
+                  defaultValue:
+                    "Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.",
+                })}
+              >
                 <Info className="size-4 text-muted-foreground" />
               </SimpleTooltip>
             </div>
@@ -773,12 +939,14 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
               value={value.default_model ?? ""}
               onValueChange={handleDefaultModelChange}
               placeholder={defaultModelPlaceholder}
-              emptyText="No models found"
-              aria-label="Default model"
+              emptyText={t("modelDashboard.table.noModels", { defaultValue: "No models found" })}
+              aria-label={t("pages.modelsAndEndpoints.defaultModel", { defaultValue: "Default model" })}
             />
             <span className="block mt-1 text-xs text-muted-foreground">
-              Used when the tier the request lands in has no model, and when the classifier fails with &quot;Route to
-              the default model&quot; selected.
+              {t("addModel.complexityRouterConfig.defaultModelHint", {
+                defaultValue:
+                  'Used when the tier the request lands in has no model, and when the classifier fails with "Route to the default model" selected.',
+              })}
             </span>
           </div>
         </CardContent>
@@ -790,7 +958,13 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
         {[
           {
             key: "classifier",
-            label: <strong className="text-foreground font-semibold">Advanced: Classification Method</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.classificationMethodSection", {
+                  defaultValue: "Advanced: Classification Method",
+                })}
+              </strong>
+            ),
             children: (
               <ClassificationMethodConfig
                 value={value}
@@ -806,7 +980,13 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
           },
           {
             key: "adaptive",
-            label: <strong className="text-foreground font-semibold">Advanced: Adaptive Routing</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.adaptiveRoutingSection", {
+                  defaultValue: "Advanced: Adaptive Routing",
+                })}
+              </strong>
+            ),
             children: (
               <Restricted by={restrictedBy(value, "adaptive")}>
                 <AdaptiveRoutingConfig value={value} onChange={onChange} />
@@ -815,29 +995,57 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
           },
           {
             key: "affinity",
-            label: <strong className="text-foreground font-semibold">Advanced: Affinity</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.affinitySection", { defaultValue: "Advanced: Affinity" })}
+              </strong>
+            ),
             children: <AffinityControls value={value} onChange={onChange} />,
           },
           {
             key: "modality",
-            label: <strong className="text-foreground font-semibold">Advanced: Modality Routing</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.modalityRoutingSection", {
+                  defaultValue: "Advanced: Modality Routing",
+                })}
+              </strong>
+            ),
             children: <ModalityRoutingControls value={value} onChange={onChange} />,
           },
           {
             key: "plan-mode",
-            label: <strong className="text-foreground font-semibold">Advanced: Plan-Mode Override</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.planModeOverrideSection", {
+                  defaultValue: "Advanced: Plan-Mode Override",
+                })}
+              </strong>
+            ),
             children: (
               <PlanModeOverrideControls value={value} onChange={onChange} planModeTierOptions={planModeTierOptions} />
             ),
           },
           {
             key: "context-window",
-            label: <strong className="text-foreground font-semibold">Advanced: Context Window Escalation</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.contextWindowEscalationSection", {
+                  defaultValue: "Advanced: Context Window Escalation",
+                })}
+              </strong>
+            ),
             children: <ContextWindowEscalationConfig value={value} onChange={onChange} />,
           },
           {
             key: "stall-escalation",
-            label: <strong className="text-foreground font-semibold">Advanced: Stalled Task Escalation</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.stalledTaskEscalationSection", {
+                  defaultValue: "Advanced: Stalled Task Escalation",
+                })}
+              </strong>
+            ),
             children: (
               <Restricted by={restrictedBy(value, "stallEscalation")}>
                 <StallEscalationConfig value={value} onChange={onChange} />
@@ -846,14 +1054,26 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
           },
           {
             key: "response",
-            label: <strong className="text-foreground font-semibold">Advanced: Response Format</strong>,
+            label: (
+              <strong className="text-foreground font-semibold">
+                {t("addModel.complexityRouterConfig.responseFormatSection", {
+                  defaultValue: "Advanced: Response Format",
+                })}
+              </strong>
+            ),
             children: <ResponseFormatControls value={value} onChange={onChange} />,
           },
           ...(onEscalationKeywordsChange
             ? [
                 {
                   key: "escalation",
-                  label: <strong className="text-foreground font-semibold">Advanced: Escalation Keywords</strong>,
+                  label: (
+                    <strong className="text-foreground font-semibold">
+                      {t("addModel.complexityRouterConfig.escalationKeywordsSection", {
+                        defaultValue: "Advanced: Escalation Keywords",
+                      })}
+                    </strong>
+                  ),
                   children: (
                     <Restricted by={restrictedBy(value, "escalation")}>
                       <EscalationKeywords keywords={escalationKeywords} onChange={onEscalationKeywordsChange} />
@@ -866,7 +1086,13 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             ? [
                 {
                   key: "compression",
-                  label: <strong className="text-foreground font-semibold">Advanced: Compression</strong>,
+                  label: (
+                    <strong className="text-foreground font-semibold">
+                      {t("addModel.complexityRouterConfig.compressionSection", {
+                        defaultValue: "Advanced: Compression",
+                      })}
+                    </strong>
+                  ),
                   children: (
                     <CompressionControls value={autoRouterCompression} onChange={onAutoRouterCompressionChange} />
                   ),
@@ -877,7 +1103,13 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             ? [
                 {
                   key: "keyword-semantic",
-                  label: <strong className="text-foreground font-semibold">Advanced: Keyword/Semantic Matching</strong>,
+                  label: (
+                    <strong className="text-foreground font-semibold">
+                      {t("addModel.complexityRouterConfig.keywordSemanticMatchingSection", {
+                        defaultValue: "Advanced: Keyword/Semantic Matching",
+                      })}
+                    </strong>
+                  ),
                   children: (
                     <>
                       {onKeywordTierRulesChange && (

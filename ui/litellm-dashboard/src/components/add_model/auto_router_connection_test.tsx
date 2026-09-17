@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 
 import { testModelGroupConnection, ModelGroupConnectionResult } from "../networking";
@@ -22,6 +23,7 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
   targets,
   onTestComplete,
 }) => {
+  const { t } = useTranslation();
   const [results, setResults] = React.useState<TargetResult[]>(() => targets.map(() => ({ status: "pending" })));
 
   React.useEffect(() => {
@@ -50,7 +52,9 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
   if (targets.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        No complexity tiers are configured yet, so there is nothing to test.
+        {t("modelInfoView.noComplexityTiers", {
+          defaultValue: "No complexity tiers are configured yet, so there is nothing to test.",
+        })}
       </p>
     );
   }
@@ -58,8 +62,10 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
   return (
     <div className="space-y-3">
       <p className="mb-2 text-sm text-muted-foreground">
-        Test Connection sends a minimal request to every configured tier, classifier, default, and embedding model. The
-        classifier probe includes its reasoning effort override.
+        {t("addModel.autoRouterConnectionTest.description", {
+          defaultValue:
+            "Test Connection sends a minimal request to every configured tier, classifier, default, and embedding model. The classifier probe includes its reasoning effort override.",
+        })}
       </p>
       {targets.map((target, index) => {
         const result = results[index] ?? { status: "pending" };
@@ -84,7 +90,9 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
               <span className="font-medium">{target.labels.join(", ")}</span>{" "}
               <span className="text-muted-foreground">
                 {"->"} {target.modelGroup}
-                {target.mode === "embedding" ? " (embedding)" : ""}
+                {target.mode === "embedding"
+                  ? t("addModel.autoRouterConnectionTest.embeddingSuffix", { defaultValue: " (embedding)" })
+                  : ""}
               </span>
               {result.status === "error" && (
                 <p className="mt-1 text-xs text-destructive" data-testid="test-error-message">
