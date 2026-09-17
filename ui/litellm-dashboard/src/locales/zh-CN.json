@@ -11233,5 +11233,10 @@
       "vertexSearchNote": "注意：Google Cloud 已在其控制台将其更名为“Agent Search”，以下步骤仍然适用。",
       "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
     }
+  },
+  "keyScope": {
+    "management": "管理",
+    "readOnly": "只读",
+    "scim": "SCIM"
   }
 }
