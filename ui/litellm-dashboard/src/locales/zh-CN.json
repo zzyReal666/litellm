@@ -368,7 +368,11 @@
       "editMember": "编辑成员",
       "deleteMember": "删除成员",
       "addMember": "添加成员",
-      "userAlias": "用户别名"
+      "userAlias": "用户别名",
+      "allRoles": "所有角色",
+      "narrowDownMembers": "筛选成员",
+      "noMatch": "没有符合搜索或筛选条件的成员",
+      "searchPlaceholder": "按名称、邮箱或用户 ID 搜索"
     },
     "modelAliasManager": {
       "bothRequired": "请同时提供别名名称和目标模型",
@@ -385,7 +389,10 @@
       "configExample": "配置示例",
       "configExampleDesc": "以下是您当前别名在配置中的样子：",
       "aliasNamePlaceholder": "例如：gpt-4o",
-      "selectTargetModelPlaceholder": "选择目标模型"
+      "selectTargetModelPlaceholder": "选择目标模型",
+      "deleteAliasAriaLabel": "删除 {{aliasName}}",
+      "editAliasAriaLabel": "编辑 {{aliasName}}",
+      "editAliasName": "编辑别名名称"
     },
     "modelSelector": {
       "placeholder": "选择模型",
@@ -394,7 +401,9 @@
       "customModelPlaceholder": "输入自定义模型名称"
     },
     "organizationDropdown": {
-      "placeholder": "所有组织"
+      "placeholder": "所有组织",
+      "loading": "加载组织中…",
+      "notFound": "未找到组织"
     },
     "passThroughGuardrailsSection": {
       "title": "护栏",
@@ -423,7 +432,8 @@
       "addDocumentsButton": "+ documents[*]",
       "tooltipExampleResults": "• results[*].text",
       "tooltipExampleChoices": "• choices[*].message.content",
-      "addResultsButton": "+ results[*]"
+      "addResultsButton": "+ results[*]",
+      "fieldLevelTargetingWithLink": "字段级定向<learnMoreLink>（了解更多）</learnMoreLink>"
     },
     "passThroughSecuritySection": {
       "title": "安全",
@@ -435,7 +445,9 @@
       "enterpriseNotice": "设置密钥/团队日志配置是 LiteLLM 企业版功能。所有免费用户均可使用全局日志设置。获取试用密钥请访问<pricingLink>此处</pricingLink>。"
     },
     "projectDropdown": {
-      "placeholder": "搜索或选择项目"
+      "placeholder": "搜索或选择项目",
+      "loading": "加载项目中…",
+      "notFound": "未找到项目"
     },
     "rateLimitTypeFormItem": {
       "label": "{{limitTypeUpper}} 速率限制类型",
@@ -502,11 +514,28 @@
       "roleUserLabel": "user",
       "roleUserDescription": "普通用户角色，可查看团队信息，但无法管理。",
       "adding": "添加中...",
-      "addMember": "添加成员"
+      "addMember": "添加成员",
+      "existingUsersNotice": "搜索仅从已存在的用户中选择。如需添加新用户，请先让代理管理员创建账号。"
     },
     "userDropdown": {
       "placeholder": "按邮箱搜索用户…",
       "loading": "正在加载用户…"
+    },
+    "budgetDurationDropdown": {
+      "hourly": "每小时",
+      "neverResets": "永不重置"
+    },
+    "metadataKeyValueFields": {
+      "keyPlaceholder": "键",
+      "removePair": "删除键值对",
+      "valuePlaceholder": "值"
+    },
+    "passThroughRoutesSelector": {
+      "notFound": "未找到透传路由"
+    },
+    "teamMultiSelect": {
+      "clearAll": "清除所有团队",
+      "placeholder": "按别名搜索团队..."
     }
   },
   "adminPanel": {
