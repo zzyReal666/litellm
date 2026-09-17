@@ -46,7 +46,7 @@
     "adminSettings": "管理员设置",
     "costTracking": "成本追踪",
     "uiTheme": "界面主题",
-    "costOptimization": "成本优化X"
+    "costOptimization": "成本优化"
   },
   "navbar": {
     "aiGateway": "AI 网关",
@@ -11194,7 +11194,8 @@
     },
     "vectorStoreTester": {
       "resultLabel": "结果 {{index}}",
-      "searchFailed": "搜索失败：{{error}}"
+      "searchFailed": "搜索失败：{{error}}",
+      "resultsCount": "{{count}} 条结果"
     },
     "index": {
       "tabIndexes": "索引",

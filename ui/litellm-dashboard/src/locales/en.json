@@ -11194,7 +11194,8 @@
     },
     "vectorStoreTester": {
       "resultLabel": "Result {{index}}",
-      "searchFailed": "Search failed: {{error}}"
+      "searchFailed": "Search failed: {{error}}",
+      "resultsCount": "{{count}} results"
     },
     "index": {
       "tabIndexes": "Indexes",
