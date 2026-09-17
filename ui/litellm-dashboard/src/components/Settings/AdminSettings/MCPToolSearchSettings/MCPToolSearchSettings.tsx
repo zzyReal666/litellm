@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CircleHelp, Info, Save } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_models";
 import { FieldGroup } from "@/components/ui/field";
@@ -48,6 +49,7 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 );
 
 export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSettingsProps) {
+  const { t } = useTranslation();
   const { data, isLoading, isError, error } = useMCPToolSearchSettings();
   const { mutate: updateSettings, isPending: isUpdating } = useUpdateMCPToolSearchSettings();
   const form = useForm<ToolSearchFormValues>({ defaultValues: DEFAULT_FORM_VALUES });
@@ -73,14 +75,24 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
     updateSettings(formToPayload(formValues), {
       onSuccess: () => {
         form.reset(formValues);
-        toast.success("Settings updated successfully. Changes will be applied across all pods within 10 seconds.");
+        toast.success(
+          t("settingsPages.mcpSemanticFilterSettings.saveSuccess", {
+            defaultValue: "Settings updated successfully. Changes will be applied across all pods within 10 seconds.",
+          }),
+        );
       },
       onError: (saveError) => toast.fromError(saveError),
     });
   };
 
   if (!accessToken) {
-    return <div className="p-6 text-center text-muted-foreground">Please log in to configure tool search.</div>;
+    return (
+      <div className="p-6 text-center text-muted-foreground">
+        {t("settingsPages.mcpToolSearchSettings.loginRequired", {
+          defaultValue: "Please log in to configure tool search.",
+        })}
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -96,7 +108,11 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
   if (isError) {
     return (
       <Alert variant="error" className="mb-6">
-        <AlertTitle>Could not load MCP tool search settings</AlertTitle>
+        <AlertTitle>
+          {t("settingsPages.mcpToolSearchSettings.loadError", {
+            defaultValue: "Could not load MCP tool search settings",
+          })}
+        </AlertTitle>
         {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
       </Alert>
     );
@@ -106,12 +122,17 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
     <div className="w-full">
       <Alert variant="info" className="mb-6">
         <Info />
-        <AlertTitle>Native MCP Tool Search</AlertTitle>
+        <AlertTitle>
+          {t("settingsPages.mcpToolSearchSettings.infoTitle", { defaultValue: "Native MCP Tool Search" })}
+        </AlertTitle>
         <AlertDescription>
-          Controls the <code>mcp_tool_search</code> virtual tool that native MCP clients call to discover tools. With an
-          embedding model set, tools are ranked by the meaning of their name and description, so a query like
-          &quot;FX&quot; finds a &quot;foreign exchange rates&quot; tool. Without one, keyword matching is used. Callers
-          only ever see tools their key, team and server permissions already allow.
+          <Trans
+            i18nKey="settingsPages.mcpToolSearchSettings.infoDesc"
+            defaults={
+              'Controls the <0>mcp_tool_search</0> virtual tool that native MCP clients call to discover tools. With an embedding model set, tools are ranked by the meaning of their name and description, so a query like "FX" finds a "foreign exchange rates" tool. Without one, keyword matching is used. Callers only ever see tools their key, team and server permissions already allow.'
+            }
+            components={{ 0: <code /> }}
+          />
         </AlertDescription>
       </Alert>
 
@@ -119,7 +140,9 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <Card className="mb-4">
             <CardHeader className="border-b">
-              <CardTitle>Ranking</CardTitle>
+              <CardTitle>
+                {t("settingsPages.mcpToolSearchSettings.rankingCardTitle", { defaultValue: "Ranking" })}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <FieldGroup>
@@ -127,8 +150,13 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                   control={form.control}
                   name="embedding_model"
                   label={labelWithHint(
-                    "Embedding Model",
-                    "Embedding model from your model list used to rank tools by meaning. Clear it to fall back to keyword matching.",
+                    t("settingsPages.mcpSemanticFilterSettings.embeddingModelLabel", {
+                      defaultValue: "Embedding Model",
+                    }),
+                    t("settingsPages.mcpToolSearchSettings.embeddingModelTooltip", {
+                      defaultValue:
+                        "Embedding model from your model list used to rank tools by meaning. Clear it to fall back to keyword matching.",
+                    }),
                   )}
                 >
                   {({ value, onChange, id }) => (
@@ -138,8 +166,22 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                       value={value}
                       onValueChange={onChange}
                       allowClear
-                      placeholder={loadingModels ? "Loading models..." : "Keyword matching (no embedding model)"}
-                      emptyText={loadingModels ? "Loading..." : "No embedding models available"}
+                      placeholder={
+                        loadingModels
+                          ? t("settingsPages.mcpSemanticFilterSettings.loadingModels", {
+                              defaultValue: "Loading models...",
+                            })
+                          : t("settingsPages.mcpToolSearchSettings.keywordMatching", {
+                              defaultValue: "Keyword matching (no embedding model)",
+                            })
+                      }
+                      emptyText={
+                        loadingModels
+                          ? t("common.loading", { defaultValue: "Loading..." })
+                          : t("settingsPages.mcpSemanticFilterSettings.noEmbeddingModels", {
+                              defaultValue: "No embedding models available",
+                            })
+                      }
                       disabled={isUpdating || loadingModels}
                     />
                   )}
@@ -149,8 +191,11 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                   control={form.control}
                   name="top_k"
                   label={labelWithHint(
-                    "Top K Results",
-                    "Most ranked tools a search returns. A smaller top_k in the tool call wins. Core tools do not count.",
+                    t("settingsPages.mcpSemanticFilterSettings.topKLabel", { defaultValue: "Top K Results" }),
+                    t("settingsPages.mcpToolSearchSettings.topKTooltip", {
+                      defaultValue:
+                        "Most ranked tools a search returns. A smaller top_k in the tool call wins. Core tools do not count.",
+                    }),
                   )}
                 >
                   {({ ref, value, onChange, onBlur, id }) => (
@@ -175,8 +220,13 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                   control={form.control}
                   name="similarity_threshold"
                   label={labelWithHint(
-                    "Similarity Threshold",
-                    "Lowest cosine similarity a tool needs to appear in semantic results. 0 means no cutoff.",
+                    t("settingsPages.mcpSemanticFilterSettings.similarityThresholdLabel", {
+                      defaultValue: "Similarity Threshold",
+                    }),
+                    t("settingsPages.mcpToolSearchSettings.similarityThresholdTooltip", {
+                      defaultValue:
+                        "Lowest cosine similarity a tool needs to appear in semantic results. 0 means no cutoff.",
+                    }),
                   )}
                 >
                   {({ value, onChange, id }) => (
@@ -206,7 +256,9 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
 
           <Card className="mb-4">
             <CardHeader className="border-b">
-              <CardTitle>Core Tools</CardTitle>
+              <CardTitle>
+                {t("settingsPages.mcpToolSearchSettings.coreToolsCardTitle", { defaultValue: "Core Tools" })}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <FieldGroup>
@@ -214,8 +266,11 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
                   control={form.control}
                   name="core_tools_text"
                   label={labelWithHint(
-                    "Always Returned First",
-                    "One tool name per line, e.g. my_server-get_rates. Listed before ranked results whenever the caller is allowed to use them.",
+                    t("settingsPages.mcpToolSearchSettings.coreToolsLabel", { defaultValue: "Always Returned First" }),
+                    t("settingsPages.mcpToolSearchSettings.coreToolsTooltip", {
+                      defaultValue:
+                        "One tool name per line, e.g. my_server-get_rates. Listed before ranked results whenever the caller is allowed to use them.",
+                    }),
                   )}
                 >
                   {({ ref, value, onChange, onBlur, id }) => (
@@ -241,7 +296,7 @@ export default function MCPToolSearchSettings({ accessToken }: MCPToolSearchSett
               disabled={!isDirty || isUpdating}
             >
               {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              Save Settings
+              {t("settingsPages.mcpSemanticFilterSettings.saveSettingsButton", { defaultValue: "Save Settings" })}
             </Button>
           </div>
         </form>

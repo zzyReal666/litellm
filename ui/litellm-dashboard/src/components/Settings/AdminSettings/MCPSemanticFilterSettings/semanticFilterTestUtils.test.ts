@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import i18n from "@/lib/i18n";
 import { getCurlCommand, runSemanticFilterTest } from "./semanticFilterTestUtils";
 import { testMCPSemanticFilter } from "@/components/networking";
 import { toast } from "@/lib/toast";
@@ -32,6 +33,7 @@ describe("runSemanticFilterTest", () => {
     accessToken: "test-token",
     testModel: "gpt-4o",
     testQuery: "find relevant files",
+    t: i18n.t,
     setIsTesting: mockSetIsTesting,
     setTestResult: mockSetTestResult,
     setTestError: mockSetTestError,

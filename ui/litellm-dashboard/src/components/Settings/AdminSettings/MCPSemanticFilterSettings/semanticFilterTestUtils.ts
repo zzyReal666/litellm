@@ -1,3 +1,4 @@
+import type { TFunction } from "i18next";
 import { toast } from "@/lib/toast";
 import { testMCPSemanticFilter } from "@/components/networking";
 
@@ -27,6 +28,7 @@ export const runSemanticFilterTest = async ({
   accessToken,
   testModel,
   testQuery,
+  t,
   setIsTesting,
   setTestResult,
   setTestError,
@@ -34,12 +36,17 @@ export const runSemanticFilterTest = async ({
   accessToken: string;
   testModel: string | null;
   testQuery: string;
+  t: TFunction;
   setIsTesting: (value: boolean) => void;
   setTestResult: (result: TestResult | null) => void;
   setTestError: (error: string | null) => void;
 }) => {
   if (!testQuery || !testModel || !accessToken) {
-    toast.error("Please enter a query and select a model");
+    toast.error(
+      t("settingsPages.mcpSemanticFilterTestPanel.queryAndModelRequired", {
+        defaultValue: "Please enter a query and select a model",
+      }),
+    );
     return;
   }
 
@@ -52,17 +59,30 @@ export const runSemanticFilterTest = async ({
     const parsedResult = parseFilterHeaders(headers);
 
     if (!parsedResult) {
-      toast.warning("Semantic filter is not enabled or no tools were filtered");
+      toast.warning(
+        t("settingsPages.mcpSemanticFilterTestPanel.filterNotEnabled", {
+          defaultValue: "Semantic filter is not enabled or no tools were filtered",
+        }),
+      );
       return;
     }
 
     setTestResult(parsedResult);
-    toast.success("Semantic filter test completed successfully");
+    toast.success(
+      t("settingsPages.mcpSemanticFilterTestPanel.testSuccess", {
+        defaultValue: "Semantic filter test completed successfully",
+      }),
+    );
   } catch (error) {
     console.error("Test failed:", error);
-    const message = error instanceof Error && error.message ? error.message : "Failed to test semantic filter";
+    const message =
+      error instanceof Error && error.message
+        ? error.message
+        : t("settingsPages.mcpSemanticFilterTestPanel.testFailed", { defaultValue: "Failed to test semantic filter" });
     setTestError(message);
-    toast.error("Failed to test semantic filter");
+    toast.error(
+      t("settingsPages.mcpSemanticFilterTestPanel.testFailed", { defaultValue: "Failed to test semantic filter" }),
+    );
   } finally {
     setIsTesting(false);
   }

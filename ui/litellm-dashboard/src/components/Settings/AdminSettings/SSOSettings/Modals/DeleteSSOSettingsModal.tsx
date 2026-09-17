@@ -5,6 +5,7 @@ import DeleteResourceModal from "../../../../common_components/DeleteResourceMod
 import { toast } from "@/lib/toast";
 import { parseErrorMessage } from "../../../../shared/errorUtils";
 import { detectSSOProvider } from "../utils";
+import { useTranslation } from "react-i18next";
 
 interface DeleteSSOSettingsModalProps {
   isVisible: boolean;
@@ -13,6 +14,7 @@ interface DeleteSSOSettingsModalProps {
 }
 
 const DeleteSSOSettingsModal: React.FC<DeleteSSOSettingsModalProps> = ({ isVisible, onCancel, onSuccess }) => {
+  const { t } = useTranslation();
   const { data: ssoSettings } = useSSOSettings();
   const { mutateAsync: editSSOSettings, isPending: isEditingSSOSettings } = useEditSSOSettings();
 
@@ -42,12 +44,19 @@ const DeleteSSOSettingsModal: React.FC<DeleteSSOSettingsModalProps> = ({ isVisib
 
     await editSSOSettings(clearSettings, {
       onSuccess: () => {
-        toast.success("SSO settings cleared successfully");
+        toast.success(
+          t("settingsPages.deleteSSOSettingsModal.clearSuccess", { defaultValue: "SSO settings cleared successfully" }),
+        );
         onCancel();
         onSuccess();
       },
       onError: (error) => {
-        toast.fromError("Failed to clear SSO settings: " + parseErrorMessage(error));
+        toast.fromError(
+          t("settingsPages.deleteSSOSettingsModal.clearFailed", {
+            defaultValue: "Failed to clear SSO settings: {{error}}",
+            error: String(parseErrorMessage(error)),
+          }),
+        );
       },
     });
   };
@@ -55,12 +64,24 @@ const DeleteSSOSettingsModal: React.FC<DeleteSSOSettingsModalProps> = ({ isVisib
   return (
     <DeleteResourceModal
       isOpen={isVisible}
-      title="Confirm Clear SSO Settings"
-      alertMessage="This action cannot be undone."
-      message="Are you sure you want to clear all SSO settings? Users will no longer be able to login using SSO after this change."
-      resourceInformationTitle="SSO Settings"
+      title={t("settingsPages.deleteSSOSettingsModal.title", { defaultValue: "Confirm Clear SSO Settings" })}
+      alertMessage={t("settingsPages.deleteSSOSettingsModal.alertMessage", {
+        defaultValue: "This action cannot be undone.",
+      })}
+      message={t("settingsPages.deleteSSOSettingsModal.message", {
+        defaultValue:
+          "Are you sure you want to clear all SSO settings? Users will no longer be able to login using SSO after this change.",
+      })}
+      resourceInformationTitle={t("settingsPages.deleteSSOSettingsModal.resourceTitle", {
+        defaultValue: "SSO Settings",
+      })}
       resourceInformation={[
-        { label: "Provider", value: (ssoSettings?.values && detectSSOProvider(ssoSettings?.values)) || "Generic" },
+        {
+          label: t("settingsPages.deleteSSOSettingsModal.providerLabel", { defaultValue: "Provider" }),
+          value:
+            (ssoSettings?.values && detectSSOProvider(ssoSettings?.values)) ||
+            t("settingsPages.deleteSSOSettingsModal.providerDefault", { defaultValue: "Generic" }),
+        },
       ]}
       onCancel={onCancel}
       onOk={handleClearSSO}

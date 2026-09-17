@@ -5,6 +5,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { toast } from "@/lib/toast";
@@ -23,6 +24,7 @@ interface AddFallbacksProps {
 }
 
 export default function AddFallbacks({ accessToken, value = [], onChange }: AddFallbacksProps) {
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modelInfo, setModelInfo] = useState<ModelGroup[]>([]);
   const [modalKey, setModalKey] = useState(0); // Key to force remount of form when modal opens
@@ -81,7 +83,12 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
     // Validation
     const invalidGroups = groups.filter((g) => !g.primaryModel || g.fallbackModels.length === 0);
     if (invalidGroups.length > 0) {
-      toast.error(`Please complete configuration for all groups. ${invalidGroups.length} group(s) incomplete.`);
+      toast.error(
+        t("settingsPages.addFallbacks.incompleteGroupsCount", {
+          count: invalidGroups.length,
+          defaultValue: "Please complete configuration for all groups. {{count}} group(s) incomplete.",
+        }),
+      );
       return;
     }
 
@@ -101,7 +108,12 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
       setIsSaving(true);
       try {
         await onChange(updatedFallbacks);
-        toast.success(`${groups.length} fallback configuration(s) added successfully!`);
+        toast.success(
+          t("settingsPages.addFallbacks.addSuccessCount", {
+            count: groups.length,
+            defaultValue: "{{count}} fallback configuration(s) added successfully!",
+          }),
+        );
         handleCancel();
       } catch (error) {
         // Error handling is done in handleFallbacksChange, so we don't need to show another notification here
@@ -110,7 +122,9 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
         setIsSaving(false);
       }
     } else {
-      toast.fromError("onChange callback not provided");
+      toast.fromError(
+        t("settingsPages.addFallbacks.missingOnChange", { defaultValue: "onChange callback not provided" }),
+      );
     }
   };
 
@@ -118,7 +132,7 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
     <div>
       <Button className="mx-auto" onClick={() => setIsModalVisible(true)}>
         <span>+</span>
-        Add Fallbacks
+        {t("settingsPages.addFallbacks.addButton", { defaultValue: "Add Fallbacks" })}
       </Button>
       <AddFallbacksModal open={isModalVisible} onCancel={handleCancel}>
         <FallbackSelectionForm
@@ -133,11 +147,13 @@ export default function AddFallbacks({ accessToken, value = [], onChange }: AddF
         {groups.length > 0 && (
           <div className="flex items-center justify-end space-x-3 pt-6 mt-6 border-t border-border">
             <Button variant="outline" onClick={handleCancel} disabled={isSaving}>
-              Cancel
+              {t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button variant="outline" onClick={handleSaveAll} disabled={groups.length === 0 || isSaving}>
               {isSaving && <UiLoadingSpinner className="size-4" />}
-              {isSaving ? "Saving Configuration..." : "Save All Configurations"}
+              {isSaving
+                ? t("settingsPages.addFallbacks.savingButton", { defaultValue: "Saving Configuration..." })
+                : t("settingsPages.addFallbacks.saveButton", { defaultValue: "Save All Configurations" })}
             </Button>
           </div>
         )}

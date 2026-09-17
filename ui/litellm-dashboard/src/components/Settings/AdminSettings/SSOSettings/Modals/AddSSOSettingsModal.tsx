@@ -14,6 +14,7 @@ import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { useEditSSOSettings } from "@/app/(dashboard)/hooks/sso/useEditSSOSettings";
 import { processSSOSettingsPayload } from "../utils";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 interface AddSSOSettingsModalProps {
   isVisible: boolean;
@@ -22,6 +23,7 @@ interface AddSSOSettingsModalProps {
 }
 
 const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, onCancel, onSuccess }) => {
+  const { t } = useTranslation();
   const form = useSSOSettingsForm("sso-settings");
   const { mutateAsync, isPending } = useEditSSOSettings();
 
@@ -30,11 +32,18 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
 
     await mutateAsync(payload, {
       onSuccess: () => {
-        toast.success("SSO settings added successfully");
+        toast.success(
+          t("settingsPages.addSSOSettingsModal.addSuccess", { defaultValue: "SSO settings added successfully" }),
+        );
         onSuccess();
       },
       onError: (error) => {
-        toast.fromError("Failed to save SSO settings: " + parseErrorMessage(error));
+        toast.fromError(
+          t("settingsPages.addSSOSettingsModal.saveFailed", {
+            defaultValue: "Failed to save SSO settings: {{error}}",
+            error: String(parseErrorMessage(error)),
+          }),
+        );
       },
     });
   };
@@ -48,13 +57,13 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add SSO</DialogTitle>
+          <DialogTitle>{t("settingsPages.addSSOSettingsModal.title", { defaultValue: "Add SSO" })}</DialogTitle>
         </DialogHeader>
         <BaseSSOSettingsForm form={form} onFormSubmit={handleFormSubmit} />
         <DialogFooter>
           <div className="flex items-center justify-end gap-2">
             <Button type="button" variant="outline" onClick={handleCancel} disabled={isPending}>
-              Cancel
+              {t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button
               type="button"
@@ -62,7 +71,9 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
               onClick={submitMountedSSOValues(form, "sso-settings", handleFormSubmit)}
             >
               {isPending && <UiLoadingSpinner className="size-4 mr-1" />}
-              {isPending ? "Adding..." : "Add SSO"}
+              {isPending
+                ? t("settingsPages.addSSOSettingsModal.addingButton", { defaultValue: "Adding..." })
+                : t("settingsPages.addSSOSettingsModal.addSSOButton", { defaultValue: "Add SSO" })}
             </Button>
           </div>
         </DialogFooter>
