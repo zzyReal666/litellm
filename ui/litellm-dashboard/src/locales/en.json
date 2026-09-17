@@ -5178,7 +5178,11 @@
       "maxTokensTooltip": "Maximum number of tokens to generate in the response.",
       "streamResponses": "Stream responses",
       "temperatureValueAriaLabel": "Temperature value",
-      "maxTokensValueAriaLabel": "Max tokens value"
+      "maxTokensValueAriaLabel": "Max tokens value",
+      "streamResponsesAriaLabel": "Help: Stream responses",
+      "streamResponsesTooltip": "Streams the answer token by token. Uncheck to send a non-streaming request and render the full response at once.",
+      "temperatureAriaLabel": "Help: Temperature",
+      "maxTokensAriaLabel": "Help: Max Tokens"
     },
     "agentBuilderView": {
       "title": "Agent Builder",
@@ -11228,10 +11232,5 @@
       "vertexSearchNote": "Note: Google Cloud has renamed this to \"Agent Search\" in its console — the steps below still apply.",
       "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set."
     }
-  },
-  "keyScope": {
-    "management": "Management",
-    "readOnly": "Read-only",
-    "scim": "SCIM"
   }
 }

@@ -5041,10 +5041,10 @@
       "generalSettings": "常规设置",
       "tagsLabel": "标签",
       "vectorStoresLabel": "向量存储",
-      "guardrailsLabel": "护栏",
+      "guardrailsLabel": "安全护栏",
       "advancedSettings": "高级设置",
       "useAdvancedParameters": "使用高级参数",
-      "temperatureLabel": "Temperature",
+      "temperatureLabel": "温度",
       "maxTokensLabel": "最大 Token 数"
     },
     "messageDisplay": {
@@ -5172,20 +5172,24 @@
       "simulateFailureDesc": "使第一个请求失败，以便路由器尝试回退（如已配置）。用于验证您的回退设置。",
       "simulateFailureNote": "当配置了密钥、团队或路由器设置时，行为可能有所不同。<learnMoreLink>了解更多</learnMoreLink>",
       "simulateFailureAriaLabel": "帮助：模拟失败以测试回退",
-      "temperature": "Temperature",
+      "temperature": "温度",
       "temperatureTooltip": "控制随机性。值越低输出越确定，值越高输出越有创意。",
       "maxTokens": "最大 Token 数",
       "maxTokensTooltip": "响应中生成的最大 Token 数。",
       "streamResponses": "流式响应",
       "temperatureValueAriaLabel": "温度值",
-      "maxTokensValueAriaLabel": "最大 Token 数"
+      "maxTokensValueAriaLabel": "最大 Token 数",
+      "streamResponsesAriaLabel": "帮助：流式响应",
+      "streamResponsesTooltip": "逐 Token 流式返回答案，取消勾选则发送非流式请求并一次性渲染完整响应。",
+      "temperatureAriaLabel": "帮助：温度",
+      "maxTokensAriaLabel": "帮助：最大 Token 数"
     },
     "agentBuilderView": {
-      "title": "Agent Builder",
+      "title": "Agent 构建器",
       "saveAgent": "保存 Agent",
       "buildAgentsSubtitle": "构建符合合规要求的 Agent。",
       "experimentalBanner": "Agent Builder 为实验性功能，可能随时更改或移除。欢迎反馈——请发送邮件至 <emailLink>product@berri.ai</emailLink>。",
-      "agentsLabel": "Agents",
+      "agentsLabel": "Agent",
       "addAgentAriaLabel": "添加 Agent",
       "newAgent": "新建 Agent",
       "noAgentsYet": "暂无 Agent。添加一个 Agent 以开始使用。",
@@ -5201,7 +5205,7 @@
       "systemPromptPlaceholder": "你是一个有帮助的助手...",
       "defaultSystemPrompt": "You are a helpful assistant.",
       "underlyingLlmLabel": "底层 LLM",
-      "temperatureLabel": "Temperature",
+      "temperatureLabel": "温度",
       "maxTokensLabel": "最大 Token 数",
       "mcpServersLabel": "MCP 服务器",
       "mcpServersPlaceholder": "选择要附加的 MCP 服务器（格式与 chat completions API 相同）",
@@ -11228,10 +11232,5 @@
       "vertexSearchNote": "注意：Google Cloud 已在其控制台将其更名为“Agent Search”，以下步骤仍然适用。",
       "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
     }
-  },
-  "keyScope": {
-    "management": "管理",
-    "readOnly": "只读",
-    "scim": "SCIM"
   }
 }
