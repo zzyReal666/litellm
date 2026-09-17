@@ -186,7 +186,7 @@ const CreateVectorStore: React.FC<CreateVectorStoreProps> = ({ accessToken, onSu
       if (!providerParams[field.name]) {
         toast.warning(
           t("vectorStoreManagement.createVectorStore.provideField", {
-            label: field.label,
+            label: t(field.labelKey, { defaultValue: field.label }),
             defaultValue: "Please provide {{label}}",
           }),
         );
@@ -478,14 +478,21 @@ const CreateVectorStore: React.FC<CreateVectorStoreProps> = ({ accessToken, onSu
                 getProviderSpecificFields(selectedProvider).map((field: VectorStoreFieldConfig) => (
                   <Field key={field.name}>
                     <FieldLabel htmlFor={`vector-store-${field.name}`}>
-                      {labelWithHint(field.label, field.tooltip)}
+                      {labelWithHint(
+                        t(field.labelKey, { defaultValue: field.label }),
+                        t(field.tooltipKey, { defaultValue: field.tooltip }),
+                      )}
                     </FieldLabel>
                     <Input
                       id={`vector-store-${field.name}`}
                       type={field.type === "password" ? "password" : "text"}
                       value={asText(providerParams[field.name])}
                       onChange={(e) => setProviderParams((prev) => ({ ...prev, [field.name]: e.target.value }))}
-                      placeholder={field.placeholder}
+                      placeholder={
+                        field.placeholderKey && field.placeholder
+                          ? t(field.placeholderKey, { defaultValue: field.placeholder })
+                          : field.placeholder
+                      }
                     />
                   </Field>
                 ))}

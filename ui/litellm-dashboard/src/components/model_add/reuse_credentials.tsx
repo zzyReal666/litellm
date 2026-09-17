@@ -1,4 +1,6 @@
 import React from "react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import { z } from "zod/v4";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { FormField } from "@/components/shared/form/FormField";
@@ -17,11 +19,14 @@ interface ReuseCredentialsModalProps {
   setIsCredentialModalOpen: (isVisible: boolean) => void;
 }
 
-const reuseCredentialsSchema = z.object({
-  credential_name: z.string().min(1, "Credential name is required"),
-});
+const createReuseCredentialsSchema = (t: TFunction) =>
+  z.object({
+    credential_name: z
+      .string()
+      .min(1, t("modelAdd.reuseCredentials.credentialNameRequired", { defaultValue: "Credential name is required" })),
+  });
 
-type ReuseCredentialsFormValues = z.infer<typeof reuseCredentialsSchema>;
+type ReuseCredentialsFormValues = z.infer<ReturnType<typeof createReuseCredentialsSchema>>;
 
 const storedValuesOf = (existingCredential: CredentialItem | null): Record<string, unknown> => {
   const values: unknown = existingCredential?.credential_values;
@@ -35,9 +40,11 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
   existingCredential,
   setIsCredentialModalOpen,
 }) => {
+  const { t } = useTranslation();
   const fieldIdPrefix = React.useId();
   const storedValues = storedValuesOf(existingCredential);
-  const form = useZodForm(reuseCredentialsSchema, {
+  const schema = React.useMemo(() => createReuseCredentialsSchema(t), [t]);
+  const form = useZodForm(schema, {
     defaultValues: { credential_name: existingCredential?.credential_name ?? "" },
   });
 
@@ -56,14 +63,24 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Reuse Credentials</DialogTitle>
+          <DialogTitle>{t("modelAdd.reuseCredentials.title", { defaultValue: "Reuse Credentials" })}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
             <FieldGroup>
-              <FormField control={form.control} name="credential_name" label="Credential Name:">
+              <FormField
+                control={form.control}
+                name="credential_name"
+                label={t("modelAdd.reuseCredentials.credentialNameLabel", { defaultValue: "Credential Name:" })}
+              >
                 {({ ref, ...field }) => (
-                  <Input {...field} ref={ref} placeholder="Enter a friendly name for these credentials" />
+                  <Input
+                    {...field}
+                    ref={ref}
+                    placeholder={t("modelAdd.reuseCredentials.credentialNamePlaceholder", {
+                      defaultValue: "Enter a friendly name for these credentials",
+                    })}
+                  />
                 )}
               </FormField>
 
@@ -73,7 +90,10 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
                   <Input
                     id={`${fieldIdPrefix}-${key}`}
                     value={String(value)}
-                    placeholder={`Enter ${key}`}
+                    placeholder={t("modelAdd.reuseCredentials.enterFieldPlaceholder", {
+                      field: key,
+                      defaultValue: "Enter {{field}}",
+                    })}
                     disabled
                     readOnly
                   />
@@ -88,18 +108,22 @@ const ReuseCredentialsModal: React.FC<ReuseCredentialsModalProps> = ({
                         href="https://github.com/BerriAI/litellm/issues"
                         className="text-sm text-primary underline-offset-4 hover:underline"
                       >
-                        Need Help?
+                        {t("modelAdd.reuseCredentials.needHelp", { defaultValue: "Need Help?" })}
                       </a>
                     }
                   />
-                  <TooltipContent>Get help on our github</TooltipContent>
+                  <TooltipContent>
+                    {t("modelAdd.reuseCredentials.needHelpTooltip", { defaultValue: "Get help on our github" })}
+                  </TooltipContent>
                 </Tooltip>
 
                 <div className="flex gap-2.5">
                   <Button type="button" variant="outline" onClick={handleCancel}>
-                    Cancel
+                    {t("common.cancel", { defaultValue: "Cancel" })}
                   </Button>
-                  <Button type="submit">Reuse Credentials</Button>
+                  <Button type="submit">
+                    {t("modelAdd.reuseCredentials.reuseCredentials", { defaultValue: "Reuse Credentials" })}
+                  </Button>
                 </div>
               </div>
             </FieldGroup>

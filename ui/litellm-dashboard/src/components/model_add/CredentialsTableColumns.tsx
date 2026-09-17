@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { CredentialItem } from "@/components/networking";
 import { getProviderLogoAndName } from "@/components/provider_info_helpers";
@@ -47,10 +49,11 @@ interface CredentialRowActionsProps {
 }
 
 function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowActionsProps) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open credential actions"
+        aria-label={t("modelAdd.credentialsTableColumns.openActions", { defaultValue: "Open credential actions" })}
         data-testid={`credential-actions-${credential.credential_name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -59,14 +62,19 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="credential-action-edit" onClick={() => onEdit(credential)}>
           <Pencil />
-          Edit
+          {t("common.edit", { defaultValue: "Edit" })}
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="credential-action-copy"
-          onClick={() => void copyToClipboard(credential.credential_name, "Credential name copied")}
+          onClick={() =>
+            void copyToClipboard(
+              credential.credential_name,
+              t("modelAdd.credentialsTableColumns.credentialNameCopied", { defaultValue: "Credential name copied" }),
+            )
+          }
         >
           <Copy />
-          Copy credential name
+          {t("modelAdd.credentialsTableColumns.copyCredentialName", { defaultValue: "Copy credential name" })}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -75,7 +83,7 @@ function CredentialRowActions({ credential, onEdit, onDelete }: CredentialRowAct
           onClick={() => onDelete(credential)}
         >
           <Trash2 />
-          Delete
+          {t("commonComponents.deleteResourceModal.okText", { defaultValue: "Delete" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -86,19 +94,26 @@ interface CredentialsTableColumnsDeps {
   canModifyCredentials: boolean;
   onEdit: (credential: CredentialItem) => void;
   onDelete: (credential: CredentialItem) => void;
+  t: TFunction;
 }
 
 export const getCredentialsTableColumns = ({
   canModifyCredentials,
   onEdit,
   onDelete,
+  t,
 }: CredentialsTableColumnsDeps): ColumnDef<CredentialItem>[] => {
   const dataColumns: ColumnDef<CredentialItem>[] = [
     {
       id: "credential_name",
       accessorKey: "credential_name",
-      meta: { title: "Credential Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Credential Name" />,
+      meta: { title: t("modelAdd.credentials.credentialName", { defaultValue: "Credential Name" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("modelAdd.credentials.credentialName", { defaultValue: "Credential Name" })}
+        />
+      ),
       size: 260,
       enableSorting: true,
       cell: ({ row }) => (
@@ -108,8 +123,8 @@ export const getCredentialsTableColumns = ({
     {
       id: "provider",
       accessorKey: "credential_info.custom_llm_provider",
-      meta: { title: "Provider" },
-      header: "Provider",
+      meta: { title: t("guardrails.guardrailGardenDetail.propertyProvider", { defaultValue: "Provider" }) },
+      header: t("guardrails.guardrailGardenDetail.propertyProvider", { defaultValue: "Provider" }),
       size: 200,
       enableSorting: false,
       cell: ({ row }) => <CredentialProviderCell provider={row.original.credential_info?.custom_llm_provider} />,
@@ -125,7 +140,7 @@ export const getCredentialsTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
       size: 64,
       enableSorting: false,
       enableHiding: false,

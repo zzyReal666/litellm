@@ -138,11 +138,11 @@ const buildVectorStoreSchema = (t: TFunction) => {
           message:
             field.type === "select"
               ? t("vectorStoreManagement.vectorStoreForm.fieldSelectRequired", {
-                  label: field.label.toLowerCase(),
+                  label: t(field.labelKey, { defaultValue: field.label }).toLowerCase(),
                   defaultValue: "Please select the {{label}}",
                 })
               : t("vectorStoreManagement.vectorStoreForm.fieldInputRequired", {
-                  label: field.label.toLowerCase(),
+                  label: t(field.labelKey, { defaultValue: field.label }).toLowerCase(),
                   defaultValue: "Please input the {{label}}",
                 }),
         }),
@@ -173,7 +173,11 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
     {label}
     <Tooltip>
-      <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
+      <TooltipTrigger
+        render={
+          <CircleHelp aria-label="question-circle" className="size-3.5 shrink-0 cursor-help text-muted-foreground" />
+        }
+      />
       <TooltipContent>{hint}</TooltipContent>
     </Tooltip>
   </>
@@ -728,7 +732,14 @@ interface ProviderFieldProps {
 
 const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo }) => {
   const { t } = useTranslation();
-  const label = labelWithHint(field.label, field.tooltip);
+  const label = labelWithHint(
+    t(field.labelKey, { defaultValue: field.label }),
+    t(field.tooltipKey, { defaultValue: field.tooltip }),
+  );
+  const placeholder =
+    field.placeholderKey && field.placeholder
+      ? t(field.placeholderKey, { defaultValue: field.placeholder })
+      : field.placeholder;
 
   if (field.type === "select") {
     const selectOptions =
@@ -757,7 +768,7 @@ const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo
               id={id}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
-              placeholder={field.placeholder}
+              placeholder={placeholder}
               className="w-full"
             />
             <ComboboxContent>
@@ -782,9 +793,9 @@ const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo
     <FormField control={control} name={field.name} label={label}>
       {({ ref, value, ...controlProps }) =>
         field.type === "password" ? (
-          <PasswordInput {...controlProps} ref={ref} value={value ?? ""} placeholder={field.placeholder} />
+          <PasswordInput {...controlProps} ref={ref} value={value ?? ""} placeholder={placeholder} />
         ) : (
-          <Input {...controlProps} ref={ref} value={value ?? ""} type="text" placeholder={field.placeholder} />
+          <Input {...controlProps} ref={ref} value={value ?? ""} type="text" placeholder={placeholder} />
         )
       }
     </FormField>

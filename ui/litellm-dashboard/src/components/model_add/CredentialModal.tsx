@@ -4,6 +4,7 @@ import { SimpleTooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import ProviderSpecificFields from "../add_model/provider_specific_fields";
 import { requiredRule } from "../common_components/formRules";
 import { labelWithHint } from "@/components/shared/form/LabelWithHint";
@@ -42,6 +43,42 @@ export default function CredentialModal({
   existingCredential = null,
 }: CredentialModalProps) {
   const isEdit = mode === "edit";
+  const { t } = useTranslation();
+  const copy = isEdit
+    ? {
+        title: t("modelAdd.editCredentialModal.title", { defaultValue: "Edit Credential" }),
+        submit: t("modelAdd.editCredentialModal.updateCredential", { defaultValue: "Update Credential" }),
+        nameLabel: t("modelAdd.editCredentialModal.credentialNameLabel", { defaultValue: "Credential Name:" }),
+        namePlaceholder: t("modelAdd.editCredentialModal.credentialNamePlaceholder", {
+          defaultValue: "Enter a friendly name for these credentials",
+        }),
+        nameRequired: t("modelAdd.editCredentialModal.credentialNameRequired", {
+          defaultValue: "Credential name is required",
+        }),
+        providerLabel: t("modelAdd.editCredentialModal.providerLabel", { defaultValue: "Provider:" }),
+        providerTooltip: t("modelAdd.editCredentialModal.providerTooltip", {
+          defaultValue: "Helper to auto-populate provider specific fields",
+        }),
+        needHelp: t("modelAdd.editCredentialModal.needHelp", { defaultValue: "Need Help?" }),
+        needHelpTooltip: t("modelAdd.editCredentialModal.needHelpTooltip", { defaultValue: "Get help on our github" }),
+      }
+    : {
+        title: t("modelAdd.addCredentialModal.title", { defaultValue: "Add New Credential" }),
+        submit: t("modelAdd.addCredentialModal.addCredential", { defaultValue: "Add Credential" }),
+        nameLabel: t("modelAdd.addCredentialModal.credentialNameLabel", { defaultValue: "Credential Name:" }),
+        namePlaceholder: t("modelAdd.addCredentialModal.credentialNamePlaceholder", {
+          defaultValue: "Enter a friendly name for these credentials",
+        }),
+        nameRequired: t("modelAdd.addCredentialModal.credentialNameRequired", {
+          defaultValue: "Credential name is required",
+        }),
+        providerLabel: t("modelAdd.addCredentialModal.providerLabel", { defaultValue: "Provider:" }),
+        providerTooltip: t("modelAdd.addCredentialModal.providerTooltip", {
+          defaultValue: "Helper to auto-populate provider specific fields",
+        }),
+        needHelp: t("modelAdd.addCredentialModal.needHelp", { defaultValue: "Need Help?" }),
+        needHelpTooltip: t("modelAdd.addCredentialModal.needHelpTooltip", { defaultValue: "Get help on our github" }),
+      };
   const [selectedProvider, setSelectedProvider] = useState<string | null>(
     (existingCredential?.credential_info.custom_llm_provider as Providers) ?? Providers.OpenAI,
   );
@@ -90,7 +127,7 @@ export default function CredentialModal({
     <Dialog open={open} onOpenChange={(open) => !open && closeAndReset()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit Credential" : "Add New Credential"}</DialogTitle>
+          <DialogTitle>{copy.title}</DialogTitle>
         </DialogHeader>
         <FormProvider {...form}>
           <MountedFormProvider value={{ control: form.control, registry }}>
@@ -101,10 +138,10 @@ export default function CredentialModal({
               }}
             >
               <MountedFormField
-                label="Credential Name:"
+                label={copy.nameLabel}
                 name="credential_name"
                 required
-                rules={{ validate: { required: requiredRule("Credential name is required") } }}
+                rules={{ validate: { required: requiredRule(copy.nameRequired) } }}
                 className="mb-4"
               >
                 {(control) => (
@@ -113,23 +150,25 @@ export default function CredentialModal({
                     value={typeof control.value === "string" ? control.value : ""}
                     onChange={control.onChange}
                     onBlur={control.onBlur}
-                    placeholder="Enter a friendly name for these credentials"
+                    placeholder={copy.namePlaceholder}
                     disabled={isEdit}
                   />
                 )}
               </MountedFormField>
 
               <MountedFormField
-                label={labelWithHint("Provider:", "Helper to auto-populate provider specific fields")}
+                label={labelWithHint(copy.providerLabel, copy.providerTooltip)}
                 name="custom_llm_provider"
                 required
-                rules={{ validate: { required: requiredRule("Required") } }}
+                rules={{ validate: { required: requiredRule(t("common.required", { defaultValue: "Required" })) } }}
                 className="mb-4"
               >
                 {(control) => (
                   <SearchSelect
                     inputId={control.id}
-                    placeholder="Select a provider"
+                    placeholder={t("addModel.addModelForm.providerSelectPlaceholder", {
+                      defaultValue: "Select a provider",
+                    })}
                     options={providerOptions}
                     value={typeof control.value === "string" ? control.value : null}
                     onValueChange={(value) => {
@@ -143,17 +182,17 @@ export default function CredentialModal({
               <ProviderSpecificFields selectedProvider={selectedProvider} />
 
               <div className="flex justify-between items-center">
-                <SimpleTooltip content="Get help on our github">
+                <SimpleTooltip content={copy.needHelpTooltip}>
                   <a href="https://github.com/BerriAI/litellm/issues" className="text-sm text-primary hover:underline">
-                    Need Help?
+                    {copy.needHelp}
                   </a>
                 </SimpleTooltip>
 
                 <div>
                   <Button variant="outline" className="mr-2.5" onClick={closeAndReset}>
-                    Cancel
+                    {t("common.cancel", { defaultValue: "Cancel" })}
                   </Button>
-                  <Button type="submit">{isEdit ? "Update Credential" : "Add Credential"}</Button>
+                  <Button type="submit">{copy.submit}</Button>
                 </div>
               </div>
             </form>
