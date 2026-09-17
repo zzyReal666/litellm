@@ -133,7 +133,8 @@
       "copiedToClipboard": "密钥已复制到剪贴板",
       "saveWarning": "请将此密钥保存在安全且易于访问的地方。出于安全原因，<b>您将无法通过 LiteLLM 账户再次查看它</b>。如果丢失此密钥，您需要重新生成一个。",
       "virtualKeyLabel": "虚拟密钥：",
-      "copyButton": "复制虚拟密钥"
+      "copyButton": "复制虚拟密钥",
+      "copied": "已复制！"
     },
     "advancedDatePicker": {
       "selectTimeRange": "选择时间范围",
@@ -161,6 +162,66 @@
       "selectTimeRange": "选择时间范围",
       "selectDateRange": "选择日期范围",
       "selected": "已选择"
+    },
+    "charts": {
+      "noData": "暂无数据"
+    },
+    "dataTableSelection": {
+      "selectAllRows": "全选所有行",
+      "selectColumn": "选择",
+      "selectRow": "选择此行"
+    },
+    "inheritedBudgetHint": {
+      "message": "该密钥自身没有预算，但它的花费仍计入："
+    },
+    "multiSelect": {
+      "selectOptionsPlaceholder": "请选择选项",
+      "noOptions": "未找到选项",
+      "clearAll": "全部清除",
+      "loading": "加载中...",
+      "loadingEllipsis": "加载中..."
+    },
+    "numericalInput": {
+      "placeholder": "请输入数值"
+    },
+    "pageHeader": {
+      "controls": "页面控件"
+    },
+    "paginatedMultiSelect": {
+      "searchPlaceholder": "搜索…",
+      "noResults": "无结果",
+      "loading": "加载中…"
+    },
+    "paginatedSearchSelect": {
+      "searchPlaceholder": "搜索…",
+      "noResults": "无结果",
+      "loading": "加载中…"
+    },
+    "searchSelect": {
+      "selectPlaceholder": "请选择…",
+      "noResults": "无结果"
+    },
+    "modelsCell": {
+      "scopedToRoutes": "限定在 {{routes}} 条路由上；该密钥不能调用任何模型",
+      "noModelAccess": "无模型访问权限",
+      "allProxyModels": "所有代理模型",
+      "moreModels": "另外 {{count}} 个"
+    },
+    "savingsTiles": {
+      "totalSaved": "共计节省",
+      "totalSavedHint": "压缩 + 提示词缓存 + 自动路由",
+      "loading": "加载中...",
+      "totalSavedInfo": "它旁边三个卡片之和。其中的缓存部分只计入 LiteLLM 注入的份额，所以这个合计反映的是网关自身带来的节省；客户端或提供商自带的缓存只出现在缓存卡片的“总计”里。",
+      "compressionSavings": "压缩节省",
+      "tokensCompressed": "已压缩 {{count}} 个 Token",
+      "compressionSavingsInfo": "调用前由 Headroom 移除的 Token，按对应模型的输入单价计价。",
+      "promptCachingSavings": "提示词缓存节省",
+      "litellmInjected": "LiteLLM 注入",
+      "total": "总计",
+      "promptCachingInfo": "缓存相对“每个 Token 都按输入单价付费”省下的金额：从缓存读取的 Token 的折扣，减去提供商写入缓存条目收取的溢价。主数字是 LiteLLM 通过配置的注入点或自动提示词缓存自行插入断点所获得的份额。旁边的总计还包括自带 cache_control 的请求以及隐式缓存的提供商。当流量写入的缓存多于复用时，两者都可能为负，所以主数字并不总是较小的那个。",
+      "autoRouterSavings": "自动路由节省",
+      "autoRouterHint": "相比它可能选到的最贵模型",
+      "autoRouterInfo": "假设所有请求都走自动路由能选到的最贵模型会产生的花费，减去实际花费。切换模型会让新模型的缓存变冷，因此需要重新写入提示词，而基准是按缓存已热计算的；频繁刷掉缓存的路径合计可能为负，而双方都没有缓存的真实首轮对话则会被低估。"
     }
   },
   "molecules": {
@@ -749,7 +810,10 @@
       "allowedSearchToolsTooltip": "选择此团队可以访问的搜索工具。留空则允许使用所有搜索工具。",
       "allowedSearchToolsHelp": "限制此团队上的密钥可以调用的已配置搜索工具。",
       "allowedSearchToolsPlaceholder": "选择搜索工具（可选，留空 = 允许所有）",
-      "modelAliasesDescription": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样您可以为特定模型创建快捷方式。"
+      "modelAliasesDescription": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样您可以为特定模型创建快捷方式。",
+      "organizationNoLongerAvailable": "该组织已不能再创建团队",
+      "allowedSkillsHelp": "此团队上的密钥在 Claude Code 市场中可以看到的私有技能。",
+      "allowedSkillsPlaceholder": "选择技能（可选）"
     },
     "accordions": {
       "additionalSettings": "附加设置",
@@ -1384,7 +1448,14 @@
       "testingButton_other": "正在测试 {{count}} 个护栏...",
       "pleaseEnterText": "请输入要测试的文本",
       "inputCopied": "输入已复制到剪贴板",
-      "failedToCopyInput": "复制输入失败"
+      "failedToCopyInput": "复制输入失败",
+      "metadataLabel": "元数据（可选）",
+      "metadataTooltip": "以 request_data['metadata'] 转发给护栏的 JSON 对象。自定义护栏可以从中读取每请求配置。",
+      "metadataInvalidObject": "元数据必须是 JSON 对象",
+      "invalidJson": "JSON 格式无效",
+      "subtitle": "测试护栏并对比结果",
+      "testingButton": "正在测试 {{count}} 个护栏...",
+      "testButton": "测试 {{count}} 个护栏"
     },
     "guardrailTestPlayground": {
       "pageTitle": "护栏测试 Playground",
@@ -1400,7 +1471,9 @@
       "appliedSuccess_one": "{{count}} 个护栏已成功应用",
       "appliedSuccess_other": "{{count}} 个护栏已成功应用",
       "applyFailed_one": "{{count}} 个护栏执行失败",
-      "applyFailed_other": "{{count}} 个护栏执行失败"
+      "applyFailed_other": "{{count}} 个护栏执行失败",
+      "appliedSuccess": "已成功应用 {{count}} 个护栏",
+      "applyFailed": "{{count}} 个护栏失败"
     },
     "guardrailTestResults": {
       "resultsHeading": "结果",
@@ -1687,7 +1760,248 @@
       "showAll": "显示全部（{{count}}）",
       "litellmSectionDesc": "由 LiteLLM 内置的护栏，零延迟，无外部依赖，无额外费用。",
       "partnerSectionTitle": "合作伙伴护栏",
-      "partnerSectionDesc": "来自领先 AI 安全提供商的第三方护栏集成。"
+      "partnerSectionDesc": "来自领先 AI 安全提供商的第三方护栏集成。",
+      "aim": {
+        "desc": "AIM Security 护栏，提供全面的 AI 威胁检测和缓解。",
+        "name": "AIM 护栏"
+      },
+      "akto": {
+        "desc": "来自 Akto.io 的 AI 安全平台，为 AI/ML 应用提供自动监控和护栏。",
+        "name": "Akto 护栏"
+      },
+      "alice": {
+        "desc": "针对提示词和模型响应的基于策略的护栏，按应用评估，因此一个代理可为不同团队或产品执行不同的策略集。",
+        "name": "Alice"
+      },
+      "aporia": {
+        "desc": "实时 AI 护栏，用于幻觉检测、主题控制和策略执行。",
+        "name": "Aporia AI"
+      },
+      "bedrock": {
+        "desc": "AWS Bedrock Guardrails，用于内容过滤、主题规避和敏感信息检测。",
+        "name": "Bedrock 护栏"
+      },
+      "blockCodeExecution": {
+        "desc": "检测请求和响应中的 Markdown 围栏代码块。按语言以可配置的置信度拦截或遮罩可执行代码（如 Python、JavaScript、Bash）。",
+        "name": "拦截代码执行"
+      },
+      "catoNetworks": {
+        "desc": "Cato Networks 护栏，提供全面的 AI 威胁检测和缓解。",
+        "name": "Cato Networks 护栏"
+      },
+      "cfBiasGender": {
+        "desc": "检测基于性别的歧视、刻板印象和偏见性语言。",
+        "name": "偏见：性别"
+      },
+      "cfBiasRacial": {
+        "desc": "检测种族歧视、刻板印象和种族偏见内容。",
+        "name": "偏见：种族"
+      },
+      "cfBiasReligious": {
+        "desc": "检测宗教歧视、不宽容和宗教偏见内容。",
+        "name": "偏见：宗教"
+      },
+      "cfBiasSexualOrientation": {
+        "desc": "检测基于性取向的歧视及相关偏见内容。",
+        "name": "偏见：性取向"
+      },
+      "cfCompetitorIntent": {
+        "desc": "拦截或改写竞争对手比较和排名的意图。检测用户要求比较或推荐竞争对手的场景（航空公司或通用竞争对手清单）。",
+        "name": "拦截竞争对手名称"
+      },
+      "cfDeniedFinancial": {
+        "desc": "检测对个性化财务建议、投资建议或财务规划的请求。",
+        "name": "拒绝财务建议"
+      },
+      "cfDeniedInsults": {
+        "desc": "检测针对聊天机器人、员工或其他人的侮辱、辱骂和人身攻击。",
+        "name": "侮辱与人身攻击"
+      },
+      "cfDeniedLegal": {
+        "desc": "检测对未经授权的法律建议、案件分析或法律建议的请求。",
+        "name": "拒绝法律建议"
+      },
+      "cfDeniedMedical": {
+        "desc": "检测对医疗诊断、治疗建议或健康建议的请求。",
+        "name": "拒绝医疗建议"
+      },
+      "cfHarmfulChildSafety": {
+        "desc": "检测可能危及儿童安全或剥削未成年人的内容。",
+        "name": "危害儿童安全"
+      },
+      "cfHarmfulIllegalWeapons": {
+        "desc": "检测与非法武器制造、分销或获取相关的内容。",
+        "name": "有害非法武器"
+      },
+      "cfHarmfulSelfHarm": {
+        "desc": "检测与自残、自杀和危险的自我伤害行为相关的内容。",
+        "name": "有害自残"
+      },
+      "cfHarmfulViolence": {
+        "desc": "检测与暴力、犯罪策划、袭击和暴力威胁相关的内容。",
+        "name": "有害暴力"
+      },
+      "cfKeywords": {
+        "desc": "拦截或遮罩包含特定关键词或短语的内容。上传自定义词表或添加单个词条。",
+        "name": "拦截关键词"
+      },
+      "cfPatterns": {
+        "desc": "检测并拦截敏感数据模式，如 SSN、信用卡号、API 密钥和自定义正则表达式模式。",
+        "name": "模式匹配"
+      },
+      "cfPromptInjectionDataExfil": {
+        "desc": "检测通过提示词操纵提取敏感数据的尝试。",
+        "name": "提示词注入：数据外泄"
+      },
+      "cfPromptInjectionJailbreak": {
+        "desc": "检测旨在绕过 AI 安全准则和限制的越狱尝试。",
+        "name": "提示词注入：越狱"
+      },
+      "cfPromptInjectionMaliciousCode": {
+        "desc": "检测通过提示词注入恶意代码的尝试。",
+        "name": "提示词注入：恶意代码"
+      },
+      "cfPromptInjectionSql": {
+        "desc": "检测嵌入提示词中的 SQL 注入尝试。",
+        "name": "提示词注入：SQL"
+      },
+      "cfPromptInjectionSystemPrompt": {
+        "desc": "检测提取或覆盖系统提示词的尝试。",
+        "name": "提示词注入：系统提示词"
+      },
+      "cfToxicAbuse": {
+        "desc": "检测多种语言（EN、AU、DE、ES、FR）中的有毒、辱骂和仇恨性语言。",
+        "name": "有毒与辱骂性语言"
+      },
+      "ciscoAiDefense": {
+        "desc": "Cisco AI Defense Inspection API 提供运行时保护：提示词注入、PII/PCI/PHI、骚扰、仇恨言论、脏话、暴力和代码检测。",
+        "name": "Cisco AI 防御"
+      },
+      "conduct": {
+        "desc": "Conduct Guard 在模型调用前依据工作区规则评估提示词：提示词注入、PII 和自定义策略，并给出拦截、警告和批准三种判定。",
+        "name": "Conduct Guard"
+      },
+      "deepkeep": {
+        "desc": "DeepKeep AI Firewall 提供全面的 LLM 安全防护：提示词注入检测、PII 保护、内容审核，以及可通过配置护栏流水线实现的策略执行。",
+        "name": "DeepKeep AI 防火墙"
+      },
+      "enkryptai": {
+        "desc": "AI 安全与治理平台，用于企业级 AI 安全与合规。",
+        "name": "EnkryptAI"
+      },
+      "googleModelArmor": {
+        "desc": "Google Cloud 的模型保护服务，用于安全且负责任的 AI 部署。",
+        "name": "Google Cloud Model Armor"
+      },
+      "guardrailsAi": {
+        "desc": "开源框架，为 LLM 输出添加结构、类型和质量保证。",
+        "name": "Guardrails AI"
+      },
+      "javelin": {
+        "desc": "内置护栏的 AI 网关，用于安全合规的 AI 运营。",
+        "name": "Javelin 护栏"
+      },
+      "lakera": {
+        "desc": "AI 安全平台，防护提示词注入、数据泄露和有害内容。",
+        "name": "Lakera"
+      },
+      "lasso": {
+        "desc": "内容审核和安全护栏，用于负责任的 AI 部署。",
+        "name": "Lasso 护栏"
+      },
+      "noma": {
+        "desc": "AI 安全平台，用于检测和防御 AI 特有的威胁与漏洞。",
+        "name": "Noma Security"
+      },
+      "openaiModeration": {
+        "desc": "OpenAI 的内容审核 API，用于检测多个类别中的有害内容。",
+        "name": "OpenAI 审核"
+      },
+      "pangea": {
+        "desc": "Pangea 的 AI 护栏，用于安全、合规且可信的 AI 应用。",
+        "name": "Pangea 护栏"
+      },
+      "panw": {
+        "desc": "Palo Alto Networks Prisma AI Runtime Security，用于保护生产环境中的 AI 应用。",
+        "name": "PANW Prisma AIRS"
+      },
+      "pillar": {
+        "desc": "AI 安全平台，用于监控、测试和保护 AI 系统。",
+        "name": "Pillar 护栏"
+      },
+      "presidio": {
+        "desc": "Microsoft Presidio 用于 PII 检测和匿名化。支持 30 多种实体类型，操作可配置。",
+        "name": "Presidio PII"
+      },
+      "promptSecurity": {
+        "desc": "防护提示词注入攻击、数据泄露和其他 LLM 安全威胁。",
+        "name": "Prompt Security"
+      },
+      "promptguard": {
+        "desc": "AI 安全网关，具备提示词注入检测、PII 脱敏、主题过滤、实体黑名单和幻觉检测。可自托管，并支持即插即用的代理集成。",
+        "name": "PromptGuard"
+      },
+      "repelloai": {
+        "desc": "RepelloAI Argus 依据 Repello 控制台中按资产配置的策略扫描提示词和响应。",
+        "name": "RepelloAI Argus"
+      },
+      "straiker": {
+        "desc": "Defend AI 智能体护栏：间接/直接提示词注入、工具滥用、恶意 MCP 和技能",
+        "name": "Straiker"
+      },
+      "subcategory": {
+        "codeSafety": "代码安全",
+        "contentCategory": "内容类别",
+        "keywords": "关键词",
+        "patterns": "模式"
+      },
+      "tags": {
+        "agentic": "智能体",
+        "aws": "AWS",
+        "bias": "偏见",
+        "blocklist": "黑名单",
+        "code": "代码",
+        "competitor": "竞争对手",
+        "compliance": "合规",
+        "contentModeration": "内容审核",
+        "contentSafety": "内容安全",
+        "dataProtection": "数据保护",
+        "enterprise": "企业",
+        "firewall": "防火墙",
+        "gateway": "网关",
+        "googleCloud": "Google Cloud",
+        "governance": "治理",
+        "grounding": "接地",
+        "hallucination": "幻觉",
+        "keywords": "关键词",
+        "mcp": "MCP",
+        "microsoft": "Microsoft",
+        "monitoring": "监控",
+        "openSource": "开源",
+        "openai": "OpenAI",
+        "pii": "PII",
+        "policy": "策略",
+        "promptInjection": "提示词注入",
+        "rag": "RAG",
+        "regex": "正则表达式",
+        "safety": "安全",
+        "security": "安全",
+        "skills": "技能",
+        "threatDetection": "威胁检测",
+        "toolMisuse": "工具滥用",
+        "topicBlocker": "主题拦截器",
+        "toxicity": "毒性",
+        "validation": "验证",
+        "contentCategory": "内容类别"
+      },
+      "xecguard": {
+        "desc": "CyCraft XecGuard AI 安全网关。多策略扫描（提示词注入、有害内容、PII、系统提示词强制）以及 RAG 上下文接地。",
+        "name": "XecGuard"
+      },
+      "zscaler": {
+        "desc": "Zscaler 的企业级 AI 安全，监控和保护 AI/ML 工作负载。",
+        "name": "Zscaler AI 防护"
+      }
     },
     "guardrailGardenCard": {
       "evalBadge": "F1：{{f1}}% · {{testCases}} 个测试用例"
@@ -1720,7 +2034,8 @@
       "typePartner": "合作伙伴",
       "tagsLabel": "标签",
       "metricHeader": "指标",
-      "valueHeader": "值"
+      "valueHeader": "值",
+      "externalDepsNone": "无"
     },
     "guardrailInfo": {
       "backToGuardrails": "返回护栏列表",
@@ -1764,7 +2079,14 @@
       "noChanges": "未检测到更改",
       "updateSuccess": "护栏已成功更新",
       "updateFailed": "更新护栏失败",
-      "notFound": "未找到护栏"
+      "notFound": "未找到护栏",
+      "createdAt": "创建时间",
+      "configGuardrailAriaLabel": "配置护栏详情",
+      "defaultOnOptionYes": "是",
+      "defaultOnOptionNo": "否",
+      "selectOptionPlaceholder": "选择一个选项",
+      "cancel": "取消",
+      "piiEntitiesConfigured": "已配置 {{count}} 个 PII 实体"
     },
     "teamGuardrailsTab": {
       "statusActive": "已激活",
@@ -1842,7 +2164,14 @@
       "formMustBeJsonObject": "必须为 JSON 对象",
       "formInvalidJson": "JSON 格式无效",
       "formGuardrailInfo": "护栏信息（可选）",
-      "formGuardrailInfoPlaceholder": "{\"description\": \"Detects PII in requests\"}"
+      "formGuardrailInfoPlaceholder": "{\"description\": \"Detects PII in requests\"}",
+      "add": "添加",
+      "forwardApiKeyLabel": "转发 API 密钥",
+      "approveConfirmQuestion": "确定要批准 <strong>「{{name}}」</strong>吗？批准后该护栏将激活并可供使用。",
+      "rejectConfirmQuestion": "确定要拒绝 <strong>「{{name}}」</strong>吗？拒绝后该护栏将标记为已拒绝并通知团队。",
+      "statusFilterAriaLabel": "按状态筛选",
+      "submissionsTab": "提交记录",
+      "viewDetails": "查看详情"
     },
     "guardrailGardenTab": "护栏库",
     "guardrailsTab": "护栏",
@@ -1886,7 +2215,8 @@
         "post_call": "LLM 调用后 - 在 LLM 调用后运行，仅检查输出",
         "logging_only": "仅日志 - 仅在日志回调中运行，不影响 LLM 调用",
         "pre_mcp_call": "MCP 工具调用前 - 在 MCP 工具执行前运行并验证工具调用",
-        "during_mcp_call": "MCP 工具调用中 - 与 MCP 工具执行并行运行用于监控"
+        "during_mcp_call": "MCP 工具调用中 - 与 MCP 工具执行并行运行用于监控",
+        "post_mcp_call": "MCP 工具调用后 - 在 MCP 工具执行后运行并检查工具结果"
       },
       "stepBasicInfo": "基本信息",
       "stepTopics": "主题",
@@ -1922,7 +2252,11 @@
       "weightsMustSum100": "标准权重之和必须为 100%（当前为 {{weightTotal}}%）",
       "addAtLeastOneRule": "请至少添加一条工具权限规则",
       "createSuccess": "护栏创建成功",
-      "createFailed": "创建护栏失败：{{error}}"
+      "createFailed": "创建护栏失败：{{error}}",
+      "noMatchingProviders": "没有匹配的提供商",
+      "modePreMcpCall": "MCP 工具调用前 - 在 MCP 工具执行前运行并验证工具调用",
+      "modeDuringMcpCall": "MCP 工具调用中 - 与 MCP 工具执行并行运行用于监控",
+      "validationFailed": "创建护栏失败：请修正高亮显示的字段"
     },
     "guardrailOptionalParams": {
       "title": "可选参数",
@@ -1941,7 +2275,9 @@
       "noFields": "此提供商暂无可配置字段。",
       "fieldRequired": "{{fieldKey}} 为必填项",
       "trueLabel": "是",
-      "falseLabel": "否"
+      "falseLabel": "否",
+      "invalidJsonObject": "请为该配置输入有效的 JSON 对象",
+      "selectPlaceholder": "选择一个选项"
     },
     "guardrailTable": {
       "colGuardrailId": "护栏 ID",
@@ -1955,7 +2291,14 @@
       "configDeleteTooltip": "配置文件中的护栏无法在仪表盘上删除，请从配置文件中删除。",
       "configDeleteAriaLabel": "删除护栏（配置文件）",
       "unnamedGuardrail": "未命名护栏",
-      "noGuardrails": "未找到护栏"
+      "noGuardrails": "未找到护栏",
+      "colCreatedAt": "创建时间",
+      "colUpdatedAt": "更新时间",
+      "emptyTitle": "暂无护栏",
+      "emptyDescription": "添加护栏即可开始过滤请求与响应。",
+      "loading": "正在加载护栏…",
+      "openActions": "打开护栏操作",
+      "configDeleteHint": "配置文件中的护栏无法在仪表盘上删除。"
     },
     "lLMJudgeFields": {
       "description": "每次 LLM 响应后，<strong>Judge Model</strong> 会根据您的标准对其评分（0–100）。若加权平均分低于阈值，响应将被拦截（或记录）。",
@@ -1980,7 +2323,11 @@
       "criterionDescPlaceholder": "Judge 应针对此标准检查什么？",
       "addCriterion": "添加标准",
       "weightsTotal": "权重合计：{{weightTotal}}%",
-      "weightsMustSum": "必须合计为 100%"
+      "weightsMustSum": "必须合计为 100%",
+      "noMatchingModels": "没有匹配的模型",
+      "selectActionPlaceholder": "选择操作",
+      "weightPlaceholder": "例如 50",
+      "removeCriterion": "移除标准"
     },
     "piiComponents": {
       "filterByCategory": "按类别筛选",
@@ -1992,7 +2339,8 @@
       "selectAllBlock": "全选并拦截",
       "piiTypeHeader": "PII 类型",
       "actionHeader": "操作",
-      "noMatch": "没有 PII 类型匹配您的筛选条件"
+      "noMatch": "没有 PII 类型匹配您的筛选条件",
+      "noMatchingCategories": "没有匹配的类别"
     },
     "piiConfiguration": {
       "title": "配置 PII 保护",
@@ -2020,7 +2368,262 @@
       "block": "拦截",
       "rewrite": "改写",
       "violationMessage": "违规消息（可选）",
-      "violationMessagePlaceholder": "这违反了我们的组织策略..."
+      "violationMessagePlaceholder": "这违反了我们的组织策略...",
+      "removeConstraint": "移除约束"
+    },
+    "selectOption": "选择一个选项",
+    "optionalLowercase": "可选",
+    "guardrailGardenCards": {
+      "aim": {
+        "desc": "AIM Security 护栏，提供全面的 AI 威胁检测和缓解。",
+        "name": "AIM 护栏"
+      },
+      "akto": {
+        "desc": "来自 Akto.io 的 AI 安全平台，为 AI/ML 应用提供自动监控和护栏。",
+        "name": "Akto 护栏"
+      },
+      "alice": {
+        "desc": "针对提示词和模型响应的基于策略的护栏，按应用评估，因此一个代理可为不同团队或产品执行不同的策略集。",
+        "name": "Alice"
+      },
+      "aporia": {
+        "desc": "实时 AI 护栏，用于幻觉检测、主题控制和策略执行。",
+        "name": "Aporia AI"
+      },
+      "bedrock": {
+        "desc": "AWS Bedrock Guardrails，用于内容过滤、主题规避和敏感信息检测。",
+        "name": "Bedrock 护栏"
+      },
+      "blockCodeExecution": {
+        "desc": "检测请求和响应中的 Markdown 围栏代码块。按语言以可配置的置信度拦截或遮罩可执行代码（如 Python、JavaScript、Bash）。",
+        "name": "拦截代码执行"
+      },
+      "catoNetworks": {
+        "desc": "Cato Networks 护栏，提供全面的 AI 威胁检测和缓解。",
+        "name": "Cato Networks 护栏"
+      },
+      "cfBiasGender": {
+        "desc": "检测基于性别的歧视、刻板印象和偏见性语言。",
+        "name": "偏见：性别"
+      },
+      "cfBiasRacial": {
+        "desc": "检测种族歧视、刻板印象和种族偏见内容。",
+        "name": "偏见：种族"
+      },
+      "cfBiasReligious": {
+        "desc": "检测宗教歧视、不宽容和宗教偏见内容。",
+        "name": "偏见：宗教"
+      },
+      "cfBiasSexualOrientation": {
+        "desc": "检测基于性取向的歧视及相关偏见内容。",
+        "name": "偏见：性取向"
+      },
+      "cfCompetitorIntent": {
+        "desc": "拦截或改写竞争对手比较和排名的意图。检测用户要求比较或推荐竞争对手的场景（航空公司或通用竞争对手清单）。",
+        "name": "拦截竞争对手名称"
+      },
+      "cfDeniedFinancial": {
+        "desc": "检测对个性化财务建议、投资建议或财务规划的请求。",
+        "name": "拒绝财务建议"
+      },
+      "cfDeniedInsults": {
+        "desc": "检测针对聊天机器人、员工或其他人的侮辱、辱骂和人身攻击。",
+        "name": "侮辱与人身攻击"
+      },
+      "cfDeniedLegal": {
+        "desc": "检测对未经授权的法律建议、案件分析或法律建议的请求。",
+        "name": "拒绝法律建议"
+      },
+      "cfDeniedMedical": {
+        "desc": "检测对医疗诊断、治疗建议或健康建议的请求。",
+        "name": "拒绝医疗建议"
+      },
+      "cfHarmfulChildSafety": {
+        "desc": "检测可能危及儿童安全或剥削未成年人的内容。",
+        "name": "危害儿童安全"
+      },
+      "cfHarmfulIllegalWeapons": {
+        "desc": "检测与非法武器制造、分销或获取相关的内容。",
+        "name": "有害非法武器"
+      },
+      "cfHarmfulSelfHarm": {
+        "desc": "检测与自残、自杀和危险的自我伤害行为相关的内容。",
+        "name": "有害自残"
+      },
+      "cfHarmfulViolence": {
+        "desc": "检测与暴力、犯罪策划、袭击和暴力威胁相关的内容。",
+        "name": "有害暴力"
+      },
+      "cfKeywords": {
+        "desc": "拦截或遮罩包含特定关键词或短语的内容。上传自定义词表或添加单个词条。",
+        "name": "拦截关键词"
+      },
+      "cfPatterns": {
+        "desc": "检测并拦截敏感数据模式，如 SSN、信用卡号、API 密钥和自定义正则表达式模式。",
+        "name": "模式匹配"
+      },
+      "cfPromptInjectionDataExfil": {
+        "desc": "检测通过提示词操纵提取敏感数据的尝试。",
+        "name": "提示词注入：数据外泄"
+      },
+      "cfPromptInjectionJailbreak": {
+        "desc": "检测旨在绕过 AI 安全准则和限制的越狱尝试。",
+        "name": "提示词注入：越狱"
+      },
+      "cfPromptInjectionMaliciousCode": {
+        "desc": "检测通过提示词注入恶意代码的尝试。",
+        "name": "提示词注入：恶意代码"
+      },
+      "cfPromptInjectionSql": {
+        "desc": "检测嵌入提示词中的 SQL 注入尝试。",
+        "name": "提示词注入：SQL"
+      },
+      "cfPromptInjectionSystemPrompt": {
+        "desc": "检测提取或覆盖系统提示词的尝试。",
+        "name": "提示词注入：系统提示词"
+      },
+      "cfToxicAbuse": {
+        "desc": "检测多种语言（EN、AU、DE、ES、FR）中的有毒、辱骂和仇恨性语言。",
+        "name": "有毒与辱骂性语言"
+      },
+      "ciscoAiDefense": {
+        "desc": "Cisco AI Defense Inspection API 提供运行时保护：提示词注入、PII/PCI/PHI、骚扰、仇恨言论、脏话、暴力和代码检测。",
+        "name": "Cisco AI 防御"
+      },
+      "conduct": {
+        "desc": "Conduct Guard 在模型调用前依据工作区规则评估提示词：提示词注入、PII 和自定义策略，并给出拦截、警告和批准三种判定。",
+        "name": "Conduct Guard"
+      },
+      "deepkeep": {
+        "desc": "DeepKeep AI Firewall 提供全面的 LLM 安全防护：提示词注入检测、PII 保护、内容审核，以及可通过配置护栏流水线实现的策略执行。",
+        "name": "DeepKeep AI 防火墙"
+      },
+      "enkryptai": {
+        "desc": "AI 安全与治理平台，用于企业级 AI 安全与合规。",
+        "name": "EnkryptAI"
+      },
+      "googleModelArmor": {
+        "desc": "Google Cloud 的模型保护服务，用于安全且负责任的 AI 部署。",
+        "name": "Google Cloud Model Armor"
+      },
+      "guardrailsAi": {
+        "desc": "开源框架，为 LLM 输出添加结构、类型和质量保证。",
+        "name": "Guardrails AI"
+      },
+      "javelin": {
+        "desc": "内置护栏的 AI 网关，用于安全合规的 AI 运营。",
+        "name": "Javelin 护栏"
+      },
+      "lakera": {
+        "desc": "AI 安全平台，防护提示词注入、数据泄露和有害内容。",
+        "name": "Lakera"
+      },
+      "lasso": {
+        "desc": "内容审核和安全护栏，用于负责任的 AI 部署。",
+        "name": "Lasso 护栏"
+      },
+      "noma": {
+        "desc": "AI 安全平台，用于检测和防御 AI 特有的威胁与漏洞。",
+        "name": "Noma Security"
+      },
+      "openaiModeration": {
+        "desc": "OpenAI 的内容审核 API，用于检测多个类别中的有害内容。",
+        "name": "OpenAI 审核"
+      },
+      "pangea": {
+        "desc": "Pangea 的 AI 护栏，用于安全、合规且可信的 AI 应用。",
+        "name": "Pangea 护栏"
+      },
+      "panw": {
+        "desc": "Palo Alto Networks Prisma AI Runtime Security，用于保护生产环境中的 AI 应用。",
+        "name": "PANW Prisma AIRS"
+      },
+      "pillar": {
+        "desc": "AI 安全平台，用于监控、测试和保护 AI 系统。",
+        "name": "Pillar 护栏"
+      },
+      "presidio": {
+        "desc": "Microsoft Presidio 用于 PII 检测和匿名化。支持 30 多种实体类型，操作可配置。",
+        "name": "Presidio PII"
+      },
+      "promptSecurity": {
+        "desc": "防护提示词注入攻击、数据泄露和其他 LLM 安全威胁。",
+        "name": "Prompt Security"
+      },
+      "promptguard": {
+        "desc": "AI 安全网关，具备提示词注入检测、PII 脱敏、主题过滤、实体黑名单和幻觉检测。可自托管，并支持即插即用的代理集成。",
+        "name": "PromptGuard"
+      },
+      "repelloai": {
+        "desc": "RepelloAI Argus 依据 Repello 控制台中按资产配置的策略扫描提示词和响应。",
+        "name": "RepelloAI Argus"
+      },
+      "straiker": {
+        "desc": "Defend AI 智能体护栏：间接/直接提示词注入、工具滥用、恶意 MCP 和技能",
+        "name": "Straiker"
+      },
+      "subcategory": {
+        "codeSafety": "代码安全",
+        "contentCategory": "内容类别",
+        "keywords": "关键词",
+        "patterns": "模式"
+      },
+      "tags": {
+        "agentic": "智能体",
+        "aws": "AWS",
+        "bias": "偏见",
+        "blocklist": "黑名单",
+        "code": "代码",
+        "competitor": "竞争对手",
+        "compliance": "合规",
+        "contentCategory": "内容类别",
+        "contentModeration": "内容审核",
+        "contentSafety": "内容安全",
+        "dataProtection": "数据保护",
+        "enterprise": "企业",
+        "firewall": "防火墙",
+        "gateway": "网关",
+        "googleCloud": "Google Cloud",
+        "governance": "治理",
+        "grounding": "接地",
+        "hallucination": "幻觉",
+        "keywords": "关键词",
+        "mcp": "MCP",
+        "microsoft": "Microsoft",
+        "monitoring": "监控",
+        "openSource": "开源",
+        "openai": "OpenAI",
+        "pii": "PII",
+        "policy": "策略",
+        "promptInjection": "提示词注入",
+        "rag": "RAG",
+        "regex": "正则表达式",
+        "safety": "安全",
+        "security": "安全",
+        "skills": "技能",
+        "threatDetection": "威胁检测",
+        "toolMisuse": "工具滥用",
+        "topicBlocker": "主题拦截器",
+        "toxicity": "毒性",
+        "validation": "验证"
+      },
+      "xecguard": {
+        "desc": "CyCraft XecGuard AI 安全网关。多策略扫描（提示词注入、有害内容、PII、系统提示词强制）以及 RAG 上下文接地。",
+        "name": "XecGuard"
+      },
+      "zscaler": {
+        "desc": "Zscaler 的企业级 AI 安全，监控和保护 AI/ML 工作负载。",
+        "name": "Zscaler AI 防护"
+      }
+    },
+    "guardrailGardenPresets": {
+      "googleModelArmorName": "Google Cloud Model Armor",
+      "guardrailsAiName": "Guardrails AI",
+      "openaiModerationName": "OpenAI 审核",
+      "straikerName": "Straiker 护栏"
+    },
+    "guardrailMode": {
+      "tagBased": "（基于标签）"
     }
   },
   "keyValueInput": {
@@ -3357,7 +3960,8 @@
       "displayName": "显示名称",
       "displayNameHelp": "覆盖此工具对用户显示的名称，留空则使用原名称。",
       "noDescription": "无描述",
-      "descriptionHelp": "覆盖向用户显示的工具描述，留空则使用原描述。"
+      "descriptionHelp": "覆盖向用户显示的工具描述，留空则使用原描述。",
+      "noToolsAvailableForConfig": "暂无可用工具"
     },
     "mcpTools": {
       "title": "MCP 工具",
@@ -3492,7 +4096,11 @@
       "clickToRecheck": "点击重新检查",
       "byokCredential": "BYOK 凭据",
       "connected": "已连接",
-      "connectButton": "连接"
+      "connectButton": "连接",
+      "logoAltWithName": "{{name}} Logo",
+      "oauthFlowNotSet": "未设置 OAuth 流程",
+      "oauthFlowNotSetTooltip": "此 OAuth 服务器未设置流程（机器对机器或交互式）。请打开它并选择 OAuth 流程类型，以便 LiteLLM 按您的预期进行认证。",
+      "missingUserFields": "缺少 {{count}} 个用户字段"
     },
     "mcpStandardsSettings": {
       "groupDocumentation": "文档",
@@ -3552,7 +4160,10 @@
       "approvedSuccess": "MCP 服务器「{{name}}」已批准",
       "failedToApprove": "批准 MCP 服务器失败",
       "rejectedSuccess": "MCP 服务器「{{name}}」已拒绝",
-      "failedToReject": "拒绝 MCP 服务器失败"
+      "failedToReject": "拒绝 MCP 服务器失败",
+      "approveConfirmBody": "这将激活服务器。提交该服务器的用户将在批准后于其 MCP 服务器列表中看到它。",
+      "savingRules": "保存中…",
+      "searchServersPlaceholder": "搜索 MCP 服务器..."
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "此工具的输入",
@@ -3596,7 +4207,7 @@
       "toolsetDeleted": "工具集已删除",
       "pageTitle": "MCP 工具集",
       "pageSubtitle": "来自一个或多个 MCP 服务器的精选工具集合。通过 MCP 权限下拉菜单将工具集分配给密钥和团队。",
-      "noToolsets": "暂无工具集。点击「新建工具集」创建一个。",
+      "noToolsets": "还没有工具集",
       "loadingToolsets": "加载工具集中...",
       "deleteToolsetTitle": "删除工具集",
       "deleteToolsetConfirm": "确定要删除此工具集吗？使用它的密钥和团队将失去对已选工具的访问权限。",
@@ -3605,7 +4216,8 @@
       "howToolsetsWorkPath": "API 密钥 → 编辑密钥 → MCP 服务器",
       "howToolsetsWorkDesc2": "将其分配给密钥，然后将您的 MCP 客户端指向工具集 URL。客户端只会看到您选定的工具。",
       "configLabel": "Claude Code / Cursor 配置",
-      "toolsetNamePlaceholder": "例如：github-linear-tools"
+      "toolsetNamePlaceholder": "例如：github-linear-tools",
+      "noToolsetsHint": "创建工具集，为密钥和团队提供精选的 MCP 工具集合。"
     },
     "oAuthFormFields": {
       "leaveBlankToKeep": "留空以保留现有值",
@@ -3833,7 +4445,8 @@
       "connectionFailedAlert": "连接失败",
       "stackTrace": "堆栈跟踪",
       "connectionSuccessfulBang": "连接成功！",
-      "noToolsFound": "此 MCP 服务器未发现任何工具"
+      "noToolsFound": "此 MCP 服务器未发现任何工具",
+      "toolPreviewUnavailable": "工具预览不可用"
     },
     "mcpDiscovery": {
       "title": "添加 MCP 服务器",
@@ -3867,7 +4480,8 @@
       "costSummary": "费用汇总：",
       "defaultCostRow": "• 默认费用：${{cost}} / 次查询",
       "toolsWithCustomPricing_one": "• {{count}} 个工具使用自定义定价",
-      "toolsWithCustomPricing_other": "• {{count}} 个工具使用自定义定价"
+      "toolsWithCustomPricing_other": "• {{count}} 个工具使用自定义定价",
+      "toolsWithCustomPricing": "• {{count}} 个工具使用自定义定价"
     },
     "toolTestPanel": {
       "testToolTitle": "测试工具：",
@@ -4009,7 +4623,10 @@
       "awsSessionNameLabel": "AWS 会话名称",
       "awsSessionNameTooltip": "可选。AssumeRole 调用的会话名称，会出现在 CloudTrail 日志中。若省略则自动生成。",
       "leaveBlankPlaceholder": "留空保留现有值",
-      "saveChanges": "保存更改"
+      "saveChanges": "保存更改",
+      "displayNameInvalid": "仅允许字母、数字、下划线和连字符（不能包含空格）。",
+      "serverUrlInvalid": "请输入有效的 URL（例如 http://service-name.domain:1234/path 或 https://example.com）",
+      "serverNameInvalid": "不能包含「-」（连字符）或空格，请改用「_」（下划线）。"
     },
     "mcpServerView": {
       "backToAllServers": "返回所有服务器",
@@ -4070,7 +4687,19 @@
       "loadingServers": "正在加载 MCP 服务器...",
       "emptyNoServers": "未配置 MCP 服务器。点击「+ 添加新 MCP 服务器」开始使用。",
       "emptyNoMatch": "没有服务器匹配当前过滤条件或搜索。",
-      "deleteSuccess": "MCP 服务器已成功删除"
+      "deleteSuccess": "MCP 服务器已成功删除",
+      "importFromJson": "从 JSON 导入",
+      "tabToolSearch": "工具搜索",
+      "copyServerId": "复制 ID",
+      "showFullUrl": "显示完整 URL",
+      "hideFullUrl": "隐藏完整 URL"
+    },
+    "mCPToolsetTableColumns": {
+      "openToolsetActions": "打开工具集操作",
+      "copyEndpointUrl": "复制端点 URL",
+      "copyToolsetId": "复制工具集 ID",
+      "endpointUrlCopied": "端点 URL 已复制",
+      "toolsetIdCopied": "工具集 ID 已复制"
     }
   },
   "playground": {

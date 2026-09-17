@@ -133,7 +133,8 @@
       "copiedToClipboard": "Key copied to clipboard",
       "saveWarning": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one.",
       "virtualKeyLabel": "Virtual Key:",
-      "copyButton": "Copy Virtual Key"
+      "copyButton": "Copy Virtual Key",
+      "copied": "Copied!"
     },
     "advancedDatePicker": {
       "selectTimeRange": "Select Time Range",
@@ -161,6 +162,66 @@
       "selectTimeRange": "Select Time Range",
       "selectDateRange": "Select date range",
       "selected": "Selected"
+    },
+    "charts": {
+      "noData": "No data"
+    },
+    "dataTableSelection": {
+      "selectAllRows": "Select all rows",
+      "selectColumn": "Select",
+      "selectRow": "Select row"
+    },
+    "inheritedBudgetHint": {
+      "message": "This key has no budget of its own, but its spend still counts toward:"
+    },
+    "multiSelect": {
+      "selectOptionsPlaceholder": "Select options",
+      "noOptions": "No options found",
+      "clearAll": "Clear all",
+      "loading": "Loading...",
+      "loadingEllipsis": "Loading..."
+    },
+    "numericalInput": {
+      "placeholder": "Enter a numerical value"
+    },
+    "pageHeader": {
+      "controls": "Page controls"
+    },
+    "paginatedMultiSelect": {
+      "searchPlaceholder": "Search…",
+      "noResults": "No results",
+      "loading": "Loading…"
+    },
+    "paginatedSearchSelect": {
+      "searchPlaceholder": "Search…",
+      "noResults": "No results",
+      "loading": "Loading…"
+    },
+    "searchSelect": {
+      "selectPlaceholder": "Select…",
+      "noResults": "No results"
+    },
+    "modelsCell": {
+      "scopedToRoutes": "Scoped to {{routes}} routes; this key cannot call any models",
+      "noModelAccess": "No model access",
+      "allProxyModels": "All Proxy Models",
+      "moreModels": "+{{count}} more"
+    },
+    "savingsTiles": {
+      "totalSaved": "Total saved",
+      "totalSavedHint": "Compression + prompt caching + auto-router",
+      "loading": "Loading...",
+      "totalSavedInfo": "The sum of the three tiles beside it. Its caching term is the LiteLLM-injected share, so this total is what the gateway itself delivered; caching that clients or providers brought on their own appears only in the caching tile's Total figure.",
+      "compressionSavings": "Compression savings",
+      "tokensCompressed": "{{count}} tokens compressed",
+      "compressionSavingsInfo": "Tokens Headroom removed before the call, priced at the model's input rate.",
+      "promptCachingSavings": "Prompt caching savings",
+      "litellmInjected": "LiteLLM injected",
+      "total": "Total",
+      "promptCachingInfo": "What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share LiteLLM earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two.",
+      "autoRouterSavings": "Auto-router savings",
+      "autoRouterHint": "vs. the priciest model it could pick",
+      "autoRouterInfo": "What this traffic would have cost had every request gone to the most expensive model the auto-router can route to, minus what it actually cost. Switching leaves the new model with a cold cache, so it pays to write the prompt again while the baseline is priced as already warm; a route that thrashes the cache can total below zero, and a genuine first turn, where neither side had anything cached, is undercounted."
     }
   },
   "molecules": {
@@ -749,7 +810,10 @@
       "allowedSearchToolsTooltip": "Select which search tools this team can access. Leave empty to allow all search tools.",
       "allowedSearchToolsHelp": "Restrict which configured search tools keys on this team may call.",
       "allowedSearchToolsPlaceholder": "Select search tools (optional, empty = all allowed)",
-      "modelAliasesDescription": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models."
+      "modelAliasesDescription": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models.",
+      "organizationNoLongerAvailable": "You can no longer create teams in this organization",
+      "allowedSkillsHelp": "Private skills keys on this team may see in the Claude Code marketplace.",
+      "allowedSkillsPlaceholder": "Select skills (optional)"
     },
     "accordions": {
       "additionalSettings": "Additional Settings",
@@ -1384,7 +1448,14 @@
       "testingButton_other": "Testing {{count}} guardrails...",
       "pleaseEnterText": "Please enter text to test",
       "inputCopied": "Input copied to clipboard",
-      "failedToCopyInput": "Failed to copy input"
+      "failedToCopyInput": "Failed to copy input",
+      "metadataLabel": "Metadata (optional)",
+      "metadataTooltip": "JSON object forwarded to the guardrail as request_data['metadata']. Custom guardrails can read per-request configuration from it.",
+      "metadataInvalidObject": "Metadata must be a JSON object",
+      "invalidJson": "Invalid JSON",
+      "subtitle": "Test guardrails and compare results",
+      "testingButton": "Testing {{count}} guardrails...",
+      "testButton": "Test {{count}} guardrails"
     },
     "guardrailTestPlayground": {
       "pageTitle": "Guardrail Testing Playground",
@@ -1400,7 +1471,9 @@
       "appliedSuccess_one": "{{count}} guardrail applied successfully",
       "appliedSuccess_other": "{{count}} guardrails applied successfully",
       "applyFailed_one": "{{count}} guardrail failed",
-      "applyFailed_other": "{{count}} guardrails failed"
+      "applyFailed_other": "{{count}} guardrails failed",
+      "appliedSuccess": "{{count}} guardrails applied successfully",
+      "applyFailed": "{{count}} guardrails failed"
     },
     "guardrailTestResults": {
       "resultsHeading": "Results",
@@ -1687,7 +1760,248 @@
       "showAll": "Show all ({{count}})",
       "litellmSectionDesc": "Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.",
       "partnerSectionTitle": "Partner Guardrails",
-      "partnerSectionDesc": "Third-party guardrail integrations from leading AI security providers."
+      "partnerSectionDesc": "Third-party guardrail integrations from leading AI security providers.",
+      "aim": {
+        "desc": "AIM Security guardrails for comprehensive AI threat detection and mitigation.",
+        "name": "AIM Guardrail"
+      },
+      "akto": {
+        "desc": "AI security platform from Akto.io with automatic monitoring and guardrails for AI/ML applications.",
+        "name": "Akto Guardrail"
+      },
+      "alice": {
+        "desc": "Policy-based guardrails for prompts and model responses, evaluated per application so one proxy can enforce a different policy set per team or product.",
+        "name": "Alice"
+      },
+      "aporia": {
+        "desc": "Real-time AI guardrails for hallucination detection, topic control, and policy enforcement.",
+        "name": "Aporia AI"
+      },
+      "bedrock": {
+        "desc": "AWS Bedrock Guardrails for content filtering, topic avoidance, and sensitive information detection.",
+        "name": "Bedrock Guardrail"
+      },
+      "blockCodeExecution": {
+        "desc": "Detects markdown fenced code blocks in requests and responses. Block or mask executable code (e.g. Python, JavaScript, Bash) by language with configurable confidence.",
+        "name": "Block Code Execution"
+      },
+      "catoNetworks": {
+        "desc": "Cato Networks guardrails for comprehensive AI threat detection and mitigation.",
+        "name": "Cato Networks Guardrail"
+      },
+      "cfBiasGender": {
+        "desc": "Detects gender-based discrimination, stereotypes, and biased language.",
+        "name": "Bias: Gender"
+      },
+      "cfBiasRacial": {
+        "desc": "Detects racial discrimination, stereotypes, and racially biased content.",
+        "name": "Bias: Racial"
+      },
+      "cfBiasReligious": {
+        "desc": "Detects religious discrimination, intolerance, and religiously biased content.",
+        "name": "Bias: Religious"
+      },
+      "cfBiasSexualOrientation": {
+        "desc": "Detects discrimination based on sexual orientation and related biased content.",
+        "name": "Bias: Sexual Orientation"
+      },
+      "cfCompetitorIntent": {
+        "desc": "Block or reframe competitor comparison and ranking intent. Detect when users ask to compare or recommend competitors (airline or generic competitor lists).",
+        "name": "Competitor Name Blocking"
+      },
+      "cfDeniedFinancial": {
+        "desc": "Detects requests for personalized financial advice, investment recommendations, or financial planning.",
+        "name": "Denied Financial Advice"
+      },
+      "cfDeniedInsults": {
+        "desc": "Detects insults, name-calling, and personal attacks directed at the chatbot, staff, or other people.",
+        "name": "Insults & Personal Attacks"
+      },
+      "cfDeniedLegal": {
+        "desc": "Detects requests for unauthorized legal advice, case analysis, or legal recommendations.",
+        "name": "Denied Legal Advice"
+      },
+      "cfDeniedMedical": {
+        "desc": "Detects requests for medical diagnosis, treatment recommendations, or health advice.",
+        "name": "Denied Medical Advice"
+      },
+      "cfHarmfulChildSafety": {
+        "desc": "Detects content that could endanger child safety or exploit minors.",
+        "name": "Harmful Child Safety"
+      },
+      "cfHarmfulIllegalWeapons": {
+        "desc": "Detects content related to illegal weapons manufacturing, distribution, or acquisition.",
+        "name": "Harmful Illegal Weapons"
+      },
+      "cfHarmfulSelfHarm": {
+        "desc": "Detects content related to self-harm, suicide, and dangerous self-destructive behavior.",
+        "name": "Harmful Self-Harm"
+      },
+      "cfHarmfulViolence": {
+        "desc": "Detects content related to violence, criminal planning, attacks, and violent threats.",
+        "name": "Harmful Violence"
+      },
+      "cfKeywords": {
+        "desc": "Block or mask content containing specific keywords or phrases. Upload custom word lists or add individual terms.",
+        "name": "Keyword Blocking"
+      },
+      "cfPatterns": {
+        "desc": "Detect and block sensitive data patterns like SSNs, credit card numbers, API keys, and custom regex patterns.",
+        "name": "Pattern Matching"
+      },
+      "cfPromptInjectionDataExfil": {
+        "desc": "Detects attempts to extract sensitive data through prompt manipulation.",
+        "name": "Prompt Injection: Data Exfiltration"
+      },
+      "cfPromptInjectionJailbreak": {
+        "desc": "Detects jailbreak attempts designed to bypass AI safety guidelines and restrictions.",
+        "name": "Prompt Injection: Jailbreak"
+      },
+      "cfPromptInjectionMaliciousCode": {
+        "desc": "Detects attempts to inject malicious code through prompts.",
+        "name": "Prompt Injection: Malicious Code"
+      },
+      "cfPromptInjectionSql": {
+        "desc": "Detects SQL injection attempts embedded in prompts.",
+        "name": "Prompt Injection: SQL"
+      },
+      "cfPromptInjectionSystemPrompt": {
+        "desc": "Detects attempts to extract or override system prompts.",
+        "name": "Prompt Injection: System Prompt"
+      },
+      "cfToxicAbuse": {
+        "desc": "Detects toxic, abusive, and hateful language across multiple languages (EN, AU, DE, ES, FR).",
+        "name": "Toxic & Abusive Language"
+      },
+      "ciscoAiDefense": {
+        "desc": "Cisco AI Defense Inspection API for runtime protection: prompt injection, PII/PCI/PHI, harassment, hate speech, profanity, violence, and code detection.",
+        "name": "Cisco AI Defense"
+      },
+      "conduct": {
+        "desc": "Conduct Guard evaluates prompts against workspace rules before the model call: prompt injection, PII, and custom policies, with block, warning, and approval verdicts.",
+        "name": "Conduct Guard"
+      },
+      "deepkeep": {
+        "desc": "DeepKeep AI Firewall for comprehensive LLM security — prompt injection detection, PII protection, content moderation, and policy enforcement with configurable guardrail pipelines.",
+        "name": "DeepKeep AI Firewall"
+      },
+      "enkryptai": {
+        "desc": "AI security and governance platform for enterprise AI safety and compliance.",
+        "name": "EnkryptAI"
+      },
+      "googleModelArmor": {
+        "desc": "Google Cloud's model protection service for safe and responsible AI deployments.",
+        "name": "Google Cloud Model Armor"
+      },
+      "guardrailsAi": {
+        "desc": "Open-source framework for adding structural, type, and quality guarantees to LLM outputs.",
+        "name": "Guardrails AI"
+      },
+      "javelin": {
+        "desc": "AI gateway with built-in guardrails for secure and compliant AI operations.",
+        "name": "Javelin Guardrails"
+      },
+      "lakera": {
+        "desc": "AI security platform protecting against prompt injections, data leakage, and harmful content.",
+        "name": "Lakera"
+      },
+      "lasso": {
+        "desc": "Content moderation and safety guardrails for responsible AI deployments.",
+        "name": "Lasso Guardrail"
+      },
+      "noma": {
+        "desc": "AI security platform for detecting and preventing AI-specific threats and vulnerabilities.",
+        "name": "Noma Security"
+      },
+      "openaiModeration": {
+        "desc": "OpenAI's content moderation API for detecting harmful content across multiple categories.",
+        "name": "OpenAI Moderation"
+      },
+      "pangea": {
+        "desc": "Pangea's AI guardrails for secure, compliant, and trustworthy AI applications.",
+        "name": "Pangea Guardrail"
+      },
+      "panw": {
+        "desc": "Palo Alto Networks Prisma AI Runtime Security for securing AI applications in production.",
+        "name": "PANW Prisma AIRS"
+      },
+      "pillar": {
+        "desc": "AI safety platform for monitoring, testing, and securing AI systems.",
+        "name": "Pillar Guardrail"
+      },
+      "presidio": {
+        "desc": "Microsoft Presidio for PII detection and anonymization. Supports 30+ entity types with configurable actions.",
+        "name": "Presidio PII"
+      },
+      "promptSecurity": {
+        "desc": "Protect against prompt injection attacks, data leakage, and other LLM security threats.",
+        "name": "Prompt Security"
+      },
+      "promptguard": {
+        "desc": "AI security gateway with prompt injection detection, PII redaction, topic filtering, entity blocklists, and hallucination detection. Self-hostable with drop-in proxy integration.",
+        "name": "PromptGuard"
+      },
+      "repelloai": {
+        "desc": "RepelloAI Argus scans prompts and responses against policies configured per asset in the Repello dashboard.",
+        "name": "RepelloAI Argus"
+      },
+      "straiker": {
+        "desc": "Defend AI Agentic Guardrails: Indirect/Direct Prompt Injection, Tool Misuse, Malicious MCP and Skills",
+        "name": "Straiker"
+      },
+      "subcategory": {
+        "codeSafety": "Code Safety",
+        "contentCategory": "Content Category",
+        "keywords": "Keywords",
+        "patterns": "Patterns"
+      },
+      "tags": {
+        "agentic": "Agentic",
+        "aws": "AWS",
+        "bias": "Bias",
+        "blocklist": "Blocklist",
+        "code": "Code",
+        "competitor": "Competitor",
+        "compliance": "Compliance",
+        "contentModeration": "Content Moderation",
+        "contentSafety": "Content Safety",
+        "dataProtection": "Data Protection",
+        "enterprise": "Enterprise",
+        "firewall": "Firewall",
+        "gateway": "Gateway",
+        "googleCloud": "Google Cloud",
+        "governance": "Governance",
+        "grounding": "Grounding",
+        "hallucination": "Hallucination",
+        "keywords": "Keywords",
+        "mcp": "MCP",
+        "microsoft": "Microsoft",
+        "monitoring": "Monitoring",
+        "openSource": "Open Source",
+        "openai": "OpenAI",
+        "pii": "PII",
+        "policy": "Policy",
+        "promptInjection": "Prompt Injection",
+        "rag": "RAG",
+        "regex": "Regex",
+        "safety": "Safety",
+        "security": "Security",
+        "skills": "Skills",
+        "threatDetection": "Threat Detection",
+        "toolMisuse": "Tool Misuse",
+        "topicBlocker": "Topic Blocker",
+        "toxicity": "Toxicity",
+        "validation": "Validation",
+        "contentCategory": "Content Category"
+      },
+      "xecguard": {
+        "desc": "CyCraft XecGuard AI security gateway. Multi-policy scanning (prompt injection, harmful content, PII, system-prompt enforcement) plus RAG context grounding.",
+        "name": "XecGuard"
+      },
+      "zscaler": {
+        "desc": "Enterprise AI security from Zscaler for monitoring and protecting AI/ML workloads.",
+        "name": "Zscaler AI Guard"
+      }
     },
     "guardrailGardenCard": {
       "evalBadge": "F1: {{f1}}% · {{testCases}} test cases"
@@ -1720,7 +2034,8 @@
       "typePartner": "Partner",
       "tagsLabel": "Tags",
       "metricHeader": "Metric",
-      "valueHeader": "Value"
+      "valueHeader": "Value",
+      "externalDepsNone": "None"
     },
     "guardrailInfo": {
       "backToGuardrails": "Back to Guardrails",
@@ -1764,7 +2079,14 @@
       "noChanges": "No changes detected",
       "updateSuccess": "Guardrail updated successfully",
       "updateFailed": "Failed to update guardrail",
-      "notFound": "Guardrail not found"
+      "notFound": "Guardrail not found",
+      "createdAt": "Created At",
+      "configGuardrailAriaLabel": "Config guardrail details",
+      "defaultOnOptionYes": "Yes",
+      "defaultOnOptionNo": "No",
+      "selectOptionPlaceholder": "Select an option",
+      "cancel": "Cancel",
+      "piiEntitiesConfigured": "{{count}} PII entities configured"
     },
     "guardrailGardenTab": "Guardrail Garden",
     "guardrailsTab": "Guardrails",
@@ -1857,7 +2179,14 @@
       "formMustBeJsonObject": "Must be a JSON object",
       "formInvalidJson": "Invalid JSON",
       "formGuardrailInfo": "Guardrail Info (optional)",
-      "formGuardrailInfoPlaceholder": "{\"description\": \"Detects PII in requests\"}"
+      "formGuardrailInfoPlaceholder": "{\"description\": \"Detects PII in requests\"}",
+      "add": "Add",
+      "forwardApiKeyLabel": "Forward API Key",
+      "approveConfirmQuestion": "Are you sure you want to approve <strong>\"{{name}}\"</strong>? This will make it active and available for use.",
+      "rejectConfirmQuestion": "Are you sure you want to reject <strong>\"{{name}}\"</strong>? This will mark it as rejected and notify the team.",
+      "statusFilterAriaLabel": "Filter by status",
+      "submissionsTab": "Submissions",
+      "viewDetails": "View Details"
     },
     "addGuardrailForm": {
       "modalTitle": "Create guardrail",
@@ -1886,7 +2215,8 @@
         "post_call": "After LLM Call - Runs after the LLM call and checks only the output",
         "logging_only": "Logging Only - Only runs on logging callbacks without affecting the LLM call",
         "pre_mcp_call": "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
-        "during_mcp_call": "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring"
+        "during_mcp_call": "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
+        "post_mcp_call": "After MCP Tool Call - Runs after MCP tool execution and checks the tool result"
       },
       "stepBasicInfo": "Basic Info",
       "stepTopics": "Topics",
@@ -1922,7 +2252,11 @@
       "weightsMustSum100": "Criterion weights must sum to 100% (currently {{weightTotal}}%)",
       "addAtLeastOneRule": "Add at least one tool permission rule",
       "createSuccess": "Guardrail created successfully",
-      "createFailed": "Failed to create guardrail: {{error}}"
+      "createFailed": "Failed to create guardrail: {{error}}",
+      "noMatchingProviders": "No matching providers",
+      "modePreMcpCall": "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
+      "modeDuringMcpCall": "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
+      "validationFailed": "Failed to create guardrail: please fix the highlighted fields"
     },
     "guardrailOptionalParams": {
       "title": "Optional Parameters",
@@ -1941,7 +2275,9 @@
       "noFields": "No configuration fields available for this provider.",
       "fieldRequired": "{{fieldKey}} is required",
       "trueLabel": "True",
-      "falseLabel": "False"
+      "falseLabel": "False",
+      "invalidJsonObject": "Enter a valid JSON object for this configuration",
+      "selectPlaceholder": "Select an option"
     },
     "guardrailTable": {
       "colGuardrailId": "Guardrail ID",
@@ -1955,7 +2291,14 @@
       "configDeleteTooltip": "Config guardrail cannot be deleted on the dashboard. Please delete it from the config file.",
       "configDeleteAriaLabel": "Delete guardrail (config)",
       "unnamedGuardrail": "Unnamed Guardrail",
-      "noGuardrails": "No guardrails found"
+      "noGuardrails": "No guardrails found",
+      "colCreatedAt": "Created At",
+      "colUpdatedAt": "Updated At",
+      "emptyTitle": "No guardrails yet",
+      "emptyDescription": "Add a guardrail to start filtering requests and responses.",
+      "loading": "Loading guardrails…",
+      "openActions": "Open guardrail actions",
+      "configDeleteHint": "Config guardrails are defined in the config file and cannot be deleted from the dashboard."
     },
     "lLMJudgeFields": {
       "description": "After each LLM response, the <strong>Judge Model</strong> scores it 0–100 against your criteria. If the weighted average falls below the threshold, the response is blocked (or logged).",
@@ -1980,7 +2323,11 @@
       "criterionDescPlaceholder": "What should the judge check for this criterion?",
       "addCriterion": "Add Criterion",
       "weightsTotal": "Weights total: {{weightTotal}}%",
-      "weightsMustSum": "must add up to 100%"
+      "weightsMustSum": "must add up to 100%",
+      "noMatchingModels": "No matching models",
+      "selectActionPlaceholder": "Select an action",
+      "weightPlaceholder": "e.g. 50",
+      "removeCriterion": "Remove criterion"
     },
     "piiComponents": {
       "filterByCategory": "Filter by category",
@@ -1992,7 +2339,8 @@
       "selectAllBlock": "Select All & Block",
       "piiTypeHeader": "PII Type",
       "actionHeader": "Action",
-      "noMatch": "No PII types match your filter criteria"
+      "noMatch": "No PII types match your filter criteria",
+      "noMatchingCategories": "No matching categories"
     },
     "piiConfiguration": {
       "title": "Configure PII Protection",
@@ -2020,7 +2368,262 @@
       "block": "Block",
       "rewrite": "Rewrite",
       "violationMessage": "Violation message (optional)",
-      "violationMessagePlaceholder": "This violates our org policy..."
+      "violationMessagePlaceholder": "This violates our org policy...",
+      "removeConstraint": "Remove constraint"
+    },
+    "selectOption": "Select an option",
+    "optionalLowercase": "optional",
+    "guardrailGardenCards": {
+      "aim": {
+        "desc": "AIM Security guardrails for comprehensive AI threat detection and mitigation.",
+        "name": "AIM Guardrail"
+      },
+      "akto": {
+        "desc": "AI security platform from Akto.io with automatic monitoring and guardrails for AI/ML applications.",
+        "name": "Akto Guardrail"
+      },
+      "alice": {
+        "desc": "Policy-based guardrails for prompts and model responses, evaluated per application so one proxy can enforce a different policy set per team or product.",
+        "name": "Alice"
+      },
+      "aporia": {
+        "desc": "Real-time AI guardrails for hallucination detection, topic control, and policy enforcement.",
+        "name": "Aporia AI"
+      },
+      "bedrock": {
+        "desc": "AWS Bedrock Guardrails for content filtering, topic avoidance, and sensitive information detection.",
+        "name": "Bedrock Guardrail"
+      },
+      "blockCodeExecution": {
+        "desc": "Detects markdown fenced code blocks in requests and responses. Block or mask executable code (e.g. Python, JavaScript, Bash) by language with configurable confidence.",
+        "name": "Block Code Execution"
+      },
+      "catoNetworks": {
+        "desc": "Cato Networks guardrails for comprehensive AI threat detection and mitigation.",
+        "name": "Cato Networks Guardrail"
+      },
+      "cfBiasGender": {
+        "desc": "Detects gender-based discrimination, stereotypes, and biased language.",
+        "name": "Bias: Gender"
+      },
+      "cfBiasRacial": {
+        "desc": "Detects racial discrimination, stereotypes, and racially biased content.",
+        "name": "Bias: Racial"
+      },
+      "cfBiasReligious": {
+        "desc": "Detects religious discrimination, intolerance, and religiously biased content.",
+        "name": "Bias: Religious"
+      },
+      "cfBiasSexualOrientation": {
+        "desc": "Detects discrimination based on sexual orientation and related biased content.",
+        "name": "Bias: Sexual Orientation"
+      },
+      "cfCompetitorIntent": {
+        "desc": "Block or reframe competitor comparison and ranking intent. Detect when users ask to compare or recommend competitors (airline or generic competitor lists).",
+        "name": "Competitor Name Blocking"
+      },
+      "cfDeniedFinancial": {
+        "desc": "Detects requests for personalized financial advice, investment recommendations, or financial planning.",
+        "name": "Denied Financial Advice"
+      },
+      "cfDeniedInsults": {
+        "desc": "Detects insults, name-calling, and personal attacks directed at the chatbot, staff, or other people.",
+        "name": "Insults & Personal Attacks"
+      },
+      "cfDeniedLegal": {
+        "desc": "Detects requests for unauthorized legal advice, case analysis, or legal recommendations.",
+        "name": "Denied Legal Advice"
+      },
+      "cfDeniedMedical": {
+        "desc": "Detects requests for medical diagnosis, treatment recommendations, or health advice.",
+        "name": "Denied Medical Advice"
+      },
+      "cfHarmfulChildSafety": {
+        "desc": "Detects content that could endanger child safety or exploit minors.",
+        "name": "Harmful Child Safety"
+      },
+      "cfHarmfulIllegalWeapons": {
+        "desc": "Detects content related to illegal weapons manufacturing, distribution, or acquisition.",
+        "name": "Harmful Illegal Weapons"
+      },
+      "cfHarmfulSelfHarm": {
+        "desc": "Detects content related to self-harm, suicide, and dangerous self-destructive behavior.",
+        "name": "Harmful Self-Harm"
+      },
+      "cfHarmfulViolence": {
+        "desc": "Detects content related to violence, criminal planning, attacks, and violent threats.",
+        "name": "Harmful Violence"
+      },
+      "cfKeywords": {
+        "desc": "Block or mask content containing specific keywords or phrases. Upload custom word lists or add individual terms.",
+        "name": "Keyword Blocking"
+      },
+      "cfPatterns": {
+        "desc": "Detect and block sensitive data patterns like SSNs, credit card numbers, API keys, and custom regex patterns.",
+        "name": "Pattern Matching"
+      },
+      "cfPromptInjectionDataExfil": {
+        "desc": "Detects attempts to extract sensitive data through prompt manipulation.",
+        "name": "Prompt Injection: Data Exfiltration"
+      },
+      "cfPromptInjectionJailbreak": {
+        "desc": "Detects jailbreak attempts designed to bypass AI safety guidelines and restrictions.",
+        "name": "Prompt Injection: Jailbreak"
+      },
+      "cfPromptInjectionMaliciousCode": {
+        "desc": "Detects attempts to inject malicious code through prompts.",
+        "name": "Prompt Injection: Malicious Code"
+      },
+      "cfPromptInjectionSql": {
+        "desc": "Detects SQL injection attempts embedded in prompts.",
+        "name": "Prompt Injection: SQL"
+      },
+      "cfPromptInjectionSystemPrompt": {
+        "desc": "Detects attempts to extract or override system prompts.",
+        "name": "Prompt Injection: System Prompt"
+      },
+      "cfToxicAbuse": {
+        "desc": "Detects toxic, abusive, and hateful language across multiple languages (EN, AU, DE, ES, FR).",
+        "name": "Toxic & Abusive Language"
+      },
+      "ciscoAiDefense": {
+        "desc": "Cisco AI Defense Inspection API for runtime protection: prompt injection, PII/PCI/PHI, harassment, hate speech, profanity, violence, and code detection.",
+        "name": "Cisco AI Defense"
+      },
+      "conduct": {
+        "desc": "Conduct Guard evaluates prompts against workspace rules before the model call: prompt injection, PII, and custom policies, with block, warning, and approval verdicts.",
+        "name": "Conduct Guard"
+      },
+      "deepkeep": {
+        "desc": "DeepKeep AI Firewall for comprehensive LLM security — prompt injection detection, PII protection, content moderation, and policy enforcement with configurable guardrail pipelines.",
+        "name": "DeepKeep AI Firewall"
+      },
+      "enkryptai": {
+        "desc": "AI security and governance platform for enterprise AI safety and compliance.",
+        "name": "EnkryptAI"
+      },
+      "googleModelArmor": {
+        "desc": "Google Cloud's model protection service for safe and responsible AI deployments.",
+        "name": "Google Cloud Model Armor"
+      },
+      "guardrailsAi": {
+        "desc": "Open-source framework for adding structural, type, and quality guarantees to LLM outputs.",
+        "name": "Guardrails AI"
+      },
+      "javelin": {
+        "desc": "AI gateway with built-in guardrails for secure and compliant AI operations.",
+        "name": "Javelin Guardrails"
+      },
+      "lakera": {
+        "desc": "AI security platform protecting against prompt injections, data leakage, and harmful content.",
+        "name": "Lakera"
+      },
+      "lasso": {
+        "desc": "Content moderation and safety guardrails for responsible AI deployments.",
+        "name": "Lasso Guardrail"
+      },
+      "noma": {
+        "desc": "AI security platform for detecting and preventing AI-specific threats and vulnerabilities.",
+        "name": "Noma Security"
+      },
+      "openaiModeration": {
+        "desc": "OpenAI's content moderation API for detecting harmful content across multiple categories.",
+        "name": "OpenAI Moderation"
+      },
+      "pangea": {
+        "desc": "Pangea's AI guardrails for secure, compliant, and trustworthy AI applications.",
+        "name": "Pangea Guardrail"
+      },
+      "panw": {
+        "desc": "Palo Alto Networks Prisma AI Runtime Security for securing AI applications in production.",
+        "name": "PANW Prisma AIRS"
+      },
+      "pillar": {
+        "desc": "AI safety platform for monitoring, testing, and securing AI systems.",
+        "name": "Pillar Guardrail"
+      },
+      "presidio": {
+        "desc": "Microsoft Presidio for PII detection and anonymization. Supports 30+ entity types with configurable actions.",
+        "name": "Presidio PII"
+      },
+      "promptSecurity": {
+        "desc": "Protect against prompt injection attacks, data leakage, and other LLM security threats.",
+        "name": "Prompt Security"
+      },
+      "promptguard": {
+        "desc": "AI security gateway with prompt injection detection, PII redaction, topic filtering, entity blocklists, and hallucination detection. Self-hostable with drop-in proxy integration.",
+        "name": "PromptGuard"
+      },
+      "repelloai": {
+        "desc": "RepelloAI Argus scans prompts and responses against policies configured per asset in the Repello dashboard.",
+        "name": "RepelloAI Argus"
+      },
+      "straiker": {
+        "desc": "Defend AI Agentic Guardrails: Indirect/Direct Prompt Injection, Tool Misuse, Malicious MCP and Skills",
+        "name": "Straiker"
+      },
+      "subcategory": {
+        "codeSafety": "Code Safety",
+        "contentCategory": "Content Category",
+        "keywords": "Keywords",
+        "patterns": "Patterns"
+      },
+      "tags": {
+        "agentic": "Agentic",
+        "aws": "AWS",
+        "bias": "Bias",
+        "blocklist": "Blocklist",
+        "code": "Code",
+        "competitor": "Competitor",
+        "compliance": "Compliance",
+        "contentCategory": "Content Category",
+        "contentModeration": "Content Moderation",
+        "contentSafety": "Content Safety",
+        "dataProtection": "Data Protection",
+        "enterprise": "Enterprise",
+        "firewall": "Firewall",
+        "gateway": "Gateway",
+        "googleCloud": "Google Cloud",
+        "governance": "Governance",
+        "grounding": "Grounding",
+        "hallucination": "Hallucination",
+        "keywords": "Keywords",
+        "mcp": "MCP",
+        "microsoft": "Microsoft",
+        "monitoring": "Monitoring",
+        "openSource": "Open Source",
+        "openai": "OpenAI",
+        "pii": "PII",
+        "policy": "Policy",
+        "promptInjection": "Prompt Injection",
+        "rag": "RAG",
+        "regex": "Regex",
+        "safety": "Safety",
+        "security": "Security",
+        "skills": "Skills",
+        "threatDetection": "Threat Detection",
+        "toolMisuse": "Tool Misuse",
+        "topicBlocker": "Topic Blocker",
+        "toxicity": "Toxicity",
+        "validation": "Validation"
+      },
+      "xecguard": {
+        "desc": "CyCraft XecGuard AI security gateway. Multi-policy scanning (prompt injection, harmful content, PII, system-prompt enforcement) plus RAG context grounding.",
+        "name": "XecGuard"
+      },
+      "zscaler": {
+        "desc": "Enterprise AI security from Zscaler for monitoring and protecting AI/ML workloads.",
+        "name": "Zscaler AI Guard"
+      }
+    },
+    "guardrailGardenPresets": {
+      "googleModelArmorName": "Google Cloud Model Armor",
+      "guardrailsAiName": "Guardrails AI",
+      "openaiModerationName": "OpenAI Moderation",
+      "straikerName": "Straiker Guardrail"
+    },
+    "guardrailMode": {
+      "tagBased": "(tag-based)"
     }
   },
   "keyValueInput": {
@@ -3357,7 +3960,8 @@
       "displayName": "Display Name",
       "displayNameHelp": "Override how this tool's name appears to users. Leave blank to use original.",
       "noDescription": "No description",
-      "descriptionHelp": "Override the tool description shown to users. Leave blank to use original."
+      "descriptionHelp": "Override the tool description shown to users. Leave blank to use original.",
+      "noToolsAvailableForConfig": "No tools available"
     },
     "mcpTools": {
       "title": "MCP Tools",
@@ -3492,7 +4096,11 @@
       "clickToRecheck": "Click to recheck",
       "byokCredential": "BYOK credential",
       "connected": "Connected",
-      "connectButton": "Connect"
+      "connectButton": "Connect",
+      "logoAltWithName": "{{name}} logo",
+      "oauthFlowNotSet": "OAuth flow not set",
+      "oauthFlowNotSetTooltip": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend.",
+      "missingUserFields": "{{count}} user fields missing"
     },
     "mcpStandardsSettings": {
       "groupDocumentation": "Documentation",
@@ -3552,7 +4160,10 @@
       "approvedSuccess": "MCP server \"{{name}}\" approved",
       "failedToApprove": "Failed to approve MCP server",
       "rejectedSuccess": "MCP server \"{{name}}\" rejected",
-      "failedToReject": "Failed to reject MCP server"
+      "failedToReject": "Failed to reject MCP server",
+      "approveConfirmBody": "This will activate the server. The submitting user will see it in their MCP Servers list once approved.",
+      "savingRules": "Saving…",
+      "searchServersPlaceholder": "Search MCP servers..."
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "Input for this tool",
@@ -3596,7 +4207,7 @@
       "toolsetDeleted": "Toolset deleted",
       "pageTitle": "MCP Toolsets",
       "pageSubtitle": "Curated collections of tools from one or more MCP servers. Assign toolsets to keys and teams via the MCP permissions dropdown.",
-      "noToolsets": "No toolsets yet. Click 'New Toolset' to create one.",
+      "noToolsets": "No toolsets yet",
       "loadingToolsets": "Loading toolsets...",
       "deleteToolsetTitle": "Delete Toolset",
       "deleteToolsetConfirm": "Are you sure you want to delete this toolset? Keys and teams using it will lose access to the scoped tools.",
@@ -3605,7 +4216,8 @@
       "howToolsetsWorkPath": "API Keys → Edit Key → MCP Servers",
       "howToolsetsWorkDesc2": ", then point your MCP client at the toolset URL. The client only sees the tools you picked.",
       "configLabel": "Claude Code / Cursor config",
-      "toolsetNamePlaceholder": "e.g. github-linear-tools"
+      "toolsetNamePlaceholder": "e.g. github-linear-tools",
+      "noToolsetsHint": "Create a toolset to give keys and teams a curated set of MCP tools."
     },
     "oAuthFormFields": {
       "leaveBlankToKeep": "leave blank to keep existing",
@@ -3833,7 +4445,8 @@
       "connectionFailedAlert": "Connection Failed",
       "stackTrace": "Stack Trace",
       "connectionSuccessfulBang": "Connection successful!",
-      "noToolsFound": "No tools found for this MCP server"
+      "noToolsFound": "No tools found for this MCP server",
+      "toolPreviewUnavailable": "Tool preview unavailable"
     },
     "mcpDiscovery": {
       "title": "Add MCP Server",
@@ -3867,7 +4480,8 @@
       "costSummary": "Cost Summary:",
       "defaultCostRow": "• Default cost: ${{cost}} per query",
       "toolsWithCustomPricing_one": "• {{count}} tool with custom pricing",
-      "toolsWithCustomPricing_other": "• {{count}} tools with custom pricing"
+      "toolsWithCustomPricing_other": "• {{count}} tools with custom pricing",
+      "toolsWithCustomPricing": "• {{count}} tool(s) with custom pricing"
     },
     "toolTestPanel": {
       "testToolTitle": "Test Tool:",
@@ -4009,7 +4623,10 @@
       "awsSessionNameLabel": "AWS Session Name",
       "awsSessionNameTooltip": "Optional. Session name for the AssumeRole call — appears in CloudTrail logs. Auto-generated if omitted.",
       "leaveBlankPlaceholder": "Leave blank to keep existing",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "displayNameInvalid": "Only letters, digits, underscores, and hyphens are allowed (no spaces).",
+      "serverUrlInvalid": "Please enter a valid URL (e.g., http://service-name.domain:1234/path or https://example.com)",
+      "serverNameInvalid": "Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead."
     },
     "mcpServerView": {
       "backToAllServers": "Back to All Servers",
@@ -4070,7 +4687,19 @@
       "loadingServers": "Loading MCP servers...",
       "emptyNoServers": "No MCP servers configured. Click '+ Add New MCP Server' to get started.",
       "emptyNoMatch": "No servers match the current filters or search.",
-      "deleteSuccess": "Deleted MCP Server successfully"
+      "deleteSuccess": "Deleted MCP Server successfully",
+      "importFromJson": "Import from JSON",
+      "tabToolSearch": "Tool Search",
+      "copyServerId": "Copy server id",
+      "showFullUrl": "Show full URL",
+      "hideFullUrl": "Hide full URL"
+    },
+    "mCPToolsetTableColumns": {
+      "openToolsetActions": "Open toolset actions",
+      "copyEndpointUrl": "Copy endpoint URL",
+      "copyToolsetId": "Copy toolset ID",
+      "endpointUrlCopied": "Endpoint URL copied",
+      "toolsetIdCopied": "Toolset ID copied"
     }
   },
   "playground": {

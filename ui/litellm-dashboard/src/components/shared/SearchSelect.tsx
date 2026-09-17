@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Combobox,
   ComboboxContent,
@@ -42,14 +43,17 @@ export function SearchSelect({
   options,
   value,
   onValueChange,
-  placeholder = "Select…",
-  emptyText = "No results",
+  placeholder,
+  emptyText,
   disabled = false,
   className,
   inputId,
   allowClear = true,
   "aria-label": ariaLabel,
 }: SearchSelectProps) {
+  const { t } = useTranslation();
+  const resolvedPlaceholder = placeholder ?? t("shared.searchSelect.selectPlaceholder", { defaultValue: "Select…" });
+  const resolvedEmptyText = emptyText ?? t("shared.searchSelect.noResults", { defaultValue: "No results" });
   const selected =
     value == null || value === "" ? null : options.find((option) => option.value === value) ?? { label: value, value };
   const items =
@@ -68,12 +72,12 @@ export function SearchSelect({
       <ComboboxInput
         id={inputId}
         aria-label={ariaLabel}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         showClear={allowClear && value != null && value !== ""}
         className={`h-8 w-full text-sm ${className ?? ""}`}
       />
       <ComboboxContent side="bottom" collisionAvoidance={{ side: "shift", align: "shift", fallbackAxisSide: "none" }}>
-        <ComboboxEmpty>{emptyText}</ComboboxEmpty>
+        <ComboboxEmpty>{resolvedEmptyText}</ComboboxEmpty>
         <ComboboxList>
           {(item: SearchSelectOption) => (
             <ComboboxItem key={item.value} value={item}>

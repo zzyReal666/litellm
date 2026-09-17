@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { ToolbarSeparator } from "./ToolbarSeparator";
+import { useTranslation } from "react-i18next";
 
 interface EmbeddedTabsSlots {
   leadingControls: React.ReactNode;
@@ -19,6 +20,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({ title, subtitle, icon, primaryAction, tabs, utilities }: PageHeaderProps) {
+  const { t } = useTranslation();
   const leadingControls =
     primaryAction == null ? null : (
       <div className="flex h-9 items-center">
@@ -46,7 +48,11 @@ export function PageHeader({ title, subtitle, icon, primaryAction, tabs, utiliti
         <div className="mt-5">{tabs({ leadingControls, utilities: utilityControls })}</div>
       ) : (
         hasControlRow && (
-          <div className="mt-5 flex h-9 items-center" role="group" aria-label="Page controls">
+          <div
+            className="mt-5 flex h-9 items-center"
+            role="group"
+            aria-label={t("shared.pageHeader.controls", { defaultValue: "Page controls" })}
+          >
             {leadingControls}
             {tabs}
             {utilityControls != null && <div className="ml-auto">{utilityControls}</div>}
