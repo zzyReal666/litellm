@@ -1,8 +1,10 @@
 import { isAdminRole } from "@/utils/roles";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod/v4";
 import DeleteResourceModal from "@/components/common_components/DeleteResourceModal";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 import {
   deleteSearchTool,
@@ -33,8 +35,18 @@ interface SearchToolsProps {
 }
 
 const editSearchToolShape = {
-  search_tool_name: z.string().min(1, "Please enter a search tool name"),
-  search_provider: z.string().min(1, "Please select a search provider"),
+  search_tool_name: z.string().min(1, {
+    error: () =>
+      i18n.t("searchTools.createSearchTools.searchToolNameRequired", {
+        defaultValue: "Please enter a search tool name",
+      }),
+  }),
+  search_provider: z.string().min(1, {
+    error: () =>
+      i18n.t("searchTools.createSearchTools.searchProviderRequired", {
+        defaultValue: "Please select a search provider",
+      }),
+  }),
   api_key: z.string().nullish(),
   description: z.string().nullish(),
 };
@@ -46,6 +58,7 @@ type EditSearchToolFormValues = z.infer<typeof editSearchToolSchema>;
 const EMPTY_EDIT_VALUES: EditSearchToolFormValues = { search_tool_name: "", search_provider: "" };
 
 const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID }) => {
+  const { t } = useTranslation();
   const {
     data: searchTools,
     isLoading: isLoadingTools,
@@ -112,13 +125,13 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
     setIsDeleting(true);
     try {
       await deleteSearchTool(accessToken, toolIdToDelete);
-      toast.success("Deleted search tool successfully");
+      toast.success(t("searchTools.searchTools.deleteSuccess", { defaultValue: "Deleted search tool successfully" }));
       setIsDeleteModalOpen(false);
       setToolToDelete(null);
       refetch();
     } catch (error) {
       console.error("Error deleting the search tool:", error);
-      toast.error("Failed to delete search tool");
+      toast.error(t("searchTools.searchTools.deleteFailed", { defaultValue: "Failed to delete search tool" }));
     } finally {
       setIsDeleting(false);
     }
@@ -145,19 +158,19 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
 
       try {
         await updateSearchTool(accessToken, selectedToolId, buildSearchToolPayload(values));
-        toast.success("Search tool updated successfully");
+        toast.success(t("searchTools.searchTools.updateSuccess", { defaultValue: "Search tool updated successfully" }));
         setEditModalVisible(false);
         form.reset(EMPTY_EDIT_VALUES);
         setSelectedToolId(null);
         refetch();
       } catch (error) {
         console.error("Failed to update search tool:", error);
-        toast.error("Failed to update search tool");
+        toast.error(t("searchTools.searchTools.updateFailed", { defaultValue: "Failed to update search tool" }));
       }
     },
     (errors) => {
       console.error("Failed to update search tool:", errors);
-      toast.error("Failed to update search tool");
+      toast.error(t("searchTools.searchTools.updateFailed", { defaultValue: "Failed to update search tool" }));
     },
   );
 
@@ -169,11 +182,27 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
   const renderEditForm = () => (
     <form onSubmit={(event) => event.preventDefault()}>
       <FieldGroup>
-        <FormField control={form.control} name="search_tool_name" label="Search Tool Name">
-          {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g., my-perplexity-search" />}
+        <FormField
+          control={form.control}
+          name="search_tool_name"
+          label={t("searchTools.searchTools.editSearchToolNameLabel", { defaultValue: "Search Tool Name" })}
+        >
+          {({ ref, ...field }) => (
+            <Input
+              {...field}
+              ref={ref}
+              placeholder={t("searchTools.searchTools.editSearchToolNamePlaceholder", {
+                defaultValue: "e.g., my-perplexity-search",
+              })}
+            />
+          )}
         </FormField>
 
-        <FormField control={form.control} name="search_provider" label="Search Provider">
+        <FormField
+          control={form.control}
+          name="search_provider"
+          label={t("searchTools.searchTools.editSearchProviderLabel", { defaultValue: "Search Provider" })}
+        >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
               items={availableProviders.map((provider) => ({
@@ -184,7 +213,11 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
               onValueChange={(provider: string | null) => onChange(provider ?? "")}
             >
               <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-                <SelectValue placeholder="Select a search provider" />
+                <SelectValue
+                  placeholder={t("searchTools.createSearchTools.searchProviderPlaceholder", {
+                    defaultValue: "Select a search provider",
+                  })}
+                />
                 {isLoadingProviders && <UiLoadingSpinner className="size-4" />}
               </SelectTrigger>
               <SelectContent>
@@ -198,15 +231,39 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
           )}
         </FormField>
 
-        <FormField control={form.control} name="api_key" label="API Key" description="API key for the search provider">
+        <FormField
+          control={form.control}
+          name="api_key"
+          label={t("searchTools.searchTools.editApiKeyLabel", { defaultValue: "API Key" })}
+          description={t("searchTools.searchTools.editApiKeyExtra", {
+            defaultValue: "API key for the search provider",
+          })}
+        >
           {({ ref, value, ...field }) => (
-            <PasswordInput {...field} ref={ref} value={value ?? ""} placeholder="Enter API key" />
+            <PasswordInput
+              {...field}
+              ref={ref}
+              value={value ?? ""}
+              placeholder={t("searchTools.searchTools.editApiKeyPlaceholder", { defaultValue: "Enter API key" })}
+            />
           )}
         </FormField>
 
-        <FormField control={form.control} name="description" label="Description">
+        <FormField
+          control={form.control}
+          name="description"
+          label={t("common.description", { defaultValue: "Description" })}
+        >
           {({ ref, value, ...field }) => (
-            <Textarea {...field} ref={ref} value={value ?? ""} rows={3} placeholder="Description of this search tool" />
+            <Textarea
+              {...field}
+              ref={ref}
+              value={value ?? ""}
+              rows={3}
+              placeholder={t("searchTools.searchTools.editDescriptionPlaceholder", {
+                defaultValue: "Description of this search tool",
+              })}
+            />
           )}
         </FormField>
       </FieldGroup>
@@ -214,7 +271,13 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
   );
 
   if (!accessToken || !userRole || !userID) {
-    return <div className="p-6 text-center text-muted-foreground">Missing required authentication parameters.</div>;
+    return (
+      <div className="p-6 text-center text-muted-foreground">
+        {t("searchTools.searchTools.missingAuthParams", {
+          defaultValue: "Missing required authentication parameters.",
+        })}
+      </div>
+    );
   }
 
   const ToolsTab = () =>
@@ -255,19 +318,30 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
     <div className="w-full h-full p-6">
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Search Tool"
-        message="Are you sure you want to delete this search tool? This action cannot be undone."
-        resourceInformationTitle="Search Tool Information"
+        title={t("searchTools.searchTools.deleteModalTitle", { defaultValue: "Delete Search Tool" })}
+        message={t("searchTools.searchTools.deleteModalMessage", {
+          defaultValue: "Are you sure you want to delete this search tool? This action cannot be undone.",
+        })}
+        resourceInformationTitle={t("searchTools.searchTools.deleteResourceInfoTitle", {
+          defaultValue: "Search Tool Information",
+        })}
         resourceInformation={
           toolToDelete
             ? [
-                { label: "Name", value: toolToDelete.search_tool_name },
-                { label: "ID", value: toolToDelete.search_tool_id, code: true },
+                { label: t("common.name", { defaultValue: "Name" }), value: toolToDelete.search_tool_name },
                 {
-                  label: "Provider",
+                  label: t("guardrails.labelId", { defaultValue: "ID" }),
+                  value: toolToDelete.search_tool_id,
+                  code: true,
+                },
+                {
+                  label: t("searchTools.searchTools.deleteResourceProviderLabel", { defaultValue: "Provider" }),
                   value: providerInfo?.ui_friendly_name || toolToDelete.litellm_params.search_provider,
                 },
-                { label: "Description", value: toolToDelete.search_tool_info?.description || "-" },
+                {
+                  label: t("common.description", { defaultValue: "Description" }),
+                  value: toolToDelete.search_tool_info?.description || "-",
+                },
               ]
             : []
         }
@@ -296,7 +370,9 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
       >
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Edit Search Tool</DialogTitle>
+            <DialogTitle>
+              {t("searchTools.searchTools.editModalTitle", { defaultValue: "Edit Search Tool" })}
+            </DialogTitle>
           </DialogHeader>
           {renderEditForm()}
           <DialogFooter>
@@ -308,18 +384,22 @@ const SearchTools: React.FC<SearchToolsProps> = ({ accessToken, userRole, userID
                 setSelectedToolId(null);
               }}
             >
-              Cancel
+              {t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
-            <Button onClick={handleEditSubmit}>OK</Button>
+            <Button onClick={handleEditSubmit}>{t("common.ok", { defaultValue: "OK" })}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <h1 className="text-lg font-semibold text-foreground">Search Tools</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Configure and manage your search providers</p>
+      <h1 className="text-lg font-semibold text-foreground">
+        {t("searchTools.searchTools.pageTitle", { defaultValue: "Search Tools" })}
+      </h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {t("searchTools.searchTools.pageSubtitle", { defaultValue: "Configure and manage your search providers" })}
+      </p>
       {isAdminRole(userRole) && (
         <Button className="mt-4 mb-4" variant="outline" onClick={() => setCreateModalVisible(true)}>
-          + Add New Search Tool
+          {t("searchTools.searchTools.addNewBtn", { defaultValue: "+ Add New Search Tool" })}
         </Button>
       )}
 

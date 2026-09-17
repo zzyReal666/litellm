@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { TFunction } from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell, StatusBadge } from "@/components/shared/table_cells";
@@ -17,9 +19,6 @@ import { cn } from "@/lib/cva.config";
 
 import { AvailableSearchProvider, SearchTool } from "./types";
 
-const CONFIG_EDIT_HINT = "Config search tools cannot be edited on the dashboard. Please edit the config file.";
-const CONFIG_DELETE_HINT = "Config search tools cannot be deleted on the dashboard. Please edit the config file.";
-
 export const searchToolKey = (tool: SearchTool): string => tool.search_tool_id || tool.search_tool_name;
 
 interface SearchToolRowActionsProps {
@@ -29,13 +28,16 @@ interface SearchToolRowActionsProps {
 }
 
 function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsProps) {
+  const { t } = useTranslation();
   const isFromConfig = tool.is_from_config ?? false;
   const toolId = tool.search_tool_id;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open search tool actions"
+        aria-label={t("searchTools.searchToolTableColumns.openActions", {
+          defaultValue: "Open search tool actions",
+        })}
         data-testid={`search-tool-actions-${searchToolKey(tool)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -45,22 +47,34 @@ function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsPr
         <DropdownMenuItem
           disabled={isFromConfig || !toolId}
           data-testid="search-tool-action-edit"
-          title={isFromConfig ? CONFIG_EDIT_HINT : undefined}
+          title={
+            isFromConfig
+              ? t("searchTools.searchToolTableColumns.configEditHint", {
+                  defaultValue: "Config search tools cannot be edited on the dashboard. Please edit the config file.",
+                })
+              : undefined
+          }
           onClick={() => toolId && onEdit(toolId)}
         >
           <Pencil />
-          Edit search tool
+          {t("searchTools.searchToolTableColumns.editTool", { defaultValue: "Edit search tool" })}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           disabled={isFromConfig || !toolId}
           data-testid="search-tool-action-delete"
-          title={isFromConfig ? CONFIG_DELETE_HINT : undefined}
+          title={
+            isFromConfig
+              ? t("searchTools.searchToolTableColumns.configDeleteHint", {
+                  defaultValue: "Config search tools cannot be deleted on the dashboard. Please edit the config file.",
+                })
+              : undefined
+          }
           onClick={() => toolId && onDelete(toolId)}
         >
           <Trash2 />
-          Delete search tool
+          {t("searchTools.searchToolTableColumns.deleteTool", { defaultValue: "Delete search tool" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -72,6 +86,7 @@ interface SearchToolTableColumnsDeps {
   onView: (searchToolId: string) => void;
   onEdit: (searchToolId: string) => void;
   onDelete: (searchToolId: string) => void;
+  t: TFunction;
 }
 
 export const getSearchToolTableColumns = ({
@@ -79,12 +94,18 @@ export const getSearchToolTableColumns = ({
   onView,
   onEdit,
   onDelete,
+  t,
 }: SearchToolTableColumnsDeps): ColumnDef<SearchTool>[] => [
   {
     id: "search_tool_id",
     accessorKey: "search_tool_id",
-    meta: { title: "Search Tool ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Search Tool ID" />,
+    meta: { title: t("searchTools.searchToolTableColumns.colSearchToolId", { defaultValue: "Search Tool ID" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("searchTools.searchToolTableColumns.colSearchToolId", { defaultValue: "Search Tool ID" })}
+      />
+    ),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -101,8 +122,8 @@ export const getSearchToolTableColumns = ({
   {
     id: "search_tool_name",
     accessorKey: "search_tool_name",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: t("common.name", { defaultValue: "Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("common.name", { defaultValue: "Name" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -113,8 +134,8 @@ export const getSearchToolTableColumns = ({
   },
   {
     id: "provider",
-    meta: { title: "Provider" },
-    header: "Provider",
+    meta: { title: t("guardrails.guardrailGardenDetail.propertyProvider", { defaultValue: "Provider" }) },
+    header: t("guardrails.guardrailGardenDetail.propertyProvider", { defaultValue: "Provider" }),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -126,8 +147,10 @@ export const getSearchToolTableColumns = ({
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("common.createdAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("common.createdAt", { defaultValue: "Created At" })} />
+    ),
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -135,27 +158,38 @@ export const getSearchToolTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: { title: t("common.updatedAt", { defaultValue: "Updated At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("common.updatedAt", { defaultValue: "Updated At" })} />
+    ),
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.updated_at} precision="date" />,
   },
   {
     id: "source",
-    meta: { title: "Source", skeleton: "badge" },
-    header: "Source",
+    meta: { title: t("molecules.modelsColumns.source", { defaultValue: "Source" }), skeleton: "badge" },
+    header: t("molecules.modelsColumns.source", { defaultValue: "Source" }),
     size: 100,
     enableSorting: false,
     cell: ({ row }) => {
       const isFromConfig = row.original.is_from_config ?? false;
-      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? "Config" : "DB"} />;
+      return (
+        <StatusBadge
+          tone={isFromConfig ? "neutral" : "info"}
+          label={
+            isFromConfig
+              ? t("searchTools.searchToolTableColumns.sourceConfig", { defaultValue: "Config" })
+              : t("searchTools.searchToolTableColumns.sourceDb", { defaultValue: "DB" })
+          }
+        />
+      );
     },
   },
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,
