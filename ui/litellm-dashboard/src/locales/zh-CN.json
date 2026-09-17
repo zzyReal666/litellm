@@ -517,10 +517,6 @@
       "addMember": "添加成员",
       "existingUsersNotice": "搜索仅从已存在的用户中选择。如需添加新用户，请先让代理管理员创建账号。"
     },
-    "userDropdown": {
-      "placeholder": "按邮箱搜索用户…",
-      "loading": "正在加载用户…"
-    },
     "budgetDurationDropdown": {
       "hourly": "每小时",
       "neverResets": "永不重置"
@@ -536,6 +532,10 @@
     "teamMultiSelect": {
       "clearAll": "清除所有团队",
       "placeholder": "按别名搜索团队..."
+    },
+    "userDropdown": {
+      "loading": "正在加载用户…",
+      "placeholder": "按邮箱搜索用户…"
     }
   },
   "adminPanel": {
@@ -1255,7 +1255,8 @@
     "cacheHitsVsApiRequests": "缓存命中 vs API 请求",
     "cachedVsGeneratedTokens": "已缓存 Token vs 生成 Token",
     "runningHealthCheck": "正在运行缓存健康检查...",
-    "unknownError": "发生未知错误"
+    "unknownError": "发生未知错误",
+    "cachedCompletionTokens": "已缓存完成 Token"
   },
   "cacheHealth": {
     "runHealthCheck": "运行健康检查",
@@ -2916,7 +2917,8 @@
     "createdAt": "创建时间",
     "updatedAt": "更新时间",
     "comingSoon": "即将推出",
-    "copyField": "复制{{field}}"
+    "copyField": "复制{{field}}",
+    "removing": "正在移除…"
   },
   "publicModelHub": {
     "copiedToClipboard": "已复制到剪贴板！",
@@ -3364,7 +3366,10 @@
     "resetBudgetLabel": "重置预算",
     "metadataLabel": "元数据",
     "metadataPlaceholder": "以 JSON 格式输入元数据",
-    "saveChangesButton": "保存更改"
+    "saveChangesButton": "保存更改",
+    "mcpServersLabel": "MCP 服务器 / 访问组",
+    "mcpServersTooltip": "限定此用户可访问的 MCP 服务器、访问组和工具。该用户持有的每个密钥都受此范围限制。",
+    "modelMaxBudgetHint": "限制此用户在单个模型上的花费，每个模型有独立的重置周期。适用于该用户持有的所有密钥。"
   },
   "viewUserSpend": {
     "totalSpend": "总花费",
@@ -3425,7 +3430,13 @@
       "noKeys": "无密钥",
       "editUserDetails": "编辑用户详情",
       "deleteUser": "删除用户",
-      "resetPassword": "重置密码"
+      "resetPassword": "重置密码",
+      "aboutSsoId": "关于 SSO ID",
+      "editUserAction": "编辑用户",
+      "key": "{{count}} 个密钥",
+      "openUserActions": "打开用户操作菜单",
+      "resetPasswordAction": "重置密码",
+      "selectUser": "选择 {{user}}"
     },
     "table": {
       "searchByEmail": "按邮箱搜索...",
@@ -3435,7 +3446,16 @@
       "selectTeam": "选择团队",
       "showing": "显示第 {{from}} - {{to}} 条，共 {{total}} 条",
       "loadingUsers": "加载用户中...",
-      "noUsersFound": "未找到用户"
+      "noUsersFound": "未找到用户",
+      "emptyHint": "请尝试调整搜索条件或筛选。",
+      "filterDrawerDescription": "缩小用户范围",
+      "loadingUsersUnicode": "正在加载用户…",
+      "noRolesFound": "未找到角色",
+      "rolePlaceholder": "选择角色…",
+      "searchPlaceholder": "按邮箱或 ID 搜索…",
+      "ssoIdPlaceholder": "输入 SSO ID…",
+      "teamPlaceholder": "选择团队…",
+      "userIdPlaceholder": "输入用户 ID…"
     },
     "userInfoView": {
       "backToUsers": "返回用户列表",
@@ -3481,8 +3501,12 @@
       "roleAdminDesc": "- 可创建团队密钥、添加成员并管理设置",
       "adding": "添加中...",
       "addToTeam": "加入团队",
-      "userFallbackTitle": "用户"
-    }
+      "userFallbackTitle": "用户",
+      "mcpPermissionsLabel": "MCP 权限",
+      "removeUserFromTeam": "移除 {{team}}",
+      "unknown": "未知"
+    },
+    "loadingDefaultUserSettings": "正在加载默认用户设置"
   },
   "viewLogs": {
     "compliancePanel": {
@@ -3492,7 +3516,9 @@
       "unavailable": "不可用",
       "regulatoryCompliance": "监管合规",
       "euAiActCheckFailed": "检查 EU AI Act 合规性失败",
-      "gdprCheckFailed": "检查 GDPR 合规性失败"
+      "gdprCheckFailed": "检查 GDPR 合规性失败",
+      "euAiAct": "EU AI Act 合规检查",
+      "gdpr": "GDPR 合规检查"
     },
     "contentFilterDetails": {
       "errorTitle": "错误",
@@ -3521,14 +3547,19 @@
       "keywords_one": "{{count}} 个关键词",
       "keywords_other": "{{count}} 个关键词",
       "categories_one": "{{count}} 个分类",
-      "categories_other": "{{count}} 个分类"
+      "categories_other": "{{count}} 个分类",
+      "blocked": "{{count}} 个已屏蔽",
+      "categories": "{{count}} 个分类",
+      "keywords": "{{count}} 个关键词",
+      "masked": "{{count}} 个已脱敏",
+      "patterns": "{{count}} 个模式"
     },
     "guardrailViewer": {
       "requestLifecycle": "请求生命周期",
       "evaluationDetails": "评估详情",
-      "requestReceived": "收到请求",
+      "requestReceived": "已收到请求",
       "llmCall": "LLM 调用",
-      "responseReturned": "返回响应",
+      "responseReturned": "已返回响应",
       "preCallGuardrail": "前置护栏：{{name}}",
       "duringCallGuardrail": "调用中护栏：{{name}}",
       "postCallGuardrail": "后置护栏：{{name}}",
@@ -3538,12 +3569,12 @@
       "matchDetails": "匹配详情（{{count}}）",
       "matchDetailsHeader": {
         "type": "类型",
-        "method": "方法",
-        "action": "操作",
+        "method": "方式",
+        "action": "动作",
         "detail": "详情"
       },
       "classification": "分类",
-      "classificationCategory": "分类：",
+      "classificationCategory": "类别：",
       "classificationReference": "引用：",
       "classificationConfidence": "置信度：",
       "classificationReason": "原因：",
@@ -3556,7 +3587,12 @@
       "exportComplianceLog": "导出合规日志",
       "riskScore": "风险 {{score}}/10",
       "riskScoreTooltip": "风险评分：{{score}}/10",
-      "confidencePercent": "{{percent}}% 置信度"
+      "confidencePercent": "{{percent}}% 置信度",
+      "estimatedGuardrailCost": "预估护栏花费（仅作报告，不计入花费或预算）",
+      "flagged": "已标记",
+      "flaggedCount": "{{count}} 个已标记",
+      "guardrailCost": "护栏花费",
+      "guardrailsEvaluated": "已评估 {{count}} 个护栏"
     },
     "presidioDetectedEntities": {
       "detectedEntities": "检测到的实体（{{count}}）",
@@ -3578,7 +3614,8 @@
       "copiedRequestId": "已复制！",
       "escToClose": "按 ESC 关闭",
       "envTag": "环境：{{env}}",
-      "providerAlt": "提供商"
+      "providerAlt": "提供商",
+      "envLabel": "环境：{{environment}}"
     },
     "historyTree": {
       "history_one": "历史（{{count}} 条消息）",
@@ -3627,7 +3664,26 @@
       "guardrailsEvaluated_one": "已评估 {{count}} 个护栏",
       "guardrailsEvaluated_other": "已评估 {{count}} 个护栏",
       "errorCode": "错误代码：",
-      "errorMessage": "消息："
+      "errorMessage": "消息：",
+      "batchResults": "批量结果",
+      "cacheHitLabel": "命中",
+      "cacheKeyTooltip": "LiteLLM 为该请求在响应缓存中计算出的键。缓存键相同的请求共用同一份缓存响应；键不同则表示请求内容未匹配到任何缓存条目。",
+      "cacheMissLabel": "未命中",
+      "docs": "文档",
+      "guardrailsEvaluated": "已评估 {{count}} 个护栏",
+      "labelBatchId": "批量 ID",
+      "labelCacheKey": "缓存键",
+      "labelFailedRequests": "失败请求数",
+      "labelModels": "模型",
+      "labelPromptCacheCreationTokens": "提示词缓存写入令牌",
+      "labelPromptCacheReadTokens": "提示词缓存读取令牌",
+      "labelReasoningTokens": "推理令牌",
+      "labelResponseCache": "响应缓存",
+      "labelSuccessfulRequests": "成功请求数",
+      "masked": "{{count}} 个已脱敏",
+      "promptCacheCreationTooltip": "写入 LLM 提供商提示词缓存、供后续请求复用的输入令牌。",
+      "promptCacheReadTooltip": "从 LLM 提供商的提示词缓存（例如 Anthropic / OpenAI）读取的输入令牌，按折扣价格计费。由提供商上报。",
+      "responseCacheTooltip": "该请求是否由 LiteLLM 的响应缓存（例如 Redis / 内存缓存）返回，从而完全跳过 LLM 提供商调用。这与提供商的提示词缓存无关，此处显示未命中并不代表提示词缓存失败。"
     },
     "logDetailsDrawer": {
       "collapseTraceSidebar": "收起追踪侧边栏",
@@ -3638,7 +3694,9 @@
       "labelReqCount": "{{count}} 个请求",
       "labelLlm": " LLM",
       "labelAgent": " Agent",
-      "labelMcp": " MCP"
+      "labelMcp": " MCP",
+      "sortDuration": "耗时",
+      "sortStartTime": "开始时间"
     },
     "outputCard": {
       "outputCopied": "输出已复制",
@@ -3662,7 +3720,11 @@
       "turnCount_other": "{{count}} 轮",
       "inputTokenBreakdown": "输入 Token 明细",
       "outputTokenBreakdown": "输出 Token 明细",
-      "tokenBreakdownSuffix": "Token 分布"
+      "tokenBreakdownSuffix": "Token 分布",
+      "tokenBreakdownInput": "输入",
+      "tokenBreakdownOutput": "输出",
+      "tokenBreakdownTitle": "{{label}} 令牌明细",
+      "turnCount": "{{count}} 轮"
     },
     "sectionHeader": {
       "labelInput": "输入",
@@ -3992,7 +4054,13 @@
       "textCoverage": "文本 {{guarded}}/{{total}}",
       "imagesCoverage": "图片 {{guarded}}/{{total}}",
       "automatedReasoningFindings": "自动推理发现",
-      "rawResponse": "原始 Bedrock 护栏响应"
+      "rawResponse": "原始 Bedrock 护栏响应",
+      "policyAutomatedReasoning": "自动推理",
+      "policyContent": "内容",
+      "policyContextualGrounding": "上下文接地",
+      "policySensitiveInfo": "敏感信息",
+      "policyTopic": "主题",
+      "policyWord": "词语"
     },
     "prettyMessagesUtils": {
       "roleSystem": "系统",
@@ -4035,6 +4103,74 @@
       "batchSucceeded": "{{successful}}/{{total}} 成功",
       "cacheHitCount": "{{count}} 次缓存命中",
       "sessionTotal": "会话总计"
+    },
+    "classifierAuditView": {
+      "inputHint": "提供商请求负载。缓存调用或已关闭消息记录时可能没有抓取内容。",
+      "inputTitle": "分类器输入",
+      "notCaptured": "未抓取或消息记录已关闭",
+      "originatingHint": "仅用于对比。该来源请求未附加到分类器输入中。",
+      "originatingTitle": "原始请求，凭证已脱敏",
+      "responseHint": "分类器返回的判定结果及说明。后续路由规则可能会改变档位。",
+      "responseTitle": "分类器响应",
+      "truncatedNotice": "此处存储的副本已截断，无法从配置的日志存储中获取完整负载。"
+    },
+    "inputCard": {
+      "inputCopied": "输入已复制"
+    },
+    "routingDecisionCard": {
+      "causeBandit": "自适应 bandit",
+      "causeClassifierFallback": "兜底档位，LLM 分类器失败",
+      "causeClassifierPlugin": "自定义分类器插件",
+      "causeDefaultFallback": "默认模型，无匹配路由",
+      "causeDefaultModelFallback": "默认模型，LLM 分类器失败",
+      "causeHeuristicFirstShortCircuit": "启发式评分器，已跳过分类器",
+      "causeHeuristicScorer": "启发式评分器",
+      "causeHeuristicV2": "启发式 v2",
+      "causeHybridShortCircuit": "启发式评分器，得分明显超出所有边界",
+      "causeModalityEscalation": "因图片输入而升级",
+      "causeModalityPinOverride": "因图片输入覆盖会话固定",
+      "causeQualityTier": "质量档位映射",
+      "causeSemanticKeywordMatch": "语义关键词匹配",
+      "causeSessionAffinityEscalation": "由会话固定升级",
+      "causeSessionAffinityPin": "已固定到会话",
+      "causeUserTurnContinuation": "续接轮次，已跳过分类器",
+      "classifier": "LLM 分类器",
+      "classifierWithModel": "LLM 分类器（{{model}}）",
+      "escalatedWithKeyword": "是，关键词 \"{{keyword}}\"",
+      "escalatedYes": "是",
+      "housekeepingKeyword": "客户端维护调用：\"{{keyword}}\"",
+      "housekeepingNoKeyword": "客户端维护调用，已跳过分类器",
+      "keywordMatch": "关键词匹配",
+      "keywordMatchWithKeyword": "关键词匹配：\"{{keyword}}\"",
+      "labelDecidedBy": "决策来源",
+      "labelEscalated": "是否升级",
+      "labelRequestType": "请求类型",
+      "labelRoutedTo": "路由至",
+      "labelScore": "得分",
+      "labelSignals": "信号",
+      "labelTier": "档位",
+      "planModeFloor": "计划模式下限",
+      "planModeFloorKeyword": "计划模式下限：\"{{keyword}}\"",
+      "planModeFloorTool": "计划模式下限（exit_plan_mode 工具）",
+      "rangeAtOrAbove": "达到或高于 {{bound}}",
+      "rangeBelow": "低于 {{bound}}",
+      "rangeBetween": "{{lower}} 至 {{upper}}",
+      "reasoningOverride": "启发式 {{tier}} 覆盖（有 2 个及以上推理标记，得分至少 {{stated}}）",
+      "requestedNoKeyword": "已请求升级；已处于最高档位",
+      "requestedWithKeyword": "通过 \"{{keyword}}\" 请求升级；已处于最高档位",
+      "routerTypeAdaptive": "自适应路由",
+      "routerTypeComplexity": "自动路由 v2",
+      "routerTypeQuality": "质量路由",
+      "simpleToMediumBoundary": "简单到中等档位的边界",
+      "tierNameCOMPLEX": "复杂",
+      "tierNameMEDIUM": "中等",
+      "tierNameREASONING": "推理",
+      "tierNameSIMPLE": "简单",
+      "title": "路由",
+      "unknownCause": "未知"
+    },
+    "typeBadges": {
+      "batch": "批量"
     }
   },
   "userAgentActivity": {
@@ -4892,7 +5028,8 @@
       "pdfLabel": "PDF",
       "imageLabel": "图片",
       "errorFetchingResponse": "获取响应失败：{{errorMessage}}",
-      "provideVirtualKey": "请提供虚拟密钥或选择当前 UI 会话"
+      "provideVirtualKey": "请提供虚拟密钥或选择当前 UI 会话",
+      "removeAttachment": "移除附件"
     },
     "comparisonPanel": {
       "syncSettingsAcrossModels": "跨模型同步设置",
@@ -5007,7 +5144,8 @@
       "verdictCorrect": "处理正确",
       "verdictGap": "缺口 — 本应被拦截",
       "verdictFalsePositive": "误报 — 被错误拦截",
-      "llmResponse": "模型响应："
+      "llmResponse": "模型响应：",
+      "testConfigurationDescGuardrailsOnly": "选择要测试的安全护栏。"
     },
     "a2AMetrics": {
       "header": "A2A 元数据",
@@ -5032,7 +5170,10 @@
       "temperature": "Temperature",
       "temperatureTooltip": "控制随机性。值越低输出越确定，值越高输出越有创意。",
       "maxTokens": "最大 Token 数",
-      "maxTokensTooltip": "响应中生成的最大 Token 数。"
+      "maxTokensTooltip": "响应中生成的最大 Token 数。",
+      "streamResponses": "流式响应",
+      "temperatureValueAriaLabel": "温度值",
+      "maxTokensValueAriaLabel": "最大 Token 数"
     },
     "agentBuilderView": {
       "title": "Agent Builder",
@@ -5090,7 +5231,8 @@
       "browserNotSupported": "您的浏览器不支持音频元素。"
     },
     "chatImageRenderer": {
-      "uploadedImageAlt": "用户上传的图片"
+      "uploadedImageAlt": "用户上传的图片",
+      "pdfAttachment": "PDF 附件"
     },
     "chatImageUpload": {
       "attachTooltip": "附加图片或 PDF"
@@ -5212,7 +5354,15 @@
       "toolsetsExample": "<strong>示例：</strong>一个「GitHub 只读」工具集可能只包含来自 GitHub MCP 服务器的 <code>list_repos</code> 和 <code>get_file</code>——防止 Agent 进行写操作。",
       "toolsetsCreatingTitle": "创建工具集：",
       "toolsetsCreatingDesc": "管理员可以从 <strong>MCP</strong> 页面 → <strong>工具集</strong>标签页创建和管理工具集。工具集随后可分配给密钥和团队以限定其工具访问范围。",
-      "audioFileSizeMb": "({{size}} MB)"
+      "audioFileSizeMb": "({{size}} MB)",
+      "pleaseSelectEndpoint": "请在发送请求前选择一个端点",
+      "modelSettingsUnavailable": "模型设置不可用",
+      "aboutMcpServersAndToolsets": "关于 MCP 服务器和工具集",
+      "aboutVectorStores": "关于向量存储",
+      "aboutGuardrails": "关于安全护栏",
+      "aboutPolicies": "关于策略",
+      "unableToCopyToClipboard": "复制到剪贴板失败",
+      "toolsetsExampleText": "<strong>示例：</strong>一个「GitHub 只读」工具集可能只包含来自 GitHub MCP 服务器的 <code>list_repos</code> 和 <code>get_file</code>，从而阻止 Agent 执行写操作。"
     },
     "codeInterpreterOutput": {
       "pythonCodeExecuted": "已执行的 Python 代码",
@@ -5225,7 +5375,8 @@
       "tooltipDesc": "运行 Python 代码以生成文件、图表并分析数据。容器将自动创建。",
       "onlyOpenAIWarning": "代码解释器仅适用于 OpenAI 模型",
       "onlyOpenAINotice": "代码解释器目前仅支持 OpenAI 模型。",
-      "requestSupportLink": "申请支持其他提供商"
+      "requestSupportLink": "申请支持其他提供商",
+      "aboutTitle": "关于代码解释器"
     },
     "filePreviewCard": {
       "uploadPreview": "上传预览",
@@ -5300,7 +5451,24 @@
       "uiSessionReadyDesc": "UI 将使用聊天历史管理会话",
       "apiSessionActiveDesc": "LiteLLM API 会话活跃 - 上下文在服务端维护",
       "uiSessionActiveDesc": "UI 会话活跃 - 上下文在客户端维护",
-      "copyTooltipTitle": "复制响应 ID 以继续会话："
+      "copyTooltipTitle": "复制响应 ID 以继续会话：",
+      "aboutTitle": "关于会话管理",
+      "useApiSessionManagement": "使用 API 会话管理",
+      "copyResponseId": "复制响应 ID",
+      "copyResponseIdFailed": "复制响应 ID 失败"
+    },
+    "chatComposer": {
+      "stopRequest": "停止请求",
+      "sendMessage": "发送消息"
+    },
+    "endpointSelector": {
+      "selectEndpoint": "选择端点"
+    },
+    "audioTranscriptions": {
+      "transcribeFailed": "音频转录失败"
+    },
+    "imageEdits": {
+      "editFailed": "图片编辑失败"
     }
   },
   "settingsPages": {
@@ -6451,7 +6619,8 @@
       "needHelp": "需要帮助？",
       "testConnectButton": "测试连接",
       "addModelButton": "添加模型",
-      "connectionTestResultsTitle": "连接测试结果"
+      "connectionTestResultsTitle": "连接测试结果",
+      "noProvidersFound": "未找到提供方"
     },
     "addModelModes": {
       "chatLabel": "聊天 - /chat/completions",
@@ -6515,7 +6684,24 @@
       "selectDefaultModelError": "请选择默认模型",
       "configureRouteError": "请为自动路由器至少配置一条路由",
       "invalidRoutesError": "请确保所有路由都有目标模型、描述和至少一个话语示例",
-      "missingFieldsError": "请填写以下必填字段：{{fields}}"
+      "missingFieldsError": "请填写以下必填字段：{{fields}}",
+      "automaticSetupCreated": "已创建自动配置",
+      "automaticSetupHint": "让我们为每个复杂度层级挑选模型。",
+      "cannotVerifyAvailability": "无法确认这些模型是否可用",
+      "checkingAvailability": "正在检查模型可用性...",
+      "configureAutomatically": "自动配置",
+      "customConfigurationDesc": "从零开始定义您的自动路由器",
+      "detailedConfiguration": "详细配置",
+      "loadingTemplates": "正在加载模板...",
+      "matchesDeployments": "与您的部署匹配",
+      "missingModels": "缺少：{{models}}",
+      "modelsLoadFailed": "无法加载可用模型。",
+      "noTiersConfigured": "尚未配置层级",
+      "notSureWhereToStart": "不确定从何开始？",
+      "selectTeamTooltip": "选择此自动路由器所属的团队。只有该团队的密钥才能调用它。",
+      "templatePlaceholder": "选择模板，或选择自定义来定义您自己的模板",
+      "templatesLoadFailed": "无法加载模板，因此仅显示自定义配置。",
+      "testRouting": "测试路由"
     },
     "complexityRouterConfig": {
       "title": "复杂度层级配置",
@@ -6541,7 +6727,54 @@
       "scoreRangeSimple": "：评分 < 0.15",
       "scoreRangeMedium": "：评分 0.15 - 0.35",
       "scoreRangeComplex": "：评分 0.35 - 0.60",
-      "scoreRangeReasoning": "：评分 > 0.60（或含 2+ 个推理标记）"
+      "scoreRangeReasoning": "：评分 > 0.60（或含 2+ 个推理标记）",
+      "adaptiveRoutingSection": "高级：自适应路由",
+      "addModelToFallbackTier": "为您的回退层级添加模型",
+      "addModelToSimpleOrMediumTier": "为简单或中等层级添加模型",
+      "addTier": "添加层级",
+      "affinitySection": "高级：亲和性",
+      "classificationMethodSection": "高级：分类方法",
+      "clearDisplayNameAriaLabel": "清除 {{label}} 层级的显示名称",
+      "compressionSection": "高级：压缩",
+      "contextWindowEscalationSection": "高级：上下文窗口升级",
+      "customTierTooltip": "您自定义的层级。分类器会把符合其定义的请求路由到这里。",
+      "defaultModelTooltip": "留空表示跟随层级。在此选定的模型会被固定：无论层级如何变化，它始终是默认模型。",
+      "derivedDefaultModelPlaceholder": "由层级推导：{{model}}",
+      "displayNameAriaLabel": "{{label}} 层级的显示名称",
+      "displayNamePlaceholder": "显示名称（默认：{{label}}）",
+      "editTiers": "编辑层级",
+      "editingHint": "添加或删除层级以定义您自己的层级集。每个自定义层级都需要一个定义，供 LLM 分类器路由使用，且编辑过的层级集必须使用 LLM 分类方法",
+      "escalationKeywordsSection": "高级：升级关键词",
+      "fallbackTierLabel": "回退层级",
+      "fallbackTierPlaceholder": "选择分类器失败时路由到的层级",
+      "fallbackTierTitle": "回退层级",
+      "fallbackTierTooltip": "当 LLM 分类器报错、超时或返回无法解析的回复时，请求路由到这里。编辑过层级集时必填：启发式评分器无法产出您的层级。",
+      "keepBuiltInDefinitionPlaceholder": "留空以保留内置定义",
+      "keywordRulesError": "{{error}}。请在高级：关键词/语义匹配下修改规则，或把该层级加回来",
+      "keywordSemanticMatchingSection": "高级：关键词/语义匹配",
+      "modalityRoutingSection": "高级：模态路由",
+      "multipleModelsHint": "已选择多个模型：路由器会按请求随机挑选（开启自适应路由时则在模型池内做 Thompson 采样）。",
+      "planModeMinTierLabel": "计划模式最低层级",
+      "planModeOverrideSection": "高级：计划模式覆盖",
+      "planModeTierHint": "处于计划模式的编码代理（Claude Code、GitHub Copilot）发出的请求至少路由到该层级。分类器若判定更高层级仍然优先，且该覆盖仅在计划模式生效期间有效。",
+      "planModeTierLabel": "将计划模式请求路由到最低层级",
+      "planModeTierUnavailable": " 为某个层级添加模型后才能启用。",
+      "removeTierAriaLabel": "移除 {{tier}} 层级",
+      "responseFormatSection": "高级：响应格式",
+      "restoreDefaults": "恢复默认值",
+      "selectTierModelsPlaceholder": "为{{label}}查询选择模型",
+      "stalledTaskEscalationSection": "高级：任务停滞升级",
+      "tierDefinitionAriaLabel": "层级 {{index}} 的定义",
+      "tierDefinitionPlaceholder": "该层级包含哪些内容，例如要求做安全审计的请求",
+      "tierDefinitionRequired": "需要填写定义：它是分类器为该层级路由所依据的评分标准",
+      "tierFallbackName": "层级 {{index}}",
+      "tierNameAriaLabel": "层级 {{index}} 的名称",
+      "tierNamePlaceholder": "层级名称，例如 SECURITY_REVIEW",
+      "tierOriginBuiltIn": "内置",
+      "tierOriginCustom": "自定义",
+      "tierPosition": "第 {{index}} 个层级，共 {{count}} 个 · {{origin}}",
+      "tierRequired": "{{label}}层级为必填项",
+      "tierMappingTooltip": "为每个复杂度层级映射一个或多个模型。简单查询使用更便宜、更快的模型，复杂查询使用能力更强的模型。"
     },
     "routerConfigBuilder": {
       "title": "路由配置",
@@ -6562,7 +6795,9 @@
       "utterancesPlaceholder": "输入话语后按 Enter...",
       "jsonPreviewLabel": "JSON 预览",
       "showButton": "显示",
-      "hideButton": "隐藏"
+      "hideButton": "隐藏",
+      "deleteAriaLabel": "删除",
+      "removeUtteranceAriaLabel": "移除 {{utterance}}"
     },
     "advancedSettings": {
       "title": "高级设置",
@@ -6597,7 +6832,18 @@
       "litellmParamsHelpText": "传入 litellm 支持的参数 JSON",
       "litellmParamsHelpLink": "litellm.completion() 调用",
       "modelInfoLabel": "模型信息",
-      "modelInfoTooltip": "可选的模型信息参数。调用 `/model/info` 端点时返回。"
+      "modelInfoTooltip": "可选的模型信息参数。调用 `/model/info` 端点时返回。",
+      "guardrailsEmptyText": "输入以添加护栏",
+      "ptuCountLabel": "PTU 数量",
+      "ptuCountTooltip": "此部署的预置吞吐单元。与「每 PTU/小时成本」和团队一起设置，可归集固定的每日成本。",
+      "ptuEndLabel": "PTU 生效结束时间（UTC）",
+      "ptuEndTooltip": "PTU 窗口的可选结束时间（不含）。留空表示不设结束时间。",
+      "ptuRateLabel": "计算出的每 PTU/小时成本（USD）",
+      "ptuRateTooltip": "固定成本 = PTU 数量 × 该费率 × 生效小时数，归集到部署所属团队。",
+      "ptuStartLabel": "PTU 生效开始时间（UTC）",
+      "ptuStartTooltip": "PTU 窗口的开始时间，设置 PTU 数量时必填。固定成本按窗口内的小时累计；23:00 开始的窗口当天计费一小时。",
+      "tagsEmptyText": "输入以添加标签",
+      "litellmParamsHelpTextWithLink": "传入 litellm 支持参数的 JSON <completionLink>litellm.completion() 调用</completionLink>"
     },
     "cacheControlSettings": {
       "injectionPointsLabel": "缓存控制注入点",
@@ -6614,7 +6860,9 @@
       "indexTooltip": "（可选）设置后，litellm 将把该索引处的消息标记为可缓存",
       "indexPlaceholder": "可选",
       "addInjectionPoint": "添加注入点",
-      "messageType": "消息"
+      "messageType": "消息",
+      "labelHelp": "{{label}} 帮助",
+      "removeInjectionPoint": "移除注入点 {{index}}"
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "公开模型名称",
@@ -6630,7 +6878,9 @@
       "modelMappingsLabel": "模型映射",
       "modelMappingsTooltip": "将公开模型名称映射到 LiteLLM 模型名称以实现负载均衡",
       "mappingRequired": "至少需要一个模型映射",
-      "publicNameRequired": "所有模型映射必须具有有效的公开名称"
+      "publicNameRequired": "所有模型映射必须具有有效的公开名称",
+      "tooltipUsageWithLabel": "<strongLabel>用法：</strongLabel>您向 LiteLLM 代理发起 API 调用，其中",
+      "tooltipResultWithLabel": "<strongLabel>结果：</strongLabel>LiteLLM 会把"
     },
     "litellmModelName": {
       "fieldLabel": "LiteLLM 模型名称",
@@ -6644,7 +6894,8 @@
       "modelDescription": "LiteLLM 将发送给 LLM API 的模型名称",
       "enterAzureDeploymentPlaceholder": "输入 Azure 部署名称",
       "enterCustomModelPlaceholder": "输入自定义模型名称",
-      "customModelRequired": "请输入自定义模型名称。"
+      "customModelRequired": "请输入自定义模型名称。",
+      "selectProviderPlaceholder": "请先选择提供方"
     },
     "modelConnectionTest": {
       "testingConnection": "正在测试与 {{modelName}} 的连接...",
@@ -6671,6 +6922,288 @@
       "vertexCredentialsHelp": "提供 GCP 服务账号（.json 文件）",
       "baseModelHelp": "您的 Azure 部署实际使用的模型。用于精确的成本追踪。请从",
       "baseModelHelpLink": "此处"
+    },
+    "adaptiveRouting": {
+      "allTiersSoftFloor": "所有层级（软下限）",
+      "allTiersSoftFloorHint": "— 路由器可跨层级选择，取决于哪个模型最契合该提示",
+      "classifiedTierOnly": "仅限分类层级",
+      "classifiedTierOnlyHint": "— 路由器只能在层级内选择模型",
+      "eligibleModelPool": "可用模型池",
+      "enableAdaptiveSelection": "启用自适应 Bandit 选择",
+      "enableAdaptiveSelectionHint": "关闭后，每个请求始终使用其分类层级所分配的模型。",
+      "howItWorksDescription": "它会从每段对话的实际结果中学习：用户是否需要改述或纠正模型、模型是否反复卡住、是否用尽工具调用、用户是否满意。结合成本，这些实时反馈会让后续路由转向真正有效的模型，并随对话增多而不断改善。反馈不足时，默认使用分类层级对应的模型。",
+      "howItWorksTitle": "自适应路由原理",
+      "qualityVsCost": "质量 vs. 成本（{{quality}}% 质量 / {{cost}}% 成本）",
+      "qualityVsCostHint": "质量权重越高越偏向能力更强（更贵）的模型；成本权重越高，在 Bandit 有反馈可用时越偏向更便宜的模型。推荐：30% 质量 / 70% 成本。",
+      "qualityVsCostLabel": "质量 vs. 成本",
+      "tierDistancePenalty": "层级距离惩罚",
+      "tierDistancePenaltyHint": "每偏离分类层级一个层级所扣的分数。"
+    },
+    "affinityControls": {
+      "pinSessionHint": "将同一会话固定在其所属组的同一部署上，以保持提供方提示缓存热度。关闭后每轮都会做负载均衡。",
+      "pinSessionLabel": "把会话固定到每个模型组的一个部署上",
+      "ttlHint": "每次复用固定关系的请求后刷新。留空则跟随后端默认的 {{seconds}} 秒。",
+      "ttlLabel": "固定关系空闲后保留时长（秒）"
+    },
+    "autoRouterConnectionTest": {
+      "description": "测试连接会向每个已配置的层级、分类器、默认模型和嵌入模型发送一次最小请求。分类器探测包含其推理强度覆盖设置。",
+      "embeddingSuffix": "（嵌入）"
+    },
+    "autoRouterRoutingTest": {
+      "description": "发送一条提示经过此路由器的分类器，查看它会选择哪个模型以及原因。该提示只会被分类：不会发送给它所路由到的模型。",
+      "promptPlaceholder": "粘贴一条终端用户会发送的提示",
+      "routeFailed": "无法路由此提示",
+      "routedTo": "路由到",
+      "routing": "正在路由...",
+      "sendPrompt": "发送测试提示",
+      "unconfiguredModel": "此代理中没有该名称的模型组"
+    },
+    "buildComplexityRouterConfig": {
+      "classifierModelRequired": "请选择分类器模型，或切回启发式",
+      "classifierModelRequiredForCustomTierSet": "请选择分类器模型：编辑过的层级集会使用 LLM 分类器进行路由",
+      "dryRunRejected": "代理拒绝了此自动路由器配置",
+      "keywordRuleOrphanedTier": "关键词规则 {{rules}} 指向此路由器已不再拥有的层级",
+      "keywordRuleWithoutKeywords": "请为以下关键词规则至少添加一个关键词：{{rules}}",
+      "missingTierModels": "请为以下层级选择模型：{{tiers}}",
+      "planModeTierWithoutModels": "计划模式的最低层级（{{tier}}）没有模型。请添加模型或关闭该覆盖设置。",
+      "reasoningEffortUnsupported": "{{model}} 中的部署并非都支持 {{effort}} 推理强度。请选择默认或受支持的值。",
+      "semanticEmbeddingModelRequired": "使用语义关键词匹配需要先选择嵌入模型",
+      "semanticKeywordRulesRequired": "使用语义关键词匹配需要至少一条关键词层级规则",
+      "tierLabelsRepeated": "层级显示名称必须唯一。重复：{{labels}}",
+      "tierLabelsShadowing": "层级显示名称不能与其他层级名称相同：{{tiers}}"
+    },
+    "classificationMethod": {
+      "boundaryLoadFailed": "无法从代理加载层级分数区间。",
+      "boundaryMarginHint": "分数距离所有层级边界都超过该值时，按评分器自己的层级路由，无论该层级多贵。分数比该值更接近边界，以及评分器完全没有找到信号的请求，都交给分类器来打破平局",
+      "boundaryMarginLabel": "边界余量",
+      "classifierFallbackHeading": "分类器失败时",
+      "classifierModelLabel": "分类器模型",
+      "classifierModelPlaceholder": "选择用于判断请求复杂度的模型",
+      "classifierModelRequired": "需要指定分类器模型",
+      "classifierPromptLabel": "分类器提示词",
+      "classifierPromptTooltip": "所有评分标准都使用同样的四个层级。区别在于用来示范层级边界的示例，其中 Business 评分标准还会为业务流量重写层级定义。在提示词编辑器中选定评分标准，并撰写您自己的开头指令和校准示例。",
+      "contextBudgetHint": "发送给分类器的历史对话总字符数。优先取最近的轮次，能完整放下就整体引用，因此短对话永远不会被截断。",
+      "contextBudgetLabel": "上下文字符预算",
+      "contextBudgetTooSmall": "低于 {{min}} 个字符时，无法引用放不下的轮次，长对话到达分类器时将完全没有上下文。如需刻意关闭上下文，请把上下文窗口大小设为 0。",
+      "contextWindowSizeLabel": "上下文窗口大小",
+      "customKeywordsEmptyText": "输入以添加关键词",
+      "customKeywordsPlaceholder": "输入关键词后按回车",
+      "customTechnicalKeywordsHint": "可选：向内置列表添加术语，以提高技术维度的分类准确度。（例如 udp、kafka、terraform）。",
+      "customTechnicalKeywordsLabel": "自定义技术关键词",
+      "customTechnicalKeywordsTooltip": "追加到内置技术关键词列表的领域术语。包含这些术语的提示在技术维度得分更高，会路由到能力更强的模型。",
+      "decideLocallyUpTo": "本地判定上限层级",
+      "decideLocallyUpToHint": "评分器判定在该层级及以下的请求直接路由过去，不调用分类器。评分器判定更高，以及完全没有找到信号的请求，都改由分类器处理",
+      "fallbackDefaultModel": "路由到默认模型",
+      "fallbackDefaultModelConfigured": "可在「默认模型」下拉中修改。",
+      "fallbackDefaultModelHint": "— 适合您的提示词评估的不是复杂度时",
+      "fallbackDefaultModelMissing": "在此路由器上设置默认模型后才能使用该选项",
+      "fallbackHeuristic": "改用启发式评分",
+      "fallbackHeuristicHint": "— 适合分类器也在评估复杂度时",
+      "fallbackHint": "在分类器调用报错、超时或返回无法解析的响应时生效。",
+      "frequencyEveryRequest": "每个请求",
+      "frequencyEveryRequestHint": "：每一轮都评分，包括工具结果的后续轮次",
+      "frequencyHint": "保持层级可让代理在整个工具循环中使用同一模型，并降低评分成本。路由器无法匹配到已有判定的轮次（例如没有会话 id 或 id 已过期）会重新评分",
+      "frequencyLabel": "分类频率",
+      "frequencySession": "每个会话一次",
+      "frequencySessionHint": "：只对第一轮评分，然后整个会话沿用该层级及其部署",
+      "frequencyUserTurn": "每条新的用户消息",
+      "frequencyUserTurnHint": "：对每一次新的人工提问评分，随后其后的工具调用沿用该层级",
+      "heuristicDesc": "（默认）基于规则的评分，不调用 API，延迟 <1ms",
+      "heuristicFirstDesc": "本地评分，只有当分数无法有把握地落入便宜层级时才调用分类器",
+      "heuristicFirstLabel": "启发式优先",
+      "heuristicLabel": "启发式",
+      "heuristicV2Desc": "使用内置的校准四层级概率，不调用 API",
+      "heuristicV2Label": "启发式 v2",
+      "hybridDesc": "在任意层级都保留本地评分，只有当分数接近层级边界时才调用分类器",
+      "hybridLabel": "混合",
+      "includeAssistantTurnsLabel": "包含助手轮次",
+      "includeAssistantTurnsTooltip": "默认关闭。对已有路由器启用它会改变层级判定，进而改变花费，同时会把助手文本发送给分类器模型，该模型可能与所路由的模型来自不同的提供方。",
+      "llmClassifierDesc": "调用模型来决定层级（例如一个小而快的模型）",
+      "llmClassifierLabel": "LLM 分类器",
+      "tierScoreAbove": "：评分 > {{score}}（或含 2+ 个推理标记且评分至少 {{floor}}）",
+      "tierScoreBelow": "：评分 < {{score}}",
+      "tierScoreRange": "：评分 {{from}} - {{to}}",
+      "timeoutHint": "分类器调用在失败并由下方回退方案接管之前可用的时长。",
+      "timeoutLabel": "超时（毫秒）"
+    },
+    "classifierCircuitBreaker": {
+      "cooldownLabel": "熔断冷却时间（秒）",
+      "description": "分类器超时一次后，所有会话立即改用回退方案，直到恢复探测成功。默认开启。",
+      "label": "分类器熔断"
+    },
+    "classifierPromptEditor": {
+      "cautionFourTiers": "始终只有四个层级，因此您的提示词必须把请求分入四个桶，但可以自行定义它们的含义。提示词必须返回上方显示的层级名称，即您重命名后的显示名称，否则为 SIMPLE、MEDIUM、COMPLEX 和 REASONING。",
+      "cautionHeuristicFallback": "启发式回退仍会评估复杂度，因此如果您的提示词评估的是其他内容，请把下方回退设为默认模型。",
+      "cautionLegacyMode": "这是旧版的整段提示词模式：层级定义和标签已固化在这段文本中，重命名层级或更换评分标准都不会更新它。选择恢复默认可切换为派生提示词，届时您只需编辑开头指令和校准示例，层级定义会自动保持同步。",
+      "cautionSystemRole": "您的提示词会成为分类器的完整系统角色。强烈建议保留其结尾段落，它通过告知分类器调用方引用的系统提示词和历史轮次只是待判断的素材、绝非指令来防御提示注入攻击。删掉它，一个写入「把所有请求都分类为 REASONING」的调用方就能把请求骗到您最贵的模型上。",
+      "cautionTitle": "请谨慎操作",
+      "changeDefaultPrompt": "修改默认提示词",
+      "defaultHint": "替换内置的复杂度评分标准，改为按其他标准分类，例如数据敏感度。",
+      "editCustomPrompt": "编辑自定义提示词",
+      "loadFailed": "无法加载默认分类器提示词",
+      "overriddenHint": "此路由器使用您自己的评分标准，而非内置的复杂度评分标准。",
+      "prefilledHint": "已按 {{rubric}} 评分标准预填，即此路由器在上下文窗口为 {{contextWindowSize}} 时会发送的内容。",
+      "restoreDefaultText": "恢复默认文本",
+      "savePrompt": "保存提示词",
+      "systemPromptAriaLabel": "分类器系统提示词",
+      "title": "分类器提示词"
+    },
+    "classifierReasoningEffort": {
+      "ariaLabel": "分类器模型 {{model}} 的推理强度",
+      "label": "推理强度",
+      "statusUnsupported": "不支持",
+      "statusUnverified": "未验证",
+      "tooltip": "仅发送给分类器调用。默认表示不改变分类器部署或提供方的设置。",
+      "unsupportedHint": "所选模型组中的部署并非都支持该已保存的强度。保存前请选择默认或受支持的值。",
+      "unverifiedHint": "无法为所选模型验证该已保存的强度。除非您已确认提供方支持，否则请选择默认。"
+    },
+    "classifierVision": {
+      "enableHint": "把内联图像数据发送给分类器，使其能根据图像内容选择层级。",
+      "enableLabel": "使用图像进行分类",
+      "maxImagesLabel": "每个请求的最大图像数"
+    },
+    "compression": {
+      "emptyText": "未找到压缩护栏",
+      "inheritPlaceholder": "沿用请求自身的压缩护栏",
+      "modelCallAriaLabel": "模型调用压缩",
+      "modelCallLabel": "模型调用",
+      "routingDecisionAriaLabel": "路由决策压缩",
+      "routingDecisionLabel": "路由决策",
+      "routingDecisionTooltip": "应用于分类器自身挑选层级那次调用的压缩，与请求所路由到的模型无关。",
+      "sameAsRouting": "与路由决策相同",
+      "useDifferentCompression": "使用不同的压缩"
+    },
+    "contextWindowEscalation": {
+      "bufferHint": "计入的提示必须落在模型窗口内的比例，范围大于 0 至 1。留空则跟随后端默认的 0.95。",
+      "bufferLabel": "窗口适配余量",
+      "enableHint": "当提示明显无法放入已判定层级的上下文窗口时，改为路由到能容纳它的最低层级，而不是让提供方直接拒绝。关闭表示仅按复杂度分发请求。",
+      "enableLabel": "将超出窗口的提示升级到可容纳的层级"
+    },
+    "customDimensionRows": {
+      "addButton": "添加自定义维度",
+      "footnote": "关键词匹配当前提问。正则只扫描其前 2,048 个字符，且仅允许长度不超过 64 的有界单字符重复。保存时代理会校验这些模式。",
+      "keywordsField": "关键词（每行一个）",
+      "patternsField": "正则模式（每行一个）",
+      "removeAriaLabel": "移除自定义维度 {{index}}",
+      "rowLegend": "自定义维度 {{index}}",
+      "scoringHint": "二值模式下任意命中即取全部权重。匹配数模式下命中一个不同的匹配项取一半权重，命中两个及以上取全部权重。",
+      "scoringLabel": "评分方式",
+      "weightAriaLabel": "{{name}} 权重"
+    },
+    "customDimensions": {
+      "matcherLimitsExceeded": "自定义维度 {{index}}：最多使用 32 个匹配项，每个不超过 256 个字符，合计不超过 4096 个字符",
+      "matcherRequired": "自定义维度 {{index}}：请至少添加一个非空关键词或模式",
+      "nameConflictsWithBuiltIn": "自定义维度 {{index}}：请使用不与会内置权重重名的名称",
+      "nameDuplicated": "自定义维度 {{index}}：名称必须唯一",
+      "nameInvalid": "自定义维度 {{index}}：名称需以字母开头，后接字母、数字或下划线（最多 64 个字符）",
+      "tooManyDimensions": "一个路由器最多可有 16 个自定义维度",
+      "weightOutOfRange": "自定义维度 {{index}}：权重必须大于 0 且不超过 1"
+    },
+    "escalationKeywords": {
+      "emptyText": "输入以添加短语",
+      "title": "升级关键词",
+      "tooltip": "用户可在消息中包含的区分大小写的短语，用于对结果不满意时强制提升到下一个更高的复杂度层级。它们可以强制使用更强的模型，但无法指定具体哪一个。"
+    },
+    "heuristicScoring": {
+      "decreasingBoundariesWarning": "这些边界值在递减，因此它们之间的每个层级都无法到达，其流量会路由到别处。",
+      "defaultsLoadFailed": "无法加载随附的默认值，因此只显示此路由器已覆盖的值。保存仍然有效，未改动的旋钮会继续跟随默认值。",
+      "intro": "下面每个旋钮都是可选的。不修改时，路由器会跟随随附的默认值，从而在默认值重新校准后自动采用，而不会固定在这里显示的数值上。",
+      "loadingDefaults": "正在加载随附的默认值...",
+      "minScoreLabel": "最低分数",
+      "overrideCountOne": "{{count}} 项覆盖",
+      "overrideCountOther": "{{count}} 项覆盖",
+      "overrideFloorHint": "出现两个及以上推理标记时，请求会提升到推理层级，但仅当其加权分数达到该下限。",
+      "overrideFloorTitle": "推理覆盖下限",
+      "promoteOnMarkers": "设为 0 表示仅凭标记就提升。",
+      "resetToDefaults": "重置为默认值",
+      "restoreDefaultWeights": "恢复默认权重",
+      "thresholdOrderWarning": "短阈值不低于长阈值，因此没有任何提示长度会在长度维度上得到中性分。",
+      "title": "高级评分",
+      "totalLabel": "合计 {{total}}",
+      "tracksBoundary": "不修改时，它跟随简单到中等的边界。",
+      "tracksBoundaryValue": "不修改时，它跟随简单到中等的边界，当前为 {{score}}。",
+      "weightAriaLabel": "{{label}} 权重"
+    },
+    "keywordTierRules": {
+      "addRuleButton": "添加关键词规则",
+      "emptyText": "输入以添加关键词",
+      "emptyTitle": "尚未配置关键词层级覆盖",
+      "keywordRequired": "至少需要一个关键词",
+      "removeAriaLabel": "移除关键词规则 {{index}}",
+      "routeAriaLabel": "将关键词规则 {{index}} 路由到层级",
+      "routeToTierLabel": "路由到层级",
+      "ruleKeywordsLabel": "关键词 {{index}}",
+      "title": "关键词层级覆盖",
+      "tooltip": "匹配已知术语并将请求直接强制到指定的复杂度层级，跳过基于规则的评分。"
+    },
+    "modalityRouting": {
+      "pinOverrideHint": "当会话被固定在不支持图像的模型上时，仍把图像轮次路由到能处理图像的模型。固定关系会保留，因此下一轮文本请求仍回到原模型。需要开启图像路由。",
+      "pinOverrideLabel": "为图像请求覆盖会话固定",
+      "routeImagesHint": "把不支持图像输入的已路由模型替换为最近的支持图像输入的高层级模型，其次是默认模型，而不是让提供方返回 400 而失败。只会替换明确声明 supports_vision 为 false 的模型，且已保留的会话固定仍然优先，除非您开启下方的覆盖选项。",
+      "routeImagesLabel": "将图像请求路由到支持视觉的模型"
+    },
+    "nonReasoningTier": {
+      "addHint": "在简单层级下方增加 NON_REASONING，用于转发或改写信息、而非进行推理的运维代理流量。需要更多能力时，升级机制仍会把它移出该层级。",
+      "addLabel": "添加非推理层级",
+      "requiresLlmClassifier": " 需要使用 LLM 分类方法。"
+    },
+    "openingPromptEditor": {
+      "baseRubricLabel": "基础评分标准",
+      "customOpeningOnRubric": "基于 {{rubric}} 评分标准的自定义开头",
+      "customizePrompt": "自定义提示词",
+      "editCustomPrompt": "编辑自定义提示词",
+      "examplesHint": "给出有代表性的请求及其应属的层级。路由器会把这些内容添加在其层级定义之后。",
+      "examplesLabel": "校准示例",
+      "instructionsHint": "说明分类器应当判断什么。层级定义在下方单独管理。",
+      "instructionsLabel": "分类指令",
+      "previewAriaLabel": "组装后的分类器提示词",
+      "previewError": "无法加载组装后的提示词。您的文本仍按原样保存。",
+      "previewHeading": "此路由器发送的内容",
+      "previewLoading": "正在加载组装后的提示词…",
+      "rubricSummary": "{{rubric}} 评分标准",
+      "savePrompt": "保存提示词",
+      "title": "分类器提示词"
+    },
+    "responseFormat": {
+      "returnRawModelNameHint": "在响应中返回真正解析到的底层模型名称，而不是自动路由器别名。",
+      "returnRawModelNameLabel": "返回原始模型名称"
+    },
+    "semanticKeywordMatching": {
+      "embeddingModelLabel": "嵌入模型",
+      "embeddingModelRequired": "需要指定嵌入模型",
+      "enableHint": "使用与上方相同的关键词-层级配对，并覆盖直接关键词匹配。会根据嵌入模型的网络请求增加延迟。",
+      "enableLabel": "语义关键词匹配",
+      "enableTooltip": "通过比较嵌入而非纯文本，识别精确关键词之外的相近说法。会覆盖直接关键词匹配",
+      "matchThresholdHint": "仅在相似度达到或高于该分数时匹配。",
+      "matchThresholdLabel": "最低匹配分数",
+      "noEmbeddingModels": "未找到嵌入模型"
+    },
+    "stallEscalation": {
+      "enableHint": "当模型反复调用同一个工具，或同一次调用一直报错时，只要看起来仍然卡住，就把请求提升一个层级。它是升级关键词的自动版本：不需要有人注意到死循环并主动提出。关闭表示卡住的任务继续使用其被分类到的模型。",
+      "enableLabel": "将停滞的任务升级到更强的模型",
+      "repeatThresholdHint": "多少次相同或失败的调用算作卡住。至少为 2；数值越低反应越快，也越容易误判。",
+      "repeatThresholdLabel": "升级前的重复次数",
+      "windowHint": "向上回溯多少次工具调用。不得低于重复次数，否则该值永远无法达到。",
+      "windowLabel": "检查的最近调用数"
+    },
+    "tierConfigIntro": {
+      "displayNamesClassifierHint": " 您的分类器模型会读取这些名称，因此更清晰的名称可以提升其判断质量。",
+      "displayNamesHint": "重命名层级，以便在仪表盘和支出日志中使用您自己的叫法。重命名不会改变请求的分类方式，调用方也看不到这些名称。",
+      "heuristic": "复杂度路由器使用基于规则的评分自动按复杂度对请求分类（不调用 API，延迟 <1ms）。请为每个层级配置由哪些模型处理。",
+      "heuristicV2": "复杂度路由器使用经过校准的本地四层级模型对每个请求分类（不调用 API）。请为每个层级配置由哪些模型处理。",
+      "llmClassifier": "复杂度路由器使用您的分类器模型对每个请求分类，并路由到对应层级。请为每个层级配置由哪些模型处理。"
+    },
+    "tierModelEffort": {
+      "reasoningEffortAriaLabel": "{{tier}}层级中 {{model}} 的推理强度",
+      "reasoningEffortLabel": "推理强度",
+      "reasoningEffortTooltip": "作为 reasoning_effort 发送给该层级路由到该模型的请求，并覆盖调用方的取值。默认表示不修改请求。"
+    },
+    "tierRows": {
+      "fallbackTierRequired": "请为分类器失败选择回退层级",
+      "tierCountOutOfRange": "一个层级集需要 {{min}} 到 {{max}} 个层级",
+      "tierDefinitionRequired": "每个自定义层级都需要定义：它是分类器路由所依据的评分标准",
+      "tierNameRequired": "请为每个层级命名",
+      "tierNamesUnique": "层级名称必须唯一（不区分大小写）"
     }
   },
   "costTracking": {
@@ -6703,7 +7236,8 @@
       "discountPercentageLabel": "折扣百分比",
       "discountPercentageTooltip": "输入百分比值（例如：5 表示 5% 折扣）",
       "discountRequired": "请输入折扣百分比",
-      "addButton": "添加提供商折扣"
+      "addButton": "添加提供商折扣",
+      "noProvidersFound": "未找到提供商"
     },
     "costTrackingSettings": {
       "pageTitle": "成本追踪设置",
@@ -6732,7 +7266,12 @@
       "addMarginModalTitle": "添加提供商利润率",
       "addMarginModalDesc": "选择提供商（或选择「全局」以覆盖所有提供商）并配置利润率，可使用百分比或固定金额。",
       "docsLinkCustomPricing": "模型自定义定价",
-      "docsLinkSpendTracking": "花费追踪"
+      "docsLinkSpendTracking": "花费追踪",
+      "blockUnpricedModelsTitle": "拦截未定价模型",
+      "blockUnpricedModelsSubtitle": "拒绝请求成本映射中没有定价的模型，而不是将其记录为 $0 花费",
+      "blockUnpricedToggleLabel": "拦截未定价模型的请求",
+      "blockUnpricedToggleHint": "启用后，若请求解析到的模型没有成本映射，将以 403 拒绝，便于管理员为其添加定价。默认关闭",
+      "loadingConfiguration": "正在加载配置..."
     },
     "howItWorks": {
       "costCalculationTitle": "成本计算",
@@ -6766,7 +7305,12 @@
       "modelPlaceholder": "选择模型",
       "perDay": "每天",
       "perMonth": "每月",
-      "addAnotherModel": "添加另一个模型"
+      "addAnotherModel": "添加另一个模型",
+      "colRequestsPer": "请求数/{{period}}",
+      "periodDay": "天",
+      "periodMonth": "月",
+      "colActions": "操作",
+      "removeRowLabel": "删除第 {{row}} 行模型"
     },
     "multiCostResults": {
       "selectModelsHint": "在上方选择模型以查看成本估算",
@@ -6794,7 +7338,10 @@
       "periodMarginFee": "{{periodLabel}}利润率费用",
       "tokenPricingLabel": "Token 定价：",
       "inputPricingPerM": "输入 ${{cost}}/1M",
-      "outputPricingPerM": "输出 ${{cost}}/1M"
+      "outputPricingPerM": "输出 ${{cost}}/1M",
+      "costBreakdownColumn": "成本明细",
+      "showBreakdownLabel": "显示 {{model}} 的成本明细",
+      "hideBreakdownLabel": "隐藏 {{model}} 的成本明细"
     },
     "multiExportDropdown": {
       "exportAsPdf": "导出为 PDF",
@@ -6845,7 +7392,8 @@
       "csvColMonthlyCost": "每月成本",
       "csvColInputCostPerReq": "输入成本/请求",
       "csvColOutputCostPerReq": "输出成本/请求",
-      "csvColMarginPerReq": "利润率/请求"
+      "csvColMarginPerReq": "利润率/请求",
+      "csvMultiModelReportTitle": "多模型成本估算报告"
     },
     "providerMarginTable": {
       "colProvider": "提供商",
@@ -6853,7 +7401,11 @@
       "colActions": "操作",
       "globalProviderLabel": "全局（所有提供商）",
       "logoAlt": "{{displayName}} 徽标",
-      "emptyMessage": "未配置提供商利润率"
+      "emptyMessage": "未配置提供商利润率",
+      "saveMarginLabel": "保存 {{displayName}} 的利润率",
+      "cancelEditingMarginLabel": "取消编辑 {{displayName}} 的利润率",
+      "editMarginLabel": "编辑 {{displayName}} 的利润率",
+      "removeMarginLabel": "移除 {{displayName}} 的利润率"
     },
     "useDiscountConfig": {
       "fetchFailed": "获取折扣配置失败",
@@ -6873,6 +7425,17 @@
       "marginAlreadyExists": "{{displayName}} 的利润率已存在，请在上方表格中编辑。",
       "invalidPercentageRange": "百分比必须在 0% 到 1000% 之间",
       "invalidFixedAmount": "固定金额不能为负数"
+    },
+    "providerDiscountTable": {
+      "colDiscountPercentage": "折扣百分比",
+      "saveDiscountLabel": "保存 {{displayName}} 的折扣",
+      "cancelEditingDiscountLabel": "取消编辑 {{displayName}} 的折扣",
+      "editDiscountLabel": "编辑 {{displayName}} 的折扣",
+      "removeDiscountLabel": "移除 {{displayName}} 的折扣"
+    },
+    "useBlockUnpricedConfig": {
+      "blocked": "未定价模型的请求现在将被拦截",
+      "allowed": "未定价模型的请求现在将被放行"
     }
   },
   "usagePage": {
@@ -8025,7 +8588,9 @@
       "ioIn": "输入:",
       "ioOut": "输出:",
       "colPublic": "公开",
-      "detailsShort": "详情"
+      "detailsShort": "详情",
+      "openAgentActions": "打开 Agent 操作",
+      "agentNameCopied": "已复制 Agent 名称"
     },
     "modelHubTable": {
       "title": "AI Hub",
@@ -8100,7 +8665,25 @@
       "fieldCreatedBy": "创建人：",
       "fieldUpdatedBy": "更新人：",
       "fieldLastHealthCheck": "最后健康检查：",
-      "fieldHealthCheckError": "健康检查错误："
+      "fieldHealthCheckError": "健康检查错误：",
+      "loadingModels": "正在加载模型…",
+      "loadingAgents": "正在加载 Agent…",
+      "loadingMcpServers": "正在加载 MCP 服务器…",
+      "clearSearch": "清除搜索",
+      "noMatchingModels": "没有匹配的模型",
+      "noModels": "暂无模型",
+      "noMatchingModelsHint": "调整筛选条件以查看更多模型。",
+      "noModelsHint": "添加到该代理的模型将显示在这里。",
+      "noMatchingAgents": "没有匹配的 Agent",
+      "noAgents": "暂无 Agent",
+      "noMatchingAgentsHint": "调整搜索以查看更多 Agent。",
+      "noAgentsHint": "添加到该代理的 Agent 将显示在这里。",
+      "noMcpServers": "暂无 MCP 服务器",
+      "noMcpServersHint": "添加到该代理的 MCP 服务器将显示在这里。",
+      "fieldDescription": "描述：",
+      "fieldStatus": "状态：",
+      "fieldCreatedAt": "创建时间：",
+      "fieldUpdatedAt": "更新时间："
     },
     "skillHubDashboard": {
       "loadingSkills": "正在加载技能...",
@@ -8112,7 +8695,13 @@
       "allDomainsPlaceholder": "所有域",
       "searchPlaceholder": "按名称、命名空间或标签搜索…",
       "showing_one": "显示 {{filtered}} / {{count}} 个技能",
-      "showing_other": "显示 {{filtered}} / {{count}} 个技能"
+      "showing_other": "显示 {{filtered}} / {{count}} 个技能",
+      "clearSearch": "清除搜索",
+      "loading": "正在加载技能…",
+      "noMatchingSkills": "没有匹配的技能",
+      "noSkills": "暂无技能",
+      "noMatchingSkillsHint": "调整搜索或域筛选以查看更多技能。",
+      "noSkillsHint": "在此添加的技能将展示给开发者。"
     },
     "usefulLinksManagement": {
       "title": "链接管理",
@@ -8210,6 +8799,19 @@
       "successCount_one": "成功将 {{count}} 个模型组设为公开！",
       "successCount_other": "成功将 {{count}} 个模型组设为公开！",
       "failedToMakePublic": "将模型组设为公开失败，请重试。"
+    },
+    "mcpHubTableColumns": {
+      "openMcpServerActions": "打开 MCP 服务器操作",
+      "serverNameCopied": "已复制服务器名称",
+      "statusUnknown": "未知"
+    },
+    "modelHubTableColumns": {
+      "openModelActions": "打开模型操作",
+      "modelNameCopied": "已复制模型名称"
+    },
+    "skillHubTableColumns": {
+      "openSkillActions": "打开技能操作",
+      "skillNameCopied": "已复制技能名称"
     }
   },
   "projects": {
@@ -8496,7 +9098,8 @@
       "dateGroupToday": "今天",
       "dateGroupYesterday": "昨天",
       "dateGroupLast7Days": "最近 7 天",
-      "dateGroupOlder": "更早"
+      "dateGroupOlder": "更早",
+      "deleteTooltip": "删除"
     },
     "mCPAppsPanel": {
       "connecting": "连接中…",
@@ -8514,8 +9117,8 @@
       "beta": "Beta",
       "browsePitch": "浏览工具，一次认证，在对话中使用 — 无需额外配置。",
       "loadingTools": "加载工具中...",
-      "toolsAvailable_one": "{{count}} 个工具可用",
-      "toolsAvailable_other": "{{count}} 个工具可用",
+      "toolsAvailable_one": "{{count}} 个可用工具",
+      "toolsAvailable_other": "{{count}} 个可用工具",
       "searchServersPlaceholder": "搜索服务器...",
       "tabAll": "全部",
       "tabConnected": "已连接",
@@ -8524,7 +9127,12 @@
       "noServersConnected": "暂无已连接的服务器。",
       "noServersMatch": "没有服务器匹配您的搜索。",
       "couldNotLoadTools": "无法加载 {{name}} 的工具",
-      "logoAlt": "{{name}} 图标"
+      "logoAlt": "{{name}} 图标",
+      "authorized": "已授权",
+      "notSupportedOnConnection": "此连接不支持",
+      "noServersForConnection": "此连接暂时没有可用的 MCP 服务器。请联系管理员为您的用户或团队授予访问权限。",
+      "connectModeHint": "点击服务器查看其工具并连接",
+      "browsePitchShort": "浏览工具，认证一次即可在对话中使用"
     },
     "mCPConnectPicker": {
       "noServersConfigured": "未配置 MCP 服务器",
@@ -8548,7 +9156,60 @@
       "colApp": "应用",
       "colConnected": "连接时间",
       "revokeConnection": "撤销连接",
-      "revokeError": "撤销连接失败，请重试。"
+      "revokeError": "撤销连接失败，请重试。",
+      "oauthConnectionsPitch": "您已保存的 OAuth 连接；在对话中自动使用",
+      "goToAppsConnectShort": "前往<0>集成</0>并点击<1>连接</1>以授权 MCP 服务器",
+      "revokeTitle": "撤销连接？",
+      "revokeButton": "撤销",
+      "revokeDescription": "这将删除为 {{name}} 保存的 OAuth 凭证。您需要重新连接才能在对话中再次使用。"
+    },
+    "chatShell": {
+      "integrations": "集成",
+      "apiKeys": "API 密钥"
+    },
+    "connectFlowBanner": {
+      "finishConnecting": "完成连接",
+      "remoteClient": "我的客户端运行在远程或 SSH 机器上",
+      "clientFallback": "该应用",
+      "serverFallback": "所请求的 MCP 服务器",
+      "cannotContinue": "无法继续连接",
+      "validateFailed": "网关无法验证此连接。取消即可返回 {{client}}。",
+      "connectServers": "将您的 MCP 服务器连接到 {{client}}",
+      "authorizeServers": "在下方授权您要使用的服务器，然后点击完成连接返回 {{client}}。",
+      "allowClientUseServer": "允许 {{client}} 使用 {{server}}",
+      "authorizeToContinue": "在下方授权 {{server}} 以继续，或取消并让 {{client}} 离开。",
+      "finishToGrant": "点击完成连接，即以您的身份授予 {{client}} 访问 {{server}} 的权限。"
+    },
+    "keysPanel": {
+      "yourApiKeys": "我的 API 密钥",
+      "viewVirtualKeys": "查看您的虚拟密钥和花费",
+      "rotateHint": "。轮换密钥可生成新的凭证，也可以选择在宽限期内保持旧密钥有效",
+      "colKey": "密钥",
+      "rotateTooltip": "轮换密钥",
+      "rotate": "轮换",
+      "rotateTitle": "轮换密钥",
+      "rotatedSuccess": "密钥轮换成功",
+      "rotateFailed": "密钥轮换失败",
+      "saveKeyWarning": "请立即保存此密钥，之后将无法再次查看",
+      "newKeyLabel": "新密钥",
+      "currentExpiry": "当前：",
+      "expiredSuffix": "（已过期）",
+      "newExpiry": "新到期时间："
+    },
+    "logsPanel": {
+      "noLogs": "该时间段没有日志",
+      "loadFailed": "无法加载您的日志",
+      "requestDetails": "请求详情",
+      "tokensBreakdown": "（输入 {{prompt}} / 输出 {{completion}}）",
+      "yourLogs": "我的日志",
+      "accountLogsOnly": "仅显示您账户的请求日志"
+    },
+    "usagePanel": {
+      "apiRequests": "API 请求数",
+      "tokensUsed": "已用 Token",
+      "activity": "花费与请求活动",
+      "noData": "该时间段没有用量数据",
+      "dailyRequests": "每日请求"
     }
   },
   "accessGroups": {
@@ -8950,6 +9611,8 @@
       "tagDeletedSuccess": "标签删除成功",
       "errorDeletingTag": "删除标签失败：{{error}}",
       "errorFetchingModels": "获取模型失败：{{error}}",
+      "deleteTagConfirmDetailed": "确定要删除此标签吗？此操作无法撤销。",
+      "resourceInformationTitle": "标签信息",
       "refreshAriaLabel": "刷新标签",
       "emptyTitle": "暂无标签",
       "emptyDescription": "创建标签即可开始路由并限制模型用量。"
@@ -9122,6 +9785,25 @@
       "testing": "测试中...",
       "testConnection": "测试连接",
       "saveChanges": "保存更改"
+    },
+    "fields": {
+      "databaseIndex": "数据库索引",
+      "gcpServiceAccount": "GCP 服务账号",
+      "gcpSslCaCerts": "GCP SSL CA 证书",
+      "host": "主机",
+      "maxConnections": "最大连接数",
+      "port": "端口",
+      "redisUrl": "Redis URL",
+      "semanticCacheScope": "语义缓存范围",
+      "semanticScopeEndUserOption": "最终用户（按最终用户隔离）",
+      "semanticScopeKeyOption": "密钥（该密钥/团队/组织的所有最终用户共享）",
+      "sentinelNodes": "哨兵节点",
+      "sentinelPassword": "哨兵密码",
+      "serviceName": "服务名",
+      "ssl": "SSL",
+      "sslCertReqs": "SSL 证书要求",
+      "sslCheckHostname": "SSL 主机名校验",
+      "ttlSeconds": "TTL（秒）"
     }
   },
   "permissions": {
@@ -10156,6 +10838,202 @@
     "fieldReset": "字段已在代理上重置",
     "internalUserSettingsUpdated": "内部用户设置更新成功"
   },
+  "caching": {
+    "coordinationRedis": {
+      "borrowedFromCache": "复用响应缓存",
+      "borrowedFromCacheTooltip": "未配置协调 Redis，代理复用响应缓存的 Redis 连接。",
+      "configuredHere": "此处已配置",
+      "configuredHereTooltip": "已设置 general_settings.coordination_redis，协调功能使用独立的 Redis 连接。",
+      "description": "Redis 用于在多个代理实例之间协调工作：跨实例速率限制、花费统计和实例锁管理。它独立于响应缓存配置。",
+      "failedToLoad": "加载协调 Redis 设置失败",
+      "failedToUpdate": "更新协调 Redis 设置失败",
+      "fromRedisEnv": "来自 REDIS_* 环境变量",
+      "fromRedisEnvTooltip": "未配置协调 Redis，代理回退到 REDIS_* 环境变量。",
+      "notConfiguredTooltip": "跨实例速率限制、花费统计和实例锁管理没有可用的 Redis 进行协调。",
+      "restartNotice": "保存的更改在代理重启后生效。",
+      "saved": "协调 Redis 设置已保存，重启代理后生效。",
+      "testSuccessful": "协调 Redis 连接测试成功！"
+    },
+    "dashboard": {
+      "clickFailedSegmentHint": "点击红色的失败请求区段，查看导致失败的错误码。",
+      "coordinationRedis": "协调 Redis",
+      "noVirtualKeys": "未找到虚拟密钥"
+    },
+    "errorDrilldown": {
+      "closeErrorBreakdown": "关闭错误明细",
+      "errorCodeFailed": "错误码 {{code}}：{{count}} 次失败",
+      "failedRequestsByErrorCode": "按错误码统计的失败请求：{{callType}}",
+      "hoverHint": "将鼠标悬停在柱状图上，可查看该错误码对应的错误类别。"
+    }
+  },
+  "costOptimization": {
+    "autoRouterBenchmarks": {
+      "actualAutoRouterSpend": "自动路由实际花费",
+      "adminOnly": "自动路由用量仅对代理管理员角色可见",
+      "allAutoRouters": "全部自动路由",
+      "autoRouterPromptCaching": "自动路由提示词缓存",
+      "avgSavedPerSession": "每会话平均节省",
+      "avgSessionLength": "平均会话时长",
+      "avgTokensPerSession": "每会话平均 Token",
+      "avgTurnsPerSession": "每会话平均轮次",
+      "bucketFirstVisit": "首次访问",
+      "bucketReturnToTier": "返回已有层级",
+      "bucketSameModel": "同一模型",
+      "bucketTurnsTitle": "{{label}}：{{turns}} 轮",
+      "cacheHitRate": "缓存命中率",
+      "classificationCost": "分类成本",
+      "colBucket": "分桶",
+      "colHitRate": "命中率",
+      "colTurns": "轮次",
+      "estimatedSpendHighestTier": "按最高层级模型估算的花费",
+      "expiredMiss": "过期未命中",
+      "llmSpend": "LLM 花费",
+      "loadingUsage": "正在加载自动路由用量...",
+      "sessionsSuffix": "· {{sessions}} 个会话",
+      "shareOfTurns": "轮次占比",
+      "shareOfTurnsByBucket": "各分桶轮次占比",
+      "tabShadowEvals": "影子评估",
+      "totalEstimatedSavings": "预计总节省",
+      "unavailable": "暂无数据",
+      "unavailableNow": "自动路由用量当前不可用"
+    },
+    "cacheLeakageCard": {
+      "byModel": "按模型",
+      "byVirtualKey": "按虚拟密钥",
+      "cacheHitRate": "缓存命中率",
+      "colKey": "密钥",
+      "colModel": "模型",
+      "description": "{{subject}}发送大量未缓存输入且缓存命中率偏低，很可能没有开启提示词缓存。潜在节省为估算值：未缓存输入按已缓存流量每个缓存 Token 的净收益计价，已扣除缓存写入溢价。",
+      "dimensionModel": "模型",
+      "dimensionVirtualKey": "虚拟密钥",
+      "loading": "加载中...",
+      "noUsage": "该时间范围内没有{{noun}}用量。",
+      "nounKey": "密钥",
+      "nounModel": "模型",
+      "potentialSavings": "潜在节省",
+      "sortBy": "按{{label}}排序",
+      "subjectKeys": "密钥",
+      "subjectModels": "模型",
+      "title": "按{{dimension}}统计的缓存流失",
+      "uncachedInputTokens": "未缓存输入 Token"
+    },
+    "costOptimizationView": {
+      "experimentalNotice": "这是一个实验性面板",
+      "feedbackPrompt": "有反馈？<a>在此参与讨论</a>",
+      "subtitle": "跟踪并配置可为你省钱的机制：提示词压缩与提示词缓存。自动路由位于「模型 + 端点」的「自动路由」标签页",
+      "tabAutoRouter": "自动路由",
+      "tabOverall": "总览",
+      "tabPromptCompression": "提示词压缩",
+      "title": "成本优化"
+    },
+    "promptCachingTab": {
+      "failedToLoad": "加载提示词缓存设置失败"
+    },
+    "promptCompressionTab": {
+      "addTitle": "添加 Headroom 压缩护栏",
+      "apiBaseDescription": "托管 Headroom 压缩服务的 URL",
+      "applyToAllRequests": "应用到所有请求",
+      "created": "压缩护栏已创建",
+      "description": "Headroom 是 LiteLLM 原生的护栏，在请求到达模型之前压缩提示词，从而减少输入 Token 费用。被移除的 Token 会计价，并作为压缩节省显示在「用量」标签页。<a>Headroom 配置文档</a>",
+      "enterpriseNotice": "对所有请求启用压缩对所有用户可用。按密钥或团队选择性启用属于 LiteLLM 企业版功能。获取试用密钥请点击<a>这里</a>",
+      "failedToCreate": "创建压缩护栏失败",
+      "failedToLoadGuardrails": "加载压缩护栏失败",
+      "title": "Headroom 提示词压缩"
+    },
+    "shadowEvalSection": {
+      "armBaseline": "基线",
+      "armCurrentModel": "当前模型",
+      "armWon": "{{arm}}胜出",
+      "colArmCost": "{{arm}}花费",
+      "colArmWins": "{{arm}}胜出",
+      "colBudgetUsed": "已用预算",
+      "colJudgeConfidence": "评判置信度",
+      "colJudgedTurns": "已评判轮次",
+      "colRouterCost": "路由花费",
+      "colRouterWins": "路由胜出",
+      "colTies": "平局",
+      "groupComparedAgainst": "对比对象",
+      "groupPromptDifficulty": "提示词难度",
+      "groupRouter": "路由",
+      "groupRouterPick": "路由选择",
+      "headlineForward": "通过 <2/> 影子复制 <0/> 流量的 {{percentage}}%<1>",
+      "headlineReverse": "将 <0/> 与 <1/> 对比，覆盖 <2/> 流量的 {{percentage}}%<3>",
+      "modelScope": "，模型为 <0/>",
+      "noVerdictsYet": "暂无评判结果",
+      "routerCostVsBaseline": "路由花费 vs 基线",
+      "routerCostVsCurrentModel": "路由花费 vs 当前模型",
+      "routerMatchedBaseline": "路由持平或优于基线",
+      "routerMatchedCurrentModel": "路由持平或优于当前模型",
+      "routerWon": "路由胜出",
+      "statusCompleted": "已完成",
+      "statusRunning": "运行中",
+      "statusStopped": "已停止",
+      "tie": "平局",
+      "title": "影子评估",
+      "verdictBreakdown": "评判结果分布"
+    },
+    "shadowEvalStartForm": {
+      "autoRouters": "自动路由",
+      "baselineModel": "基线模型",
+      "budgetRangeError": "请输入 0.01 到 10000 之间的值",
+      "descriptionForward": "将所选对象（密钥、团队或用户）流量的抽样切片经自动路由复制一份，由 LLM 评判模型盲评两个回答。每个对象有独立的花费预算。路由的回答不会返回给用户，评判调用按抽样流量自身的身份计费。",
+      "descriptionReverse": "将自动路由已在服务的流量抽样一份，与固定基线模型对比，由 LLM 评判模型盲评两个回答。每个对象有独立的花费预算。基线的回答不会返回给用户，评判调用按抽样流量自身的身份计费。",
+      "direction": "方向",
+      "directionForward": "采纳检查：密钥流量 vs 路由",
+      "directionReverse": "回归检查：路由选择 vs 基线",
+      "duration14Days": "14 天",
+      "duration1Day": "1 天",
+      "duration3Days": "3 天",
+      "everyModelTargetsUse": "对象使用的全部模型",
+      "judgeModel": "评判模型",
+      "keysLoadFailed": "无法加载密钥，请刷新页面重试。",
+      "keysToShadow": "参与影子的密钥",
+      "maxSpendHint": "每个对象的最大影子 + 评判花费",
+      "narrowsTargets": "将上面所有对象的请求范围缩小到这些模型",
+      "noAutoRouters": "未配置自动路由",
+      "noChatModels": "没有可用的对话模型",
+      "noMatchingUsers": "没有匹配的用户",
+      "noModelsConfigured": "未配置模型",
+      "onlyOnModels": "仅限模型",
+      "percentOfTraffic": "% 流量",
+      "percentRangeError": "请输入 0.1 到 100 之间的值",
+      "pickAtMostModels": "最多选择 {{max}} 个模型",
+      "pickAtMostRouters": "最多选择 {{max}} 个自动路由",
+      "recommended": "推荐",
+      "regressionOneRouter": "回归检查只能将一个路由与其基线对比",
+      "sameSampledRequests": "每个路由看到相同的抽样请求，并由同一份实时回答进行评判",
+      "searchKeysByAlias": "按别名搜索密钥",
+      "searchTeamsByAlias": "按别名搜索团队",
+      "searchUsersByEmail": "按邮箱搜索用户",
+      "selectBaselineModel": "选择基线模型",
+      "selectUpToRouters": "最多选择 4 个自动路由",
+      "spendBudget": "花费预算",
+      "startButton": "启动影子评估",
+      "starting": "启动中...",
+      "teamsToShadow": "参与影子的团队",
+      "title": "启动影子评估",
+      "trafficSampled": "抽样流量",
+      "usersLoadFailed": "无法加载用户，请刷新页面重试。",
+      "usersToShadow": "参与影子的用户"
+    },
+    "tierTurnsChart": {
+      "routingByTier": "按层级路由",
+      "totalTurns": "共 {{turns}} 轮"
+    },
+    "usageTab": {
+      "cumulative": "累计",
+      "dailySpendByTool": "按工具统计的每日花费",
+      "loading": "加载中...",
+      "noToolUsage": "该时间范围内没有工具用量。",
+      "perDay": "按天",
+      "runningTotalSaved": "累计节省",
+      "savedPerDay": "按天节省",
+      "savingsByDriver": "按来源统计的节省",
+      "spendBucketedByUtcDay": "花费按 UTC 日期分桶",
+      "spendByTool": "按工具统计的花费",
+      "totalByTool": "按工具合计"
+    }
+  },
   "budgetsPage": {
     "budgetTable": {
       "loadingBudgets": "正在加载预算…",
@@ -10186,6 +11064,47 @@
     },
     "budgetPanel": {
       "subtitle": "可分配给客户的花费、TPM 和 RPM 限制。"
+    }
+  },
+  "defaultUserSettingsForm": {
+    "budgetDuration": {
+      "daily": "每天",
+      "hourly": "每小时",
+      "monthly": "每月",
+      "noReset": "不重置",
+      "weekly": "每周"
+    },
+    "budgetDurationField": {
+      "description": "默认预算的重置周期"
+    },
+    "budgetField": {
+      "description": "新用户的默认最大预算"
+    },
+    "cardDescription": "应用于通过 SSO 或用户管理 API 创建的每个新内部用户。",
+    "displayValues": {
+      "teamMaxBudget": "最大预算 ${{budget}}"
+    },
+    "loadError": "无法加载默认用户设置。",
+    "modelsField": {
+      "description": "新用户可访问的模型",
+      "label": "默认模型"
+    },
+    "notifications": {
+      "updateFailedGeneric": "更新默认用户设置失败",
+      "updated": "默认用户设置已更新"
+    },
+    "roleField": {
+      "description": "分配给新用户的角色"
+    },
+    "teamEntry": {
+      "maxBudgetInTeamLabel": "团队内最大预算（USD）"
+    },
+    "teamPicker": {
+      "searchPlaceholder": "搜索团队"
+    },
+    "teamsField": {
+      "description": "新用户将加入这些团队，只能选择已存在的团队。",
+      "title": "默认团队"
     }
   }
 }

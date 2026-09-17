@@ -517,10 +517,6 @@
       "addMember": "Add Member",
       "existingUsersNotice": "Search selects from users that already exist. To add someone new, ask a proxy admin to create their account first."
     },
-    "userDropdown": {
-      "placeholder": "Search users by email…",
-      "loading": "Loading users…"
-    },
     "budgetDurationDropdown": {
       "hourly": "hourly",
       "neverResets": "Never resets"
@@ -536,6 +532,10 @@
     "teamMultiSelect": {
       "clearAll": "Clear all teams",
       "placeholder": "Search teams by alias..."
+    },
+    "userDropdown": {
+      "loading": "Loading users…",
+      "placeholder": "Search users by email…"
     }
   },
   "adminPanel": {
@@ -1255,7 +1255,8 @@
     "cacheHitsVsApiRequests": "Cache Hits vs API Requests",
     "cachedVsGeneratedTokens": "Cached Completion Tokens vs Generated Completion Tokens",
     "runningHealthCheck": "Running cache health check...",
-    "unknownError": "Unknown error occurred"
+    "unknownError": "Unknown error occurred",
+    "cachedCompletionTokens": "Cached Completion Tokens"
   },
   "cacheHealth": {
     "runHealthCheck": "Run Health Check",
@@ -2916,7 +2917,8 @@
     "createdAt": "Created At",
     "updatedAt": "Updated At",
     "comingSoon": "Coming soon",
-    "copyField": "Copy {{field}}"
+    "copyField": "Copy {{field}}",
+    "removing": "Removing…"
   },
   "publicModelHub": {
     "copiedToClipboard": "Copied to clipboard!",
@@ -3364,7 +3366,10 @@
     "resetBudgetLabel": "Reset Budget",
     "metadataLabel": "Metadata",
     "metadataPlaceholder": "Enter metadata as JSON",
-    "saveChangesButton": "Save Changes"
+    "saveChangesButton": "Save Changes",
+    "mcpServersLabel": "MCP Servers / Access Groups",
+    "mcpServersTooltip": "Caps which MCP servers, access groups, and tools this user may reach. Every key the user holds is limited to this set.",
+    "modelMaxBudgetHint": "Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds."
   },
   "viewUserSpend": {
     "totalSpend": "Total Spend",
@@ -3425,7 +3430,13 @@
       "noKeys": "No Keys",
       "editUserDetails": "Edit user details",
       "deleteUser": "Delete user",
-      "resetPassword": "Reset Password"
+      "resetPassword": "Reset Password",
+      "aboutSsoId": "About SSO ID",
+      "editUserAction": "Edit user",
+      "key": "{{count}} Keys",
+      "openUserActions": "Open user actions",
+      "resetPasswordAction": "Reset password",
+      "selectUser": "Select {{user}}"
     },
     "table": {
       "searchByEmail": "Search by email...",
@@ -3435,7 +3446,16 @@
       "selectTeam": "Select Team",
       "showing": "Showing {{from}} - {{to}} of {{total}} results",
       "loadingUsers": "Loading users...",
-      "noUsersFound": "No users found"
+      "noUsersFound": "No users found",
+      "emptyHint": "Try adjusting your search or filters.",
+      "filterDrawerDescription": "Narrow down your users",
+      "loadingUsersUnicode": "Loading users…",
+      "noRolesFound": "No roles found",
+      "rolePlaceholder": "Select a role…",
+      "searchPlaceholder": "Search by email or ID…",
+      "ssoIdPlaceholder": "Enter SSO ID…",
+      "teamPlaceholder": "Select a team…",
+      "userIdPlaceholder": "Enter user ID…"
     },
     "userInfoView": {
       "backToUsers": "Back to Users",
@@ -3481,8 +3501,12 @@
       "roleAdminDesc": "- Can create team keys, add members, and manage settings",
       "adding": "Adding...",
       "addToTeam": "Add to Team",
-      "userFallbackTitle": "User"
-    }
+      "userFallbackTitle": "User",
+      "mcpPermissionsLabel": "MCP Permissions",
+      "removeUserFromTeam": "Remove {{team}}",
+      "unknown": "Unknown"
+    },
+    "loadingDefaultUserSettings": "Loading default user settings"
   },
   "viewLogs": {
     "compliancePanel": {
@@ -3492,7 +3516,9 @@
       "unavailable": "UNAVAILABLE",
       "regulatoryCompliance": "Regulatory Compliance",
       "euAiActCheckFailed": "Failed to check EU AI Act compliance",
-      "gdprCheckFailed": "Failed to check GDPR compliance"
+      "gdprCheckFailed": "Failed to check GDPR compliance",
+      "euAiAct": "EU AI Act",
+      "gdpr": "GDPR"
     },
     "contentFilterDetails": {
       "errorTitle": "Error",
@@ -3521,7 +3547,12 @@
       "keywords_one": "{{count}} keywords",
       "keywords_other": "{{count}} keywords",
       "categories_one": "{{count}} categories",
-      "categories_other": "{{count}} categories"
+      "categories_other": "{{count}} categories",
+      "blocked": "{{count}} blocked",
+      "categories": "{{count}} categories",
+      "keywords": "{{count}} keywords",
+      "masked": "{{count}} masked",
+      "patterns": "{{count}} patterns"
     },
     "guardrailViewer": {
       "requestLifecycle": "Request Lifecycle",
@@ -3556,7 +3587,12 @@
       "exportComplianceLog": "Export Compliance Log",
       "riskScore": "Risk {{score}}/10",
       "riskScoreTooltip": "Risk score: {{score}}/10",
-      "confidencePercent": "{{percent}}% conf"
+      "confidencePercent": "{{percent}}% conf",
+      "estimatedGuardrailCost": "Estimated guardrail cost (reported only; not counted against spend or budgets)",
+      "flagged": "FLAGGED",
+      "flaggedCount": "{{count}} Flagged",
+      "guardrailCost": "Guardrail cost",
+      "guardrailsEvaluated": "{{count}} guardrails evaluated"
     },
     "presidioDetectedEntities": {
       "detectedEntities": "Detected Entities ({{count}})",
@@ -3578,7 +3614,8 @@
       "copiedRequestId": "Copied!",
       "escToClose": "ESC to close",
       "envTag": "Env: {{env}}",
-      "providerAlt": "Provider"
+      "providerAlt": "Provider",
+      "envLabel": "Env: {{environment}}"
     },
     "historyTree": {
       "history_one": "HISTORY ({{count}} message)",
@@ -3627,7 +3664,26 @@
       "guardrailsEvaluated_one": "{{count}} guardrail evaluated",
       "guardrailsEvaluated_other": "{{count}} guardrails evaluated",
       "errorCode": "Error Code:",
-      "errorMessage": "Message:"
+      "errorMessage": "Message:",
+      "batchResults": "Batch Results",
+      "cacheHitLabel": "Hit",
+      "cacheKeyTooltip": "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
+      "cacheMissLabel": "Miss",
+      "docs": "Docs",
+      "guardrailsEvaluated": "{{count}} guardrails evaluated",
+      "labelBatchId": "Batch ID",
+      "labelCacheKey": "Cache Key",
+      "labelFailedRequests": "Failed Requests",
+      "labelModels": "Models",
+      "labelPromptCacheCreationTokens": "Prompt Cache Creation Tokens",
+      "labelPromptCacheReadTokens": "Prompt Cache Read Tokens",
+      "labelReasoningTokens": "Reasoning Tokens",
+      "labelResponseCache": "Response Cache",
+      "labelSuccessfulRequests": "Successful Requests",
+      "masked": "{{count}} masked",
+      "promptCacheCreationTooltip": "Input tokens written to the LLM provider's prompt cache for reuse by later requests.",
+      "promptCacheReadTooltip": "Input tokens read from the LLM provider's prompt cache (e.g. Anthropic / OpenAI), billed at a discounted rate. Reported by the provider.",
+      "responseCacheTooltip": "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed."
     },
     "logDetailsDrawer": {
       "collapseTraceSidebar": "Collapse trace sidebar",
@@ -3638,7 +3694,9 @@
       "labelReqCount": "{{count}} req",
       "labelLlm": " LLM",
       "labelAgent": " Agent",
-      "labelMcp": " MCP"
+      "labelMcp": " MCP",
+      "sortDuration": "Duration",
+      "sortStartTime": "Start time"
     },
     "outputCard": {
       "outputCopied": "Output copied",
@@ -3662,7 +3720,11 @@
       "turnCount_other": "{{count}} turns",
       "inputTokenBreakdown": "Input Token Breakdown",
       "outputTokenBreakdown": "Output Token Breakdown",
-      "tokenBreakdownSuffix": "Token Breakdown"
+      "tokenBreakdownSuffix": "Token Breakdown",
+      "tokenBreakdownInput": "Input",
+      "tokenBreakdownOutput": "Output",
+      "tokenBreakdownTitle": "{{label}} Token Breakdown",
+      "turnCount": "{{count}} turns"
     },
     "sectionHeader": {
       "labelInput": "Input",
@@ -3992,7 +4054,13 @@
       "textCoverage": "text {{guarded}}/{{total}}",
       "imagesCoverage": "images {{guarded}}/{{total}}",
       "automatedReasoningFindings": "Automated Reasoning Findings",
-      "rawResponse": "Raw Bedrock Guardrail Response"
+      "rawResponse": "Raw Bedrock Guardrail Response",
+      "policyAutomatedReasoning": "automated-reasoning",
+      "policyContent": "content",
+      "policyContextualGrounding": "contextual-grounding",
+      "policySensitiveInfo": "sensitive-info",
+      "policyTopic": "topic",
+      "policyWord": "word"
     },
     "prettyMessagesUtils": {
       "roleSystem": "SYSTEM",
@@ -4035,6 +4103,74 @@
       "batchSucceeded": "{{successful}}/{{total}} succeeded",
       "cacheHitCount": "{{count}} cache hit",
       "sessionTotal": "session total"
+    },
+    "classifierAuditView": {
+      "inputHint": "Provider request payload. A cached call or disabled message logging may have no capture.",
+      "inputTitle": "Classifier input",
+      "notCaptured": "Not captured or message logging disabled",
+      "originatingHint": "Comparison only. This source request was not appended to the classifier input.",
+      "originatingTitle": "Originating request, credentials masked",
+      "responseHint": "The returned verdict and any explanation supplied by the classifier. Later routing rules may change the tier.",
+      "responseTitle": "Classifier response",
+      "truncatedNotice": "This stored copy is truncated. The complete payload is unavailable from the configured log storage."
+    },
+    "inputCard": {
+      "inputCopied": "Input copied"
+    },
+    "routingDecisionCard": {
+      "causeBandit": "Adaptive bandit",
+      "causeClassifierFallback": "Fallback tier, LLM classifier failed",
+      "causeClassifierPlugin": "Custom classifier plugin",
+      "causeDefaultFallback": "Default model, no route matched",
+      "causeDefaultModelFallback": "Default model, LLM classifier failed",
+      "causeHeuristicFirstShortCircuit": "Heuristic scorer, classifier skipped",
+      "causeHeuristicScorer": "Heuristic scorer",
+      "causeHeuristicV2": "Heuristic v2",
+      "causeHybridShortCircuit": "Heuristic scorer, score clear of every boundary",
+      "causeModalityEscalation": "Escalated for image input",
+      "causeModalityPinOverride": "Overrode session pin for image input",
+      "causeQualityTier": "Quality tier mapping",
+      "causeSemanticKeywordMatch": "Semantic keyword match",
+      "causeSessionAffinityEscalation": "Escalated from session pin",
+      "causeSessionAffinityPin": "Pinned to session",
+      "causeUserTurnContinuation": "Continuation turn, classifier skipped",
+      "classifier": "LLM classifier",
+      "classifierWithModel": "LLM classifier ({{model}})",
+      "escalatedWithKeyword": "Yes, keyword \"{{keyword}}\"",
+      "escalatedYes": "Yes",
+      "housekeepingKeyword": "Client housekeeping call: \"{{keyword}}\"",
+      "housekeepingNoKeyword": "Client housekeeping call, classifier skipped",
+      "keywordMatch": "Keyword match",
+      "keywordMatchWithKeyword": "Keyword match: \"{{keyword}}\"",
+      "labelDecidedBy": "Decided by",
+      "labelEscalated": "Escalated",
+      "labelRequestType": "Request type",
+      "labelRoutedTo": "Routed to",
+      "labelScore": "Score",
+      "labelSignals": "Signals",
+      "labelTier": "Tier",
+      "planModeFloor": "Plan-mode floor",
+      "planModeFloorKeyword": "Plan-mode floor: \"{{keyword}}\"",
+      "planModeFloorTool": "Plan-mode floor (exit_plan_mode tool)",
+      "rangeAtOrAbove": "at or above {{bound}}",
+      "rangeBelow": "below {{bound}}",
+      "rangeBetween": "{{lower}} to {{upper}}",
+      "reasoningOverride": "Heuristic, {{tier}} override (2 or more reasoning markers, score of at least {{stated}})",
+      "requestedNoKeyword": "Requested; already at the highest tier",
+      "requestedWithKeyword": "Requested via \"{{keyword}}\"; already at the highest tier",
+      "routerTypeAdaptive": "Adaptive router",
+      "routerTypeComplexity": "Auto-Router v2",
+      "routerTypeQuality": "Quality router",
+      "simpleToMediumBoundary": "the Simple to Medium boundary",
+      "tierNameCOMPLEX": "COMPLEX",
+      "tierNameMEDIUM": "MEDIUM",
+      "tierNameREASONING": "REASONING",
+      "tierNameSIMPLE": "SIMPLE",
+      "title": "Routing",
+      "unknownCause": "Unknown"
+    },
+    "typeBadges": {
+      "batch": "Batch"
     }
   },
   "userAgentActivity": {
@@ -4892,7 +5028,8 @@
       "pdfLabel": "PDF",
       "imageLabel": "Image",
       "errorFetchingResponse": "Error fetching response: {{errorMessage}}",
-      "provideVirtualKey": "Please provide a Virtual Key or select Current UI Session"
+      "provideVirtualKey": "Please provide a Virtual Key or select Current UI Session",
+      "removeAttachment": "Remove attachment"
     },
     "comparisonPanel": {
       "syncSettingsAcrossModels": "Sync Settings Across Models",
@@ -5007,7 +5144,8 @@
       "verdictCorrect": "Correctly handled",
       "verdictGap": "Gap — should have been blocked",
       "verdictFalsePositive": "False positive — incorrectly blocked",
-      "llmResponse": "LLM response:"
+      "llmResponse": "LLM response:",
+      "testConfigurationDescGuardrailsOnly": "Select guardrails to test against."
     },
     "a2AMetrics": {
       "header": "A2A Metadata",
@@ -5032,7 +5170,10 @@
       "temperature": "Temperature",
       "temperatureTooltip": "Controls randomness. Lower values make output more deterministic, higher values more creative.",
       "maxTokens": "Max Tokens",
-      "maxTokensTooltip": "Maximum number of tokens to generate in the response."
+      "maxTokensTooltip": "Maximum number of tokens to generate in the response.",
+      "streamResponses": "Stream responses",
+      "temperatureValueAriaLabel": "Temperature value",
+      "maxTokensValueAriaLabel": "Max tokens value"
     },
     "agentBuilderView": {
       "title": "Agent Builder",
@@ -5090,7 +5231,8 @@
       "browserNotSupported": "Your browser does not support the audio element."
     },
     "chatImageRenderer": {
-      "uploadedImageAlt": "User uploaded image"
+      "uploadedImageAlt": "User uploaded image",
+      "pdfAttachment": "PDF attachment"
     },
     "chatImageUpload": {
       "attachTooltip": "Attach image or PDF"
@@ -5212,7 +5354,15 @@
       "toolsetsExample": "<strong>Example:</strong> A \"GitHub Read-only\" toolset might include only <code>list_repos</code> and <code>get_file</code> from a GitHub MCP server — preventing agents from making writes.",
       "toolsetsCreatingTitle": "Creating toolsets:",
       "toolsetsCreatingDesc": "Admins can create and manage toolsets from the <strong>MCP</strong> page → <strong>Toolsets</strong> tab. Toolsets can then be assigned to keys and teams to scope their tool access.",
-      "audioFileSizeMb": "({{size}} MB)"
+      "audioFileSizeMb": "({{size}} MB)",
+      "pleaseSelectEndpoint": "Please select an endpoint before sending a request",
+      "modelSettingsUnavailable": "Model Settings unavailable",
+      "aboutMcpServersAndToolsets": "About MCP servers and toolsets",
+      "aboutVectorStores": "About vector stores",
+      "aboutGuardrails": "About guardrails",
+      "aboutPolicies": "About policies",
+      "unableToCopyToClipboard": "Unable to copy to clipboard",
+      "toolsetsExampleText": "<strong>Example:</strong> A \"GitHub Read-only\" toolset might include only <code>list_repos</code> and <code>get_file</code> from a GitHub MCP server, preventing agents from making writes."
     },
     "codeInterpreterOutput": {
       "pythonCodeExecuted": "Python Code Executed",
@@ -5225,7 +5375,8 @@
       "tooltipDesc": "Run Python code to generate files, charts, and analyze data. Container is created automatically.",
       "onlyOpenAIWarning": "Code Interpreter is only available for OpenAI models",
       "onlyOpenAINotice": "Code Interpreter is currently only supported for OpenAI models.",
-      "requestSupportLink": "Request support for other providers"
+      "requestSupportLink": "Request support for other providers",
+      "aboutTitle": "About Code Interpreter"
     },
     "filePreviewCard": {
       "uploadPreview": "Upload preview",
@@ -5300,7 +5451,24 @@
       "uiSessionReadyDesc": "UI will manage session using chat history",
       "apiSessionActiveDesc": "LiteLLM API session active - context maintained server-side",
       "uiSessionActiveDesc": "UI session active - context maintained client-side",
-      "copyTooltipTitle": "Copy response ID to continue session:"
+      "copyTooltipTitle": "Copy response ID to continue session:",
+      "aboutTitle": "About session management",
+      "useApiSessionManagement": "Use API session management",
+      "copyResponseId": "Copy response ID",
+      "copyResponseIdFailed": "Unable to copy response ID"
+    },
+    "chatComposer": {
+      "stopRequest": "Stop request",
+      "sendMessage": "Send message"
+    },
+    "endpointSelector": {
+      "selectEndpoint": "Select an endpoint"
+    },
+    "audioTranscriptions": {
+      "transcribeFailed": "Failed to transcribe audio"
+    },
+    "imageEdits": {
+      "editFailed": "Failed to edit image(s)"
     }
   },
   "settingsPages": {
@@ -6230,7 +6398,8 @@
       "guardrailsCreateFailed": "Failed to create {{count}} guardrail(s): {{list}}. You may need to create them manually.",
       "createGuardrailsFailed": "Failed to create guardrails. Please try again.",
       "learnMoreAttachmentsArrow": "Learn more about attachments ->",
-      "learnMoreDocsArrow": "Learn more in the documentation ->"
+      "learnMoreDocsArrow": "Learn more in the documentation ->",
+      "dismissAriaLabel": "Dismiss {{title}}"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "Next Step",
@@ -6450,7 +6619,8 @@
       "needHelp": "Need Help?",
       "testConnectButton": "Test Connect",
       "addModelButton": "Add Model",
-      "connectionTestResultsTitle": "Connection Test Results"
+      "connectionTestResultsTitle": "Connection Test Results",
+      "noProvidersFound": "No providers found"
     },
     "addModelModes": {
       "chatLabel": "Chat - /chat/completions",
@@ -6514,7 +6684,24 @@
       "selectDefaultModelError": "Please select a Default Model",
       "configureRouteError": "Please configure at least one route for the auto router",
       "invalidRoutesError": "Please ensure all routes have a target model, description, and at least one utterance",
-      "missingFieldsError": "Please fill in the following required fields: {{fields}}"
+      "missingFieldsError": "Please fill in the following required fields: {{fields}}",
+      "automaticSetupCreated": "Automatic setup created",
+      "automaticSetupHint": "Let us pick models for each complexity tier.",
+      "cannotVerifyAvailability": "Cannot verify these models are available",
+      "checkingAvailability": "Checking model availability...",
+      "configureAutomatically": "Configure automatically",
+      "customConfigurationDesc": "Define your auto router from scratch",
+      "detailedConfiguration": "Detailed Configuration",
+      "loadingTemplates": "Loading templates...",
+      "matchesDeployments": "Matches your deployments",
+      "missingModels": "Missing: {{models}}",
+      "modelsLoadFailed": "Could not load available models.",
+      "noTiersConfigured": "No tiers configured yet",
+      "notSureWhereToStart": "Not sure where to start?",
+      "selectTeamTooltip": "Select the team this auto router belongs to. Only keys for this team will be able to call it.",
+      "templatePlaceholder": "Choose a template or select Custom to define your own",
+      "templatesLoadFailed": "Could not load templates, so only Custom Configuration is shown.",
+      "testRouting": "Test Routing"
     },
     "complexityRouterConfig": {
       "title": "Complexity Tier Configuration",
@@ -6540,7 +6727,54 @@
       "scoreRangeSimple": ": Score < 0.15",
       "scoreRangeMedium": ": Score 0.15 - 0.35",
       "scoreRangeComplex": ": Score 0.35 - 0.60",
-      "scoreRangeReasoning": ": Score > 0.60 (or 2+ reasoning markers)"
+      "scoreRangeReasoning": ": Score > 0.60 (or 2+ reasoning markers)",
+      "adaptiveRoutingSection": "Advanced: Adaptive Routing",
+      "addModelToFallbackTier": "Add a model to your fallback tier",
+      "addModelToSimpleOrMediumTier": "Add a model to the Simple or Medium tier",
+      "addTier": "Add tier",
+      "affinitySection": "Advanced: Affinity",
+      "classificationMethodSection": "Advanced: Classification Method",
+      "clearDisplayNameAriaLabel": "Clear display name for the {{label}} tier",
+      "compressionSection": "Advanced: Compression",
+      "contextWindowEscalationSection": "Advanced: Context Window Escalation",
+      "customTierTooltip": "A tier you defined. The classifier routes requests matching its definition here.",
+      "defaultModelTooltip": "Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.",
+      "derivedDefaultModelPlaceholder": "Derived from tiers: {{model}}",
+      "displayNameAriaLabel": "Display name for the {{label}} tier",
+      "displayNamePlaceholder": "Display name (default: {{label}})",
+      "editTiers": "Edit tiers",
+      "editingHint": "Add or remove tiers to define your own set. Every custom tier needs a definition the LLM classifier routes on, and an edited set requires the LLM classification method",
+      "escalationKeywordsSection": "Advanced: Escalation Keywords",
+      "fallbackTierLabel": "Fallback tier",
+      "fallbackTierPlaceholder": "Pick the tier classifier failures route to",
+      "fallbackTierTitle": "Fallback Tier",
+      "fallbackTierTooltip": "Where requests route when the LLM classifier errors, times out, or returns an unparseable reply. Required for an edited tier set: the heuristic scorer cannot produce your tiers.",
+      "keepBuiltInDefinitionPlaceholder": "Leave blank to keep the built-in definition",
+      "keywordRulesError": "{{error}}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back",
+      "keywordSemanticMatchingSection": "Advanced: Keyword/Semantic Matching",
+      "modalityRoutingSection": "Advanced: Modality Routing",
+      "multipleModelsHint": "Multiple models selected: the router randomly picks among them per request (or Thompson-samples within the pool when adaptive routing is on).",
+      "planModeMinTierLabel": "Plan-mode minimum tier",
+      "planModeOverrideSection": "Advanced: Plan-Mode Override",
+      "planModeTierHint": "Requests from coding agents in plan mode (Claude Code, GitHub Copilot) route to at least this tier. The classifier still wins when it picks higher, and the override only lasts while plan mode is active.",
+      "planModeTierLabel": "Route plan-mode requests to a minimum tier",
+      "planModeTierUnavailable": " Add models to a tier to enable this.",
+      "removeTierAriaLabel": "Remove the {{tier}} tier",
+      "responseFormatSection": "Advanced: Response Format",
+      "restoreDefaults": "Restore defaults",
+      "selectTierModelsPlaceholder": "Select model(s) for {{label}} queries",
+      "stalledTaskEscalationSection": "Advanced: Stalled Task Escalation",
+      "tierDefinitionAriaLabel": "Definition for tier {{index}}",
+      "tierDefinitionPlaceholder": "What belongs in this tier, e.g. requests asking for a security audit",
+      "tierDefinitionRequired": "A definition is required: it is the rubric the classifier routes on for this tier",
+      "tierFallbackName": "tier {{index}}",
+      "tierNameAriaLabel": "Name for tier {{index}}",
+      "tierNamePlaceholder": "Tier name, e.g. SECURITY_REVIEW",
+      "tierOriginBuiltIn": "built-in",
+      "tierOriginCustom": "custom",
+      "tierPosition": "Tier {{index}} of {{count}} · {{origin}}",
+      "tierRequired": "The {{label}} tier is required",
+      "tierMappingTooltip": "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models."
     },
     "routerConfigBuilder": {
       "title": "Routes Configuration",
@@ -6561,7 +6795,9 @@
       "utterancesPlaceholder": "Type an utterance and press Enter...",
       "jsonPreviewLabel": "JSON Preview",
       "showButton": "Show",
-      "hideButton": "Hide"
+      "hideButton": "Hide",
+      "deleteAriaLabel": "delete",
+      "removeUtteranceAriaLabel": "Remove {{utterance}}"
     },
     "advancedSettings": {
       "title": "Advanced Settings",
@@ -6596,7 +6832,18 @@
       "litellmParamsHelpText": "Pass JSON of litellm supported params",
       "litellmParamsHelpLink": "litellm.completion() call",
       "modelInfoLabel": "Model Info",
-      "modelInfoTooltip": "Optional model info params. Returned when calling `/model/info` endpoint."
+      "modelInfoTooltip": "Optional model info params. Returned when calling `/model/info` endpoint.",
+      "guardrailsEmptyText": "Type to add a guardrail",
+      "ptuCountLabel": "PTU Count",
+      "ptuCountTooltip": "Provisioned throughput units for this deployment. Set together with Cost per PTU / Hour and a Team to attribute a flat daily cost.",
+      "ptuEndLabel": "PTU Effective To (UTC)",
+      "ptuEndTooltip": "Optional end of the PTU window (exclusive). Leave blank for open-ended.",
+      "ptuRateLabel": "Calculated Cost per PTU / Hour (USD)",
+      "ptuRateTooltip": "Flat cost = PTU count * this rate * active hours, attributed to the deployment's team.",
+      "ptuStartLabel": "PTU Effective From (UTC)",
+      "ptuStartTooltip": "Start of the PTU window, required when PTU Count is set. Flat cost accrues by the hour within the window; a window opening at 23:00 charges one hour that day.",
+      "tagsEmptyText": "Type to add a tag",
+      "litellmParamsHelpTextWithLink": "Pass JSON of litellm supported params <completionLink>litellm.completion() call</completionLink>"
     },
     "cacheControlSettings": {
       "injectionPointsLabel": "Cache Control Injection Points",
@@ -6613,7 +6860,9 @@
       "indexTooltip": "(Optional) If set litellm will mark the message at this index as cacheable",
       "indexPlaceholder": "Optional",
       "addInjectionPoint": "Add Injection Point",
-      "messageType": "Message"
+      "messageType": "Message",
+      "labelHelp": "{{label}} help",
+      "removeInjectionPoint": "Remove injection point {{index}}"
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "Public Model Name",
@@ -6629,7 +6878,9 @@
       "modelMappingsLabel": "Model Mappings",
       "modelMappingsTooltip": "Map public model names to LiteLLM model names for load balancing",
       "mappingRequired": "At least one model mapping is required",
-      "publicNameRequired": "All model mappings must have valid public names"
+      "publicNameRequired": "All model mappings must have valid public names",
+      "tooltipUsageWithLabel": "<strongLabel>Usage:</strongLabel> You make an API call to the LiteLLM proxy with",
+      "tooltipResultWithLabel": "<strongLabel>Result:</strongLabel> LiteLLM sends"
     },
     "litellmModelName": {
       "fieldLabel": "LiteLLM Model Name(s)",
@@ -6643,7 +6894,8 @@
       "modelDescription": "The model name LiteLLM will send to the LLM API",
       "enterAzureDeploymentPlaceholder": "Enter Azure deployment name",
       "enterCustomModelPlaceholder": "Enter custom model name",
-      "customModelRequired": "Please enter a custom model name."
+      "customModelRequired": "Please enter a custom model name.",
+      "selectProviderPlaceholder": "Select a provider first"
     },
     "modelConnectionTest": {
       "testingConnection": "Testing connection to {{modelName}}...",
@@ -6670,6 +6922,288 @@
       "vertexCredentialsHelp": "Give a gcp service account(.json file)",
       "baseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select name from",
       "baseModelHelpLink": "here"
+    },
+    "adaptiveRouting": {
+      "allTiersSoftFloor": "All tiers (soft floor)",
+      "allTiersSoftFloorHint": "— router can pick across tiers, depending on the best fit for the prompt",
+      "classifiedTierOnly": "Classified tier only",
+      "classifiedTierOnlyHint": "— router can only pick models within tier",
+      "eligibleModelPool": "Eligible Model Pool",
+      "enableAdaptiveSelection": "Enable adaptive bandit selection",
+      "enableAdaptiveSelectionHint": "When disabled, each request always uses the model assigned to its classified tier.",
+      "howItWorksDescription": "It learns from how each conversation actually goes: does the user have to rephrase or correct the model, does it get stuck repeating itself, does it run out of tool calls, does the user seem satisfied. Combined with cost, this live feedback shifts future routing toward the models that are actually working well, and improves as more conversations come in. Until there's enough feedback, it defaults to the classified tier's model.",
+      "howItWorksTitle": "How Adaptive Routing Works",
+      "qualityVsCost": "Quality vs. Cost ({{quality}}% quality / {{cost}}% cost)",
+      "qualityVsCostHint": "Higher quality weight favors more capable (pricier) models; higher cost weight favors cheaper models when the bandit has feedback to act on. Recommended: 30% quality / 70% cost split.",
+      "qualityVsCostLabel": "Quality vs. Cost",
+      "tierDistancePenalty": "Tier Distance Penalty",
+      "tierDistancePenaltyHint": "Score penalty applied per tier-step away from the classified tier."
+    },
+    "affinityControls": {
+      "pinSessionHint": "Keeps a session on the same deployment within a group, so provider prompt caches stay warm. Turn off to load-balance every turn.",
+      "pinSessionLabel": "Pin a session to one deployment per model group",
+      "ttlHint": "Refreshes after every request that reuses a pin. Empty tracks the backend default of {{seconds}} seconds.",
+      "ttlLabel": "How long a pin survives idle (seconds)"
+    },
+    "autoRouterConnectionTest": {
+      "description": "Test Connection sends a minimal request to every configured tier, classifier, default, and embedding model. The classifier probe includes its reasoning effort override.",
+      "embeddingSuffix": " (embedding)"
+    },
+    "autoRouterRoutingTest": {
+      "description": "Send a prompt through this router's classifier to see which model it would pick, and why. The prompt is only classified: nothing is sent to the model it routes to.",
+      "promptPlaceholder": "Paste a prompt an end user would send",
+      "routeFailed": "Could not route this prompt",
+      "routedTo": "Routed to",
+      "routing": "Routing...",
+      "sendPrompt": "Send Test Prompt",
+      "unconfiguredModel": "This proxy has no model group by that name"
+    },
+    "buildComplexityRouterConfig": {
+      "classifierModelRequired": "Please select a classifier model, or switch back to Heuristic",
+      "classifierModelRequiredForCustomTierSet": "Please select a classifier model: an edited tier set routes with the LLM classifier",
+      "dryRunRejected": "The proxy rejected this auto-router configuration",
+      "keywordRuleOrphanedTier": "Keyword rule(s) {{rules}} route to a tier this router no longer has",
+      "keywordRuleWithoutKeywords": "Add at least one keyword to keyword rule(s): {{rules}}",
+      "missingTierModels": "Select a model for the following tier(s): {{tiers}}",
+      "planModeTierWithoutModels": "The plan-mode minimum tier ({{tier}}) has no models. Add one or turn the override off.",
+      "reasoningEffortUnsupported": "{{effort}} reasoning effort is not supported by every deployment in {{model}}. Choose Default or a supported value.",
+      "semanticEmbeddingModelRequired": "Select an embedding model to use semantic keyword matching",
+      "semanticKeywordRulesRequired": "Add at least one keyword tier rule to use semantic keyword matching",
+      "tierLabelsRepeated": "Tier display names must be unique. Repeated: {{labels}}",
+      "tierLabelsShadowing": "A tier's display name can't be another tier's name: {{tiers}}"
+    },
+    "classificationMethod": {
+      "boundaryLoadFailed": "The tier score ranges could not be loaded from the proxy.",
+      "boundaryMarginHint": "A score further than this from every tier boundary routes on the scorer's own tier, however expensive that tier is. A score closer than this, and anything the scorer found no signal for at all, goes to the classifier to break the tie",
+      "boundaryMarginLabel": "Boundary margin",
+      "classifierFallbackHeading": "If the classifier fails",
+      "classifierModelLabel": "Classifier Model",
+      "classifierModelPlaceholder": "Select the model that will classify request complexity",
+      "classifierModelRequired": "A classifier model is required",
+      "classifierPromptLabel": "Classifier Prompt",
+      "classifierPromptTooltip": "Every rubric uses the same four tiers. They differ in the worked examples that show the classifier where the boundary between tiers sits, and the Business rubric also rewrites the tier definitions for business traffic. Pick the rubric, and write your own opening instructions and calibration examples, inside the prompt editor.",
+      "contextBudgetHint": "Total characters of prior conversation sent to the classifier. Turns are taken newest first and quoted whole while they fit, so a short conversation is never cut.",
+      "contextBudgetLabel": "Context Character Budget",
+      "contextBudgetTooSmall": "Under {{min}} characters there is no room to quote a turn that does not already fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0 to turn context off deliberately.",
+      "contextWindowSizeLabel": "Context Window Size",
+      "customKeywordsEmptyText": "Type to add a keyword",
+      "customKeywordsPlaceholder": "Type a keyword and press Enter",
+      "customTechnicalKeywordsHint": "Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension. (e.g., udp, kafka, terraform).",
+      "customTechnicalKeywordsLabel": "Custom Technical Keywords",
+      "customTechnicalKeywordsTooltip": "Domain-specific terms appended to the built-in technical keyword list. Prompts containing these terms score higher on the technical dimension and route to more capable models.",
+      "decideLocallyUpTo": "Decide locally up to",
+      "decideLocallyUpToHint": "A request the scorer places at or below this tier routes there without a classifier call. Anything the scorer places higher, and anything it found no signal for at all, goes to the classifier instead",
+      "fallbackDefaultModel": "Route to the default model",
+      "fallbackDefaultModelConfigured": "Change it from the Default Model select.",
+      "fallbackDefaultModelHint": "— right when your prompt grades something other than complexity",
+      "fallbackDefaultModelMissing": "Set a default model on this router to use this option",
+      "fallbackHeuristic": "Score with the heuristic",
+      "fallbackHeuristicHint": "— right when the classifier grades complexity too",
+      "fallbackHint": "Applies when the classifier call errors, times out, or returns an unparseable response.",
+      "frequencyEveryRequest": "Every request",
+      "frequencyEveryRequestHint": ": score every turn, tool-result continuations included",
+      "frequencyHint": "Holding the tier keeps an agent on one model for a whole tool loop and cuts scoring cost. A turn the router cannot match to a held decision, such as one with no session id or an expired one, is scored again",
+      "frequencyLabel": "How often to classify",
+      "frequencySession": "Once per session",
+      "frequencySessionHint": ": score the first turn only, then hold that tier and its deployment for the whole session",
+      "frequencyUserTurn": "Every new user message",
+      "frequencyUserTurnHint": ": score each new human ask, then hold that tier for the tool calls that follow it",
+      "heuristicDesc": "(default), rule-based scoring with no API calls and <1ms latency",
+      "heuristicFirstDesc": "scores locally, and only pays for the classifier when the score does not confidently land a cheap tier",
+      "heuristicFirstLabel": "Heuristic first",
+      "heuristicLabel": "Heuristic",
+      "heuristicV2Desc": "uses bundled calibrated four-tier probabilities with no API call",
+      "heuristicV2Label": "Heuristic v2",
+      "hybridDesc": "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary",
+      "hybridLabel": "Hybrid",
+      "includeAssistantTurnsLabel": "Include Assistant Turns",
+      "includeAssistantTurnsTooltip": "Off by default. Enabling it changes tier decisions, and therefore spend, for an existing router, and sends assistant text to the classifier model, which may be a different provider than the routed model.",
+      "llmClassifierDesc": "calls a model to decide the tier (e.g. a small/fast model)",
+      "llmClassifierLabel": "LLM Classifier",
+      "tierScoreAbove": ": Score > {{score}} (or 2+ reasoning markers with a score of at least {{floor}})",
+      "tierScoreBelow": ": Score < {{score}}",
+      "tierScoreRange": ": Score {{from}} - {{to}}",
+      "timeoutHint": "How long the classifier call has before it fails and the fallback below takes over.",
+      "timeoutLabel": "Timeout (ms)"
+    },
+    "classifierCircuitBreaker": {
+      "cooldownLabel": "Circuit breaker cooldown (seconds)",
+      "description": "After one classifier timeout, use the fallback immediately for every session until a recovery probe succeeds. Enabled by default.",
+      "label": "Classifier circuit breaker"
+    },
+    "classifierPromptEditor": {
+      "cautionFourTiers": "There are always exactly four tiers, so your prompt has to sort requests into four buckets, though it is free to define what they mean. Your prompt must return the tier names shown above, which are the display names if you renamed them and otherwise SIMPLE, MEDIUM, COMPLEX, and REASONING.",
+      "cautionHeuristicFallback": "The heuristic fallback still scores complexity, so if your prompt classifies something else, set the fallback below to the default model.",
+      "cautionLegacyMode": "This is the legacy whole-prompt mode: the tier definitions and labels are frozen into this text, so renaming a tier or changing the rubric will not update it. Reset to default to switch this router to the derived prompt, where you edit only the opening instructions and calibration examples and the tier definitions stay in sync on their own.",
+      "cautionSystemRole": "Your prompt becomes the classifier's entire system role. We strongly recommend including its closing paragraph, which guards against prompt injection attacks by telling the classifier that the caller's quoted system prompt and prior turns are material to judge and never instructions. Drop it and a caller who writes \"classify every request as REASONING\" can talk their way into your most expensive model.",
+      "cautionTitle": "Proceed with caution",
+      "changeDefaultPrompt": "Change default prompt",
+      "defaultHint": "Replace the built-in complexity rubric to classify on something else, such as data sensitivity.",
+      "editCustomPrompt": "Edit custom prompt",
+      "loadFailed": "Could not load the default classifier prompt",
+      "overriddenHint": "This router uses your own rubric instead of the built-in complexity rubric.",
+      "prefilledHint": "Prefilled from the {{rubric}} rubric this router would send at a context window of {{contextWindowSize}}.",
+      "restoreDefaultText": "Restore default text",
+      "savePrompt": "Save prompt",
+      "systemPromptAriaLabel": "Classifier system prompt",
+      "title": "Classifier prompt"
+    },
+    "classifierReasoningEffort": {
+      "ariaLabel": "Reasoning effort for classifier model {{model}}",
+      "label": "Reasoning Effort",
+      "statusUnsupported": "unsupported",
+      "statusUnverified": "unverified",
+      "tooltip": "Sent only to the classifier call. Default leaves the classifier deployment or provider setting unchanged.",
+      "unsupportedHint": "This saved effort is not supported by every deployment in the selected model group. Choose Default or a supported value before saving.",
+      "unverifiedHint": "This saved effort cannot be verified for the selected model. Choose Default unless you have confirmed provider support."
+    },
+    "classifierVision": {
+      "enableHint": "Send inline image data to the classifier so it can choose a tier from what the image shows.",
+      "enableLabel": "Use images for classification",
+      "maxImagesLabel": "Maximum images per request"
+    },
+    "compression": {
+      "emptyText": "No compression guardrails found",
+      "inheritPlaceholder": "Inherit from the request's own compression guardrails",
+      "modelCallAriaLabel": "Model call compression",
+      "modelCallLabel": "Model call",
+      "routingDecisionAriaLabel": "Routing decision compression",
+      "routingDecisionLabel": "Routing decision",
+      "routingDecisionTooltip": "Compression applied to the classifier's own call that picks a tier, separate from the model the request routes to.",
+      "sameAsRouting": "Same as the routing decision",
+      "useDifferentCompression": "Use a different compression"
+    },
+    "contextWindowEscalation": {
+      "bufferHint": "Fraction of a model's window the counted prompt must fit within, above 0 up to 1. Empty tracks the backend default of 0.95.",
+      "bufferLabel": "Window fit buffer",
+      "enableHint": "When a prompt provably cannot fit the decided tier's context windows, route it to the lowest tier whose window holds it instead of letting the provider reject it. Off means requests dispatch on complexity alone.",
+      "enableLabel": "Escalate oversized prompts to a tier that fits"
+    },
+    "customDimensionRows": {
+      "addButton": "Add custom dimension",
+      "footnote": "Keywords match the current ask. Regex scans its first 2,048 characters and permits bounded single-character repeats up to 64. The proxy validates patterns on save.",
+      "keywordsField": "Keywords (one per line)",
+      "patternsField": "Regex patterns (one per line)",
+      "removeAriaLabel": "Remove custom dimension {{index}}",
+      "rowLegend": "Custom dimension {{index}}",
+      "scoringHint": "Binary uses the full weight for any hit. Match count uses half for one distinct matcher and full weight for two or more.",
+      "scoringLabel": "Scoring",
+      "weightAriaLabel": "{{name}} weight"
+    },
+    "customDimensions": {
+      "matcherLimitsExceeded": "Custom dimension {{index}}: use at most 32 matchers, 256 characters each and 4096 characters combined",
+      "matcherRequired": "Custom dimension {{index}}: add at least one nonblank keyword or pattern",
+      "nameConflictsWithBuiltIn": "Custom dimension {{index}}: choose a name that is not already a built-in weight",
+      "nameDuplicated": "Custom dimension {{index}}: names must be unique",
+      "nameInvalid": "Custom dimension {{index}}: use a name starting with a letter, followed by letters, numbers or underscores (64 characters max)",
+      "tooManyDimensions": "A router can have at most 16 custom dimensions",
+      "weightOutOfRange": "Custom dimension {{index}}: weight must be greater than 0 and at most 1"
+    },
+    "escalationKeywords": {
+      "emptyText": "Type to add a phrase",
+      "title": "Escalation Keywords",
+      "tooltip": "Case-sensitive phrases a user can include in their message to force a bump to the next-higher complexity tier when they aren't happy with results. They can force a stronger model, but not choose which one."
+    },
+    "heuristicScoring": {
+      "decreasingBoundariesWarning": "These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere.",
+      "defaultsLoadFailed": "Could not load the shipped defaults, so only values this router already overrides are shown. Saving still works, and an untouched knob keeps following the defaults.",
+      "intro": "Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any recalibration of them rather than staying pinned to the numbers shown here.",
+      "loadingDefaults": "Loading the shipped defaults...",
+      "minScoreLabel": "Minimum score",
+      "overrideCountOne": "{{count}} override",
+      "overrideCountOther": "{{count}} overrides",
+      "overrideFloorHint": "Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted score reaches this floor.",
+      "overrideFloorTitle": "Reasoning override floor",
+      "promoteOnMarkers": "Set it to 0 to promote on the markers alone.",
+      "resetToDefaults": "Reset to defaults",
+      "restoreDefaultWeights": "Restore default weights",
+      "thresholdOrderWarning": "The short threshold is not below the long one, so no prompt length scores neutral on length.",
+      "title": "Advanced scoring",
+      "totalLabel": "total {{total}}",
+      "tracksBoundary": "Left untouched, it tracks the Simple to Medium boundary.",
+      "tracksBoundaryValue": "Left untouched, it tracks the Simple to Medium boundary, currently {{score}}.",
+      "weightAriaLabel": "{{label}} weight"
+    },
+    "keywordTierRules": {
+      "addRuleButton": "Add keyword rule",
+      "emptyText": "Type to add a keyword",
+      "emptyTitle": "No keyword tier overrides configured",
+      "keywordRequired": "At least one keyword is required",
+      "removeAriaLabel": "Remove keyword rule {{index}}",
+      "routeAriaLabel": "Route keyword rule {{index}} to tier",
+      "routeToTierLabel": "Route to tier",
+      "ruleKeywordsLabel": "Keywords {{index}}",
+      "title": "Keyword Tier Overrides",
+      "tooltip": "Match known terms and force the request straight to a chosen complexity tier, bypassing rule-based scoring."
+    },
+    "modalityRouting": {
+      "pinOverrideHint": "Route an image turn to a capable model even when the session is pinned to one that cannot take images. The pin is kept, so the next text turn goes back to it. Needs image routing turned on.",
+      "pinOverrideLabel": "Override session pin for image requests",
+      "routeImagesHint": "Replaces a routed model that cannot take image input with the nearest higher tier that can, then the default model, instead of failing with a provider 400. Only models explicitly declared supports_vision false are replaced, and a kept session pin still wins unless you turn on the override below.",
+      "routeImagesLabel": "Route image requests to vision-capable models"
+    },
+    "nonReasoningTier": {
+      "addHint": "Adds NON_REASONING below Simple, for operational agent traffic that relays or reformats information rather than reasoning about it. Escalation still moves up out of it when a request needs more.",
+      "addLabel": "Add a non-reasoning tier",
+      "requiresLlmClassifier": " Requires the LLM classification method."
+    },
+    "openingPromptEditor": {
+      "baseRubricLabel": "Base rubric",
+      "customOpeningOnRubric": "Custom opening on the {{rubric}} rubric",
+      "customizePrompt": "Customize prompt",
+      "editCustomPrompt": "Edit custom prompt",
+      "examplesHint": "Show representative requests and the tier they should receive. The router adds these after its tier definitions.",
+      "examplesLabel": "Calibration examples",
+      "instructionsHint": "Explain what the classifier should judge. Tier definitions are managed separately below.",
+      "instructionsLabel": "Classification instructions",
+      "previewAriaLabel": "Assembled classifier prompt",
+      "previewError": "Could not load the assembled prompt. Your text is still saved as written.",
+      "previewHeading": "What this router sends",
+      "previewLoading": "Loading the assembled prompt…",
+      "rubricSummary": "{{rubric}} rubric",
+      "savePrompt": "Save prompt",
+      "title": "Classifier prompt"
+    },
+    "responseFormat": {
+      "returnRawModelNameHint": "Return the resolved underlying model name in responses instead of the autorouter alias.",
+      "returnRawModelNameLabel": "Return raw model name"
+    },
+    "semanticKeywordMatching": {
+      "embeddingModelLabel": "Embedding model",
+      "embeddingModelRequired": "An embedding model is required",
+      "enableHint": "Uses same keyword-tier pairs as above and overrides direct keyword matching. Adds latency based on embedding model network request.",
+      "enableLabel": "Semantic keyword matching",
+      "enableTooltip": "Recognize related phrasing beyond exact keyword matches by comparing embeddings instead of plain text. Overrides direct keyword matching",
+      "matchThresholdHint": "Match only at or above this similarity score.",
+      "matchThresholdLabel": "Minimum match score",
+      "noEmbeddingModels": "No embedding models found"
+    },
+    "stallEscalation": {
+      "enableHint": "When the model keeps repeating the same tool call, or the same call keeps erroring, bump the request one tier higher for as long as it looks stuck. The automatic counterpart to an escalation keyword: nobody has to notice the loop and ask. Off means a stuck task keeps the model it was classified onto.",
+      "enableLabel": "Escalate a stalled task to a stronger model",
+      "repeatThresholdHint": "How many identical or failing calls count as stuck. At least 2; lower reacts sooner and misfires more.",
+      "repeatThresholdLabel": "Repeats before escalating",
+      "windowHint": "How far back to look, in tool calls. Never below the repeat count, since that could never be reached.",
+      "windowLabel": "Recent calls examined"
+    },
+    "tierConfigIntro": {
+      "displayNamesClassifierHint": " Your classifier model reads these names, so clearer ones can sharpen its choices.",
+      "displayNamesHint": "Rename a tier to use your own vocabulary in the dashboard and your spend logs. Renaming doesn't change how requests are classified, and callers never see these names.",
+      "heuristic": "The complexity router automatically classifies requests by complexity using rule-based scoring (no API calls, <1ms latency). Configure which model(s) handle each tier.",
+      "heuristicV2": "The complexity router classifies each request with a calibrated local four-tier model (no API calls). Configure which model(s) handle each tier.",
+      "llmClassifier": "The complexity router classifies each request with your classifier model and routes it to that tier. Configure which model(s) handle each tier."
+    },
+    "tierModelEffort": {
+      "reasoningEffortAriaLabel": "Reasoning effort for {{model}} in the {{tier}} tier",
+      "reasoningEffortLabel": "Reasoning effort",
+      "reasoningEffortTooltip": "Sent as reasoning_effort on requests this tier routes to the model, overriding the caller's value. Default leaves the request untouched."
+    },
+    "tierRows": {
+      "fallbackTierRequired": "Pick a Fallback Tier for classifier failures",
+      "tierCountOutOfRange": "A tier set needs {{min}} to {{max}} tiers",
+      "tierDefinitionRequired": "Every custom tier needs a definition: it is the rubric the classifier routes on",
+      "tierNameRequired": "Name every tier",
+      "tierNamesUnique": "Tier names must be unique, ignoring case"
     }
   },
   "costTracking": {
@@ -6702,7 +7236,8 @@
       "discountPercentageLabel": "Discount Percentage",
       "discountPercentageTooltip": "Enter a percentage value (e.g., 5 for 5% discount)",
       "discountRequired": "Please enter a discount percentage",
-      "addButton": "Add Provider Discount"
+      "addButton": "Add Provider Discount",
+      "noProvidersFound": "No providers found"
     },
     "costTrackingSettings": {
       "pageTitle": "Cost Tracking Settings",
@@ -6731,7 +7266,12 @@
       "addMarginModalTitle": "Add Provider Margin",
       "addMarginModalDesc": "Select a provider (or \"Global\" for all providers) and configure the margin. You can use percentage-based or fixed amount.",
       "docsLinkCustomPricing": "Custom pricing for models",
-      "docsLinkSpendTracking": "Spend tracking"
+      "docsLinkSpendTracking": "Spend tracking",
+      "blockUnpricedModelsTitle": "Block Unpriced Models",
+      "blockUnpricedModelsSubtitle": "Reject requests for models that have no pricing in the cost map instead of logging them as $0 spend",
+      "blockUnpricedToggleLabel": "Block requests for models without pricing",
+      "blockUnpricedToggleHint": "When enabled, a request whose resolved model has no cost mapping is rejected with a 403 so an admin can add pricing for it. Off by default",
+      "loadingConfiguration": "Loading configuration..."
     },
     "howItWorks": {
       "costCalculationTitle": "Cost Calculation",
@@ -6765,7 +7305,12 @@
       "modelPlaceholder": "Select a model",
       "perDay": "Per Day",
       "perMonth": "Per Month",
-      "addAnotherModel": "Add Another Model"
+      "addAnotherModel": "Add Another Model",
+      "colRequestsPer": "Requests/{{period}}",
+      "periodDay": "Day",
+      "periodMonth": "Month",
+      "colActions": "Actions",
+      "removeRowLabel": "Remove model row {{row}}"
     },
     "multiCostResults": {
       "selectModelsHint": "Select models above to see cost estimates",
@@ -6793,7 +7338,10 @@
       "periodMarginFee": "{{periodLabel}} Margin Fee",
       "tokenPricingLabel": "Token Pricing:",
       "inputPricingPerM": "Input ${{cost}}/1M",
-      "outputPricingPerM": "Output ${{cost}}/1M"
+      "outputPricingPerM": "Output ${{cost}}/1M",
+      "costBreakdownColumn": "Cost breakdown",
+      "showBreakdownLabel": "Show cost breakdown for {{model}}",
+      "hideBreakdownLabel": "Hide cost breakdown for {{model}}"
     },
     "multiExportDropdown": {
       "exportAsPdf": "Export as PDF",
@@ -6844,7 +7392,8 @@
       "csvColMonthlyCost": "Monthly Cost",
       "csvColInputCostPerReq": "Input Cost/Req",
       "csvColOutputCostPerReq": "Output Cost/Req",
-      "csvColMarginPerReq": "Margin/Req"
+      "csvColMarginPerReq": "Margin/Req",
+      "csvMultiModelReportTitle": "Multi-Model Cost Estimate Report"
     },
     "providerMarginTable": {
       "colProvider": "Provider",
@@ -6852,7 +7401,11 @@
       "colActions": "Actions",
       "globalProviderLabel": "Global (All Providers)",
       "logoAlt": "{{displayName}} logo",
-      "emptyMessage": "No provider margins configured"
+      "emptyMessage": "No provider margins configured",
+      "saveMarginLabel": "Save margin for {{displayName}}",
+      "cancelEditingMarginLabel": "Cancel editing margin for {{displayName}}",
+      "editMarginLabel": "Edit margin for {{displayName}}",
+      "removeMarginLabel": "Remove margin for {{displayName}}"
     },
     "useDiscountConfig": {
       "fetchFailed": "Failed to fetch discount configuration",
@@ -6872,6 +7425,17 @@
       "marginAlreadyExists": "Margin for {{displayName}} already exists. Edit it in the table above.",
       "invalidPercentageRange": "Percentage must be between 0% and 1000%",
       "invalidFixedAmount": "Fixed amount must be non-negative"
+    },
+    "providerDiscountTable": {
+      "colDiscountPercentage": "Discount Percentage",
+      "saveDiscountLabel": "Save discount for {{displayName}}",
+      "cancelEditingDiscountLabel": "Cancel editing discount for {{displayName}}",
+      "editDiscountLabel": "Edit discount for {{displayName}}",
+      "removeDiscountLabel": "Remove discount for {{displayName}}"
+    },
+    "useBlockUnpricedConfig": {
+      "blocked": "Requests for models without pricing will now be blocked",
+      "allowed": "Requests for models without pricing are now allowed"
     }
   },
   "usagePage": {
@@ -8024,7 +8588,9 @@
       "ioIn": "In:",
       "ioOut": "Out:",
       "colPublic": "Public",
-      "detailsShort": "Info"
+      "detailsShort": "Info",
+      "openAgentActions": "Open agent actions",
+      "agentNameCopied": "Agent name copied"
     },
     "modelHubTable": {
       "title": "AI Hub",
@@ -8099,7 +8665,25 @@
       "fieldCreatedBy": "Created By:",
       "fieldUpdatedBy": "Updated By:",
       "fieldLastHealthCheck": "Last Health Check:",
-      "fieldHealthCheckError": "Health Check Error:"
+      "fieldHealthCheckError": "Health Check Error:",
+      "loadingModels": "Loading models…",
+      "loadingAgents": "Loading agents…",
+      "loadingMcpServers": "Loading MCP servers…",
+      "clearSearch": "Clear search",
+      "noMatchingModels": "No matching models",
+      "noModels": "No models yet",
+      "noMatchingModelsHint": "Adjust the filters to see more models.",
+      "noModelsHint": "Models added to this proxy will appear here.",
+      "noMatchingAgents": "No matching agents",
+      "noAgents": "No agents yet",
+      "noMatchingAgentsHint": "Adjust the search to see more agents.",
+      "noAgentsHint": "Agents added to this proxy will appear here.",
+      "noMcpServers": "No MCP servers yet",
+      "noMcpServersHint": "MCP servers added to this proxy will appear here.",
+      "fieldDescription": "Description:",
+      "fieldStatus": "Status:",
+      "fieldCreatedAt": "Created At:",
+      "fieldUpdatedAt": "Updated At:"
     },
     "skillHubDashboard": {
       "loadingSkills": "Loading skills...",
@@ -8111,7 +8695,13 @@
       "allDomainsPlaceholder": "All Domains",
       "searchPlaceholder": "Search by name, namespace, or tag…",
       "showing_one": "Showing {{filtered}} of {{count}} skill",
-      "showing_other": "Showing {{filtered}} of {{count}} skills"
+      "showing_other": "Showing {{filtered}} of {{count}} skills",
+      "clearSearch": "Clear search",
+      "loading": "Loading skills…",
+      "noMatchingSkills": "No matching skills",
+      "noSkills": "No skills yet",
+      "noMatchingSkillsHint": "Adjust the search or domain filter to see more skills.",
+      "noSkillsHint": "Skills added here will appear for developers."
     },
     "usefulLinksManagement": {
       "title": "Link Management",
@@ -8209,6 +8799,19 @@
       "successCount_one": "Successfully made {{count}} model group public!",
       "successCount_other": "Successfully made {{count}} model groups public!",
       "failedToMakePublic": "Failed to make model groups public. Please try again."
+    },
+    "mcpHubTableColumns": {
+      "openMcpServerActions": "Open MCP server actions",
+      "serverNameCopied": "Server name copied",
+      "statusUnknown": "unknown"
+    },
+    "modelHubTableColumns": {
+      "openModelActions": "Open model actions",
+      "modelNameCopied": "Model name copied"
+    },
+    "skillHubTableColumns": {
+      "openSkillActions": "Open skill actions",
+      "skillNameCopied": "Skill name copied"
     }
   },
   "projects": {
@@ -8495,7 +9098,8 @@
       "dateGroupToday": "Today",
       "dateGroupYesterday": "Yesterday",
       "dateGroupLast7Days": "Last 7 Days",
-      "dateGroupOlder": "Older"
+      "dateGroupOlder": "Older",
+      "deleteTooltip": "Delete"
     },
     "mCPAppsPanel": {
       "connecting": "Connecting…",
@@ -8523,7 +9127,12 @@
       "noServersConnected": "No servers connected yet.",
       "noServersMatch": "No servers match your search.",
       "couldNotLoadTools": "Could not load tools for {{name}}",
-      "logoAlt": "{{name}} logo"
+      "logoAlt": "{{name}} logo",
+      "authorized": "Authorized",
+      "notSupportedOnConnection": "Not supported on this connection",
+      "noServersForConnection": "No MCP servers are available to this connection yet. Ask an admin to grant your user or team access.",
+      "connectModeHint": "Click a server to see its tools and connect",
+      "browsePitchShort": "Browse tools, authenticate once, use in chat"
     },
     "mCPConnectPicker": {
       "noServersConfigured": "No MCP servers configured",
@@ -8547,7 +9156,60 @@
       "colApp": "App",
       "colConnected": "Connected",
       "revokeConnection": "Revoke connection",
-      "revokeError": "Failed to revoke connection. Please try again."
+      "revokeError": "Failed to revoke connection. Please try again.",
+      "oauthConnectionsPitch": "Your stored OAuth connections; used automatically in chat",
+      "goToAppsConnectShort": "Go to <0>Integrations</0> and click <1>Connect</1> to authorize an MCP server",
+      "revokeTitle": "Revoke connection?",
+      "revokeButton": "Revoke",
+      "revokeDescription": "This removes the stored OAuth credential for {{name}}. You'll need to reconnect to use it in chat again."
+    },
+    "chatShell": {
+      "integrations": "Integrations",
+      "apiKeys": "API Keys"
+    },
+    "connectFlowBanner": {
+      "finishConnecting": "Finish connecting",
+      "remoteClient": "My client is on a remote or SSH machine",
+      "clientFallback": "the application",
+      "serverFallback": "the requested MCP server",
+      "cannotContinue": "The connection cannot continue",
+      "validateFailed": "The gateway could not validate this connection. Cancel to return to {{client}}.",
+      "connectServers": "Connect your MCP servers to {{client}}",
+      "authorizeServers": "Authorize the servers you want to use below, then click Finish connecting to return to {{client}}.",
+      "allowClientUseServer": "Allow {{client}} to use {{server}}",
+      "authorizeToContinue": "Authorize {{server}} below to continue, or cancel to send {{client}} away.",
+      "finishToGrant": "Click Finish connecting to give {{client}} access to {{server}} as you."
+    },
+    "keysPanel": {
+      "yourApiKeys": "Your API Keys",
+      "viewVirtualKeys": "View your virtual keys and spend",
+      "rotateHint": ". Rotate keys to generate new credentials while optionally keeping the old key valid during a grace period",
+      "colKey": "Key",
+      "rotateTooltip": "Rotate key",
+      "rotate": "Rotate",
+      "rotateTitle": "Rotate Key",
+      "rotatedSuccess": "Key rotated successfully",
+      "rotateFailed": "Failed to rotate key",
+      "saveKeyWarning": "Save this key now; you will not see it again",
+      "newKeyLabel": "New Key",
+      "currentExpiry": "Current: ",
+      "expiredSuffix": " (expired)",
+      "newExpiry": "New: "
+    },
+    "logsPanel": {
+      "noLogs": "No logs for this period",
+      "loadFailed": "Failed to load your logs",
+      "requestDetails": "Request details",
+      "tokensBreakdown": " ({{prompt}} in / {{completion}} out)",
+      "yourLogs": "Your Logs",
+      "accountLogsOnly": "Request logs for your account only"
+    },
+    "usagePanel": {
+      "apiRequests": "API Requests",
+      "tokensUsed": "Tokens Used",
+      "activity": "Spend and request activity",
+      "noData": "No usage data for this period",
+      "dailyRequests": "Daily Requests"
     }
   },
   "accessGroups": {
@@ -8949,6 +9611,8 @@
       "tagDeletedSuccess": "Tag deleted successfully",
       "errorDeletingTag": "Error deleting tag: {{error}}",
       "errorFetchingModels": "Error fetching models: {{error}}",
+      "deleteTagConfirmDetailed": "Are you sure you want to delete this tag? This action cannot be undone.",
+      "resourceInformationTitle": "Tag Information",
       "refreshAriaLabel": "Refresh tags",
       "emptyTitle": "No tags yet",
       "emptyDescription": "Create a tag to start routing and restricting model usage."
@@ -9121,6 +9785,25 @@
       "testing": "Testing...",
       "testConnection": "Test Connection",
       "saveChanges": "Save Changes"
+    },
+    "fields": {
+      "databaseIndex": "Database Index",
+      "gcpServiceAccount": "GCP Service Account",
+      "gcpSslCaCerts": "GCP SSL CA Certs",
+      "host": "Host",
+      "maxConnections": "Max Connections",
+      "port": "Port",
+      "redisUrl": "Redis URL",
+      "semanticCacheScope": "Semantic Cache Scope",
+      "semanticScopeEndUserOption": "End user (isolated per end user)",
+      "semanticScopeKeyOption": "Key (shared by all end users of the key/team/org)",
+      "sentinelNodes": "Sentinel Nodes",
+      "sentinelPassword": "Sentinel Password",
+      "serviceName": "Service Name",
+      "ssl": "SSL",
+      "sslCertReqs": "SSL Cert Reqs",
+      "sslCheckHostname": "SSL Check Hostname",
+      "ttlSeconds": "TTL (seconds)"
     }
   },
   "permissions": {
@@ -10155,6 +10838,202 @@
     "fieldReset": "Field reset on proxy",
     "internalUserSettingsUpdated": "Internal user settings updated successfully"
   },
+  "caching": {
+    "coordinationRedis": {
+      "borrowedFromCache": "Borrowed from response cache",
+      "borrowedFromCacheTooltip": "No coordination Redis is configured; the proxy reuses the response cache's Redis connection.",
+      "configuredHere": "Configured here",
+      "configuredHereTooltip": "general_settings.coordination_redis is set, so coordination uses its own Redis connection.",
+      "description": "Redis used to coordinate work across proxy pods: cross-pod rate limits, spend tracking, and the pod lock manager. It is configured independently of the response cache.",
+      "failedToLoad": "Failed to load coordination Redis settings",
+      "failedToUpdate": "Failed to update coordination Redis settings",
+      "fromRedisEnv": "From REDIS_* environment",
+      "fromRedisEnvTooltip": "No coordination Redis is configured; the proxy falls back to the REDIS_* environment variables.",
+      "notConfiguredTooltip": "Cross-pod rate limits, spend tracking, and the pod lock manager have no Redis to coordinate through.",
+      "restartNotice": "Saved changes take effect on proxy restart.",
+      "saved": "Coordination Redis settings saved. Restart the proxy to apply them.",
+      "testSuccessful": "Coordination Redis connection test successful!"
+    },
+    "dashboard": {
+      "clickFailedSegmentHint": "Click a red failed-requests segment to see which error codes caused those failures.",
+      "coordinationRedis": "Coordination Redis",
+      "noVirtualKeys": "No virtual keys found"
+    },
+    "errorDrilldown": {
+      "closeErrorBreakdown": "Close error breakdown",
+      "errorCodeFailed": "Error code {{code}}: {{count}} failed",
+      "failedRequestsByErrorCode": "Failed requests by error code: {{callType}}",
+      "hoverHint": "Hover a bar to see the error classes behind that code."
+    }
+  },
+  "costOptimization": {
+    "autoRouterBenchmarks": {
+      "actualAutoRouterSpend": "Actual auto-router spend",
+      "adminOnly": "Auto-router usage is visible to proxy admin roles only",
+      "allAutoRouters": "All auto-routers",
+      "autoRouterPromptCaching": "Auto-router prompt caching",
+      "avgSavedPerSession": "Avg saved per session",
+      "avgSessionLength": "Avg session length",
+      "avgTokensPerSession": "Avg tokens per session",
+      "avgTurnsPerSession": "Avg turns per session",
+      "bucketFirstVisit": "First visit",
+      "bucketReturnToTier": "Return to tier",
+      "bucketSameModel": "Same model",
+      "bucketTurnsTitle": "{{label}}: {{turns}} turns",
+      "cacheHitRate": "Cache hit rate",
+      "classificationCost": "Classification cost",
+      "colBucket": "Bucket",
+      "colHitRate": "Hit rate",
+      "colTurns": "Turns",
+      "estimatedSpendHighestTier": "Estimated spend at highest-tier model",
+      "expiredMiss": "Expired-miss",
+      "llmSpend": "LLM spend",
+      "loadingUsage": "Loading auto-router usage...",
+      "sessionsSuffix": "· {{sessions}} sessions",
+      "shareOfTurns": "Share of turns",
+      "shareOfTurnsByBucket": "Share of turns by bucket",
+      "tabShadowEvals": "Shadow Evals",
+      "totalEstimatedSavings": "Total estimated savings",
+      "unavailable": "Unavailable",
+      "unavailableNow": "Auto-router usage is unavailable right now"
+    },
+    "cacheLeakageCard": {
+      "byModel": "By model",
+      "byVirtualKey": "By virtual key",
+      "cacheHitRate": "Cache hit rate",
+      "colKey": "Key",
+      "colModel": "Model",
+      "description": "{{subject}} sending large volumes of uncached input with a low cache hit rate are likely missing prompt caching. Potential savings is approximate: uncached input priced at what your cached traffic nets per cached token, after cache-write premiums.",
+      "dimensionModel": "model",
+      "dimensionVirtualKey": "virtual key",
+      "loading": "Loading...",
+      "noUsage": "No {{noun}} usage in this range.",
+      "nounKey": "key",
+      "nounModel": "model",
+      "potentialSavings": "Potential savings",
+      "sortBy": "Sort by {{label}}",
+      "subjectKeys": "Keys",
+      "subjectModels": "Models",
+      "title": "Cache leakage by {{dimension}}",
+      "uncachedInputTokens": "Uncached input tokens"
+    },
+    "costOptimizationView": {
+      "experimentalNotice": "This is an experimental dashboard",
+      "feedbackPrompt": "Have feedback? Join the discussion <a>here</a>",
+      "subtitle": "Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab",
+      "tabAutoRouter": "Auto-Router",
+      "tabOverall": "Overall",
+      "tabPromptCompression": "Prompt Compression",
+      "title": "Cost Optimization"
+    },
+    "promptCachingTab": {
+      "failedToLoad": "Failed to load prompt caching settings"
+    },
+    "promptCompressionTab": {
+      "addTitle": "Add Headroom compression guardrail",
+      "apiBaseDescription": "The URL where your Headroom compression service is hosted",
+      "applyToAllRequests": "Apply to all requests",
+      "created": "Compression guardrail created",
+      "description": "Headroom is a native LiteLLM guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>",
+      "enterpriseNotice": "Applying compression to all requests is available to all users. Enabling it selectively per key or team is a LiteLLM Enterprise feature. Get a trial key <a>here</a>",
+      "failedToCreate": "Failed to create compression guardrail",
+      "failedToLoadGuardrails": "Failed to load compression guardrails",
+      "title": "Headroom prompt compression"
+    },
+    "shadowEvalSection": {
+      "armBaseline": "Baseline",
+      "armCurrentModel": "Current model",
+      "armWon": "{{arm}} won",
+      "colArmCost": "{{arm}} cost",
+      "colArmWins": "{{arm}} wins",
+      "colBudgetUsed": "Budget used",
+      "colJudgeConfidence": "Judge confidence",
+      "colJudgedTurns": "Judged turns",
+      "colRouterCost": "Router cost",
+      "colRouterWins": "Router wins",
+      "colTies": "Ties",
+      "groupComparedAgainst": "Compared against",
+      "groupPromptDifficulty": "Prompt difficulty",
+      "groupRouter": "Router",
+      "groupRouterPick": "Router pick",
+      "headlineForward": "Shadowing {{percentage}}% of <0/> traffic<1> via <2/>",
+      "headlineReverse": "Comparing <0/> to <1/> on {{percentage}}% of <2/> traffic<3>",
+      "modelScope": " on <0/>",
+      "noVerdictsYet": "No verdicts yet",
+      "routerCostVsBaseline": "Router cost vs the baseline",
+      "routerCostVsCurrentModel": "Router cost vs your current model",
+      "routerMatchedBaseline": "Router matched or beat the baseline",
+      "routerMatchedCurrentModel": "Router matched or beat your current model",
+      "routerWon": "Router won",
+      "statusCompleted": "completed",
+      "statusRunning": "running",
+      "statusStopped": "stopped",
+      "tie": "Tie",
+      "title": "Shadow eval",
+      "verdictBreakdown": "Verdict breakdown"
+    },
+    "shadowEvalStartForm": {
+      "autoRouters": "Auto-routers",
+      "baselineModel": "Baseline model",
+      "budgetRangeError": "Enter a value from 0.01 to 10000",
+      "descriptionForward": "Duplicates a sampled slice of the selected targets' traffic (keys, teams, or users) through the auto-router and has an LLM judge compare both answers blind. Each target gets its own spend budget. The router's answers are never served to users; judge calls bill to the sampled traffic's own identity.",
+      "descriptionReverse": "Duplicates a sampled slice of the traffic the auto-router already serves against a fixed baseline model and has an LLM judge compare both answers blind. Each target gets its own spend budget. The baseline's answers are never served to users; judge calls bill to the sampled traffic's own identity.",
+      "direction": "Direction",
+      "directionForward": "Adoption check: key's traffic vs the router",
+      "directionReverse": "Regression check: router's picks vs a baseline",
+      "duration14Days": "14 days",
+      "duration1Day": "1 day",
+      "duration3Days": "3 days",
+      "everyModelTargetsUse": "Every model the targets use",
+      "judgeModel": "Judge model",
+      "keysLoadFailed": "Keys could not be loaded. Refresh the page to retry.",
+      "keysToShadow": "Keys to shadow",
+      "maxSpendHint": "max shadow + judge spend, per target",
+      "narrowsTargets": "Narrows every target above to requests for these models",
+      "noAutoRouters": "No auto-routers configured",
+      "noChatModels": "No chat models available",
+      "noMatchingUsers": "No matching users",
+      "noModelsConfigured": "No models configured",
+      "onlyOnModels": "Only on models",
+      "percentOfTraffic": "% of traffic",
+      "percentRangeError": "Enter a value from 0.1 to 100",
+      "pickAtMostModels": "Pick at most {{max}} models",
+      "pickAtMostRouters": "Pick at most {{max}} auto-routers",
+      "recommended": "Recommended",
+      "regressionOneRouter": "A regression check compares one router to its baseline",
+      "sameSampledRequests": "Every router sees the same sampled requests, judged against the same live responses",
+      "searchKeysByAlias": "Search keys by alias",
+      "searchTeamsByAlias": "Search teams by alias",
+      "searchUsersByEmail": "Search users by email",
+      "selectBaselineModel": "Select a baseline model",
+      "selectUpToRouters": "Select up to 4 auto-routers",
+      "spendBudget": "Spend budget",
+      "startButton": "Start shadow eval",
+      "starting": "Starting...",
+      "teamsToShadow": "Teams to shadow",
+      "title": "Start a shadow eval",
+      "trafficSampled": "Traffic sampled",
+      "usersLoadFailed": "Users could not be loaded. Refresh the page to retry.",
+      "usersToShadow": "Users to shadow"
+    },
+    "tierTurnsChart": {
+      "routingByTier": "Routing by tier",
+      "totalTurns": "{{turns}} total turns"
+    },
+    "usageTab": {
+      "cumulative": "Cumulative",
+      "dailySpendByTool": "Daily spend by tool",
+      "loading": "Loading...",
+      "noToolUsage": "No tool usage in this range.",
+      "perDay": "Per day",
+      "runningTotalSaved": "Running total saved",
+      "savedPerDay": "Saved per day",
+      "savingsByDriver": "Savings by driver",
+      "spendBucketedByUtcDay": "Spend is bucketed by UTC day",
+      "spendByTool": "Spend by tool",
+      "totalByTool": "Total by tool"
+    }
+  },
   "budgetsPage": {
     "budgetTable": {
       "loadingBudgets": "Loading budgets…",
@@ -10185,6 +11064,47 @@
     },
     "budgetPanel": {
       "subtitle": "Spend, TPM and RPM limits you can assign to customers."
+    }
+  },
+  "defaultUserSettingsForm": {
+    "budgetDuration": {
+      "daily": "daily",
+      "hourly": "hourly",
+      "monthly": "monthly",
+      "noReset": "No reset",
+      "weekly": "weekly"
+    },
+    "budgetDurationField": {
+      "description": "How often the default budget resets"
+    },
+    "budgetField": {
+      "description": "Default maximum budget for new users"
+    },
+    "cardDescription": "Applied to every new internal user created through SSO or the user management APIs.",
+    "displayValues": {
+      "teamMaxBudget": "${{budget}} max budget"
+    },
+    "loadError": "Could not load the default user settings.",
+    "modelsField": {
+      "description": "Models new users can access",
+      "label": "Default Models"
+    },
+    "notifications": {
+      "updateFailedGeneric": "Failed to update default user settings",
+      "updated": "Default user settings updated successfully"
+    },
+    "roleField": {
+      "description": "Role assigned to new users"
+    },
+    "teamEntry": {
+      "maxBudgetInTeamLabel": "Max Budget in Team (USD)"
+    },
+    "teamPicker": {
+      "searchPlaceholder": "Search a team"
+    },
+    "teamsField": {
+      "description": "New users are added to these teams. Only teams that already exist can be selected.",
+      "title": "Default Teams"
     }
   }
 }
