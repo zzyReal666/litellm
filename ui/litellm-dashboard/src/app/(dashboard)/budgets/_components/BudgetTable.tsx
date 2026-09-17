@@ -1,6 +1,7 @@
 "use client";
 
 import { Inbox, ShieldAlert } from "lucide-react";
+import type { TFunction } from "i18next";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -35,8 +36,10 @@ interface BudgetTableProps {
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100];
 
-const durationLabel = (value: string): string =>
-  BUDGET_DURATION_FILTER_OPTIONS.find((option) => option.value === value)?.label ?? value;
+const durationLabel = (value: string, t: TFunction): string => {
+  const option = BUDGET_DURATION_FILTER_OPTIONS.find((entry) => entry.value === value);
+  return option ? t(option.labelKey, { defaultValue: option.label }) : value;
+};
 
 /** The drawer keeps any non-empty object as an active filter, so collapse a blank draft to nothing. */
 const normalizeMaxBudget = (draft: MaxBudgetFilterValue): MaxBudgetFilterValue | undefined => {
@@ -111,6 +114,7 @@ function ErrorState({ error }: { error: Error }) {
 
 /** "Not set" and the concrete durations are exclusive; see serializeBudgetFilters for why. */
 function DurationFilter({ selected, onChange }: { selected: string[]; onChange: (selected: string[]) => void }) {
+  const { t } = useTranslation();
   const toggle = (value: string, checked: boolean): void => {
     if (!checked) {
       onChange(selected.filter((entry) => entry !== value));
@@ -129,7 +133,7 @@ function DurationFilter({ selected, onChange }: { selected: string[]; onChange: 
             onCheckedChange={(checked) => toggle(option.value, checked === true)}
             data-testid={`budget-filter-duration-${option.value}`}
           />
-          {option.label}
+          {t(option.labelKey, { defaultValue: option.label })}
         </Label>
       ))}
     </div>
@@ -218,7 +222,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
   const formatFilterValue = (columnId: string, value: unknown): string => {
     const anyValue = t("budgetsPage.budgetTable.any", { defaultValue: "any" });
     if (columnId === "budget_duration") {
-      return (Array.isArray(value) ? value : []).map((entry) => durationLabel(String(entry))).join(", ");
+      return (Array.isArray(value) ? value : []).map((entry) => durationLabel(String(entry), t)).join(", ");
     }
     if (columnId === "max_budget") {
       const { min, max, unlimitedOnly } = (value ?? {}) as MaxBudgetFilterValue;

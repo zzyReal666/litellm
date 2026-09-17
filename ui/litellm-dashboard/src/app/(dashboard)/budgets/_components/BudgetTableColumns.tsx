@@ -29,8 +29,13 @@ const serverFilter: FilterFn<budgetItem> = () => true;
 serverFilter.autoRemove = () => false;
 
 function RateLimitCell({ value }: { value: number | null | undefined }) {
+  const { t } = useTranslation();
   if (value == null) {
-    return <span className="text-muted-foreground">n/a</span>;
+    return (
+      <span className="text-muted-foreground">
+        {t("commonComponents.rateLimitCell.notAvailable", { defaultValue: "n/a" })}
+      </span>
+    );
   }
   return <span className="tabular-nums">{value}</span>;
 }
@@ -44,7 +49,7 @@ function BudgetDurationCell({ value }: { value: string | null | undefined }) {
       </span>
     );
   }
-  return <span className="whitespace-nowrap">{getBudgetDurationLabel(value)}</span>;
+  return <span className="whitespace-nowrap">{getBudgetDurationLabel(value, t)}</span>;
 }
 
 interface BudgetRowActionsProps {

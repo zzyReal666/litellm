@@ -120,7 +120,7 @@ export default function UserDetailsPanel({
 
       <div>
         <p className="font-medium">{t("viewUsers.userInfoView.budgetResetLabel", { defaultValue: "Budget Reset" })}</p>
-        <p>{getBudgetDurationLabel(userData.budget_duration ?? null)}</p>
+        <p>{getBudgetDurationLabel(userData.budget_duration ?? null, t)}</p>
       </div>
 
       <div>

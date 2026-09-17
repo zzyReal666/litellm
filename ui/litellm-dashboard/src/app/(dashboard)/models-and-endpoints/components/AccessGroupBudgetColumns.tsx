@@ -180,7 +180,7 @@ export const getAccessGroupBudgetColumns = ({
     enableSorting: false,
     cell: ({ row }) => (
       <span className="text-sm text-muted-foreground">
-        {getBudgetDurationLabel(row.original.budget?.budget_duration)}
+        {getBudgetDurationLabel(row.original.budget?.budget_duration, t)}
       </span>
     ),
   },

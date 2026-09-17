@@ -1,3 +1,4 @@
+import type { TFunction } from "i18next";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -68,17 +69,13 @@ const BudgetDurationDropdown: React.FC<BudgetDurationDropdownProps> = ({
   );
 };
 
-export const getBudgetDurationLabel = (value: string | null | undefined): string => {
-  if (!value) return "Not set";
+export const getBudgetDurationLabel = (value: string | null | undefined, t: TFunction): string => {
+  if (!value) {
+    return t("defaultUserSettings.displayValues.notSet", { defaultValue: "Not set" });
+  }
 
-  const budgetDurationMap: Record<string, string> = {
-    "1h": "hourly",
-    "24h": "daily",
-    "7d": "weekly",
-    "30d": "monthly",
-  };
-
-  return budgetDurationMap[value] || value;
+  const entry = DURATION_LABELS[value];
+  return entry ? t(entry.key, { defaultValue: entry.label }) : value;
 };
 
 export default BudgetDurationDropdown;

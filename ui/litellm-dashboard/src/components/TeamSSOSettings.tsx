@@ -272,7 +272,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
               description="How frequently the team's budget resets."
               isEditing={isEditing}
               viewContent={
-                values.budget_duration ? <span>{getBudgetDurationLabel(values.budget_duration)}</span> : <NotSet />
+                values.budget_duration ? <span>{getBudgetDurationLabel(values.budget_duration, t)}</span> : <NotSet />
               }
               editContent={
                 <BudgetDurationDropdown
