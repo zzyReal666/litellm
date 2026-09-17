@@ -211,11 +211,7 @@ const menuGroups: MenuGroup[] = [
         page: "cost-optimization",
         icon: <PiggyBank {...ICON} />,
         roles: [...all_admin_roles, ...internalUserRoles],
-        label: (
-          <span className="flex items-center gap-2">
-            Cost Optimization <BetaBadge />
-          </span>
-        ),
+        label: "Cost Optimization",
       },
       { key: "logs", page: "logs", label: "Logs", icon: <Activity {...ICON} /> },
       {
@@ -404,7 +400,8 @@ const prettify = (key: string): string =>
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
-const labelText = (item: MenuItem): string => (typeof item.label === "string" ? item.label : prettify(item.key));
+const labelText = (item: MenuItem, fallback?: string): string =>
+  typeof item.label === "string" ? item.label : fallback ?? prettify(item.key);
 
 const NAV_LABEL_KEYS: Record<string, string> = {
   "api-keys": "nav.virtualKeys",
@@ -423,6 +420,7 @@ const NAV_LABEL_KEYS: Record<string, string> = {
   "vector-stores": "nav.vectorStores",
   "tool-policies": "nav.toolPolicies",
   new_usage: "nav.usage",
+  "cost-optimization": "nav.costOptimization",
   logs: "nav.logs",
   "guardrails-monitor": "nav.guardrailsMonitor",
   teams: "nav.teams",
@@ -456,8 +454,14 @@ const NAV_GROUP_LABEL_KEYS: Record<string, string> = {
   SETTINGS: "nav.groups.settings",
 };
 
+// Items whose label carries inline markup (the beta badge) keep their own React
+// node, so the tooltip text comes from this plain-text lookup instead.
+const LABEL_FALLBACKS: Record<string, string> = {
+  "cost-optimization": "Cost Optimization",
+};
+
 const itemLabel = (item: MenuItem, t?: TFunction): string => {
-  const fallback = labelText(item);
+  const fallback = labelText(item, LABEL_FALLBACKS[item.key]);
   const key = NAV_LABEL_KEYS[item.key];
   return key && t ? t(key, { defaultValue: fallback }) : fallback;
 };
@@ -595,8 +599,9 @@ const Sidebar_: React.FC<SidebarProps> = ({
     const active = selectedKey === item.key;
     const size = isChild ? "sub" : "default";
     const label = (
-      <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">
-        {typeof item.label === "string" ? itemLabel(item, t) : item.label}
+      <span className="flex flex-1 items-center gap-2 truncate group-data-[collapsed=true]/sidebar:hidden">
+        {itemLabel(item, t)}
+        {item.key === "cost-optimization" ? <BetaBadge /> : null}
       </span>
     );
 
@@ -649,8 +654,9 @@ const Sidebar_: React.FC<SidebarProps> = ({
           title={collapsed ? itemLabel(item, t) : undefined}
         >
           {item.icon}
-          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">
-            {typeof item.label === "string" ? itemLabel(item, t) : item.label}
+          <span className="flex flex-1 items-center gap-2 truncate group-data-[collapsed=true]/sidebar:hidden">
+            {itemLabel(item, t)}
+            {item.key === "cost-optimization" ? <BetaBadge /> : null}
           </span>
           <ChevronRight
             className={cn(
@@ -684,7 +690,11 @@ const Sidebar_: React.FC<SidebarProps> = ({
               className="flex min-w-0 items-center"
               aria-label={t("navbar.liteLLMHome", { defaultValue: "LiteLLM home" })}
             >
-              <img src={logoSrc} alt="LiteLLM" className={cn(LOGO_CLASS_NAME, "dark:hidden")} />
+              <img
+                src={logoSrc}
+                alt={t("navbar.logoAlt", { defaultValue: "LiteLLM Brand" })}
+                className={cn(LOGO_CLASS_NAME, "dark:hidden")}
+              />
               <img
                 src={darkLogoSrc}
                 alt=""
