@@ -1,5 +1,6 @@
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import BulkEditUserModal from "./BulkEditUsers";
 import BulkCreateUsersButton from "@/components/bulk_create_users_button";
@@ -58,6 +59,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
   teams,
   orgAdminOrgIds,
 }) => {
+  const { t } = useTranslation();
   const isProxyAdmin = userRole ? isProxyAdminRole(userRole) : false;
   const queryClient = useQueryClient();
 
@@ -157,19 +159,29 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
   const handleResetPassword = useCallback(
     async (userId: string) => {
       if (!accessToken) {
-        toast.fromError("Access token not found");
+        toast.fromError(
+          t("bulkEditUsers.notifications.accessTokenNotFound", { defaultValue: "Access token not found" }),
+        );
         return;
       }
       try {
-        toast.success("Generating password reset link...");
+        toast.success(
+          t("viewUsers.notifications.generatingPasswordResetLink", {
+            defaultValue: "Generating password reset link...",
+          }),
+        );
         const data = await invitationCreateCall(accessToken, userId);
         setInvitationLinkData(data);
         setIsInvitationLinkModalVisible(true);
       } catch (error) {
-        toast.fromError("Failed to generate password reset link");
+        toast.fromError(
+          t("viewUsers.notifications.failedGeneratePasswordReset", {
+            defaultValue: "Failed to generate password reset link",
+          }),
+        );
       }
     },
-    [accessToken],
+    [accessToken, t],
   );
 
   const confirmDelete = async () => {
@@ -185,10 +197,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           return { ...previousData, users: updatedUsers };
         });
 
-        toast.success("User deleted successfully");
+        toast.success(t("viewUsers.notifications.userDeletedSuccess", { defaultValue: "User deleted successfully" }));
       } catch (error) {
         console.error("Error deleting user:", error);
-        toast.fromError("Failed to delete user");
+        toast.fromError(t("viewUsers.notifications.failedDeleteUser", { defaultValue: "Failed to delete user" }));
       } finally {
         setIsDeleteModalOpen(false);
         setUserToDelete(null);
@@ -343,7 +355,9 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   variant={selectionMode ? "default" : "outline"}
                   data-testid="toggle-user-selection"
                 >
-                  {selectionMode ? "Cancel Selection" : "Select Users"}
+                  {selectionMode
+                    ? t("viewUsers.cancelSelection", { defaultValue: "Cancel Selection" })
+                    : t("viewUsers.selectUsers", { defaultValue: "Select Users" })}
                 </Button>
               )}
 
@@ -354,7 +368,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   disabled={selectedUsers.length === 0}
                   data-testid="bulk-edit-users"
                 >
-                  Bulk Edit ({selectedUsers.length} selected)
+                  {t("viewUsers.bulkEdit", {
+                    count: selectedUsers.length,
+                    defaultValue: "Bulk Edit ({{count}} selected)",
+                  })}
                 </Button>
               )}
             </>
@@ -366,10 +383,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         <Tabs defaultValue="users" className="gap-0">
           <TabsList variant="line" className="mb-4">
             <TabsTrigger value="users" className="flex-none data-active:text-primary after:bg-primary">
-              Users
+              {t("viewUsers.tabUsers", { defaultValue: "Users" })}
             </TabsTrigger>
             <TabsTrigger value="default-settings" className="flex-none data-active:text-primary after:bg-primary">
-              Default User Settings
+              {t("viewUsers.tabDefaultUserSettings", { defaultValue: "Default User Settings" })}
             </TabsTrigger>
           </TabsList>
 
@@ -382,7 +399,9 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
               <div
                 className="flex h-64 items-center justify-center"
                 role="status"
-                aria-label="Loading default user settings"
+                aria-label={t("viewUsers.loadingDefaultUserSettings", {
+                  defaultValue: "Loading default user settings",
+                })}
               >
                 <div className="w-full max-w-lg space-y-3">
                   <Skeleton className="h-5 w-1/3" />
@@ -403,18 +422,27 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
       {/* Existing Modals */}
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete User?"
-        message="Are you sure you want to delete this user? This action cannot be undone."
-        resourceInformationTitle="User Information"
+        title={t("viewUsers.deleteModal.title", { defaultValue: "Delete User?" })}
+        message={t("viewUsers.deleteModal.message", {
+          defaultValue: "Are you sure you want to delete this user? This action cannot be undone.",
+        })}
+        resourceInformationTitle={t("viewUsers.deleteModal.resourceInfoTitle", { defaultValue: "User Information" })}
         resourceInformation={[
-          { label: "Email", value: userToDelete?.user_email },
-          { label: "User ID", value: userToDelete?.user_id, code: true },
+          { label: t("viewUsers.deleteModal.labelEmail", { defaultValue: "Email" }), value: userToDelete?.user_email },
           {
-            label: "Global Proxy Role",
+            label: t("viewUsers.deleteModal.labelUserId", { defaultValue: "User ID" }),
+            value: userToDelete?.user_id,
+            code: true,
+          },
+          {
+            label: t("viewUsers.deleteModal.labelGlobalProxyRole", { defaultValue: "Global Proxy Role" }),
             value:
               (userToDelete && possibleUIRoles?.[userToDelete.user_role]?.ui_label) || userToDelete?.user_role || "-",
           },
-          { label: "Total Spend (USD)", value: userToDelete?.spend?.toFixed(2) },
+          {
+            label: t("viewUsers.deleteModal.labelTotalSpend", { defaultValue: "Total Spend (USD)" }),
+            value: userToDelete?.spend?.toFixed(2),
+          },
         ]}
         onCancel={cancelDelete}
         onOk={confirmDelete}

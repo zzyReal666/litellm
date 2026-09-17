@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Copy, Info, KeyRound, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { UserInfo } from "@/components/networking";
@@ -18,11 +19,6 @@ import {
 import { cn } from "@/lib/cva.config";
 import { copyToClipboard } from "@/utils/dataUtils";
 
-const SSO_ID_HINT =
-  "SSO ID is the ID of the user in the SSO provider. If the user is not using SSO, this will be null.";
-
-const SCIM_INACTIVE_HINT = "Deactivated via SCIM (external identity provider). The user's virtual keys are blocked.";
-
 function isScimInactive(user: UserInfo): boolean {
   return (user.metadata as Record<string, unknown> | null | undefined)?.scim_active === false;
 }
@@ -32,13 +28,14 @@ interface UserRowActionsProps {
   onUserClick: (userId: string, openInEditMode?: boolean) => void;
   onDeleteUser: (user: UserInfo) => void;
   onResetPassword: (userId: string) => void;
+  t: TFunction;
 }
 
-function UserRowActions({ user, onUserClick, onDeleteUser, onResetPassword }: UserRowActionsProps) {
+function UserRowActions({ user, onUserClick, onDeleteUser, onResetPassword, t }: UserRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open user actions"
+        aria-label={t("viewUsers.columns.openUserActions", { defaultValue: "Open user actions" })}
         data-testid={`user-actions-${user.user_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -47,23 +44,23 @@ function UserRowActions({ user, onUserClick, onDeleteUser, onResetPassword }: Us
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem onClick={() => onUserClick(user.user_id, true)} data-testid="user-action-edit">
           <Pencil />
-          Edit user
+          {t("viewUsers.columns.editUserAction", { defaultValue: "Edit user" })}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onResetPassword(user.user_id)} data-testid="user-action-reset-password">
           <KeyRound />
-          Reset password
+          {t("viewUsers.columns.resetPasswordAction", { defaultValue: "Reset password" })}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => void copyToClipboard(user.user_id, "User ID copied")}
+          onClick={() => void copyToClipboard(user.user_id, t("user.copyUserId", { defaultValue: "Copy user ID" }))}
           data-testid="user-action-copy"
         >
           <Copy />
-          Copy user ID
+          {t("user.copyUserId", { defaultValue: "Copy user ID" })}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => onDeleteUser(user)} data-testid="user-action-delete">
           <Trash2 />
-          Delete user
+          {t("viewUsers.columns.deleteUser", { defaultValue: "Delete user" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -76,6 +73,7 @@ export interface UsersTableColumnsDeps {
   onUserClick: (userId: string, openInEditMode?: boolean) => void;
   onDeleteUser: (user: UserInfo) => void;
   onResetPassword: (userId: string) => void;
+  t: TFunction;
 }
 
 export const getUsersTableColumns = ({
@@ -84,13 +82,20 @@ export const getUsersTableColumns = ({
   onUserClick,
   onDeleteUser,
   onResetPassword,
+  t,
 }: UsersTableColumnsDeps): ColumnDef<UserInfo>[] => {
   const baseColumns: ColumnDef<UserInfo>[] = [
     {
       id: "user_id",
       accessorKey: "user_id",
-      meta: { title: "User ID" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="User ID" variant="header-cycle" />,
+      meta: { title: t("viewUsers.columns.userId", { defaultValue: "User ID" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("viewUsers.columns.userId", { defaultValue: "User ID" })}
+          variant="header-cycle"
+        />
+      ),
       size: 220,
       enableSorting: true,
       cell: ({ row }) => (
@@ -104,8 +109,14 @@ export const getUsersTableColumns = ({
     {
       id: "user_email",
       accessorKey: "user_email",
-      meta: { title: "Email" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Email" variant="header-cycle" />,
+      meta: { title: t("viewUsers.columns.email", { defaultValue: "Email" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("viewUsers.columns.email", { defaultValue: "Email" })}
+          variant="header-cycle"
+        />
+      ),
       size: 220,
       enableSorting: true,
       cell: ({ row }) => (
@@ -116,8 +127,8 @@ export const getUsersTableColumns = ({
     },
     {
       id: "status",
-      meta: { title: "Status", skeleton: "badge" },
-      header: "Status",
+      meta: { title: t("viewUsers.columns.status", { defaultValue: "Status" }), skeleton: "badge" },
+      header: t("viewUsers.columns.status", { defaultValue: "Status" }),
       size: 110,
       enableSorting: false,
       cell: ({ row }) => {
@@ -125,20 +136,34 @@ export const getUsersTableColumns = ({
           return (
             <StatusBadge
               tone="error"
-              label="Inactive"
-              tooltip={SCIM_INACTIVE_HINT}
+              label={t("viewUsers.columns.inactive", { defaultValue: "Inactive" })}
+              tooltip={t("viewUsers.columns.scimInactiveTooltip", {
+                defaultValue: "Deactivated via SCIM (external identity provider). The user's virtual keys are blocked.",
+              })}
               dataTestId={`user-status-${row.original.user_id}`}
             />
           );
         }
-        return <StatusBadge tone="success" label="Active" dataTestId={`user-status-${row.original.user_id}`} />;
+        return (
+          <StatusBadge
+            tone="success"
+            label={t("viewUsers.columns.active", { defaultValue: "Active" })}
+            dataTestId={`user-status-${row.original.user_id}`}
+          />
+        );
       },
     },
     {
       id: "user_role",
       accessorKey: "user_role",
-      meta: { title: "Global Proxy Role" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Global Proxy Role" variant="header-cycle" />,
+      meta: { title: t("viewUsers.columns.globalProxyRole", { defaultValue: "Global Proxy Role" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("viewUsers.columns.globalProxyRole", { defaultValue: "Global Proxy Role" })}
+          variant="header-cycle"
+        />
+      ),
       size: 160,
       enableSorting: true,
       cell: ({ row }) => <span className="text-sm">{possibleUIRoles?.[row.original.user_role]?.ui_label || "-"}</span>,
@@ -146,8 +171,8 @@ export const getUsersTableColumns = ({
     {
       id: "user_alias",
       accessorKey: "user_alias",
-      meta: { title: "User Alias" },
-      header: "User Alias",
+      meta: { title: t("viewUsers.columns.userAlias", { defaultValue: "User Alias" }) },
+      header: t("viewUsers.columns.userAlias", { defaultValue: "User Alias" }),
       size: 150,
       enableSorting: false,
       cell: ({ row }) => (
@@ -159,8 +184,14 @@ export const getUsersTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: "Spend (USD)", numeric: true },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Spend (USD)" variant="header-cycle" />,
+      meta: { title: t("viewUsers.columns.spendUsd", { defaultValue: "Spend (USD)" }), numeric: true },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("viewUsers.columns.spendUsd", { defaultValue: "Spend (USD)" })}
+          variant="header-cycle"
+        />
+      ),
       size: 130,
       enableSorting: true,
       cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
@@ -168,22 +199,37 @@ export const getUsersTableColumns = ({
     {
       id: "max_budget",
       accessorKey: "max_budget",
-      meta: { title: "Budget (USD)", numeric: true },
-      header: "Budget (USD)",
+      meta: { title: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (USD)" }), numeric: true },
+      header: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (USD)" }),
       size: 130,
       enableSorting: false,
-      cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={2} emptyText="Unlimited" showZero />,
+      cell: ({ row }) => (
+        <MoneyCell
+          value={row.original.max_budget}
+          decimals={2}
+          emptyText={t("viewUsers.columns.unlimited", { defaultValue: "Unlimited" })}
+          showZero
+        />
+      ),
     },
     {
       id: "sso_user_id",
       accessorKey: "sso_user_id",
-      meta: { title: "SSO ID" },
+      meta: { title: t("viewUsers.columns.ssoId", { defaultValue: "SSO ID" }) },
       header: () => (
         <span className="flex items-center gap-1.5">
-          SSO ID
+          {t("viewUsers.columns.ssoId", { defaultValue: "SSO ID" })}
           <CellTooltip
-            content={SSO_ID_HINT}
-            trigger={<Info className="size-3.5 shrink-0 text-muted-foreground" aria-label="About SSO ID" />}
+            content={t("viewUsers.columns.ssoIdTooltip", {
+              defaultValue:
+                "SSO ID is the ID of the user in the SSO provider. If the user is not using SSO, this will be null.",
+            })}
+            trigger={
+              <Info
+                className="size-3.5 shrink-0 text-muted-foreground"
+                aria-label={t("viewUsers.columns.aboutSsoId", { defaultValue: "About SSO ID" })}
+              />
+            }
           />
         </span>
       ),
@@ -198,8 +244,8 @@ export const getUsersTableColumns = ({
     {
       id: "key_count",
       accessorKey: "key_count",
-      meta: { title: "Virtual Keys", skeleton: "badge" },
-      header: "Virtual Keys",
+      meta: { title: t("viewUsers.columns.virtualKeys", { defaultValue: "Virtual Keys" }), skeleton: "badge" },
+      header: t("viewUsers.columns.virtualKeys", { defaultValue: "Virtual Keys" }),
       size: 120,
       enableSorting: false,
       cell: ({ row }) => {
@@ -210,7 +256,7 @@ export const getUsersTableColumns = ({
               variant="outline"
               className="whitespace-nowrap border-indigo-200 bg-indigo-50 font-normal text-indigo-600 dark:border-indigo-800 dark:bg-indigo-950 dark:text-indigo-300"
             >
-              {keyCount} {keyCount === 1 ? "Key" : "Keys"}
+              {t("viewUsers.columns.key", { count: keyCount, defaultValue: "{{count}} Keys" })}
             </Badge>
           );
         }
@@ -219,7 +265,7 @@ export const getUsersTableColumns = ({
             variant="outline"
             className="whitespace-nowrap border-border bg-muted font-normal text-muted-foreground"
           >
-            No Keys
+            {t("viewUsers.columns.noKeys", { defaultValue: "No Keys" })}
           </Badge>
         );
       },
@@ -227,8 +273,14 @@ export const getUsersTableColumns = ({
     {
       id: "created_at",
       accessorKey: "created_at",
-      meta: { title: "Created At" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Created At" variant="header-cycle" />,
+      meta: { title: t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" })}
+          variant="header-cycle"
+        />
+      ),
       size: 130,
       enableSorting: true,
       cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -236,16 +288,20 @@ export const getUsersTableColumns = ({
     {
       id: "updated_at",
       accessorKey: "updated_at",
-      meta: { title: "Updated At" },
-      header: "Updated At",
+      meta: { title: t("guardrails.guardrailTable.colUpdatedAt", { defaultValue: "Updated At" }) },
+      header: t("guardrails.guardrailTable.colUpdatedAt", { defaultValue: "Updated At" }),
       size: 130,
       enableSorting: false,
       cell: ({ row }) => <DateCell value={row.original.updated_at} precision="date" />,
     },
     {
       id: "actions",
-      meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      meta: {
+        title: t("common.actions", { defaultValue: "Actions" }),
+        className: "text-right",
+        headerClassName: "text-right",
+      },
+      header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
       size: 60,
       enableSorting: false,
       enableHiding: false,
@@ -256,6 +312,7 @@ export const getUsersTableColumns = ({
             onUserClick={onUserClick}
             onDeleteUser={onDeleteUser}
             onResetPassword={onResetPassword}
+            t={t}
           />
         </div>
       ),
@@ -268,7 +325,11 @@ export const getUsersTableColumns = ({
 
   return [
     createSelectionColumn<UserInfo>({
-      rowAriaLabel: (row) => `Select ${row.original.user_email || row.original.user_id}`,
+      rowAriaLabel: (row) =>
+        t("viewUsers.columns.selectUser", {
+          user: row.original.user_email || row.original.user_id,
+          defaultValue: "Select {{user}}",
+        }),
     }),
     ...baseColumns,
   ];
