@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { useInfiniteKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { useInfiniteUsers } from "@/app/(dashboard)/hooks/users/useUsers";
@@ -31,9 +33,17 @@ const MAX_ROUTERS = 4;
 const MAX_MODELS = 100;
 const RECOMMENDED_JUDGE_MODELS = ["anthropic/claude-sonnet-5", "openai/gpt-4o", "gemini/gemini-2.5-pro"] as const;
 
-const DIRECTION_OPTIONS: readonly { value: ShadowEvalDirection; label: string }[] = [
-  { value: "forward", label: "Adoption check: key's traffic vs the router" },
-  { value: "reverse", label: "Regression check: router's picks vs a baseline" },
+const DIRECTION_OPTIONS: readonly { value: ShadowEvalDirection; label: string; labelKey: string }[] = [
+  {
+    value: "forward",
+    label: "Adoption check: key's traffic vs the router",
+    labelKey: "costOptimization.shadowEvalStartForm.directionForward",
+  },
+  {
+    value: "reverse",
+    label: "Regression check: router's picks vs a baseline",
+    labelKey: "costOptimization.shadowEvalStartForm.directionReverse",
+  },
 ] as const;
 
 const START_FORM_DESCRIPTION: Record<ShadowEvalDirection, string> = {
@@ -43,12 +53,17 @@ const START_FORM_DESCRIPTION: Record<ShadowEvalDirection, string> = {
     "Duplicates a sampled slice of the traffic the auto-router already serves against a fixed baseline model and has an LLM judge compare both answers blind. Each target gets its own spend budget. The baseline's answers are never served to users; judge calls bill to the sampled traffic's own identity.",
 };
 
+const START_FORM_DESCRIPTION_KEYS: Record<ShadowEvalDirection, string> = {
+  forward: "costOptimization.shadowEvalStartForm.descriptionForward",
+  reverse: "costOptimization.shadowEvalStartForm.descriptionReverse",
+};
+
 const DURATION_OPTIONS = [
-  { value: "1", label: "1 day" },
-  { value: "3", label: "3 days" },
-  { value: "7", label: "7 days" },
-  { value: "14", label: "14 days" },
-  { value: "30", label: "30 days" },
+  { value: "1", label: "1 day", labelKey: "costOptimization.shadowEvalStartForm.duration1Day" },
+  { value: "3", label: "3 days", labelKey: "costOptimization.shadowEvalStartForm.duration3Days" },
+  { value: "7", label: "7 days", labelKey: "commonComponents.keyLifecycleSettings.sevenDays" },
+  { value: "14", label: "14 days", labelKey: "costOptimization.shadowEvalStartForm.duration14Days" },
+  { value: "30", label: "30 days", labelKey: "commonComponents.keyLifecycleSettings.thirtyDays" },
 ] as const;
 
 const Field: React.FC<{ label: string; htmlFor?: string; className?: string; children: React.ReactNode }> = ({
@@ -66,6 +81,7 @@ const Field: React.FC<{ label: string; htmlFor?: string; className?: string; chi
 );
 
 const KeySelect: React.FC<{ value: string[]; onChange: (tokens: string[]) => void }> = ({ value, onChange }) => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteKeys(50, {
     selectedKeyAlias: search || null,
@@ -92,14 +108,23 @@ const KeySelect: React.FC<{ value: string[]; onChange: (tokens: string[]) => voi
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       isLoading={isPending}
-      placeholder="Search keys by alias"
-      emptyText="No matching keys"
-      errorText={isError ? "Keys could not be loaded. Refresh the page to retry." : undefined}
+      placeholder={t("costOptimization.shadowEvalStartForm.searchKeysByAlias", {
+        defaultValue: "Search keys by alias",
+      })}
+      emptyText={t("policies.addAttachmentForm.noMatchingKeys", { defaultValue: "No matching keys" })}
+      errorText={
+        isError
+          ? t("costOptimization.shadowEvalStartForm.keysLoadFailed", {
+              defaultValue: "Keys could not be loaded. Refresh the page to retry.",
+            })
+          : undefined
+      }
     />
   );
 };
 
 const UserSelect: React.FC<{ value: string[]; onChange: (ids: string[]) => void }> = ({ value, onChange }) => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteUsers(
     50,
@@ -127,9 +152,17 @@ const UserSelect: React.FC<{ value: string[]; onChange: (ids: string[]) => void 
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       isLoading={isPending}
-      placeholder="Search users by email"
-      emptyText="No matching users"
-      errorText={isError ? "Users could not be loaded. Refresh the page to retry." : undefined}
+      placeholder={t("costOptimization.shadowEvalStartForm.searchUsersByEmail", {
+        defaultValue: "Search users by email",
+      })}
+      emptyText={t("costOptimization.shadowEvalStartForm.noMatchingUsers", { defaultValue: "No matching users" })}
+      errorText={
+        isError
+          ? t("costOptimization.shadowEvalStartForm.usersLoadFailed", {
+              defaultValue: "Users could not be loaded. Refresh the page to retry.",
+            })
+          : undefined
+      }
     />
   );
 };
@@ -139,28 +172,46 @@ const RouterField: React.FC<{
   routerNames: string[];
   onChange: (names: string[]) => void;
   direction: ShadowEvalDirection;
-}> = ({ options, routerNames, onChange, direction }) => (
-  <Field label="Auto-routers">
-    <MultiSelect
-      options={options}
-      value={routerNames}
-      onValueChange={onChange}
-      placeholder="Select up to 4 auto-routers"
-      emptyText="No auto-routers configured"
-    />
-    {routerNames.length > MAX_ROUTERS && (
-      <p className="text-xs text-destructive">Pick at most {MAX_ROUTERS} auto-routers</p>
-    )}
-    {direction === "reverse" && routerNames.length > 1 && (
-      <p className="text-xs text-destructive">A regression check compares one router to its baseline</p>
-    )}
-    {direction === "forward" && routerNames.length > 1 && (
-      <p className="text-xs text-muted-foreground">
-        Every router sees the same sampled requests, judged against the same live responses
-      </p>
-    )}
-  </Field>
-);
+}> = ({ options, routerNames, onChange, direction }) => {
+  const { t } = useTranslation();
+  return (
+    <Field label={t("costOptimization.shadowEvalStartForm.autoRouters", { defaultValue: "Auto-routers" })}>
+      <MultiSelect
+        options={options}
+        value={routerNames}
+        onValueChange={onChange}
+        placeholder={t("costOptimization.shadowEvalStartForm.selectUpToRouters", {
+          defaultValue: "Select up to 4 auto-routers",
+        })}
+        emptyText={t("costOptimization.shadowEvalStartForm.noAutoRouters", {
+          defaultValue: "No auto-routers configured",
+        })}
+      />
+      {routerNames.length > MAX_ROUTERS && (
+        <p className="text-xs text-destructive">
+          {t("costOptimization.shadowEvalStartForm.pickAtMostRouters", {
+            defaultValue: "Pick at most {{max}} auto-routers",
+            max: MAX_ROUTERS,
+          })}
+        </p>
+      )}
+      {direction === "reverse" && routerNames.length > 1 && (
+        <p className="text-xs text-destructive">
+          {t("costOptimization.shadowEvalStartForm.regressionOneRouter", {
+            defaultValue: "A regression check compares one router to its baseline",
+          })}
+        </p>
+      )}
+      {direction === "forward" && routerNames.length > 1 && (
+        <p className="text-xs text-muted-foreground">
+          {t("costOptimization.shadowEvalStartForm.sameSampledRequests", {
+            defaultValue: "Every router sees the same sampled requests, judged against the same live responses",
+          })}
+        </p>
+      )}
+    </Field>
+  );
+};
 
 interface StartFormValidityInputs {
   accessToken: string | null | undefined;
@@ -222,7 +273,11 @@ const buildStartBody = (inputs: StartBodyInputs) => ({
   judge_model: inputs.judgeModel,
 });
 
+const optionLabel = (option: { label: string; labelKey: string } | undefined, t: TFunction): string | null =>
+  option === undefined ? null : t(option.labelKey, { defaultValue: option.label });
+
 export const StartForm: React.FC = () => {
+  const { t } = useTranslation();
   const { accessToken } = useAuthorized();
   const [apiKeyIds, setApiKeyIds] = useState<string[]>([]);
   const [teamIds, setTeamIds] = useState<string[]>([]);
@@ -258,9 +313,14 @@ export const StartForm: React.FC = () => {
   const judgeOptions = useMemo(
     () =>
       chatOptions.map((option) =>
-        recommendedJudgeModels.has(option.value) ? { ...option, sublabel: "Recommended" } : option,
+        recommendedJudgeModels.has(option.value)
+          ? {
+              ...option,
+              sublabel: t("costOptimization.shadowEvalStartForm.recommended", { defaultValue: "Recommended" }),
+            }
+          : option,
       ),
-    [chatOptions, recommendedJudgeModels],
+    [chatOptions, recommendedJudgeModels, t],
   );
   const start = useStartShadowEval();
 
@@ -306,50 +366,84 @@ export const StartForm: React.FC = () => {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-sm font-medium text-foreground">Start a shadow eval</CardTitle>
-        <p className="text-xs text-muted-foreground">{START_FORM_DESCRIPTION[direction]}</p>
+        <CardTitle className="text-sm font-medium text-foreground">
+          {t("costOptimization.shadowEvalStartForm.title", { defaultValue: "Start a shadow eval" })}
+        </CardTitle>
+        <p className="text-xs text-muted-foreground">
+          {t(START_FORM_DESCRIPTION_KEYS[direction], { defaultValue: START_FORM_DESCRIPTION[direction] })}
+        </p>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Direction">
+          <Field label={t("costOptimization.shadowEvalStartForm.direction", { defaultValue: "Direction" })}>
             <Select
               value={direction}
               onValueChange={(v: string | null) => setDirection(v === "reverse" ? "reverse" : "forward")}
             >
               <SelectTrigger className="w-full">
-                <SelectValue>{DIRECTION_OPTIONS.find((o) => o.value === direction)?.label}</SelectValue>
+                <SelectValue>
+                  {optionLabel(
+                    DIRECTION_OPTIONS.find((o) => o.value === direction),
+                    t,
+                  )}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DIRECTION_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {optionLabel(option, t)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Keys to shadow" htmlFor="shadow-eval-key">
+          <Field
+            label={t("costOptimization.shadowEvalStartForm.keysToShadow", { defaultValue: "Keys to shadow" })}
+            htmlFor="shadow-eval-key"
+          >
             <KeySelect value={apiKeyIds} onChange={setApiKeyIds} />
           </Field>
-          <Field label="Teams to shadow">
-            <TeamMultiSelect value={teamIds} onChange={setTeamIds} placeholder="Search teams by alias" />
+          <Field label={t("costOptimization.shadowEvalStartForm.teamsToShadow", { defaultValue: "Teams to shadow" })}>
+            <TeamMultiSelect
+              value={teamIds}
+              onChange={setTeamIds}
+              placeholder={t("costOptimization.shadowEvalStartForm.searchTeamsByAlias", {
+                defaultValue: "Search teams by alias",
+              })}
+            />
           </Field>
-          <Field label="Users to shadow" htmlFor="shadow-eval-user">
+          <Field
+            label={t("costOptimization.shadowEvalStartForm.usersToShadow", { defaultValue: "Users to shadow" })}
+            htmlFor="shadow-eval-user"
+          >
             <UserSelect value={userIds} onChange={setUserIds} />
           </Field>
           {direction === "forward" && (
-            <Field label="Only on models">
+            <Field label={t("costOptimization.shadowEvalStartForm.onlyOnModels", { defaultValue: "Only on models" })}>
               <MultiSelect
                 options={modelOptions}
                 value={models}
                 onValueChange={setModels}
-                placeholder="Every model the targets use"
-                emptyText="No models configured"
+                placeholder={t("costOptimization.shadowEvalStartForm.everyModelTargetsUse", {
+                  defaultValue: "Every model the targets use",
+                })}
+                emptyText={t("costOptimization.shadowEvalStartForm.noModelsConfigured", {
+                  defaultValue: "No models configured",
+                })}
               />
               {models.length > MAX_MODELS ? (
-                <p className="text-xs text-destructive">Pick at most {MAX_MODELS} models</p>
+                <p className="text-xs text-destructive">
+                  {t("costOptimization.shadowEvalStartForm.pickAtMostModels", {
+                    defaultValue: "Pick at most {{max}} models",
+                    max: MAX_MODELS,
+                  })}
+                </p>
               ) : (
-                <p className="text-xs text-muted-foreground">Narrows every target above to requests for these models</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("costOptimization.shadowEvalStartForm.narrowsTargets", {
+                    defaultValue: "Narrows every target above to requests for these models",
+                  })}
+                </p>
               )}
             </Field>
           )}
@@ -359,7 +453,10 @@ export const StartForm: React.FC = () => {
             onChange={setRouterNames}
             direction={direction}
           />
-          <Field label="Traffic sampled" htmlFor="shadow-eval-pct">
+          <Field
+            label={t("costOptimization.shadowEvalStartForm.trafficSampled", { defaultValue: "Traffic sampled" })}
+            htmlFor="shadow-eval-pct"
+          >
             <div className="flex items-center gap-2">
               <Input
                 id="shadow-eval-pct"
@@ -371,29 +468,40 @@ export const StartForm: React.FC = () => {
                 value={percentage}
                 onChange={(e) => setPercentage(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">% of traffic</span>
+              <span className="text-sm text-muted-foreground">
+                {t("costOptimization.shadowEvalStartForm.percentOfTraffic", { defaultValue: "% of traffic" })}
+              </span>
             </div>
             <div>
               {percentage.trim() !== "" && !percentageValid && (
-                <p className="text-xs text-destructive">Enter a value from 0.1 to 100</p>
+                <p className="text-xs text-destructive">
+                  {t("costOptimization.shadowEvalStartForm.percentRangeError", {
+                    defaultValue: "Enter a value from 0.1 to 100",
+                  })}
+                </p>
               )}
             </div>
           </Field>
-          <Field label="Duration">
+          <Field label={t("viewLogs.logDetailContent.labelDuration", { defaultValue: "Duration" })}>
             <Select value={durationDays} onValueChange={(v: string | null) => setDurationDays(v ?? "7")}>
               <SelectTrigger className="w-full">
-                <SelectValue>{DURATION_OPTIONS.find((o) => o.value === durationDays)?.label}</SelectValue>
+                <SelectValue>
+                  {optionLabel(
+                    DURATION_OPTIONS.find((o) => o.value === durationDays),
+                    t,
+                  )}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DURATION_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {optionLabel(option, t)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Spend budget">
+          <Field label={t("costOptimization.shadowEvalStartForm.spendBudget", { defaultValue: "Spend budget" })}>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">$</span>
               <Input
@@ -405,35 +513,56 @@ export const StartForm: React.FC = () => {
                 value={maxBudget}
                 onChange={(e) => setMaxBudget(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">max shadow + judge spend, per target</span>
+              <span className="text-sm text-muted-foreground">
+                {t("costOptimization.shadowEvalStartForm.maxSpendHint", {
+                  defaultValue: "max shadow + judge spend, per target",
+                })}
+              </span>
             </div>
             {maxBudget.trim() !== "" && !maxBudgetValid && (
-              <p className="text-xs text-destructive">Enter a value from 0.01 to 10000</p>
+              <p className="text-xs text-destructive">
+                {t("costOptimization.shadowEvalStartForm.budgetRangeError", {
+                  defaultValue: "Enter a value from 0.01 to 10000",
+                })}
+              </p>
             )}
           </Field>
           {direction === "reverse" && (
-            <Field label="Baseline model">
+            <Field label={t("costOptimization.shadowEvalStartForm.baselineModel", { defaultValue: "Baseline model" })}>
               <SearchSelect
                 options={chatOptions}
                 value={baselineModel}
                 onValueChange={setBaselineModel}
-                placeholder="Select a baseline model"
-                emptyText="No chat models available"
+                placeholder={t("costOptimization.shadowEvalStartForm.selectBaselineModel", {
+                  defaultValue: "Select a baseline model",
+                })}
+                emptyText={t("costOptimization.shadowEvalStartForm.noChatModels", {
+                  defaultValue: "No chat models available",
+                })}
               />
             </Field>
           )}
-          <Field label="Judge model" className="sm:col-span-2">
+          <Field
+            label={t("costOptimization.shadowEvalStartForm.judgeModel", { defaultValue: "Judge model" })}
+            className="sm:col-span-2"
+          >
             <SearchSelect
               options={judgeOptions}
               value={judgeModel}
               onValueChange={setJudgeModel}
-              placeholder="Select a judge model"
-              emptyText="No chat models available"
+              placeholder={t("guardrails.lLMJudgeFields.judgeModelRequired", {
+                defaultValue: "Select a judge model",
+              })}
+              emptyText={t("costOptimization.shadowEvalStartForm.noChatModels", {
+                defaultValue: "No chat models available",
+              })}
             />
           </Field>
         </div>
         <Button disabled={!valid || start.isPending} onClick={handleStart}>
-          {start.isPending ? "Starting..." : "Start shadow eval"}
+          {start.isPending
+            ? t("costOptimization.shadowEvalStartForm.starting", { defaultValue: "Starting..." })
+            : t("costOptimization.shadowEvalStartForm.startButton", { defaultValue: "Start shadow eval" })}
         </Button>
       </CardContent>
     </Card>

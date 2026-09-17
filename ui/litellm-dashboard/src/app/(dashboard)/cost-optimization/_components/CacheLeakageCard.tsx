@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowDown, ArrowUp, ArrowUpDown, Info } from "lucide-react";
 
 import AdvancedDatePicker from "@/components/shared/advanced_date_picker";
@@ -59,6 +60,7 @@ const SortableHead = ({
   sort: SortState;
   onSort: (column: SortColumn) => void;
 }) => {
+  const { t } = useTranslation();
   const active = sort.column === column;
   const ActiveArrow = sort.dir === "asc" ? ArrowUp : ArrowDown;
   const Arrow = active ? ActiveArrow : ArrowUpDown;
@@ -68,7 +70,10 @@ const SortableHead = ({
         <button
           type="button"
           onClick={() => onSort(column)}
-          aria-label={`Sort by ${label}`}
+          aria-label={t("costOptimization.cacheLeakageCard.sortBy", {
+            defaultValue: "Sort by {{label}}",
+            label,
+          })}
           className="inline-flex items-center gap-1 font-medium hover:text-foreground"
         >
           {label}
@@ -81,6 +86,7 @@ const SortableHead = ({
 };
 
 const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
+  const { t } = useTranslation();
   const { dateValue, onDateChange, results, loading, isFetchingMore } = activity;
   const [dimension, setDimension] = useState<CacheLeakageDimension>("key");
   const [sort, setSort] = useState<SortState>({ column: "potentialSavings", dir: "desc" });
@@ -94,9 +100,18 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
         : { column, dir: NATURAL_DIR[column] },
     );
 
-  const subject = dimension === "model" ? "Models" : "Keys";
-  const firstColumn = dimension === "model" ? "Model" : "Key";
-  const emptyNoun = dimension === "model" ? "model" : "key";
+  const subject =
+    dimension === "model"
+      ? t("costOptimization.cacheLeakageCard.subjectModels", { defaultValue: "Models" })
+      : t("costOptimization.cacheLeakageCard.subjectKeys", { defaultValue: "Keys" });
+  const firstColumn =
+    dimension === "model"
+      ? t("costOptimization.cacheLeakageCard.colModel", { defaultValue: "Model" })
+      : t("costOptimization.cacheLeakageCard.colKey", { defaultValue: "Key" });
+  const emptyNoun =
+    dimension === "model"
+      ? t("costOptimization.cacheLeakageCard.nounModel", { defaultValue: "model" })
+      : t("costOptimization.cacheLeakageCard.nounKey", { defaultValue: "key" });
 
   return (
     <TooltipProvider delay={300}>
@@ -104,11 +119,21 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
         <CardHeader>
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="min-w-0">
-              <CardTitle>Cache leakage by {dimension === "model" ? "model" : "virtual key"}</CardTitle>
+              <CardTitle>
+                {t("costOptimization.cacheLeakageCard.title", {
+                  defaultValue: "Cache leakage by {{dimension}}",
+                  dimension:
+                    dimension === "model"
+                      ? t("costOptimization.cacheLeakageCard.dimensionModel", { defaultValue: "model" })
+                      : t("costOptimization.cacheLeakageCard.dimensionVirtualKey", { defaultValue: "virtual key" }),
+                })}
+              </CardTitle>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                {subject} sending large volumes of uncached input with a low cache hit rate are likely missing prompt
-                caching. Potential savings is approximate: uncached input priced at what your cached traffic nets per
-                cached token, after cache-write premiums.
+                {t("costOptimization.cacheLeakageCard.description", {
+                  defaultValue:
+                    "{{subject}} sending large volumes of uncached input with a low cache hit rate are likely missing prompt caching. Potential savings is approximate: uncached input priced at what your cached traffic nets per cached token, after cache-write premiums.",
+                  subject,
+                })}
               </p>
             </div>
             <div className="shrink-0">
@@ -117,8 +142,12 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
           </div>
           <Tabs value={dimension} onValueChange={(value) => setDimension(value === "model" ? "model" : "key")}>
             <TabsList>
-              <TabsTrigger value="key">By virtual key</TabsTrigger>
-              <TabsTrigger value="model">By model</TabsTrigger>
+              <TabsTrigger value="key">
+                {t("costOptimization.cacheLeakageCard.byVirtualKey", { defaultValue: "By virtual key" })}
+              </TabsTrigger>
+              <TabsTrigger value="model">
+                {t("costOptimization.cacheLeakageCard.byModel", { defaultValue: "By model" })}
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </CardHeader>
@@ -130,7 +159,12 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
           )}
           {rows.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
-              {loading || isFetchingMore ? "Loading..." : `No ${emptyNoun} usage in this range.`}
+              {loading || isFetchingMore
+                ? t("costOptimization.cacheLeakageCard.loading", { defaultValue: "Loading..." })
+                : t("costOptimization.cacheLeakageCard.noUsage", {
+                    defaultValue: "No {{noun}} usage in this range.",
+                    noun: emptyNoun,
+                  })}
             </p>
           ) : (
             <Table>
@@ -139,21 +173,25 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
                   <TableHead>{firstColumn}</TableHead>
                   <SortableHead
                     column="uncachedPromptTokens"
-                    label="Uncached input tokens"
+                    label={t("costOptimization.cacheLeakageCard.uncachedInputTokens", {
+                      defaultValue: "Uncached input tokens",
+                    })}
                     info="Input tokens you sent in this range that weren't served from or written to the cache"
                     sort={sort}
                     onSort={onSort}
                   />
                   <SortableHead
                     column="cacheHitRatio"
-                    label="Cache hit rate"
+                    label={t("costOptimization.cacheLeakageCard.cacheHitRate", { defaultValue: "Cache hit rate" })}
                     info="Share of your input tokens that were served from the cache"
                     sort={sort}
                     onSort={onSort}
                   />
                   <SortableHead
                     column="potentialSavings"
-                    label="Potential savings"
+                    label={t("costOptimization.cacheLeakageCard.potentialSavings", {
+                      defaultValue: "Potential savings",
+                    })}
                     info="About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall."
                     sort={sort}
                     onSort={onSort}

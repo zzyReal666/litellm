@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Info, PiggyBank } from "lucide-react";
 
 import useCan from "@/app/(dashboard)/hooks/useCan";
@@ -20,6 +21,7 @@ interface CostOptimizationViewProps {
 }
 
 const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken, userId, userRole }) => {
+  const { t } = useTranslation();
   const activity = useDailyActivityRange(accessToken, userId, userRole);
   const canViewProxyWideCostData = useCan("viewProxyWideCostData");
   const [visitedTabs, setVisitedTabs] = React.useState<readonly string[]>(["usage"]);
@@ -37,8 +39,11 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
       <Tabs defaultValue="usage" onValueChange={handleTabChange} className="gap-6">
         <PageHeader
           icon={<PiggyBank />}
-          title="Cost Optimization"
-          subtitle="Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab"
+          title={t("costOptimization.costOptimizationView.title", { defaultValue: "Cost Optimization" })}
+          subtitle={t("costOptimization.costOptimizationView.subtitle", {
+            defaultValue:
+              "Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab",
+          })}
           tabs={({ leadingControls }) => (
             <TabsList
               variant="line"
@@ -46,18 +51,20 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
             >
               {leadingControls}
               <TabsTrigger value="usage" className="flex-none px-0 py-[7px] data-active:font-semibold">
-                Overall
+                {t("costOptimization.costOptimizationView.tabOverall", { defaultValue: "Overall" })}
               </TabsTrigger>
               {canViewProxyWideCostData && (
                 <>
                   <TabsTrigger value="compression" className="flex-none px-0 py-[7px] data-active:font-semibold">
-                    Prompt Compression
+                    {t("costOptimization.costOptimizationView.tabPromptCompression", {
+                      defaultValue: "Prompt Compression",
+                    })}
                   </TabsTrigger>
                   <TabsTrigger value="caching" className="flex-none px-0 py-[7px] data-active:font-semibold">
-                    Prompt Caching
+                    {t("templates.keyInfoView.promptCaching", { defaultValue: "Prompt Caching" })}
                   </TabsTrigger>
                   <TabsTrigger value="autorouter-usage" className="flex-none px-0 py-[7px] data-active:font-semibold">
-                    Auto-Router
+                    {t("costOptimization.costOptimizationView.tabAutoRouter", { defaultValue: "Auto-Router" })}
                   </TabsTrigger>
                 </>
               )}
@@ -70,17 +77,26 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
           className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-lg border border-border bg-muted/50 px-4 py-4"
         >
           <Info className="mt-0.5 size-5 text-primary" aria-hidden="true" />
-          <p className="font-medium text-foreground">This is an experimental dashboard</p>
+          <p className="font-medium text-foreground">
+            {t("costOptimization.costOptimizationView.experimentalNotice", {
+              defaultValue: "This is an experimental dashboard",
+            })}
+          </p>
           <p className="col-start-2 text-sm text-muted-foreground">
-            Have feedback? Join the discussion{" "}
-            <a
-              href="https://github.com/BerriAI/litellm/discussions/32168"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary underline underline-offset-2"
-            >
-              here
-            </a>
+            <Trans
+              i18nKey="costOptimization.costOptimizationView.feedbackPrompt"
+              defaults="Have feedback? Join the discussion <a>here</a>"
+              components={{
+                a: (
+                  <a
+                    href="https://github.com/BerriAI/litellm/discussions/32168"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline underline-offset-2"
+                  />
+                ),
+              }}
+            />
           </p>
         </div>
 

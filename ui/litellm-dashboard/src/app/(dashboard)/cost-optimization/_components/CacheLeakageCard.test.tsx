@@ -1,5 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import i18n from "@/lib/i18n";
 
 import type { DailyData, KeyMetricWithMetadata, SpendMetrics } from "@/components/UsagePage/types";
 import type { DailyActivityRange } from "./useDailyActivityRange";
@@ -176,5 +178,50 @@ describe("CacheLeakageCard", () => {
     expect(
       screen.queryByText("Data is still loading; rows and totals will update as the rest of the range arrives."),
     ).not.toBeInTheDocument();
+  });
+});
+
+describe("CacheLeakageCard in Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("renders the key table and its column headers in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([
+      dayWithKeys("2026-07-12", {
+        "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+      }),
+    ]);
+
+    expect(screen.getByText("按虚拟密钥")).toBeInTheDocument();
+    expect(screen.getByText("按模型")).toBeInTheDocument();
+    expect(screen.getByText("未缓存输入 Token")).toBeInTheDocument();
+    expect(screen.getByText("缓存命中率")).toBeInTheDocument();
+    expect(screen.getByText("潜在节省")).toBeInTheDocument();
+  });
+
+  it("switches to the model view with a Chinese title", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([
+      dayWithModels("2026-07-12", {
+        "claude-sonnet-5": { prompt_tokens: 5000, cache_read_input_tokens: 0 },
+      }),
+    ]);
+
+    fireEvent.click(screen.getByText("按模型"));
+
+    expect(screen.getByText("按模型统计的缓存流失")).toBeInTheDocument();
+  });
+
+  it("renders the empty state in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([dayWithKeys("2026-07-12", {})]);
+
+    expect(screen.getByText("该时间范围内没有密钥用量。")).toBeInTheDocument();
   });
 });

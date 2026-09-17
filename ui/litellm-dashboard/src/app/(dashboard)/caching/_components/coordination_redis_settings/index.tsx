@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
@@ -23,6 +24,7 @@ import {
 } from "./coordinationRedisUtils";
 
 const CoordinationRedisSettings: React.FC = () => {
+  const { t } = useTranslation();
   const form = useForm<CoordinationFormValues>({ defaultValues: buildInitialValues({}) });
   const [selectedRedisType, setSelectedRedisType] = useState<CoordinationRedisType | null>(null);
 
@@ -40,9 +42,11 @@ const CoordinationRedisSettings: React.FC = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.fromError("Failed to load coordination Redis settings");
+      toast.fromError(
+        t("caching.coordinationRedis.failedToLoad", { defaultValue: "Failed to load coordination Redis settings" }),
+      );
     }
-  }, [isError]);
+  }, [isError, t]);
 
   const validate = (): CoordinationFormValues | null => {
     const values = form.getValues();
@@ -65,12 +69,27 @@ const CoordinationRedisSettings: React.FC = () => {
     try {
       const result = await testConnection.mutateAsync(buildCoordinationPayload(redisType, values));
       if (result.status === "healthy") {
-        toast.success("Coordination Redis connection test successful!");
+        toast.success(
+          t("caching.coordinationRedis.testSuccessful", {
+            defaultValue: "Coordination Redis connection test successful!",
+          }),
+        );
       } else {
-        toast.fromError(`Connection test failed: ${result.error ?? "Unknown error"}`);
+        toast.fromError(
+          t("cacheSettings.index.testFailed", {
+            defaultValue: "Connection test failed: {{message}}",
+            message: result.error ?? t("cacheHealth.unknownError", { defaultValue: "Unknown error" }),
+          }),
+        );
       }
     } catch (error) {
-      toast.fromError(`Connection test failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      toast.fromError(
+        t("cacheSettings.index.testFailed", {
+          defaultValue: "Connection test failed: {{message}}",
+          message:
+            error instanceof Error ? error.message : t("cacheHealth.unknownError", { defaultValue: "Unknown error" }),
+        }),
+      );
     }
   };
 
@@ -82,9 +101,17 @@ const CoordinationRedisSettings: React.FC = () => {
 
     try {
       await updateSettings.mutateAsync(buildCoordinationPayload(redisType, values));
-      toast.success("Coordination Redis settings saved. Restart the proxy to apply them.");
+      toast.success(
+        t("caching.coordinationRedis.saved", {
+          defaultValue: "Coordination Redis settings saved. Restart the proxy to apply them.",
+        }),
+      );
     } catch {
-      toast.fromError("Failed to update coordination Redis settings");
+      toast.fromError(
+        t("caching.coordinationRedis.failedToUpdate", {
+          defaultValue: "Failed to update coordination Redis settings",
+        }),
+      );
     }
   };
 
@@ -97,24 +124,36 @@ const CoordinationRedisSettings: React.FC = () => {
         <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
           <div className="max-w-3xl space-y-2">
             <div className="flex items-center gap-3">
-              <h3 className="text-sm font-medium text-foreground">Coordination Redis</h3>
+              <h3 className="text-sm font-medium text-foreground">
+                {t("caching.dashboard.coordinationRedis", { defaultValue: "Coordination Redis" })}
+              </h3>
               {!isLoading && (
-                <StatusBadge tone={badge.tone} label={badge.label} dataTestId="coordination-redis-source" />
+                <StatusBadge
+                  tone={badge.tone}
+                  label={t(badge.labelKey, { defaultValue: badge.label })}
+                  dataTestId="coordination-redis-source"
+                />
               )}
             </div>
             <p className="text-xs text-muted-foreground">
-              Redis used to coordinate work across proxy pods: cross-pod rate limits, spend tracking, and the pod lock
-              manager. It is configured independently of the response cache.
+              {t("caching.coordinationRedis.description", {
+                defaultValue:
+                  "Redis used to coordinate work across proxy pods: cross-pod rate limits, spend tracking, and the pod lock manager. It is configured independently of the response cache.",
+              })}
             </p>
-            <p className="text-xs text-muted-foreground">{badge.tooltip}</p>
-            <p className="text-xs text-warning">Saved changes take effect on proxy restart.</p>
+            <p className="text-xs text-muted-foreground">{t(badge.tooltipKey, { defaultValue: badge.tooltip })}</p>
+            <p className="text-xs text-warning">
+              {t("caching.coordinationRedis.restartNotice", {
+                defaultValue: "Saved changes take effect on proxy restart.",
+              })}
+            </p>
           </div>
 
           <CoordinationRedisTypeSelector redisType={redisType} onTypeChange={setSelectedRedisType} />
 
           <div className="pt-4 border-t border-border">
             <CoordinationRedisFieldSection
-              title="Connection Settings"
+              title={t("cacheSettings.index.connectionSettings", { defaultValue: "Connection Settings" })}
               section="connection"
               redisType={redisType}
               configuredSecrets={configuredSecrets}
@@ -124,7 +163,7 @@ const CoordinationRedisSettings: React.FC = () => {
           {redisType === "cluster" && (
             <div className="pt-4 border-t border-border">
               <CoordinationRedisFieldSection
-                title="Cluster Configuration"
+                title={t("cacheSettings.index.clusterConfiguration", { defaultValue: "Cluster Configuration" })}
                 section="cluster"
                 redisType={redisType}
                 configuredSecrets={configuredSecrets}
@@ -136,7 +175,7 @@ const CoordinationRedisSettings: React.FC = () => {
           {redisType === "sentinel" && (
             <div className="pt-4 border-t border-border">
               <CoordinationRedisFieldSection
-                title="Sentinel Configuration"
+                title={t("cacheSettings.index.sentinelConfiguration", { defaultValue: "Sentinel Configuration" })}
                 section="sentinel"
                 redisType={redisType}
                 configuredSecrets={configuredSecrets}
@@ -146,7 +185,7 @@ const CoordinationRedisSettings: React.FC = () => {
 
           <div className="pt-4 border-t border-border">
             <CoordinationRedisFieldSection
-              title="SSL Settings"
+              title={t("cacheSettings.index.sslSettings", { defaultValue: "SSL Settings" })}
               section="ssl"
               redisType={redisType}
               configuredSecrets={configuredSecrets}
@@ -158,11 +197,15 @@ const CoordinationRedisSettings: React.FC = () => {
       <div className="border-t border-border pt-6 flex justify-end gap-3">
         <Button variant="outline" onClick={handleTestConnection} disabled={testConnection.isPending}>
           {testConnection.isPending && <UiLoadingSpinner className="size-4" />}
-          {testConnection.isPending ? "Testing..." : "Test Connection"}
+          {testConnection.isPending
+            ? t("cacheSettings.index.testing", { defaultValue: "Testing..." })
+            : t("cacheSettings.index.testConnection", { defaultValue: "Test Connection" })}
         </Button>
         <Button onClick={handleSaveChanges} disabled={updateSettings.isPending}>
           {updateSettings.isPending && <UiLoadingSpinner className="size-4" />}
-          {updateSettings.isPending ? "Saving..." : "Save Changes"}
+          {updateSettings.isPending
+            ? t("common.saving", { defaultValue: "Saving..." })
+            : t("cacheSettings.index.saveChanges", { defaultValue: "Save Changes" })}
         </Button>
       </div>
     </div>

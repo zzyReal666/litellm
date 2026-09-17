@@ -9,6 +9,7 @@ export const ALL_ROUTERS = "__all__";
 
 export interface BenchmarkView {
   label: string;
+  labelKey?: string;
   stats: AutoRouterBenchmarkTotals | AutoRouterBenchmarkGroup;
 }
 
@@ -25,7 +26,11 @@ export const groupLabel = (group: AutoRouterBenchmarkGroup, groups: readonly Aut
 export const viewFor = (data: AutoRouterBenchmarksResponse, selectedKey: string): BenchmarkView => {
   const group = data.groups.find((g) => groupKey(g) === selectedKey);
   if (selectedKey === ALL_ROUTERS || !group) {
-    return { label: "All auto-routers", stats: data.totals };
+    return {
+      label: "All auto-routers",
+      labelKey: "costOptimization.autoRouterBenchmarks.allAutoRouters",
+      stats: data.totals,
+    };
   }
   return { label: groupLabel(group, data.groups), stats: group };
 };
@@ -33,6 +38,7 @@ export const viewFor = (data: AutoRouterBenchmarksResponse, selectedKey: string)
 export interface BucketRow {
   key: "same_model" | "first_visit" | "return_to_tier";
   label: string;
+  labelKey: string;
   sublabel: string;
   turns: number;
   sharePct: number;
@@ -51,6 +57,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
     {
       key: "same_model",
       label: "Same model",
+      labelKey: "costOptimization.autoRouterBenchmarks.bucketSameModel",
       sublabel: "previous turn → same tier",
       turns: cache.same_model.turns,
       sharePct: sharePctOf(cache.same_model.turns, total),
@@ -60,6 +67,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
     {
       key: "first_visit",
       label: "First visit",
+      labelKey: "costOptimization.autoRouterBenchmarks.bucketFirstVisit",
       sublabel: "previous turn → a tier not used yet",
       turns: cache.first_visit.turns,
       sharePct: sharePctOf(cache.first_visit.turns, total),
@@ -69,6 +77,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
     {
       key: "return_to_tier",
       label: "Return to tier",
+      labelKey: "costOptimization.autoRouterBenchmarks.bucketReturnToTier",
       sublabel: "previous turn → a tier used earlier",
       turns: cache.return_to_tier.turns,
       sharePct: sharePctOf(cache.return_to_tier.turns, total),

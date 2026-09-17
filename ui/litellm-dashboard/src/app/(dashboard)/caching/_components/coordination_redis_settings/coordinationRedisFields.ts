@@ -9,6 +9,7 @@ export type CoordinationFieldRule = (value: unknown) => string | null;
 export interface CoordinationField {
   readonly name: string;
   readonly label: string;
+  readonly labelKey: string;
   readonly type: CoordinationFieldType;
   readonly section: CoordinationSection;
   readonly helpText: string;
@@ -30,6 +31,12 @@ export const COORDINATION_REDIS_TYPE_LABELS: Readonly<Record<CoordinationRedisTy
   node: "Node (Single Instance)",
   cluster: "Cluster",
   sentinel: "Sentinel",
+};
+
+export const COORDINATION_REDIS_TYPE_LABEL_KEYS: Readonly<Record<CoordinationRedisType, string>> = {
+  node: "cacheSettings.redisTypeSelector.nodeType",
+  cluster: "cacheSettings.redisTypeSelector.clusterType",
+  sentinel: "cacheSettings.redisTypeSelector.sentinelType",
 };
 
 const isBlank = (value: unknown): boolean => value === undefined || value === null || String(value).trim() === "";
@@ -59,6 +66,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "url",
     label: "Redis URL",
+    labelKey: "cacheSettings.fields.redisUrl",
     type: "password",
     section: "connection",
     helpText:
@@ -69,6 +77,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "host",
     label: "Host",
+    labelKey: "cacheSettings.fields.host",
     type: "string",
     section: "connection",
     helpText: "Redis server hostname or IP address",
@@ -78,6 +87,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "port",
     label: "Port",
+    labelKey: "cacheSettings.fields.port",
     type: "integer",
     section: "connection",
     helpText: "Redis server port number",
@@ -89,6 +99,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "username",
     label: "Username",
+    labelKey: "login.username",
     type: "string",
     section: "connection",
     helpText: "Redis server username (if required)",
@@ -98,6 +109,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "password",
     label: "Password",
+    labelKey: "login.password",
     type: "password",
     section: "connection",
     helpText: "Redis server password",
@@ -107,6 +119,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "startup_nodes",
     label: "Startup Nodes",
+    labelKey: "cacheHealth.startupNodes",
     type: "list",
     section: "cluster",
     helpText: 'List of startup nodes for Redis Cluster (e.g., [{"host": "127.0.0.1", "port": 7001}])',
@@ -117,6 +130,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "sentinel_nodes",
     label: "Sentinel Nodes",
+    labelKey: "cacheSettings.fields.sentinelNodes",
     type: "list",
     section: "sentinel",
     helpText: 'List of Sentinel nodes (e.g., [["localhost", 26379]])',
@@ -127,6 +141,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "service_name",
     label: "Service Name",
+    labelKey: "cacheSettings.fields.serviceName",
     type: "string",
     section: "sentinel",
     helpText: "Master service name for Redis Sentinel",
@@ -136,6 +151,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "sentinel_password",
     label: "Sentinel Password",
+    labelKey: "cacheSettings.fields.sentinelPassword",
     type: "password",
     section: "sentinel",
     helpText: "Password for Redis Sentinel authentication",
@@ -145,6 +161,7 @@ export const COORDINATION_FIELDS: readonly CoordinationField[] = [
   {
     name: "ssl",
     label: "SSL",
+    labelKey: "cacheSettings.fields.ssl",
     type: "boolean",
     section: "ssl",
     helpText: "Enable SSL/TLS connection",
