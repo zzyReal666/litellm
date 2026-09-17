@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronRight, CircleHelp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Controller,
   useFormContext,
@@ -275,9 +276,10 @@ export const AgentTagsInput = ({
   value,
   onValueChange,
   placeholder,
-  emptyText = "No matching options",
+  emptyText,
   ...props
 }: AgentTagsInputProps) => {
+  const { t } = useTranslation();
   const anchor = useComboboxAnchor();
   const [query, setQuery] = React.useState("");
   const pendingRef = React.useRef("");
@@ -359,7 +361,9 @@ export const AgentTagsInput = ({
         </ComboboxValue>
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>{emptyText}</ComboboxEmpty>
+        <ComboboxEmpty>
+          {emptyText ?? t("agentsPage.agentFormKit.noMatchingOptions", { defaultValue: "No matching options" })}
+        </ComboboxEmpty>
         <ComboboxList>
           {(option: AgentSelectOption) => (
             <ComboboxItem key={option.value} value={option} title={option.label}>
@@ -389,9 +393,10 @@ export const AgentMultiSelect = ({
   value,
   onValueChange,
   placeholder,
-  emptyText = "No matching options",
+  emptyText,
   ...props
 }: AgentMultiSelectProps) => {
+  const { t } = useTranslation();
   const anchor = useComboboxAnchor();
   const items = [...options];
   const selected = value.map((item) => items.find((option) => option.value === item) ?? { label: item, value: item });
@@ -422,7 +427,9 @@ export const AgentMultiSelect = ({
         </ComboboxValue>
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>{emptyText}</ComboboxEmpty>
+        <ComboboxEmpty>
+          {emptyText ?? t("agentsPage.agentFormKit.noMatchingOptions", { defaultValue: "No matching options" })}
+        </ComboboxEmpty>
         <ComboboxList>
           {(option: AgentSelectOption) => (
             <ComboboxItem key={option.value} value={option} title={option.label}>
