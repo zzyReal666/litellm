@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "@/components/shared/DataTable";
+import i18n from "@/lib/i18n";
 import { MCPToolset } from "@/components/mcp_tools/types";
 import { getMCPToolsetTableColumns } from "./MCPToolsetTableColumns";
 
@@ -29,7 +30,7 @@ const serverPrefixById = new Map([
 ]);
 
 function renderTable({ isAdmin = true, onEditClick = vi.fn(), onDeleteClick = vi.fn() } = {}) {
-  const deps = { isAdmin, serverPrefixById, onEditClick, onDeleteClick };
+  const deps = { isAdmin, serverPrefixById, onEditClick, onDeleteClick, t: i18n.t.bind(i18n) };
   render(
     <DataTable
       data={[mockToolset]}
