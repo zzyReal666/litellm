@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 export interface GuardrailPreset {
   provider: string;
   categoryName?: string;
@@ -6,131 +8,163 @@ export interface GuardrailPreset {
   defaultOn: boolean;
 }
 
-export const GUARDRAIL_PRESETS: Record<string, GuardrailPreset> = {
+export const getGuardrailPresets = (t: TFunction): Record<string, GuardrailPreset> => ({
   // ── LiteLLM Content Filter: Content Categories ──
   cf_denied_financial: {
     provider: "LitellmContentFilter",
     categoryName: "denied_financial_advice",
-    guardrailNameSuggestion: "Denied Financial Advice",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfDeniedFinancial.name", {
+      defaultValue: "Denied Financial Advice",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_denied_legal: {
     provider: "LitellmContentFilter",
     categoryName: "denied_legal_advice",
-    guardrailNameSuggestion: "Denied Legal Advice",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfDeniedLegal.name", {
+      defaultValue: "Denied Legal Advice",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_denied_medical: {
     provider: "LitellmContentFilter",
     categoryName: "denied_medical_advice",
-    guardrailNameSuggestion: "Denied Medical Advice",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfDeniedMedical.name", {
+      defaultValue: "Denied Medical Advice",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_denied_insults: {
     provider: "LitellmContentFilter",
     categoryName: "denied_insults",
-    guardrailNameSuggestion: "Insults & Personal Attacks",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfDeniedInsults.name", {
+      defaultValue: "Insults & Personal Attacks",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_harmful_violence: {
     provider: "LitellmContentFilter",
     categoryName: "harmful_violence",
-    guardrailNameSuggestion: "Harmful Violence",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfHarmfulViolence.name", {
+      defaultValue: "Harmful Violence",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_harmful_self_harm: {
     provider: "LitellmContentFilter",
     categoryName: "harmful_self_harm",
-    guardrailNameSuggestion: "Harmful Self-Harm",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfHarmfulSelfHarm.name", {
+      defaultValue: "Harmful Self-Harm",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_harmful_child_safety: {
     provider: "LitellmContentFilter",
     categoryName: "harmful_child_safety",
-    guardrailNameSuggestion: "Harmful Child Safety",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfHarmfulChildSafety.name", {
+      defaultValue: "Harmful Child Safety",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_harmful_illegal_weapons: {
     provider: "LitellmContentFilter",
     categoryName: "harmful_illegal_weapons",
-    guardrailNameSuggestion: "Harmful Illegal Weapons",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfHarmfulIllegalWeapons.name", {
+      defaultValue: "Harmful Illegal Weapons",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_bias_gender: {
     provider: "LitellmContentFilter",
     categoryName: "bias_gender",
-    guardrailNameSuggestion: "Bias: Gender",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfBiasGender.name", { defaultValue: "Bias: Gender" }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_bias_racial: {
     provider: "LitellmContentFilter",
     categoryName: "bias_racial",
-    guardrailNameSuggestion: "Bias: Racial",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfBiasRacial.name", { defaultValue: "Bias: Racial" }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_bias_religious: {
     provider: "LitellmContentFilter",
     categoryName: "bias_religious",
-    guardrailNameSuggestion: "Bias: Religious",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfBiasReligious.name", {
+      defaultValue: "Bias: Religious",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_bias_sexual_orientation: {
     provider: "LitellmContentFilter",
     categoryName: "bias_sexual_orientation",
-    guardrailNameSuggestion: "Bias: Sexual Orientation",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfBiasSexualOrientation.name", {
+      defaultValue: "Bias: Sexual Orientation",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_prompt_injection_jailbreak: {
     provider: "LitellmContentFilter",
     categoryName: "prompt_injection_jailbreak",
-    guardrailNameSuggestion: "Prompt Injection: Jailbreak",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPromptInjectionJailbreak.name", {
+      defaultValue: "Prompt Injection: Jailbreak",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_prompt_injection_data_exfil: {
     provider: "LitellmContentFilter",
     categoryName: "prompt_injection_data_exfiltration",
-    guardrailNameSuggestion: "Prompt Injection: Data Exfiltration",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPromptInjectionDataExfil.name", {
+      defaultValue: "Prompt Injection: Data Exfiltration",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_prompt_injection_sql: {
     provider: "LitellmContentFilter",
     categoryName: "prompt_injection_sql",
-    guardrailNameSuggestion: "Prompt Injection: SQL",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPromptInjectionSql.name", {
+      defaultValue: "Prompt Injection: SQL",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_prompt_injection_malicious_code: {
     provider: "LitellmContentFilter",
     categoryName: "prompt_injection_malicious_code",
-    guardrailNameSuggestion: "Prompt Injection: Malicious Code",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPromptInjectionMaliciousCode.name", {
+      defaultValue: "Prompt Injection: Malicious Code",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_prompt_injection_system_prompt: {
     provider: "LitellmContentFilter",
     categoryName: "prompt_injection_system_prompt",
-    guardrailNameSuggestion: "Prompt Injection: System Prompt",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPromptInjectionSystemPrompt.name", {
+      defaultValue: "Prompt Injection: System Prompt",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_toxic_abuse: {
     provider: "LitellmContentFilter",
     categoryName: "harm_toxic_abuse",
-    guardrailNameSuggestion: "Toxic & Abusive Language",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfToxicAbuse.name", {
+      defaultValue: "Toxic & Abusive Language",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
@@ -138,25 +172,29 @@ export const GUARDRAIL_PRESETS: Record<string, GuardrailPreset> = {
   // ── LiteLLM Content Filter: Patterns & Keywords (no category) ──
   cf_patterns: {
     provider: "LitellmContentFilter",
-    guardrailNameSuggestion: "Pattern Matching",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfPatterns.name", { defaultValue: "Pattern Matching" }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_keywords: {
     provider: "LitellmContentFilter",
-    guardrailNameSuggestion: "Keyword Blocking",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfKeywords.name", { defaultValue: "Keyword Blocking" }),
     mode: "pre_call",
     defaultOn: false,
   },
   block_code_execution: {
     provider: "BlockCodeExecution",
-    guardrailNameSuggestion: "Block Code Execution",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.blockCodeExecution.name", {
+      defaultValue: "Block Code Execution",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   cf_competitor_intent: {
     provider: "LitellmContentFilter",
-    guardrailNameSuggestion: "Competitor Name Blocking",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.cfCompetitorIntent.name", {
+      defaultValue: "Competitor Name Blocking",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
@@ -164,164 +202,180 @@ export const GUARDRAIL_PRESETS: Record<string, GuardrailPreset> = {
   // ── Partner Guardrails ──
   presidio: {
     provider: "PresidioPII",
-    guardrailNameSuggestion: "Presidio PII",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.presidio.name", { defaultValue: "Presidio PII" }),
     mode: "pre_call",
     defaultOn: false,
   },
   bedrock: {
     provider: "Bedrock",
-    guardrailNameSuggestion: "Bedrock Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.bedrock.name", { defaultValue: "Bedrock Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   lakera: {
     provider: "Lakera",
-    guardrailNameSuggestion: "Lakera",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.lakera.name", { defaultValue: "Lakera" }),
     mode: "pre_call",
     defaultOn: false,
   },
   openai_moderation: {
     provider: "OpenaiModeration",
-    guardrailNameSuggestion: "OpenAI Moderation",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenPresets.openaiModerationName", {
+      defaultValue: "OpenAI Moderation",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   google_model_armor: {
     provider: "ModelArmor",
-    guardrailNameSuggestion: "Google Cloud Model Armor",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenPresets.googleModelArmorName", {
+      defaultValue: "Google Cloud Model Armor",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   guardrails_ai: {
     provider: "GuardrailsAi",
-    guardrailNameSuggestion: "Guardrails AI",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenPresets.guardrailsAiName", {
+      defaultValue: "Guardrails AI",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   zscaler: {
     provider: "ZscalerAiGuard",
-    guardrailNameSuggestion: "Zscaler AI Guard",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.zscaler.name", { defaultValue: "Zscaler AI Guard" }),
     mode: "pre_call",
     defaultOn: false,
   },
   panw: {
     provider: "PanwPrismaAirs",
-    guardrailNameSuggestion: "PANW Prisma AIRS",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.panw.name", { defaultValue: "PANW Prisma AIRS" }),
     mode: "pre_call",
     defaultOn: false,
   },
   cisco_ai_defense: {
     provider: "CiscoAiDefense",
-    guardrailNameSuggestion: "Cisco AI Defense",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.ciscoAiDefense.name", {
+      defaultValue: "Cisco AI Defense",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   noma: {
     provider: "Noma",
-    guardrailNameSuggestion: "Noma Security",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.noma.name", { defaultValue: "Noma Security" }),
     mode: "pre_call",
     defaultOn: false,
   },
   aporia: {
     provider: "AporiaAi",
-    guardrailNameSuggestion: "Aporia AI",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.aporia.name", { defaultValue: "Aporia AI" }),
     mode: "pre_call",
     defaultOn: false,
   },
   aim: {
     provider: "Aim",
-    guardrailNameSuggestion: "AIM Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.aim.name", { defaultValue: "AIM Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   cato_networks: {
     provider: "Cato Networks",
-    guardrailNameSuggestion: "Cato Networks Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.catoNetworks.name", {
+      defaultValue: "Cato Networks Guardrail",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   prompt_security: {
     provider: "PromptSecurity",
-    guardrailNameSuggestion: "Prompt Security",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.promptSecurity.name", {
+      defaultValue: "Prompt Security",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   lasso: {
     provider: "Lasso",
-    guardrailNameSuggestion: "Lasso Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.lasso.name", { defaultValue: "Lasso Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   pangea: {
     provider: "Pangea",
-    guardrailNameSuggestion: "Pangea Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.pangea.name", { defaultValue: "Pangea Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   enkryptai: {
     provider: "Enkryptai",
-    guardrailNameSuggestion: "EnkryptAI",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.enkryptai.name", { defaultValue: "EnkryptAI" }),
     mode: "pre_call",
     defaultOn: false,
   },
   javelin: {
     provider: "Javelin",
-    guardrailNameSuggestion: "Javelin Guardrails",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.javelin.name", { defaultValue: "Javelin Guardrails" }),
     mode: "pre_call",
     defaultOn: false,
   },
   pillar: {
     provider: "Pillar",
-    guardrailNameSuggestion: "Pillar Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.pillar.name", { defaultValue: "Pillar Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   akto: {
     provider: "Akto",
-    guardrailNameSuggestion: "Akto Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.akto.name", { defaultValue: "Akto Guardrail" }),
     mode: "pre_call",
     defaultOn: false,
   },
   promptguard: {
     provider: "Promptguard",
-    guardrailNameSuggestion: "PromptGuard",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.promptguard.name", { defaultValue: "PromptGuard" }),
     mode: "pre_call",
     defaultOn: false,
   },
   xecguard: {
     provider: "Xecguard",
-    guardrailNameSuggestion: "XecGuard",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.xecguard.name", { defaultValue: "XecGuard" }),
     mode: "pre_call",
     defaultOn: false,
   },
   deepkeep: {
     provider: "Deepkeep",
-    guardrailNameSuggestion: "DeepKeep AI Firewall",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.deepkeep.name", {
+      defaultValue: "DeepKeep AI Firewall",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   repelloai: {
     provider: "Repelloai",
-    guardrailNameSuggestion: "RepelloAI Argus",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.repelloai.name", { defaultValue: "RepelloAI Argus" }),
     mode: "pre_call",
     defaultOn: false,
   },
   straiker: {
     provider: "Straiker",
-    guardrailNameSuggestion: "Straiker Guardrail",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenPresets.straikerName", {
+      defaultValue: "Straiker Guardrail",
+    }),
     mode: "pre_call",
     defaultOn: false,
   },
   alice: {
     provider: "Alice",
-    guardrailNameSuggestion: "Alice",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.alice.name", { defaultValue: "Alice" }),
     mode: "pre_call",
     defaultOn: false,
   },
   conduct: {
     provider: "Conduct",
-    guardrailNameSuggestion: "Conduct Guard",
+    guardrailNameSuggestion: t("guardrails.guardrailGardenCards.conduct.name", { defaultValue: "Conduct Guard" }),
     mode: "pre_call",
     defaultOn: false,
   },
-};
+});

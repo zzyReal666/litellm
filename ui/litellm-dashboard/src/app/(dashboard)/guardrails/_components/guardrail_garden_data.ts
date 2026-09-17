@@ -1,3 +1,4 @@
+import type { TFunction } from "i18next";
 import { guardrailLogoMap } from "./guardrail_info_helpers";
 
 export interface GuardrailCardInfo {
@@ -20,16 +21,23 @@ export interface GuardrailCardInfo {
 
 const litellmContentFilterLogo = guardrailLogoMap["LiteLLM Content Filter"];
 
-export const LITELLM_CONTENT_FILTER_CARDS: GuardrailCardInfo[] = [
+export const getLitellmContentFilterCards = (t: TFunction): GuardrailCardInfo[] => [
   {
     id: "cf_denied_financial",
-    name: "Denied Financial Advice",
-    description:
-      "Detects requests for personalized financial advice, investment recommendations, or financial planning.",
+    name: t("guardrails.guardrailGardenCards.cfDeniedFinancial.name", {
+      defaultValue: "Denied Financial Advice",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfDeniedFinancial.desc", {
+      defaultValue:
+        "Detects requests for personalized financial advice, investment recommendations, or financial planning.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Topic Blocker"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.topicBlocker", { defaultValue: "Topic Blocker" }),
+    ],
     eval: {
       f1: 100.0,
       precision: 100.0,
@@ -40,12 +48,18 @@ export const LITELLM_CONTENT_FILTER_CARDS: GuardrailCardInfo[] = [
   },
   {
     id: "cf_denied_insults",
-    name: "Insults & Personal Attacks",
-    description: "Detects insults, name-calling, and personal attacks directed at the chatbot, staff, or other people.",
+    name: t("guardrails.guardrailGardenCards.cfDeniedInsults.name", { defaultValue: "Insults & Personal Attacks" }),
+    description: t("guardrails.guardrailGardenCards.cfDeniedInsults.desc", {
+      defaultValue:
+        "Detects insults, name-calling, and personal attacks directed at the chatbot, staff, or other people.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Topic Blocker"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.topicBlocker", { defaultValue: "Topic Blocker" }),
+    ],
     eval: {
       f1: 100.0,
       precision: 100.0,
@@ -56,365 +70,588 @@ export const LITELLM_CONTENT_FILTER_CARDS: GuardrailCardInfo[] = [
   },
   {
     id: "cf_denied_legal",
-    name: "Denied Legal Advice",
-    description: "Detects requests for unauthorized legal advice, case analysis, or legal recommendations.",
+    name: t("guardrails.guardrailGardenCards.cfDeniedLegal.name", { defaultValue: "Denied Legal Advice" }),
+    description: t("guardrails.guardrailGardenCards.cfDeniedLegal.desc", {
+      defaultValue: "Detects requests for unauthorized legal advice, case analysis, or legal recommendations.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Topic Blocker"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.topicBlocker", { defaultValue: "Topic Blocker" }),
+    ],
   },
   {
     id: "cf_denied_medical",
-    name: "Denied Medical Advice",
-    description: "Detects requests for medical diagnosis, treatment recommendations, or health advice.",
+    name: t("guardrails.guardrailGardenCards.cfDeniedMedical.name", { defaultValue: "Denied Medical Advice" }),
+    description: t("guardrails.guardrailGardenCards.cfDeniedMedical.desc", {
+      defaultValue: "Detects requests for medical diagnosis, treatment recommendations, or health advice.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Topic Blocker"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.topicBlocker", { defaultValue: "Topic Blocker" }),
+    ],
   },
   {
     id: "cf_harmful_violence",
-    name: "Harmful Violence",
-    description: "Detects content related to violence, criminal planning, attacks, and violent threats.",
+    name: t("guardrails.guardrailGardenCards.cfHarmfulViolence.name", { defaultValue: "Harmful Violence" }),
+    description: t("guardrails.guardrailGardenCards.cfHarmfulViolence.desc", {
+      defaultValue: "Detects content related to violence, criminal planning, attacks, and violent threats.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "cf_harmful_self_harm",
-    name: "Harmful Self-Harm",
-    description: "Detects content related to self-harm, suicide, and dangerous self-destructive behavior.",
+    name: t("guardrails.guardrailGardenCards.cfHarmfulSelfHarm.name", { defaultValue: "Harmful Self-Harm" }),
+    description: t("guardrails.guardrailGardenCards.cfHarmfulSelfHarm.desc", {
+      defaultValue: "Detects content related to self-harm, suicide, and dangerous self-destructive behavior.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "cf_harmful_child_safety",
-    name: "Harmful Child Safety",
-    description: "Detects content that could endanger child safety or exploit minors.",
+    name: t("guardrails.guardrailGardenCards.cfHarmfulChildSafety.name", { defaultValue: "Harmful Child Safety" }),
+    description: t("guardrails.guardrailGardenCards.cfHarmfulChildSafety.desc", {
+      defaultValue: "Detects content that could endanger child safety or exploit minors.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "cf_harmful_illegal_weapons",
-    name: "Harmful Illegal Weapons",
-    description: "Detects content related to illegal weapons manufacturing, distribution, or acquisition.",
+    name: t("guardrails.guardrailGardenCards.cfHarmfulIllegalWeapons.name", {
+      defaultValue: "Harmful Illegal Weapons",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfHarmfulIllegalWeapons.desc", {
+      defaultValue: "Detects content related to illegal weapons manufacturing, distribution, or acquisition.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "cf_bias_gender",
-    name: "Bias: Gender",
-    description: "Detects gender-based discrimination, stereotypes, and biased language.",
+    name: t("guardrails.guardrailGardenCards.cfBiasGender.name", { defaultValue: "Bias: Gender" }),
+    description: t("guardrails.guardrailGardenCards.cfBiasGender.desc", {
+      defaultValue: "Detects gender-based discrimination, stereotypes, and biased language.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Bias"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.bias", { defaultValue: "Bias" }),
+    ],
   },
   {
     id: "cf_bias_racial",
-    name: "Bias: Racial",
-    description: "Detects racial discrimination, stereotypes, and racially biased content.",
+    name: t("guardrails.guardrailGardenCards.cfBiasRacial.name", { defaultValue: "Bias: Racial" }),
+    description: t("guardrails.guardrailGardenCards.cfBiasRacial.desc", {
+      defaultValue: "Detects racial discrimination, stereotypes, and racially biased content.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Bias"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.bias", { defaultValue: "Bias" }),
+    ],
   },
   {
     id: "cf_bias_religious",
-    name: "Bias: Religious",
-    description: "Detects religious discrimination, intolerance, and religiously biased content.",
+    name: t("guardrails.guardrailGardenCards.cfBiasReligious.name", { defaultValue: "Bias: Religious" }),
+    description: t("guardrails.guardrailGardenCards.cfBiasReligious.desc", {
+      defaultValue: "Detects religious discrimination, intolerance, and religiously biased content.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Bias"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.bias", { defaultValue: "Bias" }),
+    ],
   },
   {
     id: "cf_bias_sexual_orientation",
-    name: "Bias: Sexual Orientation",
-    description: "Detects discrimination based on sexual orientation and related biased content.",
+    name: t("guardrails.guardrailGardenCards.cfBiasSexualOrientation.name", {
+      defaultValue: "Bias: Sexual Orientation",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfBiasSexualOrientation.desc", {
+      defaultValue: "Detects discrimination based on sexual orientation and related biased content.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Bias"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.bias", { defaultValue: "Bias" }),
+    ],
   },
   {
     id: "cf_prompt_injection_jailbreak",
-    name: "Prompt Injection: Jailbreak",
-    description: "Detects jailbreak attempts designed to bypass AI safety guidelines and restrictions.",
+    name: t("guardrails.guardrailGardenCards.cfPromptInjectionJailbreak.name", {
+      defaultValue: "Prompt Injection: Jailbreak",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfPromptInjectionJailbreak.desc", {
+      defaultValue: "Detects jailbreak attempts designed to bypass AI safety guidelines and restrictions.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_prompt_injection_data_exfil",
-    name: "Prompt Injection: Data Exfiltration",
-    description: "Detects attempts to extract sensitive data through prompt manipulation.",
+    name: t("guardrails.guardrailGardenCards.cfPromptInjectionDataExfil.name", {
+      defaultValue: "Prompt Injection: Data Exfiltration",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfPromptInjectionDataExfil.desc", {
+      defaultValue: "Detects attempts to extract sensitive data through prompt manipulation.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_prompt_injection_sql",
-    name: "Prompt Injection: SQL",
-    description: "Detects SQL injection attempts embedded in prompts.",
+    name: t("guardrails.guardrailGardenCards.cfPromptInjectionSql.name", { defaultValue: "Prompt Injection: SQL" }),
+    description: t("guardrails.guardrailGardenCards.cfPromptInjectionSql.desc", {
+      defaultValue: "Detects SQL injection attempts embedded in prompts.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_prompt_injection_malicious_code",
-    name: "Prompt Injection: Malicious Code",
-    description: "Detects attempts to inject malicious code through prompts.",
+    name: t("guardrails.guardrailGardenCards.cfPromptInjectionMaliciousCode.name", {
+      defaultValue: "Prompt Injection: Malicious Code",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfPromptInjectionMaliciousCode.desc", {
+      defaultValue: "Detects attempts to inject malicious code through prompts.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_prompt_injection_system_prompt",
-    name: "Prompt Injection: System Prompt",
-    description: "Detects attempts to extract or override system prompts.",
+    name: t("guardrails.guardrailGardenCards.cfPromptInjectionSystemPrompt.name", {
+      defaultValue: "Prompt Injection: System Prompt",
+    }),
+    description: t("guardrails.guardrailGardenCards.cfPromptInjectionSystemPrompt.desc", {
+      defaultValue: "Detects attempts to extract or override system prompts.",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_toxic_abuse",
-    name: "Toxic & Abusive Language",
-    description: "Detects toxic, abusive, and hateful language across multiple languages (EN, AU, DE, ES, FR).",
+    name: t("guardrails.guardrailGardenCards.cfToxicAbuse.name", { defaultValue: "Toxic & Abusive Language" }),
+    description: t("guardrails.guardrailGardenCards.cfToxicAbuse.desc", {
+      defaultValue: "Detects toxic, abusive, and hateful language across multiple languages (EN, AU, DE, ES, FR).",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Toxicity"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.toxicity", { defaultValue: "Toxicity" }),
+    ],
   },
   {
     id: "cf_patterns",
-    name: "Pattern Matching",
-    description:
-      "Detect and block sensitive data patterns like SSNs, credit card numbers, API keys, and custom regex patterns.",
+    name: t("guardrails.guardrailGardenCards.cfPatterns.name", { defaultValue: "Pattern Matching" }),
+    description: t("guardrails.guardrailGardenCards.cfPatterns.desc", {
+      defaultValue:
+        "Detect and block sensitive data patterns like SSNs, credit card numbers, API keys, and custom regex patterns.",
+    }),
     category: "litellm",
-    subcategory: "Patterns",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.patterns", { defaultValue: "Patterns" }),
     logo: litellmContentFilterLogo,
-    tags: ["PII", "Regex", "Data Protection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+      t("guardrails.guardrailGardenCards.tags.regex", { defaultValue: "Regex" }),
+      t("guardrails.guardrailGardenCards.tags.dataProtection", { defaultValue: "Data Protection" }),
+    ],
   },
   {
     id: "cf_keywords",
-    name: "Keyword Blocking",
-    description:
-      "Block or mask content containing specific keywords or phrases. Upload custom word lists or add individual terms.",
+    name: t("guardrails.guardrailGardenCards.cfKeywords.name", { defaultValue: "Keyword Blocking" }),
+    description: t("guardrails.guardrailGardenCards.cfKeywords.desc", {
+      defaultValue:
+        "Block or mask content containing specific keywords or phrases. Upload custom word lists or add individual terms.",
+    }),
     category: "litellm",
-    subcategory: "Keywords",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.keywords", { defaultValue: "Keywords" }),
     logo: litellmContentFilterLogo,
-    tags: ["Keywords", "Blocklist"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.keywords", { defaultValue: "Keywords" }),
+      t("guardrails.guardrailGardenCards.tags.blocklist", { defaultValue: "Blocklist" }),
+    ],
   },
   {
     id: "block_code_execution",
-    name: "Block Code Execution",
-    description:
-      "Detects markdown fenced code blocks in requests and responses. Block or mask executable code (e.g. Python, JavaScript, Bash) by language with configurable confidence.",
+    name: t("guardrails.guardrailGardenCards.blockCodeExecution.name", { defaultValue: "Block Code Execution" }),
+    description: t("guardrails.guardrailGardenCards.blockCodeExecution.desc", {
+      defaultValue:
+        "Detects markdown fenced code blocks in requests and responses. Block or mask executable code (e.g. Python, JavaScript, Bash) by language with configurable confidence.",
+    }),
     category: "litellm",
-    subcategory: "Code Safety",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.codeSafety", { defaultValue: "Code Safety" }),
     logo: litellmContentFilterLogo,
-    tags: ["Code", "Safety", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.code", { defaultValue: "Code" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
   },
   {
     id: "cf_competitor_intent",
-    name: "Competitor Name Blocking",
-    description:
-      "Block or reframe competitor comparison and ranking intent. Detect when users ask to compare or recommend competitors (airline or generic competitor lists).",
+    name: t("guardrails.guardrailGardenCards.cfCompetitorIntent.name", { defaultValue: "Competitor Name Blocking" }),
+    description: t("guardrails.guardrailGardenCards.cfCompetitorIntent.desc", {
+      defaultValue:
+        "Block or reframe competitor comparison and ranking intent. Detect when users ask to compare or recommend competitors (airline or generic competitor lists).",
+    }),
     category: "litellm",
-    subcategory: "Content Category",
+    subcategory: t("guardrails.guardrailGardenCards.subcategory.contentCategory", { defaultValue: "Content Category" }),
     logo: litellmContentFilterLogo,
-    tags: ["Content Category", "Competitor", "Topic Blocker"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentCategory", { defaultValue: "Content Category" }),
+      t("guardrails.guardrailGardenCards.tags.competitor", { defaultValue: "Competitor" }),
+      t("guardrails.guardrailGardenCards.tags.topicBlocker", { defaultValue: "Topic Blocker" }),
+    ],
   },
 ];
 
-export const PARTNER_GUARDRAIL_CARDS: GuardrailCardInfo[] = [
+export const getPartnerGuardrailCards = (t: TFunction): GuardrailCardInfo[] => [
   {
     id: "presidio",
-    name: "Presidio PII",
-    description:
-      "Microsoft Presidio for PII detection and anonymization. Supports 30+ entity types with configurable actions.",
+    name: t("guardrails.guardrailGardenCards.presidio.name", { defaultValue: "Presidio PII" }),
+    description: t("guardrails.guardrailGardenCards.presidio.desc", {
+      defaultValue:
+        "Microsoft Presidio for PII detection and anonymization. Supports 30+ entity types with configurable actions.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Presidio PII"],
-    tags: ["PII", "Microsoft"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+      t("guardrails.guardrailGardenCards.tags.microsoft", { defaultValue: "Microsoft" }),
+    ],
     providerKey: "PresidioPII",
   },
   {
     id: "bedrock",
-    name: "Bedrock Guardrail",
-    description: "AWS Bedrock Guardrails for content filtering, topic avoidance, and sensitive information detection.",
+    name: t("guardrails.guardrailGardenCards.bedrock.name", { defaultValue: "Bedrock Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.bedrock.desc", {
+      defaultValue:
+        "AWS Bedrock Guardrails for content filtering, topic avoidance, and sensitive information detection.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Bedrock Guardrail"],
-    tags: ["AWS", "Content Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.aws", { defaultValue: "AWS" }),
+      t("guardrails.guardrailGardenCards.tags.contentSafety", { defaultValue: "Content Safety" }),
+    ],
     providerKey: "Bedrock",
   },
   {
     id: "lakera",
-    name: "Lakera",
-    description: "AI security platform protecting against prompt injections, data leakage, and harmful content.",
+    name: t("guardrails.guardrailGardenCards.lakera.name", { defaultValue: "Lakera" }),
+    description: t("guardrails.guardrailGardenCards.lakera.desc", {
+      defaultValue: "AI security platform protecting against prompt injections, data leakage, and harmful content.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Lakera"],
-    tags: ["Security", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
     providerKey: "Lakera",
   },
   {
     id: "openai_moderation",
-    name: "OpenAI Moderation",
-    description: "OpenAI's content moderation API for detecting harmful content across multiple categories.",
+    name: t("guardrails.guardrailGardenCards.openaiModeration.name", { defaultValue: "OpenAI Moderation" }),
+    description: t("guardrails.guardrailGardenCards.openaiModeration.desc", {
+      defaultValue: "OpenAI's content moderation API for detecting harmful content across multiple categories.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["OpenAI Moderation"],
-    tags: ["Content Moderation", "OpenAI"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentModeration", { defaultValue: "Content Moderation" }),
+      t("guardrails.guardrailGardenCards.tags.openai", { defaultValue: "OpenAI" }),
+    ],
   },
   {
     id: "google_model_armor",
-    name: "Google Cloud Model Armor",
-    description: "Google Cloud's model protection service for safe and responsible AI deployments.",
+    name: t("guardrails.guardrailGardenCards.googleModelArmor.name", { defaultValue: "Google Cloud Model Armor" }),
+    description: t("guardrails.guardrailGardenCards.googleModelArmor.desc", {
+      defaultValue: "Google Cloud's model protection service for safe and responsible AI deployments.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Google Cloud Model Armor"],
-    tags: ["Google Cloud", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.googleCloud", { defaultValue: "Google Cloud" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "guardrails_ai",
-    name: "Guardrails AI",
-    description: "Open-source framework for adding structural, type, and quality guarantees to LLM outputs.",
+    name: t("guardrails.guardrailGardenCards.guardrailsAi.name", { defaultValue: "Guardrails AI" }),
+    description: t("guardrails.guardrailGardenCards.guardrailsAi.desc", {
+      defaultValue: "Open-source framework for adding structural, type, and quality guarantees to LLM outputs.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Guardrails AI"],
-    tags: ["Open Source", "Validation"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.openSource", { defaultValue: "Open Source" }),
+      t("guardrails.guardrailGardenCards.tags.validation", { defaultValue: "Validation" }),
+    ],
   },
   {
     id: "zscaler",
-    name: "Zscaler AI Guard",
-    description: "Enterprise AI security from Zscaler for monitoring and protecting AI/ML workloads.",
+    name: t("guardrails.guardrailGardenCards.zscaler.name", { defaultValue: "Zscaler AI Guard" }),
+    description: t("guardrails.guardrailGardenCards.zscaler.desc", {
+      defaultValue: "Enterprise AI security from Zscaler for monitoring and protecting AI/ML workloads.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Zscaler AI Guard"],
-    tags: ["Enterprise", "Security"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.enterprise", { defaultValue: "Enterprise" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+    ],
   },
   {
     id: "panw",
-    name: "PANW Prisma AIRS",
-    description: "Palo Alto Networks Prisma AI Runtime Security for securing AI applications in production.",
+    name: t("guardrails.guardrailGardenCards.panw.name", { defaultValue: "PANW Prisma AIRS" }),
+    description: t("guardrails.guardrailGardenCards.panw.desc", {
+      defaultValue: "Palo Alto Networks Prisma AI Runtime Security for securing AI applications in production.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["PANW Prisma AIRS"],
-    tags: ["Enterprise", "Security"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.enterprise", { defaultValue: "Enterprise" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+    ],
   },
   {
     id: "cisco_ai_defense",
-    name: "Cisco AI Defense",
-    description:
-      "Cisco AI Defense Inspection API for runtime protection: prompt injection, PII/PCI/PHI, harassment, hate speech, profanity, violence, and code detection.",
+    name: t("guardrails.guardrailGardenCards.ciscoAiDefense.name", { defaultValue: "Cisco AI Defense" }),
+    description: t("guardrails.guardrailGardenCards.ciscoAiDefense.desc", {
+      defaultValue:
+        "Cisco AI Defense Inspection API for runtime protection: prompt injection, PII/PCI/PHI, harassment, hate speech, profanity, violence, and code detection.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Cisco AI Defense"],
-    tags: ["Enterprise", "Security", "Prompt Injection", "PII"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.enterprise", { defaultValue: "Enterprise" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+    ],
     providerKey: "CiscoAiDefense",
   },
   {
     id: "noma",
-    name: "Noma Security",
-    description: "AI security platform for detecting and preventing AI-specific threats and vulnerabilities.",
+    name: t("guardrails.guardrailGardenCards.noma.name", { defaultValue: "Noma Security" }),
+    description: t("guardrails.guardrailGardenCards.noma.desc", {
+      defaultValue: "AI security platform for detecting and preventing AI-specific threats and vulnerabilities.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Noma Security"],
-    tags: ["Security", "Threat Detection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.threatDetection", { defaultValue: "Threat Detection" }),
+    ],
   },
   {
     id: "aporia",
-    name: "Aporia AI",
-    description: "Real-time AI guardrails for hallucination detection, topic control, and policy enforcement.",
+    name: t("guardrails.guardrailGardenCards.aporia.name", { defaultValue: "Aporia AI" }),
+    description: t("guardrails.guardrailGardenCards.aporia.desc", {
+      defaultValue: "Real-time AI guardrails for hallucination detection, topic control, and policy enforcement.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Aporia AI"],
-    tags: ["Hallucination", "Policy"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.hallucination", { defaultValue: "Hallucination" }),
+      t("guardrails.guardrailGardenCards.tags.policy", { defaultValue: "Policy" }),
+    ],
   },
   {
     id: "aim",
-    name: "AIM Guardrail",
-    description: "AIM Security guardrails for comprehensive AI threat detection and mitigation.",
+    name: t("guardrails.guardrailGardenCards.aim.name", { defaultValue: "AIM Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.aim.desc", {
+      defaultValue: "AIM Security guardrails for comprehensive AI threat detection and mitigation.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["AIM Guardrail"],
-    tags: ["Security", "Threat Detection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.threatDetection", { defaultValue: "Threat Detection" }),
+    ],
   },
   {
     id: "cato_networks",
-    name: "Cato Networks Guardrail",
-    description: "Cato Networks guardrails for comprehensive AI threat detection and mitigation.",
+    name: t("guardrails.guardrailGardenCards.catoNetworks.name", { defaultValue: "Cato Networks Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.catoNetworks.desc", {
+      defaultValue: "Cato Networks guardrails for comprehensive AI threat detection and mitigation.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Cato Networks Guardrail"],
-    tags: ["Security", "Threat Detection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.threatDetection", { defaultValue: "Threat Detection" }),
+    ],
   },
   {
     id: "prompt_security",
-    name: "Prompt Security",
-    description: "Protect against prompt injection attacks, data leakage, and other LLM security threats.",
+    name: t("guardrails.guardrailGardenCards.promptSecurity.name", { defaultValue: "Prompt Security" }),
+    description: t("guardrails.guardrailGardenCards.promptSecurity.desc", {
+      defaultValue: "Protect against prompt injection attacks, data leakage, and other LLM security threats.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Prompt Security"],
-    tags: ["Prompt Injection", "Security"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+    ],
   },
   {
     id: "lasso",
-    name: "Lasso Guardrail",
-    description: "Content moderation and safety guardrails for responsible AI deployments.",
+    name: t("guardrails.guardrailGardenCards.lasso.name", { defaultValue: "Lasso Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.lasso.desc", {
+      defaultValue: "Content moderation and safety guardrails for responsible AI deployments.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Lasso Guardrail"],
-    tags: ["Content Moderation"],
+    tags: [t("guardrails.guardrailGardenCards.tags.contentModeration", { defaultValue: "Content Moderation" })],
   },
   {
     id: "pangea",
-    name: "Pangea Guardrail",
-    description: "Pangea's AI guardrails for secure, compliant, and trustworthy AI applications.",
+    name: t("guardrails.guardrailGardenCards.pangea.name", { defaultValue: "Pangea Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.pangea.desc", {
+      defaultValue: "Pangea's AI guardrails for secure, compliant, and trustworthy AI applications.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Pangea Guardrail"],
-    tags: ["Compliance", "Security"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.compliance", { defaultValue: "Compliance" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+    ],
   },
   {
     id: "enkryptai",
-    name: "EnkryptAI",
-    description: "AI security and governance platform for enterprise AI safety and compliance.",
+    name: t("guardrails.guardrailGardenCards.enkryptai.name", { defaultValue: "EnkryptAI" }),
+    description: t("guardrails.guardrailGardenCards.enkryptai.desc", {
+      defaultValue: "AI security and governance platform for enterprise AI safety and compliance.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["EnkryptAI"],
-    tags: ["Enterprise", "Governance"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.enterprise", { defaultValue: "Enterprise" }),
+      t("guardrails.guardrailGardenCards.tags.governance", { defaultValue: "Governance" }),
+    ],
   },
   {
     id: "javelin",
-    name: "Javelin Guardrails",
-    description: "AI gateway with built-in guardrails for secure and compliant AI operations.",
+    name: t("guardrails.guardrailGardenCards.javelin.name", { defaultValue: "Javelin Guardrails" }),
+    description: t("guardrails.guardrailGardenCards.javelin.desc", {
+      defaultValue: "AI gateway with built-in guardrails for secure and compliant AI operations.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Javelin Guardrails"],
-    tags: ["Gateway", "Security"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.gateway", { defaultValue: "Gateway" }),
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+    ],
   },
   {
     id: "pillar",
-    name: "Pillar Guardrail",
-    description: "AI safety platform for monitoring, testing, and securing AI systems.",
+    name: t("guardrails.guardrailGardenCards.pillar.name", { defaultValue: "Pillar Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.pillar.desc", {
+      defaultValue: "AI safety platform for monitoring, testing, and securing AI systems.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Pillar Guardrail"],
-    tags: ["Monitoring", "Safety"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.monitoring", { defaultValue: "Monitoring" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+    ],
   },
   {
     id: "akto",
-    name: "Akto Guardrail",
-    description: "AI security platform from Akto.io with automatic monitoring and guardrails for AI/ML applications.",
+    name: t("guardrails.guardrailGardenCards.akto.name", { defaultValue: "Akto Guardrail" }),
+    description: t("guardrails.guardrailGardenCards.akto.desc", {
+      defaultValue:
+        "AI security platform from Akto.io with automatic monitoring and guardrails for AI/ML applications.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Akto"],
-    tags: ["Security", "Safety", "Monitoring"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.safety", { defaultValue: "Safety" }),
+      t("guardrails.guardrailGardenCards.tags.monitoring", { defaultValue: "Monitoring" }),
+    ],
   },
   {
     id: "promptguard",
-    name: "PromptGuard",
-    description:
-      "AI security gateway with prompt injection detection, PII redaction, topic filtering, entity blocklists, and hallucination detection. Self-hostable with drop-in proxy integration.",
+    name: t("guardrails.guardrailGardenCards.promptguard.name", { defaultValue: "PromptGuard" }),
+    description: t("guardrails.guardrailGardenCards.promptguard.desc", {
+      defaultValue:
+        "AI security gateway with prompt injection detection, PII redaction, topic filtering, entity blocklists, and hallucination detection. Self-hostable with drop-in proxy integration.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["PromptGuard"],
-    tags: ["Security", "Prompt Injection", "PII"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+    ],
     providerKey: "Promptguard",
     eval: {
       f1: 94.9,
@@ -426,64 +663,109 @@ export const PARTNER_GUARDRAIL_CARDS: GuardrailCardInfo[] = [
   },
   {
     id: "xecguard",
-    name: "XecGuard",
-    description:
-      "CyCraft XecGuard AI security gateway. Multi-policy scanning (prompt injection, harmful content, PII, system-prompt enforcement) plus RAG context grounding.",
+    name: t("guardrails.guardrailGardenCards.xecguard.name", { defaultValue: "XecGuard" }),
+    description: t("guardrails.guardrailGardenCards.xecguard.desc", {
+      defaultValue:
+        "CyCraft XecGuard AI security gateway. Multi-policy scanning (prompt injection, harmful content, PII, system-prompt enforcement) plus RAG context grounding.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["XecGuard"],
-    tags: ["Security", "Policy", "Grounding", "RAG"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.policy", { defaultValue: "Policy" }),
+      t("guardrails.guardrailGardenCards.tags.grounding", { defaultValue: "Grounding" }),
+      t("guardrails.guardrailGardenCards.tags.rag", { defaultValue: "RAG" }),
+    ],
     providerKey: "Xecguard",
   },
   {
     id: "deepkeep",
-    name: "DeepKeep AI Firewall",
-    description:
-      "DeepKeep AI Firewall for comprehensive LLM security — prompt injection detection, PII protection, content moderation, and policy enforcement with configurable guardrail pipelines.",
+    name: t("guardrails.guardrailGardenCards.deepkeep.name", { defaultValue: "DeepKeep AI Firewall" }),
+    description: t("guardrails.guardrailGardenCards.deepkeep.desc", {
+      defaultValue:
+        "DeepKeep AI Firewall for comprehensive LLM security — prompt injection detection, PII protection, content moderation, and policy enforcement with configurable guardrail pipelines.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["DeepKeep AI Firewall"],
-    tags: ["Security", "Prompt Injection", "PII", "Firewall"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+      t("guardrails.guardrailGardenCards.tags.firewall", { defaultValue: "Firewall" }),
+    ],
     providerKey: "Deepkeep",
   },
   {
     id: "repelloai",
-    name: "RepelloAI Argus",
-    description:
-      "RepelloAI Argus scans prompts and responses against policies configured per asset in the Repello dashboard.",
+    name: t("guardrails.guardrailGardenCards.repelloai.name", { defaultValue: "RepelloAI Argus" }),
+    description: t("guardrails.guardrailGardenCards.repelloai.desc", {
+      defaultValue:
+        "RepelloAI Argus scans prompts and responses against policies configured per asset in the Repello dashboard.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["RepelloAI Argus"],
-    tags: ["Security", "Policy", "Prompt Injection"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.policy", { defaultValue: "Policy" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+    ],
     providerKey: "Repelloai",
   },
   {
     id: "straiker",
-    name: "Straiker",
-    description:
-      "Defend AI Agentic Guardrails: Indirect/Direct Prompt Injection, Tool Misuse, Malicious MCP and Skills",
+    name: t("guardrails.guardrailGardenCards.straiker.name", { defaultValue: "Straiker" }),
+    description: t("guardrails.guardrailGardenCards.straiker.desc", {
+      defaultValue:
+        "Defend AI Agentic Guardrails: Indirect/Direct Prompt Injection, Tool Misuse, Malicious MCP and Skills",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Straiker"],
-    tags: ["Agentic", "Prompt Injection", "Tool Misuse", "MCP", "Skills"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.agentic", { defaultValue: "Agentic" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.toolMisuse", { defaultValue: "Tool Misuse" }),
+      t("guardrails.guardrailGardenCards.tags.mcp", { defaultValue: "MCP" }),
+      t("guardrails.guardrailGardenCards.tags.skills", { defaultValue: "Skills" }),
+    ],
     providerKey: "Straiker",
   },
   {
     id: "alice",
-    name: "Alice",
-    description:
-      "Policy-based guardrails for prompts and model responses, evaluated per application so one proxy can enforce a different policy set per team or product.",
+    name: t("guardrails.guardrailGardenCards.alice.name", { defaultValue: "Alice" }),
+    description: t("guardrails.guardrailGardenCards.alice.desc", {
+      defaultValue:
+        "Policy-based guardrails for prompts and model responses, evaluated per application so one proxy can enforce a different policy set per team or product.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Alice"],
-    tags: ["Content Moderation", "Prompt Injection", "PII", "Policy"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.contentModeration", { defaultValue: "Content Moderation" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+      t("guardrails.guardrailGardenCards.tags.policy", { defaultValue: "Policy" }),
+    ],
     providerKey: "Alice",
   },
   {
     id: "conduct",
-    name: "Conduct Guard",
-    description:
-      "Conduct Guard evaluates prompts against workspace rules before the model call: prompt injection, PII, and custom policies, with block, warning, and approval verdicts.",
+    name: t("guardrails.guardrailGardenCards.conduct.name", { defaultValue: "Conduct Guard" }),
+    description: t("guardrails.guardrailGardenCards.conduct.desc", {
+      defaultValue:
+        "Conduct Guard evaluates prompts against workspace rules before the model call: prompt injection, PII, and custom policies, with block, warning, and approval verdicts.",
+    }),
     category: "partner",
     logo: guardrailLogoMap["Conduct Guard"],
-    tags: ["Security", "Prompt Injection", "PII", "Policy"],
+    tags: [
+      t("guardrails.guardrailGardenCards.tags.security", { defaultValue: "Security" }),
+      t("guardrails.guardrailGardenCards.tags.promptInjection", { defaultValue: "Prompt Injection" }),
+      t("guardrails.guardrailGardenCards.tags.pii", { defaultValue: "PII" }),
+      t("guardrails.guardrailGardenCards.tags.policy", { defaultValue: "Policy" }),
+    ],
     providerKey: "Conduct",
   },
 ];
 
-export const ALL_CARDS = [...LITELLM_CONTENT_FILTER_CARDS, ...PARTNER_GUARDRAIL_CARDS];
+export const getAllCards = (t: TFunction): GuardrailCardInfo[] => [
+  ...getLitellmContentFilterCards(t),
+  ...getPartnerGuardrailCards(t),
+];

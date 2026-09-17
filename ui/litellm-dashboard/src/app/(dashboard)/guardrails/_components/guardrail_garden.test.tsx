@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import i18n from "@/lib/i18n";
 import GuardrailGarden from "./guardrail_garden";
-import { ALL_CARDS } from "./guardrail_garden_data";
+import { getAllCards } from "./guardrail_garden_data";
 
 vi.mock("./guardrail_garden_detail", () => ({
   __esModule: true,
@@ -14,12 +15,19 @@ vi.mock("./guardrail_garden_detail", () => ({
   ),
 }));
 
+const ALL_CARDS = getAllCards(i18n.t);
 const LITELLM_CARDS = ALL_CARDS.filter((c) => c.category === "litellm");
 const PARTNER_CARDS = ALL_CARDS.filter((c) => c.category === "partner");
 
 describe("GuardrailGarden", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    await i18n.changeLanguage("en");
+  });
+
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
   });
 
   const renderGarden = () => render(<GuardrailGarden accessToken="test-token" onGuardrailCreated={vi.fn()} />);

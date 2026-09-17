@@ -1,7 +1,9 @@
 "use client";
 
+import type { TFunction } from "i18next";
 import { Plus, X } from "lucide-react";
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { useController } from "react-hook-form";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
@@ -33,9 +35,9 @@ interface LLMJudgeFieldsProps {
 
 const DEFAULT_CRITERIA: GuardrailCriterion[] = [{ name: "", weight: 100, description: "" }];
 
-const ON_FAILURE_ITEMS = [
-  { label: "Block (return 422)", value: "block" },
-  { label: "Log only", value: "log" },
+const getOnFailureItems = (t: TFunction) => [
+  { label: t("guardrails.lLMJudgeFields.onFailureBlock", { defaultValue: "Block (return 422)" }), value: "block" },
+  { label: t("guardrails.lLMJudgeFields.onFailureLog", { defaultValue: "Log only" }), value: "log" },
 ];
 
 const clampToRange = (value: unknown, min: number, max: number): number | null => {
@@ -77,6 +79,8 @@ const BoundedNumberInput: React.FC<BoundedNumberInputProps> = ({ control, min, m
 };
 
 const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, control }) => {
+  const { t } = useTranslation();
+  const onFailureItems = getOnFailureItems(t);
   const { field } = useController({ control, name: "criteria", defaultValue: DEFAULT_CRITERIA });
   const criteria: GuardrailCriterion[] = Array.isArray(field.value) ? field.value : [];
   const setCriteria = field.onChange;
@@ -87,18 +91,26 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
   return (
     <FieldGroup>
       <div className="rounded-md border border-success/20 bg-success/10 px-3.5 py-2.5 text-[13px] text-success">
-        After each LLM response, the <strong>Judge Model</strong> scores it 0–100 against your criteria. If the weighted
-        average falls below the threshold, the response is blocked (or logged).
+        <Trans
+          i18nKey="guardrails.lLMJudgeFields.description"
+          defaults="After each LLM response, the <strong>Judge Model</strong> scores it 0–100 against your criteria. If the weighted average falls below the threshold, the response is blocked (or logged)."
+          components={{ strong: <strong /> }}
+        />
       </div>
 
       <GuardrailField
         control={control}
         name="judge_model"
         label={labelWithHint(
-          "Judge Model",
-          "The LLM that reads each response and grades it. Pick a capable model — it never sees end-user data beyond what the LLM returned.",
+          t("guardrails.lLMJudgeFields.judgeModelLabel", { defaultValue: "Judge Model" }),
+          t("guardrails.lLMJudgeFields.judgeModelTooltip", {
+            defaultValue:
+              "The LLM that reads each response and grades it. Pick a capable model — it never sees end-user data beyond what the LLM returned.",
+          }),
         )}
-        rules={requiredRule("Select a judge model")}
+        rules={requiredRule(
+          t("guardrails.lLMJudgeFields.judgeModelRequired", { defaultValue: "Select a judge model" }),
+        )}
       >
         {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
           <Combobox items={availableModels} value={asText(value) || null} onValueChange={onChange}>
@@ -106,11 +118,13 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
               id={id}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
-              placeholder="Select a model"
+              placeholder={t("guardrails.lLMJudgeFields.judgeModelPlaceholder", { defaultValue: "Select a model" })}
               className="w-full"
             />
             <ComboboxContent>
-              <ComboboxEmpty>No matching models</ComboboxEmpty>
+              <ComboboxEmpty>
+                {t("guardrails.lLMJudgeFields.noMatchingModels", { defaultValue: "No matching models" })}
+              </ComboboxEmpty>
               <ComboboxList>
                 {(model: string) => (
                   <ComboboxItem key={model} value={model} title={model}>
@@ -127,8 +141,11 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
         control={control}
         name="overall_threshold"
         label={labelWithHint(
-          "Minimum Score to Pass",
-          "0–100. If the weighted average of criterion scores falls below this, the guardrail triggers. 80 is a good default.",
+          t("guardrails.lLMJudgeFields.minScoreLabel", { defaultValue: "Minimum Score to Pass" }),
+          t("guardrails.lLMJudgeFields.minScoreTooltip", {
+            defaultValue:
+              "0–100. If the weighted average of criterion scores falls below this, the guardrail triggers. 80 is a good default.",
+          }),
         )}
         defaultValue={80}
       >
@@ -139,18 +156,25 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
         control={control}
         name="on_failure"
         label={labelWithHint(
-          "On Failure",
-          "Block: return HTTP 422 when the score is too low. Log: record the result but let the response through.",
+          t("guardrails.lLMJudgeFields.onFailureLabel", { defaultValue: "On Failure" }),
+          t("guardrails.lLMJudgeFields.onFailureTooltip", {
+            defaultValue:
+              "Block: return HTTP 422 when the score is too low. Log: record the result but let the response through.",
+          }),
         )}
         defaultValue="block"
       >
         {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
-          <Select items={ON_FAILURE_ITEMS} value={asText(value) || null} onValueChange={onChange}>
+          <Select items={onFailureItems} value={asText(value) || null} onValueChange={onChange}>
             <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-              <SelectValue placeholder="Select an action" />
+              <SelectValue
+                placeholder={t("guardrails.lLMJudgeFields.selectActionPlaceholder", {
+                  defaultValue: "Select an action",
+                })}
+              />
             </SelectTrigger>
             <SelectContent>
-              {ON_FAILURE_ITEMS.map((item) => (
+              {onFailureItems.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
                 </SelectItem>
@@ -163,8 +187,10 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
       <Field>
         <FieldLabel>
           {labelWithHint(
-            "Evaluation Criteria",
-            "Each criterion is something the judge checks. Weights must add up to 100%.",
+            t("guardrails.lLMJudgeFields.criteriaLabel", { defaultValue: "Evaluation Criteria" }),
+            t("guardrails.lLMJudgeFields.criteriaTooltip", {
+              defaultValue: "Each criterion is something the judge checks. Weights must add up to 100%.",
+            }),
           )}
         </FieldLabel>
 
@@ -174,7 +200,9 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
               <GuardrailField
                 control={control}
                 name={`criteria.${index}.name`}
-                rules={requiredRule("Enter criterion name")}
+                rules={requiredRule(
+                  t("guardrails.lLMJudgeFields.criterionNameRequired", { defaultValue: "Enter criterion name" }),
+                )}
                 className="flex-2"
               >
                 {({ ref, value, ...field }) => (
@@ -182,7 +210,9 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
                     {...field}
                     ref={ref}
                     value={asText(value)}
-                    placeholder="Criterion name (e.g. Policy accuracy)"
+                    placeholder={t("guardrails.lLMJudgeFields.criterionNamePlaceholder", {
+                      defaultValue: "Criterion name (e.g. Policy accuracy)",
+                    })}
                   />
                 )}
               </GuardrailField>
@@ -190,20 +220,31 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
                 control={control}
                 name={`criteria.${index}.weight`}
                 label={labelWithHint(
-                  <span className="text-xs text-muted-foreground">Weight</span>,
-                  "How much this criterion counts toward the final score. All weights must add up to 100%.",
+                  <span className="text-xs text-muted-foreground">
+                    {t("guardrails.lLMJudgeFields.weightLabel", { defaultValue: "Weight" })}
+                  </span>,
+                  t("guardrails.lLMJudgeFields.weightTooltip", {
+                    defaultValue:
+                      "How much this criterion counts toward the final score. All weights must add up to 100%.",
+                  }),
                 )}
-                rules={requiredRule("Enter weight")}
+                rules={requiredRule(t("guardrails.lLMJudgeFields.weightRequired", { defaultValue: "Enter weight" }))}
                 className="flex-1"
               >
                 {(fieldControl) => (
-                  <BoundedNumberInput control={fieldControl} min={0} max={100} suffix="%" placeholder="e.g. 50" />
+                  <BoundedNumberInput
+                    control={fieldControl}
+                    min={0}
+                    max={100}
+                    suffix="%"
+                    placeholder={t("guardrails.lLMJudgeFields.weightPlaceholder", { defaultValue: "e.g. 50" })}
+                  />
                 )}
               </GuardrailField>
               <Button
                 variant="ghost"
                 size="sm"
-                aria-label="Remove criterion"
+                aria-label={t("guardrails.lLMJudgeFields.removeCriterion", { defaultValue: "Remove criterion" })}
                 className="mb-1 text-destructive hover:text-destructive/80"
                 onClick={() => setCriteria(criteria.filter((_, position) => position !== index))}
               >
@@ -213,7 +254,9 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
             <GuardrailField
               control={control}
               name={`criteria.${index}.description`}
-              rules={requiredRule("Describe what to check")}
+              rules={requiredRule(
+                t("guardrails.lLMJudgeFields.criterionDescRequired", { defaultValue: "Describe what to check" }),
+              )}
               className="mt-2"
             >
               {({ ref, value, ...field }) => (
@@ -221,7 +264,9 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
                   {...field}
                   ref={ref}
                   value={asText(value)}
-                  placeholder="What should the judge check for this criterion?"
+                  placeholder={t("guardrails.lLMJudgeFields.criterionDescPlaceholder", {
+                    defaultValue: "What should the judge check for this criterion?",
+                  })}
                 />
               )}
             </GuardrailField>
@@ -234,12 +279,18 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, contro
           onClick={() => setCriteria([...criteria, { name: "", weight: 0, description: "" }])}
         >
           <Plus className="size-4" />
-          Add Criterion
+          {t("guardrails.lLMJudgeFields.addCriterion", { defaultValue: "Add Criterion" })}
         </Button>
 
         {criteria.length > 0 && (
           <div className={`mt-1.5 text-xs ${weightOk ? "text-success" : "text-warning"}`}>
-            Weights total: {weightTotal}%{weightOk ? " ✓" : " — must add up to 100%"}
+            {t("guardrails.lLMJudgeFields.weightsTotal", {
+              weightTotal,
+              defaultValue: "Weights total: {{weightTotal}}%",
+            })}
+            {weightOk
+              ? " ✓"
+              : ` — ${t("guardrails.lLMJudgeFields.weightsMustSum", { defaultValue: "must add up to 100%" })}`}
           </div>
         )}
       </Field>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ALL_CARDS, LITELLM_CONTENT_FILTER_CARDS, PARTNER_GUARDRAIL_CARDS } from "./guardrail_garden_data";
+import i18n from "@/lib/i18n";
+import { getAllCards, getLitellmContentFilterCards, getPartnerGuardrailCards } from "./guardrail_garden_data";
 
 const EXPECTED_PARTNER_LOGO_FILES: Record<string, string> = {
   presidio: "microsoft_azure.svg",
@@ -30,6 +31,10 @@ const EXPECTED_PARTNER_LOGO_FILES: Record<string, string> = {
   alice: "alice.svg",
   conduct: "conduct.png",
 };
+
+const PARTNER_GUARDRAIL_CARDS = getPartnerGuardrailCards(i18n.t);
+const LITELLM_CONTENT_FILTER_CARDS = getLitellmContentFilterCards(i18n.t);
+const ALL_CARDS = getAllCards(i18n.t);
 
 describe("guardrail_garden_data logos", () => {
   it("points every partner card at its own provider's bundled logo file", () => {

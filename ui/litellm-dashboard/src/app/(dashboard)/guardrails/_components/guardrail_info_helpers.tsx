@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 import aimSecurityLogo from "../../../../../public/assets/logos/aim_security.jpeg";
 import aktoLogo from "../../../../../public/assets/logos/akto.svg";
 import aliceLogo from "../../../../../public/assets/logos/alice.svg";
@@ -114,7 +116,7 @@ export const toModeArray = (raw: unknown): string[] => {
   return [];
 };
 
-export const formatGuardrailMode = (raw: unknown): string => {
+export const formatGuardrailMode = (raw: unknown, t: TFunction): string => {
   const flat: string[] = toModeArray(raw);
   if (flat.length > 0) return flat.join(", ");
   if (raw === null || typeof raw !== "object") return "";
@@ -122,7 +124,9 @@ export const formatGuardrailMode = (raw: unknown): string => {
   const { tags, default: fallback } = raw as { tags?: Record<string, unknown>; default?: unknown };
   const tagged: string[] = tags && typeof tags === "object" ? Object.values(tags).flatMap(toModeArray) : [];
   const modes: string[] = Array.from(new Set([...toModeArray(fallback), ...tagged]));
-  return modes.length > 0 ? `${modes.join(", ")} (tag-based)` : "";
+  return modes.length > 0
+    ? `${modes.join(", ")} ${t("guardrails.guardrailMode.tagBased", { defaultValue: "(tag-based)" })}`
+    : "";
 };
 
 // Resolves the supported modes for the selected provider, falling back to the global list

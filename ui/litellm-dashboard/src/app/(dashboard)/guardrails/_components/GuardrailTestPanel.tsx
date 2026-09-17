@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Copy, Info } from "lucide-react";
 import { toast } from "@/lib/toast";
 import { Button } from "@/components/ui/button";
@@ -24,6 +27,7 @@ export function GuardrailTestPanel({
   errors,
   onClose,
 }: GuardrailTestPanelProps) {
+  const { t } = useTranslation();
   const [inputText, setInputText] = useState("");
   const [metadataText, setMetadataText] = useState("");
   const [metadataError, setMetadataError] = useState<string | null>(null);
@@ -35,17 +39,27 @@ export function GuardrailTestPanel({
     try {
       const parsed = JSON.parse(raw);
       if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
-        return { metadata: null, error: "Metadata must be a JSON object" };
+        return {
+          metadata: null,
+          error: t("guardrails.guardrailTestPanel.metadataInvalidObject", {
+            defaultValue: "Metadata must be a JSON object",
+          }),
+        };
       }
       return { metadata: parsed, error: null };
     } catch {
-      return { metadata: null, error: "Invalid JSON" };
+      return {
+        metadata: null,
+        error: t("guardrails.guardrailTestPanel.invalidJson", { defaultValue: "Invalid JSON" }),
+      };
     }
   };
 
   const handleSubmit = () => {
     if (!inputText.trim()) {
-      toast.fromError("Please enter text to test");
+      toast.fromError(
+        t("guardrails.guardrailTestPanel.pleaseEnterText", { defaultValue: "Please enter text to test" }),
+      );
       return;
     }
 
@@ -98,11 +112,13 @@ export function GuardrailTestPanel({
   const handleCopyInput = async () => {
     const success = await copyToClipboard(inputText);
     if (success) {
-      toast.success("Input copied to clipboard");
+      toast.success(t("guardrails.guardrailTestPanel.inputCopied", { defaultValue: "Input copied to clipboard" }));
     } else {
-      toast.fromError("Failed to copy input");
+      toast.fromError(t("guardrails.guardrailTestPanel.failedToCopyInput", { defaultValue: "Failed to copy input" }));
     }
   };
+
+  const guardrailCount = guardrailNames.length;
 
   return (
     <div className="space-y-4 h-full flex flex-col">
@@ -111,7 +127,9 @@ export function GuardrailTestPanel({
         <div className="flex items-center space-x-3">
           <div className="flex-1 min-w-0">
             <div className="mb-1 flex items-center space-x-2">
-              <h2 className="text-lg font-semibold">Test Guardrails:</h2>
+              <h2 className="text-lg font-semibold">
+                {t("guardrails.guardrailTestPanel.title", { defaultValue: "Test Guardrails:" })}
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {guardrailNames.map((name) => (
                   <div
@@ -124,7 +142,10 @@ export function GuardrailTestPanel({
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Test {guardrailNames.length > 1 ? "guardrails" : "guardrail"} and compare results
+              {t("guardrails.guardrailTestPanel.subtitle", {
+                count: guardrailCount,
+                defaultValue: "Test guardrails and compare results",
+              })}
             </p>
           </div>
         </div>
@@ -136,7 +157,9 @@ export function GuardrailTestPanel({
           <div>
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <label className="text-sm font-medium">Input Text</label>
+                <label className="text-sm font-medium">
+                  {t("guardrails.guardrailTestPanel.inputText", { defaultValue: "Input Text" })}
+                </label>
                 <Tooltip>
                   <TooltipTrigger
                     render={
@@ -145,13 +168,17 @@ export function GuardrailTestPanel({
                       </span>
                     }
                   />
-                  <TooltipContent>Press Enter to submit. Use Shift+Enter for new line.</TooltipContent>
+                  <TooltipContent>
+                    {t("guardrails.guardrailTestPanel.inputTooltip", {
+                      defaultValue: "Press Enter to submit. Use Shift+Enter for new line.",
+                    })}
+                  </TooltipContent>
                 </Tooltip>
               </div>
               {inputText && (
                 <Button size="sm" variant="secondary" onClick={handleCopyInput}>
                   <Copy />
-                  Copy Input
+                  {t("guardrails.guardrailTestPanel.copyInput", { defaultValue: "Copy Input" })}
                 </Button>
               )}
             </div>
@@ -159,23 +186,37 @@ export function GuardrailTestPanel({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter text to test with guardrails..."
+              placeholder={t("guardrails.guardrailTestPanel.inputPlaceholder", {
+                defaultValue: "Enter text to test with guardrails...",
+              })}
               rows={8}
               className="font-mono text-sm field-sizing-fixed"
             />
             <div className="mt-1 flex items-center justify-between">
               <span className="text-xs text-muted-foreground">
-                Press <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Enter</kbd> to
-                submit • <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs">Shift+Enter</kbd>{" "}
-                for new line
+                <Trans
+                  i18nKey="guardrails.guardrailTestPanel.keyboardHint"
+                  defaults="Press <enter>Enter</enter> to submit • <shiftEnter>Shift+Enter</shiftEnter> for new line"
+                  components={{
+                    enter: <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs" />,
+                    shiftEnter: <kbd className="rounded-sm border border-border bg-muted px-1 py-0.5 text-xs" />,
+                  }}
+                />
               </span>
-              <span className="text-xs text-muted-foreground">Characters: {inputText.length}</span>
+              <span className="text-xs text-muted-foreground">
+                {t("guardrails.guardrailTestPanel.characters", {
+                  count: inputText.length,
+                  defaultValue: "Characters: {{count}}",
+                })}
+              </span>
             </div>
           </div>
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <label className="text-sm font-medium">Metadata (optional)</label>
+              <label className="text-sm font-medium">
+                {t("guardrails.guardrailTestPanel.metadataLabel", { defaultValue: "Metadata (optional)" })}
+              </label>
               <Tooltip>
                 <TooltipTrigger
                   render={
@@ -185,8 +226,10 @@ export function GuardrailTestPanel({
                   }
                 />
                 <TooltipContent>
-                  JSON object forwarded to the guardrail as request_data[&apos;metadata&apos;]. Custom guardrails can
-                  read per-request configuration from it.
+                  {t("guardrails.guardrailTestPanel.metadataTooltip", {
+                    defaultValue:
+                      "JSON object forwarded to the guardrail as request_data['metadata']. Custom guardrails can read per-request configuration from it.",
+                  })}
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -215,8 +258,14 @@ export function GuardrailTestPanel({
             >
               {isLoading && <UiLoadingSpinner className="size-4" />}
               {isLoading
-                ? `Testing ${guardrailNames.length} guardrail${guardrailNames.length > 1 ? "s" : ""}...`
-                : `Test ${guardrailNames.length} guardrail${guardrailNames.length > 1 ? "s" : ""}`}
+                ? t("guardrails.guardrailTestPanel.testingButton", {
+                    count: guardrailCount,
+                    defaultValue: "Testing {{count}} guardrails...",
+                  })
+                : t("guardrails.guardrailTestPanel.testButton", {
+                    count: guardrailCount,
+                    defaultValue: "Test {{count}} guardrails",
+                  })}
             </Button>
           </div>
         </div>

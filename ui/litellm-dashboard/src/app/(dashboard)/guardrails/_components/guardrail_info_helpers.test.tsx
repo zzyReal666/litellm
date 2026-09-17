@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
+import i18n from "@/lib/i18n";
 import {
   populateGuardrailProviders,
   populateGuardrailProviderMap,
@@ -212,9 +213,11 @@ describe("guardrail_info_helpers", () => {
   });
 
   describe("formatGuardrailMode", () => {
+    const format = (raw: unknown) => formatGuardrailMode(raw, i18n.t.bind(i18n));
+
     it("renders a single mode and a list of modes", () => {
-      expect(formatGuardrailMode("pre_call")).toBe("pre_call");
-      expect(formatGuardrailMode(["pre_call", "post_call"])).toBe("pre_call, post_call");
+      expect(format("pre_call")).toBe("pre_call");
+      expect(format(["pre_call", "post_call"])).toBe("pre_call, post_call");
     });
 
     it("flattens a tag-based mode object into deduped modes instead of returning it verbatim", () => {
@@ -223,19 +226,23 @@ describe("guardrail_info_helpers", () => {
         default: ["pre_call", "post_call"],
       };
 
-      expect(formatGuardrailMode(mode)).toBe("pre_call, post_call, during_call (tag-based)");
+      expect(format(mode)).toBe("pre_call, post_call, during_call (tag-based)");
     });
 
     it("handles a tag-based mode with no default and with no tags", () => {
-      expect(formatGuardrailMode({ tags: { "team: a": "post_call" } })).toBe("post_call (tag-based)");
-      expect(formatGuardrailMode({ default: "pre_call" })).toBe("pre_call (tag-based)");
+      expect(format({ tags: { "team: a": "post_call" } })).toBe("post_call (tag-based)");
+      expect(format({ default: "pre_call" })).toBe("pre_call (tag-based)");
     });
 
     it("returns an empty string for missing or unusable modes", () => {
-      expect(formatGuardrailMode(undefined)).toBe("");
-      expect(formatGuardrailMode(null)).toBe("");
-      expect(formatGuardrailMode({})).toBe("");
-      expect(formatGuardrailMode({ tags: {}, default: null })).toBe("");
+      expect(format(undefined)).toBe("");
+      expect(format(null)).toBe("");
+      expect(format({})).toBe("");
+      expect(format({ tags: {}, default: null })).toBe("");
+    });
+
+    it("localizes the tag-based suffix through the supplied translator", () => {
+      expect(formatGuardrailMode({ default: "pre_call" }, i18n.getFixedT("zh-CN"))).toBe("pre_call （基于标签）");
     });
   });
 
