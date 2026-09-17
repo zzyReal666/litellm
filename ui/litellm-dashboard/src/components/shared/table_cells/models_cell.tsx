@@ -30,10 +30,11 @@ export function ModelsCell({ models, maxVisible = 3, allowedRoutes, keyType }: M
   if (!Array.isArray(models) || models.length === 0) {
     const scope = deriveKeyModelScope(allowedRoutes, keyType);
     if (!scope.hasModelAccess) {
+      const scopeLabel = t(scope.labelKey, { defaultValue: scope.label });
       return (
         <CellTooltip
           content={t("shared.modelsCell.scopedToRoutes", {
-            routes: scope.label,
+            routes: scopeLabel,
             defaultValue: "Scoped to {{routes}} routes; this key cannot call any models",
           })}
           trigger={

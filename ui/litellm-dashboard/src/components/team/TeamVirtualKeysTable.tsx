@@ -382,10 +382,11 @@ export function TeamVirtualKeysTable({ teamId, teamAlias, organization }: TeamVi
         cell: (info) => {
           const models = info.getValue() as string[];
           const scope = deriveKeyModelScope(info.row.original.allowed_routes, info.row.original.key_type);
+          const scopeLabel = scope.hasModelAccess ? null : t(scope.labelKey, { defaultValue: scope.label });
           const emptyModelsBadge = !scope.hasModelAccess ? (
             <SimpleTooltip
               content={t("teamPage.teamVirtualKeysTable.scopedToRoutes", {
-                routes: scope.label,
+                routes: scopeLabel,
                 defaultValue: "Scoped to {{routes}} routes; this key cannot call any models",
               })}
             >

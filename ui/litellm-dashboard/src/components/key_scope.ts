@@ -1,16 +1,23 @@
-export interface KeyModelScope {
-  hasModelAccess: boolean;
-  label: string | null;
-}
+export type KeyModelScope =
+  | { hasModelAccess: true; labelKey: null; label: null }
+  | { hasModelAccess: false; labelKey: string; label: string };
 
 const MANAGEMENT_ROUTES_PRESET = "management_routes";
 const INFO_ROUTES_PRESET = "info_routes";
 const SCIM_ROUTE_PREFIX = "/scim";
 
-const MANAGEMENT_SCOPE: KeyModelScope = { hasModelAccess: false, label: "Management" };
-const READ_ONLY_SCOPE: KeyModelScope = { hasModelAccess: false, label: "Read-only" };
-const SCIM_SCOPE: KeyModelScope = { hasModelAccess: false, label: "SCIM" };
-const FULL_MODEL_ACCESS: KeyModelScope = { hasModelAccess: true, label: null };
+const MANAGEMENT_SCOPE: KeyModelScope = {
+  hasModelAccess: false,
+  labelKey: "keyScope.management",
+  label: "Management",
+};
+const READ_ONLY_SCOPE: KeyModelScope = {
+  hasModelAccess: false,
+  labelKey: "keyScope.readOnly",
+  label: "Read-only",
+};
+const SCIM_SCOPE: KeyModelScope = { hasModelAccess: false, labelKey: "keyScope.scim", label: "SCIM" };
+const FULL_MODEL_ACCESS: KeyModelScope = { hasModelAccess: true, labelKey: null, label: null };
 
 const isScimRoute = (route: string): boolean => route.startsWith(SCIM_ROUTE_PREFIX);
 

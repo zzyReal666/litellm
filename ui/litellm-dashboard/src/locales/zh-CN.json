@@ -1031,7 +1031,19 @@
     "trendNegative": "较昨日 {{diff}}",
     "updateInputPolicyFailed": "更新输入策略失败：{{error}}",
     "updateOutputPolicyFailed": "更新输出策略失败：{{error}}",
-    "failedToLoadTools": "加载工具失败"
+    "failedToLoadTools": "加载工具失败",
+    "policyUntrusted": "不受信任",
+    "policyTrusted": "受信任",
+    "policyBlocked": "已屏蔽",
+    "allInputPolicies": "所有输入策略",
+    "allOutputPolicies": "所有输出策略",
+    "allTeams": "所有团队",
+    "filtersDescription": "筛选已发现的工具",
+    "noMatchingTools": "没有匹配的工具",
+    "noMatchingToolsHint": "没有工具匹配您的搜索或筛选条件。",
+    "noToolsDiscoveredTitle": "未发现工具",
+    "noToolsDiscoveredHint": "发起一次返回 tool_calls 的对话补全即可启动自动发现。",
+    "unknownError": "未知错误"
   },
   "uiAccessControlForm": {
     "description": "配置谁可以访问 UI 界面，以及如何从 JWT Token 中提取用户组信息。",
@@ -1144,7 +1156,11 @@
     "costPerRequestExtra": "通过此端点每次请求收取的费用",
     "creating": "创建中...",
     "createSuccess": "透传端点创建成功",
-    "createFailed": "创建透传端点时出错：{{error}}"
+    "createFailed": "创建透传端点时出错：{{error}}",
+    "performanceSectionTitle": "性能",
+    "performanceSectionSubtitle": "配置此端点的上游请求超时",
+    "timeoutTooltip": "等待上游 API 响应的最长时间。留空则使用 general_settings.pass_through_request_timeout（默认 600 秒）。",
+    "timeoutDesc": "上游 API 较慢时请使用更大的值（例如长时间运行的 LLM 调用可设为 1200）"
   },
   "agents": {
     "title": "Agents",
@@ -3226,7 +3242,13 @@
     "invalidJsonHeaders": "请求头的 JSON 格式无效",
     "updateFailed": "更新透传端点失败",
     "deleteSuccess": "透传端点已成功删除",
-    "deleteFailed": "删除透传端点失败"
+    "deleteFailed": "删除透传端点失败",
+    "hideHeaders": "隐藏请求头",
+    "showHeaders": "显示请求头",
+    "timeoutLabel": "请求超时（秒）",
+    "labelTimeout": "请求超时",
+    "timeoutDesc": "等待上游响应的最长时间。留空则使用全局的 pass_through_request_timeout（默认 600 秒）。",
+    "timeoutSeconds": "{{seconds}} 秒"
   },
   "queryParamInput": {
     "paramNamePlaceholder": "参数名称（如：version）",
@@ -9381,6 +9403,10 @@
       "connectionIdPlaceholder": "输入您的 CloudZero 连接 ID",
       "timezoneLabel": "时区",
       "timezoneTooltip": "日期处理时区（未提供时默认为 UTC）"
+    },
+    "cloudZeroFormControls": {
+      "showApiKey": "显示 API 密钥",
+      "hideApiKey": "隐藏 API 密钥"
     }
   },
   "usageExport": {
@@ -9914,7 +9940,11 @@
       "howRoutingWorksDesc": "调用方按名称请求组内任意模型 — LiteLLM 在后台使用 <strong>{{strategy}}</strong> 策略选取部署。",
       "tabCurl": "cURL",
       "tabPython": "Python（OpenAI SDK）",
-      "tabJavascript": "JavaScript（OpenAI SDK）"
+      "tabJavascript": "JavaScript（OpenAI SDK）",
+      "colStrategyTitle": "策略",
+      "emptyTitle": "暂无路由组",
+      "emptyDescription": "创建一个组，将一组模型负载均衡到同一个名称下。",
+      "loadingMessage": "正在加载路由组…"
     },
     "index": {
       "searchPlaceholder": "搜索组...",

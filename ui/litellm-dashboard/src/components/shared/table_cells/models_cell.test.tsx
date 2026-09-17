@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+
+import i18n from "@/lib/i18n";
 
 import { ModelsCell } from "./models_cell";
 
@@ -65,5 +67,23 @@ describe("ModelsCell", () => {
   it("labels the all-proxy-models wildcard", () => {
     render(<ModelsCell models={["all-proxy-models"]} />);
     expect(screen.getByText("All Proxy Models")).toBeInTheDocument();
+  });
+});
+
+describe("ModelsCell in Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("translates the key scope label inside the scoped-routes tooltip", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const user = userEvent.setup();
+    render(<ModelsCell models={[]} allowedRoutes={["management_routes"]} />);
+
+    expect(screen.getByText("无模型访问权限")).toBeInTheDocument();
+
+    await user.hover(screen.getByText("无模型访问权限"));
+    expect(await screen.findByText("限定在 管理 条路由上；该密钥不能调用任何模型")).toBeInTheDocument();
   });
 });

@@ -1031,7 +1031,19 @@
     "trendNegative": "{{diff}} since yesterday",
     "updateInputPolicyFailed": "Failed to update input policy: {{error}}",
     "updateOutputPolicyFailed": "Failed to update output policy: {{error}}",
-    "failedToLoadTools": "Failed to load tools"
+    "failedToLoadTools": "Failed to load tools",
+    "policyUntrusted": "untrusted",
+    "policyTrusted": "trusted",
+    "policyBlocked": "blocked",
+    "allInputPolicies": "All Input Policies",
+    "allOutputPolicies": "All Output Policies",
+    "allTeams": "All Teams",
+    "filtersDescription": "Narrow down discovered tools",
+    "noMatchingTools": "No matching tools",
+    "noMatchingToolsHint": "No tools match your search or filters.",
+    "noToolsDiscoveredTitle": "No tools discovered",
+    "noToolsDiscoveredHint": "Make a chat completion that returns tool_calls to start auto-discovery.",
+    "unknownError": "unknown error"
   },
   "uiAccessControlForm": {
     "description": "Configure who can access the UI interface and how group information is extracted from JWT tokens.",
@@ -1144,7 +1156,11 @@
     "costPerRequestExtra": "The cost charged for each request through this endpoint",
     "creating": "Creating...",
     "createSuccess": "Pass-through endpoint created successfully",
-    "createFailed": "Error creating pass-through endpoint: {{error}}"
+    "createFailed": "Error creating pass-through endpoint: {{error}}",
+    "performanceSectionTitle": "Performance",
+    "performanceSectionSubtitle": "Configure upstream request timeout for this endpoint",
+    "timeoutTooltip": "Max time to wait for the upstream API to respond. Leave empty to use general_settings.pass_through_request_timeout (default 600s).",
+    "timeoutDesc": "Use a higher value for slow upstream APIs (e.g. 1200 for long-running LLM calls)"
   },
   "agents": {
     "title": "Agents",
@@ -3226,7 +3242,13 @@
     "invalidJsonHeaders": "Invalid JSON format for headers",
     "updateFailed": "Failed to update pass through endpoint",
     "deleteSuccess": "Pass through endpoint deleted successfully",
-    "deleteFailed": "Failed to delete pass through endpoint"
+    "deleteFailed": "Failed to delete pass through endpoint",
+    "hideHeaders": "Hide headers",
+    "showHeaders": "Show headers",
+    "timeoutLabel": "Request Timeout (seconds)",
+    "labelTimeout": "Request Timeout",
+    "timeoutDesc": "Max time to wait for upstream response. Leave empty to use the global pass_through_request_timeout (default 600s).",
+    "timeoutSeconds": "{{seconds}}s"
   },
   "queryParamInput": {
     "paramNamePlaceholder": "Parameter Name (e.g., version)",
@@ -9381,6 +9403,10 @@
       "connectionIdPlaceholder": "Enter your CloudZero connection ID",
       "timezoneLabel": "Timezone",
       "timezoneTooltip": "Timezone for date handling (defaults to UTC if not provided)"
+    },
+    "cloudZeroFormControls": {
+      "showApiKey": "Show API key",
+      "hideApiKey": "Hide API key"
     }
   },
   "usageExport": {
@@ -9911,10 +9937,14 @@
       "strategyUsageBased": "Usage Based",
       "strategyLatencyBased": "Latency Based",
       "howRoutingWorksTitle": "How routing works for this group",
-      "howRoutingWorksDesc": "Callers request any model in the group by name — LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy.",
+      "howRoutingWorksDesc": "Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy.",
       "tabCurl": "cURL",
       "tabPython": "Python (OpenAI SDK)",
-      "tabJavascript": "JavaScript (OpenAI SDK)"
+      "tabJavascript": "JavaScript (OpenAI SDK)",
+      "colStrategyTitle": "Strategy",
+      "emptyTitle": "No routing groups yet",
+      "emptyDescription": "Create a group to load-balance a set of models behind one name.",
+      "loadingMessage": "Loading routing groups…"
     },
     "index": {
       "searchPlaceholder": "Search groups...",
