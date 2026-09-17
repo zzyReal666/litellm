@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -111,12 +112,13 @@ function ModelProviderSection({
   providerLogo?: string;
   providerName?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex min-w-0 items-center gap-2">
       {providerLogo && (
         <img
           src={providerLogo}
-          alt={providerName || "Provider"}
+          alt={providerName || t("viewLogs.drawerHeader.providerAlt", { defaultValue: "Provider" })}
           style={{ width: 24, height: 24 }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -144,6 +146,7 @@ function ModelProviderSection({
  * Request ID display with copy functionality
  */
 function RequestIdSection({ requestId }: { requestId: string }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -178,7 +181,11 @@ function RequestIdSection({ requestId }: { requestId: string }) {
             {requestId}
             <button
               type="button"
-              aria-label={copied ? "Copied!" : "Copy Request ID"}
+              aria-label={
+                copied
+                  ? t("viewLogs.columns.copied", { defaultValue: "Copied!" })
+                  : t("viewLogs.drawerHeader.copyRequestId", { defaultValue: "Copy Request ID" })
+              }
               onClick={handleCopy}
               className="ml-1 align-middle text-muted-foreground hover:text-foreground"
             >
@@ -205,6 +212,7 @@ function NavigationSection({
   onNext: () => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const keyboardShortcutStyle = {
     border: "1px solid var(--color-border)",
     borderRadius: 4,
@@ -233,7 +241,7 @@ function NavigationSection({
           <TooltipTrigger render={<Button variant="ghost" size="icon-sm" onClick={onClose} />}>
             <X className="size-4" />
           </TooltipTrigger>
-          <TooltipContent>ESC to close</TooltipContent>
+          <TooltipContent>{t("viewLogs.drawerHeader.escToClose", { defaultValue: "ESC to close" })}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </div>
@@ -254,10 +262,13 @@ function StatusBar({
   statusColor: "error" | "success";
   environment: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-3">
       <Badge variant={statusColor === "error" ? "destructive" : "secondary"}>{statusLabel}</Badge>
-      <Badge variant="outline">Env: {environment}</Badge>
+      <Badge variant="outline">
+        {t("viewLogs.drawerHeader.envLabel", { environment, defaultValue: `Env: ${environment}` })}
+      </Badge>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground" style={{ fontSize: FONT_SIZE_MEDIUM }}>
           {moment(log.startTime).format("MMM D, YYYY h:mm:ss A")}

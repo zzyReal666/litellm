@@ -3,6 +3,7 @@
 import moment from "moment";
 import { CalendarDays } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,6 +46,7 @@ export function LogsTableToolbar({
   onResetToFirstPage,
   onResetFilters,
 }: LogsTableToolbarProps) {
+  const { t } = useTranslation();
   const [quickSelectOpen, setQuickSelectOpen] = useState(false);
 
   const applyQuickSelect = (option: { label: string; value: number; unit: string }) => {
@@ -63,7 +65,11 @@ export function LogsTableToolbar({
   const selectedOption = QUICK_SELECT_OPTIONS.find(
     (option) => option.value === selectedTimeInterval.value && option.unit === selectedTimeInterval.unit,
   );
-  const displayLabel = isCustomDate ? getTimeRangeDisplay(isCustomDate, startTime, endTime) : selectedOption?.label;
+  const displayLabel = isCustomDate
+    ? getTimeRangeDisplay(isCustomDate, startTime, endTime, t)
+    : selectedOption !== undefined
+      ? t(selectedOption.labelKey, { defaultValue: selectedOption.label })
+      : undefined;
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -85,7 +91,7 @@ export function LogsTableToolbar({
                 className="w-full justify-start font-normal"
                 onClick={() => applyQuickSelect(option)}
               >
-                {option.label}
+                {t(option.labelKey, { defaultValue: option.label })}
               </Button>
             ))}
             <div className="my-2 border-t" />
@@ -97,7 +103,7 @@ export function LogsTableToolbar({
                 onResetToFirstPage();
               }}
             >
-              Custom Range
+              {t("viewLogs.logsTableToolbar.customRange", { defaultValue: "Custom Range" })}
             </Button>
           </div>
         </PopoverContent>
@@ -114,7 +120,9 @@ export function LogsTableToolbar({
               onResetToFirstPage();
             }}
           />
-          <span className="text-sm text-muted-foreground">to</span>
+          <span className="text-sm text-muted-foreground">
+            {t("viewLogs.logsTableToolbar.to", { defaultValue: "to" })}
+          </span>
           <Input
             type="datetime-local"
             className="w-auto"
@@ -128,32 +136,43 @@ export function LogsTableToolbar({
       )}
 
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Live Tail</span>
-        <Switch checked={isLiveTail} onCheckedChange={onIsLiveTailChange} aria-label="Live Tail" />
+        <span className="text-sm font-medium">
+          {t("viewLogs.logsTableToolbar.liveTail", { defaultValue: "Live Tail" })}
+        </span>
+        <Switch
+          checked={isLiveTail}
+          onCheckedChange={onIsLiveTailChange}
+          aria-label={t("viewLogs.logsTableToolbar.liveTail", { defaultValue: "Live Tail" })}
+        />
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Hide Health Checks</span>
+        <span className="text-sm font-medium">
+          {t("viewLogs.logsTableToolbar.hideHealthChecks", { defaultValue: "Hide Health Checks" })}
+        </span>
         <Switch
           checked={excludeInternalHealthChecks}
           onCheckedChange={onExcludeInternalHealthChecksChange}
-          aria-label="Hide Health Checks"
+          aria-label={t("viewLogs.logsTableToolbar.hideHealthChecks", { defaultValue: "Hide Health Checks" })}
         />
       </div>
 
       <Button variant="outline" size="sm" onClick={onResetFilters}>
-        Reset Filters
+        {t("molecules.filter.resetFilters", { defaultValue: "Reset Filters" })}
       </Button>
     </div>
   );
 }
 
 export function LiveTailBanner({ onStop }: { onStop: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className="mb-4 flex items-center justify-between rounded-md border border-success/20 bg-success/10 px-4 py-2">
-      <span className="text-sm text-success">Auto-refreshing every 15 seconds</span>
+      <span className="text-sm text-success">
+        {t("viewLogs.logsTableToolbar.autoRefreshing", { defaultValue: "Auto-refreshing every 15 seconds" })}
+      </span>
       <button type="button" onClick={onStop} className="text-sm text-success hover:text-success/80">
-        Stop
+        {t("viewLogs.logsTableToolbar.stop", { defaultValue: "Stop" })}
       </button>
     </div>
   );

@@ -3,6 +3,8 @@
  * Used in the request logs table and session type column.
  */
 
+import { useTranslation } from "react-i18next";
+
 export const SparkleIcon = ({ size = 12 }: { size?: number }) => (
   <svg
     width={size}
@@ -97,9 +99,12 @@ export const AgentBadge = ({ count }: { count?: number }) => (
   </span>
 );
 
-export const BatchBadge = () => (
-  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-teal-50 text-teal-700 border border-teal-200 rounded-full text-[11px] font-medium whitespace-nowrap dark:bg-teal-950 dark:text-teal-300 dark:border-teal-800">
-    <LayersIcon />
-    Batch
-  </span>
-);
+export const BatchBadge = () => {
+  const { t } = useTranslation();
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-teal-50 text-teal-700 border border-teal-200 rounded-full text-[11px] font-medium whitespace-nowrap dark:bg-teal-950 dark:text-teal-300 dark:border-teal-800">
+      <LayersIcon />
+      {t("viewLogs.typeBadges.batch", { defaultValue: "Batch" })}
+    </span>
+  );
+};

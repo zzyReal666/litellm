@@ -1,6 +1,7 @@
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
+import type { Column, ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, IdCell, MoneyCell, StatusBadge } from "@/components/shared/table_cells";
@@ -15,7 +16,49 @@ import { AgentBadge, AgentIcon, BatchBadge, LlmBadge, McpBadge, SparkleIcon, Wre
 export interface RequestLogsTableColumnsDeps {
   onKeyHashClick: (keyHash: string) => void;
   onSessionClick: (log: LogEntry) => void;
+  t: TFunction;
 }
+
+interface SortableHeaderSpec {
+  labelKey: string;
+  label: string;
+}
+
+interface PlainHeaderSpec {
+  labelKey: string;
+  label: string;
+  sortable: false;
+}
+
+export const REQUEST_LOGS_TABLE_HEADERS: Record<string, SortableHeaderSpec | PlainHeaderSpec> = {
+  startTime: { labelKey: "viewLogs.columns.colTime", label: "Time" },
+  type: { labelKey: "viewLogs.columns.colType", label: "Type", sortable: false },
+  status: { labelKey: "viewLogs.columns.colStatus", label: "Status", sortable: false },
+  session_id: { labelKey: "viewLogs.columns.colSessionId", label: "Session ID", sortable: false },
+  request_id: { labelKey: "viewLogs.columns.colRequestId", label: "Request ID", sortable: false },
+  spend: { labelKey: "viewLogs.columns.colCost", label: "Cost" },
+  request_duration_ms: { labelKey: "viewLogs.columns.colDuration", label: "Duration (s)" },
+  ttft_ms: { labelKey: "viewLogs.columns.colTtft", label: "TTFT (s)" },
+  team_alias: { labelKey: "viewLogs.columns.colTeamName", label: "Team Name", sortable: false },
+  key_hash: { labelKey: "viewLogs.columns.colKeyHash", label: "Key Hash", sortable: false },
+  key_alias: { labelKey: "viewLogs.columns.colKeyAlias", label: "Key Alias", sortable: false },
+  model: { labelKey: "viewLogs.columns.colModel", label: "Model" },
+  total_tokens: { labelKey: "viewLogs.columns.colTokens", label: "Tokens" },
+  user: { labelKey: "viewLogs.columns.colInternalUser", label: "Internal User", sortable: false },
+  end_user: { labelKey: "viewLogs.columns.colEndUser", label: "End User", sortable: false },
+  request_tags: { labelKey: "viewLogs.columns.colTags", label: "Tags", sortable: false },
+};
+
+const headerText = (t: TFunction, columnId: string): string => {
+  const spec = REQUEST_LOGS_TABLE_HEADERS[columnId];
+  return t(spec.labelKey, { defaultValue: spec.label });
+};
+
+const sortableHeader =
+  (t: TFunction, columnId: string) =>
+  ({ column }: { column: Column<LogEntry, unknown> }) => (
+    <DataTableSortHeader column={column} title={headerText(t, columnId)} variant="dropdown-tristate" />
+  );
 
 const readMetaString = (metadata: Record<string, unknown> | undefined, key: string): string | undefined => {
   const value = metadata?.[key];
@@ -40,18 +83,19 @@ function TruncatedText({ value }: { value: string | undefined }) {
 export const getRequestLogsTableColumns = ({
   onKeyHashClick,
   onSessionClick,
+  t,
 }: RequestLogsTableColumnsDeps): ColumnDef<LogEntry>[] => [
   {
     id: "startTime",
     accessorKey: "startTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Time" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "startTime"),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.startTime} />,
   },
   {
     id: "type",
-    header: "Type",
+    header: headerText(t, "type"),
     size: 90,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -96,14 +140,18 @@ export const getRequestLogsTableColumns = ({
         sessionLlmCount > 0 && `${sessionLlmCount} LLM`,
         sessionAgentCount > 0 && `${sessionAgentCount} Agent`,
         sessionMcpCount > 0 && `${sessionMcpCount} MCP`,
-        log.session_cache_hit_count != null && `${log.session_cache_hit_count} cache hit`,
+        log.session_cache_hit_count != null &&
+          t("viewLogs.requestLogsTableColumns.cacheHitCount", {
+            count: log.session_cache_hit_count,
+            defaultValue: `${log.session_cache_hit_count} cache hit`,
+          }),
       ].filter(Boolean);
       return <CellTooltip content={tooltipParts.join(" • ")} trigger={sessionTypeBadge} />;
     },
   },
   {
     id: "status",
-    header: "Status",
+    header: headerText(t, "status"),
     size: 100,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -116,18 +164,35 @@ export const getRequestLogsTableColumns = ({
         return (
           <StatusBadge
             tone="warning"
-            label={`${batchCounts.successful}/${total} succeeded`}
-            tooltip={`${batchCounts.failed} of ${total} batch requests failed`}
+            label={t("viewLogs.requestLogsTableColumns.batchSucceeded", {
+              successful: batchCounts.successful,
+              total,
+              defaultValue: `${batchCounts.successful}/${total} succeeded`,
+            })}
+            tooltip={t("viewLogs.requestLogsTableColumns.batchFailedTooltip", {
+              failed: batchCounts.failed,
+              total,
+              defaultValue: `${batchCounts.failed} of ${total} batch requests failed`,
+            })}
           />
         );
       }
-      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? "Success" : "Failure"} />;
+      return (
+        <StatusBadge
+          tone={isSuccess ? "success" : "error"}
+          label={
+            isSuccess
+              ? t("viewLogs.columns.statusSuccess", { defaultValue: "Success" })
+              : t("viewLogs.columns.statusFailure", { defaultValue: "Failure" })
+          }
+        />
+      );
     },
   },
   {
     id: "session_id",
     accessorKey: "session_id",
-    header: "Session ID",
+    header: headerText(t, "session_id"),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.session_id} onClick={() => onSessionClick(row.original)} />,
@@ -135,7 +200,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_id",
     accessorKey: "request_id",
-    header: "Request ID",
+    header: headerText(t, "request_id"),
     enableSorting: false,
     cell: ({ row }) => {
       const log = row.original;
@@ -144,7 +209,9 @@ export const getRequestLogsTableColumns = ({
         return (
           <div className="flex flex-col">
             <IdCell value={batchId} variant="plain" copyable tooltip={`Batch ${batchId} (row: ${log.request_id})`} />
-            <span className="text-[10px] text-muted-foreground">batch cost</span>
+            <span className="text-[10px] text-muted-foreground">
+              {t("viewLogs.requestLogsTableColumns.batchCost", { defaultValue: "batch cost" })}
+            </span>
           </div>
         );
       }
@@ -154,7 +221,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Cost" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "spend"),
     size: 110,
     enableSorting: true,
     meta: { numeric: true, skeleton: "twoLine" },
@@ -173,10 +240,18 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           {spend ? <CellTooltip content={`$${String(spend)}`} trigger={money} /> : money}
-          {isMultiCallSession && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {isMultiCallSession && (
+            <span className="text-[10px] text-muted-foreground">
+              {t("viewLogs.requestLogsTableColumns.sessionTotal", { defaultValue: "session total" })}
+            </span>
+          )}
           {mcpCount > 0 && mcpSpend > 0 && (
             <span className="text-[10px] text-warning">
-              incl. {getSpendString(mcpSpend)} from {mcpCount} MCP
+              {t("viewLogs.columns.mcpCostNote", {
+                spend: getSpendString(mcpSpend),
+                count: mcpCount,
+                defaultValue: `incl. ${getSpendString(mcpSpend)} from ${mcpCount} MCP`,
+              })}
             </span>
           )}
         </div>
@@ -186,7 +261,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_duration_ms",
     accessorKey: "request_duration_ms",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Duration (s)" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "request_duration_ms"),
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -203,7 +278,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "ttft_ms",
     accessorKey: "completionStartTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="TTFT (s)" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "ttft_ms"),
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -223,14 +298,14 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "team_alias",
-    header: "Team Name",
+    header: headerText(t, "team_alias"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_team_alias")} />,
   },
   {
     id: "key_hash",
-    header: "Key Hash",
+    header: headerText(t, "key_hash"),
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -239,7 +314,7 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "key_alias",
-    header: "Key Alias",
+    header: headerText(t, "key_alias"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_alias")} />,
@@ -247,7 +322,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "model",
     accessorKey: "model",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "model"),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -284,7 +359,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "total_tokens",
     accessorKey: "total_tokens",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tokens" variant="dropdown-tristate" />,
+    header: sortableHeader(t, "total_tokens"),
     size: 140,
     enableSorting: true,
     meta: { numeric: true },
@@ -302,7 +377,11 @@ export const getRequestLogsTableColumns = ({
               ({String(prompt || "0")}+{String(completion || "0")})
             </span>
           </span>
-          {showSessionTotal && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {showSessionTotal && (
+            <span className="text-[10px] text-muted-foreground">
+              {t("viewLogs.requestLogsTableColumns.sessionTotal", { defaultValue: "session total" })}
+            </span>
+          )}
         </div>
       );
     },
@@ -310,7 +389,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    header: "Internal User",
+    header: headerText(t, "user"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.user} />,
@@ -318,7 +397,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "end_user",
     accessorKey: "end_user",
-    header: "End User",
+    header: headerText(t, "end_user"),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.end_user} />,
@@ -326,7 +405,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_tags",
     accessorKey: "request_tags",
-    header: "Tags",
+    header: headerText(t, "request_tags"),
     size: 150,
     enableSorting: false,
     meta: { skeleton: "chips" },

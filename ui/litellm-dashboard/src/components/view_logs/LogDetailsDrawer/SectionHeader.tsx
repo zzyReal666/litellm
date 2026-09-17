@@ -3,6 +3,7 @@
  */
 
 import { ChevronDown, ChevronUp, Copy, MessageSquare } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cva.config";
@@ -28,6 +29,7 @@ export function SectionHeader({
   onToggleCollapse,
   turnCount,
 }: SectionHeaderProps) {
+  const { t } = useTranslation();
   const summary = (
     <>
       {onToggleCollapse &&
@@ -43,15 +45,32 @@ export function SectionHeader({
         ) : (
           <span className="text-sm opacity-60 grayscale">✨</span>
         )}
-        <span className="text-sm font-medium">{type === "input" ? "Input" : "Output"}</span>
+        <span className="text-sm font-medium">
+          {type === "input"
+            ? t("viewLogs.sectionHeader.labelInput", { defaultValue: "Input" })
+            : t("viewLogs.sectionHeader.labelOutput", { defaultValue: "Output" })}
+        </span>
       </div>
 
-      {tokens !== undefined && <span className="text-xs text-muted-foreground">Tokens: {tokens.toLocaleString()}</span>}
+      {tokens !== undefined && (
+        <span className="text-xs text-muted-foreground">
+          {t("viewLogs.sectionHeader.tokens", {
+            count: tokens.toLocaleString(),
+            defaultValue: `Tokens: ${tokens.toLocaleString()}`,
+          })}
+        </span>
+      )}
 
-      {cost !== undefined && <span className="text-xs text-muted-foreground">Cost: ${cost.toFixed(6)}</span>}
+      {cost !== undefined && (
+        <span className="text-xs text-muted-foreground">
+          {t("viewLogs.sectionHeader.cost", { amount: cost.toFixed(6), defaultValue: `Cost: $${cost.toFixed(6)}` })}
+        </span>
+      )}
 
       {turnCount !== undefined && turnCount > 0 && (
-        <span className="text-xs text-muted-foreground">Turns: {turnCount}</span>
+        <span className="text-xs text-muted-foreground">
+          {t("viewLogs.sectionHeader.turns", { count: turnCount, defaultValue: `Turns: ${turnCount}` })}
+        </span>
       )}
     </>
   );
@@ -82,7 +101,11 @@ export function SectionHeader({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label={type === "input" ? "Copy input" : "Copy output"}
+              aria-label={
+                type === "input"
+                  ? t("viewLogs.sectionHeader.copyInput", { defaultValue: "Copy input" })
+                  : t("viewLogs.sectionHeader.copyOutput", { defaultValue: "Copy output" })
+              }
               onClick={(e) => {
                 e.stopPropagation();
                 onCopy();
@@ -92,7 +115,7 @@ export function SectionHeader({
         >
           <Copy />
         </TooltipTrigger>
-        <TooltipContent>Copy</TooltipContent>
+        <TooltipContent>{t("viewLogs.sectionHeader.copy", { defaultValue: "Copy" })}</TooltipContent>
       </Tooltip>
     </div>
   );

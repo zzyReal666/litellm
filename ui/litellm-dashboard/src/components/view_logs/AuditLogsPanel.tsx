@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ColumnFiltersState, OnChangeFn, PaginationState } from "@tanstack/react-table";
@@ -39,6 +40,7 @@ export default function AuditLogsPanel({
   isActive,
   premiumUser,
 }: AuditLogsProps) {
+  const { t } = useTranslation();
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: PAGE_SIZE });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchInput, setSearchInput] = useState("");
@@ -100,16 +102,20 @@ export default function AuditLogsPanel({
   if (!premiumUser) {
     return (
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <h1 style={{ display: "block", marginBottom: "10px" }}>✨ Enterprise Feature.</h1>
+        <h1 style={{ display: "block", marginBottom: "10px" }}>
+          ✨ {t("viewLogs.auditLogs.enterpriseTitle", { defaultValue: "Enterprise Feature." })}
+        </h1>
         <p style={{ display: "block", marginBottom: "10px" }}>
-          This is a LiteLLM Enterprise feature, and requires a valid key to use.
+          {t("viewLogs.auditLogs.enterpriseDesc", {
+            defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+          })}
         </p>
         <p style={{ display: "block", marginBottom: "20px", fontStyle: "italic" }}>
-          Here&apos;s a preview of what Audit Logs offer:
+          {t("viewLogs.auditLogs.previewText", { defaultValue: "Here's a preview of what Audit Logs offer:" })}
         </p>
         <img
           src={resolveLogoSrc(auditLogsPreviewImg)}
-          alt="Audit Logs Preview"
+          alt={t("viewLogs.auditLogs.previewAlt", { defaultValue: "Audit Logs Preview" })}
           style={{
             maxWidth: "100%",
             maxHeight: "700px",
@@ -128,7 +134,7 @@ export default function AuditLogsPanel({
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Audit Logs</h1>
+        <h1 className="text-xl font-semibold">{t("viewLogs.auditLogs.pageTitle", { defaultValue: "Audit Logs" })}</h1>
       </div>
 
       <AuditLogsTable

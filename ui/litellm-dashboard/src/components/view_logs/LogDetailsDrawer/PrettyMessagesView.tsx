@@ -4,6 +4,8 @@
  * Detects realtime API responses and renders a specialized view.
  */
 
+import { useTranslation } from "react-i18next";
+
 import { parseMessages } from "./prettyMessagesUtils";
 import { InputCard } from "./InputCard";
 import { OutputCard } from "./OutputCard";
@@ -21,11 +23,13 @@ interface PrettyMessagesViewProps {
 }
 
 export function PrettyMessagesView({ request, response, metrics }: PrettyMessagesViewProps) {
+  const { t } = useTranslation();
+
   if (isRealtimeResponse(response)) {
     return <RealtimePrettyView response={response} metrics={metrics} />;
   }
 
-  const { requestMessages, responseMessage } = parseMessages(request, response);
+  const { requestMessages, responseMessage } = parseMessages(request, response, t);
 
   return (
     <div>

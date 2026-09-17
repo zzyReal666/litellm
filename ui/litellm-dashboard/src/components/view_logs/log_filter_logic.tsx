@@ -52,6 +52,22 @@ export const LOG_FILTER_LABELS: Record<string, string> = {
   [LOG_FILTER_IDS.SEARCH]: "Search",
 };
 
+export const LOG_FILTER_LABEL_KEYS: Record<string, string> = {
+  [LOG_FILTER_IDS.TEAM_ID]: "viewLogs.filterOptions.teamIdLabel",
+  [LOG_FILTER_IDS.STATUS]: "viewLogs.filterOptions.statusLabel",
+  [LOG_FILTER_IDS.CACHE_STATUS]: "viewLogs.filterOptions.cacheStatusLabel",
+  [LOG_FILTER_IDS.KEY_ALIAS]: "viewLogs.filterOptions.keyAliasLabel",
+  [LOG_FILTER_IDS.USER_ID]: "viewLogs.filterOptions.userIdLabel",
+  [LOG_FILTER_IDS.END_USER]: "viewLogs.filterOptions.endUserLabel",
+  [LOG_FILTER_IDS.ERROR_CODE]: "viewLogs.filterOptions.errorCodeLabel",
+  [LOG_FILTER_IDS.ERROR_MESSAGE]: "viewLogs.filterOptions.errorMessageLabel",
+  [LOG_FILTER_IDS.KEY_HASH]: "viewLogs.filterOptions.keyHashLabel",
+  [LOG_FILTER_IDS.SESSION_ID]: "viewLogs.filterOptions.sessionIdLabel",
+  [LOG_FILTER_IDS.MODEL_ID]: "viewLogs.filterOptions.modelLabel",
+  [LOG_FILTER_IDS.PUBLIC_MODEL_OR_SEARCH_TOOL]: "viewLogs.filterOptions.publicModelLabel",
+  [LOG_FILTER_IDS.SEARCH]: "commonComponents.dataTable.searchPlaceholder",
+};
+
 export interface LogsWindow {
   start_date: string;
   end_date: string;

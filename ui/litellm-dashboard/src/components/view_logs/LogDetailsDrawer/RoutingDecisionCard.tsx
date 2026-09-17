@@ -1,6 +1,8 @@
 "use client";
 
 import { Waypoints } from "lucide-react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cva.config";
@@ -29,11 +31,20 @@ export interface RoutingDecision {
   reasoning_override_min_score?: number;
 }
 
+const ROUTER_TYPE_LABEL_KEYS: Record<string, string> = {
+  complexity: "viewLogs.routingDecisionCard.routerTypeComplexity",
+  adaptive: "viewLogs.routingDecisionCard.routerTypeAdaptive",
+  quality: "viewLogs.routingDecisionCard.routerTypeQuality",
+};
+
 const ROUTER_TYPE_LABELS: Record<string, string> = {
   complexity: "Auto-Router v2",
   adaptive: "Adaptive router",
   quality: "Quality router",
 };
+
+const tierName = (t: TFunction, tier: string): string =>
+  t(`viewLogs.routingDecisionCard.tierName${tier}`, { defaultValue: tier });
 
 /**
  * The tier the score alone would have produced, given the boundaries in effect when
@@ -41,6 +52,7 @@ const ROUTER_TYPE_LABELS: Record<string, string> = {
  * use the snapshot rather than today's config.
  */
 function describeScoreAgainstBoundaries(
+  t: TFunction,
   score: number,
   boundaries?: RoutingDecisionTierBoundaries,
   renamed?: boolean,
@@ -54,16 +66,49 @@ function describeScoreAgainstBoundaries(
   if (simpleMedium === undefined || mediumComplex === undefined || complexReasoning === undefined) return null;
 
   const named = (range: string, tier: string): string => (renamed ? range : `${range}, ${tier}`);
-  if (score < simpleMedium) return named(`below ${simpleMedium}`, "SIMPLE");
-  if (score < mediumComplex) return named(`${simpleMedium} to ${mediumComplex}`, "MEDIUM");
-  if (score < complexReasoning) return named(`${mediumComplex} to ${complexReasoning}`, "COMPLEX");
-  return named(`at or above ${complexReasoning}`, "REASONING");
+  if (score < simpleMedium)
+    return named(
+      t("viewLogs.routingDecisionCard.rangeBelow", { bound: simpleMedium, defaultValue: `below ${simpleMedium}` }),
+      tierName(t, "SIMPLE"),
+    );
+  if (score < mediumComplex)
+    return named(
+      t("viewLogs.routingDecisionCard.rangeBetween", {
+        lower: simpleMedium,
+        upper: mediumComplex,
+        defaultValue: `${simpleMedium} to ${mediumComplex}`,
+      }),
+      tierName(t, "MEDIUM"),
+    );
+  if (score < complexReasoning)
+    return named(
+      t("viewLogs.routingDecisionCard.rangeBetween", {
+        lower: mediumComplex,
+        upper: complexReasoning,
+        defaultValue: `${mediumComplex} to ${complexReasoning}`,
+      }),
+      tierName(t, "COMPLEX"),
+    );
+  return named(
+    t("viewLogs.routingDecisionCard.rangeAtOrAbove", {
+      bound: complexReasoning,
+      defaultValue: `at or above ${complexReasoning}`,
+    }),
+    tierName(t, "REASONING"),
+  );
 }
 
-function describePlanModeFloor(matchedKeyword: string | undefined): string {
-  if (matchedKeyword === "exit_plan_mode") return "Plan-mode floor (exit_plan_mode tool)";
-  if (matchedKeyword) return `Plan-mode floor: "${matchedKeyword}"`;
-  return "Plan-mode floor";
+function describePlanModeFloor(t: TFunction, matchedKeyword: string | undefined): string {
+  if (matchedKeyword === "exit_plan_mode")
+    return t("viewLogs.routingDecisionCard.planModeFloorTool", {
+      defaultValue: "Plan-mode floor (exit_plan_mode tool)",
+    });
+  if (matchedKeyword)
+    return t("viewLogs.routingDecisionCard.planModeFloorKeyword", {
+      keyword: matchedKeyword,
+      defaultValue: `Plan-mode floor: "${matchedKeyword}"`,
+    });
+  return t("viewLogs.routingDecisionCard.planModeFloor", { defaultValue: "Plan-mode floor" });
 }
 
 /**
@@ -71,37 +116,86 @@ function describePlanModeFloor(matchedKeyword: string | undefined): string {
  * would add to housekeeping_patterns to cover another client, so naming it turns the row into
  * the instruction. Without it the drawer says only that the classifier was skipped.
  */
-function describeHousekeeping(matchedKeyword: string | undefined): string {
-  if (matchedKeyword) return `Client housekeeping call: "${matchedKeyword}"`;
-  return "Client housekeeping call, classifier skipped";
+function describeHousekeeping(t: TFunction, matchedKeyword: string | undefined): string {
+  if (matchedKeyword)
+    return t("viewLogs.routingDecisionCard.housekeepingKeyword", {
+      keyword: matchedKeyword,
+      defaultValue: `Client housekeeping call: "${matchedKeyword}"`,
+    });
+  return t("viewLogs.routingDecisionCard.housekeepingNoKeyword", {
+    defaultValue: "Client housekeeping call, classifier skipped",
+  });
 }
 
 /** Rows logged before the floor was recorded name what it tracked back then instead of a number. */
-function describeReasoningOverride(tierLabel: string | undefined, floor: number | undefined): string {
-  const stated = floor === undefined ? "the Simple to Medium boundary" : String(floor);
-  return `Heuristic, ${tierLabel ?? "REASONING"} override (2 or more reasoning markers, score of at least ${stated})`;
+function describeReasoningOverride(t: TFunction, tierLabel: string | undefined, floor: number | undefined): string {
+  const stated =
+    floor === undefined
+      ? t("viewLogs.routingDecisionCard.simpleToMediumBoundary", { defaultValue: "the Simple to Medium boundary" })
+      : String(floor);
+  return t("viewLogs.routingDecisionCard.reasoningOverride", {
+    tier: tierLabel ?? tierName(t, "REASONING"),
+    stated,
+    defaultValue: `Heuristic, ${tierLabel ?? "REASONING"} override (2 or more reasoning markers, score of at least ${stated})`,
+  });
 }
 
-const CONSTANT_CAUSE_LABELS: Record<string, string> = {
-  heuristic_scorer: "Heuristic scorer",
-  heuristic_v2: "Heuristic v2",
-  heuristic_first_short_circuit: "Heuristic scorer, classifier skipped",
-  hybrid_short_circuit: "Heuristic scorer, score clear of every boundary",
-  classifier_plugin: "Custom classifier plugin",
-  semantic_keyword_match: "Semantic keyword match",
-  session_affinity_pin: "Pinned to session",
-  session_affinity_escalation: "Escalated from session pin",
-  user_turn_continuation: "Continuation turn, classifier skipped",
-  modality_escalation: "Escalated for image input",
-  modality_pin_override: "Overrode session pin for image input",
-  quality_tier: "Quality tier mapping",
-  bandit: "Adaptive bandit",
-  default_fallback: "Default model, no route matched",
-  classifier_fallback: "Fallback tier, LLM classifier failed",
-  default_model_fallback: "Default model, LLM classifier failed",
+const CONSTANT_CAUSE_LABELS: Record<string, { labelKey: string; label: string }> = {
+  heuristic_scorer: { labelKey: "viewLogs.routingDecisionCard.causeHeuristicScorer", label: "Heuristic scorer" },
+  heuristic_v2: { labelKey: "viewLogs.routingDecisionCard.causeHeuristicV2", label: "Heuristic v2" },
+  heuristic_first_short_circuit: {
+    labelKey: "viewLogs.routingDecisionCard.causeHeuristicFirstShortCircuit",
+    label: "Heuristic scorer, classifier skipped",
+  },
+  hybrid_short_circuit: {
+    labelKey: "viewLogs.routingDecisionCard.causeHybridShortCircuit",
+    label: "Heuristic scorer, score clear of every boundary",
+  },
+  classifier_plugin: {
+    labelKey: "viewLogs.routingDecisionCard.causeClassifierPlugin",
+    label: "Custom classifier plugin",
+  },
+  semantic_keyword_match: {
+    labelKey: "viewLogs.routingDecisionCard.causeSemanticKeywordMatch",
+    label: "Semantic keyword match",
+  },
+  session_affinity_pin: {
+    labelKey: "viewLogs.routingDecisionCard.causeSessionAffinityPin",
+    label: "Pinned to session",
+  },
+  session_affinity_escalation: {
+    labelKey: "viewLogs.routingDecisionCard.causeSessionAffinityEscalation",
+    label: "Escalated from session pin",
+  },
+  user_turn_continuation: {
+    labelKey: "viewLogs.routingDecisionCard.causeUserTurnContinuation",
+    label: "Continuation turn, classifier skipped",
+  },
+  modality_escalation: {
+    labelKey: "viewLogs.routingDecisionCard.causeModalityEscalation",
+    label: "Escalated for image input",
+  },
+  modality_pin_override: {
+    labelKey: "viewLogs.routingDecisionCard.causeModalityPinOverride",
+    label: "Overrode session pin for image input",
+  },
+  quality_tier: { labelKey: "viewLogs.routingDecisionCard.causeQualityTier", label: "Quality tier mapping" },
+  bandit: { labelKey: "viewLogs.routingDecisionCard.causeBandit", label: "Adaptive bandit" },
+  default_fallback: {
+    labelKey: "viewLogs.routingDecisionCard.causeDefaultFallback",
+    label: "Default model, no route matched",
+  },
+  classifier_fallback: {
+    labelKey: "viewLogs.routingDecisionCard.causeClassifierFallback",
+    label: "Fallback tier, LLM classifier failed",
+  },
+  default_model_fallback: {
+    labelKey: "viewLogs.routingDecisionCard.causeDefaultModelFallback",
+    label: "Default model, LLM classifier failed",
+  },
 };
 
-function describeCause(decision: RoutingDecision): string {
+function describeCause(t: TFunction, decision: RoutingDecision): string {
   const {
     cause,
     classifier_model: classifierModel,
@@ -111,22 +205,32 @@ function describeCause(decision: RoutingDecision): string {
   } = decision;
 
   const constant = cause ? CONSTANT_CAUSE_LABELS[cause] : undefined;
-  if (constant) return constant;
+  if (constant) return t(constant.labelKey, { defaultValue: constant.label });
 
   switch (cause) {
     case "reasoning_override":
-      return describeReasoningOverride(tierLabel, overrideFloor);
+      return describeReasoningOverride(t, tierLabel, overrideFloor);
     case "llm_classifier":
-      return classifierModel ? `LLM classifier (${classifierModel})` : "LLM classifier";
+      return classifierModel
+        ? t("viewLogs.routingDecisionCard.classifierWithModel", {
+            model: classifierModel,
+            defaultValue: `LLM classifier (${classifierModel})`,
+          })
+        : t("viewLogs.routingDecisionCard.classifier", { defaultValue: "LLM classifier" });
     case "literal_keyword_match":
     case "keyword":
-      return matchedKeyword ? `Keyword match: "${matchedKeyword}"` : "Keyword match";
+      return matchedKeyword
+        ? t("viewLogs.routingDecisionCard.keywordMatchWithKeyword", {
+            keyword: matchedKeyword,
+            defaultValue: `Keyword match: "${matchedKeyword}"`,
+          })
+        : t("viewLogs.routingDecisionCard.keywordMatch", { defaultValue: "Keyword match" });
     case "plan_mode":
-      return describePlanModeFloor(matchedKeyword);
+      return describePlanModeFloor(t, matchedKeyword);
     case "housekeeping":
-      return describeHousekeeping(matchedKeyword);
+      return describeHousekeeping(t, matchedKeyword);
     default:
-      return cause ?? "Unknown";
+      return cause ?? t("viewLogs.routingDecisionCard.unknownCause", { defaultValue: "Unknown" });
   }
 }
 
@@ -136,9 +240,22 @@ function describeCause(decision: RoutingDecision): string {
  * ordinary route; it just must not claim a bump that did not happen. Only called when
  * the request escalated or asked to, so there is no "did not escalate" case.
  */
-function describeEscalation(escalated: boolean, keyword: string | undefined): string {
-  if (escalated) return keyword ? `Yes, keyword "${keyword}"` : "Yes";
-  return keyword ? `Requested via "${keyword}"; already at the highest tier` : "Requested; already at the highest tier";
+function describeEscalation(t: TFunction, escalated: boolean, keyword: string | undefined): string {
+  if (escalated)
+    return keyword
+      ? t("viewLogs.routingDecisionCard.escalatedWithKeyword", {
+          keyword,
+          defaultValue: `Yes, keyword "${keyword}"`,
+        })
+      : t("viewLogs.routingDecisionCard.escalatedYes", { defaultValue: "Yes" });
+  return keyword
+    ? t("viewLogs.routingDecisionCard.requestedWithKeyword", {
+        keyword,
+        defaultValue: `Requested via "${keyword}"; already at the highest tier`,
+      })
+    : t("viewLogs.routingDecisionCard.requestedNoKeyword", {
+        defaultValue: "Requested; already at the highest tier",
+      });
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -157,6 +274,7 @@ export function RoutingDecisionCard({
   decision?: RoutingDecision | null;
   className?: string;
 }) {
+  const { t } = useTranslation();
   if (!decision || !decision.cause) return null;
 
   const {
@@ -178,12 +296,14 @@ export function RoutingDecisionCard({
   // inside `signals`, which redaction can remove.
   const scoreExplanation =
     score !== undefined && decision.cause !== "reasoning_override" && decision.cause !== "plan_mode"
-      ? describeScoreAgainstBoundaries(score, tierBoundaries, tierLabel !== undefined)
+      ? describeScoreAgainstBoundaries(t, score, tierBoundaries, tierLabel !== undefined)
       : null;
 
   return (
     <div className={cn("mb-6 w-full max-w-full overflow-hidden rounded-lg bg-card shadow-sm", className)}>
-      <div className="border-b px-4 py-2.5 text-sm font-medium">Routing</div>
+      <div className="border-b px-4 py-2.5 text-sm font-medium">
+        {t("viewLogs.routingDecisionCard.title", { defaultValue: "Routing" })}
+      </div>
       <div className="px-4 py-3">
         {routerModelName && (
           <div className="mb-2 flex items-center gap-2 text-sm font-medium">
@@ -191,37 +311,55 @@ export function RoutingDecisionCard({
             <span>{routerModelName}</span>
             {routerType && (
               <span className="font-normal text-muted-foreground">
-                ({ROUTER_TYPE_LABELS[routerType] ?? routerType})
+                (
+                {t(ROUTER_TYPE_LABEL_KEYS[routerType] ?? "", {
+                  defaultValue: ROUTER_TYPE_LABELS[routerType] ?? routerType,
+                })}
+                )
               </span>
             )}
           </div>
         )}
 
         {tier && (
-          <Row label="Tier">
+          <Row label={t("viewLogs.routingDecisionCard.labelTier", { defaultValue: "Tier" })}>
             <Badge variant="secondary" className="font-normal">
               {tierLabel ?? tier}
             </Badge>
           </Row>
         )}
 
-        {requestType && <Row label="Request type">{requestType}</Row>}
+        {requestType && (
+          <Row label={t("viewLogs.routingDecisionCard.labelRequestType", { defaultValue: "Request type" })}>
+            {requestType}
+          </Row>
+        )}
 
-        <Row label="Decided by">{describeCause(decision)}</Row>
+        <Row label={t("viewLogs.routingDecisionCard.labelDecidedBy", { defaultValue: "Decided by" })}>
+          {describeCause(t, decision)}
+        </Row>
 
         {score !== undefined && (
-          <Row label="Score">
+          <Row label={t("viewLogs.routingDecisionCard.labelScore", { defaultValue: "Score" })}>
             <span className="tabular-nums">{score.toFixed(2)}</span>
             {scoreExplanation && <span className="ml-2 text-muted-foreground">({scoreExplanation})</span>}
           </Row>
         )}
 
-        {routedModel && <Row label="Routed to">{routedModel}</Row>}
+        {routedModel && (
+          <Row label={t("viewLogs.routingDecisionCard.labelRoutedTo", { defaultValue: "Routed to" })}>
+            {routedModel}
+          </Row>
+        )}
 
-        {escalated !== undefined && <Row label="Escalated">{describeEscalation(escalated, escalationKeyword)}</Row>}
+        {escalated !== undefined && (
+          <Row label={t("viewLogs.routingDecisionCard.labelEscalated", { defaultValue: "Escalated" })}>
+            {describeEscalation(t, escalated, escalationKeyword)}
+          </Row>
+        )}
 
         {signals && signals.length > 0 && (
-          <Row label="Signals">
+          <Row label={t("viewLogs.routingDecisionCard.labelSignals", { defaultValue: "Signals" })}>
             <span className="flex flex-wrap gap-1">
               {signals.map((signal) => (
                 <Badge key={signal} variant="outline" className="font-normal">

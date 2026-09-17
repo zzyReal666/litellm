@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp, MessageSquare, Mic, Settings, Volume2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SectionHeader } from "./SectionHeader";
@@ -82,6 +83,7 @@ export function isRealtimeResponse(response: any): boolean {
 }
 
 export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProps) {
+  const { t } = useTranslation();
   const events: RealtimeEvent[] = response?.results || [];
   const usage = response?.usage;
 
@@ -114,7 +116,7 @@ export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProp
             fontSize: 13,
           }}
         >
-          No recognized realtime events found
+          {t("viewLogs.realtimePrettyView.noEventsFound", { defaultValue: "No recognized realtime events found" })}
         </div>
       )}
     </div>
@@ -122,6 +124,7 @@ export function RealtimePrettyView({ response, metrics }: RealtimePrettyViewProp
 }
 
 function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCount: number }) {
+  const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
@@ -162,14 +165,19 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Settings className="size-3.5 text-muted-foreground" />
-            <span style={{ fontWeight: 500, fontSize: 14 }}>Session</span>
+            <span style={{ fontWeight: 500, fontSize: 14 }}>
+              {t("viewLogs.realtimePrettyView.labelSession", { defaultValue: "Session" })}
+            </span>
           </div>
           <span className="text-muted-foreground" style={{ fontSize: 12 }}>
             {session.model}
           </span>
           {turnCount > 0 && (
             <Badge variant="secondary" style={{ margin: 0, fontWeight: 500 }}>
-              {turnCount} {turnCount === 1 ? "turn" : "turns"}
+              {t("viewLogs.realtimePrettyView.turnCount", {
+                count: turnCount,
+                defaultValue: `${turnCount} ${turnCount === 1 ? "turn" : "turns"}`,
+              })}
             </Badge>
           )}
           {session.voice && (
@@ -206,15 +214,44 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
               fontSize: 13,
             }}
           >
-            <ConfigRow label="Model" value={session.model} />
-            <ConfigRow label="Voice" value={session.voice} />
-            <ConfigRow label="Temperature" value={session.temperature} />
-            <ConfigRow label="Max Output Tokens" value={session.max_response_output_tokens} />
-            <ConfigRow label="Input Audio Format" value={session.input_audio_format} />
-            <ConfigRow label="Output Audio Format" value={session.output_audio_format} />
-            {session.turn_detection && <ConfigRow label="Turn Detection" value={session.turn_detection.type} />}
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelModel", { defaultValue: "Model" })}
+              value={session.model}
+            />
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelVoice", { defaultValue: "Voice" })}
+              value={session.voice}
+            />
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelTemperature", { defaultValue: "Temperature" })}
+              value={session.temperature}
+            />
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelMaxOutputTokens", { defaultValue: "Max Output Tokens" })}
+              value={session.max_response_output_tokens}
+            />
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelInputAudioFormat", { defaultValue: "Input Audio Format" })}
+              value={session.input_audio_format}
+            />
+            <ConfigRow
+              label={t("viewLogs.realtimePrettyView.labelOutputAudioFormat", { defaultValue: "Output Audio Format" })}
+              value={session.output_audio_format}
+            />
+            {session.turn_detection && (
+              <ConfigRow
+                label={t("viewLogs.realtimePrettyView.labelTurnDetection", { defaultValue: "Turn Detection" })}
+                value={session.turn_detection.type}
+              />
+            )}
             {session.tools && session.tools.length > 0 && (
-              <ConfigRow label="Tools" value={`${session.tools.length} tool(s)`} />
+              <ConfigRow
+                label={t("viewLogs.realtimePrettyView.labelTools", { defaultValue: "Tools" })}
+                value={t("viewLogs.realtimePrettyView.toolCount", {
+                  count: session.tools.length,
+                  defaultValue: `${session.tools.length} tool(s)`,
+                })}
+              />
             )}
           </div>
 
@@ -230,7 +267,7 @@ function SessionCard({ session, turnCount }: { session: RealtimeSession; turnCou
                   marginBottom: 4,
                 }}
               >
-                Instructions
+                {t("viewLogs.realtimePrettyView.labelInstructions", { defaultValue: "Instructions" })}
               </span>
               <div
                 style={{
@@ -316,6 +353,7 @@ function ConversationCard({
 }
 
 function ResponseTurn({ response, index }: { response: RealtimeResponse; index: number }) {
+  const { t } = useTranslation();
   const outputs = response.output || [];
   const usage = response.usage;
 
@@ -341,7 +379,11 @@ function ResponseTurn({ response, index }: { response: RealtimeResponse; index: 
         </Badge>
         {usage && (
           <span className="text-muted-foreground" style={{ fontSize: 11 }}>
-            {usage.input_tokens ?? 0} in / {usage.output_tokens ?? 0} out tokens
+            {t("viewLogs.realtimePrettyView.tokenUsage", {
+              input: usage.input_tokens ?? 0,
+              output: usage.output_tokens ?? 0,
+              defaultValue: `${usage.input_tokens ?? 0} in / ${usage.output_tokens ?? 0} out tokens`,
+            })}
           </span>
         )}
         {response.conversation_id && (
@@ -364,13 +406,24 @@ function ResponseTurn({ response, index }: { response: RealtimeResponse; index: 
       ))}
 
       {/* Token breakdown if available */}
-      {usage?.input_token_details && <TokenBreakdown label="Input" details={usage.input_token_details} />}
-      {usage?.output_token_details && <TokenBreakdown label="Output" details={usage.output_token_details} />}
+      {usage?.input_token_details && (
+        <TokenBreakdown
+          label={t("viewLogs.realtimePrettyView.tokenBreakdownInput", { defaultValue: "Input" })}
+          details={usage.input_token_details}
+        />
+      )}
+      {usage?.output_token_details && (
+        <TokenBreakdown
+          label={t("viewLogs.realtimePrettyView.tokenBreakdownOutput", { defaultValue: "Output" })}
+          details={usage.output_token_details}
+        />
+      )}
     </div>
   );
 }
 
 function OutputMessage({ output }: { output: RealtimeOutputItem }) {
+  const { t } = useTranslation();
   const contents = output.content || [];
   const hasTranscripts = contents.some((c) => c.transcript || c.text);
 
@@ -388,7 +441,7 @@ function OutputMessage({ output }: { output: RealtimeOutputItem }) {
           marginBottom: 3,
         }}
       >
-        {output.role?.toUpperCase() || "ASSISTANT"}
+        {output.role?.toUpperCase() || t("viewLogs.prettyMessagesUtils.roleAssistant", { defaultValue: "ASSISTANT" })}
       </span>
       {contents.map((c, cIdx) => {
         const text = c.transcript || c.text;
@@ -440,6 +493,7 @@ function OutputMessage({ output }: { output: RealtimeOutputItem }) {
 }
 
 function TokenBreakdown({ label, details }: { label: string; details: Record<string, any> }) {
+  const { t } = useTranslation();
   const entries = Object.entries(details).filter(
     ([, v]) => typeof v === "number" || (typeof v === "object" && v !== null),
   );
@@ -452,7 +506,10 @@ function TokenBreakdown({ label, details }: { label: string; details: Record<str
         className="text-muted-foreground"
         style={{ fontSize: 10, letterSpacing: "0.5px", textTransform: "uppercase" }}
       >
-        {label} Token Breakdown
+        {t("viewLogs.realtimePrettyView.tokenBreakdownTitle", {
+          label,
+          defaultValue: `${label} Token Breakdown`,
+        })}
       </span>
       <div
         style={{

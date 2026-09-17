@@ -3,9 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { DataTable } from "@/components/shared/DataTable";
+import i18n from "@/lib/i18n";
 
 import type { LogEntry } from "./columns";
-import { getRequestLogsTableColumns } from "./RequestLogsTableColumns";
+import { getRequestLogsTableColumns, type RequestLogsTableColumnsDeps } from "./RequestLogsTableColumns";
 
 const logEntry = (overrides: Partial<LogEntry>): LogEntry => ({
   request_id: "req-1",
@@ -26,7 +27,11 @@ const logEntry = (overrides: Partial<LogEntry>): LogEntry => ({
   ...overrides,
 });
 
-const noopDeps = { onKeyHashClick: vi.fn(), onSessionClick: vi.fn() };
+const noopDeps = {
+  onKeyHashClick: vi.fn(),
+  onSessionClick: vi.fn(),
+  t: i18n.t as unknown as RequestLogsTableColumnsDeps["t"],
+};
 
 function renderRows(rows: LogEntry[], deps = noopDeps) {
   render(
@@ -241,7 +246,7 @@ describe("Model column", () => {
 describe("row action cells", () => {
   it("reports the key hash through the injected dependency rather than a row field", async () => {
     const user = userEvent.setup();
-    const deps = { onKeyHashClick: vi.fn(), onSessionClick: vi.fn() };
+    const deps = { ...noopDeps, onKeyHashClick: vi.fn(), onSessionClick: vi.fn() };
     renderRows([logEntry({ request_id: "req-key", metadata: { user_api_key: "sk-hash-9" } })], deps);
 
     await user.click(screen.getByText("sk-hash-9"));
@@ -250,7 +255,7 @@ describe("row action cells", () => {
 
   it("reports the clicked row from the session cell, so two rows sharing a session id stay distinguishable", async () => {
     const user = userEvent.setup();
-    const deps = { onKeyHashClick: vi.fn(), onSessionClick: vi.fn() };
+    const deps = { ...noopDeps, onKeyHashClick: vi.fn(), onSessionClick: vi.fn() };
     renderRows(
       [
         logEntry({ request_id: "req-key-a", session_id: "sess-42", api_key: "key-a" }),

@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "@/lib/toast";
 import { ParsedMessage } from "./prettyMessagesTypes";
 import { SectionHeader } from "./SectionHeader";
@@ -18,6 +19,7 @@ interface InputCardProps {
 }
 
 export function InputCard({ messages, promptTokens, inputCost }: InputCardProps) {
+  const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   if (messages.length === 0) {
@@ -33,7 +35,7 @@ export function InputCard({ messages, promptTokens, inputCost }: InputCardProps)
   const handleCopy = () => {
     const content = lastMessage?.content || "";
     navigator.clipboard.writeText(content);
-    toast.success("Input copied");
+    toast.success(t("viewLogs.inputCard.inputCopied", { defaultValue: "Input copied" }));
   };
 
   return (
@@ -68,7 +70,7 @@ export function InputCard({ messages, promptTokens, inputCost }: InputCardProps)
           {/* System Message - Collapsible with arrow */}
           {systemMessage && (
             <CollapsibleMessage
-              label="SYSTEM"
+              label={t("viewLogs.prettyMessagesUtils.roleSystem", { defaultValue: "SYSTEM" })}
               content={systemMessage.content}
               defaultExpanded={!!(systemMessage.content && systemMessage.content.length < 200)}
             />

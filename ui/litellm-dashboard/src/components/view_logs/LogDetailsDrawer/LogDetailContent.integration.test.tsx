@@ -293,8 +293,8 @@ describe("LogDetailContent", () => {
 
       expect(screen.getByText("legacy classifier prompt")).toBeInTheDocument();
       expect(screen.queryByRole("region", { name: "Classifier input" })).not.toBeInTheDocument();
-      await user.click(screen.getByRole("tab", { name: "JSON", exact: true }));
-      await user.click(screen.getByRole("button", { name: "Copy JSON", exact: true }));
+      await user.click(screen.getByRole("tab", { name: "JSON" }));
+      await user.click(screen.getByRole("button", { name: "Copy JSON" }));
       expect(await navigator.clipboard.readText()).toBe(
         JSON.stringify(shape === "messages only" ? messages : request, null, 2),
       );

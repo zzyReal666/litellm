@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import DeletedKeysPage from "../DeletedKeysPage/DeletedKeysPage";
 import DeletedTeamsPage from "../DeletedTeamsPage/DeletedTeamsPage";
@@ -19,25 +20,44 @@ type LogsTabId = "request logs" | "audit logs" | "deleted keys" | "deleted teams
 
 interface LogsTab {
   id: LogsTabId;
+  labelKey: string;
   label: string;
 }
 
-const REQUEST_LOGS_TAB: LogsTab = { id: "request logs", label: "Request Logs" };
-const AUDIT_LOGS_TAB: LogsTab = { id: "audit logs", label: "Audit Logs" };
-const DELETED_KEYS_TAB: LogsTab = { id: "deleted keys", label: "Deleted Keys" };
-const DELETED_TEAMS_TAB: LogsTab = { id: "deleted teams", label: "Deleted Teams" };
+const REQUEST_LOGS_TAB: LogsTab = {
+  id: "request logs",
+  labelKey: "viewLogs.index.tabRequestLogs",
+  label: "Request Logs",
+};
+const AUDIT_LOGS_TAB: LogsTab = { id: "audit logs", labelKey: "viewLogs.index.tabAuditLogs", label: "Audit Logs" };
+const DELETED_KEYS_TAB: LogsTab = {
+  id: "deleted keys",
+  labelKey: "viewLogs.index.tabDeletedKeys",
+  label: "Deleted Keys",
+};
+const DELETED_TEAMS_TAB: LogsTab = {
+  id: "deleted teams",
+  labelKey: "viewLogs.index.tabDeletedTeams",
+  label: "Deleted Teams",
+};
 
 const tabContentClassName = (tabId: LogsTabId): string =>
   tabId === REQUEST_LOGS_TAB.id ? "flex min-h-0 flex-1 flex-col" : "min-h-0 flex-1 overflow-y-auto";
 
 export default function SpendLogsTable({ accessToken, token, userRole, userID, premiumUser }: SpendLogsTableProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<LogsTabId>(REQUEST_LOGS_TAB.id);
   const canViewAuditLogs = useCan("viewAuditLogs");
   const canViewDeletedTeams = useCan("viewDeletedTeams");
 
   if (!accessToken || !token || !userRole || !userID) {
     return (
-      <div role="status" aria-busy="true" aria-label="Loading" className="flex h-64 items-center justify-center">
+      <div
+        role="status"
+        aria-busy="true"
+        aria-label={t("viewLogs.index.loading", { defaultValue: "Loading" })}
+        className="flex h-64 items-center justify-center"
+      >
         <UiLoadingSpinner className="size-8 text-primary" />
       </div>
     );
@@ -86,7 +106,7 @@ export default function SpendLogsTable({ accessToken, token, userRole, userID, p
         <TabsList variant="line">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} className="flex-none">
-              {tab.label}
+              {t(tab.labelKey, { defaultValue: tab.label })}
             </TabsTrigger>
           ))}
         </TabsList>
