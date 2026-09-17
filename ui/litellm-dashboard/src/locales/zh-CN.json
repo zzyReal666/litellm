@@ -11582,5 +11582,9 @@
     "ptuStartRequired": "设置 PTU 数量时，必须填写 PTU 生效开始时间",
     "ptuWindowOrder": "PTU 生效结束时间必须晚于 PTU 生效开始时间",
     "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空"
+  },
+  "noRedisWarning": {
+    "title": "未配置 Redis，强烈建议配置",
+    "body": "该代理运行了多个工作进程（或无法确认工作进程数量）。没有 Redis 时，限流、预算、路由状态与缓存失效都只在单个工作进程内生效，所以限额会按每个工作进程各自计算，花费可能超出上限。<0>查看没有 Redis 时会失效的全部功能</0>。设置 <1>LITELLM_DISABLE_NO_REDIS_WARNING=true</1> 仍可隐藏此提示。"
   }
 }

@@ -11582,5 +11582,9 @@
     "ptuStartRequired": "PTU Effective From is required when PTU Count is set",
     "ptuWindowOrder": "PTU Effective To must be after PTU Effective From",
     "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank"
+  },
+  "noRedisWarning": {
+    "title": "No Redis configured. Redis is highly recommended",
+    "body": "This proxy is running more than one worker (or the worker count could not be verified). Without Redis, rate limits, budgets, router state, and cache invalidation are per worker, so limits are enforced once per worker and spend can overshoot. <0>See everything that does not work without Redis</0>. Set <1>LITELLM_DISABLE_NO_REDIS_WARNING=true</1> to hide this banner anyway."
   }
 }
