@@ -210,7 +210,7 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving }: Su
                   className="inline-flex items-center gap-1 text-xs bg-info/10 text-info border border-info/20 px-2 py-0.5 rounded-full"
                 >
                   <CheckIcon className="h-3 w-3" />
-                  {f.label}
+                  {t(f.labelKey, { defaultValue: f.label })}
                 </span>
               ))}
             </div>
@@ -236,7 +236,7 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving }: Su
             {FIELD_GROUPS.map((group) => (
               <div key={group.label}>
                 <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  {group.label}
+                  {t(group.labelKey, { defaultValue: group.label })}
                 </div>
                 <div className="space-y-2">
                   {group.fields.map((field) => {
@@ -251,9 +251,11 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving }: Su
                         />
                         <div>
                           <div className="text-sm font-medium text-foreground group-hover:text-info transition-colors">
-                            {field.label}
+                            {t(field.labelKey, { defaultValue: field.label })}
                           </div>
-                          <div className="text-xs text-muted-foreground">{field.description}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {t(field.descriptionKey, { defaultValue: field.description })}
+                          </div>
                         </div>
                       </label>
                     );
@@ -305,8 +307,8 @@ function MCPServerCard({ server, onApprove, onReject, requiredFields }: MCPServe
 
   const checks = MCP_REQUIRED_FIELD_DEFS.filter((f) => requiredFields.includes(f.key)).map((f) => ({
     key: f.key,
-    label: f.label,
-    description: f.description,
+    label: t(f.labelKey, { defaultValue: f.label }),
+    description: t(f.descriptionKey, { defaultValue: f.description }),
     passed: f.check(server),
   }));
   const passCount = checks.filter((c) => c.passed).length;

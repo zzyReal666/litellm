@@ -27,6 +27,7 @@ import {
   TRANSPORT,
   TRANSPORT_ITEMS,
   AUTH_TYPE_ITEMS,
+  localizeSelectItems,
   getMcpOAuthMode,
   oauth2FlowToFormValue,
 } from "@/components/mcp_tools/types";
@@ -113,6 +114,8 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
   availableAccessGroups,
 }) => {
   const { t } = useTranslation();
+  const transportItems = React.useMemo(() => localizeSelectItems(TRANSPORT_ITEMS, t), [t]);
+  const authTypeItems = React.useMemo(() => localizeSelectItems(AUTH_TYPE_ITEMS, t), [t]);
   const initialStaticHeaders = React.useMemo(() => {
     if (!mcpServer.static_headers) {
       return [];
@@ -916,7 +919,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                 >
                   {(control) => (
                     <Select
-                      items={TRANSPORT_ITEMS}
+                      items={transportItems}
                       value={(control.value as string | undefined) ?? null}
                       onValueChange={handleTransportSelected(control.onChange)}
                     >
@@ -924,7 +927,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {TRANSPORT_ITEMS.map((item) => (
+                        {transportItems.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
                             {item.label}
                           </SelectItem>
@@ -1040,12 +1043,12 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                       }}
                     >
                       {(control) => (
-                        <Select {...selectControl<string>(control)} items={AUTH_TYPE_ITEMS}>
+                        <Select {...selectControl<string>(control)} items={authTypeItems}>
                           <SelectTrigger {...selectTriggerControl(control)} className="w-full">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {AUTH_TYPE_ITEMS.map((item) => (
+                            {authTypeItems.map((item) => (
                               <SelectItem key={item.value} value={item.value}>
                                 {item.label}
                               </SelectItem>
@@ -1112,7 +1115,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                     >
                       {(control) => (
                         <MultiSelect
-                          {...tagsControl(control)}
+                          {...tagsControl(control, t)}
                           placeholder={t("mcpTools.mcpServerEdit.stdioArgsPlaceholder", {
                             defaultValue: "Add args (press enter or comma)",
                           })}

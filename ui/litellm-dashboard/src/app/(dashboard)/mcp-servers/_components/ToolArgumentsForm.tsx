@@ -1,5 +1,7 @@
 import React from "react";
 import { useForm, type Control } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { CircleHelp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { FieldGroup } from "@/components/ui/field";
 import { FormField, type FormFieldControlProps } from "@/components/shared/form/FormField";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
-import type { InputSchemaProperty } from "@/components/mcp_tools/types";
+import { localizeSelectItems, type InputSchemaProperty } from "@/components/mcp_tools/types";
 import {
   ToolArgumentField,
   ToolArgumentsFormValues,
@@ -34,13 +36,13 @@ const argumentLabel = (field: ToolArgumentField): React.ReactNode => (
 );
 
 const BOOLEAN_ITEMS = [
-  { value: true, label: "True" },
-  { value: false, label: "False" },
+  { value: true, labelKey: "mcpTools.mCPToolArgumentsForm.booleanTrue", label: "True" },
+  { value: false, labelKey: "mcpTools.mCPToolArgumentsForm.booleanFalse", label: "False" },
 ];
 
-const booleanTitle = (value: unknown): string | undefined => {
-  if (value === true) return "True";
-  if (value === false) return "False";
+const booleanTitle = (value: unknown, t: TFunction): string | undefined => {
+  if (value === true) return t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" });
+  if (value === false) return t("mcpTools.mCPToolArgumentsForm.booleanFalse", { defaultValue: "False" });
   return undefined;
 };
 
@@ -49,8 +51,17 @@ const JsonArgumentControl: React.FC<{
   prop: InputSchemaProperty;
   control: FormFieldControlProps<ToolArgumentsFormValues, `args.${number}`>;
 }> = ({ field, prop, control }) => {
+  const { t } = useTranslation();
   const isObject = prop.type === "object";
-  const fallbackPlaceholder = isObject ? `Enter JSON object for ${field.key}` : `Enter JSON array for ${field.key}`;
+  const fallbackPlaceholder = isObject
+    ? t("mcpTools.mCPToolArgumentsForm.jsonObjectPlaceholder", {
+        key: field.key,
+        defaultValue: "Enter JSON object for {{key}}",
+      })
+    : t("mcpTools.mCPToolArgumentsForm.jsonArrayPlaceholder", {
+        key: field.key,
+        defaultValue: "Enter JSON array for {{key}}",
+      });
   return (
     <div className="space-y-2">
       <Textarea
@@ -63,7 +74,9 @@ const JsonArgumentControl: React.FC<{
         className="rounded-lg font-mono"
       />
       <p className="text-xs text-muted-foreground">
-        {isObject ? "Provide a valid JSON object." : "Provide a valid JSON array."}
+        {isObject
+          ? t("mcpTools.toolTestPanel.provideJsonObject", { defaultValue: "Provide a valid JSON object." })
+          : t("mcpTools.toolTestPanel.provideJsonArray", { defaultValue: "Provide a valid JSON array." })}
       </p>
     </div>
   );
@@ -73,7 +86,12 @@ const ToolArgumentControl: React.FC<{
   field: ToolArgumentField;
   control: FormFieldControlProps<ToolArgumentsFormValues, `args.${number}`>;
 }> = ({ field, control }) => {
+  const { t } = useTranslation();
   const prop = resolveSchemaProperty(field.prop);
+  const selectLabel = t("mcpTools.mCPToolArgumentsForm.selectPlaceholder", {
+    key: field.key,
+    defaultValue: "Select {{key}}",
+  });
 
   if (prop.type === "string" && prop.enum) {
     return (
@@ -84,11 +102,11 @@ const ToolArgumentControl: React.FC<{
         className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50 focus:outline-hidden"
       >
         <option value={-1} disabled={field.required}>
-          Select {field.key}
+          {selectLabel}
         </option>
         {prop.enum.map((option, index) => (
           <option key={option} value={index}>
-            {option === "" ? "Empty string" : option}
+            {option === "" ? t("mcpTools.mCPToolArgumentsForm.emptyString", { defaultValue: "Empty string" }) : option}
           </option>
         ))}
       </select>
@@ -102,7 +120,10 @@ const ToolArgumentControl: React.FC<{
         type="number"
         step={prop.type === "integer" ? 1 : "any"}
         value={(control.value as number | string) ?? ""}
-        placeholder={prop.description || `Enter ${field.key}`}
+        placeholder={
+          prop.description ||
+          t("mcpTools.mCPToolArgumentsForm.enterPlaceholder", { key: field.key, defaultValue: "Enter {{key}}" })
+        }
         className="rounded-lg"
       />
     );
@@ -111,22 +132,30 @@ const ToolArgumentControl: React.FC<{
   if (prop.type === "boolean") {
     return (
       <Select
-        items={field.required ? BOOLEAN_ITEMS : [{ value: null, label: `Select ${field.key}` }, ...BOOLEAN_ITEMS]}
+        items={
+          field.required
+            ? localizeSelectItems(BOOLEAN_ITEMS, t)
+            : [{ value: null, label: selectLabel }, ...localizeSelectItems(BOOLEAN_ITEMS, t)]
+        }
         value={control.value ?? null}
         onValueChange={control.onChange}
       >
         <SelectTrigger
           id={control.id}
           aria-invalid={control["aria-invalid"]}
-          title={booleanTitle(control.value)}
+          title={booleanTitle(control.value, t)}
           className="w-full"
         >
-          <SelectValue placeholder={`Select ${field.key}`} />
+          <SelectValue placeholder={selectLabel} />
         </SelectTrigger>
         <SelectContent>
-          {!field.required && <SelectItem value={null}>Select {field.key}</SelectItem>}
-          <SelectItem value={true}>True</SelectItem>
-          <SelectItem value={false}>False</SelectItem>
+          {!field.required && <SelectItem value={null}>{selectLabel}</SelectItem>}
+          <SelectItem value={true}>
+            {t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
+          </SelectItem>
+          <SelectItem value={false}>
+            {t("mcpTools.mCPToolArgumentsForm.booleanFalse", { defaultValue: "False" })}
+          </SelectItem>
         </SelectContent>
       </Select>
     );
@@ -140,7 +169,10 @@ const ToolArgumentControl: React.FC<{
     <Input
       {...control}
       value={(control.value as string) ?? ""}
-      placeholder={prop.description || `Enter ${field.key}`}
+      placeholder={
+        prop.description ||
+        t("mcpTools.mCPToolArgumentsForm.enterPlaceholder", { key: field.key, defaultValue: "Enter {{key}}" })
+      }
       className="rounded-lg"
     />
   );
@@ -151,6 +183,7 @@ const ToolArgumentFields: React.FC<{
   control: Control<ToolArgumentsFormValues>;
   singleInputFallback: boolean;
 }> = ({ fields, control, singleInputFallback }) => {
+  const { t } = useTranslation();
   if (singleInputFallback) {
     return (
       <FieldGroup>
@@ -159,7 +192,8 @@ const ToolArgumentFields: React.FC<{
           name="args.0"
           label={
             <span>
-              Input <span className="text-destructive">*</span>
+              {t("mcpTools.mCPToolArgumentsForm.inputLabel", { defaultValue: "Input" })}{" "}
+              <span className="text-destructive">*</span>
             </span>
           }
         >
@@ -167,7 +201,9 @@ const ToolArgumentFields: React.FC<{
             <Input
               {...field}
               value={(field.value as string) ?? ""}
-              placeholder="Enter input for this tool"
+              placeholder={t("mcpTools.mCPToolArgumentsForm.inputPlaceholder", {
+                defaultValue: "Enter input for this tool",
+              })}
               className="rounded-lg"
             />
           )}
@@ -180,8 +216,14 @@ const ToolArgumentFields: React.FC<{
     return (
       <div className="rounded-lg border border-border bg-muted py-6 text-center">
         <div className="mx-auto max-w-sm">
-          <h4 className="mb-1 text-sm font-medium text-foreground">No Parameters Required</h4>
-          <p className="text-xs text-muted-foreground">This tool can be called without any input parameters.</p>
+          <h4 className="mb-1 text-sm font-medium text-foreground">
+            {t("mcpTools.toolTestPanel.noParametersTitle", { defaultValue: "No Parameters Required" })}
+          </h4>
+          <p className="text-xs text-muted-foreground">
+            {t("mcpTools.toolTestPanel.noParametersDesc", {
+              defaultValue: "This tool can be called without any input parameters.",
+            })}
+          </p>
         </div>
       </div>
     );
@@ -203,9 +245,11 @@ const ToolArgumentFields: React.FC<{
   );
 };
 
-const callButtonLabel = (isLoading: boolean, hasRun: boolean): string => {
-  if (isLoading) return "Calling Tool...";
-  return hasRun ? "Call Again" : "Call Tool";
+const callButtonLabel = (isLoading: boolean, hasRun: boolean, t: TFunction): string => {
+  if (isLoading) return t("mcpTools.toolTestPanel.callingTool", { defaultValue: "Calling Tool..." });
+  return hasRun
+    ? t("mcpTools.toolTestPanel.callAgain", { defaultValue: "Call Again" })
+    : t("mcpTools.toolTestPanel.callTool", { defaultValue: "Call Tool" });
 };
 
 export const ToolArgumentsForm: React.FC<{
@@ -215,6 +259,7 @@ export const ToolArgumentsForm: React.FC<{
   hasRun: boolean;
   onRun: (args: Record<string, unknown>) => void;
 }> = ({ fields, singleInputFallback, isLoading, hasRun, onRun }) => {
+  const { t } = useTranslation();
   const form = useForm<ToolArgumentsFormValues>({
     defaultValues: { args: initialArgumentValues(fields) },
     resolver: toolArgumentsResolver(fields),
@@ -236,7 +281,7 @@ export const ToolArgumentsForm: React.FC<{
             className="w-full"
           >
             {isLoading && <UiLoadingSpinner className="size-4" />}
-            {callButtonLabel(isLoading, hasRun)}
+            {callButtonLabel(isLoading, hasRun, t)}
           </Button>
         </div>
       </form>

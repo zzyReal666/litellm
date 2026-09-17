@@ -1,5 +1,6 @@
 import * as React from "react";
 import { render, type RenderResult } from "@testing-library/react";
+import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from "react-hook-form";
 
 import {
@@ -14,6 +15,7 @@ export const McpFormHarness: React.FC<{
   onFinish?: (values: MountedFormValues) => void;
   children: React.ReactNode;
 }> = ({ defaultValues, onFinish, children }) => {
+  const { t } = useTranslation();
   const form = useForm<MountedFormValues>({ mode: "onChange", defaultValues });
   const registry = useMountRegistry();
   return (
@@ -26,7 +28,7 @@ export const McpFormHarness: React.FC<{
           }}
         >
           {children}
-          <button type="submit">Submit</button>
+          <button type="submit">{t("common.submit", { defaultValue: "Submit" })}</button>
         </form>
       </MountedFormProvider>
     </FormProvider>

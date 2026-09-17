@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 
 import { Switch } from "@/components/ui/switch";
@@ -23,13 +24,19 @@ export default function DcrBridgeToggle({
   authType?: string | null;
   initialChecked?: boolean;
 }) {
+  const { t } = useTranslation();
   if (!isClientForwardedTokenMode(authType)) return null;
   return (
     <MountedFormField
       label={
         <span className="text-sm font-medium text-foreground flex items-center">
-          Gateway-hosted sign-in (DCR bridge)
-          <SimpleTooltip content="Lets OAuth-only clients like Claude Desktop register and sign in through the gateway. Turn off to relay the upstream server's own OAuth metadata instead (for clients pre-registered with the upstream IdP).">
+          {t("mcpTools.dcrBridgeToggle.label", { defaultValue: "Gateway-hosted sign-in (DCR bridge)" })}
+          <SimpleTooltip
+            content={t("mcpTools.dcrBridgeToggle.tooltip", {
+              defaultValue:
+                "Lets OAuth-only clients like Claude Desktop register and sign in through the gateway. Turn off to relay the upstream server's own OAuth metadata instead (for clients pre-registered with the upstream IdP).",
+            })}
+          >
             <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
           </SimpleTooltip>
         </span>
