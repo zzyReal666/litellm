@@ -1314,6 +1314,11 @@
       "count": 1
     }
   },
+  "src/components/ModelInfoEditForm.tsx": {
+    "max-lines": {
+      "count": 1
+    }
+  },
   "src/components/Navbar/BlogDropdown/BlogDropdown.test.tsx": {
     "max-nested-callbacks": {
       "count": 10
