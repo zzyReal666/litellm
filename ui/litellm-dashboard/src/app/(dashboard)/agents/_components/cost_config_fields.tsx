@@ -16,7 +16,7 @@ const CostConfigFields: React.FC = () => {
           key={field.name}
           name={field.name}
           label={
-            field.tooltipKey
+            field.tooltipKey && field.tooltip
               ? labelWithHint(
                   translateFieldText(t, field.labelKey, field.label),
                   translateFieldText(t, field.tooltipKey, field.tooltip),
