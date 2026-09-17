@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 import { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { ToolSpendDailyEntry, ToolSpendEntry } from "@/components/networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -10,11 +12,21 @@ export const usd = (value: number): string => {
   return `${value < 0 ? "-" : ""}$${formatNumberWithCommas(magnitude, decimals)}`;
 };
 
-export const classificationRatePer1kTurns = (classifierCost: number, turns: number): string => {
-  if (turns <= 0) return `(${usd(0)} / 1K turns)`;
+export const classificationRatePer1kTurns = (classifierCost: number, turns: number, t: TFunction): string => {
+  if (turns <= 0)
+    return t("costOptimization.autoRouterBenchmarks.classificationRate", {
+      defaultValue: "({{rate}} / 1K turns)",
+      rate: usd(0),
+    });
   const rate = (classifierCost * 1000) / turns;
-  if (rate > 0 && rate < 0.0001) return "(<$0.0001 / 1K turns)";
-  return `(${usd(rate)} / 1K turns)`;
+  if (rate > 0 && rate < 0.0001)
+    return t("costOptimization.autoRouterBenchmarks.classificationRateBelow", {
+      defaultValue: "(<$0.0001 / 1K turns)",
+    });
+  return t("costOptimization.autoRouterBenchmarks.classificationRate", {
+    defaultValue: "({{rate}} / 1K turns)",
+    rate: usd(rate),
+  });
 };
 
 export const pct = (ratio: number): string => `${formatNumberWithCommas(ratio * 100, 1)}%`;
@@ -200,9 +212,14 @@ export type SavingsPoint = {
  * mapping. Colour travels with the driver so filtering cannot separate them.
  */
 export const SAVINGS_DRIVERS = [
-  { name: "Compression", color: "emerald", of: compressionOf },
-  { name: "Prompt caching", color: "blue", of: gatewayAttributedCachingOf },
-  { name: "Auto-router", color: "amber", of: autorouterOf },
+  { name: "Compression", color: "emerald", of: compressionOf, labelKey: "costOptimization.savingsDrivers.compression" },
+  {
+    name: "Prompt caching",
+    color: "blue",
+    of: gatewayAttributedCachingOf,
+    labelKey: "costOptimization.savingsDrivers.promptCaching",
+  },
+  { name: "Auto-router", color: "amber", of: autorouterOf, labelKey: "costOptimization.savingsDrivers.autoRouter" },
 ] as const;
 
 export const SAVINGS_SERIES = SAVINGS_DRIVERS.map((d) => d.name);

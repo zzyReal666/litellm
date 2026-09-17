@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,7 @@ const SettingValueEditor: React.FC<{
   setting: generalSettingsItem;
   onChange: (fieldName: string, newValue: any) => void;
 }> = ({ setting, onChange }) => {
+  const { t } = useTranslation();
   if (setting.field_type === "Integer") {
     return (
       <Input
@@ -94,10 +96,10 @@ const SettingValueEditor: React.FC<{
     return (
       <Select value={setting.field_value ?? null} onValueChange={(newValue) => onChange(setting.field_name, newValue)}>
         <SelectTrigger className="min-w-32">
-          <SelectValue placeholder="Default" />
+          <SelectValue placeholder={t("common.default", { defaultValue: "Default" })} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={null}>Default</SelectItem>
+          <SelectItem value={null}>{t("common.default", { defaultValue: "Default" })}</SelectItem>
           {(setting.field_options ?? []).map((option) => (
             <SelectItem key={option} value={option}>
               {option}
@@ -115,6 +117,7 @@ export const PromptCachingPanel: React.FC<{
   settings: generalSettingsItem[];
   onChange: (fieldName: string, newValue: any) => void;
 }> = ({ accessToken, settings, onChange }) => {
+  const { t } = useTranslation();
   const enableSetting = settings.find((s) => s.field_name === ENABLE_ANTHROPIC_PROMPT_CACHING);
   const ttlSetting = settings.find((s) => s.field_name === ANTHROPIC_PROMPT_CACHING_TTL);
 
@@ -140,11 +143,15 @@ export const PromptCachingPanel: React.FC<{
   return (
     <Card>
       <CardContent>
-        <CardTitle>Prompt Caching</CardTitle>
+        <CardTitle>{t("templates.keyInfoView.promptCaching", { defaultValue: "Prompt Caching" })}</CardTitle>
 
         <div className="mt-6 flex items-start justify-between gap-8">
           <div className="min-w-0 max-w-2xl">
-            <p className="font-medium">Automatic Anthropic prompt caching</p>
+            <p className="font-medium">
+              {t("generalSettings.automaticAnthropicPromptCaching", {
+                defaultValue: "Automatic Anthropic prompt caching",
+              })}
+            </p>
             <p className="mt-1 break-words text-xs text-muted-foreground">{enableSetting.field_description}</p>
           </div>
           <Switch checked={enabled} onCheckedChange={(checked) => persist(ENABLE_ANTHROPIC_PROMPT_CACHING, checked)} />
@@ -153,7 +160,9 @@ export const PromptCachingPanel: React.FC<{
         {ttlSetting && (
           <div className="mt-6 flex items-start justify-between gap-8">
             <div className="min-w-0 max-w-2xl">
-              <p className={`font-medium ${enabled ? "" : "text-muted-foreground"}`}>Cache lifetime (TTL)</p>
+              <p className={`font-medium ${enabled ? "" : "text-muted-foreground"}`}>
+                {t("generalSettings.cacheLifetimeTtl", { defaultValue: "Cache lifetime (TTL)" })}
+              </p>
               <p className="mt-1 break-words text-xs text-muted-foreground">{ttlSetting.field_description}</p>
             </div>
             <Select
@@ -162,10 +171,12 @@ export const PromptCachingPanel: React.FC<{
               onValueChange={(newValue) => persist(ANTHROPIC_PROMPT_CACHING_TTL, newValue)}
             >
               <SelectTrigger className="min-w-40">
-                <SelectValue placeholder="5m (default)" />
+                <SelectValue placeholder={t("generalSettings.fiveMinutesDefault", { defaultValue: "5m (default)" })} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>5m (default)</SelectItem>
+                <SelectItem value={null}>
+                  {t("generalSettings.fiveMinutesDefault", { defaultValue: "5m (default)" })}
+                </SelectItem>
                 {(ttlSetting.field_options ?? []).map((option) => (
                   <SelectItem key={option} value={option}>
                     {option}
@@ -181,6 +192,7 @@ export const PromptCachingPanel: React.FC<{
 };
 
 const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, userRole, userID }) => {
+  const { t } = useTranslation();
   const [generalSettings, setGeneralSettings] = useState<generalSettingsItem[]>([]);
 
   useEffect(() => {
@@ -254,11 +266,19 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
     <div className="w-full">
       <Tabs defaultValue="loadbalancing" className="h-[75vh] w-full">
         <TabsList variant="line" className="mx-8 mt-4">
-          <TabsTrigger value="loadbalancing">Loadbalancing</TabsTrigger>
-          <TabsTrigger value="routing-groups">Routing Groups</TabsTrigger>
-          <TabsTrigger value="fallbacks">Fallbacks</TabsTrigger>
-          <TabsTrigger value="prompt-caching">Prompt Caching</TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="loadbalancing">
+            {t("generalSettings.tabLoadbalancing", { defaultValue: "Loadbalancing" })}
+          </TabsTrigger>
+          <TabsTrigger value="routing-groups">
+            {t("generalSettings.tabRoutingGroups", { defaultValue: "Routing Groups" })}
+          </TabsTrigger>
+          <TabsTrigger value="fallbacks">
+            {t("generalSettings.tabFallbacks", { defaultValue: "Fallbacks" })}
+          </TabsTrigger>
+          <TabsTrigger value="prompt-caching">
+            {t("templates.keyInfoView.promptCaching", { defaultValue: "Prompt Caching" })}
+          </TabsTrigger>
+          <TabsTrigger value="general">{t("generalSettings.tabGeneral", { defaultValue: "General" })}</TabsTrigger>
         </TabsList>
         <TabsContent value="loadbalancing" className="px-8 py-6" keepMounted>
           <RouterSettings accessToken={accessToken} userRole={userRole} userID={userID} />
@@ -278,10 +298,10 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Setting</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
+                    <TableHead>{t("generalSettings.colSetting", { defaultValue: "Setting" })}</TableHead>
+                    <TableHead>{t("generalSettings.colValue", { defaultValue: "Value" })}</TableHead>
+                    <TableHead>{t("generalSettings.colStatus", { defaultValue: "Status" })}</TableHead>
+                    <TableHead>{t("generalSettings.colAction", { defaultValue: "Action" })}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -307,15 +327,26 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
                         </TableCell>
                         <TableCell>
                           {value.stored_in_db == true ? (
-                            <StatusBadge tone="success" label="In DB" />
+                            <StatusBadge
+                              tone="success"
+                              label={t("generalSettings.statusInDb", { defaultValue: "In DB" })}
+                            />
                           ) : value.stored_in_db == false ? (
-                            <StatusBadge tone="neutral" label="In Config" />
+                            <StatusBadge
+                              tone="neutral"
+                              label={t("generalSettings.statusInConfig", { defaultValue: "In Config" })}
+                            />
                           ) : (
-                            <StatusBadge tone="neutral" label="Not Set" />
+                            <StatusBadge
+                              tone="neutral"
+                              label={t("generalSettings.statusNotSet", { defaultValue: "Not Set" })}
+                            />
                           )}
                         </TableCell>
                         <TableCell>
-                          <Button onClick={() => handleUpdateField(value.field_name)}>Update</Button>
+                          <Button onClick={() => handleUpdateField(value.field_name)}>
+                            {t("common.update", { defaultValue: "Update" })}
+                          </Button>
                           <span
                             onClick={() => handleResetField(value.field_name)}
                             className="inline-flex shrink-0 cursor-pointer items-center justify-center px-1.5 py-1.5 text-destructive"

@@ -154,7 +154,9 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
         <CardContent>
           {rows.length > 0 && isFetchingMore && (
             <p className="mb-2 text-sm text-muted-foreground">
-              Data is still loading; rows and totals will update as the rest of the range arrives.
+              {t("costOptimization.cacheLeakageCard.stillLoading", {
+                defaultValue: "Data is still loading; rows and totals will update as the rest of the range arrives.",
+              })}
             </p>
           )}
           {rows.length === 0 ? (
@@ -176,14 +178,19 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
                     label={t("costOptimization.cacheLeakageCard.uncachedInputTokens", {
                       defaultValue: "Uncached input tokens",
                     })}
-                    info="Input tokens you sent in this range that weren't served from or written to the cache"
+                    info={t("costOptimization.cacheLeakageCard.uncachedInputTokensInfo", {
+                      defaultValue:
+                        "Input tokens you sent in this range that weren't served from or written to the cache",
+                    })}
                     sort={sort}
                     onSort={onSort}
                   />
                   <SortableHead
                     column="cacheHitRatio"
                     label={t("costOptimization.cacheLeakageCard.cacheHitRate", { defaultValue: "Cache hit rate" })}
-                    info="Share of your input tokens that were served from the cache"
+                    info={t("costOptimization.cacheLeakageCard.cacheHitRateInfo", {
+                      defaultValue: "Share of your input tokens that were served from the cache",
+                    })}
                     sort={sort}
                     onSort={onSort}
                   />
@@ -192,7 +199,10 @@ const CacheLeakageCard: React.FC<CacheLeakageCardProps> = ({ activity }) => {
                     label={t("costOptimization.cacheLeakageCard.potentialSavings", {
                       defaultValue: "Potential savings",
                     })}
-                    info="About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall."
+                    info={t("costOptimization.cacheLeakageCard.potentialSavingsInfo", {
+                      defaultValue:
+                        "About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall.",
+                    })}
                     sort={sort}
                     onSort={onSort}
                   />

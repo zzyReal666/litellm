@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import type { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import type { AutoRouterDeployment } from "@/app/(dashboard)/hooks/models/useModels";
 import { useAutoRouters } from "@/app/(dashboard)/hooks/models/useModels";
@@ -130,13 +130,15 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
               hint={
                 stats.classifier_cost == null
                   ? undefined
-                  : classificationRatePer1kTurns(stats.classifier_cost, stats.turns)
+                  : classificationRatePer1kTurns(stats.classifier_cost, stats.turns, t)
               }
             />
           </div>
           {stats.classifier_cost == null && (
             <p className="mb-3 text-xs text-muted-foreground">
-              Breakdown unavailable because some usage predates classification-cost tracking.
+              {t("costOptimization.autoRouterBenchmarks.breakdownUnavailable", {
+                defaultValue: "Breakdown unavailable because some usage predates classification-cost tracking.",
+              })}
             </p>
           )}
           <Separator />
@@ -214,7 +216,9 @@ const BucketTable: React.FC<{ buckets: BucketRow[] }> = ({ buckets }) => {
                 <span className={`inline-block size-2 shrink-0 rounded-sm ${b.fill}`} aria-hidden />
                 <span>
                   {t(b.labelKey, { defaultValue: b.label })}
-                  <span className="block text-xs font-normal text-muted-foreground">{b.sublabel}</span>
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    {t(b.sublabelKey, { defaultValue: b.sublabel })}
+                  </span>
                 </span>
               </span>
             </TableCell>
@@ -268,8 +272,10 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
                   <span className="font-medium tabular-nums text-foreground">{pctLabel(expiredMissPct)}</span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-64">
-                  share of all measured turns that missed cache because a return to an earlier tier came after its TTL
-                  lapsed
+                  {t("costOptimization.autoRouterBenchmarks.expiredMissHint", {
+                    defaultValue:
+                      "share of all measured turns that missed cache because a return to an earlier tier came after its TTL lapsed",
+                  })}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -282,15 +288,22 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
               {t("costOptimization.autoRouterBenchmarks.shareOfTurns", { defaultValue: "Share of turns" })}
             </p>
             <p className="text-xs text-muted-foreground">
-              <span className="text-lg font-semibold tabular-nums text-foreground">{total.toLocaleString()}</span> turns
-              measured
+              <Trans
+                i18nKey="costOptimization.autoRouterBenchmarks.turnsMeasured"
+                defaults="<0>{{turns}}</0> turns measured"
+                values={{ turns: total.toLocaleString() }}
+                components={[<span key="turns" className="text-lg font-semibold tabular-nums text-foreground" />]}
+              />
             </p>
           </div>
           <StackedTurnBar buckets={buckets} />
           <BucketTable buckets={buckets} />
           {cache.unordered_turns > 0 && (
             <p className="text-xs text-muted-foreground">
-              {cache.unordered_turns.toLocaleString()} turns arrived out of order across pods and are not bucketed
+              {t("costOptimization.autoRouterBenchmarks.unorderedTurns", {
+                defaultValue: "{{turns}} turns arrived out of order across pods and are not bucketed",
+                turns: cache.unordered_turns.toLocaleString(),
+              })}
             </p>
           )}
         </div>
@@ -373,12 +386,10 @@ const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data,
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Compares your actual routed spend with the estimated cost of using only the most expensive model configured in
-        the auto-router. It accounts for both the cache savings from staying on one model and the added cache costs from
-        switching models. Savings are net of recorded LLM classification cost, which is included in actual spend.
-        Classification cost per 1K turns is averaged over all auto-router turns, including those that skip
-        classification. The range counts whole sessions that overlap it, so totals can differ slightly from the Overall
-        tab, which buckets savings by UTC day.
+        {t("costOptimization.autoRouterBenchmarks.comparisonDescription", {
+          defaultValue:
+            "Compares your actual routed spend with the estimated cost of using only the most expensive model configured in the auto-router. It accounts for both the cache savings from staying on one model and the added cache costs from switching models. Savings are net of recorded LLM classification cost, which is included in actual spend. Classification cost per 1K turns is averaged over all auto-router turns, including those that skip classification. The range counts whole sessions that overlap it, so totals can differ slightly from the Overall tab, which buckets savings by UTC day.",
+        })}
       </p>
 
       <div className="space-y-4">
@@ -389,7 +400,9 @@ const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data,
             })}
           </h3>
           <p className="text-xs text-muted-foreground">
-            every turn falls in exactly one bucket, by what the router did
+            {t("costOptimization.autoRouterBenchmarks.bucketRule", {
+              defaultValue: "every turn falls in exactly one bucket, by what the router did",
+            })}
           </p>
         </div>
         <CachingCard cache={stats.cache} />

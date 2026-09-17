@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { TFunction } from "i18next";
 
 import type { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import type { ToolSpendDailyEntry, ToolSpendEntry } from "@/components/networking";
@@ -403,19 +404,36 @@ describe("usd", () => {
 });
 
 describe("classificationRatePer1kTurns", () => {
+  const t = ((_key: string, options?: Record<string, unknown>) =>
+    String(options?.defaultValue ?? "").replace(/\{\{(\w+)\}\}/g, (_match: string, name: string) =>
+      String(options?.[name] ?? ""),
+    )) as TFunction;
+
   it("normalizes total classification cost to one thousand turns", () => {
-    expect(classificationRatePer1kTurns(342.18, 140815)).toBe("($2.43 / 1K turns)");
-    expect(classificationRatePer1kTurns(0.0004, 100)).toBe("($0.0040 / 1K turns)");
+    expect(classificationRatePer1kTurns(342.18, 140815, t)).toBe("($2.43 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.0004, 100, t)).toBe("($0.0040 / 1K turns)");
   });
 
   it("shows a floor instead of rounding a real cost down to zero", () => {
-    expect(classificationRatePer1kTurns(0.00001, 1000)).toBe("(<$0.0001 / 1K turns)");
-    expect(classificationRatePer1kTurns(0.0001, 1000)).toBe("($0.0001 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.00001, 1000, t)).toBe("(<$0.0001 / 1K turns)");
+    expect(classificationRatePer1kTurns(0.0001, 1000, t)).toBe("($0.0001 / 1K turns)");
   });
 
   it("reports zero when there are no turns or no classification cost", () => {
-    expect(classificationRatePer1kTurns(0, 0)).toBe("($0.00 / 1K turns)");
-    expect(classificationRatePer1kTurns(0, 100)).toBe("($0.00 / 1K turns)");
+    expect(classificationRatePer1kTurns(0, 0, t)).toBe("($0.00 / 1K turns)");
+    expect(classificationRatePer1kTurns(0, 100, t)).toBe("($0.00 / 1K turns)");
+  });
+
+  it("hands the rate to the catalog as an interpolation value", () => {
+    const calls: { key: string; rate: unknown }[] = [];
+    const record = ((key: string, options?: Record<string, unknown>) => {
+      calls.push({ key, rate: options?.rate });
+      return "";
+    }) as TFunction;
+
+    classificationRatePer1kTurns(0.0004, 100, record);
+
+    expect(calls).toEqual([{ key: "costOptimization.autoRouterBenchmarks.classificationRate", rate: "$0.0040" }]);
   });
 });
 

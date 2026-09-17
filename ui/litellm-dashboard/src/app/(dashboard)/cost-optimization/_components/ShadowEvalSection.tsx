@@ -67,8 +67,23 @@ export const shadowedTargetLabel = (target: ShadowEvalJobTarget): string =>
   target.key_name ||
   (target.target_type === "key" ? `${target.target_id.slice(0, 10)}…` : target.target_id);
 
-const shadowedTargetsLabel = (job: ShadowEvalJob): string =>
-  job.targets.length === 1 ? shadowedTargetLabel(job.targets[0]) : `${job.targets.length} targets`;
+const shadowedTargetsLabel = (job: ShadowEvalJob, t: TFunction): string =>
+  job.targets.length === 1
+    ? shadowedTargetLabel(job.targets[0])
+    : t("costOptimization.shadowEvalSection.targetsCount", {
+        defaultValue: "{{targets}} targets",
+        targets: job.targets.length,
+      });
+
+const TARGET_TYPE_KEYS: Readonly<Record<string, string>> = {
+  team: "usagePage.entityUsage.entityTeamLower",
+  user: "usagePage.entityUsage.entityUserLower",
+};
+
+const targetTypeLabel = (targetType: string, t: TFunction): string => {
+  const key = TARGET_TYPE_KEYS[targetType];
+  return key === undefined ? targetType : t(key, { defaultValue: targetType });
+};
 
 const totalBudget = (job: ShadowEvalJob): number | null =>
   job.targets.reduce<number | null>(
@@ -105,6 +120,7 @@ const JobModelScope: React.FC<{ job: ShadowEvalJob }> = ({ job }) =>
   ) : null;
 
 const JobHeadline: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
+  const { t } = useTranslation();
   const routers = (
     <span key="routers" className="font-mono text-xs">
       {jobRouters(job)}
@@ -112,7 +128,7 @@ const JobHeadline: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
   );
   const targets = (
     <span key="targets" className="font-mono text-xs">
-      {shadowedTargetsLabel(job)}
+      {shadowedTargetsLabel(job, t)}
     </span>
   );
   const modelScope = <JobModelScope job={job} />;
@@ -147,13 +163,15 @@ const JobHeadline: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
 
 const isActive = (job: ShadowEvalJob): boolean => job.status === "running";
 
-const endsIn = (endsAt: string | null | undefined): string | null => {
+const endsIn = (endsAt: string | null | undefined, t: TFunction): string | null => {
   if (!endsAt) return null;
   const remainingMs = new Date(endsAt).getTime() - Date.now();
   if (!Number.isFinite(remainingMs)) return null;
-  if (remainingMs <= 0) return "ending now";
+  if (remainingMs <= 0) return t("costOptimization.shadowEvalSection.endingNow", { defaultValue: "ending now" });
   const days = Math.round(remainingMs / 86_400_000);
-  return days >= 2 ? `ends in ${days} days` : "ends within a day";
+  return days >= 2
+    ? t("costOptimization.shadowEvalSection.endsInDays", { defaultValue: "ends in {{days}} days", days })
+    : t("costOptimization.shadowEvalSection.endsWithinADay", { defaultValue: "ends within a day" });
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -217,7 +235,9 @@ const SliceTable: React.FC<{
             <TableCell className="font-medium text-foreground">
               {slice.group}
               {slice.turn_count < MIN_TURNS_FOR_CONFIDENCE && (
-                <span className="ml-2 text-xs font-normal text-muted-foreground">(low sample)</span>
+                <span className="ml-2 text-xs font-normal text-muted-foreground">
+                  {t("costOptimization.shadowEvalSection.lowSample", { defaultValue: "(low sample)" })}
+                </span>
               )}
             </TableCell>
             <TableCell className="text-right tabular-nums">{slice.turn_count.toLocaleString()}</TableCell>
@@ -264,8 +284,10 @@ const CostComparison: React.FC<{
           <Tooltip>
             <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help" />} />
             <TooltipContent>
-              Each arm is priced as its completion plus its own routing classifier call, measured on the same judged
-              turns; the judge&apos;s cost is excluded from both arms
+              {t("costOptimization.shadowEvalSection.costComparisonHint", {
+                defaultValue:
+                  "Each arm is priced as its completion plus its own routing classifier call, measured on the same judged turns; the judge's cost is excluded from both arms",
+              })}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -273,11 +295,22 @@ const CostComparison: React.FC<{
       <p
         className={`text-3xl font-semibold ${savingsPct != null && savingsPct > 0 ? "text-success" : "text-foreground"}`}
       >
-        {savingsPct != null ? `${savingsPct > 0 ? "-" : "+"}${Math.abs(savingsPct).toFixed(1)}%` : "n/a"}
+        {savingsPct != null
+          ? `${savingsPct > 0 ? "-" : "+"}${Math.abs(savingsPct).toFixed(1)}%`
+          : t("costOptimization.shadowEvalSection.notApplicable", { defaultValue: "n/a" })}
       </p>
       <p className="text-xs text-muted-foreground">
-        {usd(routerSpend)} vs {usd(otherSpend)} on the same judged turns
-        {cacheHits > 0 ? `; ${cacheHits.toLocaleString()} cache-served turns excluded` : ""}
+        {t("costOptimization.shadowEvalSection.costOnSameTurns", {
+          defaultValue: "{{router}} vs {{other}} on the same judged turns",
+          router: usd(routerSpend),
+          other: usd(otherSpend),
+        })}
+        {cacheHits > 0
+          ? t("costOptimization.shadowEvalSection.cacheServedExcluded", {
+              defaultValue: "; {{turns}} cache-served turns excluded",
+              turns: cacheHits.toLocaleString(),
+            })
+          : ""}
       </p>
     </div>
   );
@@ -365,7 +398,9 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
               <TableCell className="font-medium text-foreground">
                 {shadowedTargetLabel(target)}
                 {target.target_type !== "key" && (
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">{target.target_type}</span>
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {targetTypeLabel(target.target_type, t)}
+                  </span>
                 )}
               </TableCell>
               <TableCell>
@@ -374,7 +409,11 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
               <TableCell className="text-right tabular-nums">
                 {target.max_budget != null
                   ? `${usd(target.spend ?? 0)} / ${usd(target.max_budget)}`
-                  : `${(target.attempt_count ?? slice?.turn_count ?? 0).toLocaleString()} / ${target.max_turns.toLocaleString()} turns`}
+                  : t("costOptimization.shadowEvalSection.targetTurnsUsed", {
+                      defaultValue: "{{used}} / {{total}} turns",
+                      used: (target.attempt_count ?? slice?.turn_count ?? 0).toLocaleString(),
+                      total: target.max_turns.toLocaleString(),
+                    })}
               </TableCell>
               {slice ? (
                 <>
@@ -398,11 +437,20 @@ const TargetTable: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
   );
 };
 
-const emptyResultsText = (job: ShadowEvalJob, resultsError: boolean): string => {
-  if (resultsError) return "Results could not be loaded. Retrying.";
-  if (isActive(job)) return "Collecting verdicts. Results appear as sampled requests are judged.";
-  if (job.judged_count === 0) return "No verdicts were recorded for this job.";
-  return "Loading results...";
+const emptyResultsText = (job: ShadowEvalJob, resultsError: boolean, t: TFunction): string => {
+  if (resultsError)
+    return t("costOptimization.shadowEvalSection.resultsLoadFailed", {
+      defaultValue: "Results could not be loaded. Retrying.",
+    });
+  if (isActive(job))
+    return t("costOptimization.shadowEvalSection.collectingVerdicts", {
+      defaultValue: "Collecting verdicts. Results appear as sampled requests are judged.",
+    });
+  if (job.judged_count === 0)
+    return t("costOptimization.shadowEvalSection.noVerdictsRecorded", {
+      defaultValue: "No verdicts were recorded for this job.",
+    });
+  return t("costOptimization.shadowEvalSection.loadingResults", { defaultValue: "Loading results..." });
 };
 
 const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({ job, resultsError = false }) => {
@@ -418,7 +466,7 @@ const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({
       )}
       {/* results == null re-stated for TS narrowing; hasVerdicts alone cannot narrow it */}
       {!hasVerdicts || results == null ? (
-        <p className="px-6 py-8 text-center text-sm text-muted-foreground">{emptyResultsText(job, resultsError)}</p>
+        <p className="px-6 py-8 text-center text-sm text-muted-foreground">{emptyResultsText(job, resultsError, t)}</p>
       ) : (
         <>
           <div className="flex flex-wrap border-b">
@@ -436,7 +484,10 @@ const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({
                 {pct(routerMatchedOrBeatPct(job.direction, results))}
               </p>
               <p className="text-xs text-muted-foreground">
-                of {(job.judged_count ?? 0).toLocaleString()} judged responses
+                {t("costOptimization.shadowEvalSection.judgedResponses", {
+                  defaultValue: "of {{judged}} judged responses",
+                  judged: (job.judged_count ?? 0).toLocaleString(),
+                })}
               </p>
             </div>
             <CostComparison direction={job.direction} results={results} />
@@ -488,8 +539,9 @@ const JobResults: React.FC<{
   resultsError?: boolean;
   readOnly?: boolean;
 }> = ({ job, onStop, stopPending, resultsError = false, readOnly = false }) => {
+  const { t } = useTranslation();
   const active = isActive(job);
-  const remaining = endsIn(job.ends_at);
+  const remaining = endsIn(job.ends_at, t);
   return (
     <Card className="overflow-hidden py-0">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-6 py-4">
@@ -500,22 +552,45 @@ const JobResults: React.FC<{
               <JobHeadline job={job} />
             </p>
             <p className="text-xs text-muted-foreground">
-              {(job.judged_count ?? 0).toLocaleString()} turns judged · {(job.error_count ?? 0).toLocaleString()}{" "}
-              errored · {usd(totalSpend(job))}
-              {totalBudget(job) !== null ? ` of ${usd(totalBudget(job) ?? 0)}` : ""} eval spend
-              {active && remaining ? ` · ${remaining}` : ""}
+              {totalBudget(job) !== null
+                ? t("costOptimization.shadowEvalSection.jobSpendWithBudget", {
+                    defaultValue: "{{judged}} turns judged · {{errored}} errored · {{spend}} of {{budget}} eval spend",
+                    judged: (job.judged_count ?? 0).toLocaleString(),
+                    errored: (job.error_count ?? 0).toLocaleString(),
+                    spend: usd(totalSpend(job)),
+                    budget: usd(totalBudget(job) ?? 0),
+                  })
+                : t("costOptimization.shadowEvalSection.jobSpend", {
+                    defaultValue: "{{judged}} turns judged · {{errored}} errored · {{spend}} eval spend",
+                    judged: (job.judged_count ?? 0).toLocaleString(),
+                    errored: (job.error_count ?? 0).toLocaleString(),
+                    spend: usd(totalSpend(job)),
+                  })}
+              {active && remaining
+                ? ` ${t("costOptimization.shadowEvalSection.remainingSuffix", {
+                    defaultValue: "· {{remaining}}",
+                    remaining,
+                  })}`
+                : ""}
             </p>
           </div>
         </div>
         {active && !readOnly && (
           <Button variant="outline" size="sm" onClick={onStop} disabled={stopPending}>
-            {stopPending ? "Stopping..." : "Stop"}
+            {stopPending
+              ? t("costOptimization.shadowEvalSection.stopping", { defaultValue: "Stopping..." })
+              : t("toolPolicies.stop", { defaultValue: "Stop" })}
           </Button>
         )}
       </div>
       {(job.error_count ?? 0) > 0 && job.last_error != null && (
         <p className="border-b bg-destructive/10 px-6 py-2 text-xs text-destructive">
-          Last failure: <span className="font-mono">{job.last_error}</span>
+          <Trans
+            i18nKey="costOptimization.shadowEvalSection.lastFailure"
+            defaults="Last failure: <0>{{error}}</0>"
+            values={{ error: job.last_error }}
+            components={[<span key="error" className="font-mono" />]}
+          />
         </p>
       )}
       <ResultsBody job={job} resultsError={resultsError} />
@@ -523,13 +598,16 @@ const JobResults: React.FC<{
   );
 };
 
-const previousSummary = (job: ShadowEvalJob): string => {
+const previousSummary = (job: ShadowEvalJob, t: TFunction): string => {
   const results = job.results;
   if (results) return pct(routerMatchedOrBeatPct(job.direction, results));
-  return job.judged_count === 0 ? "no verdicts" : "view results";
+  return job.judged_count === 0
+    ? t("costOptimization.shadowEvalSection.noVerdicts", { defaultValue: "no verdicts" })
+    : t("costOptimization.shadowEvalSection.viewResults", { defaultValue: "view results" });
 };
 
 const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const { data: detail, isError } = useShadowEvalJob(expanded ? job.job_id : null);
   const shown = detail ?? job;
@@ -549,12 +627,17 @@ const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
             </p>
             <p className="text-xs text-muted-foreground">
               {shown.judged_count != null &&
-                `${shown.judged_count.toLocaleString()} judged · ${(shown.error_count ?? 0).toLocaleString()} errored · ${usd(totalSpend(shown))} eval spend · `}
+                `${t("costOptimization.shadowEvalSection.previousJobSummary", {
+                  defaultValue: "{{judged}} judged · {{errored}} errored · {{spend}} eval spend ·",
+                  judged: shown.judged_count.toLocaleString(),
+                  errored: (shown.error_count ?? 0).toLocaleString(),
+                  spend: usd(totalSpend(shown)),
+                })} `}
               {new Date(shown.created_at).toLocaleDateString()}
             </p>
           </div>
         </div>
-        <span className="text-sm font-medium text-foreground">{previousSummary(shown)}</span>
+        <span className="text-sm font-medium text-foreground">{previousSummary(shown, t)}</span>
       </button>
       {expanded && (
         <div className="border-t">
@@ -566,6 +649,7 @@ const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
 };
 
 const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   if (jobs.length === 0) return null;
   return (
@@ -576,8 +660,17 @@ const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) =>
         onClick={() => setOpen((prev) => !prev)}
         className="flex w-full items-center justify-between gap-3 px-6 py-3 text-left hover:bg-muted/50"
       >
-        <span className="text-sm font-medium text-foreground">Previous evaluations ({jobs.length})</span>
-        <span className="text-xs text-muted-foreground">{open ? "Hide" : "Show"}</span>
+        <span className="text-sm font-medium text-foreground">
+          {t("costOptimization.shadowEvalSection.previousEvaluations", {
+            defaultValue: "Previous evaluations ({{evaluations}})",
+            evaluations: jobs.length,
+          })}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {open
+            ? t("addModel.routerConfigBuilder.hideButton", { defaultValue: "Hide" })
+            : t("addModel.routerConfigBuilder.showButton", { defaultValue: "Show" })}
+        </span>
       </button>
       {open && (
         <div className="border-t">
@@ -625,17 +718,26 @@ const ShadowEvalSection: React.FC = () => {
           {t("costOptimization.shadowEvalSection.title", { defaultValue: "Shadow eval" })}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Blind-judge the auto-router on the real traffic of a key, team, or user (teams and users cover
-          JWT-authenticated traffic): against the models they use today before switching, or against a fixed baseline
-          after they have switched.
+          {t("costOptimization.shadowEvalSection.description", {
+            defaultValue:
+              "Blind-judge the auto-router on the real traffic of a key, team, or user (teams and users cover JWT-authenticated traffic): against the models they use today before switching, or against a fixed baseline after they have switched.",
+          })}
         </p>
       </div>
 
       {error != null && (
-        <p className="text-sm text-destructive">Existing evaluations could not be loaded. Refresh the page to retry.</p>
+        <p className="text-sm text-destructive">
+          {t("costOptimization.shadowEvalSection.existingJobsLoadFailed", {
+            defaultValue: "Existing evaluations could not be loaded. Refresh the page to retry.",
+          })}
+        </p>
       )}
 
-      {isPending && error == null && <p className="text-sm text-muted-foreground">Loading evaluations...</p>}
+      {isPending && error == null && (
+        <p className="text-sm text-muted-foreground">
+          {t("costOptimization.shadowEvalSection.loadingEvaluations", { defaultValue: "Loading evaluations..." })}
+        </p>
+      )}
 
       {showcased.map((job) => (
         <JobCard key={job.job_id} job={job} readOnly={isViewOnly} />

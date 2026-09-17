@@ -104,8 +104,10 @@ const TierTurnsChart: React.FC<TierTurnsChartProps> = ({ view, autoRouters }) =>
       <CardHeader>
         <CardTitle>{t("costOptimization.tierTurnsChart.routingByTier", { defaultValue: "Routing by tier" })}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted
-          here, so this can total less than the router&apos;s turns.
+          {t("costOptimization.tierTurnsChart.description", {
+            defaultValue:
+              "Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted here, so this can total less than the router's turns.",
+          })}
         </p>
       </CardHeader>
       <CardContent>

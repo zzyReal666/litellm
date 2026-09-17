@@ -40,6 +40,7 @@ export interface BucketRow {
   label: string;
   labelKey: string;
   sublabel: string;
+  sublabelKey: string;
   turns: number;
   sharePct: number;
   hitRatePct: number;
@@ -59,6 +60,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
       label: "Same model",
       labelKey: "costOptimization.autoRouterBenchmarks.bucketSameModel",
       sublabel: "previous turn → same tier",
+      sublabelKey: "costOptimization.autoRouterBenchmarks.bucketSameModelSublabel",
       turns: cache.same_model.turns,
       sharePct: sharePctOf(cache.same_model.turns, total),
       hitRatePct: cache.same_model.hit_rate_pct,
@@ -69,6 +71,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
       label: "First visit",
       labelKey: "costOptimization.autoRouterBenchmarks.bucketFirstVisit",
       sublabel: "previous turn → a tier not used yet",
+      sublabelKey: "costOptimization.autoRouterBenchmarks.bucketFirstVisitSublabel",
       turns: cache.first_visit.turns,
       sharePct: sharePctOf(cache.first_visit.turns, total),
       hitRatePct: cache.first_visit.hit_rate_pct,
@@ -79,6 +82,7 @@ export const bucketRows = (cache: AutoRouterCacheStats): BucketRow[] => {
       label: "Return to tier",
       labelKey: "costOptimization.autoRouterBenchmarks.bucketReturnToTier",
       sublabel: "previous turn → a tier used earlier",
+      sublabelKey: "costOptimization.autoRouterBenchmarks.bucketReturnToTierSublabel",
       turns: cache.return_to_tier.turns,
       sharePct: sharePctOf(cache.return_to_tier.turns, total),
       hitRatePct: cache.return_to_tier.hit_rate_pct,

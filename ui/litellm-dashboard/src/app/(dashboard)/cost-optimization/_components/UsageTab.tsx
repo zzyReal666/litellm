@@ -102,14 +102,30 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
   // that actually saved are plotted; the range total keeps the signed truth.
   const byDriver = useMemo(
     () =>
-      SAVINGS_DRIVERS.map(({ name, color, of }) => ({
-        driver: name,
+      SAVINGS_DRIVERS.map(({ name, color, labelKey, of }) => ({
+        driver: t(labelKey, { defaultValue: name }),
         color,
         usd: sumOverDays(results, of),
       })).filter((d) => d.usd > 0),
-    [results],
+    [results, t],
   );
   const plottedDriverTotal = useMemo(() => byDriver.reduce((sum, d) => sum + d.usd, 0), [byDriver]);
+
+  // The charts name each series from its category key, so the datum keys have to carry
+  // the translated driver name rather than the driver's English identifier.
+  const driverLabels = useMemo(
+    () => Object.fromEntries(SAVINGS_DRIVERS.map(({ name, labelKey }) => [name, t(labelKey, { defaultValue: name })])),
+    [t],
+  );
+  const seriesLabels = useMemo(() => SAVINGS_SERIES.map((name) => driverLabels[name]), [driverLabels]);
+  const localizedSeries = useMemo(
+    () =>
+      overTime.map((point) => ({
+        date: point.date,
+        ...Object.fromEntries(SAVINGS_DRIVERS.map(({ name }) => [driverLabels[name], point[name]])),
+      })),
+    [overTime, driverLabels],
+  );
 
   const topTools = useMemo(() => topToolsBySpend(toolSpend?.by_tool ?? []), [toolSpend]);
   const topToolNames = useMemo(() => topTools.map((t) => t.tool_name), [topTools]);
@@ -148,7 +164,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
             <CardTitle>{t("templates.keyInfoView.tabSavings", { defaultValue: "Savings" })}</CardTitle>
             <CardDescription>{savingsSubtitle}</CardDescription>
             <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-              <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
+              <CustomLegend categories={seriesLabels} colors={SAVINGS_COLORS} />
               <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
                 <TabsList>
                   <TabsTrigger value="cumulative">
@@ -162,9 +178,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
           <CardContent>
             {accumulation === "cumulative" ? (
               <AreaChart
-                data={overTime}
+                data={localizedSeries}
                 index="date"
-                categories={SAVINGS_SERIES}
+                categories={seriesLabels}
                 colors={SAVINGS_COLORS}
                 valueFormatter={usd}
                 showLegend={false}
@@ -175,9 +191,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
               // for its cold cache, and stacking would draw that segment below the axis
               // while the remaining bar still read as the day's total
               <BarChart
-                data={overTime}
+                data={localizedSeries}
                 index="date"
-                categories={SAVINGS_SERIES}
+                categories={seriesLabels}
                 colors={SAVINGS_COLORS}
                 valueFormatter={usd}
                 showLegend={false}
@@ -211,9 +227,10 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
           <CardHeader>
             <CardTitle>{t("costOptimization.usageTab.spendByTool", { defaultValue: "Spend by tool" })}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it
-              does not count. A request that invoked multiple tools counts its full spend toward each, so this
-              attributes rather than partitions spend.
+              {t("costOptimization.usageTab.spendByToolDescription", {
+                defaultValue:
+                  "Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it does not count. A request that invoked multiple tools counts its full spend toward each, so this attributes rather than partitions spend.",
+              })}
             </p>
           </CardHeader>
           <CardContent>

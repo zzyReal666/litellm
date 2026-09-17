@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type { TFunction } from "i18next";
 import { Trans, useTranslation } from "react-i18next";
 import { CircleHelp } from "lucide-react";
 import { z } from "zod/v4";
@@ -27,13 +28,18 @@ interface PromptCompressionTabProps {
   accessToken: string | null;
 }
 
-const compressionSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  apiBase: z.string().min(1, "API base is required"),
-  defaultOn: z.boolean(),
-});
+const compressionSchema = (t: TFunction) =>
+  z.object({
+    name: z
+      .string()
+      .min(1, t("costOptimization.promptCompressionTab.nameRequired", { defaultValue: "Name is required" })),
+    apiBase: z
+      .string()
+      .min(1, t("costOptimization.promptCompressionTab.apiBaseRequired", { defaultValue: "API base is required" })),
+    defaultOn: z.boolean(),
+  });
 
-type CompressionFormValues = z.infer<typeof compressionSchema>;
+type CompressionFormValues = z.infer<ReturnType<typeof compressionSchema>>;
 
 const EMPTY_VALUES: CompressionFormValues = {
   name: "",
@@ -53,7 +59,10 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 
 const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken }) => {
   const { t } = useTranslation();
-  const form = useZodForm(compressionSchema, { defaultValues: EMPTY_VALUES });
+  const form = useZodForm(
+    useMemo(() => compressionSchema(t), [t]),
+    { defaultValues: EMPTY_VALUES },
+  );
   const [guardrails, setGuardrails] = useState<GuardrailListItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -135,10 +144,15 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
               }}
             />
           </p>
-          {isLoading && <p className="text-sm text-muted-foreground">Loading...</p>}
+          {isLoading && (
+            <p className="text-sm text-muted-foreground">{t("common.loading", { defaultValue: "Loading..." })}</p>
+          )}
           {!isLoading && guardrails.length === 0 && (
             <p className="text-sm text-muted-foreground">
-              No prompt compression guardrails configured yet. Add one below to start saving on input tokens
+              {t("costOptimization.promptCompressionTab.noGuardrails", {
+                defaultValue:
+                  "No prompt compression guardrails configured yet. Add one below to start saving on input tokens",
+              })}
             </p>
           )}
           {!isLoading && guardrails.length > 0 && (
@@ -156,7 +170,9 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
-                    {guardrail.litellm_params?.default_on ? "Always on" : "Opt-in"}
+                    {guardrail.litellm_params?.default_on
+                      ? t("costOptimization.promptCompressionTab.alwaysOn", { defaultValue: "Always on" })
+                      : t("costOptimization.promptCompressionTab.optIn", { defaultValue: "Opt-in" })}
                   </span>
                 </li>
               ))}
@@ -188,8 +204,11 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                   control={form.control}
                   name="apiBase"
                   label={labelWithHint(
-                    "Headroom API base",
-                    "Base URL of your Headroom compression service (LiteLLM calls its /v1/compress endpoint)",
+                    t("costOptimization.promptCompressionTab.apiBaseLabel", { defaultValue: "Headroom API base" }),
+                    t("costOptimization.promptCompressionTab.apiBaseHint", {
+                      defaultValue:
+                        "Base URL of your Headroom compression service (LiteLLM calls its /v1/compress endpoint)",
+                    }),
                   )}
                   description={t("costOptimization.promptCompressionTab.apiBaseDescription", {
                     defaultValue: "The URL where your Headroom compression service is hosted",
@@ -236,7 +255,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
               <div className="flex justify-end">
                 <Button type="submit" disabled={isSaving}>
                   {isSaving && <UiLoadingSpinner className="size-4" />}
-                  Add guardrail
+                  {t("costOptimization.promptCompressionTab.addGuardrail", { defaultValue: "Add guardrail" })}
                 </Button>
               </div>
             </form>
