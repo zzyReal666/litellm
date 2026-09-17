@@ -9147,7 +9147,6 @@
       "tabAll": "全部",
       "tabConnected": "已连接",
       "tabConnectedCount": "已连接 ({{count}})",
-      "noServersConfigured": "未配置 MCP 服务器。请在工具 → MCP 服务器中添加。",
       "noServersConnected": "暂无已连接的服务器。",
       "noServersMatch": "没有服务器匹配您的搜索。",
       "couldNotLoadTools": "无法加载 {{name}} 的工具",
@@ -9156,7 +9155,8 @@
       "notSupportedOnConnection": "此连接不支持",
       "noServersForConnection": "此连接暂时没有可用的 MCP 服务器。请联系管理员为您的用户或团队授予访问权限。",
       "connectModeHint": "点击服务器查看其工具并连接",
-      "browsePitchShort": "浏览工具，认证一次即可在对话中使用"
+      "browsePitchShort": "浏览工具，认证一次即可在对话中使用",
+      "noServersConfiguredAscii": "未配置 MCP 服务器。请在 工具 -> MCP 服务器 中添加。"
     },
     "mCPConnectPicker": {
       "noServersConfigured": "未配置 MCP 服务器",
@@ -11228,5 +11228,10 @@
       "vertexSearchNote": "注意：Google Cloud 已在其控制台将其更名为“Agent Search”，以下步骤仍然适用。",
       "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
     }
+  },
+  "keyScope": {
+    "management": "管理",
+    "readOnly": "只读",
+    "scim": "SCIM"
   }
 }
