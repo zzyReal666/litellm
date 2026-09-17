@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface GuardrailConfigProps {
   guardrailName: string;
@@ -16,7 +17,8 @@ interface GuardrailConfigProps {
 const versions = [
   {
     id: "v3",
-    label: "v3 (current)",
+    label: "v3",
+    isCurrent: true,
     date: "2026-02-18",
     author: "admin@company.com",
     changes: "Adjusted sensitivity for medical terms",
@@ -26,28 +28,33 @@ const versions = [
 ];
 
 const ACTION_ITEMS = [
-  { value: "block", label: "Block Request" },
-  { value: "flag", label: "Flag for Review" },
-  { value: "log", label: "Log Only" },
-  { value: "fallback", label: "Use Fallback Response" },
+  { value: "block", label: "Block Request", labelKey: "guardrailsMonitor.guardrailConfig.actionBlock" },
+  { value: "flag", label: "Flag for Review", labelKey: "guardrailsMonitor.guardrailConfig.actionFlag" },
+  { value: "log", label: "Log Only", labelKey: "guardrailsMonitor.guardrailConfig.actionLog" },
+  { value: "fallback", label: "Use Fallback Response", labelKey: "guardrailsMonitor.guardrailConfig.actionFallback" },
 ];
 
 const PROVIDER_ITEMS = [
-  { value: "bedrock", label: "AWS Bedrock Guardrails" },
-  { value: "google", label: "Google Cloud AI Safety" },
-  { value: "litellm", label: "LiteLLM Built-in" },
-  { value: "custom", label: "Custom Code" },
+  { value: "bedrock", label: "AWS Bedrock Guardrails", labelKey: "guardrailsMonitor.guardrailConfig.providerBedrock" },
+  { value: "google", label: "Google Cloud AI Safety", labelKey: "guardrailsMonitor.guardrailConfig.providerGoogle" },
+  { value: "litellm", label: "LiteLLM Built-in", labelKey: "guardrailsMonitor.guardrailConfig.providerLiteLLM" },
+  { value: "custom", label: "Custom Code", labelKey: "guardrailsMonitor.guardrailConfig.providerCustom" },
 ];
 
 const GUARDRAIL_TYPE_ITEMS = [
-  { value: "Content Safety", label: "Content Safety" },
-  { value: "PII", label: "PII Detection" },
-  { value: "Topic", label: "Topic Restriction" },
-  { value: "prompt_injection", label: "Prompt Injection" },
-  { value: "custom", label: "Custom" },
+  { value: "Content Safety", label: "Content Safety", labelKey: "guardrailsMonitor.guardrailConfig.typeContentSafety" },
+  { value: "PII", label: "PII Detection", labelKey: "guardrailsMonitor.guardrailConfig.typePII" },
+  { value: "Topic", label: "Topic Restriction", labelKey: "guardrailsMonitor.guardrailConfig.typeTopic" },
+  {
+    value: "prompt_injection",
+    label: "Prompt Injection",
+    labelKey: "guardrailsMonitor.guardrailConfig.typePromptInjection",
+  },
+  { value: "custom", label: "Custom", labelKey: "guardrailsMonitor.guardrailConfig.typeCustom" },
 ];
 
 export function GuardrailConfig({ guardrailName, guardrailType, provider }: GuardrailConfigProps) {
+  const { t } = useTranslation();
   const [action, setAction] = useState("block");
   const [enabled, setEnabled] = useState(true);
   const [customCode, setCustomCode] = useState("");
@@ -56,6 +63,12 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
   const [version, setVersion] = useState("v3");
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const enabledToggleId = useId();
+
+  const localizedLabel = (item: { label: string; labelKey: string }) => t(item.labelKey, { defaultValue: item.label });
+  const versionLabel = (v: (typeof versions)[number]) =>
+    v.isCurrent
+      ? `${v.label} (${t("guardrailsMonitor.guardrailConfig.current", { defaultValue: "current" })})`
+      : v.label;
 
   const handleRerun = () => {
     setRerunStatus("running");
@@ -71,9 +84,11 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
       <div className="bg-card border border-border rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-foreground">Version:</span>
+            <span className="text-sm font-medium text-foreground">
+              {t("guardrailsMonitor.guardrailConfig.versionLabel", { defaultValue: "Version:" })}
+            </span>
             <Select
-              items={versions.map((v) => ({ value: v.id, label: v.label }))}
+              items={versions.map((v) => ({ value: v.id, label: versionLabel(v) }))}
               value={version}
               onValueChange={(value: string | null) => value && setVersion(value)}
             >
@@ -83,23 +98,28 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
               <SelectContent>
                 {versions.map((v) => (
                   <SelectItem key={v.id} value={v.id}>
-                    {v.label}
+                    {versionLabel(v)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Button variant="link" size="sm" onClick={() => setShowVersionHistory(!showVersionHistory)}>
-              {showVersionHistory ? "Hide history" : "View history"}
+              {showVersionHistory
+                ? t("guardrailsMonitor.guardrailConfig.hideHistory", { defaultValue: "Hide history" })
+                : t("guardrailsMonitor.guardrailConfig.viewHistory", { defaultValue: "View history" })}
             </Button>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline">
               <Undo2 />
-              Revert
+              {t("guardrailsMonitor.guardrailConfig.revert", { defaultValue: "Revert" })}
             </Button>
             <Button>
               <Save />
-              Save as v{parseInt(version.replace("v", ""), 10) + 1}
+              {t("guardrailsMonitor.guardrailConfig.saveAsVersion", {
+                version: parseInt(version.replace("v", ""), 10) + 1,
+                defaultValue: "Save as v{{version}}",
+              })}
             </Button>
           </div>
         </div>
@@ -133,14 +153,23 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
 
       {/* Parameters */}
       <div className="bg-card border border-border rounded-lg p-6">
-        <h3 className="text-base font-semibold text-foreground mb-1">Parameters</h3>
-        <p className="text-xs text-muted-foreground mb-5">Configure {guardrailName} behavior</p>
+        <h3 className="text-base font-semibold text-foreground mb-1">
+          {t("guardrailsMonitor.guardrailConfig.parametersTitle", { defaultValue: "Parameters" })}
+        </h3>
+        <p className="text-xs text-muted-foreground mb-5">
+          {t("guardrailsMonitor.guardrailConfig.parametersDesc", {
+            name: guardrailName,
+            defaultValue: "Configure {{name}} behavior",
+          })}
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Action on Failure</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t("guardrailsMonitor.guardrailConfig.actionOnFailure", { defaultValue: "Action on Failure" })}
+            </label>
             <Select
-              items={ACTION_ITEMS}
+              items={ACTION_ITEMS.map((item) => ({ value: item.value, label: localizedLabel(item) }))}
               value={action}
               onValueChange={(value: string | null) => value && setAction(value)}
             >
@@ -150,7 +179,7 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
               <SelectContent>
                 {ACTION_ITEMS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
-                    {item.label}
+                    {localizedLabel(item)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -158,15 +187,20 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Provider</label>
-            <Select items={PROVIDER_ITEMS} defaultValue={provider}>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t("guardrailsMonitor.guardrailConfig.providerLabel", { defaultValue: "Provider" })}
+            </label>
+            <Select
+              items={PROVIDER_ITEMS.map((item) => ({ value: item.value, label: localizedLabel(item) }))}
+              defaultValue={provider}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {PROVIDER_ITEMS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
-                    {item.label}
+                    {localizedLabel(item)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -174,15 +208,20 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Guardrail Type</label>
-            <Select items={GUARDRAIL_TYPE_ITEMS} defaultValue={guardrailType}>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t("guardrailsMonitor.guardrailConfig.guardrailTypeLabel", { defaultValue: "Guardrail Type" })}
+            </label>
+            <Select
+              items={GUARDRAIL_TYPE_ITEMS.map((item) => ({ value: item.value, label: localizedLabel(item) }))}
+              defaultValue={guardrailType}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {GUARDRAIL_TYPE_ITEMS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
-                    {item.label}
+                    {localizedLabel(item)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -190,14 +229,18 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-foreground mb-1.5">Categories (comma-separated)</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t("guardrailsMonitor.guardrailConfig.categoriesLabel", { defaultValue: "Categories (comma-separated)" })}
+            </label>
             <Input defaultValue="violence, hate_speech, sexual_content, self_harm, illegal_activity" />
           </div>
 
           <div className="md:col-span-2 flex items-center gap-3">
             <Switch id={enabledToggleId} checked={enabled} onCheckedChange={setEnabled} />
             <Label htmlFor={enabledToggleId} className="font-normal text-foreground">
-              Guardrail enabled in production
+              {t("guardrailsMonitor.guardrailConfig.enabledInProduction", {
+                defaultValue: "Guardrail enabled in production",
+              })}
             </Label>
           </div>
         </div>
@@ -209,13 +252,21 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
           <div>
             <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
               <Code className="size-4 text-muted-foreground" />
-              Custom Code Override
+              {t("guardrailsMonitor.guardrailConfig.customCodeTitle", { defaultValue: "Custom Code Override" })}
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Replace the built-in guardrail with custom evaluation code
+              {t("guardrailsMonitor.guardrailConfig.customCodeDesc", {
+                defaultValue: "Replace the built-in guardrail with custom evaluation code",
+              })}
             </p>
           </div>
-          <Switch aria-label="Custom Code Override" checked={useCustomCode} onCheckedChange={setUseCustomCode} />
+          <Switch
+            aria-label={t("guardrailsMonitor.guardrailConfig.customCodeTitle", {
+              defaultValue: "Custom Code Override",
+            })}
+            checked={useCustomCode}
+            onCheckedChange={setUseCustomCode}
+          />
         </div>
 
         {useCustomCode && (
@@ -236,24 +287,37 @@ export function GuardrailConfig({ guardrailName, guardrailType, provider }: Guar
 
       {/* Re-run on Failing Logs */}
       <div className="bg-card border border-border rounded-lg p-6">
-        <h3 className="text-base font-semibold text-foreground mb-1">Test Configuration</h3>
+        <h3 className="text-base font-semibold text-foreground mb-1">
+          {t("guardrailsMonitor.guardrailConfig.testConfigTitle", { defaultValue: "Test Configuration" })}
+        </h3>
         <p className="text-xs text-muted-foreground mb-4">
-          Re-run this guardrail on recent failing logs to validate your changes
+          {t("guardrailsMonitor.guardrailConfig.testConfigDesc", {
+            defaultValue: "Re-run this guardrail on recent failing logs to validate your changes",
+          })}
         </p>
 
         <div className="flex items-center gap-3">
           <Button disabled={rerunStatus === "running"} aria-busy={rerunStatus === "running"} onClick={handleRerun}>
             {rerunStatus === "running" ? null : <CirclePlay />}
-            {rerunStatus === "running" ? "Running on 10 samples..." : "Re-run on failing logs"}
+            {rerunStatus === "running"
+              ? t("guardrailsMonitor.guardrailConfig.runningOnSamples", { defaultValue: "Running on 10 samples..." })
+              : t("guardrailsMonitor.guardrailConfig.rerunOnFailingLogs", { defaultValue: "Re-run on failing logs" })}
           </Button>
 
           {rerunStatus === "success" && (
             <span className="text-sm text-success flex items-center gap-2">
-              <CircleCheck className="size-4" /> 7/10 would now pass with new config
+              <CircleCheck className="size-4" />
+              {t("guardrailsMonitor.guardrailConfig.rerunSuccess", {
+                defaultValue: "7/10 would now pass with new config",
+              })}
             </span>
           )}
 
-          {rerunStatus === "error" && <span className="text-sm text-destructive">Error running tests</span>}
+          {rerunStatus === "error" && (
+            <span className="text-sm text-destructive">
+              {t("guardrailsMonitor.guardrailConfig.rerunError", { defaultValue: "Error running tests" })}
+            </span>
+          )}
         </div>
       </div>
     </div>

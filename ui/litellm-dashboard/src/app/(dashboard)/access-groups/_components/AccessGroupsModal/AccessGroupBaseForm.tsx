@@ -2,6 +2,8 @@
 
 import { BotIcon, InfoIcon, LayersIcon, ServerIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { z } from "zod/v4";
 
 import { useAgents } from "@/app/(dashboard)/hooks/agents/useAgents";
@@ -14,15 +16,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 
-export const accessGroupFormSchema = z.object({
-  name: z.string().min(1, "Please enter the access group name"),
-  description: z.string(),
-  modelIds: z.array(z.string()),
-  mcpServerIds: z.array(z.string()),
-  agentIds: z.array(z.string()),
-});
+export const getAccessGroupFormSchema = (t: TFunction) =>
+  z.object({
+    name: z
+      .string()
+      .min(
+        1,
+        t("accessGroups.accessGroupBaseForm.nameRequired", { defaultValue: "Please enter the access group name" }),
+      ),
+    description: z.string(),
+    modelIds: z.array(z.string()),
+    mcpServerIds: z.array(z.string()),
+    agentIds: z.array(z.string()),
+  });
 
-export type AccessGroupFormValues = z.output<typeof accessGroupFormSchema>;
+export type AccessGroupFormValues = z.output<ReturnType<typeof getAccessGroupFormSchema>>;
 
 export const GENERAL_TAB = "general";
 export const MODELS_TAB = "models";
@@ -89,6 +97,7 @@ export function AccessGroupBaseForm({
   activeTab,
   onTabChange,
 }: AccessGroupBaseFormProps) {
+  const { t } = useTranslation();
   const { data: agentsData } = useAgents();
   const { data: mcpServersData } = useMCPServers();
 
@@ -106,52 +115,84 @@ export function AccessGroupBaseForm({
       <TabsList className="w-full">
         <TabsTrigger value={GENERAL_TAB}>
           <InfoIcon size={16} />
-          General Info
+          {t("accessGroups.accessGroupBaseForm.tabGeneralInfo", { defaultValue: "General Info" })}
         </TabsTrigger>
         <TabsTrigger value={MODELS_TAB}>
           <LayersIcon size={16} />
-          Models
+          {t("accessGroups.accessGroupBaseForm.tabModels", { defaultValue: "Models" })}
         </TabsTrigger>
         <TabsTrigger value={MCP_SERVERS_TAB}>
           <ServerIcon size={16} />
-          MCP Servers
+          {t("accessGroups.accessGroupBaseForm.tabMcpServers", { defaultValue: "MCP Servers" })}
         </TabsTrigger>
         <TabsTrigger value={AGENTS_TAB}>
           <BotIcon size={16} />
-          Agents
+          {t("accessGroups.accessGroupBaseForm.tabAgents", { defaultValue: "Agents" })}
         </TabsTrigger>
       </TabsList>
 
       <TabsContent value={GENERAL_TAB} className="pt-4">
         <FieldGroup>
-          <FormField control={form.control} name="name" label="Group Name">
+          <FormField
+            control={form.control}
+            name="name"
+            label={t("accessGroups.accessGroupBaseForm.labelGroupName", { defaultValue: "Group Name" })}
+          >
             {({ ref, ...field }) => (
-              <Input {...field} ref={ref} placeholder="e.g. Engineering Team" disabled={isNameDisabled} />
+              <Input
+                {...field}
+                ref={ref}
+                placeholder={t("accessGroups.accessGroupBaseForm.namePlaceholder", {
+                  defaultValue: "e.g. Engineering Team",
+                })}
+                disabled={isNameDisabled}
+              />
             )}
           </FormField>
-          <FormField control={form.control} name="description" label="Description">
+          <FormField
+            control={form.control}
+            name="description"
+            label={t("common.description", { defaultValue: "Description" })}
+          >
             {({ ref, ...field }) => (
-              <Textarea {...field} ref={ref} rows={4} placeholder="Describe the purpose of this access group..." />
+              <Textarea
+                {...field}
+                ref={ref}
+                rows={4}
+                placeholder={t("accessGroups.accessGroupBaseForm.descriptionPlaceholder", {
+                  defaultValue: "Describe the purpose of this access group...",
+                })}
+              />
             )}
           </FormField>
         </FieldGroup>
       </TabsContent>
 
       <TabsContent value={MODELS_TAB} className="pt-4">
-        <FormField control={form.control} name="modelIds" label="Allowed Models">
+        <FormField
+          control={form.control}
+          name="modelIds"
+          label={t("accessGroups.accessGroupBaseForm.labelAllowedModels", { defaultValue: "Allowed Models" })}
+        >
           {(field) => <ModelSelect context="global" value={field.value} onChange={field.onChange} />}
         </FormField>
       </TabsContent>
 
       <TabsContent value={MCP_SERVERS_TAB} className="pt-4">
-        <FormField control={form.control} name="mcpServerIds" label="Allowed MCP Servers">
+        <FormField
+          control={form.control}
+          name="mcpServerIds"
+          label={t("accessGroups.accessGroupBaseForm.labelAllowedMcpServers", { defaultValue: "Allowed MCP Servers" })}
+        >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <MultiSelect
               id={id}
               value={value}
               onChange={onChange}
               options={mcpServerOptions}
-              placeholder="Select MCP servers"
+              placeholder={t("accessGroups.accessGroupBaseForm.mcpServersPlaceholder", {
+                defaultValue: "Select MCP servers",
+              })}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
             />
@@ -160,14 +201,18 @@ export function AccessGroupBaseForm({
       </TabsContent>
 
       <TabsContent value={AGENTS_TAB} className="pt-4">
-        <FormField control={form.control} name="agentIds" label="Allowed Agents">
+        <FormField
+          control={form.control}
+          name="agentIds"
+          label={t("accessGroups.accessGroupBaseForm.labelAllowedAgents", { defaultValue: "Allowed Agents" })}
+        >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <MultiSelect
               id={id}
               value={value}
               onChange={onChange}
               options={agentOptions}
-              placeholder="Select agents"
+              placeholder={t("accessGroups.accessGroupBaseForm.agentsPlaceholder", { defaultValue: "Select agents" })}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
             />
