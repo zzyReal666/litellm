@@ -6940,7 +6940,8 @@
       "tierOriginCustom": "custom",
       "tierPosition": "Tier {{index}} of {{count}} · {{origin}}",
       "tierRequired": "The {{label}} tier is required",
-      "tierMappingTooltip": "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models."
+      "tierMappingTooltip": "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.",
+      "defaultModelHint": "Used when the tier the request lands in has no model, and when the classifier fails with \"Route to the default model\" selected."
     },
     "routerConfigBuilder": {
       "title": "Routes Configuration",
@@ -7190,7 +7191,9 @@
       "tierScoreBelow": ": Score < {{score}}",
       "tierScoreRange": ": Score {{from}} - {{to}}",
       "timeoutHint": "How long the classifier call has before it fails and the fallback below takes over.",
-      "timeoutLabel": "Timeout (ms)"
+      "timeoutLabel": "Timeout (ms)",
+      "contextWindowSizeHint": "Number of prior user turns (tool output and harness reminders excluded) sent to the classifier as context, so a referring follow-up like \"now do the same for the streaming path\" is classified against what it refers to. Set to 0 to send only the current message.",
+      "includeAssistantTurnsHint": "Let the classifier read the assistant's replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns."
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "Circuit breaker cooldown (seconds)",
@@ -7237,7 +7240,8 @@
       "routingDecisionLabel": "Routing decision",
       "routingDecisionTooltip": "Compression applied to the classifier's own call that picks a tier, separate from the model the request routes to.",
       "sameAsRouting": "Same as the routing decision",
-      "useDifferentCompression": "Use a different compression"
+      "useDifferentCompression": "Use a different compression",
+      "noneOption": "None (no compression)"
     },
     "contextWindowEscalation": {
       "bufferHint": "Fraction of a model's window the counted prompt must fit within, above 0 up to 1. Empty tracks the backend default of 0.95.",
@@ -7268,7 +7272,8 @@
     "escalationKeywords": {
       "emptyText": "Type to add a phrase",
       "title": "Escalation Keywords",
-      "tooltip": "Case-sensitive phrases a user can include in their message to force a bump to the next-higher complexity tier when they aren't happy with results. They can force a stronger model, but not choose which one."
+      "tooltip": "Case-sensitive phrases a user can include in their message to force a bump to the next-higher complexity tier when they aren't happy with results. They can force a stronger model, but not choose which one.",
+      "description": "Optional: when a user message contains one of these phrases, the request is bumped one tier higher than it would otherwise route to. Matching is case-sensitive, so \"LITELLM ESCALATE\" only fires on the exact, shouted form. Leave empty to disable."
     },
     "heuristicScoring": {
       "decreasingBoundariesWarning": "These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere.",
@@ -7300,7 +7305,8 @@
       "routeToTierLabel": "Route to tier",
       "ruleKeywordsLabel": "Keywords {{index}}",
       "title": "Keyword Tier Overrides",
-      "tooltip": "Match known terms and force the request straight to a chosen complexity tier, bypassing rule-based scoring."
+      "tooltip": "Match known terms and force the request straight to a chosen complexity tier, bypassing rule-based scoring.",
+      "description": "Optional: route requests containing specific keywords directly to a tier, e.g. route \"invoice, refund, billing\" to the medium tier."
     },
     "modalityRouting": {
       "pinOverrideHint": "Route an image turn to a capable model even when the session is pinned to one that cannot take images. The pin is kept, so the next text turn goes back to it. Needs image routing turned on.",
@@ -7350,7 +7356,9 @@
       "repeatThresholdHint": "How many identical or failing calls count as stuck. At least 2; lower reacts sooner and misfires more.",
       "repeatThresholdLabel": "Repeats before escalating",
       "windowHint": "How far back to look, in tool calls. Never below the repeat count, since that could never be reached.",
-      "windowLabel": "Recent calls examined"
+      "windowLabel": "Recent calls examined",
+      "blockedSession": "Set \"How often to classify\" to every request under Advanced: Classification Method to use this. Scoring once per session replays that model instead of classifying, so a stall never reaches the classifier.",
+      "blockedUserTurn": "Set \"How often to classify\" to every request under Advanced: Classification Method to use this. Scoring only new user messages skips the tool-call turns a stall shows up in."
     },
     "tierConfigIntro": {
       "displayNamesClassifierHint": " Your classifier model reads these names, so clearer ones can sharpen its choices.",

@@ -6940,7 +6940,8 @@
       "tierOriginCustom": "自定义",
       "tierPosition": "第 {{index}} 个层级，共 {{count}} 个 · {{origin}}",
       "tierRequired": "{{label}}层级为必填项",
-      "tierMappingTooltip": "为每个复杂度层级映射一个或多个模型。简单查询使用更便宜、更快的模型，复杂查询使用能力更强的模型。"
+      "tierMappingTooltip": "为每个复杂度层级映射一个或多个模型。简单查询使用更便宜、更快的模型，复杂查询使用能力更强的模型。",
+      "defaultModelHint": "在请求落入的层级没有模型时使用，以及在选择了「路由到默认模型」且分类器失败时使用。"
     },
     "routerConfigBuilder": {
       "title": "路由配置",
@@ -7190,7 +7191,9 @@
       "tierScoreBelow": "：评分 < {{score}}",
       "tierScoreRange": "：评分 {{from}} - {{to}}",
       "timeoutHint": "分类器调用在失败并由下方回退方案接管之前可用的时长。",
-      "timeoutLabel": "超时（毫秒）"
+      "timeoutLabel": "超时（毫秒）",
+      "contextWindowSizeHint": "发送给分类器作为上下文的先前用户轮次数量（不含工具输出和 harness 提醒），因此像「现在对流式路径也这样做」这类指代性追问会结合其所指的内容来分类。设为 0 则只发送当前消息。",
+      "includeAssistantTurnsHint": "让分类器读取助手的回复，这样由模型而非用户表达的难度也能保持可见：助手称之为复杂的计划，仅用「是」批准，也会按被批准的工作来分类。此时「上下文窗口大小」统计的是两种角色合计的最近 N 轮，而不是最近的 N 个用户轮次。"
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "熔断冷却时间（秒）",
@@ -7237,7 +7240,8 @@
       "routingDecisionLabel": "路由决策",
       "routingDecisionTooltip": "应用于分类器自身挑选层级那次调用的压缩，与请求所路由到的模型无关。",
       "sameAsRouting": "与路由决策相同",
-      "useDifferentCompression": "使用不同的压缩"
+      "useDifferentCompression": "使用不同的压缩",
+      "noneOption": "无（不压缩）"
     },
     "contextWindowEscalation": {
       "bufferHint": "计入的提示必须落在模型窗口内的比例，范围大于 0 至 1。留空则跟随后端默认的 0.95。",
@@ -7268,7 +7272,8 @@
     "escalationKeywords": {
       "emptyText": "输入以添加短语",
       "title": "升级关键词",
-      "tooltip": "用户可在消息中包含的区分大小写的短语，用于对结果不满意时强制提升到下一个更高的复杂度层级。它们可以强制使用更强的模型，但无法指定具体哪一个。"
+      "tooltip": "用户可在消息中包含的区分大小写的短语，用于对结果不满意时强制提升到下一个更高的复杂度层级。它们可以强制使用更强的模型，但无法指定具体哪一个。",
+      "description": "可选：当用户消息包含其中任一短语时，请求会比原本要路由到的层级再提升一个层级。匹配区分大小写，因此「LITELLM ESCALATE」只有完全一致的全大写形式才会触发。留空则禁用。"
     },
     "heuristicScoring": {
       "decreasingBoundariesWarning": "这些边界值在递减，因此它们之间的每个层级都无法到达，其流量会路由到别处。",
@@ -7300,7 +7305,8 @@
       "routeToTierLabel": "路由到层级",
       "ruleKeywordsLabel": "关键词 {{index}}",
       "title": "关键词层级覆盖",
-      "tooltip": "匹配已知术语并将请求直接强制到指定的复杂度层级，跳过基于规则的评分。"
+      "tooltip": "匹配已知术语并将请求直接强制到指定的复杂度层级，跳过基于规则的评分。",
+      "description": "可选：把包含特定关键词的请求直接路由到某个层级，例如把「invoice, refund, billing」路由到中等层级。"
     },
     "modalityRouting": {
       "pinOverrideHint": "当会话被固定在不支持图像的模型上时，仍把图像轮次路由到能处理图像的模型。固定关系会保留，因此下一轮文本请求仍回到原模型。需要开启图像路由。",
@@ -7350,7 +7356,9 @@
       "repeatThresholdHint": "多少次相同或失败的调用算作卡住。至少为 2；数值越低反应越快，也越容易误判。",
       "repeatThresholdLabel": "升级前的重复次数",
       "windowHint": "向上回溯多少次工具调用。不得低于重复次数，否则该值永远无法达到。",
-      "windowLabel": "检查的最近调用数"
+      "windowLabel": "检查的最近调用数",
+      "blockedSession": "请把「高级：分类方法」下的「分类频率」设为「每个请求」才能使用此功能。每个会话只评分一次会沿用该模型而不再分类，因此停滞永远不会到达分类器。",
+      "blockedUserTurn": "请把「高级：分类方法」下的「分类频率」设为「每个请求」才能使用此功能。只对新的用户消息评分会跳过停滞出现的工具调用轮次。"
     },
     "tierConfigIntro": {
       "displayNamesClassifierHint": " 您的分类器模型会读取这些名称，因此更清晰的名称可以提升其判断质量。",
