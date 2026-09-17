@@ -519,12 +519,17 @@
     },
     "budgetDurationDropdown": {
       "hourly": "每小时",
-      "neverResets": "永不重置"
+      "neverResets": "永不重置",
+      "daily": "每天",
+      "weekly": "每周",
+      "monthly": "每月"
     },
     "metadataKeyValueFields": {
       "keyPlaceholder": "键",
       "removePair": "删除键值对",
-      "valuePlaceholder": "值"
+      "valuePlaceholder": "值",
+      "missingKey": "键名为必填项",
+      "duplicateKey": "键名重复"
     },
     "passThroughRoutesSelector": {
       "notFound": "未找到透传路由"
@@ -8836,18 +8841,23 @@
       "unlimited": "无限制",
       "membersLabel": "成员",
       "noTeamAssigned": "未分配团队",
-      "id": "ID："
+      "id": "ID：",
+      "copyProjectId": "复制项目 ID",
+      "loadingTeam": "正在加载团队"
     },
     "projectKeysSection": {
       "title": "密钥",
       "filterPlaceholder": "按密钥名称筛选...",
-      "totalKeys": "共 {{count}} 个密钥"
+      "totalKeys": "共 {{count}} 个密钥",
+      "clearKeyFilter": "清除密钥筛选"
     },
     "projectKeysTable": {
       "colKeyName": "密钥名称",
       "colOwner": "所有者",
       "colLastActive": "最后活跃",
-      "noKeysFound": "未找到密钥"
+      "noKeysFound": "未找到密钥",
+      "emptyHint": "在该项目中创建的密钥会显示在这里。",
+      "loading": "正在加载密钥…"
     },
     "createProjectModal": {
       "title": "新建项目",
@@ -8895,7 +8905,13 @@
       "keyPlaceholder": "键",
       "missingValue": "缺少值",
       "valuePlaceholder": "值",
-      "addKeyValue": "添加键值对"
+      "addKeyValue": "添加键值对",
+      "inputTpmLabel": "输入 TPM 限制",
+      "inputTpmPlaceholder": "输入 TPM 限制",
+      "outputTpmLabel": "输出 TPM 限制",
+      "outputTpmPlaceholder": "输出 TPM 限制",
+      "removeModelLimit": "移除第 {{index}} 个模型限制",
+      "removeMetadataPair": "移除第 {{index}} 个元数据对"
     },
     "projectsPage": {
       "title": "项目",
@@ -8906,7 +8922,15 @@
       "colTeam": "团队",
       "colModels": "模型",
       "noModels": "无模型",
-      "statusBlocked": "已封锁"
+      "statusBlocked": "已封锁",
+      "clearSearch": "清除搜索"
+    },
+    "projectsTable": {
+      "noMatchingProjects": "没有匹配的项目",
+      "noProjects": "暂无项目",
+      "filteredHint": "请尝试其他搜索关键词。",
+      "emptyHint": "创建项目，在团队中管理密钥。",
+      "loading": "正在加载项目…"
     }
   },
   "guardrailsMonitor": {
@@ -9411,7 +9435,8 @@
       "connectionTestResultsTitle": "连接测试结果",
       "createSuccess": "搜索工具创建成功",
       "createError": "创建搜索工具时出错：{{error}}",
-      "testFillRequired": "请在测试前填写搜索提供商和 API 密钥"
+      "testFillRequired": "请在测试前填写搜索提供商和 API 密钥",
+      "noMatchingProviders": "没有匹配的搜索提供商"
     },
     "searchConnectionTest": {
       "testSuccessNotification": "连接测试成功！",
@@ -9453,13 +9478,16 @@
       "previousSearches": "历史搜索",
       "clearAll": "清除全部",
       "showLess": "收起",
-      "showMore": "展开"
+      "showMore": "展开",
+      "openInNewTab": "在新标签页中打开结果"
     },
     "searchToolView": {
       "backToAll": "返回所有搜索工具",
       "providerLabel": "提供商",
       "apiKeyLabel": "API 密钥",
-      "notSet": "未设置"
+      "notSet": "未设置",
+      "copyName": "复制搜索工具名称",
+      "copyId": "复制搜索工具 ID"
     },
     "searchTools": {
       "pageTitle": "搜索工具",
@@ -9483,6 +9511,20 @@
       "editDescriptionPlaceholder": "此搜索工具的描述",
       "updateSuccess": "搜索工具更新成功",
       "updateFailed": "更新搜索工具失败"
+    },
+    "searchToolTable": {
+      "emptyHint": "添加搜索工具，为您的模型启用联网搜索。",
+      "loading": "正在加载搜索工具…"
+    },
+    "searchToolTableColumns": {
+      "openActions": "打开搜索工具操作",
+      "editTool": "编辑搜索工具",
+      "deleteTool": "删除搜索工具",
+      "colSearchToolId": "搜索工具 ID",
+      "sourceConfig": "配置",
+      "sourceDb": "数据库",
+      "configEditHint": "配置文件中的搜索工具无法在仪表盘中编辑，请修改配置文件。",
+      "configDeleteHint": "配置文件中的搜索工具无法在仪表盘中删除，请修改配置文件。"
     }
   },
   "modelDashboard": {
@@ -11105,6 +11147,86 @@
     "teamsField": {
       "description": "新用户将加入这些团队，只能选择已存在的团队。",
       "title": "默认团队"
+    }
+  },
+  "vectorStores": {
+    "vectorStoreTable": {
+      "noVectorStores": "暂无向量存储",
+      "emptyHint": "连接向量存储即可启用检索增强生成。",
+      "loading": "正在加载向量存储…"
+    },
+    "vectorStoreTableColumns": {
+      "openActions": "打开向量存储操作菜单",
+      "idCopied": "向量存储 ID 已复制",
+      "copyId": "复制向量存储 ID"
+    },
+    "documentsTable": {
+      "noDocumentsYet": "尚未上传文档",
+      "uploadHint": "请在上方上传文档以开始使用。"
+    },
+    "documentsTableColumns": {
+      "openActions": "打开文档操作菜单",
+      "copyId": "复制文档 ID"
+    },
+    "indexesTab": {
+      "description": "向量存储索引通过 <code>/v1/indexes</code> API 注册到此代理。工作原理请参阅<docsLink>向量存储索引文档</docsLink>。目前索引透传支持 Azure AI Search 和 Milvus，如需支持更多提供商，请<issueLink>提交 GitHub 问题</issueLink>。",
+      "fetchError": "获取索引失败：{{error}}"
+    },
+    "indexesTable": {
+      "noIndexes": "尚未注册任何索引",
+      "emptyHint": "在此代理上注册的索引将显示在此处。",
+      "loading": "正在加载索引…"
+    },
+    "indexesTableColumns": {
+      "providerIndex": "提供商索引"
+    },
+    "s3VectorsConfig": {
+      "intro": "AWS S3 Vectors 允许您直接在 S3 中存储和查询向量嵌入：",
+      "noEmbeddingModels": "未找到嵌入模型。"
+    },
+    "testVectorStoreTab": {
+      "accessTokenRequired": "测试向量存储需要访问令牌。",
+      "noMatches": "没有匹配的向量存储"
+    },
+    "vectorStoreTester": {
+      "resultLabel": "结果 {{index}}",
+      "searchFailed": "搜索失败：{{error}}"
+    },
+    "index": {
+      "tabIndexes": "索引",
+      "fetchVectorStoresError": "获取向量存储失败：{{error}}",
+      "fetchCredentialsError": "获取凭据失败：{{error}}",
+      "deleteError": "删除向量存储失败：{{error}}"
+    },
+    "vectorStoreInfo": {
+      "notFound": "未找到向量存储",
+      "loadFailed": "无法加载向量存储 {{vectorStoreId}}，它可能已被删除。",
+      "fetchDetailsError": "获取向量存储详情失败：{{error}}",
+      "updateError": "更新向量存储失败：{{error}}"
+    },
+    "vectorStoreForm": {
+      "createError": "创建向量存储失败：{{error}}",
+      "hidePassword": "隐藏密码",
+      "showPassword": "显示密码",
+      "noMatchingCredentials": "没有匹配的凭据",
+      "noMatchingOptions": "没有匹配的选项",
+      "vectorStoreIdPlaceholderDefault": "输入来自您提供商的向量存储 ID",
+      "vectorStoreIdPlaceholderVertexSearchWithEngine": "您在 LiteLLM 中引用此向量存储所用的任意标识符",
+      "vectorStoreIdPlaceholderVertexRag": "6917529027641081856（Vertex AI /“RAG Engine”控制台中的语料库 ID）",
+      "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890（Vertex AI /“Agent Search”控制台中的数据存储 ID）",
+      "vectorStoreIdPlaceholderValkey": "my-search-index（Valkey 中的 FT 索引名称）",
+      "vectorStoreIdPlaceholderMongoDb": "my-vector-index（MongoDB Vector Search 索引名称）",
+      "valkeyAlertTitle": "需要配置 Valkey",
+      "valkeyAlertDescription": "LiteLLM 检索的是您已存入 Valkey 的文档，它不会为您创建索引或上传文档。创建此向量存储前，请确认：",
+      "valkeyStep1": "您的 Valkey 服务器已启用向量搜索（valkey-search 模块，包含在 valkey-bundle 镜像以及 AWS ElastiCache / MemoryDB for Valkey 中）",
+      "valkeyStep2": "您已创建搜索索引，并已将文档及其嵌入加载到其中。请将该索引名称填入向量存储 ID",
+      "valkeyStep3": "您知道这些已存储的嵌入由哪个嵌入模型生成。该模型必须添加到本代理的模型列表中，才能在下方选择；使用其他模型会返回错误结果",
+      "valkeyStep4": "您知道文档中用于文本和嵌入的字段名称。如果不是“text”和“embedding”，请在下方设置",
+      "valkeyFooter": "收到查询时，LiteLLM 会用下方模型将其转换为嵌入，并从您的索引中返回最接近的文档。",
+      "vertexRagNote": "注意：Google Cloud 已在其控制台将其更名为“RAG Engine”，以下步骤仍然适用。",
+      "vertexRagStep3": "记下 Vertex AI 控制台中的语料库 ID（在 Google Cloud 中现在标记为“RAG Engine”）",
+      "vertexSearchNote": "注意：Google Cloud 已在其控制台将其更名为“Agent Search”，以下步骤仍然适用。",
+      "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
     }
   }
 }

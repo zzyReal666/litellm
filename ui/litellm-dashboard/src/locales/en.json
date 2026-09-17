@@ -519,12 +519,17 @@
     },
     "budgetDurationDropdown": {
       "hourly": "hourly",
-      "neverResets": "Never resets"
+      "neverResets": "Never resets",
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly"
     },
     "metadataKeyValueFields": {
       "keyPlaceholder": "Key",
       "removePair": "Remove key-value pair",
-      "valuePlaceholder": "Value"
+      "valuePlaceholder": "Value",
+      "missingKey": "Missing key",
+      "duplicateKey": "Duplicate key"
     },
     "passThroughRoutesSelector": {
       "notFound": "No pass through routes found"
@@ -8836,18 +8841,23 @@
       "unlimited": "Unlimited",
       "membersLabel": "Members",
       "noTeamAssigned": "No team assigned",
-      "id": "ID:"
+      "id": "ID:",
+      "copyProjectId": "Copy project ID",
+      "loadingTeam": "Loading team"
     },
     "projectKeysSection": {
       "title": "Keys",
       "filterPlaceholder": "Filter by key name...",
-      "totalKeys": "{{count}} keys"
+      "totalKeys": "{{count}} keys",
+      "clearKeyFilter": "Clear key filter"
     },
     "projectKeysTable": {
       "colKeyName": "Key Name",
       "colOwner": "Owner",
       "colLastActive": "Last Active",
-      "noKeysFound": "No keys found"
+      "noKeysFound": "No keys found",
+      "emptyHint": "Keys created in this project will show up here.",
+      "loading": "Loading keys…"
     },
     "createProjectModal": {
       "title": "Create New Project",
@@ -8895,7 +8905,13 @@
       "keyPlaceholder": "Key",
       "missingValue": "Missing value",
       "valuePlaceholder": "Value",
-      "addKeyValue": "Add Key-Value Pair"
+      "addKeyValue": "Add Key-Value Pair",
+      "inputTpmLabel": "Input TPM Limit",
+      "inputTpmPlaceholder": "Input TPM Limit",
+      "outputTpmLabel": "Output TPM Limit",
+      "outputTpmPlaceholder": "Output TPM Limit",
+      "removeModelLimit": "Remove model limit {{index}}",
+      "removeMetadataPair": "Remove metadata pair {{index}}"
     },
     "projectsPage": {
       "title": "Projects",
@@ -8906,7 +8922,15 @@
       "colTeam": "Team",
       "colModels": "Models",
       "noModels": "No models",
-      "statusBlocked": "Blocked"
+      "statusBlocked": "Blocked",
+      "clearSearch": "Clear search"
+    },
+    "projectsTable": {
+      "noMatchingProjects": "No matching projects",
+      "noProjects": "No projects yet",
+      "filteredHint": "Try a different search term.",
+      "emptyHint": "Create a project to organize keys within your teams.",
+      "loading": "Loading projects…"
     }
   },
   "guardrailsMonitor": {
@@ -9411,7 +9435,8 @@
       "connectionTestResultsTitle": "Connection Test Results",
       "createSuccess": "Search tool created successfully",
       "createError": "Error creating search tool: {{error}}",
-      "testFillRequired": "Please fill in Search Provider and API Key before testing"
+      "testFillRequired": "Please fill in Search Provider and API Key before testing",
+      "noMatchingProviders": "No matching search providers"
     },
     "searchConnectionTest": {
       "testSuccessNotification": "Connection test successful!",
@@ -9453,13 +9478,16 @@
       "previousSearches": "Previous Searches",
       "clearAll": "Clear All",
       "showLess": "Show less",
-      "showMore": "Show more"
+      "showMore": "Show more",
+      "openInNewTab": "Open result in new tab"
     },
     "searchToolView": {
       "backToAll": "Back to All Search Tools",
       "providerLabel": "Provider",
       "apiKeyLabel": "API Key",
-      "notSet": "Not set"
+      "notSet": "Not set",
+      "copyName": "Copy search tool name",
+      "copyId": "Copy search tool ID"
     },
     "searchTools": {
       "pageTitle": "Search Tools",
@@ -9483,6 +9511,20 @@
       "editDescriptionPlaceholder": "Description of this search tool",
       "updateSuccess": "Search tool updated successfully",
       "updateFailed": "Failed to update search tool"
+    },
+    "searchToolTable": {
+      "emptyHint": "Add a search tool to enable web search for your models.",
+      "loading": "Loading search tools…"
+    },
+    "searchToolTableColumns": {
+      "openActions": "Open search tool actions",
+      "editTool": "Edit search tool",
+      "deleteTool": "Delete search tool",
+      "colSearchToolId": "Search Tool ID",
+      "sourceConfig": "Config",
+      "sourceDb": "DB",
+      "configEditHint": "Config search tools cannot be edited on the dashboard. Please edit the config file.",
+      "configDeleteHint": "Config search tools cannot be deleted on the dashboard. Please edit the config file."
     }
   },
   "modelDashboard": {
@@ -10956,8 +10998,8 @@
       "groupPromptDifficulty": "Prompt difficulty",
       "groupRouter": "Router",
       "groupRouterPick": "Router pick",
-      "headlineForward": "Shadowing {{percentage}}% of <0/> traffic<1> via <2/>",
-      "headlineReverse": "Comparing <0/> to <1/> on {{percentage}}% of <2/> traffic<3>",
+      "headlineForward": "Shadowing {{percentage}}% of <0/> traffic<1/> via <2/>",
+      "headlineReverse": "Comparing <0/> to <1/> on {{percentage}}% of <2/> traffic<3/>",
       "modelScope": " on <0/>",
       "noVerdictsYet": "No verdicts yet",
       "routerCostVsBaseline": "Router cost vs the baseline",
@@ -11105,6 +11147,86 @@
     "teamsField": {
       "description": "New users are added to these teams. Only teams that already exist can be selected.",
       "title": "Default Teams"
+    }
+  },
+  "vectorStores": {
+    "vectorStoreTable": {
+      "noVectorStores": "No vector stores",
+      "emptyHint": "Connect a vector store to enable retrieval-augmented generation.",
+      "loading": "Loading vector stores…"
+    },
+    "vectorStoreTableColumns": {
+      "openActions": "Open vector store actions",
+      "idCopied": "Vector store ID copied",
+      "copyId": "Copy vector store ID"
+    },
+    "documentsTable": {
+      "noDocumentsYet": "No documents uploaded yet",
+      "uploadHint": "Upload documents above to get started."
+    },
+    "documentsTableColumns": {
+      "openActions": "Open document actions",
+      "copyId": "Copy document ID"
+    },
+    "indexesTab": {
+      "description": "Vector store indexes registered on this proxy via the <code>/v1/indexes</code> API. See the <docsLink>vector store index docs</docsLink> for how this works. Index passthrough is supported for Azure AI Search and Milvus today; support for more providers can be added, so please <issueLink>file a GitHub issue</issueLink> if you want your provider supported.",
+      "fetchError": "Error fetching indexes: {{error}}"
+    },
+    "indexesTable": {
+      "noIndexes": "No indexes registered yet",
+      "emptyHint": "Indexes registered on this proxy will appear here.",
+      "loading": "Loading indexes…"
+    },
+    "indexesTableColumns": {
+      "providerIndex": "Provider Index"
+    },
+    "s3VectorsConfig": {
+      "intro": "AWS S3 Vectors allows you to store and query vector embeddings directly in S3:",
+      "noEmbeddingModels": "No embedding models found."
+    },
+    "testVectorStoreTab": {
+      "accessTokenRequired": "Access token is required to test vector stores.",
+      "noMatches": "No matching vector stores"
+    },
+    "vectorStoreTester": {
+      "resultLabel": "Result {{index}}",
+      "searchFailed": "Search failed: {{error}}"
+    },
+    "index": {
+      "tabIndexes": "Indexes",
+      "fetchVectorStoresError": "Error fetching vector stores: {{error}}",
+      "fetchCredentialsError": "Error fetching credentials: {{error}}",
+      "deleteError": "Error deleting vector store: {{error}}"
+    },
+    "vectorStoreInfo": {
+      "notFound": "Vector store not found",
+      "loadFailed": "Vector store {{vectorStoreId}} could not be loaded. It may have been deleted.",
+      "fetchDetailsError": "Error fetching vector store details: {{error}}",
+      "updateError": "Error updating vector store: {{error}}"
+    },
+    "vectorStoreForm": {
+      "createError": "Error creating vector store: {{error}}",
+      "hidePassword": "Hide Password",
+      "showPassword": "Show Password",
+      "noMatchingCredentials": "No matching credentials",
+      "noMatchingOptions": "No matching options",
+      "vectorStoreIdPlaceholderDefault": "Enter vector store ID from your provider",
+      "vectorStoreIdPlaceholderVertexSearchWithEngine": "Any identifier you'll use to reference this in LiteLLM",
+      "vectorStoreIdPlaceholderVertexRag": "6917529027641081856 (corpus ID from Vertex AI / \"RAG Engine\" console)",
+      "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890 (data store ID from Vertex AI / \"Agent Search\" console)",
+      "vectorStoreIdPlaceholderValkey": "my-search-index (FT index name in Valkey)",
+      "vectorStoreIdPlaceholderMongoDb": "my-vector-index (MongoDB Vector Search index name)",
+      "valkeyAlertTitle": "Valkey Setup Required",
+      "valkeyAlertDescription": "LiteLLM searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
+      "valkeyStep1": "Your Valkey server has vector search enabled (the valkey-search module, included in the valkey-bundle image and in AWS ElastiCache / MemoryDB for Valkey)",
+      "valkeyStep2": "You have already created a search index and loaded your documents and their embeddings into it. Enter that index name as the Vector Store ID",
+      "valkeyStep3": "You know which embedding model created those stored embeddings. That model must be added to this proxy under Models so you can pick it below. Using a different model returns wrong results",
+      "valkeyStep4": "You know the field names your documents use for their text and their embedding. If they are not \"text\" and \"embedding\", set them below",
+      "valkeyFooter": "When a query comes in, LiteLLM converts it to an embedding with the model below and returns the closest matching documents from your index.",
+      "vertexRagNote": "Note: Google Cloud has renamed this to \"RAG Engine\" in its console — the steps below still apply.",
+      "vertexRagStep3": "Note the corpus ID from the Vertex AI console (now labeled \"RAG Engine\" in Google Cloud)",
+      "vertexSearchNote": "Note: Google Cloud has renamed this to \"Agent Search\" in its console — the steps below still apply.",
+      "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set."
     }
   }
 }
