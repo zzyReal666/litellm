@@ -1046,7 +1046,11 @@
     "noMatchingToolsHint": "没有工具匹配您的搜索或筛选条件。",
     "noToolsDiscoveredTitle": "未发现工具",
     "noToolsDiscoveredHint": "发起一次返回 tool_calls 的对话补全即可启动自动发现。",
-    "unknownError": "未知错误"
+    "unknownError": "未知错误",
+    "view": {
+      "title": "工具策略",
+      "adminOnly": "工具策略仅管理员可用。"
+    }
   },
   "uiAccessControlForm": {
     "description": "配置谁可以访问 UI 界面，以及如何从 JWT Token 中提取用户组信息。",
@@ -9557,7 +9561,7 @@
       "apiKeyLabel": "CloudZero API 密钥",
       "apiKeyRequired": "请输入您的 CloudZero API 密钥",
       "apiKeyPlaceholder": "输入您的 CloudZero API 密钥",
-      "connectionIdLabel": "Connection ID",
+      "connectionIdLabel": "连接 ID",
       "connectionIdRequired": "请输入您的 CloudZero 连接 ID",
       "connectionIdPlaceholder": "输入您的 CloudZero 连接 ID",
       "timezoneLabel": "时区",
@@ -9571,7 +9575,7 @@
     "cloudZeroIntegrationSettings": {
       "cardTitle": "CloudZero 配置",
       "apiKeyRedacted": "API 密钥（已脱敏）",
-      "connectionId": "Connection ID",
+      "connectionId": "连接 ID",
       "timezone": "时区",
       "notConfigured": "未配置",
       "defaultUtc": "默认 (UTC)",
@@ -9601,7 +9605,7 @@
       "apiKeyRuleMessage": "请输入您的 CloudZero API 密钥",
       "apiKeyTooltip": "留空则保留现有 API 密钥",
       "apiKeyPlaceholder": "留空则保留现有密钥",
-      "connectionIdLabel": "Connection ID",
+      "connectionIdLabel": "连接 ID",
       "connectionIdRequired": "请输入您的 CloudZero 连接 ID",
       "connectionIdPlaceholder": "输入您的 CloudZero 连接 ID",
       "timezoneLabel": "时区",

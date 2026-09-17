@@ -1046,7 +1046,11 @@
     "noMatchingToolsHint": "No tools match your search or filters.",
     "noToolsDiscoveredTitle": "No tools discovered",
     "noToolsDiscoveredHint": "Make a chat completion that returns tool_calls to start auto-discovery.",
-    "unknownError": "unknown error"
+    "unknownError": "unknown error",
+    "view": {
+      "title": "Tool Policies",
+      "adminOnly": "Tool Policies is only available to admin users."
+    }
   },
   "uiAccessControlForm": {
     "description": "Configure who can access the UI interface and how group information is extracted from JWT tokens.",
