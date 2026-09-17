@@ -2,6 +2,7 @@
 
 import { CircleX, Mic, MicOff, Send, Volume2 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,6 +28,7 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
   customProxyBaseUrl,
   selectedGuardrails,
 }) => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<RealtimeMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isConnected, setIsConnected] = useState(false);
@@ -88,7 +90,10 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
   const connect = useCallback(async () => {
     if (wsRef.current) return;
     if (!selectedModel) {
-      addMessage("status", "Please select a model first");
+      addMessage(
+        "status",
+        t("playground.realtimePlayground.selectModelFirst", { defaultValue: "Please select a model first" }),
+      );
       return;
     }
     setIsConnecting(true);
@@ -108,7 +113,10 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
       ws.onopen = () => {
         setIsConnected(true);
         setIsConnecting(false);
-        addMessage("status", "Connected to realtime API");
+        addMessage(
+          "status",
+          t("playground.realtimePlayground.connectedToApi", { defaultValue: "Connected to realtime API" }),
+        );
       };
 
       ws.onmessage = async (event) => {
@@ -179,7 +187,13 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
               return prev;
             });
           } else if (type === "error") {
-            addMessage("status", `Error: ${data.error?.message || JSON.stringify(data.error)}`);
+            addMessage(
+              "status",
+              t("playground.realtimePlayground.wsError", {
+                defaultValue: "Error: {{error}}",
+                error: data.error?.message || JSON.stringify(data.error),
+              }),
+            );
           }
         } catch {
           // ignore parse errors
@@ -187,13 +201,13 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
       };
 
       ws.onerror = () => {
-        addMessage("status", "WebSocket error");
+        addMessage("status", t("playground.realtimePlayground.websocketError", { defaultValue: "WebSocket error" }));
         setIsConnected(false);
         setIsConnecting(false);
       };
 
       ws.onclose = () => {
-        addMessage("status", "Disconnected");
+        addMessage("status", t("playground.realtimePlayground.disconnected", { defaultValue: "Disconnected" }));
         setIsConnected(false);
         setIsConnecting(false);
         wsRef.current = null;
@@ -201,7 +215,13 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
 
       wsRef.current = ws;
     } catch (err: any) {
-      addMessage("status", `Connection failed: ${err.message}`);
+      addMessage(
+        "status",
+        t("playground.realtimePlayground.connectionFailed", {
+          defaultValue: "Connection failed: {{error}}",
+          error: err.message,
+        }),
+      );
       setIsConnecting(false);
     }
   }, [
@@ -213,6 +233,7 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
     addMessage,
     appendAssistantText,
     playAudioChunk,
+    t,
   ]);
 
   const disconnect = useCallback(() => {
@@ -295,11 +316,17 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
       source.connect(processor);
       processor.connect(ctx.destination);
       setIsRecording(true);
-      addMessage("status", "🎙️ Listening...");
+      addMessage("status", t("playground.realtimePlayground.listening", { defaultValue: "🎙️ Listening..." }));
     } catch (err: any) {
-      addMessage("status", `Microphone error: ${err.message}`);
+      addMessage(
+        "status",
+        t("playground.realtimePlayground.microphoneError", {
+          defaultValue: "Microphone error: {{error}}",
+          error: err.message,
+        }),
+      );
     }
-  }, [addMessage]);
+  }, [addMessage, t]);
 
   const stopRecording = useCallback(() => {
     processorRef.current?.disconnect();
@@ -359,17 +386,23 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
     };
   }, []);
 
+  const connectionStatusLabel = () => {
+    if (isConnected) return t("playground.realtimePlayground.connected", { defaultValue: "Connected" });
+    if (isConnecting) return t("playground.realtimePlayground.connecting", { defaultValue: "Connecting..." });
+    return t("playground.realtimePlayground.disconnectedStatus", { defaultValue: "Disconnected" });
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted">
         <div className="flex items-center gap-3">
           <Volume2 className="size-5 text-info" />
-          <span className="font-semibold text-foreground">Realtime Voice Chat</span>
-          <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? "bg-success" : "bg-border"}`} />
-          <span className="text-xs text-muted-foreground">
-            {isConnected ? "Connected" : isConnecting ? "Connecting..." : "Disconnected"}
+          <span className="font-semibold text-foreground">
+            {t("playground.realtimePlayground.title", { defaultValue: "Realtime Voice Chat" })}
           </span>
+          <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? "bg-success" : "bg-border"}`} />
+          <span className="text-xs text-muted-foreground">{connectionStatusLabel()}</span>
         </div>
         <div className="flex items-center gap-2">
           <Select
@@ -377,7 +410,11 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
             onValueChange={(voice) => setSelectedVoice(voice ?? selectedVoice)}
             disabled={isConnected}
           >
-            <SelectTrigger size="sm" className="w-[220px]" aria-label="Voice">
+            <SelectTrigger
+              size="sm"
+              className="w-[220px]"
+              aria-label={t("viewLogs.realtimePrettyView.labelVoice", { defaultValue: "Voice" })}
+            >
               <SelectValue>{OPEN_AI_VOICE_SELECT_OPTIONS.find((v) => v.value === selectedVoice)?.label}</SelectValue>
             </SelectTrigger>
             <SelectContent>
@@ -390,12 +427,12 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
           </Select>
           {!isConnected ? (
             <Button onClick={connect} disabled={isConnecting} size="sm">
-              Connect
+              {t("playground.realtimePlayground.connect", { defaultValue: "Connect" })}
             </Button>
           ) : (
             <Button variant="destructive" onClick={disconnect} size="sm">
               <CircleX />
-              Disconnect
+              {t("playground.realtimePlayground.disconnect", { defaultValue: "Disconnect" })}
             </Button>
           )}
         </div>
@@ -406,10 +443,14 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
         {messages.length === 0 && !isConnected && (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3">
             <Volume2 className="size-12" />
-            <span className="text-lg text-muted-foreground">Realtime Voice Playground</span>
+            <span className="text-lg text-muted-foreground">
+              {t("playground.realtimePlayground.emptyTitle", { defaultValue: "Realtime Voice Playground" })}
+            </span>
             <p className="text-sm text-muted-foreground text-center max-w-md">
-              Click <b>Connect</b> to start a realtime session. You can speak using your microphone or type messages.
-              The AI will respond with voice and text.
+              {t("playground.realtimePlayground.emptyHint", {
+                defaultValue:
+                  "Click Connect to start a realtime session. You can speak using your microphone or type messages. The AI will respond with voice and text.",
+              })}
             </p>
           </div>
         )}
@@ -428,7 +469,11 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
                     : "bg-muted text-foreground rounded-bl-md"
                 }`}
               >
-                <div className="text-xs font-medium mb-0.5 opacity-70">{msg.role === "user" ? "You" : "AI"}</div>
+                <div className="text-xs font-medium mb-0.5 opacity-70">
+                  {msg.role === "user"
+                    ? t("playground.realtimePlayground.you", { defaultValue: "You" })
+                    : t("playground.realtimePlayground.ai", { defaultValue: "AI" })}
+                </div>
                 <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
               </div>
             )}
@@ -445,13 +490,19 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
               size="icon-lg"
               variant={isRecording ? "destructive" : "outline"}
               onClick={isRecording ? stopRecording : startRecording}
-              title={isRecording ? "Stop recording" : "Start recording"}
+              title={
+                isRecording
+                  ? t("playground.realtimePlayground.stopRecording", { defaultValue: "Stop recording" })
+                  : t("playground.realtimePlayground.startRecording", { defaultValue: "Start recording" })
+              }
               className={`rounded-full ${isRecording ? "animate-pulse" : ""}`}
             >
               {isRecording ? <MicOff /> : <Mic />}
             </Button>
             <Input
-              placeholder="Type a message or use the mic..."
+              placeholder={t("playground.realtimePlayground.inputPlaceholder", {
+                defaultValue: "Type a message or use the mic...",
+              })}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => {
@@ -459,14 +510,21 @@ const RealtimePlayground: React.FC<RealtimePlaygroundProps> = ({
               }}
               className="h-10 flex-1"
             />
-            <Button size="icon-lg" onClick={sendTextMessage} disabled={!inputText.trim()} aria-label="Send">
+            <Button
+              size="icon-lg"
+              onClick={sendTextMessage}
+              disabled={!inputText.trim()}
+              aria-label={t("policies.templateParameterModal.send", { defaultValue: "Send" })}
+            >
               <Send />
             </Button>
           </div>
           {isRecording && (
             <div className="mt-2 flex items-center gap-2 text-destructive text-xs">
               <span className="inline-block w-2 h-2 rounded-full bg-destructive animate-pulse" />
-              Listening — speak into your microphone. Server VAD will detect when you stop.
+              {t("playground.realtimePlayground.listeningHint", {
+                defaultValue: "Listening — speak into your microphone. Server VAD will detect when you stop.",
+              })}
             </div>
           )}
         </div>

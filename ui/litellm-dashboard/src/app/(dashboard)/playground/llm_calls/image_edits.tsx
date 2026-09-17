@@ -1,5 +1,6 @@
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 
 export async function makeOpenAIImageEditsRequest(
@@ -70,7 +71,9 @@ export async function makeOpenAIImageEditsRequest(
 
     if (signal?.aborted) {
     } else {
-      let errorMessage = "Failed to edit image(s)";
+      let errorMessage = i18n.t("playground.imageEdits.editFailed", {
+        defaultValue: "Failed to edit image(s)",
+      });
 
       if (error?.error?.message) {
         errorMessage = error.error.message;

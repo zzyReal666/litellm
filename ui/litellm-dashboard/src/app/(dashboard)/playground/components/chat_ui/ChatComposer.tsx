@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cva.config";
+import { useTranslation } from "react-i18next";
 
 interface ChatComposerProps {
   value: string;
@@ -38,6 +39,8 @@ export function ChatComposer({
   onSuggestionSelect,
   className,
 }: ChatComposerProps) {
+  const { t } = useTranslation();
+
   const submitIfAllowed = () => {
     if (!submitDisabled && !isLoading) {
       onSubmit();
@@ -110,7 +113,7 @@ export function ChatComposer({
               <InputGroupButton
                 type="button"
                 size="icon-sm"
-                aria-label="Stop request"
+                aria-label={t("playground.chatComposer.stopRequest", { defaultValue: "Stop request" })}
                 data-testid="chat-stop-button"
                 className="size-8 rounded-xl bg-foreground text-background hover:bg-foreground/90"
                 onClick={onCancel}
@@ -121,7 +124,7 @@ export function ChatComposer({
               <InputGroupButton
                 type="button"
                 size="icon-sm"
-                aria-label="Send message"
+                aria-label={t("playground.chatComposer.sendMessage", { defaultValue: "Send message" })}
                 data-testid="chat-send-button"
                 disabled={submitDisabled || isLoading}
                 onClick={submitIfAllowed}
@@ -148,6 +151,8 @@ interface CodeInterpreterToggleProps {
 }
 
 export function CodeInterpreterToggle({ enabled, onToggle }: CodeInterpreterToggleProps) {
+  const { t } = useTranslation();
+
   return (
     <Tooltip>
       <TooltipTrigger
@@ -162,7 +167,13 @@ export function CodeInterpreterToggle({ enabled, onToggle }: CodeInterpreterTogg
                 ? "border-info/20 bg-info/10 text-info hover:bg-info/15"
                 : "text-muted-foreground hover:text-foreground",
             )}
-            aria-label={enabled ? "Code Interpreter enabled (click to disable)" : "Enable Code Interpreter"}
+            aria-label={
+              enabled
+                ? t("playground.chatUi.codeInterpreterEnabledTooltip", {
+                    defaultValue: "Code Interpreter enabled (click to disable)",
+                  })
+                : t("playground.chatUi.enableCodeInterpreterTooltip", { defaultValue: "Enable Code Interpreter" })
+            }
             onClick={onToggle}
           />
         }
@@ -170,7 +181,11 @@ export function CodeInterpreterToggle({ enabled, onToggle }: CodeInterpreterTogg
         <Code2 className="size-4" />
       </TooltipTrigger>
       <TooltipContent>
-        {enabled ? "Code Interpreter enabled (click to disable)" : "Enable Code Interpreter"}
+        {enabled
+          ? t("playground.chatUi.codeInterpreterEnabledTooltip", {
+              defaultValue: "Code Interpreter enabled (click to disable)",
+            })
+          : t("playground.chatUi.enableCodeInterpreterTooltip", { defaultValue: "Enable Code Interpreter" })}
       </TooltipContent>
     </Tooltip>
   );

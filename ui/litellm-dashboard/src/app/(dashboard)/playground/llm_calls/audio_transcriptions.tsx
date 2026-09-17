@@ -1,5 +1,6 @@
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 
 export async function makeOpenAIAudioTranscriptionRequest(
@@ -54,7 +55,9 @@ export async function makeOpenAIAudioTranscriptionRequest(
 
     if (signal?.aborted) {
     } else {
-      let errorMessage = "Failed to transcribe audio";
+      let errorMessage = i18n.t("playground.audioTranscriptions.transcribeFailed", {
+        defaultValue: "Failed to transcribe audio",
+      });
 
       if (error?.error?.message) {
         errorMessage = error.error.message;

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Input } from "@/components/ui/input";
 interface ModelSelectorProps {
@@ -9,6 +10,7 @@ interface ModelSelectorProps {
   disabled?: boolean;
 }
 export function ModelSelector({ value, onChange, models, loading, disabled }: ModelSelectorProps) {
+  const { t } = useTranslation();
   const [isAddingCustom, setIsAddingCustom] = useState(false);
   const [customValue, setCustomValue] = useState("");
 
@@ -54,20 +56,29 @@ export function ModelSelector({ value, onChange, models, loading, disabled }: Mo
       <SearchSelect
         options={[
           ...displayOptions.map((model) => ({ label: model, value: model })),
-          { label: "+ Add custom model", value: "__custom__" },
+          {
+            label: t("playground.compareModelSelector.addCustomModel", { defaultValue: "+ Add custom model" }),
+            value: "__custom__",
+          },
         ]}
         value={selectValue ?? ""}
         onValueChange={handleSelectChange}
         disabled={disabled}
-        placeholder={loading ? "Loading models..." : "Select a model"}
-        emptyText="No models found"
+        placeholder={
+          loading
+            ? "Loading models..."
+            : t("playground.compareModelSelector.selectModel", { defaultValue: "Select a model" })
+        }
+        emptyText={t("viewLogs.filterOptions.noModelsFoundLabel", { defaultValue: "No models found" })}
         allowClear={false}
         className="rounded-md"
       />
       {isAddingCustom && (
         <Input
           className="mt-2"
-          placeholder="Custom Model Name (Enter to add)"
+          placeholder={t("playground.compareModelSelector.customModelPlaceholder", {
+            defaultValue: "Custom Model Name (Enter to add)",
+          })}
           value={customValue}
           onChange={(e) => setCustomValue(e.target.value)}
           onKeyDown={(event) => {
