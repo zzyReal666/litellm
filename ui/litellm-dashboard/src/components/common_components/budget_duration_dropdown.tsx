@@ -15,9 +15,9 @@ const DURATION_LABELS: Record<string, DurationLabel> = {
     label: "Never resets",
   },
   "1h": { key: "commonComponents.budgetDurationDropdown.hourly", label: "hourly" },
-  "24h": { key: "commonComponents.durationSelect.daily", label: "daily" },
-  "7d": { key: "commonComponents.durationSelect.weekly", label: "weekly" },
-  "30d": { key: "commonComponents.durationSelect.monthly", label: "monthly" },
+  "24h": { key: "commonComponents.budgetDurationDropdown.daily", label: "daily" },
+  "7d": { key: "commonComponents.budgetDurationDropdown.weekly", label: "weekly" },
+  "30d": { key: "commonComponents.budgetDurationDropdown.monthly", label: "monthly" },
 };
 
 interface BudgetDurationDropdownProps {
