@@ -108,7 +108,6 @@
     "toggleHideBouncingIcon": "切换隐藏跳动图标"
   },
   "login": {
-    "title": "登录",
     "subtitle": "访问您的 LiteLLM 管理界面。",
     "defaultCredentialsTitle": "默认凭据",
     "defaultCredentialsBody": "默认情况下，用户名为 <code>admin</code>，密码为您设置的 LiteLLM Proxy <code>MASTER_KEY</code>。",
@@ -127,7 +126,8 @@
     "ssoNotConfigured": "请先配置 SSO 后再使用 SSO 登录。",
     "adminUiDisabledTitle": "管理界面已禁用",
     "adminUiDisabledBody": "管理员已禁用管理界面。如需重新启用，请更新以下环境变量：",
-    "ssoEnabledNotice": "单点登录（SSO）已启用。LiteLLM 不再在加载此页面时自动跳转到 SSO 登录流程。如需重新启用自动跳转，请在环境配置中设置 <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code>。"
+    "ssoEnabledNotice": "单点登录（SSO）已启用。LiteLLM 不再在加载此页面时自动跳转到 SSO 登录流程。如需重新启用自动跳转，请在环境配置中设置 <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code>。",
+    "title": "登录"
   },
   "shared": {
     "createdKeyDisplay": {
@@ -223,6 +223,11 @@
       "autoRouterSavings": "自动路由节省",
       "autoRouterHint": "相比它可能选到的最贵模型",
       "autoRouterInfo": "假设所有请求都走自动路由能选到的最贵模型会产生的花费，减去实际花费。切换模型会让新模型的缓存变冷，因此需要重新写入提示词，而基准是按缓存已热计算的；频繁刷掉缓存的路径合计可能为负，而双方都没有缓存的真实首轮对话则会被低估。"
+    },
+    "paginationStatusAlerts": {
+      "spendData": "花费数据",
+      "fetching": "正在抓取{{subject}}：已抓取 {{current}} / {{total}} 页。数据加载过程中图表会定期更新。离开此页面将停止并重置抓取。如果想在此期间继续使用界面，请<0>在新标签页中打开<1/></0>。",
+      "partial": "显示部分{{subject}}（已加载 {{current}}/{{total}} 页）"
     }
   },
   "molecules": {
@@ -1521,7 +1526,10 @@
     "colAction": "操作",
     "statusInDb": "数据库中",
     "statusInConfig": "配置文件中",
-    "statusNotSet": "未设置"
+    "statusNotSet": "未设置",
+    "automaticAnthropicPromptCaching": "Anthropic 自动提示词缓存",
+    "cacheLifetimeTtl": "缓存存活时间（TTL）",
+    "fiveMinutesDefault": "5m（默认）"
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -11205,7 +11213,18 @@
       "tabShadowEvals": "影子评估",
       "totalEstimatedSavings": "预计总节省",
       "unavailable": "暂无数据",
-      "unavailableNow": "自动路由用量当前不可用"
+      "unavailableNow": "自动路由用量当前不可用",
+      "breakdownUnavailable": "无法提供明细，因为部分用量早于分类花费统计功能上线。",
+      "expiredMissHint": "在所有已统计轮次中，因回到更早层级时缓存已过 TTL 而未命中的占比",
+      "turnsMeasured": "已统计 <0>{{turns}}</0> 轮",
+      "unorderedTurns": "有 {{turns}} 轮因跨 Pod 到达顺序错乱而未纳入分桶",
+      "comparisonDescription": "将你的实际路由花费与仅使用自动路由中配置的最贵模型时的估算成本对比。其中既计入固定使用同一模型带来的缓存节省，也计入切换模型增加的缓存成本。节省额已扣除记录的 LLM 分类花费，该花费包含在实际花费中。每 1K 轮分类花费按所有自动路由轮次平均，包括未走分类的轮次。该范围按与其重叠的完整会话统计，因此合计可能与按 UTC 日分桶的「总览」标签页略有差异。",
+      "bucketRule": "每一轮都按其路由行为归入唯一的分桶",
+      "bucketSameModelSublabel": "上一轮 → 同一层级",
+      "bucketFirstVisitSublabel": "上一轮 → 尚未使用过的层级",
+      "bucketReturnToTierSublabel": "上一轮 → 之前用过的层级",
+      "classificationRate": "（每 1K 轮 {{rate}}）",
+      "classificationRateBelow": "（每 1K 轮低于 $0.0001）"
     },
     "cacheLeakageCard": {
       "byModel": "按模型",
@@ -11225,7 +11244,11 @@
       "subjectKeys": "密钥",
       "subjectModels": "模型",
       "title": "按{{dimension}}统计的缓存流失",
-      "uncachedInputTokens": "未缓存输入 Token"
+      "uncachedInputTokens": "未缓存输入 Token",
+      "stillLoading": "数据仍在加载中，随着该时间范围内其余数据到达，行与合计会一并更新。",
+      "uncachedInputTokensInfo": "本时间范围内你发送的、既未从缓存读取也未写入缓存的输入 Token",
+      "cacheHitRateInfo": "从缓存读取的输入 Token 占比",
+      "potentialSavingsInfo": "如果这些未缓存输入改用提示词缓存，大致能省下多少。估算方式为未缓存输入 Token 数乘以已缓存流量每个缓存 Token 的净收益（实际缓存节省，已扣除写入溢价，÷ 缓存读取与写入 Token 数）。当缓存整体上尚未带来节省时留空。"
     },
     "costOptimizationView": {
       "experimentalNotice": "这是一个实验性面板",
@@ -11248,7 +11271,15 @@
       "enterpriseNotice": "对所有请求启用压缩对所有用户可用。按密钥或团队选择性启用属于 LiteLLM 企业版功能。获取试用密钥请点击<a>这里</a>",
       "failedToCreate": "创建压缩护栏失败",
       "failedToLoadGuardrails": "加载压缩护栏失败",
-      "title": "Headroom 提示词压缩"
+      "title": "Headroom 提示词压缩",
+      "nameRequired": "名称不能为空",
+      "apiBaseRequired": "API 地址不能为空",
+      "noGuardrails": "尚未配置提示词压缩护栏。在下方添加一个即可开始节省输入 Token",
+      "alwaysOn": "始终启用",
+      "optIn": "按需启用",
+      "apiBaseLabel": "Headroom API 地址",
+      "apiBaseHint": "你的 Headroom 压缩服务的基础 URL（LiteLLM 会调用它的 /v1/compress 端点）",
+      "addGuardrail": "添加护栏"
     },
     "shadowEvalSection": {
       "armBaseline": "基线",
@@ -11280,7 +11311,34 @@
       "statusStopped": "已停止",
       "tie": "平局",
       "title": "影子评估",
-      "verdictBreakdown": "评判结果分布"
+      "verdictBreakdown": "评判结果分布",
+      "targetsCount": "{{targets}} 个对象",
+      "endingNow": "即将结束",
+      "endsInDays": "{{days}} 天后结束",
+      "endsWithinADay": "1 天内结束",
+      "lowSample": "（样本偏少）",
+      "costComparisonHint": "每一侧按其补全费用加上各自的路由分类调用计价，基于相同的已评判轮次衡量；评判模型的费用不计入任何一侧",
+      "notApplicable": "不适用",
+      "costOnSameTurns": "{{router}} 对比 {{other}}，基于相同的已评判轮次",
+      "cacheServedExcluded": "；已排除 {{turns}} 轮由缓存响应",
+      "resultsLoadFailed": "无法加载结果，正在重试。",
+      "collectingVerdicts": "正在收集评判结果。随着抽样请求被评判，结果会逐步显示。",
+      "noVerdictsRecorded": "该任务没有记录任何评判结果。",
+      "loadingResults": "正在加载结果...",
+      "judgedResponses": "占 {{judged}} 条已评判回答",
+      "jobSpend": "已评判 {{judged}} 轮 · {{errored}} 次出错 · 评估花费 {{spend}}",
+      "jobSpendWithBudget": "已评判 {{judged}} 轮 · {{errored}} 次出错 · 评估花费 {{spend}}，预算 {{budget}}",
+      "remainingSuffix": "· {{remaining}}",
+      "stopping": "正在停止...",
+      "lastFailure": "最近一次失败：<0>{{error}}</0>",
+      "noVerdicts": "暂无评判结果",
+      "viewResults": "查看结果",
+      "previousJobSummary": "已评判 {{judged}} · {{errored}} 次出错 · 评估花费 {{spend}} ·",
+      "previousEvaluations": "历史评估（{{evaluations}}）",
+      "description": "用密钥、团队或用户的真实流量对自动路由做盲评（团队与用户覆盖 JWT 认证的流量）：切换前与其当前使用的模型对比，切换后与固定基线对比。",
+      "existingJobsLoadFailed": "无法加载已有评估。请刷新页面重试。",
+      "loadingEvaluations": "正在加载评估...",
+      "targetTurnsUsed": "{{used}} / {{total}} 轮"
     },
     "shadowEvalStartForm": {
       "autoRouters": "自动路由",
@@ -11328,7 +11386,8 @@
     },
     "tierTurnsChart": {
       "routingByTier": "按层级路由",
-      "totalTurns": "共 {{turns}} 轮"
+      "totalTurns": "共 {{turns}} 轮",
+      "description": "各层级服务的轮次。分类器发往默认模型的轮次不属于任何层级，也不在此统计，因此这里的总数可能少于该路由的总轮次。"
     },
     "usageTab": {
       "cumulative": "累计",
@@ -11341,7 +11400,13 @@
       "savingsByDriver": "按来源统计的节省",
       "spendBucketedByUtcDay": "花费按 UTC 日期分桶",
       "spendByTool": "按工具统计的花费",
-      "totalByTool": "按工具合计"
+      "totalByTool": "按工具合计",
+      "spendByToolDescription": "调用过各工具（MCP 与客户端工具）的请求所产生的花费；仅声明而未调用工具不计入。一个请求若调用了多个工具，其全部花费会分别计入每个工具，因此这里是花费归属而非分摊。"
+    },
+    "savingsDrivers": {
+      "compression": "压缩",
+      "promptCaching": "提示词缓存",
+      "autoRouter": "自动路由"
     }
   },
   "budgetsPage": {

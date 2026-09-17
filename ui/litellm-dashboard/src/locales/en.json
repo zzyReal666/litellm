@@ -111,7 +111,7 @@
     "title": "Login",
     "subtitle": "Access your LiteLLM Admin UI.",
     "defaultCredentialsTitle": "Default Credentials",
-    "defaultCredentialsBody": "By default, Username is <code>admin</code> and Password is your set LiteLLM Proxy <code>MASTER_KEY</code>.",
+    "defaultCredentialsBody": "By default, Username is <code>admin</code> and Password is your set LiteLLM Proxy<code>MASTER_KEY</code>.",
     "docsHint": "Need to set UI credentials or SSO? <docsLink>Check the documentation</docsLink>.",
     "worker": "Worker",
     "workerPlaceholder": "Choose a worker to connect to",
@@ -223,6 +223,11 @@
       "autoRouterSavings": "Auto-router savings",
       "autoRouterHint": "vs. the priciest model it could pick",
       "autoRouterInfo": "What this traffic would have cost had every request gone to the most expensive model the auto-router can route to, minus what it actually cost. Switching leaves the new model with a cold cache, so it pays to write the prompt again while the baseline is priced as already warm; a route that thrashes the cache can total below zero, and a genuine first turn, where neither side had anything cached, is undercounted."
+    },
+    "paginationStatusAlerts": {
+      "spendData": "spend data",
+      "fetching": "Currently fetching {{subject}}: fetched {{current}} / {{total}} pages. Charts will update periodically as data loads. Moving off of this page will stop and reset this. To continue using the UI in the meantime, <0>open a new tab<1/></0>.",
+      "partial": "Showing partial {{subject}} ({{current}}/{{total}} pages loaded)"
     }
   },
   "molecules": {
@@ -1521,7 +1526,10 @@
     "colAction": "Action",
     "statusInDb": "In DB",
     "statusInConfig": "In Config",
-    "statusNotSet": "Not Set"
+    "statusNotSet": "Not Set",
+    "automaticAnthropicPromptCaching": "Automatic Anthropic prompt caching",
+    "cacheLifetimeTtl": "Cache lifetime (TTL)",
+    "fiveMinutesDefault": "5m (default)"
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -11205,7 +11213,18 @@
       "tabShadowEvals": "Shadow Evals",
       "totalEstimatedSavings": "Total estimated savings",
       "unavailable": "Unavailable",
-      "unavailableNow": "Auto-router usage is unavailable right now"
+      "unavailableNow": "Auto-router usage is unavailable right now",
+      "breakdownUnavailable": "Breakdown unavailable because some usage predates classification-cost tracking.",
+      "expiredMissHint": "share of all measured turns that missed cache because a return to an earlier tier came after its TTL lapsed",
+      "turnsMeasured": "<0>{{turns}}</0> turns measured",
+      "unorderedTurns": "{{turns}} turns arrived out of order across pods and are not bucketed",
+      "comparisonDescription": "Compares your actual routed spend with the estimated cost of using only the most expensive model configured in the auto-router. It accounts for both the cache savings from staying on one model and the added cache costs from switching models. Savings are net of recorded LLM classification cost, which is included in actual spend. Classification cost per 1K turns is averaged over all auto-router turns, including those that skip classification. The range counts whole sessions that overlap it, so totals can differ slightly from the Overall tab, which buckets savings by UTC day.",
+      "bucketRule": "every turn falls in exactly one bucket, by what the router did",
+      "bucketSameModelSublabel": "previous turn → same tier",
+      "bucketFirstVisitSublabel": "previous turn → a tier not used yet",
+      "bucketReturnToTierSublabel": "previous turn → a tier used earlier",
+      "classificationRate": "({{rate}} / 1K turns)",
+      "classificationRateBelow": "(<$0.0001 / 1K turns)"
     },
     "cacheLeakageCard": {
       "byModel": "By model",
@@ -11225,7 +11244,11 @@
       "subjectKeys": "Keys",
       "subjectModels": "Models",
       "title": "Cache leakage by {{dimension}}",
-      "uncachedInputTokens": "Uncached input tokens"
+      "uncachedInputTokens": "Uncached input tokens",
+      "stillLoading": "Data is still loading; rows and totals will update as the rest of the range arrives.",
+      "uncachedInputTokensInfo": "Input tokens you sent in this range that weren't served from or written to the cache",
+      "cacheHitRateInfo": "Share of your input tokens that were served from the cache",
+      "potentialSavingsInfo": "About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall."
     },
     "costOptimizationView": {
       "experimentalNotice": "This is an experimental dashboard",
@@ -11248,7 +11271,15 @@
       "enterpriseNotice": "Applying compression to all requests is available to all users. Enabling it selectively per key or team is a LiteLLM Enterprise feature. Get a trial key <a>here</a>",
       "failedToCreate": "Failed to create compression guardrail",
       "failedToLoadGuardrails": "Failed to load compression guardrails",
-      "title": "Headroom prompt compression"
+      "title": "Headroom prompt compression",
+      "nameRequired": "Name is required",
+      "apiBaseRequired": "API base is required",
+      "noGuardrails": "No prompt compression guardrails configured yet. Add one below to start saving on input tokens",
+      "alwaysOn": "Always on",
+      "optIn": "Opt-in",
+      "apiBaseLabel": "Headroom API base",
+      "apiBaseHint": "Base URL of your Headroom compression service (LiteLLM calls its /v1/compress endpoint)",
+      "addGuardrail": "Add guardrail"
     },
     "shadowEvalSection": {
       "armBaseline": "Baseline",
@@ -11280,7 +11311,34 @@
       "statusStopped": "stopped",
       "tie": "Tie",
       "title": "Shadow eval",
-      "verdictBreakdown": "Verdict breakdown"
+      "verdictBreakdown": "Verdict breakdown",
+      "targetsCount": "{{targets}} targets",
+      "endingNow": "ending now",
+      "endsInDays": "ends in {{days}} days",
+      "endsWithinADay": "ends within a day",
+      "lowSample": "(low sample)",
+      "costComparisonHint": "Each arm is priced as its completion plus its own routing classifier call, measured on the same judged turns; the judge's cost is excluded from both arms",
+      "notApplicable": "n/a",
+      "costOnSameTurns": "{{router}} vs {{other}} on the same judged turns",
+      "cacheServedExcluded": "; {{turns}} cache-served turns excluded",
+      "resultsLoadFailed": "Results could not be loaded. Retrying.",
+      "collectingVerdicts": "Collecting verdicts. Results appear as sampled requests are judged.",
+      "noVerdictsRecorded": "No verdicts were recorded for this job.",
+      "loadingResults": "Loading results...",
+      "judgedResponses": "of {{judged}} judged responses",
+      "jobSpend": "{{judged}} turns judged · {{errored}} errored · {{spend}} eval spend",
+      "jobSpendWithBudget": "{{judged}} turns judged · {{errored}} errored · {{spend}} of {{budget}} eval spend",
+      "remainingSuffix": "· {{remaining}}",
+      "stopping": "Stopping...",
+      "lastFailure": "Last failure: <0>{{error}}</0>",
+      "noVerdicts": "no verdicts",
+      "viewResults": "view results",
+      "previousJobSummary": "{{judged}} judged · {{errored}} errored · {{spend}} eval spend ·",
+      "previousEvaluations": "Previous evaluations ({{evaluations}})",
+      "description": "Blind-judge the auto-router on the real traffic of a key, team, or user (teams and users cover JWT-authenticated traffic): against the models they use today before switching, or against a fixed baseline after they have switched.",
+      "existingJobsLoadFailed": "Existing evaluations could not be loaded. Refresh the page to retry.",
+      "loadingEvaluations": "Loading evaluations...",
+      "targetTurnsUsed": "{{used}} / {{total}} turns"
     },
     "shadowEvalStartForm": {
       "autoRouters": "Auto-routers",
@@ -11328,7 +11386,8 @@
     },
     "tierTurnsChart": {
       "routingByTier": "Routing by tier",
-      "totalTurns": "{{turns}} total turns"
+      "totalTurns": "{{turns}} total turns",
+      "description": "Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted here, so this can total less than the router's turns."
     },
     "usageTab": {
       "cumulative": "Cumulative",
@@ -11341,7 +11400,13 @@
       "savingsByDriver": "Savings by driver",
       "spendBucketedByUtcDay": "Spend is bucketed by UTC day",
       "spendByTool": "Spend by tool",
-      "totalByTool": "Total by tool"
+      "totalByTool": "Total by tool",
+      "spendByToolDescription": "Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it does not count. A request that invoked multiple tools counts its full spend toward each, so this attributes rather than partitions spend."
+    },
+    "savingsDrivers": {
+      "compression": "Compression",
+      "promptCaching": "Prompt caching",
+      "autoRouter": "Auto-router"
     }
   },
   "budgetsPage": {
