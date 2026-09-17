@@ -63,8 +63,9 @@ import {
 } from "./teamModelAccess";
 import { computeInheritedGrants } from "../permissions/inheritedGrants";
 import MetadataKeyValueFields, {
-  metadataObjectToPairs,
+  createMetadataPairsSchema,
   metadataPairsSchema,
+  metadataObjectToPairs,
   metadataPairsToObject,
 } from "../common_components/MetadataKeyValueFields";
 import { useTeamMetadataSchema } from "@/app/(dashboard)/hooks/teams/useTeamMetadataSchema";
@@ -547,12 +548,14 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
   const { t } = useTranslation();
   const teamUpdateSchema = useMemo(
     () =>
-      teamUpdateFieldsSchema.superRefine((values, ctx) => {
-        if (!isParsableJson(values.secret_manager_settings)) {
-          ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["secret_manager_settings"] });
-        }
-      }),
-    [],
+      z
+        .object({ ...teamUpdateFieldsSchema.shape, metadata: createMetadataPairsSchema(t).optional() })
+        .superRefine((values, ctx) => {
+          if (!isParsableJson(values.secret_manager_settings)) {
+            ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["secret_manager_settings"] });
+          }
+        }),
+    [t],
   );
   const [teamData, setTeamData] = useState<TeamData | null>(null);
   const [loading, setLoading] = useState(true);

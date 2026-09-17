@@ -1,6 +1,8 @@
 import { CircleMinus, Plus } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
+import type { TFunction } from "i18next";
 import {
   useFieldArray,
   type Control,
@@ -22,15 +24,30 @@ export interface MetadataPair {
   value: string;
 }
 
-export const metadataPairsSchema = z
-  .array(z.object({ key: z.string().min(1, "Missing key"), value: z.string().optional() }))
-  .superRefine((pairs, ctx) => {
-    pairs.forEach((pair, index) => {
-      if (pair.key && pairs.filter((other) => other.key === pair.key).length > 1) {
-        ctx.addIssue({ code: "custom", message: "Duplicate key", path: [index, "key"] });
-      }
+export const createMetadataPairsSchema = (t: TFunction) =>
+  z
+    .array(
+      z.object({
+        key: z
+          .string()
+          .min(1, t("commonComponents.metadataKeyValueFields.missingKey", { defaultValue: "Missing key" })),
+        value: z.string().optional(),
+      }),
+    )
+    .superRefine((pairs, ctx) => {
+      pairs.forEach((pair, index) => {
+        if (pair.key && pairs.filter((other) => other.key === pair.key).length > 1) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("commonComponents.metadataKeyValueFields.duplicateKey", { defaultValue: "Duplicate key" }),
+            path: [index, "key"],
+          });
+        }
+      });
     });
-  });
+
+// English instance for callers that validate without a translation function, such as unit tests.
+export const metadataPairsSchema = createMetadataPairsSchema(i18n.t.bind(i18n));
 
 function formatMetadataValue(value: unknown): string {
   if (typeof value !== "string") {

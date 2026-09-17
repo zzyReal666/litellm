@@ -28,6 +28,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { TeamsTable } from "./TeamsPage/TeamsTable";
 import AccessGroupSelector from "./common_components/AccessGroupSelector";
 import MetadataKeyValueFields, {
+  createMetadataPairsSchema,
   metadataPairsSchema,
   metadataPairsToObject,
 } from "./common_components/MetadataKeyValueFields";
@@ -229,28 +230,30 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
   const teamCreateSchema = useMemo(
     () =>
-      teamCreateFieldsSchema.superRefine((values, ctx) => {
-        if (isOrgAdmin && !values.organization_id) {
-          ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["organization_id"] });
-        }
-        const organizationIsStillPickable =
-          values.organization_id == null ||
-          organizations == null ||
-          adminOrgs.some((org) => org.organization_id === values.organization_id);
-        if (!organizationIsStillPickable) {
-          ctx.addIssue({
-            code: "custom",
-            message: t("oldTeams.form.organizationNoLongerAvailable", {
-              defaultValue: "You can no longer create teams in this organization",
-            }),
-            path: ["organization_id"],
-          });
-        }
-        if (additionalSettingsOpen && !isParsableJson(values.secret_manager_settings)) {
-          ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["secret_manager_settings"] });
-        }
-      }),
-    [isOrgAdmin, additionalSettingsOpen, adminOrgs, organizations],
+      z
+        .object({ ...teamCreateFieldsSchema.shape, metadata: createMetadataPairsSchema(t).optional() })
+        .superRefine((values, ctx) => {
+          if (isOrgAdmin && !values.organization_id) {
+            ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["organization_id"] });
+          }
+          const organizationIsStillPickable =
+            values.organization_id == null ||
+            organizations == null ||
+            adminOrgs.some((org) => org.organization_id === values.organization_id);
+          if (!organizationIsStillPickable) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("oldTeams.form.organizationNoLongerAvailable", {
+                defaultValue: "You can no longer create teams in this organization",
+              }),
+              path: ["organization_id"],
+            });
+          }
+          if (additionalSettingsOpen && !isParsableJson(values.secret_manager_settings)) {
+            ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["secret_manager_settings"] });
+          }
+        }),
+    [t, isOrgAdmin, additionalSettingsOpen, adminOrgs, organizations],
   );
 
   const form = useZodForm(teamCreateSchema, { defaultValues: EMPTY_TEAM_CREATE_VALUES });
