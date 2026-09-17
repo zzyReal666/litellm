@@ -924,7 +924,10 @@
     "modelsDesc": "新团队可访问的默认模型列表。",
     "teamMemberPermissionsLabel": "团队成员权限",
     "teamMemberPermissionsDesc": "新创建团队的成员默认获得的权限。/key/info 和 /key/health 始终包含。",
-    "selectPermissionsPlaceholder": "选择权限"
+    "selectPermissionsPlaceholder": "选择权限",
+    "loadingAriaLabel": "正在加载默认团队设置",
+    "defaultOrganizationLabel": "默认组织",
+    "cancel": "取消"
   },
   "toolDetail": {
     "backToToolPolicies": "返回工具策略",

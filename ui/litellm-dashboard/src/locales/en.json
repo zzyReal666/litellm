@@ -924,7 +924,10 @@
     "modelsDesc": "Default list of models that new teams can access.",
     "teamMemberPermissionsLabel": "Team Member Permissions",
     "teamMemberPermissionsDesc": "Default permissions granted to members of newly created teams. /key/info and /key/health are always included.",
-    "selectPermissionsPlaceholder": "Select permissions"
+    "selectPermissionsPlaceholder": "Select permissions",
+    "loadingAriaLabel": "Loading default team settings",
+    "defaultOrganizationLabel": "Default Organization",
+    "cancel": "Cancel"
   },
   "toolDetail": {
     "backToToolPolicies": "Back to Tool Policies",
