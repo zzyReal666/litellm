@@ -287,6 +287,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
 };
 
 const ConversationList: React.FC<Props> = ({ conversations, activeConversationId, onSelect, onDelete, onRename }) => {
+  const { t } = useTranslation();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const handleGlobalKeyDown = useCallback((e: KeyboardEvent) => {

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FieldGroup } from "@/components/ui/field";
 import { AgentCreateInfo, AgentCredentialFieldMetadata } from "@/components/networking";
 import { PasswordInput } from "@/components/shared/PasswordInput";
-import { AGENT_FORM_CONFIG, translateFieldText } from "./agent_config";
+import { AGENT_FORM_CONFIG } from "./agent_config";
 import CostConfigFields, { COST_FIELD_NAMES } from "./cost_config_fields";
 import {
   AgentFormField,
@@ -172,7 +172,7 @@ const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTy
       <div className="mb-4 rounded-md border border-border px-4">
         <AgentFormPanel
           panelKey={AGENT_FORM_CONFIG.cost.key}
-          title={translateFieldText(t, AGENT_FORM_CONFIG.cost.titleKey, AGENT_FORM_CONFIG.cost.title)}
+          title={t(AGENT_FORM_CONFIG.cost.titleKey, { defaultValue: AGENT_FORM_CONFIG.cost.title })}
           panels={panels}
         >
           <CostConfigFields />

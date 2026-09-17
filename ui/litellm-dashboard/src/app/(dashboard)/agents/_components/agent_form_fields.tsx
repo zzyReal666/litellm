@@ -375,7 +375,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.skills.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.skills.key}
-            title={translateFieldText(t, AGENT_FORM_CONFIG.skills.titleKey, AGENT_FORM_CONFIG.skills.title)}
+            title={t(AGENT_FORM_CONFIG.skills.titleKey, { defaultValue: AGENT_FORM_CONFIG.skills.title })}
             panels={panels}
           >
             <SkillsFieldArray />
@@ -385,7 +385,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.capabilities.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.capabilities.key}
-            title={translateFieldText(t, AGENT_FORM_CONFIG.capabilities.titleKey, AGENT_FORM_CONFIG.capabilities.title)}
+            title={t(AGENT_FORM_CONFIG.capabilities.titleKey, { defaultValue: AGENT_FORM_CONFIG.capabilities.title })}
             panels={panels}
           >
             {AGENT_FORM_CONFIG.capabilities.fields.map((field) => (
@@ -405,7 +405,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.optional.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.optional.key}
-            title={translateFieldText(t, AGENT_FORM_CONFIG.optional.titleKey, AGENT_FORM_CONFIG.optional.title)}
+            title={t(AGENT_FORM_CONFIG.optional.titleKey, { defaultValue: AGENT_FORM_CONFIG.optional.title })}
             panels={panels}
           >
             {AGENT_FORM_CONFIG.optional.fields.map((field) => (
@@ -435,7 +435,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.cost.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.cost.key}
-            title={translateFieldText(t, AGENT_FORM_CONFIG.cost.titleKey, AGENT_FORM_CONFIG.cost.title)}
+            title={t(AGENT_FORM_CONFIG.cost.titleKey, { defaultValue: AGENT_FORM_CONFIG.cost.title })}
             panels={panels}
           >
             <CostConfigFields />
@@ -445,7 +445,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         {shouldShow(AGENT_FORM_CONFIG.litellm.key) && (
           <AgentFormPanel
             panelKey={AGENT_FORM_CONFIG.litellm.key}
-            title={translateFieldText(t, AGENT_FORM_CONFIG.litellm.titleKey, AGENT_FORM_CONFIG.litellm.title)}
+            title={t(AGENT_FORM_CONFIG.litellm.titleKey, { defaultValue: AGENT_FORM_CONFIG.litellm.title })}
             panels={panels}
           >
             {AGENT_FORM_CONFIG.litellm.fields.map((field) => (
