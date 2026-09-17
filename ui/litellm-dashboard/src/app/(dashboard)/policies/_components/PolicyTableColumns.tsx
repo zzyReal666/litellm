@@ -19,6 +19,7 @@ import {
 import { cn } from "@/lib/cva.config";
 
 export interface PolicyRow {
+  groupKey: string;
   policy_name: string;
   primaryPolicy: Policy;
   versionCount: number;
@@ -135,7 +136,9 @@ export const getPolicyTableColumns = ({
           ) : undefined;
         return (
           <IdentityCell
-            title={row.original.policy_name}
+            title={
+              row.original.policy_name || t("policies.policyTable.unnamedPolicy", { defaultValue: "Unnamed Policy" })
+            }
             titleClassName="max-w-60"
             badge={
               isConfigPolicy ? (

@@ -4102,7 +4102,8 @@
       "whereIsMyApiKey": "Where do I find my API key?",
       "saveKeyLabel": "Save key for future use",
       "securityNote": "Your key is stored securely and transmitted over HTTPS. It is never shared with third parties.",
-      "connectAndAuthorize": "Connect & Authorize"
+      "connectAndAuthorize": "Connect & Authorize",
+      "defaultServiceName": "Service"
     },
     "envVarsSection": {
       "sectionTitle": "Variables",
@@ -4275,7 +4276,9 @@
       "booleanTrue": "True",
       "booleanFalse": "False",
       "jsonObjectPlaceholder": "Enter JSON object for {{key}}",
-      "jsonArrayPlaceholder": "Enter JSON array for {{key}}"
+      "jsonArrayPlaceholder": "Enter JSON array for {{key}}",
+      "emptyString": "Empty string",
+      "selectInvalid": "Please select a valid {{key}}"
     },
     "mCPToolsetsTab": {
       "selectedCount": "{{count}} selected",
@@ -4735,7 +4738,11 @@
       "maxConcurrentRequestsPlaceholder": "e.g. 10",
       "authRequired": "Authentication is required",
       "noOAuthFlowSet": "This server has no OAuth flow set",
-      "noOAuthFlowSetDesc": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively."
+      "noOAuthFlowSetDesc": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively.",
+      "authOauthTokenExchange": "OAuth Token Exchange (OBO)",
+      "authIdJag": "ID-JAG (Okta Cross App Access)",
+      "authTruePassthrough": "True Passthrough (no LiteLLM auth)",
+      "authOauthDelegate": "OAuth Delegate (client-supplied upstream token)"
     },
     "mcpServerView": {
       "backToAllServers": "Back to All Servers",
@@ -4809,6 +4816,29 @@
       "copyToolsetId": "Copy toolset ID",
       "endpointUrlCopied": "Endpoint URL copied",
       "toolsetIdCopied": "Toolset ID copied"
+    },
+    "mcpCrudPermissionPanel": {
+      "groupRead": "Read",
+      "groupCreate": "Create",
+      "groupUpdate": "Update",
+      "groupDelete": "Delete",
+      "groupOther": "Other",
+      "groupDescRead": "Safe operations — fetch, list, search. No side effects.",
+      "groupDescCreate": "Add new resources — insert, upload, register.",
+      "groupDescUpdate": "Modify existing resources — edit, patch, rename.",
+      "groupDescDelete": "Destructive operations — remove, purge, destroy.",
+      "groupDescOther": "Operations that could not be automatically classified.",
+      "highRisk": "High Risk",
+      "mediumRisk": "Medium Risk",
+      "safe": "Safe",
+      "unclassified": "Unclassified",
+      "allowedCount": "{{allowed}}/{{total}} allowed",
+      "allOn": "All on",
+      "partial": "Partial",
+      "allOff": "All off",
+      "allowAllTools": "Allow all {{label}} tools",
+      "stateOn": "on",
+      "stateOff": "off"
     }
   },
   "playground": {
@@ -6142,7 +6172,8 @@
       "guardrailsCreateFailed": "Failed to create {{count}} guardrail(s): {{list}}. You may need to create them manually.",
       "createGuardrailsFailed": "Failed to create guardrails. Please try again.",
       "learnMoreAttachmentsArrow": "Learn more about attachments ->",
-      "learnMoreDocsArrow": "Learn more in the documentation ->"
+      "learnMoreDocsArrow": "Learn more in the documentation ->",
+      "dismissAriaLabel": "Dismiss {{title}}"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "Next Step",

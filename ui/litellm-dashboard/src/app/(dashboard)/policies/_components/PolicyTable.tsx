@@ -10,20 +10,32 @@ import { Policy } from "@/components/policies/types";
 
 import { getPolicyTableColumns, PolicyRow } from "./PolicyTableColumns";
 
+const UNNAMED_POLICY_KEY = "__unnamed__";
+
 /** One row per DB policy name plus one row per config policy, so a config policy never hides same-named DB versions; primaryPolicy is used for display and for Edit (FlowBuilder loads all versions) */
 function groupPoliciesByName(policies: Policy[]): PolicyRow[] {
   const dbPolicies = policies.filter((policy) => policy.definition_location !== "config");
-  const names = Array.from(new Set(dbPolicies.map((policy) => policy.policy_name || "(unnamed)")));
-  const dbRows = names.map((policyName) => {
-    const versions = dbPolicies.filter((policy) => (policy.policy_name || "(unnamed)") === policyName);
+  const groupKeys = Array.from(new Set(dbPolicies.map((policy) => policy.policy_name || UNNAMED_POLICY_KEY)));
+  const dbRows = groupKeys.map((groupKey) => {
+    const versions = dbPolicies.filter((policy) => (policy.policy_name || UNNAMED_POLICY_KEY) === groupKey);
     const primary =
       versions.find((version) => version.version_status === "production") ??
       [...versions].sort((a, b) => (b.version_number ?? 0) - (a.version_number ?? 0))[0];
-    return { policy_name: policyName, primaryPolicy: primary, versionCount: versions.length };
+    return {
+      groupKey,
+      policy_name: primary.policy_name ?? "",
+      primaryPolicy: primary,
+      versionCount: versions.length,
+    };
   });
   const configRows = policies
     .filter((policy) => policy.definition_location === "config")
-    .map((policy) => ({ policy_name: policy.policy_name || "(unnamed)", primaryPolicy: policy, versionCount: 1 }));
+    .map((policy) => ({
+      groupKey: policy.policy_name || UNNAMED_POLICY_KEY,
+      policy_name: policy.policy_name ?? "",
+      primaryPolicy: policy,
+      versionCount: 1,
+    }));
   return [...dbRows, ...configRows];
 }
 
@@ -80,7 +92,7 @@ const PolicyTable: React.FC<PolicyTableProps> = ({
       data={rows}
       paginationMode="client"
       columns={columns}
-      getRowId={(row) => `${row.primaryPolicy.definition_location ?? "db"}:${row.policy_name}`}
+      getRowId={(row) => `${row.primaryPolicy.definition_location ?? "db"}:${row.groupKey}`}
       sortingMode="client"
       sorting={sorting}
       onSortingChange={setSorting}

@@ -4102,7 +4102,8 @@
       "whereIsMyApiKey": "在哪里可以找到我的 API 密钥？",
       "saveKeyLabel": "保存密钥以供以后使用",
       "securityNote": "您的密钥已安全存储并通过 HTTPS 传输，不会与第三方共享。",
-      "connectAndAuthorize": "连接并授权"
+      "connectAndAuthorize": "连接并授权",
+      "defaultServiceName": "服务"
     },
     "envVarsSection": {
       "sectionTitle": "变量",
@@ -4275,7 +4276,9 @@
       "booleanTrue": "是",
       "booleanFalse": "否",
       "jsonObjectPlaceholder": "为 {{key}} 输入 JSON 对象",
-      "jsonArrayPlaceholder": "为 {{key}} 输入 JSON 数组"
+      "jsonArrayPlaceholder": "为 {{key}} 输入 JSON 数组",
+      "emptyString": "空字符串",
+      "selectInvalid": "请选择有效的 {{key}}"
     },
     "mCPToolsetsTab": {
       "selectedCount": "已选 {{count}} 个",
@@ -4735,7 +4738,11 @@
       "maxConcurrentRequestsPlaceholder": "例如 10",
       "authRequired": "身份验证为必填项",
       "noOAuthFlowSet": "此服务器未设置 OAuth 流程",
-      "noOAuthFlowSetDesc": "请选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按您预期的方式进行身份验证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户身份验证，并以保守方式处理机器对机器形式的凭据。"
+      "noOAuthFlowSetDesc": "请选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按您预期的方式进行身份验证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户身份验证，并以保守方式处理机器对机器形式的凭据。",
+      "authOauthTokenExchange": "OAuth Token Exchange（OBO）",
+      "authIdJag": "ID-JAG（Okta 跨应用访问）",
+      "authTruePassthrough": "真实透传（不使用 LiteLLM 认证）",
+      "authOauthDelegate": "OAuth 委派（由客户端提供上游 Token）"
     },
     "mcpServerView": {
       "backToAllServers": "返回所有服务器",
@@ -4809,6 +4816,29 @@
       "copyToolsetId": "复制工具集 ID",
       "endpointUrlCopied": "端点 URL 已复制",
       "toolsetIdCopied": "工具集 ID 已复制"
+    },
+    "mcpCrudPermissionPanel": {
+      "groupRead": "读取",
+      "groupCreate": "创建",
+      "groupUpdate": "更新",
+      "groupDelete": "删除",
+      "groupOther": "其他",
+      "groupDescRead": "安全操作：获取、列表、搜索，无副作用。",
+      "groupDescCreate": "新增资源：插入、上传、注册。",
+      "groupDescUpdate": "修改现有资源：编辑、修补、重命名。",
+      "groupDescDelete": "破坏性操作：移除、清除、销毁。",
+      "groupDescOther": "无法自动分类的操作。",
+      "highRisk": "高风险",
+      "mediumRisk": "中风险",
+      "safe": "安全",
+      "unclassified": "未分类",
+      "allowedCount": "已允许 {{allowed}}/{{total}}",
+      "allOn": "全部开启",
+      "partial": "部分开启",
+      "allOff": "全部关闭",
+      "allowAllTools": "允许所有{{label}}工具",
+      "stateOn": "开",
+      "stateOff": "关"
     }
   },
   "playground": {
@@ -6142,7 +6172,8 @@
       "guardrailsCreateFailed": "{{count}} 个护栏创建失败：{{list}}。您可能需要手动创建。",
       "createGuardrailsFailed": "创建护栏失败，请重试。",
       "learnMoreAttachmentsArrow": "了解更多关于附件的信息 ->",
-      "learnMoreDocsArrow": "在文档中了解更多 ->"
+      "learnMoreDocsArrow": "在文档中了解更多 ->",
+      "dismissAriaLabel": "关闭 {{title}}"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "下一步",

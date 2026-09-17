@@ -67,4 +67,12 @@ describe("PolicyTable in Chinese", () => {
 
     expect(screen.getByText("2 个版本")).toBeInTheDocument();
   });
+
+  it("falls back to the Chinese placeholder name for a policy without a name", async () => {
+    await i18n.changeLanguage("zh-CN");
+    renderWithProviders(<PolicyTable {...defaultProps} policies={[makePolicy({ policy_name: "" })]} />);
+
+    expect(screen.getByRole("button", { name: "未命名策略" })).toBeInTheDocument();
+    expect(screen.queryByText("__unnamed__")).not.toBeInTheDocument();
+  });
 });
