@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "@/components/shared/DataTable";
 import { Plugin } from "@/components/claude_code_plugins/types";
+import i18n from "@/lib/i18n";
 import { getSkillHubTableColumns } from "./SkillHubTableColumns";
 
 const mockSkill: Plugin = {
@@ -19,7 +20,7 @@ function renderTable(data: Plugin[], onSkillClick = vi.fn()) {
   render(
     <DataTable
       data={data}
-      columns={getSkillHubTableColumns({ onSkillClick })}
+      columns={getSkillHubTableColumns({ onSkillClick, t: i18n.t.bind(i18n) })}
       getRowId={(skill, index) => skill.id || String(index)}
       sortingMode="client"
       size="compact"

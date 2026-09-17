@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "@/components/shared/DataTable";
+import i18n from "@/lib/i18n";
 import { getModelHubTableColumns, ModelHubData } from "./ModelHubTableColumns";
 
 const mockModel: ModelHubData = {
@@ -22,7 +23,7 @@ function renderTable(data: ModelHubData[], onModelClick = vi.fn()) {
   render(
     <DataTable
       data={data}
-      columns={getModelHubTableColumns({ onModelClick })}
+      columns={getModelHubTableColumns({ onModelClick, t: i18n.t.bind(i18n) })}
       getRowId={(model, index) => model.model_group || String(index)}
       sortingMode="client"
       size="compact"

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "@/components/shared/DataTable";
+import i18n from "@/lib/i18n";
 import { getMCPHubTableColumns, MCPServerData } from "./MCPHubTableColumns";
 
 const SERVER_URL = "https://mcp.exa.ai/mcp";
@@ -32,7 +33,7 @@ function renderTable(onServerClick = vi.fn()) {
   render(
     <DataTable
       data={[mockServer]}
-      columns={getMCPHubTableColumns({ onServerClick })}
+      columns={getMCPHubTableColumns({ onServerClick, t: i18n.t.bind(i18n) })}
       getRowId={(server) => server.server_id}
       sortingMode="client"
       size="compact"
@@ -57,7 +58,7 @@ describe("getMCPHubTableColumns", () => {
   it("does not expose a URL column", () => {
     renderTable();
     expect(screen.queryByText("URL")).not.toBeInTheDocument();
-    const columns = getMCPHubTableColumns({ onServerClick: vi.fn() });
+    const columns = getMCPHubTableColumns({ onServerClick: vi.fn(), t: i18n.t.bind(i18n) });
     expect(columns.some((c) => c.header === "URL" || c.meta?.title === "URL")).toBe(false);
   });
 
