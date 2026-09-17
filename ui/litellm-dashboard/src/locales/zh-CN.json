@@ -3635,7 +3635,9 @@
       "tokens": "Token：{{count}}",
       "cost": "费用：${{amount}}",
       "turns": "轮次：{{count}}",
-      "copy": "复制"
+      "copy": "复制",
+      "copyInput": "复制输入",
+      "copyOutput": "复制输出"
     },
     "table": {
       "loadingLogs": "🚅 正在加载日志...",
@@ -3661,7 +3663,8 @@
       "quickSelectLastHour": "最近 1 小时",
       "quickSelectLast4Hours": "最近 4 小时",
       "quickSelectLast24Hours": "最近 24 小时",
-      "quickSelectLast7Days": "最近 7 天"
+      "quickSelectLast7Days": "最近 7 天",
+      "quickSelectLast1Minute": "最近 1 分钟"
     },
     "filterOptions": {
       "teamIdLabel": "团队 ID",
@@ -3675,7 +3678,30 @@
       "errorMessageLabel": "错误消息",
       "keyHashLabel": "密钥哈希",
       "modelLabel": "模型",
-      "publicModelLabel": "公共模型 / 搜索工具"
+      "publicModelLabel": "公共模型 / 搜索工具",
+      "allRequestsLabel": "所有请求",
+      "allStatusesLabel": "所有状态",
+      "cacheHitLabel": "缓存命中",
+      "cacheMissLabel": "缓存未命中",
+      "cacheStatusLabel": "缓存",
+      "endUserPlaceholder": "搜索终端用户",
+      "errorCodePlaceholder": "选择或输入错误码",
+      "errorMessagePlaceholder": "输入错误消息…",
+      "internalUserPlaceholder": "搜索内部用户",
+      "keyAliasPlaceholder": "搜索密钥别名",
+      "keyHashPlaceholder": "输入密钥哈希…",
+      "modelPlaceholder": "搜索模型",
+      "noEndUsersInRange": "该时间范围内没有终端用户",
+      "noErrorCodesFound": "未找到错误码",
+      "noKeyAliasesFound": "未找到密钥别名",
+      "noModelsFoundLabel": "未找到模型",
+      "noTeamsFound": "未找到团队",
+      "noUsersFoundLabel": "未找到用户",
+      "publicModelPlaceholder": "输入公共模型或搜索工具…",
+      "sessionIdLabel": "会话 ID",
+      "sessionIdPlaceholder": "输入会话 ID…",
+      "teamPlaceholder": "搜索或选择团队",
+      "userIdLabel": "用户 ID"
     },
     "index": {
       "tabRequestLogs": "请求日志",
@@ -3683,7 +3709,8 @@
       "tabDeletedKeys": "已删除密钥",
       "tabDeletedTeams": "已删除团队",
       "requestLogsTitle": "请求日志",
-      "backToLogs": "返回日志"
+      "backToLogs": "返回日志",
+      "loading": "加载中"
     },
     "logsTableToolbar": {
       "searchPlaceholder": "按请求 ID 搜索",
@@ -3696,7 +3723,8 @@
       "showing": "显示第 {{from}} - {{to}} 条，共 {{total}} 条",
       "page": "第 {{current}} 页，共 {{total}} 页",
       "autoRefreshing": "每 15 秒自动刷新",
-      "stop": "停止"
+      "stop": "停止",
+      "hideHealthChecks": "隐藏健康检查"
     },
     "requestResponsePanel": {
       "requestCopied": "请求已复制到剪贴板",
@@ -3819,7 +3847,11 @@
       "labelTable": "表",
       "labelObjectId": "对象 ID",
       "labelChangedBy": "操作人",
-      "labelApiKeyHash": "API 密钥（哈希）"
+      "labelApiKeyHash": "API 密钥（哈希）",
+      "copyApiKeyHash": "复制 API 密钥哈希",
+      "copyObjectId": "复制对象 ID",
+      "notAvailable": "不适用",
+      "title": "审计日志详情"
     },
     "configInfoMessage": {
       "title": "请求/响应数据不可用",
@@ -3841,7 +3873,22 @@
       "discount": "折扣",
       "discountAmount": "折扣金额",
       "margin": "利润",
-      "finalCalculatedCost": "最终计算费用"
+      "finalCalculatedCost": "最终计算费用",
+      "cacheReadCostLabel": "提示词缓存读取费用：",
+      "cacheWriteCostLabel": "提示词缓存写入费用：",
+      "completionTokenCount": "（{{count}} 补全 Token）",
+      "discountAmountLabel": "折扣金额：",
+      "discountLabel": "折扣（{{percent}}）：",
+      "finalCalculatedCostLabel": "最终计算费用：",
+      "inputCostLabel": "输入费用：",
+      "marginFixedLabel": "利润：",
+      "marginLabel": "利润（{{percent}}）：",
+      "originalLlmCostLabel": "原始 LLM 费用：",
+      "outputCostLabel": "输出费用：",
+      "promptTokenCount": "（{{count}} 提示词 Token）",
+      "tokenCount": "（{{count}} Token）",
+      "toolUsageCostLabel": "工具使用费用：",
+      "totalLabel": "总计："
     },
     "errorViewer": {
       "title": "错误详情",
@@ -3869,7 +3916,12 @@
       "judge": "评判模型",
       "iter": "迭代",
       "judgeError": "评判错误",
-      "scoreNoCriterion": "得分：{{score}} — 无逐标准明细。"
+      "scoreNoCriterion": "得分：{{score}} — 无逐标准明细。",
+      "iterLabel": "迭代：{{count}}",
+      "judgeErrorLabel": "评判错误：{{message}}",
+      "judgeLabel": "评判模型：{{model}}",
+      "thresholdLabel": "阈值：{{threshold}}",
+      "totalLabel": "总计"
     },
     "bedrockGuardrailDetails": {
       "detected": "已检测",
@@ -3911,7 +3963,43 @@
       "roleSystem": "系统",
       "roleUser": "用户",
       "roleAssistant": "助手",
-      "roleTool": "工具结果"
+      "roleTool": "工具结果",
+      "audioMarker": "[音频]",
+      "fileMarker": "[文件]",
+      "imageMarker": "[图片]",
+      "unknown": "未知"
+    },
+    "auditLogsTable": {
+      "filtersDescription": "缩小审计日志条目范围",
+      "loadingAuditLogs": "正在加载审计日志…",
+      "logsAppearHere": "对密钥、团队、用户和模型的管理变更会显示在这里。",
+      "noLogsYet": "暂无审计日志",
+      "noMatchingLogs": "没有匹配的审计日志",
+      "noMatchingLogsHint": "没有符合筛选条件的审计日志条目。",
+      "objectIdPlaceholder": "输入对象 ID…",
+      "searchPlaceholder": "按 ID 搜索审计日志…",
+      "teamIdPlaceholder": "输入团队 ID…",
+      "userIdPlaceholder": "输入用户 ID…"
+    },
+    "classifyTag": {
+      "label": "分类",
+      "tooltip": "自动路由发起的档位分类调用，并非调用方发送的请求"
+    },
+    "requestLogsTable": {
+      "filtersDescription": "缩小请求日志范围",
+      "loadingRequestLogs": "正在加载请求日志…",
+      "noMatchingRequests": "没有匹配的请求",
+      "noMatchingRequestsHint": "该时间范围内没有符合筛选条件的请求。",
+      "noRequestsYet": "暂无请求",
+      "requestsAppearHere": "通过 LiteLLM 代理的请求会显示在这里。",
+      "searchPlaceholder": "按 ID 搜索日志…"
+    },
+    "requestLogsTableColumns": {
+      "batchCost": "批量费用",
+      "batchFailedTooltip": "{{total}} 个批量请求中有 {{failed}} 个失败",
+      "batchSucceeded": "{{successful}}/{{total}} 成功",
+      "cacheHitCount": "{{count}} 次缓存命中",
+      "sessionTotal": "会话总计"
     }
   },
   "userAgentActivity": {
@@ -3964,7 +4052,8 @@
       "displayNameHelp": "覆盖此工具对用户显示的名称，留空则使用原名称。",
       "noDescription": "无描述",
       "descriptionHelp": "覆盖向用户显示的工具描述，留空则使用原描述。",
-      "noToolsAvailableForConfig": "暂无可用工具"
+      "noToolsAvailableForConfig": "暂无可用工具",
+      "toolsEnabled": "已为用户开放 {{enabled}} / {{count}} 个工具"
     },
     "mcpTools": {
       "title": "MCP 工具",
@@ -3992,7 +4081,9 @@
       "selected": "已选择",
       "testingPlaygroundTitle": "工具测试 Playground",
       "selectToolToTest": "选择工具进行测试",
-      "selectToolHint": "从左侧边栏选择工具，开始使用自定义输入测试其功能。"
+      "selectToolHint": "从左侧边栏选择工具，开始使用自定义输入测试其功能。",
+      "accessTokenRequired": "需要 Access Token",
+      "headersConfigured": "已配置 {{count}} 个请求头"
     },
     "byokCredentialModal": {
       "pleaseEnterApiKey": "请输入您的 API 密钥",
@@ -4038,7 +4129,8 @@
       "logoLabel": "Logo",
       "logoTooltip": "选择常用 Logo 或粘贴任意图片 URL。Logo 将显示在管理页面和对话页面。",
       "selectedLogoAlt": "已选 Logo",
-      "customUrlPlaceholder": "或粘贴自定义 Logo URL..."
+      "customUrlPlaceholder": "或粘贴自定义 Logo URL...",
+      "selectedLogoLabel": "已选"
     },
     "mcpNetworkSettings": {
       "privateIpRangesTitle": "私有 IP 范围",
@@ -4449,7 +4541,8 @@
       "stackTrace": "堆栈跟踪",
       "connectionSuccessfulBang": "连接成功！",
       "noToolsFound": "此 MCP 服务器未发现任何工具",
-      "toolPreviewUnavailable": "工具预览不可用"
+      "toolPreviewUnavailable": "工具预览不可用",
+      "readyToSubmit": "可以提交"
     },
     "mcpDiscovery": {
       "title": "添加 MCP 服务器",
@@ -4629,7 +4722,20 @@
       "saveChanges": "保存更改",
       "displayNameInvalid": "仅允许字母、数字、下划线和连字符（不能包含空格）。",
       "serverUrlInvalid": "请输入有效的 URL（例如 http://service-name.domain:1234/path 或 https://example.com）",
-      "serverNameInvalid": "不能包含「-」（连字符）或空格，请改用「_」（下划线）。"
+      "serverNameInvalid": "不能包含「-」（连字符）或空格，请改用「_」（下划线）。",
+      "browserTokenHeldToast": "Token 仅保存在本次浏览器会话中。现在可以加载并配置工具；该 Token 不会保存到 LiteLLM。",
+      "incompleteToolPreview": "请补全 URL、身份验证和请求头设置以加载工具。",
+      "authorizeUpstreamHint": "请在上游完成授权（仅浏览器会话，位于「身份验证」区块）以加载并配置此服务器的工具。",
+      "oauthTokenPersistFailedNoMessage": "MCP 服务器已更新，但 OAuth Token 持久化失败",
+      "transportRequired": "传输类型为必填项",
+      "serverUrlPlaceholder": "https://your-mcp-server.com",
+      "specUrlPlaceholder": "https://petstore3.swagger.io/api/v3/openapi.json",
+      "maxConcurrentRequestsLabel": "最大并发请求数（可选）",
+      "maxConcurrentRequestsTooltip": "LiteLLM 对此服务器同时运行的工具调用上限。超出的调用会等待空闲槽位。留空表示不限制。",
+      "maxConcurrentRequestsPlaceholder": "例如 10",
+      "authRequired": "身份验证为必填项",
+      "noOAuthFlowSet": "此服务器未设置 OAuth 流程",
+      "noOAuthFlowSetDesc": "请选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按您预期的方式进行身份验证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户身份验证，并以保守方式处理机器对机器形式的凭据。"
     },
     "mcpServerView": {
       "backToAllServers": "返回所有服务器",
@@ -5166,7 +5272,24 @@
       "clearFieldLabel": "字段",
       "deleteSuccess": "Hashicorp Vault 配置已删除",
       "clearSuccess": "{{fieldLabel}} 已清除",
-      "connectionSuccess": "Vault 连接成功！"
+      "connectionSuccess": "Vault 连接成功！",
+      "cardTitle": "Hashicorp Vault",
+      "loadingAriaLabel": "正在加载 Hashicorp Vault 配置",
+      "testingButton": "测试中...",
+      "clearFieldAriaLabel": "清除{{fieldLabel}}",
+      "authMethodTlsCertificate": "TLS 证书",
+      "fieldLabels": {
+        "vault_namespace": "命名空间",
+        "vault_mount_name": "KV 挂载名称",
+        "vault_path_prefix": "路径前缀",
+        "vault_token": "Token",
+        "approle_role_id": "Role ID",
+        "approle_secret_id": "Secret ID",
+        "approle_mount_path": "挂载路径",
+        "client_cert": "客户端证书",
+        "client_key": "客户端密钥",
+        "vault_cert_role": "证书角色"
+      }
     },
     "hashicorpVaultEmptyPlaceholder": {
       "noConfigTitle": "未找到 Vault 配置",
@@ -5183,7 +5306,20 @@
       "retentionPeriodPlaceholder": "例如：7d、30d",
       "saveSettingsButton": "保存设置",
       "saveSuccess": "花费日志设置更新成功",
-      "saveFailed": "保存花费日志设置失败：{{error}}"
+      "saveFailed": "保存花费日志设置失败：{{error}}",
+      "cleanupBatchSizeLabel": "花费日志清理批次大小（可选）",
+      "cleanupBatchSizePlaceholder": "例如：1000",
+      "cleanupBatchSizeTooltipDefault": "清理时每条 DELETE 语句删除的行数。留空则使用默认值 1000。",
+      "cleanupMaxBatchesLabel": "花费日志清理最大批次数（可选）",
+      "cleanupMaxBatchesPlaceholder": "例如：500",
+      "cleanupMaxBatchesTooltipDefault": "每次清理运行时每张表执行的 DELETE 语句数量上限。留空则使用默认值 500。",
+      "cleanupRunBudgetLabel": "花费日志清理运行预算（可选）",
+      "cleanupRunBudgetPlaceholder": "例如：5m",
+      "cleanupRunBudgetTooltipDefault": "整次清理运行的墙钟时间预算，由本次清理的所有表共享（例如 '5m'）。留空则使用默认值 5m。",
+      "cleanupBatchTimeoutLabel": "花费日志清理批次超时（可选）",
+      "cleanupBatchTimeoutPlaceholder": "例如：30s",
+      "cleanupBatchTimeoutTooltipDefault": "应用于每个清理批次的 Postgres 语句和锁超时，避免清理长期占用连接（例如 '30s'）。留空则使用默认值 30s。",
+      "clearFailed": "清除以下字段的已保存值失败：{{fields}}"
     },
     "mcpSemanticFilterSettings": {
       "loginRequired": "请登录以配置语义过滤器设置。",
@@ -5227,7 +5363,15 @@
       "semanticFilterHeader": "x-litellm-semantic-filter：显示总工具数 → 已选工具数",
       "semanticFilterHeaderExample": "示例：10→3",
       "semanticFilterToolsHeader": "x-litellm-semantic-filter-tools：已选工具名称的 CSV",
-      "semanticFilterToolsHeaderExample": "示例：wikipedia-fetch,github-search,slack-post"
+      "semanticFilterToolsHeaderExample": "示例：wikipedia-fetch,github-search,slack-post",
+      "filterFailedTitle": "语义过滤未运行",
+      "toolsSelectedOfTotal": "已选中 {{total}} 个工具中的 {{selected}} 个",
+      "toolsFilteredOut": "已过滤掉 {{count}} 个工具",
+      "moreToolsNotShown": "另有 {{count}} 个已选工具未显示",
+      "queryAndModelRequired": "请输入查询并选择模型",
+      "filterNotEnabled": "语义过滤器未启用，或没有工具被过滤",
+      "testSuccess": "语义过滤器测试完成",
+      "testFailed": "测试语义过滤器失败"
     },
     "addSSOSettingsModal": {
       "title": "添加 SSO",
@@ -5271,7 +5415,17 @@
         "genericClientSecret": "通用客户端密钥",
         "authorizationEndpoint": "授权端点",
         "tokenEndpoint": "Token 端点",
-        "userinfoEndpoint": "用户信息端点"
+        "userinfoEndpoint": "用户信息端点",
+        "scopes": "作用域",
+        "idpMetadataUrl": "IdP 元数据 URL",
+        "idpMetadataXml": "IdP 元数据 XML",
+        "spEntityId": "SP 实体 ID",
+        "allowUnsolicited": "允许 IdP 发起的（非请求）响应"
+      },
+      "placeholders": {
+        "idpMetadataUrl": "https://idp.example.com/metadata（使用此链接或下方的元数据 XML）",
+        "idpMetadataXml": "如果没有元数据 URL，请在此粘贴 IdP 元数据 XML",
+        "spEntityId": "默认为 <proxy base url>/sso/saml/metadata"
       }
     },
     "deleteSSOSettingsModal": {
@@ -5291,7 +5445,9 @@
       "processFailed": "处理 SSO 设置失败：{{error}}"
     },
     "redactableField": {
-      "notConfigured": "未配置"
+      "notConfigured": "未配置",
+      "showValue": "显示值",
+      "hideValue": "隐藏值"
     },
     "roleMappings": {
       "title": "角色映射",
@@ -5315,7 +5471,14 @@
       "userInfoEndpoint": "用户信息端点",
       "teamIdsJwtField": "团队 ID JWT 字段",
       "editSSOSettings": "编辑 SSO 设置",
-      "deleteSSOSettings": "删除 SSO 设置"
+      "deleteSSOSettings": "删除 SSO 设置",
+      "copyValue": "复制值",
+      "provided": "已提供",
+      "scopes": "作用域",
+      "idpMetadataUrl": "IdP 元数据 URL",
+      "idpMetadataXml": "IdP 元数据 XML",
+      "spEntityId": "SP 实体 ID",
+      "allowUnsolicited": "允许 IdP 发起的（非请求）响应"
     },
     "sSOSettingsEmptyPlaceholder": {
       "noConfigTitle": "未找到 SSO 配置",
@@ -5356,7 +5519,12 @@
       "scopeUserSearchLabel": "将用户搜索范围限定到组织",
       "scopeUserSearchDesc": "启用后，用户搜索端点将按组织限制结果。关闭时，任何已认证用户均可搜索所有用户。",
       "disableCustomApiKeysLabel": "禁用自定义虚拟密钥值",
-      "disableCustomApiKeysDesc": "若为 true，用户无法指定自定义密钥值，所有密钥必须自动生成。"
+      "disableCustomApiKeysDesc": "若为 true，用户无法指定自定义密钥值，所有密钥必须自动生成。",
+      "loading": "正在加载界面设置",
+      "enableProjectsUIAriaLabel": "启用项目功能",
+      "enableChatUIAriaLabel": "启用 Chat 页面",
+      "enableChatUILabel": "[BETA] 启用 Chat 页面（页面将刷新）",
+      "enableChatUIDesc": "启用后，将在界面侧边栏显示 Chat 页面，用户可与 LLM 对话，并通过 OAuth 连接自己的 MCP 服务器凭据。"
     },
     "loggingCallbacksTable": {
       "addCallbackButton": "+ 添加回调",
@@ -5370,7 +5538,12 @@
       "editCallbackTooltip": "编辑回调",
       "deleteCallbackTooltip": "删除回调",
       "emptyStateTitle": "未配置回调",
-      "emptyStateDesc": "添加您的第一个回调，开始将数据记录到外部服务。"
+      "emptyStateDesc": "添加您的第一个回调，开始将数据记录到外部服务。",
+      "readOnlyLabel": "只读",
+      "readOnlyTooltip": "此活跃回调不是通过仪表板添加的，请在配置它的位置进行编辑。",
+      "openActionsAriaLabel": "打开回调操作",
+      "addCallback": "添加回调",
+      "loadingCallbacks": "正在加载回调…"
     },
     "addFallbacks": {
       "addButton": "添加回退",
@@ -5379,7 +5552,10 @@
       "addSuccess_one": "成功添加 {{count}} 个回退配置！",
       "addSuccess_other": "成功添加 {{count}} 个回退配置！",
       "savingButton": "正在保存配置...",
-      "saveButton": "保存所有配置"
+      "saveButton": "保存所有配置",
+      "incompleteGroupsCount": "请完成所有组的配置，{{count}} 个组尚未完成。",
+      "addSuccessCount": "成功添加 {{count}} 个回退配置！",
+      "missingOnChange": "未提供 onChange 回调"
     },
     "addFallbacksModal": {
       "title": "配置模型回退",
@@ -5397,13 +5573,17 @@
       "selectHint": "搜索并选择多个模型，已选模型将按顺序显示在下方。（已用 {{used}}/{{max}}）",
       "maxReachedHint": "已达到最大 {{maxFallbacks}} 个回退，请先移除一些再添加。",
       "noFallbacksSelected": "未选择回退模型",
-      "addFromDropdown": "从上方下拉菜单添加模型"
+      "addFromDropdown": "从上方下拉菜单添加模型",
+      "fallbackChainAriaLabel": "回退链",
+      "removeModelAriaLabel": "移除 {{model}}"
     },
     "fallbackSelectionForm": {
       "atLeastOneGroup": "至少需要一个组",
       "groupLabel": "组 {{number}}",
       "noGroupsConfigured": "未配置回退组",
-      "createFirstGroup": "创建第一个组"
+      "createFirstGroup": "创建第一个组",
+      "addGroupAriaLabel": "添加回退组",
+      "removeGroupAriaLabel": "移除 {{name}}"
     },
     "fallbacks": {
       "testingFallback": "正在测试回退模型响应...",
@@ -5418,7 +5598,119 @@
       "deleteFallbackTooltip": "删除回退",
       "deleteModalTitle": "删除回退？",
       "deleteModalMessage": "确定要删除此回退吗？此操作无法撤销。",
-      "deleteModalResourceTitle": "回退信息"
+      "deleteModalResourceTitle": "回退信息",
+      "editFallbackTooltip": "编辑回退"
+    },
+    "sSOSettingsLoadingSkeleton": {
+      "loading": "正在加载 SSO 配置"
+    },
+    "mcpToolSearchSettings": {
+      "loginRequired": "请登录以配置工具搜索。",
+      "loadError": "无法加载 MCP 工具搜索设置",
+      "infoTitle": "原生 MCP 工具搜索",
+      "infoDesc": "控制原生 MCP 客户端用于发现工具的 <0>mcp_tool_search</0> 虚拟工具。设置嵌入模型后，工具会按名称和描述的语义排序，因此查询 “FX” 可以找到 “foreign exchange rates” 工具；未设置时则使用关键词匹配。调用方只能看到其密钥、团队和服务器权限已允许的工具。",
+      "rankingCardTitle": "排序",
+      "coreToolsCardTitle": "核心工具",
+      "embeddingModelTooltip": "从模型列表中选择用于按语义排序工具的嵌入模型。清除后将回退到关键词匹配。",
+      "keywordMatching": "关键词匹配（无嵌入模型）",
+      "topKTooltip": "搜索返回的排序工具数量上限。工具调用中较小的 top_k 优先生效，核心工具不计入。",
+      "similarityThresholdTooltip": "工具进入语义结果所需的最低余弦相似度。0 表示不设下限。",
+      "coreToolsLabel": "始终优先返回",
+      "coreToolsTooltip": "每行一个工具名称，例如 my_server-get_rates。只要调用方有权限使用，这些工具会排在排序结果之前。"
+    },
+    "userBannerSettings": {
+      "saveSuccess": "用户横幅更新成功",
+      "cardTitle": "用户横幅",
+      "cardDescription": "向所有界面用户发布公告。支持 Markdown；横幅会显示在每个页面的页眉下方，直到您取消发布。用户可以关闭横幅，内容变更后会重新出现。",
+      "publishLabel": "发布用户横幅",
+      "messageLabel": "消息",
+      "messagePlaceholder": "**计划维护** 今晚 22:00 UTC。参见[状态页](https://example.com)。",
+      "messageRequired": "发布前请先填写消息。",
+      "severityLabel": "严重级别",
+      "severityAriaLabel": "横幅严重级别",
+      "severityInfo": "信息",
+      "previewLabel": "预览",
+      "saveButton": "保存横幅"
+    },
+    "editFallbacks": {
+      "updateSuccess": "已成功更新 {{model}} 的回退！",
+      "savingChanges": "正在保存更改..."
+    },
+    "pluginSettings": {
+      "cardTitle": "插件",
+      "description": "将外部服务注册为插件。添加后，用户可通过侧边栏左上角的模式切换器切换到该插件。",
+      "manifestHint": "每个插件必须提供 <code>GET /api/plugin-manifest</code>，返回导航项和能力。",
+      "addPlugin": "添加插件",
+      "editPlugin": "编辑插件",
+      "displayName": "显示名称",
+      "urlColumn": "URL",
+      "pluginKey": "插件密钥",
+      "nameLabel": "名称（标识符）",
+      "nameDescription": "用于 URL 和配置，不能包含空格。例如 litellm-platform-plugin",
+      "displayNamePlaceholder": "智能体控制平面",
+      "urlDescription": "插件服务的基础 URL",
+      "pluginKeyDescription": "可选。插件自身的凭据，仅在 litellm 将 API 调用反向代理到插件后端（/plugin-proxy/<name>/*）时以 Authorization: Bearer <key> 注入。对于使用转发的 litellm 用户 Token 的插件（例如 iframe 插件）请留空，该路径使用用户 Token，而非此密钥。",
+      "keyPlaceholderEdit": "留空以保留当前密钥",
+      "keyPlaceholderCreate": "sk-...（可选）",
+      "hideKeyAriaLabel": "隐藏插件密钥",
+      "showKeyAriaLabel": "显示插件密钥",
+      "editAriaLabel": "编辑 {{name}}",
+      "deleteAriaLabel": "删除 {{name}}"
+    },
+    "cyberArk": {
+      "cardTitle": "CyberArk Conjur",
+      "loadingAriaLabel": "正在加载 CyberArk 配置",
+      "loadError": "无法加载 CyberArk 配置",
+      "manageSecretManager": "管理密钥管理器配置",
+      "testingButton": "测试中...",
+      "testConnection": "测试连接",
+      "editConfiguration": "编辑配置",
+      "deleteConfiguration": "删除配置",
+      "hotReloadHint": "配置更改会在所有代理实例上热重载",
+      "viewDocumentation": "查看文档",
+      "authMethod": "认证方式",
+      "authMethodApiKey": "API 密钥",
+      "authMethodTlsCertificate": "TLS 证书",
+      "connectionSuccess": "CyberArk Conjur 连接成功！",
+      "deleteSuccess": "CyberArk 配置已删除",
+      "clearSuccess": "{{fieldLabel}} 已清除",
+      "clearTitle": "清除 {{fieldLabel}}？",
+      "clearMessage": "此操作将删除已存储的值。",
+      "clearResourceTitle": "字段",
+      "clearFieldLabel": "字段",
+      "clearFieldAriaLabel": "清除{{fieldLabel}}",
+      "notConfigured": "未配置",
+      "deleteTitle": "删除 CyberArk 配置？",
+      "deleteMessage": "使用 CyberArk 密钥的模型将无法访问其 API 密钥，直到保存新配置为止。",
+      "deleteResourceTitle": "CyberArk 配置",
+      "conjurServerUrlLabel": "Conjur 服务器 URL",
+      "fieldLabels": {
+        "cyberark_account": "账户",
+        "cyberark_username": "用户名",
+        "cyberark_api_key": "API 密钥",
+        "client_cert": "客户端证书",
+        "client_key": "客户端密钥",
+        "ssl_verify": "SSL 验证",
+        "refresh_interval": "Token 刷新间隔（秒）"
+      }
+    },
+    "editCyberArkModal": {
+      "title": "编辑 CyberArk 配置",
+      "saveSuccess": "CyberArk 配置更新成功",
+      "urlPatternMessage": "必须以 http:// 或 https:// 开头",
+      "leaveBlankToKeep": "留空以保留现有值（{{existing}}）",
+      "groupConnection": "连接",
+      "groupApiKeyAuth": "API 密钥认证",
+      "groupApiKeyAuthSubtitle": "使用 Conjur API 密钥进行认证。只需配置一种认证方式。",
+      "groupCertificateAuth": "证书认证",
+      "groupCertificateAuthSubtitle": "使用客户端 TLS 证书和密钥进行认证。只需配置一种认证方式。",
+      "groupAdvanced": "高级",
+      "groupAdvancedSubtitle": "可选的 TLS 和 Token 缓存设置。"
+    },
+    "cyberArkEmptyPlaceholder": {
+      "noConfigTitle": "未找到 CyberArk 配置",
+      "noConfigDesc": "配置 CyberArk Conjur 以安全管理您的 LiteLLM 部署的提供商 API 密钥和密钥。",
+      "configureButton": "配置 CyberArk"
     }
   },
   "promptsPage": {
@@ -5617,7 +5909,13 @@
       "attachmentCreatedSuccess_one": "附加创建成功",
       "attachmentCreatedSuccess_other": "成功创建 {{count}} 个附加",
       "attachmentsPartialSuccess": "成功创建 {{successCount}} 个附加，{{failedCount}} 个失败",
-      "createAttachmentFailed": "创建附加失败：{{error}}"
+      "createAttachmentFailed": "创建附加失败：{{error}}",
+      "createAttachmentsFailed": "创建附件失败",
+      "loadingTeams": "正在加载团队...",
+      "noMatchingKeys": "没有匹配的密钥",
+      "noMatchingPolicies": "没有匹配的策略",
+      "noMatchingTeams": "没有匹配的团队",
+      "teamsNotExist": "以下团队不存在：{{teams}}。请选择已有团队，或使用类似 \"team-*\" 的通配符按前缀匹配。"
     },
     "addPolicyForm": {
       "simpleModeTitle": "简单模式",
@@ -5663,7 +5961,8 @@
       "modelConditionPlaceholderRegex": "留空则应用于所有模型（如 gpt-4.* 或 bedrock/claude-.*）",
       "policyUpdatedSuccess": "策略更新成功",
       "policyCreatedSuccess": "策略创建成功",
-      "savePolicyFailed": "保存策略失败：{{error}}"
+      "savePolicyFailed": "保存策略失败：{{error}}",
+      "flowBuilderRedirectNotice": "您将进入流程构建器，以可视化方式设计策略逻辑。"
     },
     "aiSuggestionModal": {
       "title": "AI 策略建议",
@@ -5719,7 +6018,9 @@
       "testSuggestions": "测试建议",
       "useSelectedTemplates_one": "使用 {{count}} 个选中的模板",
       "useSelectedTemplates_other": "使用 {{count}} 个选中的模板",
-      "msLatencyDisplay": "+{{value}}ms 延迟"
+      "msLatencyDisplay": "+{{value}}ms 延迟",
+      "guardrailsAcrossTemplatesOne": "{{guardrailCount}} 个护栏，跨 {{templateCount}} 个模板",
+      "pressEnterToSubmit": "按 <kbd>Enter</kbd> 提交"
     },
     "attachmentTable": {
       "attachmentId": "附件 ID",
@@ -5731,7 +6032,13 @@
       "models": "模型",
       "tags": "标签",
       "deleteAttachment": "删除附件",
-      "noAttachmentsFound": "未找到附件"
+      "noAttachmentsFound": "未找到附件",
+      "attachmentIdCopied": "已复制附件 ID",
+      "configAttachmentHint": "配置文件中的附件由配置文件定义，无法从仪表盘删除。",
+      "copyAttachmentId": "复制附件 ID",
+      "emptyHint": "将策略附加到团队、密钥、模型或标签，以控制其生效范围。",
+      "loadingAttachments": "正在加载附件…",
+      "openAttachmentActions": "打开附件操作"
     },
     "guardrailSelectionModal": {
       "subtitle": "审查并选择要为此模板创建的护栏",
@@ -5757,7 +6064,8 @@
       "selectAtLeastOne": "请至少选择一个护栏来创建，或点击「使用模板」直接使用而不创建新护栏。",
       "createAndUseTemplate_one": "创建 {{count}} 个护栏并使用模板",
       "createAndUseTemplate_other": "创建 {{count}} 个护栏并使用模板",
-      "useTemplate": "使用模板"
+      "useTemplate": "使用模板",
+      "unknown": "未知"
     },
     "impactPopover": {
       "blastRadius": "影响范围",
@@ -5832,7 +6140,9 @@
       "guardrailsCreated_other": "已创建 {{count}} 个护栏！请完成策略表单以保存。",
       "templateReady": "模板已就绪！请完成策略表单以保存。",
       "guardrailsCreateFailed": "{{count}} 个护栏创建失败：{{list}}。您可能需要手动创建。",
-      "createGuardrailsFailed": "创建护栏失败，请重试。"
+      "createGuardrailsFailed": "创建护栏失败，请重试。",
+      "learnMoreAttachmentsArrow": "了解更多关于附件的信息 ->",
+      "learnMoreDocsArrow": "在文档中了解更多 ->"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "下一步",
@@ -5913,7 +6223,10 @@
       "updatePolicy": "更新策略",
       "savePolicy": "保存策略",
       "addDescriptionPlaceholder": "添加描述（可选）...",
-      "durationMs": "（{{ms}}ms）"
+      "durationMs": "（{{ms}}ms）",
+      "comingSoon": "即将推出",
+      "defaultTestMessage": "你好，能帮我一下吗？",
+      "guardrailFieldLabel": "护栏"
     },
     "policyInfo": {
       "notFound": "未找到策略",
@@ -5932,7 +6245,8 @@
       "guardrailsToRemove": "要移除的护栏",
       "conditions": "条件",
       "modelCondition": "模型条件",
-      "noModelCondition": "无模型条件（应用于所有模型）"
+      "noModelCondition": "无模型条件（应用于所有模型）",
+      "goBack": "返回"
     },
     "policyTable": {
       "versionCount_one": "{{count}} 个版本",
@@ -5945,7 +6259,12 @@
       "editPolicy": "编辑策略",
       "deletePolicy": "删除策略",
       "unnamedPolicy": "未命名策略",
-      "noPoliciesFound": "未找到策略"
+      "noPoliciesFound": "未找到策略",
+      "configBadge": "配置",
+      "configPolicyHint": "配置文件中的策略由配置文件定义，无法从仪表盘编辑或删除。",
+      "emptyHint": "创建策略以组合护栏，并将其应用到多个团队。",
+      "loadingPolicies": "正在加载策略…",
+      "openPolicyActions": "打开策略操作"
     },
     "policyTemplates": {
       "title": "策略模板",
@@ -6005,7 +6324,8 @@
       "refineList": "精炼列表",
       "refinePlaceholder": "例如：再添加 10 个亚洲竞品，增加到 50 个...",
       "send": "发送",
-      "refineHint": "给出添加、移除或修改竞品的指令，按 Enter 发送。"
+      "refineHint": "给出添加、移除或修改竞品的指令，按 Enter 发送。",
+      "removeCompetitor": "移除 {{name}}"
     }
   },
   "addModel": {

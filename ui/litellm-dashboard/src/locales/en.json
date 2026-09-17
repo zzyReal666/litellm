@@ -3635,7 +3635,9 @@
       "tokens": "Tokens: {{count}}",
       "cost": "Cost: ${{amount}}",
       "turns": "Turns: {{count}}",
-      "copy": "Copy"
+      "copy": "Copy",
+      "copyInput": "Copy input",
+      "copyOutput": "Copy output"
     },
     "table": {
       "loadingLogs": "🚅 Loading logs...",
@@ -3661,7 +3663,8 @@
       "quickSelectLastHour": "Last Hour",
       "quickSelectLast4Hours": "Last 4 Hours",
       "quickSelectLast24Hours": "Last 24 Hours",
-      "quickSelectLast7Days": "Last 7 Days"
+      "quickSelectLast7Days": "Last 7 Days",
+      "quickSelectLast1Minute": "Last 1 Minute"
     },
     "filterOptions": {
       "teamIdLabel": "Team ID",
@@ -3675,7 +3678,30 @@
       "errorMessageLabel": "Error Message",
       "keyHashLabel": "Key Hash",
       "modelLabel": "Model",
-      "publicModelLabel": "Public model / search tool"
+      "publicModelLabel": "Public model / search tool",
+      "allRequestsLabel": "All Requests",
+      "allStatusesLabel": "All Statuses",
+      "cacheHitLabel": "Cache Hit",
+      "cacheMissLabel": "Cache Miss",
+      "cacheStatusLabel": "Cache",
+      "endUserPlaceholder": "Search an end user",
+      "errorCodePlaceholder": "Select or type an error code",
+      "errorMessagePlaceholder": "Enter error message…",
+      "internalUserPlaceholder": "Search an internal user",
+      "keyAliasPlaceholder": "Search a key alias",
+      "keyHashPlaceholder": "Enter key hash…",
+      "modelPlaceholder": "Search a model",
+      "noEndUsersInRange": "No end users in this time range",
+      "noErrorCodesFound": "No error codes found",
+      "noKeyAliasesFound": "No key aliases found",
+      "noModelsFoundLabel": "No models found",
+      "noTeamsFound": "No teams found",
+      "noUsersFoundLabel": "No users found",
+      "publicModelPlaceholder": "Enter public model or search tool…",
+      "sessionIdLabel": "Session ID",
+      "sessionIdPlaceholder": "Enter session ID…",
+      "teamPlaceholder": "Search or select a team",
+      "userIdLabel": "User ID"
     },
     "index": {
       "tabRequestLogs": "Request Logs",
@@ -3683,7 +3709,8 @@
       "tabDeletedKeys": "Deleted Keys",
       "tabDeletedTeams": "Deleted Teams",
       "requestLogsTitle": "Request Logs",
-      "backToLogs": "Back to Logs"
+      "backToLogs": "Back to Logs",
+      "loading": "Loading"
     },
     "logsTableToolbar": {
       "searchPlaceholder": "Search by Request ID",
@@ -3696,7 +3723,8 @@
       "showing": "Showing {{from}} - {{to}} of {{total}} results",
       "page": "Page {{current}} of {{total}}",
       "autoRefreshing": "Auto-refreshing every 15 seconds",
-      "stop": "Stop"
+      "stop": "Stop",
+      "hideHealthChecks": "Hide Health Checks"
     },
     "requestResponsePanel": {
       "requestCopied": "Request copied to clipboard",
@@ -3819,7 +3847,11 @@
       "labelTable": "Table",
       "labelObjectId": "Object ID",
       "labelChangedBy": "Changed By",
-      "labelApiKeyHash": "API Key (Hash)"
+      "labelApiKeyHash": "API Key (Hash)",
+      "copyApiKeyHash": "Copy API key hash",
+      "copyObjectId": "Copy object ID",
+      "notAvailable": "N/A",
+      "title": "Audit log details"
     },
     "configInfoMessage": {
       "title": "Request/Response Data Not Available",
@@ -3841,7 +3873,22 @@
       "discount": "Discount",
       "discountAmount": "Discount Amount",
       "margin": "Margin",
-      "finalCalculatedCost": "Final Calculated Cost"
+      "finalCalculatedCost": "Final Calculated Cost",
+      "cacheReadCostLabel": "Prompt Cache Read Cost:",
+      "cacheWriteCostLabel": "Prompt Cache Write Cost:",
+      "completionTokenCount": "({{count}} completion tokens)",
+      "discountAmountLabel": "Discount Amount:",
+      "discountLabel": "Discount ({{percent}}):",
+      "finalCalculatedCostLabel": "Final Calculated Cost:",
+      "inputCostLabel": "Input Cost:",
+      "marginFixedLabel": "Margin:",
+      "marginLabel": "Margin ({{percent}}):",
+      "originalLlmCostLabel": "Original LLM Cost:",
+      "outputCostLabel": "Output Cost:",
+      "promptTokenCount": "({{count}} prompt tokens)",
+      "tokenCount": "({{count}} tokens)",
+      "toolUsageCostLabel": "Tool Usage Cost:",
+      "totalLabel": "Total:"
     },
     "errorViewer": {
       "title": "Error Details",
@@ -3869,7 +3916,12 @@
       "judge": "Judge",
       "iter": "Iter",
       "judgeError": "Judge error",
-      "scoreNoCriterion": "Score: {{score}} — no per-criterion breakdown available."
+      "scoreNoCriterion": "Score: {{score}} — no per-criterion breakdown available.",
+      "iterLabel": "Iter: {{count}}",
+      "judgeErrorLabel": "Judge error: {{message}}",
+      "judgeLabel": "Judge: {{model}}",
+      "thresholdLabel": "threshold: {{threshold}}",
+      "totalLabel": "Total"
     },
     "bedrockGuardrailDetails": {
       "detected": "detected",
@@ -3911,7 +3963,43 @@
       "roleSystem": "SYSTEM",
       "roleUser": "USER",
       "roleAssistant": "ASSISTANT",
-      "roleTool": "TOOL RESULT"
+      "roleTool": "TOOL RESULT",
+      "audioMarker": "[Audio]",
+      "fileMarker": "[File]",
+      "imageMarker": "[Image]",
+      "unknown": "unknown"
+    },
+    "auditLogsTable": {
+      "filtersDescription": "Narrow down audit log entries",
+      "loadingAuditLogs": "Loading audit logs…",
+      "logsAppearHere": "Administrative changes to keys, teams, users, and models will appear here.",
+      "noLogsYet": "No audit logs yet",
+      "noMatchingLogs": "No matching audit logs",
+      "noMatchingLogsHint": "No audit log entries match your filters.",
+      "objectIdPlaceholder": "Enter object ID…",
+      "searchPlaceholder": "Search audit logs by ID…",
+      "teamIdPlaceholder": "Enter team ID…",
+      "userIdPlaceholder": "Enter user ID…"
+    },
+    "classifyTag": {
+      "label": "Classify",
+      "tooltip": "Tier classification call made by the auto-router, not a request the caller sent"
+    },
+    "requestLogsTable": {
+      "filtersDescription": "Narrow down request logs",
+      "loadingRequestLogs": "Loading request logs…",
+      "noMatchingRequests": "No matching requests",
+      "noMatchingRequestsHint": "No requests match your filters for this time range.",
+      "noRequestsYet": "No requests yet",
+      "requestsAppearHere": "Requests proxied through LiteLLM will appear here.",
+      "searchPlaceholder": "Search logs by ID…"
+    },
+    "requestLogsTableColumns": {
+      "batchCost": "batch cost",
+      "batchFailedTooltip": "{{failed}} of {{total}} batch requests failed",
+      "batchSucceeded": "{{successful}}/{{total}} succeeded",
+      "cacheHitCount": "{{count}} cache hit",
+      "sessionTotal": "session total"
     }
   },
   "userAgentActivity": {
@@ -3964,7 +4052,8 @@
       "displayNameHelp": "Override how this tool's name appears to users. Leave blank to use original.",
       "noDescription": "No description",
       "descriptionHelp": "Override the tool description shown to users. Leave blank to use original.",
-      "noToolsAvailableForConfig": "No tools available"
+      "noToolsAvailableForConfig": "No tools available",
+      "toolsEnabled": "{{enabled}} of {{count}} tools enabled for user access"
     },
     "mcpTools": {
       "title": "MCP Tools",
@@ -3992,7 +4081,9 @@
       "selected": "Selected",
       "testingPlaygroundTitle": "Tool Testing Playground",
       "selectToolToTest": "Select a Tool to Test",
-      "selectToolHint": "Choose a tool from the left sidebar to start testing its functionality with custom inputs."
+      "selectToolHint": "Choose a tool from the left sidebar to start testing its functionality with custom inputs.",
+      "accessTokenRequired": "Access Token required",
+      "headersConfigured": "{{count}} header(s) configured"
     },
     "byokCredentialModal": {
       "pleaseEnterApiKey": "Please enter your API key",
@@ -4038,7 +4129,8 @@
       "logoLabel": "Logo",
       "logoTooltip": "Select a well-known logo or paste a URL to any image. The logo is shown on the admin and chat pages.",
       "selectedLogoAlt": "Selected logo",
-      "customUrlPlaceholder": "Or paste a custom logo URL..."
+      "customUrlPlaceholder": "Or paste a custom logo URL...",
+      "selectedLogoLabel": "Selected"
     },
     "mcpNetworkSettings": {
       "privateIpRangesTitle": "Private IP Ranges",
@@ -4449,7 +4541,8 @@
       "stackTrace": "Stack Trace",
       "connectionSuccessfulBang": "Connection successful!",
       "noToolsFound": "No tools found for this MCP server",
-      "toolPreviewUnavailable": "Tool preview unavailable"
+      "toolPreviewUnavailable": "Tool preview unavailable",
+      "readyToSubmit": "Ready to submit"
     },
     "mcpDiscovery": {
       "title": "Add MCP Server",
@@ -4629,7 +4722,20 @@
       "saveChanges": "Save Changes",
       "displayNameInvalid": "Only letters, digits, underscores, and hyphens are allowed (no spaces).",
       "serverUrlInvalid": "Please enter a valid URL (e.g., http://service-name.domain:1234/path or https://example.com)",
-      "serverNameInvalid": "Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead."
+      "serverNameInvalid": "Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead.",
+      "browserTokenHeldToast": "Token held for this browser session. Tools can now be loaded and configured; the token is not saved to LiteLLM.",
+      "incompleteToolPreview": "Complete the URL, authentication, and header settings to load tools.",
+      "authorizeUpstreamHint": "Authorize with the upstream (browser-only, in the Authentication section) to load and configure this server's tools.",
+      "oauthTokenPersistFailedNoMessage": "MCP Server updated, but failed to persist OAuth token",
+      "transportRequired": "Transport Type is required",
+      "serverUrlPlaceholder": "https://your-mcp-server.com",
+      "specUrlPlaceholder": "https://petstore3.swagger.io/api/v3/openapi.json",
+      "maxConcurrentRequestsLabel": "Max Concurrent Requests (optional)",
+      "maxConcurrentRequestsTooltip": "Maximum number of tool calls LiteLLM will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit.",
+      "maxConcurrentRequestsPlaceholder": "e.g. 10",
+      "authRequired": "Authentication is required",
+      "noOAuthFlowSet": "This server has no OAuth flow set",
+      "noOAuthFlowSetDesc": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively."
     },
     "mcpServerView": {
       "backToAllServers": "Back to All Servers",
@@ -5166,7 +5272,24 @@
       "clearFieldLabel": "Field",
       "deleteSuccess": "Hashicorp Vault configuration deleted",
       "clearSuccess": "{{fieldLabel}} cleared",
-      "connectionSuccess": "Connection to Vault successful!"
+      "connectionSuccess": "Connection to Vault successful!",
+      "cardTitle": "Hashicorp Vault",
+      "loadingAriaLabel": "Loading Hashicorp Vault configuration",
+      "testingButton": "Testing...",
+      "clearFieldAriaLabel": "Clear {{fieldLabel}}",
+      "authMethodTlsCertificate": "TLS Certificate",
+      "fieldLabels": {
+        "vault_namespace": "Namespace",
+        "vault_mount_name": "KV Mount Name",
+        "vault_path_prefix": "Path Prefix",
+        "vault_token": "Token",
+        "approle_role_id": "Role ID",
+        "approle_secret_id": "Secret ID",
+        "approle_mount_path": "Mount Path",
+        "client_cert": "Client Certificate",
+        "client_key": "Client Key",
+        "vault_cert_role": "Certificate Role"
+      }
     },
     "hashicorpVaultEmptyPlaceholder": {
       "noConfigTitle": "No Vault Configuration Found",
@@ -5183,7 +5306,20 @@
       "retentionPeriodPlaceholder": "e.g., 7d, 30d",
       "saveSettingsButton": "Save Settings",
       "saveSuccess": "Spend logs settings updated successfully",
-      "saveFailed": "Failed to save spend logs settings: {{error}}"
+      "saveFailed": "Failed to save spend logs settings: {{error}}",
+      "cleanupBatchSizeLabel": "Spend Logs Cleanup Batch Size (Optional)",
+      "cleanupBatchSizePlaceholder": "e.g., 1000",
+      "cleanupBatchSizeTooltipDefault": "Rows deleted per DELETE statement during cleanup. Leave empty to use the default of 1000.",
+      "cleanupMaxBatchesLabel": "Spend Logs Cleanup Max Batches (Optional)",
+      "cleanupMaxBatchesPlaceholder": "e.g., 500",
+      "cleanupMaxBatchesTooltipDefault": "Maximum number of DELETE statements run per table per cleanup run. Leave empty to use the default of 500.",
+      "cleanupRunBudgetLabel": "Spend Logs Cleanup Run Budget (Optional)",
+      "cleanupRunBudgetPlaceholder": "e.g., 5m",
+      "cleanupRunBudgetTooltipDefault": "Wall-clock budget for a whole cleanup run, shared across every table it cleans (e.g., '5m'). Leave empty to use the default of 5m.",
+      "cleanupBatchTimeoutLabel": "Spend Logs Cleanup Batch Timeout (Optional)",
+      "cleanupBatchTimeoutPlaceholder": "e.g., 30s",
+      "cleanupBatchTimeoutTooltipDefault": "Postgres statement and lock timeout applied to each cleanup batch, so cleanup never monopolizes a connection (e.g., '30s'). Leave empty to use the default of 30s.",
+      "clearFailed": "Failed to clear saved value for: {{fields}}"
     },
     "mcpSemanticFilterSettings": {
       "loginRequired": "Please log in to configure semantic filter settings.",
@@ -5227,7 +5363,15 @@
       "semanticFilterHeader": "x-litellm-semantic-filter: shows total tools → selected tools",
       "semanticFilterHeaderExample": "Example: 10→3",
       "semanticFilterToolsHeader": "x-litellm-semantic-filter-tools: CSV of selected tool names",
-      "semanticFilterToolsHeaderExample": "Example: wikipedia-fetch,github-search,slack-post"
+      "semanticFilterToolsHeaderExample": "Example: wikipedia-fetch,github-search,slack-post",
+      "filterFailedTitle": "Semantic filtering did not run",
+      "toolsSelectedOfTotal": "{{selected}} of {{total}} tools selected",
+      "toolsFilteredOut": "{{count}} tools filtered out",
+      "moreToolsNotShown": "+{{count}} more selected tools not shown",
+      "queryAndModelRequired": "Please enter a query and select a model",
+      "filterNotEnabled": "Semantic filter is not enabled or no tools were filtered",
+      "testSuccess": "Semantic filter test completed successfully",
+      "testFailed": "Failed to test semantic filter"
     },
     "addSSOSettingsModal": {
       "title": "Add SSO",
@@ -5271,7 +5415,17 @@
         "genericClientSecret": "Generic Client Secret",
         "authorizationEndpoint": "Authorization Endpoint",
         "tokenEndpoint": "Token Endpoint",
-        "userinfoEndpoint": "Userinfo Endpoint"
+        "userinfoEndpoint": "Userinfo Endpoint",
+        "scopes": "Scopes",
+        "idpMetadataUrl": "IdP Metadata URL",
+        "idpMetadataXml": "IdP Metadata XML",
+        "spEntityId": "SP Entity ID",
+        "allowUnsolicited": "Allow IdP-initiated (unsolicited) responses"
+      },
+      "placeholders": {
+        "idpMetadataUrl": "https://idp.example.com/metadata (use this or the metadata XML below)",
+        "idpMetadataXml": "Paste the IdP metadata XML here if you do not have a metadata URL",
+        "spEntityId": "Defaults to <proxy base url>/sso/saml/metadata"
       }
     },
     "deleteSSOSettingsModal": {
@@ -5291,7 +5445,9 @@
       "processFailed": "Failed to process SSO settings: {{error}}"
     },
     "redactableField": {
-      "notConfigured": "Not configured"
+      "notConfigured": "Not configured",
+      "showValue": "Show value",
+      "hideValue": "Hide value"
     },
     "roleMappings": {
       "title": "Role Mappings",
@@ -5315,7 +5471,14 @@
       "userInfoEndpoint": "User Info Endpoint",
       "teamIdsJwtField": "Team IDs JWT Field",
       "editSSOSettings": "Edit SSO Settings",
-      "deleteSSOSettings": "Delete SSO Settings"
+      "deleteSSOSettings": "Delete SSO Settings",
+      "copyValue": "Copy value",
+      "provided": "Provided",
+      "scopes": "Scopes",
+      "idpMetadataUrl": "IdP Metadata URL",
+      "idpMetadataXml": "IdP Metadata XML",
+      "spEntityId": "SP Entity ID",
+      "allowUnsolicited": "Allow IdP-initiated (unsolicited) responses"
     },
     "sSOSettingsEmptyPlaceholder": {
       "noConfigTitle": "No SSO Configuration Found",
@@ -5356,7 +5519,12 @@
       "scopeUserSearchLabel": "Scope user search to organization",
       "scopeUserSearchDesc": "If enabled, the user search endpoint restricts results by organization. When off, any authenticated user can search all users.",
       "disableCustomApiKeysLabel": "Disable custom Virtual key values",
-      "disableCustomApiKeysDesc": "If true, users cannot specify custom key values. All keys must be auto-generated."
+      "disableCustomApiKeysDesc": "If true, users cannot specify custom key values. All keys must be auto-generated.",
+      "loading": "Loading UI settings",
+      "enableProjectsUIAriaLabel": "Enable Projects UI",
+      "enableChatUIAriaLabel": "Enable Chat page",
+      "enableChatUILabel": "[BETA] Enable Chat page (page will refresh)",
+      "enableChatUIDesc": "If enabled, shows the Chat page in the UI sidebar, letting users chat with an LLM and connect their own MCP server credentials via OAuth."
     },
     "loggingCallbacksTable": {
       "addCallbackButton": "+ Add Callback",
@@ -5370,7 +5538,12 @@
       "editCallbackTooltip": "Edit Callback",
       "deleteCallbackTooltip": "Delete Callback",
       "emptyStateTitle": "No callbacks configured",
-      "emptyStateDesc": "Add your first callback to start logging data to external services."
+      "emptyStateDesc": "Add your first callback to start logging data to external services.",
+      "readOnlyLabel": "Read only",
+      "readOnlyTooltip": "Active callback that was not added through the dashboard. Edit it where it was configured.",
+      "openActionsAriaLabel": "Open callback actions",
+      "addCallback": "Add Callback",
+      "loadingCallbacks": "Loading callbacks…"
     },
     "addFallbacks": {
       "addButton": "Add Fallbacks",
@@ -5379,7 +5552,10 @@
       "addSuccess_one": "{{count}} fallback configuration added successfully!",
       "addSuccess_other": "{{count}} fallback configurations added successfully!",
       "savingButton": "Saving Configuration...",
-      "saveButton": "Save All Configurations"
+      "saveButton": "Save All Configurations",
+      "incompleteGroupsCount": "Please complete configuration for all groups. {{count}} group(s) incomplete.",
+      "addSuccessCount": "{{count}} fallback configuration(s) added successfully!",
+      "missingOnChange": "onChange callback not provided"
     },
     "addFallbacksModal": {
       "title": "Configure Model Fallbacks",
@@ -5397,13 +5573,17 @@
       "selectHint": "Search and select multiple models. Selected models will appear below in order. ({{used}}/{{max}} used)",
       "maxReachedHint": "Maximum {{maxFallbacks}} fallbacks reached. Remove some to add more.",
       "noFallbacksSelected": "No fallback models selected",
-      "addFromDropdown": "Add models from the dropdown above"
+      "addFromDropdown": "Add models from the dropdown above",
+      "fallbackChainAriaLabel": "Fallback chain",
+      "removeModelAriaLabel": "Remove {{model}}"
     },
     "fallbackSelectionForm": {
       "atLeastOneGroup": "At least one group is required",
       "groupLabel": "Group {{number}}",
       "noGroupsConfigured": "No fallback groups configured",
-      "createFirstGroup": "Create First Group"
+      "createFirstGroup": "Create First Group",
+      "addGroupAriaLabel": "Add fallback group",
+      "removeGroupAriaLabel": "Remove {{name}}"
     },
     "fallbacks": {
       "testingFallback": "Testing fallback model response...",
@@ -5418,7 +5598,119 @@
       "deleteFallbackTooltip": "Delete fallback",
       "deleteModalTitle": "Delete Fallback?",
       "deleteModalMessage": "Are you sure you want to delete this fallback? This action cannot be undone.",
-      "deleteModalResourceTitle": "Fallback Information"
+      "deleteModalResourceTitle": "Fallback Information",
+      "editFallbackTooltip": "Edit fallback"
+    },
+    "sSOSettingsLoadingSkeleton": {
+      "loading": "Loading SSO configuration"
+    },
+    "mcpToolSearchSettings": {
+      "loginRequired": "Please log in to configure tool search.",
+      "loadError": "Could not load MCP tool search settings",
+      "infoTitle": "Native MCP Tool Search",
+      "infoDesc": "Controls the <0>mcp_tool_search</0> virtual tool that native MCP clients call to discover tools. With an embedding model set, tools are ranked by the meaning of their name and description, so a query like \"FX\" finds a \"foreign exchange rates\" tool. Without one, keyword matching is used. Callers only ever see tools their key, team and server permissions already allow.",
+      "rankingCardTitle": "Ranking",
+      "coreToolsCardTitle": "Core Tools",
+      "embeddingModelTooltip": "Embedding model from your model list used to rank tools by meaning. Clear it to fall back to keyword matching.",
+      "keywordMatching": "Keyword matching (no embedding model)",
+      "topKTooltip": "Most ranked tools a search returns. A smaller top_k in the tool call wins. Core tools do not count.",
+      "similarityThresholdTooltip": "Lowest cosine similarity a tool needs to appear in semantic results. 0 means no cutoff.",
+      "coreToolsLabel": "Always Returned First",
+      "coreToolsTooltip": "One tool name per line, e.g. my_server-get_rates. Listed before ranked results whenever the caller is allowed to use them."
+    },
+    "userBannerSettings": {
+      "saveSuccess": "User banner updated successfully",
+      "cardTitle": "User Banner",
+      "cardDescription": "Publish an announcement to all dashboard users. Markdown is supported; the banner appears below the header on every page until you unpublish it. Users can dismiss it, and it reappears whenever the content changes.",
+      "publishLabel": "Publish user banner",
+      "messageLabel": "Message",
+      "messagePlaceholder": "**Scheduled maintenance** tonight at 10 PM UTC. See [status page](https://example.com).",
+      "messageRequired": "Add a message before publishing.",
+      "severityLabel": "Severity",
+      "severityAriaLabel": "Banner severity",
+      "severityInfo": "Info",
+      "previewLabel": "Preview",
+      "saveButton": "Save banner"
+    },
+    "editFallbacks": {
+      "updateSuccess": "Fallbacks for {{model}} updated successfully!",
+      "savingChanges": "Saving Changes..."
+    },
+    "pluginSettings": {
+      "cardTitle": "Plugins",
+      "description": "Register external services as plugins. Once added, users can toggle to the plugin from the mode switcher in the top-left of the sidebar.",
+      "manifestHint": "Each plugin must expose <code>GET /api/plugin-manifest</code> returning nav items and capabilities.",
+      "addPlugin": "Add Plugin",
+      "editPlugin": "Edit Plugin",
+      "displayName": "Display Name",
+      "urlColumn": "URL",
+      "pluginKey": "Plugin Key",
+      "nameLabel": "Name (identifier)",
+      "nameDescription": "Used in URLs and config. No spaces. E.g. litellm-platform-plugin",
+      "displayNamePlaceholder": "Agent Control Plane",
+      "urlDescription": "Base URL of the plugin service",
+      "pluginKeyDescription": "Optional. The plugin's own credential, injected as Authorization: Bearer <key> only when litellm reverse-proxies API calls to the plugin's backend (/plugin-proxy/<name>/*). Leave blank for plugins that use the forwarded litellm user token (e.g. iframe plugins) — that path uses the user's token, not this key.",
+      "keyPlaceholderEdit": "Leave blank to keep current key",
+      "keyPlaceholderCreate": "sk-... (optional)",
+      "hideKeyAriaLabel": "Hide plugin key",
+      "showKeyAriaLabel": "Show plugin key",
+      "editAriaLabel": "Edit {{name}}",
+      "deleteAriaLabel": "Delete {{name}}"
+    },
+    "cyberArk": {
+      "cardTitle": "CyberArk Conjur",
+      "loadingAriaLabel": "Loading CyberArk configuration",
+      "loadError": "Could not load CyberArk configuration",
+      "manageSecretManager": "Manage secret manager configuration",
+      "testingButton": "Testing...",
+      "testConnection": "Test Connection",
+      "editConfiguration": "Edit Configuration",
+      "deleteConfiguration": "Delete Configuration",
+      "hotReloadHint": "Configuration changes are hot-reloaded across all proxy instances",
+      "viewDocumentation": "View documentation",
+      "authMethod": "Auth Method",
+      "authMethodApiKey": "API Key",
+      "authMethodTlsCertificate": "TLS Certificate",
+      "connectionSuccess": "Connection to CyberArk Conjur successful!",
+      "deleteSuccess": "CyberArk configuration deleted",
+      "clearSuccess": "{{fieldLabel}} cleared",
+      "clearTitle": "Clear {{fieldLabel}}?",
+      "clearMessage": "This will remove the stored value.",
+      "clearResourceTitle": "Field",
+      "clearFieldLabel": "Field",
+      "clearFieldAriaLabel": "Clear {{fieldLabel}}",
+      "notConfigured": "Not configured",
+      "deleteTitle": "Delete CyberArk Configuration?",
+      "deleteMessage": "Models using CyberArk secrets will lose access to their API keys until a new configuration is saved.",
+      "deleteResourceTitle": "CyberArk Configuration",
+      "conjurServerUrlLabel": "Conjur Server URL",
+      "fieldLabels": {
+        "cyberark_account": "Account",
+        "cyberark_username": "Username",
+        "cyberark_api_key": "API Key",
+        "client_cert": "Client Certificate",
+        "client_key": "Client Key",
+        "ssl_verify": "SSL Verification",
+        "refresh_interval": "Token Refresh Interval (seconds)"
+      }
+    },
+    "editCyberArkModal": {
+      "title": "Edit CyberArk Configuration",
+      "saveSuccess": "CyberArk configuration updated successfully",
+      "urlPatternMessage": "Must start with http:// or https://",
+      "leaveBlankToKeep": "Leave blank to keep existing ({{existing}})",
+      "groupConnection": "Connection",
+      "groupApiKeyAuth": "API Key Authentication",
+      "groupApiKeyAuthSubtitle": "Use a Conjur API key to authenticate. Only one auth method is required.",
+      "groupCertificateAuth": "Certificate Authentication",
+      "groupCertificateAuthSubtitle": "Use a client TLS certificate and key to authenticate. Only one auth method is required.",
+      "groupAdvanced": "Advanced",
+      "groupAdvancedSubtitle": "Optional TLS and token caching settings."
+    },
+    "cyberArkEmptyPlaceholder": {
+      "noConfigTitle": "No CyberArk Configuration Found",
+      "noConfigDesc": "Configure CyberArk Conjur to securely manage provider API keys and secrets for your LiteLLM deployment.",
+      "configureButton": "Configure CyberArk"
     }
   },
   "promptsPage": {
@@ -5617,7 +5909,13 @@
       "attachmentCreatedSuccess_one": "Attachment created successfully",
       "attachmentCreatedSuccess_other": "{{count}} attachments created successfully",
       "attachmentsPartialSuccess": "{{successCount}} attachments created, {{failedCount}} failed",
-      "createAttachmentFailed": "Failed to create attachment: {{error}}"
+      "createAttachmentFailed": "Failed to create attachment: {{error}}",
+      "createAttachmentsFailed": "Failed to create attachments",
+      "loadingTeams": "Loading teams...",
+      "noMatchingKeys": "No matching keys",
+      "noMatchingPolicies": "No matching policies",
+      "noMatchingTeams": "No matching teams",
+      "teamsNotExist": "These teams don't exist: {{teams}}. Choose an existing team, or use a wildcard like \"team-*\" to match by prefix."
     },
     "addPolicyForm": {
       "simpleModeTitle": "Simple Mode",
@@ -5663,7 +5961,8 @@
       "modelConditionPlaceholderRegex": "Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)",
       "policyUpdatedSuccess": "Policy updated successfully",
       "policyCreatedSuccess": "Policy created successfully",
-      "savePolicyFailed": "Failed to save policy: {{error}}"
+      "savePolicyFailed": "Failed to save policy: {{error}}",
+      "flowBuilderRedirectNotice": "You'll be taken to the Flow Builder to design your policy logic visually."
     },
     "aiSuggestionModal": {
       "title": "AI Policy Suggestion",
@@ -5719,7 +6018,9 @@
       "testSuggestions": "Test Suggestions",
       "useSelectedTemplates_one": "Use {{count}} Selected Template",
       "useSelectedTemplates_other": "Use {{count}} Selected Templates",
-      "msLatencyDisplay": "+{{value}}ms latency"
+      "msLatencyDisplay": "+{{value}}ms latency",
+      "guardrailsAcrossTemplatesOne": "{{guardrailCount}} guardrails across {{templateCount}} template",
+      "pressEnterToSubmit": "Press <kbd>Enter</kbd> to submit"
     },
     "attachmentTable": {
       "attachmentId": "Attachment ID",
@@ -5731,7 +6032,13 @@
       "models": "Models",
       "tags": "Tags",
       "deleteAttachment": "Delete attachment",
-      "noAttachmentsFound": "No attachments found"
+      "noAttachmentsFound": "No attachments found",
+      "attachmentIdCopied": "Attachment ID copied",
+      "configAttachmentHint": "Config attachments are defined in the config file and cannot be deleted from the dashboard.",
+      "copyAttachmentId": "Copy attachment ID",
+      "emptyHint": "Attach a policy to teams, keys, models, or tags to control where it applies.",
+      "loadingAttachments": "Loading attachments…",
+      "openAttachmentActions": "Open attachment actions"
     },
     "guardrailSelectionModal": {
       "subtitle": "Review and select guardrails to create for this template",
@@ -5757,7 +6064,8 @@
       "selectAtLeastOne": "Select at least one guardrail to create, or click \"Use Template\" to proceed without creating new guardrails.",
       "createAndUseTemplate_one": "Create {{count}} Guardrail & Use Template",
       "createAndUseTemplate_other": "Create {{count}} Guardrails & Use Template",
-      "useTemplate": "Use Template"
+      "useTemplate": "Use Template",
+      "unknown": "unknown"
     },
     "impactPopover": {
       "blastRadius": "Blast Radius",
@@ -5832,7 +6140,9 @@
       "guardrailsCreated_other": "Created {{count}} guardrails! Complete the policy form to save.",
       "templateReady": "Template ready! Complete the policy form to save.",
       "guardrailsCreateFailed": "Failed to create {{count}} guardrail(s): {{list}}. You may need to create them manually.",
-      "createGuardrailsFailed": "Failed to create guardrails. Please try again."
+      "createGuardrailsFailed": "Failed to create guardrails. Please try again.",
+      "learnMoreAttachmentsArrow": "Learn more about attachments ->",
+      "learnMoreDocsArrow": "Learn more in the documentation ->"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "Next Step",
@@ -5913,7 +6223,10 @@
       "updatePolicy": "Update Policy",
       "savePolicy": "Save Policy",
       "addDescriptionPlaceholder": "Add a description (optional)...",
-      "durationMs": "({{ms}}ms)"
+      "durationMs": "({{ms}}ms)",
+      "comingSoon": "COMING SOON",
+      "defaultTestMessage": "Hello, can you help me?",
+      "guardrailFieldLabel": "Guardrail"
     },
     "policyInfo": {
       "notFound": "Policy not found",
@@ -5932,7 +6245,8 @@
       "guardrailsToRemove": "Guardrails to Remove",
       "conditions": "Conditions",
       "modelCondition": "Model Condition",
-      "noModelCondition": "No model condition (applies to all models)"
+      "noModelCondition": "No model condition (applies to all models)",
+      "goBack": "Go Back"
     },
     "policyTable": {
       "versionCount_one": "{{count}} version",
@@ -5945,7 +6259,12 @@
       "editPolicy": "Edit policy",
       "deletePolicy": "Delete policy",
       "unnamedPolicy": "Unnamed Policy",
-      "noPoliciesFound": "No policies found"
+      "noPoliciesFound": "No policies found",
+      "configBadge": "Config",
+      "configPolicyHint": "Config policies are defined in the config file and cannot be edited or deleted from the dashboard.",
+      "emptyHint": "Create a policy to bundle guardrails and apply them across teams.",
+      "loadingPolicies": "Loading policies…",
+      "openPolicyActions": "Open policy actions"
     },
     "policyTemplates": {
       "title": "Policy Templates",
@@ -6005,7 +6324,8 @@
       "refineList": "Refine List",
       "refinePlaceholder": "e.g. add 10 more from Asia, increase to 50 total...",
       "send": "Send",
-      "refineHint": "Give instructions to add, remove, or change competitors. Press Enter to send."
+      "refineHint": "Give instructions to add, remove, or change competitors. Press Enter to send.",
+      "removeCompetitor": "Remove {{name}}"
     }
   },
   "addModel": {
