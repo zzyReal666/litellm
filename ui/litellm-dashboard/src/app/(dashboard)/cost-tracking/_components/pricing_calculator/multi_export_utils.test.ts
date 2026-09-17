@@ -1,9 +1,12 @@
 // @vitest-environment jsdom
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import i18n from "@/lib/i18n";
 import { exportMultiToPDF, exportMultiToCSV } from "./multi_export_utils";
 import type { MultiModelResult } from "./types";
 import type { CostEstimateResponse } from "../types";
+
+const t = i18n.t.bind(i18n);
 
 vi.mock("@/utils/dataUtils", () => ({
   formatNumberWithCommas: vi.fn((v: number, d: number = 0) => (Number.isFinite(v) ? v.toFixed(d) : "-")),
@@ -78,30 +81,30 @@ describe("exportMultiToPDF", () => {
   });
 
   it("should open a new popup window", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     expect(window.open).toHaveBeenCalledWith("", "_blank");
   });
 
   it("should write HTML containing the report title", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).toContain("LLM Cost Estimate Report");
   });
 
   it("should include model name and provider in the generated HTML", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).toContain("gpt-4");
     expect(html).toContain("openai");
   });
 
   it("should close the document after writing", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     expect(mockPrintWindow.document.close).toHaveBeenCalledTimes(1);
   });
 
   it("should call print after the window finishes loading", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     expect(mockPrintWindow.print).not.toHaveBeenCalled();
     mockPrintWindow.onload!();
     expect(mockPrintWindow.print).toHaveBeenCalledTimes(1);
@@ -118,13 +121,13 @@ describe("exportMultiToPDF", () => {
         monthly_margin: 30.0,
       },
     });
-    exportMultiToPDF(multiResult);
+    exportMultiToPDF(multiResult, t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).toContain("Margin/Request");
   });
 
   it("should not show the margin section when margin per request is zero", () => {
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).not.toContain("Margin/Request");
   });
@@ -132,7 +135,7 @@ describe("exportMultiToPDF", () => {
   it("should alert when popup is blocked", () => {
     vi.spyOn(window, "open").mockReturnValue(null);
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    exportMultiToPDF(makeMultiResult());
+    exportMultiToPDF(makeMultiResult(), t);
     expect(alertSpy).toHaveBeenCalledWith("Please allow popups to export PDF");
   });
 
@@ -161,7 +164,7 @@ describe("exportMultiToPDF", () => {
         monthly_margin: null,
       },
     };
-    exportMultiToPDF(multiResult);
+    exportMultiToPDF(multiResult, t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).toContain("1 model configured");
     expect(html).toContain("claude-3");
@@ -192,7 +195,7 @@ describe("exportMultiToPDF", () => {
         monthly_margin: null,
       },
     };
-    exportMultiToPDF(multiResult);
+    exportMultiToPDF(multiResult, t);
     const html = mockPrintWindow.document.write.mock.calls[0][0] as string;
     expect(html).toContain("2 models configured");
   });
@@ -210,7 +213,7 @@ describe("exportMultiToCSV", () => {
   });
 
   it("should create an object URL and revoke it after download", () => {
-    exportMultiToCSV(makeMultiResult());
+    exportMultiToCSV(makeMultiResult(), t);
     expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
     expect(window.URL.revokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
   });
@@ -225,7 +228,7 @@ describe("exportMultiToCSV", () => {
     });
 
     const today = new Date().toISOString().split("T")[0];
-    exportMultiToCSV(makeMultiResult());
+    exportMultiToCSV(makeMultiResult(), t);
 
     expect(createdAnchors[0].download).toBe(`cost_estimate_multi_model_${today}.csv`);
   });
@@ -240,7 +243,7 @@ describe("exportMultiToCSV", () => {
       }
     } as unknown as typeof Blob;
 
-    exportMultiToCSV(makeMultiResult());
+    exportMultiToCSV(makeMultiResult(), t);
     globalThis.Blob = OriginalBlob;
 
     expect(csvContent).toContain("Model");
@@ -259,7 +262,7 @@ describe("exportMultiToCSV", () => {
       }
     } as unknown as typeof Blob;
 
-    exportMultiToCSV(makeMultiResult());
+    exportMultiToCSV(makeMultiResult(), t);
     globalThis.Blob = OriginalBlob;
 
     expect(csvContent).toContain("COMBINED TOTALS");
@@ -275,7 +278,7 @@ describe("exportMultiToCSV", () => {
       }
     } as unknown as typeof Blob;
 
-    exportMultiToCSV(makeMultiResult());
+    exportMultiToCSV(makeMultiResult(), t);
     globalThis.Blob = OriginalBlob;
 
     expect(capturedType).toBe("text/csv;charset=utf-8;");
@@ -310,7 +313,7 @@ describe("exportMultiToCSV", () => {
       }
     } as unknown as typeof Blob;
 
-    exportMultiToCSV(multiResult);
+    exportMultiToCSV(multiResult, t);
     globalThis.Blob = OriginalBlob;
 
     // CSV should have metadata rows but no model data row for gpt-4

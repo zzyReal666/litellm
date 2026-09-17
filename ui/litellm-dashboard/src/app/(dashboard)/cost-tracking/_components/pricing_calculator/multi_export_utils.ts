@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import { CostEstimateResponse } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { MultiModelResult } from "./types";
@@ -15,45 +16,45 @@ const formatRequestsForExport = (value: number | null | undefined): string => {
   return formatNumberWithCommas(value, 0);
 };
 
-const generateModelSection = (result: CostEstimateResponse): string => {
+const generateModelSection = (result: CostEstimateResponse, t: TFunction): string => {
   return `
     <div class="model-section">
       <h3>${result.model} ${result.provider ? `<span class="provider">(${result.provider})</span>` : ""}</h3>
       
       <div class="meta">
-        <p><strong>Input Tokens per Request:</strong> ${formatRequestsForExport(result.input_tokens)}</p>
-        <p><strong>Output Tokens per Request:</strong> ${formatRequestsForExport(result.output_tokens)}</p>
-        ${result.num_requests_per_day ? `<p><strong>Requests per Day:</strong> ${formatRequestsForExport(result.num_requests_per_day)}</p>` : ""}
-        ${result.num_requests_per_month ? `<p><strong>Requests per Month:</strong> ${formatRequestsForExport(result.num_requests_per_month)}</p>` : ""}
+        <p><strong>${t("costTracking.multiExportUtils.inputTokensPerRequest", { defaultValue: "Input Tokens per Request:" })}</strong> ${formatRequestsForExport(result.input_tokens)}</p>
+        <p><strong>${t("costTracking.multiExportUtils.outputTokensPerRequest", { defaultValue: "Output Tokens per Request:" })}</strong> ${formatRequestsForExport(result.output_tokens)}</p>
+        ${result.num_requests_per_day ? `<p><strong>${t("costTracking.multiExportUtils.requestsPerDay", { defaultValue: "Requests per Day:" })}</strong> ${formatRequestsForExport(result.num_requests_per_day)}</p>` : ""}
+        ${result.num_requests_per_month ? `<p><strong>${t("costTracking.multiExportUtils.requestsPerMonth", { defaultValue: "Requests per Month:" })}</strong> ${formatRequestsForExport(result.num_requests_per_month)}</p>` : ""}
       </div>
 
       <table>
         <tr>
-          <th>Cost Type</th>
-          <th>Per Request</th>
-          ${result.daily_cost !== null ? "<th>Daily</th>" : ""}
-          ${result.monthly_cost !== null ? "<th>Monthly</th>" : ""}
+          <th>${t("costTracking.multiExportUtils.colCostType", { defaultValue: "Cost Type" })}</th>
+          <th>${t("costTracking.multiExportUtils.colPerRequest", { defaultValue: "Per Request" })}</th>
+          ${result.daily_cost !== null ? `<th>${t("costTracking.multiExportUtils.colDaily", { defaultValue: "Daily" })}</th>` : ""}
+          ${result.monthly_cost !== null ? `<th>${t("costTracking.multiExportUtils.colMonthly", { defaultValue: "Monthly" })}</th>` : ""}
         </tr>
         <tr>
-          <td>Input Cost</td>
+          <td>${t("costTracking.multiExportUtils.inputCost", { defaultValue: "Input Cost" })}</td>
           <td class="cost-value">${formatCostForExport(result.input_cost_per_request)}</td>
           ${result.daily_cost !== null ? `<td class="cost-value">${formatCostForExport(result.daily_input_cost)}</td>` : ""}
           ${result.monthly_cost !== null ? `<td class="cost-value">${formatCostForExport(result.monthly_input_cost)}</td>` : ""}
         </tr>
         <tr>
-          <td>Output Cost</td>
+          <td>${t("costTracking.multiExportUtils.outputCost", { defaultValue: "Output Cost" })}</td>
           <td class="cost-value">${formatCostForExport(result.output_cost_per_request)}</td>
           ${result.daily_cost !== null ? `<td class="cost-value">${formatCostForExport(result.daily_output_cost)}</td>` : ""}
           ${result.monthly_cost !== null ? `<td class="cost-value">${formatCostForExport(result.monthly_output_cost)}</td>` : ""}
         </tr>
         <tr>
-          <td>Margin/Fee</td>
+          <td>${t("costTracking.multiExportUtils.marginFee", { defaultValue: "Margin/Fee" })}</td>
           <td class="cost-value">${formatCostForExport(result.margin_cost_per_request)}</td>
           ${result.daily_cost !== null ? `<td class="cost-value">${formatCostForExport(result.daily_margin_cost)}</td>` : ""}
           ${result.monthly_cost !== null ? `<td class="cost-value">${formatCostForExport(result.monthly_margin_cost)}</td>` : ""}
         </tr>
         <tr class="total-row">
-          <td>Total</td>
+          <td>${t("shared.savingsTiles.total", { defaultValue: "Total" })}</td>
           <td class="cost-value">${formatCostForExport(result.cost_per_request)}</td>
           ${result.daily_cost !== null ? `<td class="cost-value">${formatCostForExport(result.daily_cost)}</td>` : ""}
           ${result.monthly_cost !== null ? `<td class="cost-value">${formatCostForExport(result.monthly_cost)}</td>` : ""}
@@ -63,10 +64,10 @@ const generateModelSection = (result: CostEstimateResponse): string => {
   `;
 };
 
-export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
+export const exportMultiToPDF = (multiResult: MultiModelResult, t: TFunction): void => {
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    alert("Please allow popups to export PDF");
+    alert(t("costTracking.multiExportUtils.popupBlockedAlert", { defaultValue: "Please allow popups to export PDF" }));
     return;
   }
 
@@ -193,22 +194,22 @@ export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
       </style>
     </head>
     <body>
-      <h1>LLM Cost Estimate Report</h1>
-      <p style="color: #666; margin-top: -20px; margin-bottom: 30px;">${modelCount} model${modelCount !== 1 ? "s" : ""} configured</p>
+      <h1>${t("costTracking.multiExportUtils.reportTitle", { defaultValue: "LLM Cost Estimate Report" })}</h1>
+      <p style="color: #666; margin-top: -20px; margin-bottom: 30px;">${t("costTracking.multiExportUtils.modelCount", { count: modelCount, defaultValue: "{{count}} models configured" })}</p>
       
       <div class="summary-box">
-        <h2>Combined Totals</h2>
+        <h2>${t("costTracking.multiExportUtils.combinedTotals", { defaultValue: "Combined Totals" })}</h2>
         <div class="summary-grid">
           <div class="summary-item">
-            <div class="label">Total Per Request</div>
+            <div class="label">${t("costTracking.multiExportUtils.totalPerRequest", { defaultValue: "Total Per Request" })}</div>
             <div class="value blue">${formatCostForExport(multiResult.totals.cost_per_request)}</div>
           </div>
           <div class="summary-item">
-            <div class="label">Total Daily</div>
+            <div class="label">${t("costTracking.multiExportUtils.totalDaily", { defaultValue: "Total Daily" })}</div>
             <div class="value green">${formatCostForExport(multiResult.totals.daily_cost)}</div>
           </div>
           <div class="summary-item">
-            <div class="label">Total Monthly</div>
+            <div class="label">${t("costTracking.multiExportUtils.totalMonthly", { defaultValue: "Total Monthly" })}</div>
             <div class="value purple">${formatCostForExport(multiResult.totals.monthly_cost)}</div>
           </div>
         </div>
@@ -217,15 +218,15 @@ export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
             ? `
         <div class="summary-grid" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
           <div class="summary-item">
-            <div class="label">Margin/Request</div>
+            <div class="label">${t("costTracking.multiExportUtils.marginPerRequest", { defaultValue: "Margin/Request" })}</div>
             <div class="value" style="color: #faad14;">${formatCostForExport(multiResult.totals.margin_per_request)}</div>
           </div>
           <div class="summary-item">
-            <div class="label">Daily Margin</div>
+            <div class="label">${t("costTracking.multiExportUtils.dailyMargin", { defaultValue: "Daily Margin" })}</div>
             <div class="value" style="color: #faad14;">${formatCostForExport(multiResult.totals.daily_margin)}</div>
           </div>
           <div class="summary-item">
-            <div class="label">Monthly Margin</div>
+            <div class="label">${t("costTracking.multiExportUtils.monthlyMargin", { defaultValue: "Monthly Margin" })}</div>
             <div class="value" style="color: #faad14;">${formatCostForExport(multiResult.totals.monthly_margin)}</div>
           </div>
         </div>
@@ -234,11 +235,11 @@ export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
         }
       </div>
 
-      <h2>Model Breakdown</h2>
-      ${validEntries.map((e) => generateModelSection(e.result!)).join("")}
+      <h2>${t("costTracking.multiExportUtils.modelBreakdown", { defaultValue: "Model Breakdown" })}</h2>
+      ${validEntries.map((e) => generateModelSection(e.result!, t)).join("")}
 
       <div class="footer">
-        <p>Generated by LiteLLM Pricing Calculator on ${new Date().toLocaleString()}</p>
+        <p>${t("costTracking.multiExportUtils.generatedOn", { defaultValue: "Generated by LiteLLM Pricing Calculator on {{date}}", date: new Date().toLocaleString() })}</p>
       </div>
     </body>
     </html>
@@ -251,37 +252,59 @@ export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
   };
 };
 
-export const exportMultiToCSV = (multiResult: MultiModelResult): void => {
+export const exportMultiToCSV = (multiResult: MultiModelResult, t: TFunction): void => {
   const validEntries = multiResult.entries.filter((e) => e.result !== null);
 
-  const rows: string[][] = [["LLM Multi-Model Cost Estimate Report"], ["Generated", new Date().toLocaleString()], [""]];
+  const rows: string[][] = [
+    [t("costTracking.multiExportUtils.csvReportTitle", { defaultValue: "LLM Multi-Model Cost Estimate Report" })],
+    [t("costTracking.multiExportUtils.csvGenerated", { defaultValue: "Generated" }), new Date().toLocaleString()],
+    [""],
+  ];
 
   // Summary section
   rows.push(
-    ["COMBINED TOTALS"],
-    ["Total Per Request", multiResult.totals.cost_per_request.toString()],
-    ["Total Daily", multiResult.totals.daily_cost?.toString() || "-"],
-    ["Total Monthly", multiResult.totals.monthly_cost?.toString() || "-"],
-    ["Margin Per Request", multiResult.totals.margin_per_request.toString()],
-    ["Daily Margin", multiResult.totals.daily_margin?.toString() || "-"],
-    ["Monthly Margin", multiResult.totals.monthly_margin?.toString() || "-"],
+    [t("costTracking.multiExportUtils.csvCombinedTotals", { defaultValue: "COMBINED TOTALS" })],
+    [
+      t("costTracking.multiExportUtils.csvTotalPerRequest", { defaultValue: "Total Per Request" }),
+      multiResult.totals.cost_per_request.toString(),
+    ],
+    [
+      t("costTracking.multiExportUtils.csvTotalDaily", { defaultValue: "Total Daily" }),
+      multiResult.totals.daily_cost?.toString() || "-",
+    ],
+    [
+      t("costTracking.multiExportUtils.csvTotalMonthly", { defaultValue: "Total Monthly" }),
+      multiResult.totals.monthly_cost?.toString() || "-",
+    ],
+    [
+      t("costTracking.multiExportUtils.csvMarginPerRequest", { defaultValue: "Margin Per Request" }),
+      multiResult.totals.margin_per_request.toString(),
+    ],
+    [
+      t("costTracking.multiExportUtils.csvDailyMargin", { defaultValue: "Daily Margin" }),
+      multiResult.totals.daily_margin?.toString() || "-",
+    ],
+    [
+      t("costTracking.multiExportUtils.csvMonthlyMargin", { defaultValue: "Monthly Margin" }),
+      multiResult.totals.monthly_margin?.toString() || "-",
+    ],
     [""],
   );
 
   // Summary table header
   rows.push([
-    "Model",
-    "Provider",
-    "Input Tokens",
-    "Output Tokens",
-    "Requests/Day",
-    "Requests/Month",
-    "Cost/Request",
-    "Daily Cost",
-    "Monthly Cost",
-    "Input Cost/Req",
-    "Output Cost/Req",
-    "Margin/Req",
+    t("costTracking.multiExportUtils.csvColModel", { defaultValue: "Model" }),
+    t("costTracking.multiExportUtils.csvColProvider", { defaultValue: "Provider" }),
+    t("costTracking.multiExportUtils.csvColInputTokens", { defaultValue: "Input Tokens" }),
+    t("costTracking.multiExportUtils.csvColOutputTokens", { defaultValue: "Output Tokens" }),
+    t("costTracking.multiExportUtils.csvColRequestsPerDay", { defaultValue: "Requests/Day" }),
+    t("costTracking.multiExportUtils.csvColRequestsPerMonth", { defaultValue: "Requests/Month" }),
+    t("costTracking.multiExportUtils.csvColCostPerRequest", { defaultValue: "Cost/Request" }),
+    t("costTracking.multiExportUtils.csvColDailyCost", { defaultValue: "Daily Cost" }),
+    t("costTracking.multiExportUtils.csvColMonthlyCost", { defaultValue: "Monthly Cost" }),
+    t("costTracking.multiExportUtils.csvColInputCostPerReq", { defaultValue: "Input Cost/Req" }),
+    t("costTracking.multiExportUtils.csvColOutputCostPerReq", { defaultValue: "Output Cost/Req" }),
+    t("costTracking.multiExportUtils.csvColMarginPerReq", { defaultValue: "Margin/Req" }),
   ]);
 
   // Add each model's data

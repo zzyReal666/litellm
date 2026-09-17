@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -34,7 +35,13 @@ const SingleModelBreakdown: React.FC<{
   loading: boolean;
   timePeriod: "day" | "month";
 }> = ({ result, loading, timePeriod }) => {
-  const periodLabel = timePeriod === "day" ? "Daily" : "Monthly";
+  const { t } = useTranslation();
+  const periodLabel = t(
+    timePeriod === "day" ? "costTracking.multiCostResults.daily" : "costTracking.multiCostResults.monthly",
+    {
+      defaultValue: timePeriod === "day" ? "Daily" : "Monthly",
+    },
+  );
   const periodCost = timePeriod === "day" ? result.daily_cost : result.monthly_cost;
   const periodInputCost = timePeriod === "day" ? result.daily_input_cost : result.monthly_input_cost;
   const periodOutputCost = timePeriod === "day" ? result.daily_output_cost : result.monthly_output_cost;
@@ -46,25 +53,33 @@ const SingleModelBreakdown: React.FC<{
       {loading && (
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <UiLoadingSpinner className="size-3.5" />
-          <span>Updating...</span>
+          <span>{t("costTracking.multiCostResults.updating", { defaultValue: "Updating..." })}</span>
         </div>
       )}
 
       <div className="grid grid-cols-4 gap-4">
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground block">Total/Request</p>
+          <p className="text-xs text-muted-foreground block">
+            {t("costTracking.multiCostResults.breakdownTotalPerRequest", { defaultValue: "Total/Request" })}
+          </p>
           <p className="text-base font-semibold text-info break-words">{formatCost(result.cost_per_request)}</p>
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground block">Input Cost</p>
+          <p className="text-xs text-muted-foreground block">
+            {t("costTracking.multiCostResults.inputCost", { defaultValue: "Input Cost" })}
+          </p>
           <p className="text-sm break-words">{formatCost(result.input_cost_per_request)}</p>
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground block">Output Cost</p>
+          <p className="text-xs text-muted-foreground block">
+            {t("costTracking.multiCostResults.outputCost", { defaultValue: "Output Cost" })}
+          </p>
           <p className="text-sm break-words">{formatCost(result.output_cost_per_request)}</p>
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground block">Margin Fee</p>
+          <p className="text-xs text-muted-foreground block">
+            {t("costTracking.multiCostResults.marginFee", { defaultValue: "Margin Fee" })}
+          </p>
           <p className={`text-sm break-words ${result.margin_cost_per_request > 0 ? "text-warning" : ""}`}>
             {formatCost(result.margin_cost_per_request)}
           </p>
@@ -75,7 +90,11 @@ const SingleModelBreakdown: React.FC<{
         <div className="grid grid-cols-4 gap-4 pt-2 border-t border-border">
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground block">
-              {periodLabel} Total ({formatRequests(periodRequests)} req)
+              {t("costTracking.multiCostResults.periodTotal", {
+                defaultValue: "{{periodLabel}} Total ({{requests}} req)",
+                periodLabel,
+                requests: formatRequests(periodRequests),
+              })}
             </p>
             <p
               className={`text-base font-semibold break-words ${timePeriod === "day" ? "text-success" : "text-purple-600 dark:text-purple-300"}`}
@@ -84,15 +103,24 @@ const SingleModelBreakdown: React.FC<{
             </p>
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground block">{periodLabel} Input</p>
+            <p className="text-xs text-muted-foreground block">
+              {t("costTracking.multiCostResults.periodInput", { defaultValue: "{{periodLabel}} Input", periodLabel })}
+            </p>
             <p className="text-sm break-words">{formatCost(periodInputCost)}</p>
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground block">{periodLabel} Output</p>
+            <p className="text-xs text-muted-foreground block">
+              {t("costTracking.multiCostResults.periodOutput", { defaultValue: "{{periodLabel}} Output", periodLabel })}
+            </p>
             <p className="text-sm break-words">{formatCost(periodOutputCost)}</p>
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground block">{periodLabel} Margin Fee</p>
+            <p className="text-xs text-muted-foreground block">
+              {t("costTracking.multiCostResults.periodMarginFee", {
+                defaultValue: "{{periodLabel}} Margin Fee",
+                periodLabel,
+              })}
+            </p>
             <p className={`text-sm break-words ${(periodMarginCost ?? 0) > 0 ? "text-warning" : ""}`}>
               {formatCost(periodMarginCost)}
             </p>
@@ -102,13 +130,23 @@ const SingleModelBreakdown: React.FC<{
 
       {(result.input_cost_per_token || result.output_cost_per_token) && (
         <div className="text-xs text-muted-foreground pt-2 border-t border-border">
-          Token Pricing:{" "}
+          {t("costTracking.multiCostResults.tokenPricingLabel", { defaultValue: "Token Pricing:" })}{" "}
           {result.input_cost_per_token && (
-            <span>Input ${formatNumberWithCommas(result.input_cost_per_token * 1_000_000, 2)}/1M</span>
+            <span>
+              {t("costTracking.multiCostResults.inputPricingPerM", {
+                defaultValue: "Input ${{cost}}/1M",
+                cost: formatNumberWithCommas(result.input_cost_per_token * 1_000_000, 2),
+              })}
+            </span>
           )}
           {result.input_cost_per_token && result.output_cost_per_token && " | "}
           {result.output_cost_per_token && (
-            <span>Output ${formatNumberWithCommas(result.output_cost_per_token * 1_000_000, 2)}/1M</span>
+            <span>
+              {t("costTracking.multiCostResults.outputPricingPerM", {
+                defaultValue: "Output ${{cost}}/1M",
+                cost: formatNumberWithCommas(result.output_cost_per_token * 1_000_000, 2),
+              })}
+            </span>
           )}
         </div>
       )}
@@ -117,6 +155,7 @@ const SingleModelBreakdown: React.FC<{
 };
 
 const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePeriod }) => {
+  const { t } = useTranslation();
   const [expandedModels, setExpandedModels] = useState<Set<string>>(new Set());
 
   const validEntries = multiResult.entries.filter((e) => e.result !== null);
@@ -130,7 +169,11 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
   if (!hasAnyResult && !isAnyLoading && !hasAnyError) {
     return (
       <div className="py-6 text-center border border-dashed border-border rounded-lg bg-muted">
-        <p className="text-muted-foreground">Select models above to see cost estimates</p>
+        <p className="text-muted-foreground">
+          {t("costTracking.multiCostResults.selectModelsHint", {
+            defaultValue: "Select models above to see cost estimates",
+          })}
+        </p>
       </div>
     );
   }
@@ -140,7 +183,9 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
     return (
       <div className="py-6 text-center">
         <UiLoadingSpinner className="inline-block size-5" />
-        <p className="text-muted-foreground block mt-2">Calculating costs...</p>
+        <p className="text-muted-foreground block mt-2">
+          {t("costTracking.multiCostResults.calculatingCosts", { defaultValue: "Calculating costs..." })}
+        </p>
       </div>
     );
   }
@@ -151,7 +196,9 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
       <div className="space-y-4">
         <Separator className="my-4" />
         <div className="flex items-center justify-between">
-          <p className="text-base font-semibold text-foreground">Cost Estimates</p>
+          <p className="text-base font-semibold text-foreground">
+            {t("costTracking.multiCostResults.costEstimatesTitle", { defaultValue: "Cost Estimates" })}
+          </p>
           {isAnyLoading && <UiLoadingSpinner className="size-3.5" />}
         </div>
         {/* Error Messages */}
@@ -160,7 +207,9 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
             key={e.entry.id}
             className="text-sm text-destructive bg-destructive/10 p-3 rounded-lg border border-destructive/20"
           >
-            <span className="font-medium">{e.entry.model || "Unknown model"}: </span>
+            <span className="font-medium">
+              {e.entry.model || t("costTracking.multiCostResults.unknownModel", { defaultValue: "Unknown model" })}:{" "}
+            </span>
             {e.error}
           </div>
         ))}
@@ -182,7 +231,10 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
 
   const hasMargin = multiResult.totals.margin_per_request > 0;
 
-  const periodLabel = timePeriod === "day" ? "Daily" : "Monthly";
+  const periodLabel = t(
+    timePeriod === "day" ? "costTracking.multiCostResults.daily" : "costTracking.multiCostResults.monthly",
+    { defaultValue: timePeriod === "day" ? "Daily" : "Monthly" },
+  );
 
   // Include both valid results and errors in the table data
   const allEntriesWithModels = multiResult.entries.filter((e) => e.entry.model);
@@ -204,7 +256,9 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
       <Separator className="my-4" />
 
       <div className="flex items-center justify-between">
-        <p className="text-base font-semibold text-foreground">Cost Estimates</p>
+        <p className="text-base font-semibold text-foreground">
+          {t("costTracking.multiCostResults.costEstimatesTitle", { defaultValue: "Cost Estimates" })}
+        </p>
         <div className="flex items-center gap-2">
           {isAnyLoading && <UiLoadingSpinner className="size-3.5" />}
           <MultiExportDropdown multiResult={multiResult} />
@@ -215,13 +269,17 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
       <Card size="sm" className="px-4 bg-linear-to-r from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
           <div className="min-w-0">
-            <span className="text-xs text-muted-foreground">Total Per Request</span>
+            <span className="text-xs text-muted-foreground">
+              {t("costTracking.multiCostResults.totalPerRequest", { defaultValue: "Total Per Request" })}
+            </span>
             <div className="text-lg font-mono text-info break-words">
               {formatCost(multiResult.totals.cost_per_request)}
             </div>
           </div>
           <div className="min-w-0">
-            <span className="text-xs text-muted-foreground">Total {periodLabel}</span>
+            <span className="text-xs text-muted-foreground">
+              {t("costTracking.multiCostResults.totalPeriod", { defaultValue: "Total {{periodLabel}}", periodLabel })}
+            </span>
             <div
               className={`text-lg font-mono break-words ${timePeriod === "day" ? "text-success" : "text-purple-600 dark:text-purple-300"}`}
             >
@@ -232,13 +290,20 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
         {hasMargin && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-3 pt-3 border-t border-border">
             <div className="min-w-0">
-              <div className="text-xs text-muted-foreground">Margin Fee/Request</div>
+              <div className="text-xs text-muted-foreground">
+                {t("costTracking.multiCostResults.marginFeePerRequest", { defaultValue: "Margin Fee/Request" })}
+              </div>
               <div className="text-sm font-mono text-warning break-words">
                 {formatCost(multiResult.totals.margin_per_request)}
               </div>
             </div>
             <div className="min-w-0">
-              <div className="text-xs text-muted-foreground">{periodLabel} Margin Fee</div>
+              <div className="text-xs text-muted-foreground">
+                {t("costTracking.multiCostResults.periodMarginFeeTotal", {
+                  defaultValue: "{{periodLabel}} Margin Fee",
+                  periodLabel,
+                })}
+              </div>
               <div className="text-sm font-mono text-warning break-words">
                 {formatCost(timePeriod === "day" ? multiResult.totals.daily_margin : multiResult.totals.monthly_margin)}
               </div>
@@ -252,12 +317,18 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
         <Table className="border border-border rounded-lg">
           <TableHeader>
             <TableRow>
-              <TableHead>Model</TableHead>
-              <TableHead className="text-right">Per Request</TableHead>
-              <TableHead className="text-right">Margin Fee</TableHead>
+              <TableHead>{t("costTracking.multiCostResults.colModel", { defaultValue: "Model" })}</TableHead>
+              <TableHead className="text-right">
+                {t("costTracking.multiCostResults.colPerRequest", { defaultValue: "Per Request" })}
+              </TableHead>
+              <TableHead className="text-right">
+                {t("costTracking.multiCostResults.colMarginFee", { defaultValue: "Margin Fee" })}
+              </TableHead>
               <TableHead className="text-right">{periodLabel}</TableHead>
               <TableHead className="w-10">
-                <span className="sr-only">Cost breakdown</span>
+                <span className="sr-only">
+                  {t("costTracking.multiCostResults.costBreakdownColumn", { defaultValue: "Cost breakdown" })}
+                </span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -287,7 +358,10 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
                         )}
                         {record.hasZeroCost && !record.error && (
                           <div className="text-xs text-warning bg-warning/10 px-2 py-1 rounded-sm">
-                            ⚠️ No pricing data found for this model. Set base_model in config.
+                            ⚠️{" "}
+                            {t("costTracking.multiCostResults.noPricingData", {
+                              defaultValue: "No pricing data found for this model. Set base_model in config.",
+                            })}
                           </div>
                         )}
                       </div>
@@ -323,7 +397,17 @@ const MultiCostResults: React.FC<MultiCostResultsProps> = ({ multiResult, timePe
                           variant="ghost"
                           size="icon-xs"
                           aria-expanded={isExpanded}
-                          aria-label={`${isExpanded ? "Hide" : "Show"} cost breakdown for ${record.model}`}
+                          aria-label={
+                            isExpanded
+                              ? t("costTracking.multiCostResults.hideBreakdownLabel", {
+                                  defaultValue: "Hide cost breakdown for {{model}}",
+                                  model: record.model,
+                                })
+                              : t("costTracking.multiCostResults.showBreakdownLabel", {
+                                  defaultValue: "Show cost breakdown for {{model}}",
+                                  model: record.model,
+                                })
+                          }
                           onClick={() => toggleExpanded(record.id)}
                           className="text-muted-foreground hover:text-foreground"
                         >
