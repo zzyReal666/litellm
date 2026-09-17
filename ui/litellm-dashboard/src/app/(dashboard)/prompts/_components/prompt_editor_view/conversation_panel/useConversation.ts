@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "@/lib/toast";
 import { TokenUsage } from "@/components/chat_ui/ResponseMetrics";
 import { Message } from "./types";
@@ -6,6 +7,7 @@ import { convertToDotPrompt, extractVariables } from "../utils";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 
 export const useConversation = (prompt: any, accessToken: string | null) => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -37,12 +39,16 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
 
   const handleSendMessage = async () => {
     if (!accessToken) {
-      toast.fromError("Access token is required");
+      toast.fromError(t("promptsPage.addPromptForm.accessTokenRequired", { defaultValue: "Access token is required" }));
       return;
     }
 
     if (extractedVariables.length > 0 && !allVariablesFilled) {
-      toast.fromError("Please fill in all template variables");
+      toast.fromError(
+        t("promptsPage.conversationPanel.fillAllVariables", {
+          defaultValue: "Please fill in all template variables",
+        }),
+      );
       return;
     }
 
@@ -179,12 +185,16 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
       if (error.name === "AbortError") {
       } else {
         console.error("Error testing prompt:", error);
+        const errorMessage = t("promptsPage.conversationPanel.errorMessage", {
+          defaultValue: "Error: {{message}}",
+          message: error.message,
+        });
         setMessages((prev) => {
           const lastMsg = prev[prev.length - 1];
           if (lastMsg && lastMsg.role === "assistant" && lastMsg.content === "") {
-            return [...prev.slice(0, -1), { role: "assistant", content: `Error: ${error.message}` }];
+            return [...prev.slice(0, -1), { role: "assistant", content: errorMessage }];
           }
-          return [...prev, { role: "assistant", content: `Error: ${error.message}` }];
+          return [...prev, { role: "assistant", content: errorMessage }];
         });
       }
     } finally {
@@ -198,14 +208,14 @@ export const useConversation = (prompt: any, accessToken: string | null) => {
       abortController.abort();
       setAbortController(null);
       setIsLoading(false);
-      toast.info("Request cancelled");
+      toast.info(t("promptsPage.conversationPanel.requestCancelled", { defaultValue: "Request cancelled" }));
     }
   };
 
   const handleClearConversation = () => {
     setMessages([]);
     setVariablesFilled(false);
-    toast.success("Chat history cleared.");
+    toast.success(t("promptsPage.conversationPanel.chatCleared", { defaultValue: "Chat history cleared." }));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {

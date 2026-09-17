@@ -1,5 +1,6 @@
 import React from "react";
 import { LoaderCircleIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,36 +29,43 @@ const PublishModal: React.FC<PublishModalProps> = ({
   onPublish,
   onCancel,
 }) => {
+  const { t } = useTranslation();
   return (
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Publish Prompt</DialogTitle>
-          <DialogDescription>Published prompts are versioned and can be used in API calls.</DialogDescription>
+          <DialogTitle>{t("promptsPage.publishModal.title", { defaultValue: "Publish Prompt" })}</DialogTitle>
+          <DialogDescription>
+            {t("promptsPage.publishModal.description", {
+              defaultValue: "Published prompts are versioned and can be used in API calls.",
+            })}
+          </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <label htmlFor="publish-prompt-name" className="mb-2 block">
-            Name
+            {t("common.name", { defaultValue: "Name" })}
           </label>
           <Input
             id="publish-prompt-name"
             value={promptName}
             onChange={(e) => onNameChange(e.target.value)}
-            placeholder="Enter prompt name"
+            placeholder={t("promptsPage.publishModal.namePlaceholder", { defaultValue: "Enter prompt name" })}
             onKeyDown={(event) => event.key === "Enter" && onPublish()}
             autoFocus
           />
           <p className="text-muted-foreground text-xs mt-2">
-            Published prompts can be used in API calls and are versioned for easy tracking.
+            {t("promptsPage.publishModal.versionedHint", {
+              defaultValue: "Published prompts can be used in API calls and are versioned for easy tracking.",
+            })}
           </p>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
           <Button onClick={onPublish} disabled={isSaving}>
             {isSaving && <LoaderCircleIcon className="animate-spin" />}
-            Publish
+            {t("promptsPage.publishModal.publish", { defaultValue: "Publish" })}
           </Button>
         </DialogFooter>
       </DialogContent>
