@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -56,6 +57,7 @@ interface TagRateLimitEditorProps {
 }
 
 export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps) {
+  const { t } = useTranslation();
   const addRow = () => {
     onChange([...value, { id: newRowId(), tag: "", rpm_limit: null }]);
   };
@@ -73,22 +75,27 @@ export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps)
       {value.map((row, idx) => (
         <div key={row.id} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
           <Input
-            aria-label="Tag"
+            aria-label={t("usagePage.entityUsage.entityTag", { defaultValue: "Tag" })}
             value={row.tag}
             onChange={(e) => updateRow(idx, "tag", e.target.value)}
-            placeholder="Tag (e.g. cell-1)"
+            placeholder={t("keyTeamHelpers.tagRateLimit.tagLabel", { defaultValue: "Tag (e.g. cell-1)" })}
             style={{ width: 180 }}
           />
           <Input
-            aria-label="RPM limit"
+            aria-label={t("keyTeamHelpers.tagRateLimit.rpmLimitAriaLabel", { defaultValue: "RPM limit" })}
             type="number"
             min={0}
             value={row.rpm_limit ?? ""}
             onChange={(e) => updateRow(idx, "rpm_limit", e.target.value === "" ? null : Number(e.target.value))}
-            placeholder="RPM"
+            placeholder={t("organizations.rpmLabel", { defaultValue: "RPM" })}
             style={{ width: 120 }}
           />
-          <Button variant="destructive" size="sm" aria-label="Remove tag limit" onClick={() => removeRow(idx)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            aria-label={t("keyTeamHelpers.tagRateLimit.removeAriaLabel", { defaultValue: "Remove tag limit" })}
+            onClick={() => removeRow(idx)}
+          >
             ✕
           </Button>
         </div>

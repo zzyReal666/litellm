@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { BudgetFallbacksEditor } from "./BudgetFallbacksEditor";
 
 const MODELS = ["gpt-4", "gpt-3.5-turbo", "claude-3", "claude-haiku"];
@@ -95,5 +96,34 @@ describe("BudgetFallbacksEditor", () => {
       />,
     );
     expect(screen.getByText(/first model still within its own budget/)).toBeInTheDocument();
+  });
+});
+
+describe("BudgetFallbacksEditor in Simplified Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("renders the empty state, the field labels and the ordering hint in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const onChange = vi.fn();
+    render(<BudgetFallbacksEditor value={{}} onChange={onChange} availableModels={MODELS} />);
+
+    expect(screen.getByText("添加预算备用模型")).toBeInTheDocument();
+    expect(screen.getByText(/请求会自动改派到备用模型/)).toBeInTheDocument();
+
+    cleanup();
+    render(
+      <BudgetFallbacksEditor
+        value={{ "gpt-4": ["gpt-3.5-turbo", "claude-3"] }}
+        onChange={onChange}
+        availableModels={MODELS}
+      />,
+    );
+    expect(screen.getByText("若超出预算，则尝试")).toBeInTheDocument();
+    expect(screen.getByText("主模型")).toBeInTheDocument();
+    expect(screen.getByText("备用模型")).toBeInTheDocument();
+    expect(screen.getByText(/按顺序尝试/)).toBeInTheDocument();
   });
 });

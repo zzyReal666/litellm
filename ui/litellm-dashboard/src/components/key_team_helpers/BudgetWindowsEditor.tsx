@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export interface BudgetWindowEntry {
   budget_duration: string;
@@ -9,10 +10,34 @@ export interface BudgetWindowEntry {
 }
 
 export const BUDGET_WINDOW_OPTIONS = [
-  { value: "1h", label: "Hourly", resetHint: "Resets every hour" },
-  { value: "24h", label: "Daily", resetHint: "Resets daily at midnight UTC" },
-  { value: "7d", label: "Weekly", resetHint: "Resets every Sunday at midnight UTC" },
-  { value: "30d", label: "Monthly", resetHint: "Resets on the 1st of every month at midnight UTC" },
+  {
+    value: "1h",
+    label: "Hourly",
+    labelKey: "keyTeamHelpers.budgetWindowsEditor.hourly",
+    resetHint: "Resets every hour",
+    resetHintKey: "keyTeamHelpers.budgetWindowsEditor.resetsEveryHour",
+  },
+  {
+    value: "24h",
+    label: "Daily",
+    labelKey: "commonComponents.durationSelect.daily",
+    resetHint: "Resets daily at midnight UTC",
+    resetHintKey: "keyTeamHelpers.budgetWindowsEditor.resetsDailyMidnight",
+  },
+  {
+    value: "7d",
+    label: "Weekly",
+    labelKey: "commonComponents.durationSelect.weekly",
+    resetHint: "Resets every Sunday at midnight UTC",
+    resetHintKey: "keyTeamHelpers.budgetWindowsEditor.resetsWeeklySunday",
+  },
+  {
+    value: "30d",
+    label: "Monthly",
+    labelKey: "commonComponents.durationSelect.monthly",
+    resetHint: "Resets on the 1st of every month at midnight UTC",
+    resetHintKey: "keyTeamHelpers.budgetWindowsEditor.resetsMonthly",
+  },
 ];
 
 interface BudgetWindowsEditorProps {
@@ -21,6 +46,7 @@ interface BudgetWindowsEditorProps {
 }
 
 export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProps) {
+  const { t } = useTranslation();
   const addWindow = () => {
     onChange([...value, { budget_duration: "24h", max_budget: null }]);
   };
@@ -37,7 +63,8 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
   return (
     <div>
       {value.map((window, idx) => {
-        const hint = BUDGET_WINDOW_OPTIONS.find((o) => o.value === window.budget_duration)?.resetHint;
+        const option = BUDGET_WINDOW_OPTIONS.find((o) => o.value === window.budget_duration);
+        const hint = option ? t(option.resetHintKey, { defaultValue: option.resetHint }) : undefined;
         return (
           <div key={idx} style={{ marginBottom: 12 }}>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -52,7 +79,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
                 <SelectContent>
                   {BUDGET_WINDOW_OPTIONS.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
-                      {option.label}
+                      {t(option.labelKey, { defaultValue: option.label })}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -76,7 +103,9 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
                       updateWindow(idx, "max_budget", Number(typed.toFixed(2)));
                     }
                   }}
-                  placeholder="Max spend ($)"
+                  placeholder={t("keyTeamHelpers.budgetWindowsEditor.maxSpendPlaceholder", {
+                    defaultValue: "Max spend ($)",
+                  })}
                 />
               </InputGroup>
               <Button

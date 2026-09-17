@@ -9332,6 +9332,26 @@
       "resetsMonthly": "Resets on the 1st of every month at midnight UTC",
       "maxSpendPlaceholder": "Max spend ($)",
       "addBudgetWindow": "+ Add Budget Window"
+    },
+    "budgetFallbacks": {
+      "rerouteHint": "When a model exceeds its per-model budget, requests automatically reroute to fallback models",
+      "addButton": "Add Budget Fallback",
+      "ifBudgetExceeded": "IF BUDGET EXCEEDED, TRY",
+      "fallbackModelsLabel": "Fallback Models",
+      "orderHint": "Tried in order; first model still within its own budget is used",
+      "selectFallbackPlaceholder": "Select fallback models",
+      "selectPrimaryFirstPlaceholder": "Select a primary model first"
+    },
+    "modelMaxBudget": {
+      "calendarMonth": "Calendar month",
+      "addButton": "Add Model Budget",
+      "currentWindowSpend": "Current window spend: ${{amount}}",
+      "ofBudgetLimit": " of ${{amount}}"
+    },
+    "tagRateLimit": {
+      "tagLabel": "Tag (e.g. cell-1)",
+      "rpmLimitAriaLabel": "RPM limit",
+      "removeAriaLabel": "Remove tag limit"
     }
   },
   "mcpServerManagement": {

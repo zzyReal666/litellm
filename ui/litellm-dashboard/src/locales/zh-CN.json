@@ -9332,6 +9332,26 @@
       "resetsMonthly": "每月 1 日 UTC 零点重置",
       "maxSpendPlaceholder": "最大花费 ($)",
       "addBudgetWindow": "+ 添加预算窗口"
+    },
+    "budgetFallbacks": {
+      "rerouteHint": "当模型超出其单模型预算时，请求会自动改派到备用模型",
+      "addButton": "添加预算备用模型",
+      "ifBudgetExceeded": "若超出预算，则尝试",
+      "fallbackModelsLabel": "备用模型",
+      "orderHint": "按顺序尝试，使用第一个仍在其预算内的模型",
+      "selectFallbackPlaceholder": "选择备用模型",
+      "selectPrimaryFirstPlaceholder": "请先选择主模型"
+    },
+    "modelMaxBudget": {
+      "calendarMonth": "自然月",
+      "addButton": "添加模型预算",
+      "currentWindowSpend": "当前窗口花费：${{amount}}",
+      "ofBudgetLimit": "，预算上限 ${{amount}}"
+    },
+    "tagRateLimit": {
+      "tagLabel": "标签（例如 cell-1）",
+      "rpmLimitAriaLabel": "RPM 限制",
+      "removeAriaLabel": "移除标签限制"
     }
   },
   "mcpServerManagement": {
