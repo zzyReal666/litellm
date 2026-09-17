@@ -548,7 +548,7 @@
       "placeholder": "按邮箱搜索用户…"
     },
     "rateLimitCell": {
-      "notAvailable": "n/a"
+      "notAvailable": "不适用"
     }
   },
   "adminPanel": {

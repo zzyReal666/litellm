@@ -100,7 +100,7 @@ export interface AgentFormValues {
 
 export type AgentFieldName = FieldPath<AgentFormValues>;
 
-export const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode => (
+export const labelWithHint = (label: React.ReactNode, hint: string | undefined): React.ReactNode => (
   <>
     {label}
     <Tooltip>
