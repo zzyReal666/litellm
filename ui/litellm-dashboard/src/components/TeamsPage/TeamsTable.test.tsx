@@ -1,6 +1,8 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, MockedFunction, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, MockedFunction, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import i18n from "@/lib/i18n";
 
 import { chooseSelectOption, renderWithProviders } from "../../../tests/test-utils";
 import { Team } from "../key_team_helpers/key_list";
@@ -370,5 +372,23 @@ describe("hidden-by-default columns", () => {
     const menu = await screen.findByRole("menu");
     expect(within(menu).getByText("Rate Limits")).toBeInTheDocument();
     expect(within(menu).getByText("Updated")).toBeInTheDocument();
+  });
+});
+
+describe("TeamsTable in Simplified Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("renders the toolbar, the row actions and the resource counts in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    renderTable();
+
+    expect(await screen.findByTitle("2 位成员")).toBeInTheDocument();
+    expect(screen.getByTitle("4 个模型")).toBeInTheDocument();
+    expect(screen.getByTitle("3 个密钥")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "筛选" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "打开团队操作" })).toBeInTheDocument();
   });
 });

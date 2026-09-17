@@ -7558,6 +7558,16 @@
       "grantedVia": "Granted via {{source}}",
       "noDefaultModels": "No default models",
       "noDefaultTooltip": "No models are granted directly. Access comes only from access groups"
+    },
+    "teamsTable": {
+      "filterDescription": "Narrow down your teams",
+      "teamAliasLabel": "Team alias",
+      "teamAliasPlaceholder": "Enter team alias…",
+      "teamIdPlaceholder": "Enter team ID…",
+      "copyTeamId": "Copy team ID",
+      "resourceMembers": "members",
+      "resourceModels": "models",
+      "resourceKeys": "keys"
     }
   },
   "aiHub": {

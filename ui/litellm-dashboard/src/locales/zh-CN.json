@@ -7558,6 +7558,16 @@
       "grantedVia": "通过{{source}}授予",
       "noDefaultModels": "没有默认模型",
       "noDefaultTooltip": "没有直接授予任何模型，访问权限仅来自访问组"
+    },
+    "teamsTable": {
+      "filterDescription": "缩小团队范围",
+      "teamAliasLabel": "团队别名",
+      "teamAliasPlaceholder": "输入团队别名…",
+      "teamIdPlaceholder": "输入团队 ID…",
+      "copyTeamId": "复制团队 ID",
+      "resourceMembers": "位成员",
+      "resourceModels": "个模型",
+      "resourceKeys": "个密钥"
     }
   },
   "aiHub": {
