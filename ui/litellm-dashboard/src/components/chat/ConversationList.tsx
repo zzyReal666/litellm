@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Pencil, Trash2, Search, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,13 @@ interface Props {
 }
 
 type DateGroup = "Recents" | "Yesterday" | "Last 7 Days" | "Older";
+
+const DATE_GROUP_KEY: Record<DateGroup, string> = {
+  Recents: "chat.conversationList.dateGroupToday",
+  Yesterday: "chat.conversationList.dateGroupYesterday",
+  "Last 7 Days": "chat.conversationList.dateGroupLast7Days",
+  Older: "chat.conversationList.dateGroupOlder",
+};
 
 const getDateGroup = (timestamp: number): DateGroup => {
   const now = dayjs();
@@ -69,6 +77,7 @@ interface ConversationRowProps {
 }
 
 const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSelect, onDelete, onRename }) => {
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(conv.title);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -153,7 +162,7 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
                   }
                 />
                 <TooltipContent side="bottom">
-                  <p>Rename</p>
+                  <p>{t("chat.conversationList.rename", { defaultValue: "Rename" })}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -177,22 +186,26 @@ const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSel
                     }
                   />
                   <TooltipContent side="bottom">
-                    <p>Delete</p>
+                    <p>{t("chat.conversationList.deleteTooltip", { defaultValue: "Delete" })}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this conversation?</AlertDialogTitle>
-                  <AlertDialogDescription>This action cannot be undone</AlertDialogDescription>
+                  <AlertDialogTitle>
+                    {t("chat.conversationList.deleteConversationTitle", { defaultValue: "Delete this conversation?" })}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t("agents.deleteCannotUndo", { defaultValue: "This action cannot be undone." })}
+                  </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{t("common.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => onDelete(conv.id)}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Delete
+                    {t("commonComponents.deleteResourceModal.okText", { defaultValue: "Delete" })}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -212,6 +225,7 @@ interface SearchModalProps {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect, onClose }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [wasOpen, setWasOpen] = useState(open);
 
@@ -236,7 +250,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             autoFocus
-            placeholder="Search conversations\u2026"
+            placeholder={t("chat.conversationList.searchPlaceholder", { defaultValue: "Search conversations…" })}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-9"
@@ -245,7 +259,9 @@ const SearchModal: React.FC<SearchModalProps> = ({ open, conversations, onSelect
 
         <ScrollArea className="max-h-[320px]">
           {filtered.length === 0 ? (
-            <div className="text-center py-6 text-muted-foreground text-sm">No conversations found</div>
+            <div className="text-center py-6 text-muted-foreground text-sm">
+              {t("chat.conversationList.noConversationsFound", { defaultValue: "No conversations found" })}
+            </div>
           ) : (
             filtered.map((conv) => {
               const truncated = conv.title.length > 55 ? conv.title.slice(0, 55) + "\u2026" : conv.title;
@@ -293,15 +309,22 @@ const ConversationList: React.FC<Props> = ({ conversations, activeConversationId
         <ScrollArea className="flex-1 h-0 px-1.5 pt-2">
           {grouped.length === 0 ? (
             <div className="text-center text-muted-foreground/60 text-xs mt-8 px-3">
-              No conversations yet
-              <br />
-              Start a new chat above
+              {t("chat.conversationList.noConversationsYet", {
+                defaultValue: "No conversations yet.\nStart a new chat above.",
+              })
+                .split("\n")
+                .map((line, index) => (
+                  <React.Fragment key={line}>
+                    {index > 0 && <br />}
+                    {line}
+                  </React.Fragment>
+                ))}
             </div>
           ) : (
             grouped.map(({ group, items }) => (
               <div key={group} className="mb-2">
                 <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider px-2 pt-2 pb-1">
-                  {group}
+                  {t(DATE_GROUP_KEY[group], { defaultValue: group })}
                 </div>
                 {items.map((conv) => (
                   <ConversationRow

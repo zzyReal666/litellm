@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { AlertCircle, ScrollText } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -84,18 +85,26 @@ function formatDuration(row: LogRow): string {
 }
 
 function StatusBadge({ status }: { status?: string }) {
+  const { t } = useTranslation();
   const isFailure = status === "failure";
   return (
     <span className={`inline-flex items-center gap-1.5 text-xs ${isFailure ? "text-destructive" : "text-success"}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${isFailure ? "bg-destructive" : "bg-success"}`} />
-      {isFailure ? "Failure" : "Success"}
+      {isFailure
+        ? t("viewLogs.filterOptions.statusFailure", { defaultValue: "Failure" })
+        : t("common.success", { defaultValue: "Success" })}
     </span>
   );
 }
 
 function JsonBlock({ value }: { value: unknown }) {
+  const { t } = useTranslation();
   if (value == null || value === "") {
-    return <p className="m-0 text-xs text-muted-foreground">Not available</p>;
+    return (
+      <p className="m-0 text-xs text-muted-foreground">
+        {t("viewLogs.logDetailContent.responseNotAvailable", { defaultValue: "Response data not available" })}
+      </p>
+    );
   }
   const text = typeof value === "string" ? value : JSON.stringify(value, null, 2);
   return (
@@ -123,38 +132,53 @@ function LogsSkeleton() {
 }
 
 function LogsEmpty() {
+  const { t } = useTranslation();
   return (
     <div className="rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
       <ScrollText className="mx-auto mb-3 h-6 w-6 text-muted-foreground/50" />
-      No logs for this period
+      {t("chat.logsPanel.noLogs", { defaultValue: "No logs for this period" })}
     </div>
   );
 }
 
 function LogsError({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
       <AlertCircle className="h-6 w-6 text-destructive/70" />
-      Failed to load your logs
+      {t("chat.logsPanel.loadFailed", { defaultValue: "Failed to load your logs" })}
       <Button variant="outline" size="sm" onClick={onRetry}>
-        Retry
+        {t("navbar.retry", { defaultValue: "Retry" })}
       </Button>
     </div>
   );
 }
 
 function LogsTable({ rows, onRowClick }: { rows: LogRow[]; onRowClick: (row: LogRow) => void }) {
+  const { t } = useTranslation();
   return (
     <div className="overflow-hidden rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Time</TableHead>
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Model</TableHead>
-            <TableHead className="text-[11px] font-medium uppercase tracking-wide">Status</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Tokens</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Duration</TableHead>
-            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">Cost</TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">
+              {t("viewLogs.columns.colTime", { defaultValue: "Time" })}
+            </TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">
+              {t("agents.colModel", { defaultValue: "Model" })}
+            </TableHead>
+            <TableHead className="text-[11px] font-medium uppercase tracking-wide">
+              {t("claudeCodePluginsPage.skillDetail.sidebarStatus", { defaultValue: "Status" })}
+            </TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {t("activityMetrics.tokens", { defaultValue: "Tokens" })}
+            </TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {t("viewLogs.logDetailContent.labelDuration", { defaultValue: "Duration" })}
+            </TableHead>
+            <TableHead className="text-right text-[11px] font-medium uppercase tracking-wide">
+              {t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" })}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -191,39 +215,54 @@ function LogDetailDialog({
   isLoading: boolean;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <Dialog open={!!log} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Request details</DialogTitle>
+          <DialogTitle>{t("chat.logsPanel.requestDetails", { defaultValue: "Request details" })}</DialogTitle>
           <DialogDescription className="break-all font-mono text-xs">{log?.request_id}</DialogDescription>
         </DialogHeader>
         {log && (
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Model</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">
+                  {t("agents.colModel", { defaultValue: "Model" })}
+                </div>
                 <div className="text-sm text-foreground">{log.model || "-"}</div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Cost</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">
+                  {t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" })}
+                </div>
                 <div className="text-sm text-foreground">{formatCost(log.spend)}</div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Tokens</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">
+                  {t("activityMetrics.tokens", { defaultValue: "Tokens" })}
+                </div>
                 <div className="text-sm text-foreground">
-                  {formatTokens(log.total_tokens)} ({formatTokens(log.prompt_tokens)} in /{" "}
-                  {formatTokens(log.completion_tokens)} out)
+                  {formatTokens(log.total_tokens)}
+                  {t("chat.logsPanel.tokensBreakdown", {
+                    prompt: formatTokens(log.prompt_tokens),
+                    completion: formatTokens(log.completion_tokens),
+                    defaultValue: " ({{prompt}} in / {{completion}} out)",
+                  })}
                 </div>
               </div>
               <div className="rounded-md border bg-card p-3">
-                <div className="mb-0.5 text-xs text-muted-foreground">Duration</div>
+                <div className="mb-0.5 text-xs text-muted-foreground">
+                  {t("viewLogs.logDetailContent.labelDuration", { defaultValue: "Duration" })}
+                </div>
                 <div className="text-sm text-foreground">{formatDuration(log)}</div>
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Request</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {t("viewLogs.logDetailContent.tabRequest", { defaultValue: "Request" })}
+              </div>
               {isLoading ? (
                 <Skeleton className="h-16 w-full" />
               ) : (
@@ -231,7 +270,9 @@ function LogDetailDialog({
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Response</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {t("viewLogs.logDetailContent.tabResponse", { defaultValue: "Response" })}
+              </div>
               {isLoading ? <Skeleton className="h-16 w-full" /> : <JsonBlock value={details?.response} />}
             </div>
           </div>
@@ -242,6 +283,7 @@ function LogDetailDialog({
 }
 
 const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
+  const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState<TimeRange>("24h");
   const [page, setPage] = useState(1);
   const [selectedLog, setSelectedLog] = useState<LogRow | null>(null);
@@ -293,10 +335,10 @@ const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
           {totalPages > 1 && (
             <div className="flex gap-1">
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-                Previous
+                {t("common.previous", { defaultValue: "Previous" })}
               </Button>
               <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-                Next
+                {t("common.next", { defaultValue: "Next" })}
               </Button>
             </div>
           )}
@@ -309,8 +351,12 @@ const LogsPanel: React.FC<Props> = ({ accessToken, userId }) => {
     <div className="w-full">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="mb-0.5 text-base font-semibold tracking-tight text-foreground">Your Logs</h2>
-          <p className="m-0 text-sm text-muted-foreground">Request logs for your account only</p>
+          <h2 className="mb-0.5 text-base font-semibold tracking-tight text-foreground">
+            {t("chat.logsPanel.yourLogs", { defaultValue: "Your Logs" })}
+          </h2>
+          <p className="m-0 text-sm text-muted-foreground">
+            {t("chat.logsPanel.accountLogsOnly", { defaultValue: "Request logs for your account only" })}
+          </p>
         </div>
         <div className="flex gap-1">
           {TIME_RANGE_OPTIONS.map((opt) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BarChart3 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { userDailyActivityAggregatedCall } from "../networking";
@@ -90,6 +91,7 @@ const TIME_RANGE_OPTIONS: { value: TimeRange; label: string }[] = [
 ];
 
 const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
+  const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
   const { start, end } = getDateRange(timeRange);
 
@@ -109,15 +111,21 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
 
   const statCards: Array<{ label: string; value: string; sub?: string; subVariant?: "error" }> = meta
     ? [
-        { label: "Total Spend", value: `$${meta.total_spend.toFixed(2)}` },
-        { label: "API Requests", value: formatNumber(meta.total_api_requests) },
         {
-          label: "Tokens Used",
+          label: t("activityMetrics.totalSpend", { defaultValue: "Total Spend" }),
+          value: `$${meta.total_spend.toFixed(2)}`,
+        },
+        {
+          label: t("chat.usagePanel.apiRequests", { defaultValue: "API Requests" }),
+          value: formatNumber(meta.total_api_requests),
+        },
+        {
+          label: t("chat.usagePanel.tokensUsed", { defaultValue: "Tokens Used" }),
           value: formatNumber(meta.total_tokens),
           sub: `${formatNumber(meta.total_prompt_tokens)} in / ${formatNumber(meta.total_completion_tokens)} out`,
         },
         {
-          label: "Success Rate",
+          label: t("usagePage.endpointUsageTable.colSuccessRate", { defaultValue: "Success Rate" }),
           value:
             meta.total_api_requests > 0
               ? `${((meta.total_successful_requests / meta.total_api_requests) * 100).toFixed(1)}%`
@@ -132,8 +140,12 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground mb-0.5">Your Usage</h2>
-          <p className="text-sm text-muted-foreground m-0">Spend and request activity</p>
+          <h2 className="text-base font-semibold text-foreground mb-0.5">
+            {t("usagePage.usageViewSelect.yourUsageLabel", { defaultValue: "Your Usage" })}
+          </h2>
+          <p className="text-sm text-muted-foreground m-0">
+            {t("chat.usagePanel.activity", { defaultValue: "Spend and request activity" })}
+          </p>
         </div>
         <div className="flex gap-1">
           {TIME_RANGE_OPTIONS.map((opt) => (
@@ -161,7 +173,7 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
       ) : !meta || meta.total_api_requests === 0 ? (
         <div className="text-center text-muted-foreground text-sm py-12 border border-dashed rounded-lg">
           <BarChart3 className="h-6 w-6 mb-3 mx-auto text-muted-foreground/50" />
-          No usage data for this period
+          {t("chat.usagePanel.noData", { defaultValue: "No usage data for this period" })}
         </div>
       ) : (
         <div>
@@ -186,11 +198,15 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
           {dailyData.length > 1 && (
             <div className="grid grid-cols-2 gap-3">
               <div className="border rounded-lg p-4 bg-card">
-                <div className="text-xs text-muted-foreground mb-2">Daily Spend</div>
+                <div className="text-xs text-muted-foreground mb-2">
+                  {t("usagePage.usagePageView.dailySpend", { defaultValue: "Daily Spend" })}
+                </div>
                 <SparklineBar data={dailySpend} maxVal={maxSpend} />
               </div>
               <div className="border rounded-lg p-4 bg-card">
-                <div className="text-xs text-muted-foreground mb-2">Daily Requests</div>
+                <div className="text-xs text-muted-foreground mb-2">
+                  {t("chat.usagePanel.dailyRequests", { defaultValue: "Daily Requests" })}
+                </div>
                 <SparklineBar data={dailyRequests} maxVal={maxRequests} />
               </div>
             </div>
