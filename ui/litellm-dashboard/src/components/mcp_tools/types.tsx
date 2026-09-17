@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 /** A single MCP tool event emitted by the LiteLLM proxy during a Responses API turn. */
 export interface MCPEvent {
   type: string;
@@ -46,18 +48,44 @@ export const AUTH_TYPE = {
   OAUTH_DELEGATE: "oauth_delegate",
 };
 
-export const AUTH_TYPE_ITEMS = [
-  { value: AUTH_TYPE.NONE, label: "None" },
-  { value: AUTH_TYPE.API_KEY, label: "API Key" },
-  { value: AUTH_TYPE.BEARER_TOKEN, label: "Bearer Token" },
-  { value: AUTH_TYPE.TOKEN, label: "Token" },
-  { value: AUTH_TYPE.BASIC, label: "Basic Auth" },
-  { value: AUTH_TYPE.OAUTH2, label: "OAuth" },
-  { value: AUTH_TYPE.OAUTH2_TOKEN_EXCHANGE, label: "OAuth Token Exchange (OBO)" },
-  { value: AUTH_TYPE.OAUTH2_ID_JAG, label: "ID-JAG (Okta Cross App Access)" },
-  { value: AUTH_TYPE.AWS_SIGV4, label: "AWS SigV4 (Bedrock AgentCore MCPs)" },
-  { value: AUTH_TYPE.TRUE_PASSTHROUGH, label: "True Passthrough (no LiteLLM auth)" },
-  { value: AUTH_TYPE.OAUTH_DELEGATE, label: "OAuth Delegate (client-supplied upstream token)" },
+export interface McpSelectItem {
+  value: string;
+  label: string;
+  labelKey: string;
+}
+
+export const AUTH_TYPE_ITEMS: readonly McpSelectItem[] = [
+  { value: AUTH_TYPE.NONE, label: "None", labelKey: "mcpTools.mcpServerEdit.authNone" },
+  { value: AUTH_TYPE.API_KEY, label: "API Key", labelKey: "mcpTools.mcpServerEdit.authApiKey" },
+  { value: AUTH_TYPE.BEARER_TOKEN, label: "Bearer Token", labelKey: "mcpTools.mcpServerEdit.authBearerToken" },
+  { value: AUTH_TYPE.TOKEN, label: "Token", labelKey: "mcpTools.mcpServerEdit.authToken" },
+  { value: AUTH_TYPE.BASIC, label: "Basic Auth", labelKey: "mcpTools.mcpServerEdit.authBasic" },
+  { value: AUTH_TYPE.OAUTH2, label: "OAuth", labelKey: "mcpTools.mcpServerEdit.authOauth" },
+  {
+    value: AUTH_TYPE.OAUTH2_TOKEN_EXCHANGE,
+    label: "OAuth Token Exchange (OBO)",
+    labelKey: "mcpTools.mcpServerEdit.authOauthTokenExchange",
+  },
+  {
+    value: AUTH_TYPE.OAUTH2_ID_JAG,
+    label: "ID-JAG (Okta Cross App Access)",
+    labelKey: "mcpTools.mcpServerEdit.authIdJag",
+  },
+  {
+    value: AUTH_TYPE.AWS_SIGV4,
+    label: "AWS SigV4 (Bedrock AgentCore MCPs)",
+    labelKey: "mcpTools.mcpServerEdit.authAwsSigv4",
+  },
+  {
+    value: AUTH_TYPE.TRUE_PASSTHROUGH,
+    label: "True Passthrough (no LiteLLM auth)",
+    labelKey: "mcpTools.mcpServerEdit.authTruePassthrough",
+  },
+  {
+    value: AUTH_TYPE.OAUTH_DELEGATE,
+    label: "OAuth Delegate (client-supplied upstream token)",
+    labelKey: "mcpTools.mcpServerEdit.authOauthDelegate",
+  },
 ];
 
 // The two client-forwarded token modes: the caller supplies the upstream Authorization (forwarded
@@ -264,12 +292,21 @@ export const TRANSPORT = {
   OPENAPI: "openapi",
 };
 
-export const TRANSPORT_ITEMS = [
-  { value: TRANSPORT.HTTP, label: "Streamable HTTP (Recommended)" },
-  { value: TRANSPORT.SSE, label: "Server-Sent Events (SSE)" },
-  { value: TRANSPORT.STDIO, label: "Standard Input/Output (stdio)" },
-  { value: TRANSPORT.OPENAPI, label: "OpenAPI Spec" },
+export const TRANSPORT_ITEMS: readonly McpSelectItem[] = [
+  { value: TRANSPORT.HTTP, label: "Streamable HTTP (Recommended)", labelKey: "mcpTools.mcpServerEdit.transportHttp" },
+  { value: TRANSPORT.SSE, label: "Server-Sent Events (SSE)", labelKey: "mcpTools.mcpServerEdit.transportSse" },
+  {
+    value: TRANSPORT.STDIO,
+    label: "Standard Input/Output (stdio)",
+    labelKey: "mcpTools.mcpServerEdit.transportStdio",
+  },
+  { value: TRANSPORT.OPENAPI, label: "OpenAPI Spec", labelKey: "mcpTools.mcpServerEdit.transportOpenapi" },
 ];
+
+export const localizeSelectItems = <Item extends { label: string; labelKey: string }>(
+  items: readonly Item[],
+  t: TFunction,
+): Item[] => items.map((item) => ({ ...item, label: t(item.labelKey, { defaultValue: item.label }) }));
 
 export const handleTransport = (transport?: string | null, specPath?: string | null): string => {
   if (transport === null || transport === undefined) {

@@ -1754,7 +1754,7 @@
   },
   "src/components/mcp_tools/McpCrudPermissionPanel.tsx": {
     "no-nested-ternary": {
-      "count": 3
+      "count": 1
     }
   },
   "src/components/mcp_tools/types.tsx": {
