@@ -6172,8 +6172,7 @@
       "guardrailsCreateFailed": "Failed to create {{count}} guardrail(s): {{list}}. You may need to create them manually.",
       "createGuardrailsFailed": "Failed to create guardrails. Please try again.",
       "learnMoreAttachmentsArrow": "Learn more about attachments ->",
-      "learnMoreDocsArrow": "Learn more in the documentation ->",
-      "dismissAriaLabel": "Dismiss {{title}}"
+      "learnMoreDocsArrow": "Learn more in the documentation ->"
     },
     "pipelineFlowBuilder": {
       "actionNextStep": "Next Step",
@@ -7381,7 +7380,10 @@
       "creatingButton": "Creating...",
       "credentialFieldRequired": "Please enter {{label}}",
       "agentTypeSettings": "{{agentType}} Settings",
-      "agentLogoAlt": "Agent"
+      "agentLogoAlt": "Agent",
+      "creationSteps": "Agent creation steps",
+      "customAgentHint": "For agents that don't follow a standard protocol, just needs a virtual key",
+      "loadingKeys": "Loading keys…"
     },
     "agentCard": {
       "noDescription": "No description",
@@ -7432,7 +7434,9 @@
       "skillTagsLabel": "Tags",
       "skillTagsPlaceholder": "Type a tag and press Enter",
       "skillExamplesLabel": "Examples",
-      "skillExamplesPlaceholder": "Type an example and press Enter"
+      "skillExamplesPlaceholder": "Type an example and press Enter",
+      "protocolVersionTooltip": "The A2A protocol version LiteLLM serves to clients for this agent. LiteLLM converts the upstream agent's responses to this version, so clients always see the version you pick here regardless of the original agent's version.",
+      "protocolVersionHelpText": "LiteLLM serves this version to clients and converts the upstream agent's responses to match it, regardless of the original agent's version."
     },
     "agentFormFields": {
       "agentNameLabel": "Agent Name",
@@ -7452,7 +7456,9 @@
       "addStaticHeader": "Add Static Header",
       "forwardClientHeadersLabel": "Forward Client Headers",
       "forwardClientHeadersTooltip": "Header names to extract from the client's request and forward to the agent. Type a name and press Enter.",
-      "forwardClientHeadersPlaceholder": "e.g. x-api-key, Authorization"
+      "forwardClientHeadersPlaceholder": "e.g. x-api-key, Authorization",
+      "removeStaticHeader": "Remove static header",
+      "requiredSuffix": "(Required)"
     },
     "agentCostView": {
       "title": "Cost Configuration",
@@ -7483,7 +7489,8 @@
       "more": "more",
       "capabilitiesTitle": "Capabilities",
       "capabilitiesTooltip": "Only capabilities LiteLLM can faithfully proxy today are listed. Others (push notifications, extensions) are coming soon.",
-      "notAdvertisedUpstream": "not advertised upstream"
+      "notAdvertisedUpstream": "not advertised upstream",
+      "dismissError": "Dismiss error"
     },
     "agentInfo": {
       "failedToLoad": "Failed to load agent information",
@@ -7528,7 +7535,9 @@
       "editSettings": "Edit Settings",
       "editSettingsHint": "Click \"Edit Settings\" to modify agent configuration.",
       "rateLimitsTitle": "Rate Limits",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "backToAgent": "Back to Agent",
+      "allowedMcpServersTooltip": "Select which MCP servers or access groups this agent can access. Keys bound to this agent can only reach servers granted here."
     },
     "dynamicAgentFormFields": {
       "agentNameLabel": "Agent Name",
@@ -7538,6 +7547,28 @@
       "descriptionTooltip": "Brief description of what this agent does",
       "descriptionPlaceholder": "Describe what this agent does...",
       "credentialFieldRequired": "Please enter {{label}}"
+    },
+    "agentFormKit": {
+      "noMatchingOptions": "No matching options"
+    },
+    "agentsPanel": {
+      "deleteConfirm": "Are you sure you want to delete agent: {{name}}? This action cannot be undone."
+    },
+    "agentsTable": {
+      "noMatchingAgents": "No matching agents",
+      "noAgentsYet": "No agents yet",
+      "adjustSearch": "Adjust the search to see more agents.",
+      "addAgentHint": "Add an agent to make it available in your organization.",
+      "loading": "Loading agents…",
+      "searchPlaceholder": "Search agents by name, ID, or description...",
+      "clearSearch": "Clear search"
+    },
+    "agentsTableColumns": {
+      "openAgentActions": "Open agent actions"
+    },
+    "agentVirtualKeys": {
+      "noKeyAssigned": "No virtual key assigned to this agent.",
+      "unnamedKey": "Unnamed key"
     }
   },
   "teamPage": {

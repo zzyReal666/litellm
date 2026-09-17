@@ -7381,7 +7381,10 @@
       "creatingButton": "创建中...",
       "credentialFieldRequired": "请输入 {{label}}",
       "agentTypeSettings": "{{agentType}} 设置",
-      "agentLogoAlt": "Agent"
+      "agentLogoAlt": "Agent",
+      "creationSteps": "Agent 创建步骤",
+      "customAgentHint": "适用于不遵循标准协议的 Agent，只需一个虚拟密钥",
+      "loadingKeys": "加载密钥中…"
     },
     "agentCard": {
       "noDescription": "无描述",
@@ -7432,7 +7435,9 @@
       "skillTagsLabel": "标签",
       "skillTagsPlaceholder": "输入标签后按 Enter",
       "skillExamplesLabel": "示例",
-      "skillExamplesPlaceholder": "输入示例后按 Enter"
+      "skillExamplesPlaceholder": "输入示例后按 Enter",
+      "protocolVersionTooltip": "LiteLLM 向客户端提供的此 Agent 的 A2A 协议版本。LiteLLM 会将上游 Agent 的响应转换为此版本，因此无论原始 Agent 使用哪个版本，客户端始终看到此处选择的版本。",
+      "protocolVersionHelpText": "LiteLLM 将此版本提供给客户端，并把上游 Agent 的响应转换为该版本，与原始 Agent 的版本无关。"
     },
     "agentFormFields": {
       "agentNameLabel": "Agent 名称",
@@ -7452,7 +7457,9 @@
       "addStaticHeader": "添加静态请求头",
       "forwardClientHeadersLabel": "转发客户端请求头",
       "forwardClientHeadersTooltip": "从客户端请求中提取并转发给 Agent 的请求头名称。输入名称后按 Enter。",
-      "forwardClientHeadersPlaceholder": "例如：x-api-key、Authorization"
+      "forwardClientHeadersPlaceholder": "例如：x-api-key、Authorization",
+      "removeStaticHeader": "移除静态请求头",
+      "requiredSuffix": "（必填）"
     },
     "agentCostView": {
       "title": "花费配置",
@@ -7483,7 +7490,8 @@
       "more": "展开",
       "capabilitiesTitle": "能力",
       "capabilitiesTooltip": "仅列出 LiteLLM 当前可以忠实代理的能力，其他能力（推送通知、扩展）即将推出。",
-      "notAdvertisedUpstream": "上游未声明"
+      "notAdvertisedUpstream": "上游未声明",
+      "dismissError": "关闭错误提示"
     },
     "agentInfo": {
       "failedToLoad": "加载 Agent 信息失败",
@@ -7528,7 +7536,9 @@
       "editSettings": "编辑设置",
       "editSettingsHint": "点击「编辑设置」修改 Agent 配置。",
       "rateLimitsTitle": "速率限制",
-      "saveChanges": "保存更改"
+      "saveChanges": "保存更改",
+      "backToAgent": "返回 Agent",
+      "allowedMcpServersTooltip": "选择此 Agent 可访问的 MCP 服务器或访问组。绑定到此 Agent 的密钥只能访问此处授权的服务器。"
     },
     "dynamicAgentFormFields": {
       "agentNameLabel": "Agent 名称",
@@ -7538,6 +7548,28 @@
       "descriptionTooltip": "简要描述该 Agent 的功能",
       "descriptionPlaceholder": "描述该 Agent 的功能...",
       "credentialFieldRequired": "请输入{{label}}"
+    },
+    "agentFormKit": {
+      "noMatchingOptions": "没有匹配的选项"
+    },
+    "agentsPanel": {
+      "deleteConfirm": "确定要删除 Agent：{{name}}？此操作无法撤销。"
+    },
+    "agentsTable": {
+      "noMatchingAgents": "没有匹配的 Agent",
+      "noAgentsYet": "暂无 Agent",
+      "adjustSearch": "调整搜索条件以查看更多 Agent。",
+      "addAgentHint": "添加 Agent 后即可在组织中使用。",
+      "loading": "加载 Agent 中…",
+      "searchPlaceholder": "按名称、ID 或描述搜索 Agent...",
+      "clearSearch": "清除搜索"
+    },
+    "agentsTableColumns": {
+      "openAgentActions": "打开 Agent 操作"
+    },
+    "agentVirtualKeys": {
+      "noKeyAssigned": "此 Agent 未分配虚拟密钥。",
+      "unnamedKey": "未命名密钥"
     }
   },
   "teamPage": {
