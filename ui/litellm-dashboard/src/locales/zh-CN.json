@@ -1337,7 +1337,8 @@
       "totalWillBePublished_other": "共 <strong>{{count}}</strong> 个技能将被发布",
       "modalTitle": "发布到技能中心",
       "stepSelectSkills": "选择技能",
-      "publishToHub": "发布到中心"
+      "publishToHub": "发布到中心",
+      "stepConfirm": "确认"
     },
     "addPluginForm": {
       "noAccessToken": "没有可用的访问令牌",
@@ -1382,7 +1383,24 @@
       "authorEmailTooltip": "技能作者的联系邮箱",
       "adding": "添加中...",
       "addSkill": "添加技能",
-      "authorEmailPlaceholder": "author@example.com"
+      "authorEmailPlaceholder": "author@example.com",
+      "sourceUrlLabel": "来源 URL",
+      "sourceUrlTooltip": "粘贴来自 GitHub、GitLab、Bitbucket 或自建主机的 HTTPS git 仓库 URL（例如 github.com/org/repo 或 github.com/org/repo/tree/main/my-skill），或粘贴托管在 S3 或任意静态文件服务器上的技能 .zip 压缩包的 HTTPS 链接。",
+      "sourceUrlPlaceholder": "https://github.com/org/repo 或 https://bucket.s3.amazonaws.com/my-skill.zip",
+      "sourceUrlRequired": "请输入仓库或 zip 压缩包 URL",
+      "sourceUrlInvalid": "请输入有效的仓库或 zip 压缩包 URL",
+      "subPathLabel": "子文件夹路径（可选）",
+      "subPathTooltip": "技能在仓库中的路径（例如 plugins/my-skill）。如果技能位于仓库根目录，请留空。",
+      "subPathPlaceholder": "plugins/my-skill",
+      "subPathInvalid": "子文件夹必须为 plugins/my-skill 这样的相对路径（仅限字母、数字、点、连字符和下划线）",
+      "subPathLockGitSubdir": "该 URL 已指向某个子文件夹，因此此字段已禁用",
+      "subPathLockArchive": "zip 压缩包会整体安装，因此此字段已禁用",
+      "sha256Label": "压缩包 SHA-256（可选）",
+      "sha256Tooltip": "zip 文件的十六进制摘要。如果校验和不匹配，Claude Code 将拒绝安装该压缩包。",
+      "sha256Placeholder": "64 个十六进制字符",
+      "sha256Invalid": "SHA-256 必须为 64 个字符的十六进制摘要",
+      "namePlaceholder": "my-skill",
+      "versionPlaceholder": "1.0.0"
     },
     "pluginTable": {
       "copiedToClipboard": "已复制到剪贴板！",
@@ -1395,7 +1413,11 @@
       "uncategorized": "未分类",
       "colPublic": "是否公开",
       "deleteSkill": "删除技能",
-      "noSkillsFound": "未找到技能，点击添加以开始使用。"
+      "noSkillsFound": "未找到技能，点击添加以开始使用。",
+      "noSkillsFoundTitle": "未找到技能",
+      "noSkillsFoundHint": "添加一个技能即可开始使用。",
+      "copySkillId": "复制技能 ID",
+      "skillIdCopied": "技能 ID 已复制"
     },
     "skillDetail": {
       "backLink": "技能",
@@ -1422,7 +1444,10 @@
       "noMarketplace": "还未配置 marketplace？",
       "seeSetup": "查看一次性配置 →",
       "setupHeading": "一次性 marketplace 配置",
-      "setupInstruction": "将以下内容添加到 <code>~/.claude/settings.json</code>，将 Claude Code 指向您的代理："
+      "setupInstruction": "将以下内容添加到 <code>~/.claude/settings.json</code>，将 Claude Code 指向您的代理：",
+      "pluginNotFound": "如果看到“在 marketplace 中未找到插件 {{name}}”，请先更新目录：",
+      "registerMarketplaceInstruction": "在 Claude Code 中运行以下命令以注册 marketplace：",
+      "settingsInstruction": "或将以下内容添加到 <code>~/.claude/settings.json</code> 以实现持久配置："
     }
   },
   "cloudzeroExportModal": {
@@ -3388,7 +3413,9 @@
     "allTags": "所有标签",
     "enterpriseOnlyFeature": "（仅限企业版功能）",
     "spendPerTag": "按标签花费",
-    "spendPerTagDesc": "从按标签追踪成本开始 <docsLink>此处</docsLink>"
+    "spendPerTagDesc": "从按标签追踪成本开始 <docsLink>此处</docsLink>",
+    "selectTags": "选择标签",
+    "adminOnlyDesc": "代理全局用量仅对管理员用户开放。您自己的用量可在用量页面查看。"
   },
   "userDashboard": {
     "userIdNotSet": "用户 ID 未设置"
@@ -7898,6 +7925,39 @@
       "awsRegionTooltip": "S3 存储桶所在的 AWS 区域（例如：us-west-2）",
       "embeddingModelLabel": "嵌入模型",
       "embeddingModelTooltip": "选择用于向量生成的嵌入模型"
+    },
+    "mongodb": {
+      "sidecarUrlLabel": "Sidecar URL",
+      "sidecarUrlTooltip": "远程 sidecar 请使用 HTTPS，同一主机或 Pod 上的 sidecar 可使用 HTTP 配合回环 IP 地址",
+      "sidecarApiKeyLabel": "Sidecar API 密钥",
+      "sidecarApiKeyTooltip": "在您的 MongoDB sidecar 中配置的 MONGODB_SIDECAR_API_KEY",
+      "sidecarApiKeyPlaceholder": "输入 sidecar API 密钥",
+      "databaseLabel": "数据库",
+      "databaseTooltip": "存放要搜索的集合的 MongoDB 数据库",
+      "collectionLabel": "集合",
+      "collectionTooltip": "您的 MongoDB Vector Search 索引所基于的集合",
+      "embeddingModelTooltip": "本代理上创建了您集合中已存储向量的嵌入模型。LiteLLM 会用它嵌入每个搜索查询，因此必须是同一个模型。尺寸相同的其他模型不会报错，只是会返回错误结果。如果列表中没有，请先在 Models 下添加",
+      "embeddingFieldLabel": "向量字段名",
+      "embeddingFieldTooltip": "每个文档中存放其嵌入向量的字段。必须与创建 MongoDB Vector Search 索引时使用的路径一致（默认：embedding）",
+      "textFieldLabel": "文本字段",
+      "textFieldTooltip": "每个文档中存放可读文本的字段。LiteLLM 会在搜索结果中返回该文本，并支持 metadata.body 这类点号路径（默认：text）",
+      "numCandidatesLabel": "候选数量",
+      "numCandidatesTooltip": "MongoDB 在返回最佳结果之前检查的最近邻数量。数值越大越准确，速度也越慢。留空则由 LiteLLM 根据请求的结果数量自动调整"
+    },
+    "valkey": {
+      "hostLabel": "Valkey 主机",
+      "hostTooltip": "您的 Valkey 服务器的主机名或 IP，不要包含 redis:// 或端口（例如：my-valkey.example.com）",
+      "portLabel": "Valkey 端口",
+      "portTooltip": "您的 Valkey 服务器监听的端口。除非您修改过，否则保持 6379",
+      "passwordLabel": "Valkey 密码",
+      "passwordTooltip": "登录您的 Valkey 服务器所用的密码。如果服务器没有密码，请留空",
+      "sslLabel": "使用 TLS",
+      "sslTooltip": "如果您的 Valkey 服务器需要加密（TLS）连接，请设置为 true，例如开启了传输中加密的 AWS ElastiCache",
+      "embeddingModelTooltip": "本代理上用于创建您 Valkey 索引中已存储嵌入的嵌入模型。LiteLLM 用它嵌入每个搜索查询，因此必须是同一个模型，否则结果会出错。如果列表中没有，请先在 Models 下添加",
+      "textFieldLabel": "文本字段",
+      "textFieldTooltip": "每个已存储文档中存放可读文本的字段。LiteLLM 会在搜索结果中返回该文本。必须与您存储文档时使用的字段一致（默认：text）",
+      "embeddingFieldLabel": "向量字段名",
+      "embeddingFieldTooltip": "每个已存储文档中存放其嵌入向量的字段。LiteLLM 会针对该字段进行搜索，因此必须与创建索引时使用的字段一致（默认：embedding）"
     }
   },
   "vectorStoreManagement": {
@@ -9725,7 +9785,10 @@
       "successModalFallbackTitle": "响应详情",
       "statusLabel": "状态：",
       "healthCheckPassed": "健康检查通过",
-      "responseDetailsLabel": "响应详情："
+      "responseDetailsLabel": "响应详情：",
+      "errorModalDescription": "模型健康检查返回的详细信息。",
+      "successModalDescription": "模型健康检查成功时返回的响应。",
+      "healthCheckFailed": "健康检查失败"
     },
     "healthCheckColumns": {
       "modelId": "模型 ID",
@@ -9741,7 +9804,11 @@
       "checkInProgress": "检查进行中...",
       "lastSuccess": "最近成功",
       "rerunHealthCheck": "重新运行健康检查",
-      "runHealthCheck": "运行健康检查"
+      "runHealthCheck": "运行健康检查",
+      "selectRow": "选择 {{name}}",
+      "neverChecked": "从未检查",
+      "neverSucceeded": "从未成功",
+      "none": "无"
     },
     "modelSettingsModal": {
       "title": "模型设置",
@@ -9749,7 +9816,11 @@
       "storeModelInDb": "将模型存储到数据库",
       "storeModelInDbTooltip": "启用后，模型和配置将存储到数据库并从数据库加载。",
       "updateSuccess": "模型存储设置已成功更新",
-      "updateFailed": "保存模型存储设置失败：{{error}}"
+      "updateFailed": "保存模型存储设置失败：{{error}}",
+      "loadingSettings": "正在加载模型设置"
+    },
+    "healthChecksTable": {
+      "emptyBody": "添加到此代理的模型将在此显示其健康状态。"
     }
   },
   "routerSettings": {
@@ -9898,7 +9969,11 @@
       "deleteFailed": "删除凭据失败",
       "deleteTitle": "删除凭据？",
       "deleteMessage": "确定要删除此凭据吗？此操作不可撤销，且可能破坏现有集成。",
-      "credentialInformation": "凭据信息"
+      "credentialInformation": "凭据信息",
+      "updateFailed": "更新凭据失败",
+      "addFailed": "添加凭据失败",
+      "loadingCredentials": "正在加载凭据…",
+      "noCredentialsBody": "添加凭据以连接 AI 提供商。"
     },
     "reuseCredentials": {
       "title": "复用凭据",
@@ -9907,7 +9982,13 @@
       "credentialNamePlaceholder": "输入这组凭据的友好名称",
       "needHelpTooltip": "在我们的 GitHub 上获取帮助",
       "needHelp": "需要帮助？",
-      "reuseCredentials": "复用凭据"
+      "reuseCredentials": "复用凭据",
+      "enterFieldPlaceholder": "请输入 {{field}}"
+    },
+    "credentialsTableColumns": {
+      "openActions": "打开凭据操作菜单",
+      "copyCredentialName": "复制凭据名称",
+      "credentialNameCopied": "凭据名称已复制"
     }
   },
   "budgets": {
@@ -10402,7 +10483,13 @@
       "updatedAt": "更新于 {{timestamp}}",
       "updatedAtBy": "{{timestamp}} 由 {{by}} 更新",
       "deleteTitle": "删除记忆",
-      "deleteMessage": "此操作不可撤销。"
+      "deleteMessage": "此操作不可撤销。",
+      "noMatchingMemories": "没有匹配的记忆",
+      "emptyFilteredDesc": "没有记忆与您的搜索匹配。",
+      "emptyNoDataDesc": "Agent 存储在 /v1/memory 下的记忆将显示在此处。",
+      "loading": "正在加载记忆…",
+      "searchPlaceholder": "按键前缀或记忆 ID 搜索…",
+      "openActions": "打开记忆操作"
     }
   },
   "modelSelect": {

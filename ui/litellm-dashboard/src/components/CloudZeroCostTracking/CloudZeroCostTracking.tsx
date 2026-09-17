@@ -3,12 +3,14 @@ import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { Card, CardContent } from "@/components/ui/card";
 import CloudZeroEmptyPlaceholder from "./CloudZeroEmptyPlaceholder";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CloudZeroCreationModal from "./CloudZeroCreateModal";
 import { useQueryClient } from "@tanstack/react-query";
 import { createQueryKeys } from "@/app/(dashboard)/hooks/common/queryKeysFactory";
 import { CloudZeroIntegrationSettings } from "./CloudZeroIntegrationSettings";
 
 export default function CloudZeroCostTracking() {
+  const { t } = useTranslation();
   const { accessToken } = useAuthorized();
   const { data: settings, isLoading, error } = useCloudZeroSettings(accessToken);
   const queryClient = useQueryClient();
@@ -29,7 +31,9 @@ export default function CloudZeroCostTracking() {
     return (
       <Card>
         <CardContent>
-          <p className="text-sm text-muted-foreground">Loading CloudZero settings...</p>
+          <p className="text-sm text-muted-foreground">
+            {t("cloudZero.cloudZeroCostTracking.loadingSettings", { defaultValue: "Loading CloudZero settings..." })}
+          </p>
         </CardContent>
       </Card>
     );
@@ -40,7 +44,10 @@ export default function CloudZeroCostTracking() {
       <Card>
         <CardContent>
           <p className="text-sm text-destructive">
-            Error loading CloudZero settings: {error instanceof Error ? error.message : String(error)}
+            {t("cloudZero.cloudZeroCostTracking.errorLoadingSettings", {
+              error: error instanceof Error ? error.message : String(error),
+              defaultValue: "Error loading CloudZero settings: {{error}}",
+            })}
           </p>
         </CardContent>
       </Card>

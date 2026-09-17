@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
+import i18n from "@/lib/i18n";
 import { getToolPoliciesTableColumns } from "./ToolPoliciesTableColumns";
 import type { ToolRow } from "@/components/networking";
 
@@ -23,6 +25,7 @@ const defaultDeps = {
   savingOutput: new Set<string>(),
   onInputPolicyChange: vi.fn(),
   onOutputPolicyChange: vi.fn(),
+  t: i18n.t as TFunction,
 };
 
 // Renders the column definitions through a real TanStack table so each `cell`
