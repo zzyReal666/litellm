@@ -19,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import EditHashicorpVaultModal from "./EditHashicorpVaultModal";
 import HashicorpVaultEmptyPlaceholder from "./HashicorpVaultEmptyPlaceholder";
-import { FIELD_LABELS, SENSITIVE_FIELDS } from "./constants";
+import { fieldLabel, SENSITIVE_FIELDS } from "./constants";
 
 function detectAuthMethod(values: Record<string, unknown>, t: TFunction): string {
   if (values.approle_role_id || values.approle_secret_id) return "AppRole";
@@ -89,7 +89,7 @@ export default function HashicorpVault() {
           toast.success(
             t("settingsPages.hashicorpVault.clearSuccess", {
               defaultValue: "{{fieldLabel}} cleared",
-              fieldLabel: FIELD_LABELS[clearingField] ?? clearingField,
+              fieldLabel: fieldLabel(clearingField, t),
             }),
           );
           setClearingField(null);
@@ -119,7 +119,7 @@ export default function HashicorpVault() {
           size="icon-sm"
           aria-label={t("settingsPages.hashicorpVault.clearFieldAriaLabel", {
             defaultValue: "Clear {{fieldLabel}}",
-            fieldLabel: FIELD_LABELS[key] ?? key,
+            fieldLabel: fieldLabel(key, t),
           })}
           onClick={() => setClearingField(key)}
         >
@@ -224,7 +224,7 @@ export default function HashicorpVault() {
                     {detectAuthMethod(rawValues, t)}
                   </DetailRow>
                   {fieldsToShow.map(([key]) => (
-                    <DetailRow key={key} label={FIELD_LABELS[key] ?? key}>
+                    <DetailRow key={key} label={fieldLabel(key, t)}>
                       {renderValue(key)}
                     </DetailRow>
                   ))}
@@ -266,14 +266,14 @@ export default function HashicorpVault() {
         isOpen={clearingField !== null}
         title={t("settingsPages.hashicorpVault.clearTitle", {
           defaultValue: "Clear {{fieldLabel}}?",
-          fieldLabel: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "",
+          fieldLabel: clearingField ? fieldLabel(clearingField, t) : "",
         })}
         message={t("settingsPages.hashicorpVault.clearMessage", { defaultValue: "This will remove the stored value." })}
         resourceInformationTitle={t("settingsPages.hashicorpVault.clearResourceTitle", { defaultValue: "Field" })}
         resourceInformation={[
           {
             label: t("settingsPages.hashicorpVault.clearFieldLabel", { defaultValue: "Field" }),
-            value: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "",
+            value: clearingField ? fieldLabel(clearingField, t) : "",
           },
         ]}
         onCancel={() => setClearingField(null)}

@@ -19,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import CyberArkEmptyPlaceholder from "./CyberArkEmptyPlaceholder";
 import EditCyberArkModal from "./EditCyberArkModal";
-import { FIELD_LABELS, SENSITIVE_FIELDS } from "./constants";
+import { fieldLabel, SENSITIVE_FIELDS } from "./constants";
 
 function detectAuthMethod(values: Record<string, unknown>, t: TFunction): string {
   if (values.cyberark_api_key) {
@@ -88,7 +88,7 @@ export default function CyberArk() {
           toast.success(
             t("settingsPages.cyberArk.clearSuccess", {
               defaultValue: "{{fieldLabel}} cleared",
-              fieldLabel: FIELD_LABELS[clearingField] ?? clearingField,
+              fieldLabel: fieldLabel(clearingField, t),
             }),
           );
           setClearingField(null);
@@ -118,7 +118,7 @@ export default function CyberArk() {
           size="icon-sm"
           aria-label={t("settingsPages.cyberArk.clearFieldAriaLabel", {
             defaultValue: "Clear {{fieldLabel}}",
-            fieldLabel: FIELD_LABELS[key] ?? key,
+            fieldLabel: fieldLabel(key, t),
           })}
           onClick={() => setClearingField(key)}
         >
@@ -223,7 +223,7 @@ export default function CyberArk() {
                   {detectAuthMethod(rawValues, t)}
                 </DetailRow>
                 {fieldsToShow.map(([key]) => (
-                  <DetailRow key={key} label={FIELD_LABELS[key] ?? key}>
+                  <DetailRow key={key} label={fieldLabel(key, t)}>
                     {renderValue(key)}
                   </DetailRow>
                 ))}
@@ -270,14 +270,14 @@ export default function CyberArk() {
         isOpen={clearingField !== null}
         title={t("settingsPages.cyberArk.clearTitle", {
           defaultValue: "Clear {{fieldLabel}}?",
-          fieldLabel: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "",
+          fieldLabel: clearingField ? fieldLabel(clearingField, t) : "",
         })}
         message={t("settingsPages.cyberArk.clearMessage", { defaultValue: "This will remove the stored value." })}
         resourceInformationTitle={t("settingsPages.cyberArk.clearResourceTitle", { defaultValue: "Field" })}
         resourceInformation={[
           {
             label: t("settingsPages.cyberArk.clearFieldLabel", { defaultValue: "Field" }),
-            value: clearingField ? FIELD_LABELS[clearingField] ?? clearingField : "",
+            value: clearingField ? fieldLabel(clearingField, t) : "",
           },
         ]}
         onCancel={() => setClearingField(null)}

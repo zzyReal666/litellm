@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { Separator } from "@/components/ui/separator";
 import { useZodForm } from "@/lib/forms/useZodForm";
-import { SENSITIVE_FIELDS, FIELD_LABELS } from "./constants";
+import { fieldLabel, SENSITIVE_FIELDS } from "./constants";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface FieldCopy {
@@ -160,7 +160,7 @@ const EditCyberArkModal: React.FC<EditCyberArkModalProps> = ({ isVisible, onCanc
       : fieldSchema?.description;
 
     return (
-      <FormField key={fieldName} control={form.control} name={fieldName} label={FIELD_LABELS[fieldName] ?? fieldName}>
+      <FormField key={fieldName} control={form.control} name={fieldName} label={fieldLabel(fieldName, t)}>
         {({ ref, ...field }) =>
           isSensitive ? (
             <PasswordInput ref={ref} placeholder={placeholder} {...field} />
