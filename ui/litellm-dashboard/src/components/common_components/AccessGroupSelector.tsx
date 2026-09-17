@@ -1,5 +1,6 @@
 import React from "react";
 import { Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MultiSelect, type MultiSelectOption } from "@/components/shared/MultiSelect";
 import { useAccessGroups, AccessGroupResponse } from "@/app/(dashboard)/hooks/accessGroups/useAccessGroups";
@@ -25,14 +26,22 @@ export interface AccessGroupSelectorProps {
 const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
   value,
   onChange,
-  placeholder = "Select access groups",
+  placeholder,
   disabled = false,
   style,
   className,
   showLabel = false,
-  labelText = "Access Group",
+  labelText,
 }) => {
+  const { t } = useTranslation();
   const { data: accessGroups, isLoading, isError } = useAccessGroups();
+  const placeholderText =
+    placeholder ?? t("commonComponents.accessGroupSelector.placeholder", { defaultValue: "Select access groups" });
+  const label =
+    labelText ??
+    t("commonComponents.accessGroupSelector.labelText", {
+      defaultValue: "Access Group",
+    });
 
   // ── Loading skeleton ─────────────────────────────────────────────────────
   if (isLoading) {
@@ -40,7 +49,7 @@ const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
       <div>
         {showLabel && (
           <p className="mb-2 flex items-center text-sm font-medium text-foreground">
-            <Users className="mr-2 size-4" /> {labelText}
+            <Users className="mr-2 size-4" /> {label}
           </p>
         )}
         <Skeleton className="h-8 w-full" style={style} />
@@ -60,7 +69,7 @@ const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
     <div>
       {showLabel && (
         <p className="mb-2 flex items-center text-sm font-medium text-foreground">
-          <Users className="mr-2 size-4" /> {labelText}
+          <Users className="mr-2 size-4" /> {label}
         </p>
       )}
       <div style={style}>
@@ -68,8 +77,12 @@ const AccessGroupSelector: React.FC<AccessGroupSelectorProps> = ({
           options={options}
           value={value}
           onValueChange={onChange ?? (() => {})}
-          placeholder={placeholder}
-          emptyText={isError ? "Failed to load access groups" : "No access groups found"}
+          placeholder={placeholderText}
+          emptyText={
+            isError
+              ? t("commonComponents.accessGroupSelector.loadFailed", { defaultValue: "Failed to load access groups" })
+              : t("commonComponents.accessGroupSelector.notFound", { defaultValue: "No access groups found" })
+          }
           disabled={disabled}
           className={`w-full rounded-md ${className ?? ""}`}
         />

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { hasRouterSettings } from "./routerSettingsPayload";
 
@@ -13,12 +14,15 @@ const fallbackEntries = (fallbacks: unknown): Array<[string, string[]]> => {
   );
 };
 
-export default function RouterSettingsSummary({
-  routerSettings,
-  emptyText = "No router settings configured",
-}: RouterSettingsSummaryProps) {
+export default function RouterSettingsSummary({ routerSettings, emptyText }: RouterSettingsSummaryProps) {
+  const { t } = useTranslation();
+
   if (!hasRouterSettings(routerSettings)) {
-    return <div className="text-muted-foreground">{emptyText}</div>;
+    return (
+      <div className="text-muted-foreground">
+        {emptyText ?? t("teamPage.teamInfo.noRouterSettings", { defaultValue: "No router settings configured" })}
+      </div>
+    );
   }
 
   const settings = routerSettings as Record<string, unknown>;

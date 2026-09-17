@@ -1,6 +1,8 @@
+import type { TFunction } from "i18next";
 import type { ColumnDef, ColumnFiltersState } from "@tanstack/react-table";
 import { Crown, Info, User, UserPlus } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Member } from "@/components/networking";
 import {
@@ -66,6 +68,7 @@ function RoleHeaderTitle({ title, tooltip }: { title: string; tooltip?: string }
 const ACTIONS_COLUMN_WIDTH = 120;
 
 interface MemberColumnDeps {
+  t: TFunction;
   canEdit: boolean;
   onEdit: (member: Member) => void;
   onDelete: (member: Member) => void;
@@ -98,6 +101,7 @@ const extraColumnDef = (column: MemberTableColumn): ColumnDef<Member> => {
 };
 
 const buildColumns = ({
+  t,
   canEdit,
   onEdit,
   onDelete,
@@ -109,32 +113,40 @@ const buildColumns = ({
   {
     id: "user_alias",
     accessorFn: (member) => member.user_alias || undefined,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("common.name", { defaultValue: "Name" })} />,
     sortingFn: "text",
     sortUndefined: "last",
     enableGlobalFilter: true,
-    meta: { title: "Name" },
+    meta: { title: t("common.name", { defaultValue: "Name" }) },
     cell: ({ row }) => row.original.user_alias || <span className="text-muted-foreground">-</span>,
   },
   {
     id: "user_email",
     accessorFn: (member) => member.user_email || undefined,
-    header: ({ column }) => <DataTableSortHeader column={column} title="User Email" />,
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("commonComponents.memberTable.userEmail", { defaultValue: "User Email" })}
+      />
+    ),
     sortingFn: "text",
     sortUndefined: "last",
     enableGlobalFilter: true,
-    meta: { title: "User Email" },
+    meta: { title: t("commonComponents.memberTable.userEmail", { defaultValue: "User Email" }) },
     cell: ({ row }) => row.original.user_email || "-",
   },
   {
     id: "user_id",
     accessorFn: (member) => member.user_id ?? undefined,
-    header: "User ID",
+    header: t("commonComponents.memberTable.userId", { defaultValue: "User ID" }),
     enableSorting: false,
     enableGlobalFilter: true,
     cell: ({ row }) =>
       row.original.user_id === "default_user_id" ? (
-        <StatusBadge tone="info" label="Default Proxy Admin" />
+        <StatusBadge
+          tone="info"
+          label={t("commonComponents.defaultProxyAdminTag.label", { defaultValue: "Default Proxy Admin" })}
+        />
       ) : (
         row.original.user_id || "-"
       ),
@@ -159,7 +171,7 @@ const buildColumns = ({
   ...extraColumns.map(extraColumnDef),
   {
     id: "actions",
-    header: "Actions",
+    header: t("common.actions", { defaultValue: "Actions" }),
     size: ACTIONS_COLUMN_WIDTH,
     enableSorting: false,
     enableGlobalFilter: false,
@@ -169,14 +181,14 @@ const buildColumns = ({
         <span className="inline-flex items-center gap-2">
           <TableIconActionButton
             variant="Edit"
-            tooltipText="Edit member"
+            tooltipText={t("commonComponents.memberTable.editMember", { defaultValue: "Edit member" })}
             dataTestId="edit-member"
             onClick={() => onEdit(row.original)}
           />
           {(!showDeleteForMember || showDeleteForMember(row.original)) && (
             <TableIconActionButton
               variant="Delete"
-              tooltipText="Delete member"
+              tooltipText={t("commonComponents.memberTable.deleteMember", { defaultValue: "Delete member" })}
               dataTestId="delete-member"
               onClick={() => onDelete(row.original)}
             />
@@ -192,29 +204,35 @@ export default function MemberTable({
   onEdit,
   onDelete,
   onAddMember,
-  roleColumnTitle = "Role",
+  roleColumnTitle,
   roleTooltip,
   extraColumns = [],
   showDeleteForMember,
   emptyText,
 }: MemberTableProps) {
+  const { t } = useTranslation();
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const columnDeps: MemberColumnDeps = {
+    t,
     canEdit,
     onEdit,
     onDelete,
-    roleColumnTitle,
+    roleColumnTitle: roleColumnTitle ?? t("user.role", { defaultValue: "Role" }),
     roleTooltip,
     extraColumns,
     showDeleteForMember,
   };
   const columns = buildColumns(columnDeps);
-  const roleFilterItems = [
-    { value: ALL_ROLES, label: "All Roles" },
-    ...memberRoleOptions(members).map((role) => ({ value: role, label: role })),
+  const roleItems = [
+    {
+      value: ALL_ROLES,
+      labelKey: "commonComponents.memberTable.allRoles",
+      label: "All Roles",
+    },
+    ...memberRoleOptions(members).map((role) => ({ value: role, labelKey: role, label: role })),
   ];
 
   const isNarrowed = globalFilter !== "" || columnFilters.length > 0;
@@ -237,7 +255,11 @@ export default function MemberTable({
         onGlobalFilterChange={setGlobalFilter}
         noDataMessage={
           <span className="text-muted-foreground">
-            {isNarrowed ? "No members match your search or filters" : emptyText ?? "No data"}
+            {isNarrowed
+              ? t("commonComponents.memberTable.noMatch", {
+                  defaultValue: "No members match your search or filters",
+                })
+              : emptyText ?? t("common.noData", { defaultValue: "No data" })}
           </span>
         }
         toolbar={(table) => (
@@ -246,7 +268,9 @@ export default function MemberTable({
               table={table}
               searchValue={globalFilter}
               onSearchChange={setGlobalFilter}
-              searchPlaceholder="Search by name, email, or user ID"
+              searchPlaceholder={t("commonComponents.memberTable.searchPlaceholder", {
+                defaultValue: "Search by name, email, or user ID",
+              })}
               onOpenFilters={() => setFiltersOpen(true)}
               showViewOptions={false}
             />
@@ -254,23 +278,25 @@ export default function MemberTable({
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
-              description="Narrow down members"
+              title={t("molecules.filter.filters", { defaultValue: "Filters" })}
+              description={t("commonComponents.memberTable.narrowDownMembers", { defaultValue: "Narrow down members" })}
             >
               {({ get, set }) => (
-                <DataTableFilterField label={roleColumnTitle}>
+                <DataTableFilterField label={columnDeps.roleColumnTitle}>
                   <Select
-                    items={roleFilterItems}
+                    items={roleItems}
                     value={(get("role") as string | undefined) ?? ALL_ROLES}
                     onValueChange={(value) => set("role", value === ALL_ROLES ? undefined : value)}
                   >
                     <SelectTrigger className="w-full" data-testid="filter-role">
-                      <SelectValue placeholder="All Roles" />
+                      <SelectValue
+                        placeholder={t("commonComponents.memberTable.allRoles", { defaultValue: "All Roles" })}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      {roleFilterItems.map((item) => (
+                      {roleItems.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
-                          {item.label}
+                          {item.value === ALL_ROLES ? t(item.labelKey, { defaultValue: item.label }) : item.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -284,7 +310,7 @@ export default function MemberTable({
       {onAddMember && canEdit && (
         <Button onClick={onAddMember} className="self-start">
           <UserPlus className="size-4" />
-          Add Member
+          {t("commonComponents.memberTable.addMember", { defaultValue: "Add Member" })}
         </Button>
       )}
     </div>

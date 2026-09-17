@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 
 export interface SimpleTableColumn<T> {
@@ -25,10 +26,14 @@ export function SimpleTable<T>({
   data,
   columns,
   isLoading = false,
-  loadingMessage = "Loading...",
-  emptyMessage = "No data",
+  loadingMessage,
+  emptyMessage,
   getRowKey,
 }: SimpleTableProps<T>) {
+  const { t } = useTranslation();
+  const loadingText = loadingMessage ?? t("common.loading", { defaultValue: "Loading..." });
+  const emptyText = emptyMessage ?? t("common.noData", { defaultValue: "No data" });
+
   return (
     <Table>
       <TableHeader>
@@ -44,7 +49,7 @@ export function SimpleTable<T>({
         {isLoading ? (
           <TableRow>
             <TableCell colSpan={columns.length} className="text-center">
-              <span className="text-muted-foreground">{loadingMessage}</span>
+              <span className="text-muted-foreground">{loadingText}</span>
             </TableCell>
           </TableRow>
         ) : data.length > 0 ? (
@@ -60,7 +65,7 @@ export function SimpleTable<T>({
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="text-center">
-              <span className="text-muted-foreground">{emptyMessage}</span>
+              <span className="text-muted-foreground">{emptyText}</span>
             </TableCell>
           </TableRow>
         )}
