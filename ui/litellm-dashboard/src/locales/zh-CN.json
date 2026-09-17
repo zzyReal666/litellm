@@ -45,7 +45,8 @@
     "loggingAlerts": "日志与告警",
     "adminSettings": "管理员设置",
     "costTracking": "成本追踪",
-    "uiTheme": "界面主题"
+    "uiTheme": "界面主题",
+    "costOptimization": "成本优化"
   },
   "navbar": {
     "aiGateway": "AI 网关",
@@ -485,7 +486,8 @@
     },
     "teamDropdown": {
       "placeholder": "搜索或选择团队",
-      "notFound": "未找到团队"
+      "notFound": "未找到团队",
+      "loading": "正在加载团队…"
     },
     "userSearchModal": {
       "title": "添加团队成员",
@@ -501,6 +503,10 @@
       "roleUserDescription": "普通用户角色，可查看团队信息，但无法管理。",
       "adding": "添加中...",
       "addMember": "添加成员"
+    },
+    "userDropdown": {
+      "placeholder": "按邮箱搜索用户…",
+      "loading": "正在加载用户…"
     }
   },
   "adminPanel": {
@@ -5760,7 +5766,8 @@
       "fileLabel": "提示词文件",
       "fileExtra": "上传符合 Dotprompt 规范的 .prompt 文件",
       "selectFile": "选择 .prompt 文件",
-      "selected": "已选择：{{name}}"
+      "selected": "已选择：{{name}}",
+      "promptFileAriaLabel": "提示词文件"
     },
     "developerMessageCard": {
       "title": "开发者消息",
@@ -5785,7 +5792,8 @@
       "copiedToClipboard": "已复制到剪贴板！",
       "tabBasic": "基础",
       "tabWithMessages": "含消息",
-      "tabWithVersion": "含版本"
+      "tabWithVersion": "含版本",
+      "generatedCodeType": "生成的代码类型"
     },
     "promptEditorHeader": {
       "envDevelopment": "开发",
@@ -5793,7 +5801,8 @@
       "envProduction": "生产",
       "draft": "草稿",
       "unsavedChanges": "有未保存的更改",
-      "history": "历史"
+      "history": "历史",
+      "promptNameAriaLabel": "提示词名称"
     },
     "promptMessagesCard": {
       "title": "提示词消息",
@@ -5808,7 +5817,8 @@
       "title": "发布提示词",
       "publish": "发布",
       "namePlaceholder": "输入提示词名称",
-      "versionedHint": "已发布的提示词可在 API 调用中使用，并支持版本管理以便追踪。"
+      "versionedHint": "已发布的提示词可在 API 调用中使用，并支持版本管理以便追踪。",
+      "description": "已发布的提示词支持版本管理，并可在 API 调用中使用。"
     },
     "toolsCard": {
       "title": "工具",
@@ -5820,10 +5830,12 @@
       "latest": "最新",
       "active": "当前",
       "savedToDatabase": "已保存到数据库",
-      "configPrompt": "配置提示词"
+      "configPrompt": "配置提示词",
+      "loadingAriaLabel": "正在加载版本历史"
     },
     "messageInput": {
-      "placeholder": "输入消息...（Shift+Enter 换行）"
+      "placeholder": "输入消息...（Shift+Enter 换行）",
+      "sendAriaLabel": "发送消息"
     },
     "variableInput": {
       "title": "填写模板变量以开始测试",
@@ -5839,7 +5851,9 @@
       "fillAllVariables": "请填写所有模板变量",
       "requestCancelled": "请求已取消",
       "chatCleared": "对话历史已清空。",
-      "errorMessage": "错误：{{message}}"
+      "errorMessage": "错误：{{message}}",
+      "emptyStateWithVariables": "先填写上方变量，然后输入消息开始测试",
+      "emptyStateNoVariables": "在下方输入消息以开始测试提示词"
     },
     "promptEditorView": {
       "failedToParsePrompt": "解析提示词数据失败",
@@ -5887,7 +5901,8 @@
       "deleteCannotUndo": "此操作无法撤销。",
       "deleteSuccess": "提示词「{{id}}」已成功删除",
       "deleteFailed": "删除提示词失败",
-      "failedToLoadVersion": "加载版本 v{{version}} 失败"
+      "failedToLoadVersion": "加载版本 v{{version}} 失败",
+      "deleteConfirmAllEnv": "确定要从所有环境删除提示词：<strong>{{id}}</strong>？"
     },
     "promptTable": {
       "colPromptId": "提示词 ID",
@@ -5897,18 +5912,32 @@
       "colType": "类型",
       "copyPromptId": "复制提示词 ID",
       "deletePrompt": "删除提示词",
-      "noPromptsFound": "未找到提示词"
+      "noPromptsFound": "未找到提示词",
+      "noPromptsYet": "暂无提示词",
+      "emptyHint": "添加提示词以开始管理可复用模板。",
+      "loadingPrompts": "正在加载提示词…",
+      "openPromptActions": "打开提示词操作",
+      "promptIdCopied": "提示词 ID 已复制",
+      "unknownPrompt": "未知提示词"
     },
     "toolModal": {
       "title": "添加工具",
       "invalidJsonError": "JSON 格式无效，请检查语法。",
       "placeholder": "在此粘贴工具 JSON...",
-      "addButton": "添加"
+      "addButton": "添加",
+      "toolJsonAriaLabel": "工具 JSON"
     },
     "variableTextarea": {
       "detectedVariables": "检测到的变量：",
       "editVariableName": "编辑变量名",
       "variableNamePlaceholder": "变量名"
+    },
+    "messageList": {
+      "loadingResponse": "正在加载回复"
+    },
+    "promptsPanel": {
+      "deleteConfirm": "确定要删除 {{environment}} 环境的提示词：{{name}}？此操作无法撤销。",
+      "deleteSuccess": "已成功从 {{environment}} 删除提示词「{{name}}」"
     }
   },
   "policies": {
@@ -8331,7 +8360,13 @@
       "performanceSubtitle": "点击护栏查看详情、日志和配置",
       "evaluationSettings": "评估设置",
       "noDataForPeriod": "该时段暂无数据",
-      "loadError": "加载数据失败，请重试。"
+      "loadError": "加载数据失败，请重试。",
+      "guardrailCost": "护栏费用",
+      "colUsageUnits": "用量单位",
+      "howThisCostIsCalculated": "此费用是如何计算的",
+      "costMathFormula": "护栏 + 护栏 + … = 护栏费用",
+      "costMathNote": "每个护栏的费用等于其各计数器的单位数 × 费用表中该计数器的单价。打开某个护栏可查看按计数器的计算过程。",
+      "unpricedTooltip": "{{unpriced}}：这些单位没有已知价格，未计入费用"
     },
     "logViewer": {
       "titleWithName": "日志 — {{name}}",
@@ -8347,6 +8382,29 @@
     "scoreChart": {
       "title": "请求结果随时间变化",
       "noData": "该时段暂无图表数据"
+    },
+    "guardrailUsageBreakdown": {
+      "sectionLabel": "用量与费用",
+      "title": "用量与费用",
+      "subtitle": "提供商为此护栏上报的可计费单位，以及 LiteLLM 为它们定价的结果",
+      "unpricedUnitsColumn": "未定价单位",
+      "counterColumn": "计数器",
+      "unitsColumn": "单位数",
+      "howThisCostIsCalculated": "此费用是如何计算的",
+      "costFormula": "已定价单位数 × 每单位价格 = 费用，按计数器分别计算",
+      "perUnitPriceNote": "每单位价格来自 LiteLLM 内置的费用表。",
+      "howUnitsAddUp": "用量单位如何累加",
+      "unitsFormula": "计数器 + 计数器 + … = 用量单位",
+      "unitsNote": "单位是提供商为此护栏上报的可计费计数器，按每次调用累加。",
+      "noBillableUnits": "此时间段内没有记录到可计费用量单位。",
+      "usageUnitsLabel": "用量单位",
+      "counterCount_one": "{{count}} 个计数器",
+      "counterCount_other": "{{count}} 个计数器",
+      "byCounter": "按计数器",
+      "byTeam": "按团队",
+      "byKey": "按密钥",
+      "noTeam": "无团队",
+      "noKey": "无密钥"
     }
   },
   "chat": {
@@ -8483,7 +8541,8 @@
     "accessGroupCreateModal": {
       "title": "创建访问组",
       "okText": "创建组",
-      "createSuccess": "访问组创建成功"
+      "createSuccess": "访问组创建成功",
+      "createError": "创建访问组失败"
     },
     "accessGroupEditModal": {
       "title": "编辑访问组",
@@ -8509,7 +8568,8 @@
       "noTeams": "暂无关联团队",
       "created": "创建时间",
       "lastUpdated": "最后更新",
-      "idLabel": "ID："
+      "idLabel": "ID：",
+      "copyAccessGroupId": "复制访问组 ID"
     },
     "accessGroupsPage": {
       "title": "访问组",
@@ -8524,7 +8584,21 @@
       "deleteTooltip": "删除访问组",
       "deleteTitle": "删除访问组",
       "deleteMessage": "确定要删除此访问组吗？此操作无法撤销。",
-      "resourceInfoTitle": "访问组信息"
+      "resourceInfoTitle": "访问组信息",
+      "clearSearch": "清除搜索",
+      "labelId": "ID"
+    },
+    "accessGroupsTable": {
+      "noMatching": "没有匹配的访问组",
+      "empty": "还没有访问组",
+      "tryDifferentSearch": "请尝试其他搜索词。",
+      "createHint": "创建访问组以管理组织的资源访问权限。",
+      "loading": "正在加载访问组…"
+    },
+    "accessGroupsTableColumns": {
+      "colId": "ID",
+      "openAccessGroupActions": "打开访问组操作",
+      "colUpdated": "更新时间"
     }
   },
   "cloudZero": {
@@ -8813,7 +8887,10 @@
       "editTagDisabledAriaLabel": "编辑标签（已禁用）",
       "deleteTagTooltip": "删除标签",
       "deleteTagDisabledAriaLabel": "删除标签（已禁用）",
-      "noTagsFound": "未找到标签"
+      "noTagsFound": "未找到标签",
+      "noDescription": "暂无描述",
+      "openActionsAriaLabel": "打开标签操作",
+      "loading": "正在加载标签…"
     },
     "createTagModal": {
       "title": "创建新标签",
@@ -8843,7 +8920,10 @@
       "errorCreatingTag": "创建标签失败：{{error}}",
       "tagDeletedSuccess": "标签删除成功",
       "errorDeletingTag": "删除标签失败：{{error}}",
-      "errorFetchingModels": "获取模型失败：{{error}}"
+      "errorFetchingModels": "获取模型失败：{{error}}",
+      "refreshAriaLabel": "刷新标签",
+      "emptyTitle": "暂无标签",
+      "emptyDescription": "创建标签即可开始路由并限制模型用量。"
     },
     "tagInfo": {
       "backToTags": "← 返回标签列表",
@@ -8871,7 +8951,9 @@
       "rpmLimit": "RPM 限制",
       "errorFetchingTagDetails": "获取标签详情失败：{{error}}",
       "tagUpdatedSuccess": "标签更新成功",
-      "errorUpdatingTag": "更新标签失败：{{error}}"
+      "errorUpdatingTag": "更新标签失败：{{error}}",
+      "loading": "加载中...",
+      "cancelButton": "取消"
     }
   },
   "modelAdd": {
@@ -9817,7 +9899,16 @@
       "editMemberTitle": "编辑成员",
       "roleOrgAdmin": "组织管理员",
       "roleInternalUser": "内部用户",
-      "roleInternalUserViewer": "内部用户（只读）"
+      "roleInternalUserViewer": "内部用户（只读）",
+      "copyOrgId": "复制组织 ID"
+    },
+    "orgCreateDialog": {
+      "createFailed": "创建组织失败",
+      "creating": "创建中...",
+      "mcpServersHelp": "选择此组织可访问的 MCP 服务器、访问组和工具集。留空表示可访问全部"
+    },
+    "orgSettingsForm": {
+      "noReset": "不重置"
     }
   },
   "workflowRuns": {
@@ -10035,5 +10126,37 @@
     "valueUpdated": "更新成功！",
     "fieldReset": "字段已在代理上重置",
     "internalUserSettingsUpdated": "内部用户设置更新成功"
+  },
+  "budgetsPage": {
+    "budgetTable": {
+      "loadingBudgets": "正在加载预算…",
+      "searchPlaceholder": "按预算 ID 搜索…",
+      "filterDrawerDescription": "缩小预算范围",
+      "noMatchingBudgets": "没有匹配的预算",
+      "noBudgetsYet": "暂无预算",
+      "noMatchHint": "没有预算符合你的搜索或筛选条件。",
+      "emptyHint": "创建预算以为客户设置花费、TPM 和 RPM 限制。",
+      "forbiddenTitle": "你无权访问预算",
+      "forbiddenHint": "请联系代理管理员为你授予管理员查看者角色。",
+      "loadFailed": "无法加载预算",
+      "filterMinPlaceholder": "最小值",
+      "filterMaxPlaceholder": "最大值",
+      "filterMinAriaLabel": "最大预算下限",
+      "filterMaxAriaLabel": "最大预算上限",
+      "unlimitedOnly": "仅显示无限制",
+      "createdFrom": "创建时间起",
+      "createdTo": "创建时间止",
+      "any": "任意",
+      "rangeValue": "{{min}} 至 {{max}}"
+    },
+    "budgetTableColumns": {
+      "openBudgetActions": "打开预算操作"
+    },
+    "budgetModal": {
+      "tpmLimitHelp": "留空表示不设置 LiteLLM 限制，提供商的速率限制仍然生效。"
+    },
+    "budgetPanel": {
+      "subtitle": "可分配给客户的花费、TPM 和 RPM 限制。"
+    }
   }
 }

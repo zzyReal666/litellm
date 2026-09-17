@@ -45,7 +45,8 @@
     "loggingAlerts": "Logging & Alerts",
     "adminSettings": "Admin Settings",
     "costTracking": "Cost Tracking",
-    "uiTheme": "UI Theme"
+    "uiTheme": "UI Theme",
+    "costOptimization": "Cost Optimization"
   },
   "navbar": {
     "aiGateway": "AI Gateway",
@@ -485,7 +486,8 @@
     },
     "teamDropdown": {
       "placeholder": "Search or select a team",
-      "notFound": "No teams found"
+      "notFound": "No teams found",
+      "loading": "Loading teams…"
     },
     "userSearchModal": {
       "title": "Add Team Member",
@@ -501,6 +503,10 @@
       "roleUserDescription": "User role. Can view team info, but not manage it.",
       "adding": "Adding...",
       "addMember": "Add Member"
+    },
+    "userDropdown": {
+      "placeholder": "Search users by email…",
+      "loading": "Loading users…"
     }
   },
   "adminPanel": {
@@ -5760,7 +5766,8 @@
       "fileLabel": "Prompt File",
       "fileExtra": "Upload a .prompt file that follows the Dotprompt specification",
       "selectFile": "Select .prompt File",
-      "selected": "Selected: {{name}}"
+      "selected": "Selected: {{name}}",
+      "promptFileAriaLabel": "Prompt file"
     },
     "developerMessageCard": {
       "title": "Developer message",
@@ -5785,7 +5792,8 @@
       "copiedToClipboard": "Copied to clipboard!",
       "tabBasic": "Basic",
       "tabWithMessages": "With Messages",
-      "tabWithVersion": "With Version"
+      "tabWithVersion": "With Version",
+      "generatedCodeType": "Generated code type"
     },
     "promptEditorHeader": {
       "envDevelopment": "Development",
@@ -5793,7 +5801,8 @@
       "envProduction": "Production",
       "draft": "Draft",
       "unsavedChanges": "Unsaved changes",
-      "history": "History"
+      "history": "History",
+      "promptNameAriaLabel": "Prompt name"
     },
     "promptMessagesCard": {
       "title": "Prompt messages",
@@ -5808,7 +5817,8 @@
       "title": "Publish Prompt",
       "publish": "Publish",
       "namePlaceholder": "Enter prompt name",
-      "versionedHint": "Published prompts can be used in API calls and are versioned for easy tracking."
+      "versionedHint": "Published prompts can be used in API calls and are versioned for easy tracking.",
+      "description": "Published prompts are versioned and can be used in API calls."
     },
     "toolsCard": {
       "title": "Tools",
@@ -5820,10 +5830,12 @@
       "latest": "Latest",
       "active": "Active",
       "savedToDatabase": "Saved to Database",
-      "configPrompt": "Config Prompt"
+      "configPrompt": "Config Prompt",
+      "loadingAriaLabel": "Loading version history"
     },
     "messageInput": {
-      "placeholder": "Type your message... (Shift+Enter for new line)"
+      "placeholder": "Type your message... (Shift+Enter for new line)",
+      "sendAriaLabel": "Send message"
     },
     "variableInput": {
       "title": "Fill in template variables to start testing",
@@ -5839,7 +5851,9 @@
       "fillAllVariables": "Please fill in all template variables",
       "requestCancelled": "Request cancelled",
       "chatCleared": "Chat history cleared.",
-      "errorMessage": "Error: {{message}}"
+      "errorMessage": "Error: {{message}}",
+      "emptyStateWithVariables": "Fill in the variables above, then type a message to start testing",
+      "emptyStateNoVariables": "Type a message below to start testing your prompt"
     },
     "promptEditorView": {
       "failedToParsePrompt": "Failed to parse prompt data",
@@ -5887,7 +5901,8 @@
       "deleteCannotUndo": "This action cannot be undone.",
       "deleteSuccess": "Prompt \"{{id}}\" deleted successfully",
       "deleteFailed": "Failed to delete prompt",
-      "failedToLoadVersion": "Failed to load version v{{version}}"
+      "failedToLoadVersion": "Failed to load version v{{version}}",
+      "deleteConfirmAllEnv": "Are you sure you want to delete prompt: <strong>{{id}}</strong> from every environment?"
     },
     "promptTable": {
       "colPromptId": "Prompt ID",
@@ -5897,18 +5912,32 @@
       "colType": "Type",
       "copyPromptId": "Copy prompt ID",
       "deletePrompt": "Delete prompt",
-      "noPromptsFound": "No prompts found"
+      "noPromptsFound": "No prompts found",
+      "noPromptsYet": "No prompts yet",
+      "emptyHint": "Add a prompt to start managing reusable templates.",
+      "loadingPrompts": "Loading prompts…",
+      "openPromptActions": "Open prompt actions",
+      "promptIdCopied": "Prompt ID copied",
+      "unknownPrompt": "Unknown Prompt"
     },
     "toolModal": {
       "title": "Add Tool",
       "invalidJsonError": "Invalid JSON format. Please check your syntax.",
       "placeholder": "Paste your tool JSON here...",
-      "addButton": "Add"
+      "addButton": "Add",
+      "toolJsonAriaLabel": "Tool JSON"
     },
     "variableTextarea": {
       "detectedVariables": "Detected variables:",
       "editVariableName": "Edit variable name",
       "variableNamePlaceholder": "Variable name"
+    },
+    "messageList": {
+      "loadingResponse": "Loading response"
+    },
+    "promptsPanel": {
+      "deleteConfirm": "Are you sure you want to delete the {{environment}} copy of prompt: {{name}}? This action cannot be undone.",
+      "deleteSuccess": "Prompt \"{{name}}\" deleted successfully from {{environment}}"
     }
   },
   "policies": {
@@ -8330,7 +8359,13 @@
       "performanceSubtitle": "Click a guardrail to view details, logs, and configuration",
       "evaluationSettings": "Evaluation settings",
       "noDataForPeriod": "No data for this period",
-      "loadError": "Failed to load data. Try again."
+      "loadError": "Failed to load data. Try again.",
+      "guardrailCost": "Guardrail Cost",
+      "colUsageUnits": "Usage Units",
+      "howThisCostIsCalculated": "How this cost is calculated",
+      "costMathFormula": "guardrail + guardrail + … = guardrail cost",
+      "costMathNote": "Each guardrail's cost is its units per counter × that counter's per-unit price from the cost map. Open a guardrail for its per-counter math.",
+      "unpricedTooltip": "{{unpriced}}: these units have no known price and are left out of the cost"
     },
     "logViewer": {
       "titleWithName": "Logs — {{name}}",
@@ -8346,6 +8381,29 @@
     "scoreChart": {
       "title": "Request Outcomes Over Time",
       "noData": "No chart data for this period"
+    },
+    "guardrailUsageBreakdown": {
+      "sectionLabel": "Usage and cost",
+      "title": "Usage & Cost",
+      "subtitle": "Billable units the provider reported for this guardrail and what LiteLLM priced them at",
+      "unpricedUnitsColumn": "Unpriced Units",
+      "counterColumn": "Counter",
+      "unitsColumn": "Units",
+      "howThisCostIsCalculated": "How this cost is calculated",
+      "costFormula": "priced units × price per unit = cost, per counter",
+      "perUnitPriceNote": "Per-unit prices come from the cost map LiteLLM ships with.",
+      "howUnitsAddUp": "How usage units add up",
+      "unitsFormula": "counter + counter + … = usage units",
+      "unitsNote": "Units are the billable counters the provider reported for this guardrail, added up over every call.",
+      "noBillableUnits": "No billable usage units were recorded in this period.",
+      "usageUnitsLabel": "Usage Units",
+      "counterCount_one": "{{count}} counter",
+      "counterCount_other": "{{count}} counters",
+      "byCounter": "By counter",
+      "byTeam": "By team",
+      "byKey": "By key",
+      "noTeam": "No team",
+      "noKey": "No key"
     }
   },
   "chat": {
@@ -8482,7 +8540,8 @@
     "accessGroupCreateModal": {
       "title": "Create Access Group",
       "okText": "Create Group",
-      "createSuccess": "Access group created successfully"
+      "createSuccess": "Access group created successfully",
+      "createError": "Failed to create access group"
     },
     "accessGroupEditModal": {
       "title": "Edit Access Group",
@@ -8508,7 +8567,8 @@
       "noTeams": "No teams attached",
       "created": "Created",
       "lastUpdated": "Last Updated",
-      "idLabel": "ID:"
+      "idLabel": "ID:",
+      "copyAccessGroupId": "Copy access group ID"
     },
     "accessGroupsPage": {
       "title": "Access Groups",
@@ -8523,7 +8583,21 @@
       "deleteTooltip": "Delete access group",
       "deleteTitle": "Delete Access Group",
       "deleteMessage": "Are you sure you want to delete this access group? This action cannot be undone.",
-      "resourceInfoTitle": "Access Group Information"
+      "resourceInfoTitle": "Access Group Information",
+      "clearSearch": "Clear search",
+      "labelId": "ID"
+    },
+    "accessGroupsTable": {
+      "noMatching": "No matching access groups",
+      "empty": "No access groups yet",
+      "tryDifferentSearch": "Try a different search term.",
+      "createHint": "Create an access group to manage resource permissions for your organization.",
+      "loading": "Loading access groups…"
+    },
+    "accessGroupsTableColumns": {
+      "colId": "ID",
+      "openAccessGroupActions": "Open access group actions",
+      "colUpdated": "Updated"
     }
   },
   "cloudZero": {
@@ -8812,7 +8886,10 @@
       "editTagDisabledAriaLabel": "Edit tag (disabled)",
       "deleteTagTooltip": "Delete tag",
       "deleteTagDisabledAriaLabel": "Delete tag (disabled)",
-      "noTagsFound": "No tags found"
+      "noTagsFound": "No tags found",
+      "noDescription": "No description",
+      "openActionsAriaLabel": "Open tag actions",
+      "loading": "Loading tags…"
     },
     "createTagModal": {
       "title": "Create New Tag",
@@ -8842,7 +8919,10 @@
       "errorCreatingTag": "Error creating tag: {{error}}",
       "tagDeletedSuccess": "Tag deleted successfully",
       "errorDeletingTag": "Error deleting tag: {{error}}",
-      "errorFetchingModels": "Error fetching models: {{error}}"
+      "errorFetchingModels": "Error fetching models: {{error}}",
+      "refreshAriaLabel": "Refresh tags",
+      "emptyTitle": "No tags yet",
+      "emptyDescription": "Create a tag to start routing and restricting model usage."
     },
     "tagInfo": {
       "backToTags": "← Back to Tags",
@@ -8870,7 +8950,9 @@
       "rpmLimit": "RPM Limit",
       "errorFetchingTagDetails": "Error fetching tag details: {{error}}",
       "tagUpdatedSuccess": "Tag updated successfully",
-      "errorUpdatingTag": "Error updating tag: {{error}}"
+      "errorUpdatingTag": "Error updating tag: {{error}}",
+      "loading": "Loading...",
+      "cancelButton": "Cancel"
     }
   },
   "modelAdd": {
@@ -9816,7 +9898,16 @@
       "editMemberTitle": "Edit Member",
       "roleOrgAdmin": "Org Admin",
       "roleInternalUser": "Internal User",
-      "roleInternalUserViewer": "Internal User Viewer"
+      "roleInternalUserViewer": "Internal User Viewer",
+      "copyOrgId": "Copy organization ID"
+    },
+    "orgCreateDialog": {
+      "createFailed": "Failed to create organization",
+      "creating": "Creating...",
+      "mcpServersHelp": "Select MCP servers, access groups, and toolsets this organization can access. Leave empty for access to all"
+    },
+    "orgSettingsForm": {
+      "noReset": "No reset"
     }
   },
   "workflowRuns": {
@@ -10034,5 +10125,37 @@
     "valueUpdated": "Successfully updated value!",
     "fieldReset": "Field reset on proxy",
     "internalUserSettingsUpdated": "Internal user settings updated successfully"
+  },
+  "budgetsPage": {
+    "budgetTable": {
+      "loadingBudgets": "Loading budgets…",
+      "searchPlaceholder": "Search by budget ID…",
+      "filterDrawerDescription": "Narrow down your budgets",
+      "noMatchingBudgets": "No matching budgets",
+      "noBudgetsYet": "No budgets yet",
+      "noMatchHint": "No budget matches your search or filters.",
+      "emptyHint": "Create a budget to set spend, TPM and RPM limits for customers.",
+      "forbiddenTitle": "You do not have access to budgets",
+      "forbiddenHint": "Ask a proxy admin to grant you the admin viewer role.",
+      "loadFailed": "Could not load budgets",
+      "filterMinPlaceholder": "Min",
+      "filterMaxPlaceholder": "Max",
+      "filterMinAriaLabel": "Minimum max budget",
+      "filterMaxAriaLabel": "Maximum max budget",
+      "unlimitedOnly": "Unlimited only",
+      "createdFrom": "Created from",
+      "createdTo": "Created to",
+      "any": "any",
+      "rangeValue": "{{min}} to {{max}}"
+    },
+    "budgetTableColumns": {
+      "openBudgetActions": "Open budget actions"
+    },
+    "budgetModal": {
+      "tpmLimitHelp": "Leave blank for no LiteLLM limit. Provider rate limits still apply."
+    },
+    "budgetPanel": {
+      "subtitle": "Spend, TPM and RPM limits you can assign to customers."
+    }
   }
 }
