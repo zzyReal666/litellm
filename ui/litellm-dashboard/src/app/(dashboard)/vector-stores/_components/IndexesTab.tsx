@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { toast } from "@/lib/toast";
 import { indexesListCall } from "@/components/networking";
@@ -29,6 +30,7 @@ interface IndexesTabProps {
 }
 
 const IndexesTab: React.FC<IndexesTabProps> = ({ accessToken, vectorStores, onViewVectorStore }) => {
+  const { t } = useTranslation();
   const [indexes, setIndexes] = useState<VectorStoreIndex[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,37 +57,45 @@ const IndexesTab: React.FC<IndexesTabProps> = ({ accessToken, vectorStores, onVi
         setIndexes(response.data || []);
       } catch (error) {
         console.error("Error fetching indexes:", error);
-        toast.fromError("Error fetching indexes: " + error);
+        toast.fromError(
+          t("vectorStores.indexesTab.fetchError", {
+            error: String(error),
+            defaultValue: "Error fetching indexes: {{error}}",
+          }),
+        );
       } finally {
         setIsLoading(false);
       }
     };
     fetchIndexes();
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   return (
     <div className="w-full">
       <p className="mb-4 text-sm text-muted-foreground">
-        Vector store indexes registered on this proxy via the <code>/v1/indexes</code> API. See the{" "}
-        <a
-          href="https://docs.litellm.ai/docs/providers/azure_ai/azure_ai_vector_stores_passthrough"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-info hover:underline"
-        >
-          vector store index docs
-        </a>{" "}
-        for how this works. Index passthrough is supported for Azure AI Search and Milvus today; support for more
-        providers can be added, so please{" "}
-        <a
-          href="https://github.com/BerriAI/litellm/issues"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-info hover:underline"
-        >
-          file a GitHub issue
-        </a>{" "}
-        if you want your provider supported.
+        <Trans
+          i18nKey="vectorStores.indexesTab.description"
+          defaults="Vector store indexes registered on this proxy via the <code>/v1/indexes</code> API. See the <docsLink>vector store index docs</docsLink> for how this works. Index passthrough is supported for Azure AI Search and Milvus today; support for more providers can be added, so please <issueLink>file a GitHub issue</issueLink> if you want your provider supported."
+          components={{
+            code: <code />,
+            docsLink: (
+              <a
+                href="https://docs.litellm.ai/docs/providers/azure_ai/azure_ai_vector_stores_passthrough"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-info hover:underline"
+              />
+            ),
+            issueLink: (
+              <a
+                href="https://github.com/BerriAI/litellm/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-info hover:underline"
+              />
+            ),
+          }}
+        />
       </p>
       <div className="grid grid-cols-1 gap-2 pt-2 pb-2 w-full">
         <IndexesTable

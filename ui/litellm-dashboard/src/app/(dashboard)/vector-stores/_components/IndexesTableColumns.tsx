@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { TFunction } from "i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell } from "@/components/shared/table_cells";
@@ -11,17 +12,24 @@ import type { VectorStoreIndex } from "./IndexesTab";
 interface IndexesTableColumnsDeps {
   resolveVectorStoreId: (name: string) => string | undefined;
   onViewVectorStore: (vectorStoreId: string) => void;
+  t: TFunction;
 }
 
 export const getIndexesTableColumns = ({
   resolveVectorStoreId,
   onViewVectorStore,
+  t,
 }: IndexesTableColumnsDeps): ColumnDef<VectorStoreIndex>[] => [
   {
     id: "index_name",
     accessorKey: "index_name",
-    meta: { title: "Index Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Index Name" />,
+    meta: { title: t("vectorStoreManagement.s3VectorsConfig.indexNameLabel", { defaultValue: "Index Name" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("vectorStoreManagement.s3VectorsConfig.indexNameLabel", { defaultValue: "Index Name" })}
+      />
+    ),
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -33,8 +41,13 @@ export const getIndexesTableColumns = ({
   {
     id: "vector_store_name",
     accessorFn: (row) => row.litellm_params.vector_store_name,
-    meta: { title: "Vector Store" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Vector Store" />,
+    meta: { title: t("playground.chatUi.vectorStoreLabel", { defaultValue: "Vector Store" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("playground.chatUi.vectorStoreLabel", { defaultValue: "Vector Store" })}
+      />
+    ),
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -60,8 +73,8 @@ export const getIndexesTableColumns = ({
   {
     id: "vector_store_index",
     accessorFn: (row) => row.litellm_params.vector_store_index,
-    meta: { title: "Provider Index" },
-    header: "Provider Index",
+    meta: { title: t("vectorStores.indexesTableColumns.providerIndex", { defaultValue: "Provider Index" }) },
+    header: t("vectorStores.indexesTableColumns.providerIndex", { defaultValue: "Provider Index" }),
     size: 220,
     enableSorting: false,
     cell: ({ row }) => (
@@ -76,8 +89,8 @@ export const getIndexesTableColumns = ({
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By" },
-    header: "Created By",
+    meta: { title: t("molecules.modelsColumns.createdBy", { defaultValue: "Created By" }) },
+    header: t("molecules.modelsColumns.createdBy", { defaultValue: "Created By" }),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -99,8 +112,13 @@ export const getIndexesTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" })}
+      />
+    ),
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
