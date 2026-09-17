@@ -541,6 +541,9 @@
     "userDropdown": {
       "loading": "加载用户中…",
       "placeholder": "按邮箱搜索用户…"
+    },
+    "rateLimitCell": {
+      "notAvailable": "n/a"
     }
   },
   "adminPanel": {
@@ -3048,7 +3051,21 @@
     "labelTransport": "传输协议：",
     "labelAlias": "别名：",
     "labelAuthType": "认证类型：",
-    "additionalInfo": "附加信息"
+    "additionalInfo": "附加信息",
+    "labelDescription": "描述：",
+    "searchModelsPlaceholderCompact": "搜索模型名称...",
+    "searchModelsAriaLabel": "搜索模型名称",
+    "searchModelsTooltipText": "在所有页面中查找名称包含您输入内容的已发布模型。可尝试 'grok'、'claude'、'gpt-4' 或 'sonnet'",
+    "noModelsHint": "代理管理员设为公开的模型将显示在此处。",
+    "adjustSearchOrFilters": "调整搜索或筛选条件以查看更多模型。",
+    "noMatchingAgents": "没有匹配的 Agent",
+    "adjustSearchOrSkillFilter": "调整搜索或技能筛选条件以查看更多 Agent。",
+    "noMatchingMcpServers": "没有匹配的 MCP 服务器",
+    "adjustSearchOrTransportFilter": "调整搜索或传输协议筛选条件以查看更多服务器。",
+    "loadingModels": "正在加载模型…",
+    "loadingAgents": "正在加载 Agent…",
+    "loadingMcpServers": "正在加载 MCP 服务器…",
+    "unknownStatus": "未知"
   },
   "objectPermissionsView": {
     "title": "对象权限",
@@ -4338,7 +4355,8 @@
       "suggestedRange": "建议范围：",
       "yourPrivateNetworkRanges": "您的私有网络范围",
       "rangesPlaceholder": "留空以使用默认值：10.0.0.0/8、172.16.0.0/12、192.168.0.0/16、127.0.0.0/8",
-      "cidrHelp": "输入 CIDR 范围（例如：10.0.0.0/8）。留空时使用标准私有 IP 范围。"
+      "cidrHelp": "输入 CIDR 范围（例如：10.0.0.0/8）。留空时使用标准私有 IP 范围。",
+      "removeRange": "移除 {{range}}"
     },
     "mcpPermissionManagement": {
       "panelTitle": "权限管理 / 访问控制",
@@ -4371,7 +4389,9 @@
       "headerNamePlaceholder": "请求头名称（例如：X-API-Key）",
       "headerValueRequired": "请求头值为必填项",
       "headerValuePlaceholder": "请求头值",
-      "addStaticHeader": "添加静态请求头"
+      "addStaticHeader": "添加静态请求头",
+      "clearHeaderName": "清空请求头名称",
+      "clearHeaderValue": "清空请求头值"
     },
     "mcpServerCard": {
       "testConnection": "测试连接",
@@ -4427,8 +4447,8 @@
       "rejectButton": "拒绝",
       "reapproveButton": "重新批准",
       "submissionRulesTitle": "提交规则",
-      "requiredFieldCount_one": "{{count}} 个必填字段",
-      "requiredFieldCount_other": "{{count}} 个必填字段",
+      "requiredFieldCount_one": "{{count}} 个必填项",
+      "requiredFieldCount_other": "{{count}} 个必填项",
       "noRulesSet": "未设置规则",
       "submissionRulesDesc": "选择提交内容被视为合规前必须填写的字段。LiteLLM 将在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
       "saveRulesButton": "保存规则",
@@ -4457,7 +4477,8 @@
       "failedToReject": "拒绝 MCP 服务器失败",
       "approveConfirmBody": "这将激活服务器。提交该服务器的用户将在批准后于其 MCP 服务器列表中看到它。",
       "savingRules": "保存中…",
-      "searchServersPlaceholder": "搜索 MCP 服务器..."
+      "searchServersPlaceholder": "搜索 MCP 服务器...",
+      "requiredFieldCount": "{{count}} 个必填项"
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "此工具的输入",
@@ -4561,7 +4582,14 @@
       "waitingForAuthorization": "等待授权...",
       "exchangingCode": "正在交换授权码...",
       "authorizeAndFetch": "授权并获取 Token",
-      "tokenFetched": "Token 已获取，有效期 {{seconds}} 秒。"
+      "tokenFetched": "Token 已获取，有效期 {{seconds}} 秒。",
+      "upstreamResourceLabel": "资源指示符（可选）",
+      "upstreamResourceTooltip": "发送给授权服务器的 RFC 8707 资源指示符，使其签发的 Token 以本 MCP 服务器为受众。留空表示不发送，这是默认行为，也是大多数提供商期望的方式。填写 'auto' 表示发送本服务器自身的 URL。当授权服务器要求特定标识符时，请填写确切的标识符。部分提供商会拒绝该参数并改为从权限范围推断受众；若出现 AADSTS901002，请留空。若出现 invalid_target，说明授权服务器要求设置该参数。",
+      "upstreamResourcePlaceholder": "auto，或 https://mcp.example.com/mcp",
+      "flowTypePlaceholder": "选择 OAuth 流程",
+      "issuerLabel": "签发者（可选）",
+      "issuerTooltip": "OAuth 2.0 授权服务器签发者（RFC 8414）。留空表示从上游资源发现端点；填写后将固定信任锚点，即仅以该签发者的文档作为端点来源（RFC 8414 §3.3），并覆盖上方的授权 / Token / 注册 URL，若无法获取其元数据则直接失败。",
+      "tokenStorageTtlCacheTooltip": "每个用户的 OAuth 可访问 Token 在 Redis 中的缓存时长，到期后清除（不会超过 Token 自身的 expires_in）。留空表示根据 Token 的 expires_in 推导 TTL，或回退到 12 小时默认值。"
     },
     "openAPIFormSection": {
       "specUrlLabel": "OpenAPI Spec URL",
@@ -4671,7 +4699,10 @@
       "awsSessionNameTooltip": "可选。AssumeRole 调用的会话名称，出现在 CloudTrail 日志中。若不填写则自动生成。",
       "awsSessionNamePlaceholder": "litellm-prod（可选，留空自动生成）",
       "creating": "创建中...",
-      "addButton": "添加 MCP 服务器"
+      "addButton": "添加 MCP 服务器",
+      "submitSuccessDesc": "管理员审核通过后，该服务器将出现在您的 MCP 服务器列表中。",
+      "nonAdminBannerText": "您的提交将发送给管理员审核。审核通过后，服务器将出现在您的 MCP 服务器列表中。该请求必须使用团队范围的 API 密钥发起。",
+      "authSettingsLabel": "身份验证设置"
     },
     "mcpConnect": {
       "pageTitle": "连接到您的 MCP 客户端",
@@ -4680,8 +4711,8 @@
       "tabLiteLLMProxy": "LiteLLM Proxy",
       "tabCursor": "Cursor",
       "tabStreamableHttp": "Streamable HTTP",
-      "implementationExample": "Implementation Example",
-      "configuration": "Configuration",
+      "implementationExample": "实现示例",
+      "configuration": "配置",
       "limitToolsText": "通过传递",
       "headerSuffix": "请求头，将工具限定到特定 MCP 服务器或 MCP 组",
       "twoOptions": "两种方式",
@@ -4723,7 +4754,14 @@
       "universalMcpConnectionDesc": "使用此 URL 连接任何支持 HTTP 传输的 MCP 客户端",
       "transportMethodText": "不同 MCP 客户端支持的传输方式各不相同，请参阅您的客户端文档以确定合适的传输方式。",
       "headersConfiguration": "请求头配置",
-      "learnMoreTransports": "了解更多关于 MCP 传输的信息"
+      "learnMoreTransports": "了解更多关于 MCP 传输的信息",
+      "openaiPlatformLink": "OpenAI 平台",
+      "shortcutMac": "⇧+⌘+J",
+      "macSuffix": "（Mac）",
+      "shortcutWindows": "Ctrl+Shift+J",
+      "windowsLinuxSuffix": "（Windows/Linux）",
+      "shortcutSaveMac": "Cmd+S",
+      "shortcutSaveWindows": "Ctrl+S"
     },
     "mcpConnectionStatus": {
       "title": "连接状态",
@@ -4767,7 +4805,10 @@
       "useDefaultPlaceholder": "使用默认值",
       "costSummary": "费用汇总：",
       "defaultCostRow": "• 默认费用：${{cost}} / 次查询",
-      "toolCostRow": "• {{toolName}}：${{cost}} / 次查询"
+      "toolCostRow": "• {{toolName}}：${{cost}} / 次查询",
+      "aboutCostConfiguration": "关于成本配置",
+      "aboutDefaultCost": "关于默认成本",
+      "aboutPerToolCosts": "关于按工具计费"
     },
     "mcpServerCostDisplay": {
       "noCostConfig": "此服务器未配置费用。工具调用将按每次 $0.00 收费。",
@@ -4825,7 +4866,8 @@
       "copyResultFailed": "复制结果失败",
       "toolNameCopied": "工具名称已复制到剪贴板",
       "copyToolNameFailed": "复制工具名称失败",
-      "toolResultAlt": "工具结果"
+      "toolResultAlt": "工具结果",
+      "logoAlt": "{{server}} 徽标"
     },
     "mcpServerEdit": {
       "oauthAuthSuccess": "OAuth 授权成功！请点击「更新 MCP 服务器」以保存凭据。",
@@ -5037,6 +5079,99 @@
       "allowAllTools": "允许所有{{label}}工具",
       "stateOn": "开",
       "stateOff": "关"
+    },
+    "dcrBridgeToggle": {
+      "label": "由网关托管登录（DCR 桥接）",
+      "tooltip": "允许 Claude Desktop 等仅支持 OAuth 的客户端通过网关注册并登录。关闭后将改为转发上游服务器自身的 OAuth 元数据（适用于已在上游 IdP 预注册的客户端）。"
+    },
+    "idJagFormFields": {
+      "orgTokenEndpointLabel": "组织 Token 端点（第一段）",
+      "orgTokenEndpointTooltip": "您的 IdP 组织授权服务器的 Token 端点。LiteLLM 在此交换用户身份断言以获取 ID-JAG 断言（RFC 8693，requested_token_type=urn:ietf:params:oauth:token-type:id-jag）。",
+      "orgTokenEndpointRequired": "ID-JAG 必须提供组织 Token 端点",
+      "resourceTokenEndpointLabel": "资源 Token 端点（第二段）",
+      "resourceTokenEndpointTooltip": "上游资源授权服务器的 Token 端点。LiteLLM 在此以 RFC 7523 jwt-bearer 授权类型提交 ID-JAG 断言，以获取 MCP 服务器接受的可访问 Token。",
+      "resourceTokenEndpointRequired": "ID-JAG 必须提供资源 Token 端点",
+      "clientIdTooltip": "LiteLLM 在两段交换中用于身份认证的 OAuth2 客户端 ID。",
+      "clientIdRequired": "ID-JAG 必须提供客户端 ID",
+      "clientSecretTooltip": "通过 client_secret_post 将 LiteLLM 认证为 OAuth 客户端。改用私钥时请留空；私钥优先于此密钥。",
+      "secretOrPrivateKeyRequired": "请提供客户端密钥或客户端私钥",
+      "clientPrivateKeyLabel": "客户端私钥（PEM）",
+      "clientPrivateKeyTooltip": "用于签署 RFC 7523 private_key_jwt 客户端断言的 PEM 私钥。Okta Cross App Access 通常需要该私钥。设置后将优先于客户端密钥。",
+      "privateKeyIdLabel": "私钥 ID（可选）",
+      "privateKeyIdTooltip": "客户端断言 JWT 头部中声明的 kid，便于 IdP 选择正确的已注册密钥。",
+      "assertionAlgLabel": "客户端断言签名算法（可选）",
+      "assertionAlgTooltip": "签署客户端断言 JWT 的算法，默认为 RS256。",
+      "audienceLabel": "受众（可选）",
+      "audienceTooltip": "第一段发送的 RFC 8693 受众，用于标识 ID-JAG 断言所面向的上游。",
+      "resourceIndicatorLabel": "资源指示符（可选）",
+      "resourceIndicatorTooltip": "第一段发送的 RFC 8707 资源指示符。与受众相互独立，后者是 RFC 8693 参数。",
+      "subjectTokenTypeLabel": "主体 Token 类型（可选）",
+      "subjectTokenTypeTooltip": "第一段交换的身份断言类型，默认为 urn:ietf:params:oauth:token-type:id_token。",
+      "scopesTooltip": "交换第一段请求的权限范围。"
+    },
+    "importMCPServers": {
+      "importedCount_one": "已导入 {{count}} 个 MCP 服务器",
+      "importedCount_other": "已导入 {{count}} 个 MCP 服务器",
+      "importFailed": "导入请求失败，请查看代理日志了解详情。",
+      "title": "导入 MCP 连接器",
+      "connectorJsonLabel": "连接器 JSON",
+      "importedLabel": "已导入：",
+      "skippedLabel": "已跳过：",
+      "failedLabel": "失败：",
+      "importing": "导入中...",
+      "description": "粘贴 Anthropic 连接器配置：可来自 Claude Desktop / Claude Code 配置文件中的 <code>mcpServers</code> 映射，或 Anthropic Messages API 中的 <code>mcp_servers</code> 数组。"
+    },
+    "passthroughAuthorizeSection": {
+      "authorizeButtonIdle": "授权并获取工具（仅浏览器）",
+      "clientIdPlaceholderKeep": "留空则保留当前已保存的应用（如有）",
+      "clientIdPlaceholderDynamic": "留空则使用动态客户端注册",
+      "clientSecretPlaceholderKeep": "留空则保留当前已保存的密钥（如有）",
+      "clientSecretPlaceholderPublic": "公共客户端 / PKCE 请留空",
+      "clientIdExtraKeep": "设置后所有人都会通过指定应用进行授权；对于不支持动态客户端注册的上游（例如预注册的 Slack 应用）此项必填。",
+      "clientIdExtraSwitch": "切换身份验证类型会丢弃此前保存的应用；请在此填写客户端 ID，或留空以使用动态客户端注册。",
+      "description": "该身份验证类型由调用方自带上游 Token，因此 LiteLLM 不会存储 Token。如需预览工具并配置工具白名单，请在此向上游授权：Token 仅保留在当前浏览器会话中，绝不会保存到 LiteLLM。下方配置的 OAuth 应用会随服务器一并保存，因此在「工具」页面进行授权的内部用户都会经由该应用。",
+      "appMayNotMatchUpstream": "您修改了上游 URL 或端点；此处填写的 OAuth 应用是为之前的上游注册的，可能已失效。请更新客户端 ID，或清空以使用动态客户端注册。",
+      "removeStoredAppLabel": "保存时删除已存储的 OAuth 应用（服务器将回到动态客户端注册）",
+      "tokenHeld": "Token 已在当前浏览器会话中保留。现在可以预览并配置工具；该 Token 未保存到 LiteLLM。"
+    },
+    "tokenEndpointAuthMethodField": {
+      "label": "Token 端点认证方式（可选）",
+      "tooltip": "代理向上游 OAuth Token 端点进行身份认证的方式。Client Secret Basic 通过 HTTP Basic Authorization 请求头发送客户端凭据；留空则使用默认的 Client Secret Post，即在请求体中发送凭据。",
+      "placeholderEditing": "留空则保留现有值（默认 Client Secret Post）",
+      "placeholderDefault": "默认（Client Secret Post）",
+      "clientSecretBasicLabel": "Client Secret Basic",
+      "clientSecretPostLabel": "Client Secret Post"
+    },
+    "tokenExchangeFormFields": {
+      "profileLabel": "配置档",
+      "profileTooltip": "Token 交换的协议方言。RFC 8693 是标准 Token 交换授权。Microsoft Entra OBO 使用 Entra 的 On-Behalf-Of 方言（RFC 7523 jwt-bearer 授权，requested_token_use=on_behalf_of），并通过形如 api://<app-id>/.default 的权限范围携带目标资源。",
+      "endpointLabel": "Token 交换端点（可选）",
+      "endpointTooltip": "RFC 8693 Token 端点。代理在此将用户的传入 Token 交换为用于调用上游 MCP 服务器的限定范围 Token。留空则从上游的受保护资源元数据自动发现（先 RFC 9728，再 RFC 8414）。",
+      "clientIdTooltip": "用于向 Token 交换端点进行身份认证的 OAuth2 客户端 ID。",
+      "clientIdRequired": "Token 交换必须提供客户端 ID",
+      "clientSecretTooltip": "用于向 Token 交换端点进行身份认证的 OAuth2 客户端密钥。",
+      "clientSecretRequired": "Token 交换必须提供客户端密钥",
+      "audienceLabel": "受众（可选）",
+      "audienceTooltip": "交换所得 Token 的目标受众（RFC 8693 audience），用于标识该 Token 面向的上游 MCP 服务器。",
+      "subjectTokenTypeLabel": "主体 Token 类型（可选）",
+      "subjectTokenTypeTooltip": "用户传入 Token 的类型（RFC 8693 subject_token_type），默认为 urn:ietf:params:oauth:token-type:access_token。",
+      "scopesEntraTooltip": "Microsoft Entra OBO 通过权限范围携带目标资源，因此至少需要填写一项（例如 api://<app-id>/.default）。",
+      "scopesTooltip": "Token 交换期间可选请求的权限范围。",
+      "scopesRequired": "Microsoft Entra OBO 需要至少一个权限范围，例如 api://<app-id>/.default",
+      "profileRfc8693": "RFC 8693（标准）",
+      "profileEntraObo": "Microsoft Entra OBO"
+    },
+    "truePassthroughWarning": {
+      "title": "真透传会对此服务器禁用 LiteLLM 身份验证",
+      "description": "任何能够访问网关的人都可以在没有 LiteLLM 密钥的情况下调用此服务器。调用方的 Authorization 请求头会原样转发到上游，按密钥、按团队的速率限制与支出统计不再生效，上游需完全负责对调用方进行身份验证。若仍希望调用方先通过 LiteLLM 认证，请改选 OAuth Delegate。"
+    },
+    "upstreamTokenHeaderField": {
+      "label": "Token 请求头（可选）",
+      "tooltip": "LiteLLM 为此服务器解析出的 Token 由哪个上游请求头承载。留空则按默认方式发送为 'Authorization: Bearer <token>'，这也是大多数服务器期望的方式。当上游期望通过其他请求头接收时请填写请求头名称，例如某个 API 网关在 'esb-oauth' 上终止自己的凭据，而来自静态请求头的另一个 Authorization 继续透传到其后的服务器。",
+      "placeholder": "Authorization"
+    },
+    "mcpFieldRules": {
+      "emptyText": "输入后添加"
     }
   },
   "playground": {
@@ -11140,6 +11275,9 @@
     },
     "budgetPanel": {
       "subtitle": "可分配给客户的花费、TPM 和 RPM 限制。"
+    },
+    "filters": {
+      "durationNotSet": "未设置"
     }
   },
   "defaultUserSettingsForm": {
@@ -11268,5 +11406,17 @@
     "management": "管理",
     "readOnly": "只读",
     "scim": "SCIM"
+  },
+  "modelInfoEditForm": {
+    "fieldPtuRate": "每 PTU/小时成本（USD）",
+    "placeholderPtuCount": "例如：15",
+    "placeholderPtuRate": "例如：2.00",
+    "invalidJson": "请输入有效的 JSON",
+    "ptuCountRange": "PTU 数量必须是 1 到 {{max}} 之间的整数",
+    "ptuRateRange": "每 PTU/小时成本必须在 0 到 {{max}} 之间",
+    "ptuFieldsTogether": "PTU 数量与每 PTU/小时成本必须同时设置",
+    "ptuStartRequired": "设置 PTU 数量时，必须填写 PTU 生效开始时间",
+    "ptuWindowOrder": "PTU 生效结束时间必须晚于 PTU 生效开始时间",
+    "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空"
   }
 }

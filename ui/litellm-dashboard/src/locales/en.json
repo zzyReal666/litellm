@@ -541,6 +541,9 @@
     "userDropdown": {
       "loading": "Loading users…",
       "placeholder": "Search users by email…"
+    },
+    "rateLimitCell": {
+      "notAvailable": "n/a"
     }
   },
   "adminPanel": {
@@ -3048,7 +3051,21 @@
     "labelTransport": "Transport:",
     "labelAlias": "Alias:",
     "labelAuthType": "Auth Type:",
-    "additionalInfo": "Additional Information"
+    "additionalInfo": "Additional Information",
+    "labelDescription": "Description:",
+    "searchModelsPlaceholderCompact": "Search model names...",
+    "searchModelsAriaLabel": "Search model names",
+    "searchModelsTooltipText": "Finds every published model whose name contains what you type, across all pages. Try 'grok', 'claude', 'gpt-4', or 'sonnet'",
+    "noModelsHint": "Models made public by the proxy admin will appear here.",
+    "adjustSearchOrFilters": "Adjust the search or filters to see more models.",
+    "noMatchingAgents": "No matching agents",
+    "adjustSearchOrSkillFilter": "Adjust the search or skill filter to see more agents.",
+    "noMatchingMcpServers": "No matching MCP servers",
+    "adjustSearchOrTransportFilter": "Adjust the search or transport filter to see more servers.",
+    "loadingModels": "Loading models…",
+    "loadingAgents": "Loading agents…",
+    "loadingMcpServers": "Loading MCP servers…",
+    "unknownStatus": "Unknown"
   },
   "objectPermissionsView": {
     "title": "Object Permissions",
@@ -4338,7 +4355,8 @@
       "suggestedRange": "Suggested range:",
       "yourPrivateNetworkRanges": "Your Private Network Ranges",
       "rangesPlaceholder": "Leave empty to use defaults: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8",
-      "cidrHelp": "Enter CIDR ranges (e.g., 10.0.0.0/8). When empty, standard private IP ranges are used."
+      "cidrHelp": "Enter CIDR ranges (e.g., 10.0.0.0/8). When empty, standard private IP ranges are used.",
+      "removeRange": "Remove {{range}}"
     },
     "mcpPermissionManagement": {
       "panelTitle": "Permission Management / Access Control",
@@ -4371,7 +4389,9 @@
       "headerNamePlaceholder": "Header name (e.g., X-API-Key)",
       "headerValueRequired": "Header value is required",
       "headerValuePlaceholder": "Header value",
-      "addStaticHeader": "Add Static Header"
+      "addStaticHeader": "Add Static Header",
+      "clearHeaderName": "Clear header name",
+      "clearHeaderValue": "Clear header value"
     },
     "mcpServerCard": {
       "testConnection": "Test Connection",
@@ -4457,7 +4477,8 @@
       "failedToReject": "Failed to reject MCP server",
       "approveConfirmBody": "This will activate the server. The submitting user will see it in their MCP Servers list once approved.",
       "savingRules": "Saving…",
-      "searchServersPlaceholder": "Search MCP servers..."
+      "searchServersPlaceholder": "Search MCP servers...",
+      "requiredFieldCount": "{{count}} required fields"
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "Input for this tool",
@@ -4561,7 +4582,14 @@
       "waitingForAuthorization": "Waiting for authorization...",
       "exchangingCode": "Exchanging authorization code...",
       "authorizeAndFetch": "Authorize & Fetch Token",
-      "tokenFetched": "Token fetched. Expires in {{seconds}} seconds."
+      "tokenFetched": "Token fetched. Expires in {{seconds}} seconds.",
+      "upstreamResourceLabel": "Resource Indicator (optional)",
+      "upstreamResourceTooltip": "RFC 8707 resource indicator sent to the authorization server so it mints a token audienced for this MCP server. Leave blank to send nothing, which is the default and what most providers expect. Use 'auto' to send this server's own URL. Set an exact identifier when the authorization server expects a specific one. Some providers reject this parameter and take the audience from scopes instead; if you see AADSTS901002, leave it blank. If you see invalid_target, the authorization server needs it set.",
+      "upstreamResourcePlaceholder": "auto, or https://mcp.example.com/mcp",
+      "flowTypePlaceholder": "Select OAuth flow",
+      "issuerLabel": "Issuer (optional)",
+      "issuerTooltip": "OAuth 2.0 authorization server issuer (RFC 8414). Leave empty to discover endpoints from the upstream resource; set it to pin the trust anchor, which makes this issuer's document the only endpoint source (RFC 8414 §3.3), overriding the Authorization/Token/Registration URLs above and failing closed if its metadata cannot be fetched.",
+      "tokenStorageTtlCacheTooltip": "How long to cache each user's OAuth access token in Redis before evicting it (never longer than the token's own expires_in). Leave blank to derive the TTL from the token's expires_in, or fall back to the 12-hour default."
     },
     "openAPIFormSection": {
       "specUrlLabel": "OpenAPI Spec URL",
@@ -4671,7 +4699,10 @@
       "awsSessionNameTooltip": "Optional. Session name for the AssumeRole call — appears in CloudTrail logs. Auto-generated if omitted.",
       "awsSessionNamePlaceholder": "litellm-prod (optional, auto-generated if blank)",
       "creating": "Creating...",
-      "addButton": "Add MCP Server"
+      "addButton": "Add MCP Server",
+      "submitSuccessDesc": "Once an admin approves it, the server will appear in your MCP Servers list.",
+      "nonAdminBannerText": "Your submission will be sent for admin review. Once approved, the server will appear in your MCP Servers list. The request must be made with a team-scoped API key.",
+      "authSettingsLabel": "Authentication settings"
     },
     "mcpConnect": {
       "pageTitle": "Connect to your MCP client",
@@ -4723,7 +4754,14 @@
       "universalMcpConnectionDesc": "Use this URL with any MCP client that supports HTTP transport",
       "transportMethodText": "Each MCP client supports different transports. Refer to your client documentation to determine the appropriate transport method.",
       "headersConfiguration": "Headers Configuration",
-      "learnMoreTransports": "Learn more about MCP transports"
+      "learnMoreTransports": "Learn more about MCP transports",
+      "openaiPlatformLink": "OpenAI platform",
+      "shortcutMac": "⇧+⌘+J",
+      "macSuffix": "(Mac)",
+      "shortcutWindows": "Ctrl+Shift+J",
+      "windowsLinuxSuffix": "(Windows/Linux)",
+      "shortcutSaveMac": "Cmd+S",
+      "shortcutSaveWindows": "Ctrl+S"
     },
     "mcpConnectionStatus": {
       "title": "Connection Status",
@@ -4767,7 +4805,10 @@
       "useDefaultPlaceholder": "Use default",
       "costSummary": "Cost Summary:",
       "defaultCostRow": "• Default cost: ${{cost}} per query",
-      "toolCostRow": "• {{toolName}}: ${{cost}} per query"
+      "toolCostRow": "• {{toolName}}: ${{cost}} per query",
+      "aboutCostConfiguration": "About cost configuration",
+      "aboutDefaultCost": "About the default cost",
+      "aboutPerToolCosts": "About per-tool costs"
     },
     "mcpServerCostDisplay": {
       "noCostConfig": "No cost configuration set for this server. Tool calls will be charged at $0.00 per tool call.",
@@ -4825,7 +4866,8 @@
       "copyResultFailed": "Failed to copy result",
       "toolNameCopied": "Tool name copied to clipboard",
       "copyToolNameFailed": "Failed to copy tool name",
-      "toolResultAlt": "Tool result"
+      "toolResultAlt": "Tool result",
+      "logoAlt": "{{server}} logo"
     },
     "mcpServerEdit": {
       "oauthAuthSuccess": "OAuth authorization successful! Please click 'Update MCP Server' to save the credentials.",
@@ -5037,6 +5079,99 @@
       "allowAllTools": "Allow all {{label}} tools",
       "stateOn": "on",
       "stateOff": "off"
+    },
+    "dcrBridgeToggle": {
+      "label": "Gateway-hosted sign-in (DCR bridge)",
+      "tooltip": "Lets OAuth-only clients like Claude Desktop register and sign in through the gateway. Turn off to relay the upstream server's own OAuth metadata instead (for clients pre-registered with the upstream IdP)."
+    },
+    "idJagFormFields": {
+      "orgTokenEndpointLabel": "Org Token Endpoint (leg 1)",
+      "orgTokenEndpointTooltip": "Your IdP org authorization server's token endpoint. LiteLLM exchanges the user's identity assertion here for an ID-JAG assertion (RFC 8693 with requested_token_type=urn:ietf:params:oauth:token-type:id-jag).",
+      "orgTokenEndpointRequired": "The org token endpoint is required for ID-JAG",
+      "resourceTokenEndpointLabel": "Resource Token Endpoint (leg 2)",
+      "resourceTokenEndpointTooltip": "The upstream resource authorization server's token endpoint. LiteLLM posts the ID-JAG assertion here as an RFC 7523 jwt-bearer grant to get the access token the MCP server accepts.",
+      "resourceTokenEndpointRequired": "The resource token endpoint is required for ID-JAG",
+      "clientIdTooltip": "OAuth2 client ID LiteLLM authenticates as on both legs.",
+      "clientIdRequired": "Client ID is required for ID-JAG",
+      "clientSecretTooltip": "Authenticates LiteLLM as the OAuth client via client_secret_post. Leave blank when using a private key instead; a private key takes precedence over this secret.",
+      "secretOrPrivateKeyRequired": "Provide either a client secret or a client private key",
+      "clientPrivateKeyLabel": "Client Private Key (PEM)",
+      "clientPrivateKeyTooltip": "PEM private key signing the RFC 7523 private_key_jwt client assertion. Okta Cross App Access normally requires this. When set it takes precedence over the client secret.",
+      "privateKeyIdLabel": "Private Key ID (optional)",
+      "privateKeyIdTooltip": "The kid advertised in the client assertion JWT header, so the IdP can select the right registered key.",
+      "assertionAlgLabel": "Client Assertion Signing Algorithm (optional)",
+      "assertionAlgTooltip": "Algorithm signing the client assertion JWT. Defaults to RS256.",
+      "audienceLabel": "Audience (optional)",
+      "audienceTooltip": "RFC 8693 audience sent on leg 1, identifying the upstream the ID-JAG assertion is minted for.",
+      "resourceIndicatorLabel": "Resource Indicator (optional)",
+      "resourceIndicatorTooltip": "RFC 8707 resource indicator sent on leg 1. Separate from Audience, which is the RFC 8693 parameter.",
+      "subjectTokenTypeLabel": "Subject Token Type (optional)",
+      "subjectTokenTypeTooltip": "Type of the identity assertion exchanged on leg 1. Defaults to urn:ietf:params:oauth:token-type:id_token.",
+      "scopesTooltip": "Scopes requested on leg 1 of the exchange."
+    },
+    "importMCPServers": {
+      "importedCount_one": "Imported {{count}} MCP server",
+      "importedCount_other": "Imported {{count}} MCP servers",
+      "importFailed": "Import request failed. Check the proxy logs for details.",
+      "title": "Import MCP Connectors",
+      "connectorJsonLabel": "Connector JSON",
+      "importedLabel": "Imported:",
+      "skippedLabel": "Skipped:",
+      "failedLabel": "Failed:",
+      "importing": "Importing...",
+      "description": "Paste an Anthropic connector configuration: the <code>mcpServers</code> mapping from a Claude Desktop / Claude Code config file, or the <code>mcp_servers</code> array from the Anthropic Messages API."
+    },
+    "passthroughAuthorizeSection": {
+      "authorizeButtonIdle": "Authorize & Fetch Tools (browser-only)",
+      "clientIdPlaceholderKeep": "Leave blank to keep the currently saved app (if any)",
+      "clientIdPlaceholderDynamic": "Leave blank to use dynamic client registration",
+      "clientSecretPlaceholderKeep": "Leave blank to keep the currently saved secret (if any)",
+      "clientSecretPlaceholderPublic": "Leave blank for public clients / PKCE",
+      "clientIdExtraKeep": "Set this to make everyone authorize through a specific app; required for upstreams without dynamic client registration (e.g. a pre-registered Slack app).",
+      "clientIdExtraSwitch": "Switching the auth type discards the previously saved app; enter a client ID here or leave blank to use dynamic client registration.",
+      "description": "Callers bring their own upstream token for this auth type, so LiteLLM never stores tokens. To preview tools and configure the tool allowlist, authorize against the upstream here: the token stays in this browser session only and is never saved to LiteLLM. An OAuth app configured below IS saved with the server, so internal users who authorize from the Tools page go through it.",
+      "appMayNotMatchUpstream": "You changed the upstream URL or endpoints; the OAuth app entered here was registered for the previous upstream and may not be valid. Update the client ID, or clear it to use dynamic client registration.",
+      "removeStoredAppLabel": "Remove the saved OAuth app on save (the server goes back to dynamic client registration)",
+      "tokenHeld": "Token held for this browser session. Tools can now be previewed and configured; the token was not saved to LiteLLM."
+    },
+    "tokenEndpointAuthMethodField": {
+      "label": "Token Endpoint Auth Method (optional)",
+      "tooltip": "How the proxy authenticates to the upstream OAuth token endpoint. Client Secret Basic sends the client credentials in an HTTP Basic Authorization header; leave blank to use the default, Client Secret Post, which sends them in the request body.",
+      "placeholderEditing": "Leave blank to keep existing (default Client Secret Post)",
+      "placeholderDefault": "Default (Client Secret Post)",
+      "clientSecretBasicLabel": "Client Secret Basic",
+      "clientSecretPostLabel": "Client Secret Post"
+    },
+    "tokenExchangeFormFields": {
+      "profileLabel": "Profile",
+      "profileTooltip": "Token-exchange wire dialect. RFC 8693 is the standard token-exchange grant. Microsoft Entra OBO uses Entra's On-Behalf-Of dialect (the RFC 7523 jwt-bearer grant with requested_token_use=on_behalf_of) and carries the target resource in a scope like api://<app-id>/.default.",
+      "endpointLabel": "Token Exchange Endpoint (optional)",
+      "endpointTooltip": "RFC 8693 token endpoint. The proxy exchanges the user's incoming token here for a scoped token used to call the upstream MCP server. Leave blank to auto-discover it from the upstream's protected-resource metadata (RFC 9728 then RFC 8414).",
+      "clientIdTooltip": "OAuth2 client ID used to authenticate to the token exchange endpoint.",
+      "clientIdRequired": "Client ID is required for token exchange",
+      "clientSecretTooltip": "OAuth2 client secret used to authenticate to the token exchange endpoint.",
+      "clientSecretRequired": "Client Secret is required for token exchange",
+      "audienceLabel": "Audience (optional)",
+      "audienceTooltip": "Target audience for the exchanged token (RFC 8693 audience). Identifies the upstream MCP server the token is for.",
+      "subjectTokenTypeLabel": "Subject Token Type (optional)",
+      "subjectTokenTypeTooltip": "Type of the user's incoming token (RFC 8693 subject_token_type). Defaults to urn:ietf:params:oauth:token-type:access_token.",
+      "scopesEntraTooltip": "Microsoft Entra OBO carries the target resource in the scope, so at least one is required (e.g. api://<app-id>/.default).",
+      "scopesTooltip": "Optional scopes to request during the token exchange.",
+      "scopesRequired": "Microsoft Entra OBO requires a scope, e.g. api://<app-id>/.default",
+      "profileRfc8693": "RFC 8693 (standard)",
+      "profileEntraObo": "Microsoft Entra OBO"
+    },
+    "truePassthroughWarning": {
+      "title": "True Passthrough disables LiteLLM authentication for this server",
+      "description": "Anyone who can reach the gateway can call this server without a LiteLLM key. The caller's Authorization header is forwarded to the upstream verbatim, per-key and per-team rate limits and spend tracking do not apply, and the upstream is fully responsible for authenticating callers. Choose OAuth Delegate instead if callers should still authenticate to LiteLLM."
+    },
+    "upstreamTokenHeaderField": {
+      "label": "Token Header (optional)",
+      "tooltip": "Which upstream header carries the token LiteLLM resolves for this server. Leave blank to send it as 'Authorization: Bearer <token>', which is the default and what most servers expect. Set a header name when the upstream expects it elsewhere, for example an API gateway that terminates its own credential on 'esb-oauth' while a separate Authorization from Static Headers passes through to the server behind it.",
+      "placeholder": "Authorization"
+    },
+    "mcpFieldRules": {
+      "emptyText": "Type to add"
     }
   },
   "playground": {
@@ -11140,6 +11275,9 @@
     },
     "budgetPanel": {
       "subtitle": "Spend, TPM and RPM limits you can assign to customers."
+    },
+    "filters": {
+      "durationNotSet": "Not set"
     }
   },
   "defaultUserSettingsForm": {
@@ -11268,5 +11406,17 @@
     "management": "Management",
     "readOnly": "Read-only",
     "scim": "SCIM"
+  },
+  "modelInfoEditForm": {
+    "fieldPtuRate": "Cost per PTU / Hour (USD)",
+    "placeholderPtuCount": "e.g. 15",
+    "placeholderPtuRate": "e.g. 2.00",
+    "invalidJson": "Please enter valid JSON",
+    "ptuCountRange": "PTU Count must be a whole number between 1 and {{max}}",
+    "ptuRateRange": "Cost per PTU / Hour must be between 0 and {{max}}",
+    "ptuFieldsTogether": "PTU Count and Cost per PTU / Hour must be set together",
+    "ptuStartRequired": "PTU Effective From is required when PTU Count is set",
+    "ptuWindowOrder": "PTU Effective To must be after PTU Effective From",
+    "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank"
   }
 }
