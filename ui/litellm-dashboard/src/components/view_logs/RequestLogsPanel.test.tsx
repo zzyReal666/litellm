@@ -296,6 +296,26 @@ describe("RequestLogsPanel", () => {
       expect(vi.mocked(uiSpendLogsCall).mock.calls.filter(([options]) => options.page === 2)).toHaveLength(0);
     });
 
+    it("falls back to numbered pages when the server sends no session cursor", async () => {
+      const firstPage = Array.from({ length: 25 }, (_, index) => logEntry({ request_id: `req-${index}` }));
+      const secondPage = Array.from({ length: 25 }, (_, index) => logEntry({ request_id: `req-second-${index}` }));
+      vi.mocked(uiSpendLogsCall).mockImplementation(async ({ page }) =>
+        page === 2
+          ? { data: secondPage, total: 60, page: 2, page_size: 25, total_pages: 3 }
+          : { data: firstPage, total: 60, page: 1, page_size: 25, total_pages: 3 },
+      );
+      renderPanel();
+
+      await waitFor(() => expect(row("req-0")).not.toBeNull());
+      expect(screen.getByTestId("pagination-next")).toBeEnabled();
+      fireEvent.click(screen.getByTestId("pagination-next"));
+
+      await waitFor(() => expect(row("req-second-0")).not.toBeNull());
+      expect(lastCall()?.page).toBe(2);
+      expect(lastCall()?.params?.session_cursor).toBeUndefined();
+      expect(screen.getByTestId("pagination-page")).toHaveTextContent("Page 2 of 3");
+    });
+
     it("drops the cursor and returns to the first page when a filter changes", async () => {
       const firstPage = Array.from({ length: 50 }, (_, index) => logEntry({ request_id: `req-${index}` }));
       vi.mocked(uiSpendLogsCall).mockResolvedValue({

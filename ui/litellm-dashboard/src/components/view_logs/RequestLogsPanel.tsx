@@ -218,8 +218,12 @@ export default function RequestLogsPanel({ accessToken, token, userRole, userID,
         setPagination(requested);
         return;
       }
+      if (logsQuery.isPlaceholderData) return;
       const nextCursor = filteredLogs.next_session_cursor;
-      if (!nextCursor || logsQuery.isPlaceholderData) return;
+      if (!nextCursor) {
+        setPagination(requested);
+        return;
+      }
       setSessionCursors((previous) => ({ ...previous, [requested.pageIndex]: nextCursor }));
       setPagination(requested);
     },
