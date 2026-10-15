@@ -22,10 +22,18 @@ services:
       # is auto-refreshed alongside the writer.
       # DATABASE_URL_READ_REPLICA: "postgresql://llmproxy:dbpassword9090@db-reader:5432/litellm"
       STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
+      # Redis backs rate limits, budgets, router state, and cache invalidation
+      # across workers. Two workers without it enforce every limit twice.
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
     env_file:
       - .env # Load local .env file
     depends_on:
-      - db  # Indicates that this service depends on the 'db' service, ensuring 'db' starts first
+      db:  # Indicates that this service depends on the 'db' service, ensuring 'db' starts first
+        condition: service_started
+      redis:  # Ensures Redis is accepting commands before the proxy starts
+        condition: service_healthy
     healthcheck:  # Defines the health check configuration for the container
       test:
         - CMD-SHELL
@@ -53,6 +61,42 @@ services:
       timeout: 5s
       retries: 10
 
+  redis:
+    image: redis:7.4.2-alpine
+    restart: always
+    container_name: litellm_redis
+    user: redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    # Requires a password only when REDIS_PASSWORD is set, so the stack works
+    # with or without auth against the same compose file.
+    command:
+      - "sh"
+      - "-c"
+      - >-
+        if [ -n "$${REDIS_PASSWORD}" ]; then
+        exec redis-server --appendonly yes --appendfsync everysec --requirepass "$${REDIS_PASSWORD}";
+        else
+        exec redis-server --appendonly yes --appendfsync everysec;
+        fi
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data # Persists the append-only file across container restarts
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          if [ -n "$${REDIS_PASSWORD}" ]; then
+          redis-cli -a "$${REDIS_PASSWORD}" --no-auth-warning ping;
+          else
+          redis-cli ping;
+          fi | grep -q PONG
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
   prometheus:
     image: prom/prometheus
     volumes:
@@ -71,3 +115,5 @@ volumes:
     driver: local
   postgres_data:
     name: litellm_postgres_data # Named volume for Postgres data persistence
+  redis_data:
+    name: litellm_redis_data # Named volume for Redis AOF persistence
