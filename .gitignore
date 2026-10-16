@@ -154,3 +154,7 @@ litellm.log
 .worktrees/
 
 .doc-work/
+
+# Internal docs kept local only
+Doc4zzy（文档for张忠源）/7.99按人限量方案.md
+Doc4zzy（文档for张忠源）/asyncio面试题-LiteLLM.md
