@@ -28,19 +28,19 @@ describe("RoutingStrategySelector", () => {
     expect(screen.getByText("Routing Strategy")).toBeInTheDocument();
   });
 
-  it("should display ui_field_name from metadata when provided", () => {
+  it("should prefer the translated label over a label supplied by field metadata", () => {
     const props = {
       ...baseProps,
       routerFieldsMetadata: {
         routing_strategy: {
-          ui_field_name: "Strategy",
-          field_description: "How to pick a deployment",
+          ui_field_name: "Legacy Label",
+          field_description: "Legacy description",
         },
       },
     };
     render(<RoutingStrategySelector {...props} />);
-    expect(screen.getByText("Strategy")).toBeInTheDocument();
-    expect(screen.getByText("How to pick a deployment")).toBeInTheDocument();
+    expect(screen.getByText("Routing Strategy")).toBeInTheDocument();
+    expect(screen.queryByText("Legacy Label")).not.toBeInTheDocument();
   });
 
   it("should render all available strategies as options", async () => {
@@ -60,8 +60,24 @@ describe("RoutingStrategySelector", () => {
 
     await openStrategyDropdown(user);
 
-    expect(await screen.findByText("Randomly pick a deployment")).toBeInTheDocument();
-    expect(screen.getByText("Pick the lowest-latency deployment")).toBeInTheDocument();
+    expect(await screen.findByText("Randomly picks a deployment from the list. Simple and fast.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Routes to the deployment with the lowest latency over a sliding window."),
+    ).toBeInTheDocument();
+  });
+
+  it("should fall back to the backend description for a strategy the catalog does not cover", async () => {
+    const user = userEvent.setup();
+    const props = {
+      ...baseProps,
+      availableStrategies: ["custom-strategy"],
+      routingStrategyDescriptions: { "custom-strategy": "Custom strategy description" },
+    };
+    render(<RoutingStrategySelector {...props} />);
+
+    await openStrategyDropdown(user);
+
+    expect(await screen.findByText("Custom strategy description")).toBeInTheDocument();
   });
 
   it("should not render a description for a strategy that has none", async () => {

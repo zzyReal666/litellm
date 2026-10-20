@@ -1,4 +1,5 @@
 import React, { useId } from "react";
+import { useTranslation } from "react-i18next";
 import { Switch } from "@/components/ui/switch";
 
 interface TagFilteringToggleProps {
@@ -9,16 +10,21 @@ interface TagFilteringToggleProps {
 
 const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, routerFieldsMetadata, onToggle }) => {
   const toggleId = useId();
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-3 max-w-3xl">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <label htmlFor={toggleId} className="text-xs font-medium text-foreground uppercase tracking-wide">
-            {routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering"}
+            {t("routerSettings.fields.enable_tag_filtering.label", {
+              defaultValue: routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering",
+            })}
           </label>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {routerFieldsMetadata["enable_tag_filtering"]?.field_description || ""}
+            {t("routerSettings.fields.enable_tag_filtering.description", {
+              defaultValue: routerFieldsMetadata["enable_tag_filtering"]?.field_description || "",
+            })}
             {routerFieldsMetadata["enable_tag_filtering"]?.link && (
               <>
                 {" "}
@@ -28,7 +34,7 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
                   rel="noopener noreferrer"
                   className="text-info hover:text-info/80 underline"
                 >
-                  Learn more
+                  {t("routerSettings.tagFilteringToggle.learnMore", { defaultValue: "Learn more" })}
                 </a>
               </>
             )}

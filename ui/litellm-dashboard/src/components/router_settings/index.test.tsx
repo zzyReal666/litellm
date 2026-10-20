@@ -121,7 +121,7 @@ describe("RouterSettings", () => {
 
     await findStrategySelect();
 
-    const numRetries = await screen.findByRole("textbox", { name: /num_retries/i });
+    const numRetries = await screen.findByRole("textbox", { name: /number of retries/i });
     await user.clear(numRetries);
     fireEvent.change(numRetries, { target: { value: "42" } });
 

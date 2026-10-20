@@ -3392,7 +3392,10 @@
     "saveFailed": "更新主题设置失败",
     "resetSuccess": "主题设置已重置为默认！",
     "resetFailed": "重置主题设置失败",
-    "resetToDefault": "重置为默认"
+    "resetToDefault": "重置为默认",
+    "logoUrlDarkLabel": "自定义 Logo URL（深色模式）",
+    "logoUrlDarkHint": "输入适用于深色背景的 Logo URL，留空则复用上方 Logo",
+    "save": "保存更改"
   },
   "usage": {
     "tabAllUp": "总览",
@@ -9851,12 +9854,115 @@
       "subtitle": "配置请求如何路由到各部署"
     },
     "tagFilteringToggle": {
-      "label": "启用标签过滤"
+      "label": "启用标签过滤",
+      "learnMore": "了解更多"
     },
     "index": {
       "updateFailed": "更新路由器设置失败：{{error}}",
       "updateSuccess": "路由器设置已成功更新",
-      "saveChanges": "保存更改"
+      "saveChanges": "保存更改",
+      "reset": "重置"
+    },
+    "routingStrategySelector": {
+      "label": "路由策略"
+    },
+    "fields": {
+      "routing_strategy": {
+        "label": "路由策略",
+        "description": "用于在多个部署之间做负载均衡的路由策略"
+      },
+      "routing_strategy_args": {
+        "label": "路由策略参数",
+        "description": "传给路由策略的参数（例如 latency-based-routing 的 ttl、lowest_latency_buffer）"
+      },
+      "routing_groups": {
+        "label": "路由分组",
+        "description": "共享同一路由策略的 model_name 子集。未被显式分组认领的模型会落到顶层 routing_strategy"
+      },
+      "num_retries": {
+        "label": "重试次数",
+        "description": "失败请求的重试次数"
+      },
+      "timeout": {
+        "label": "超时时间",
+        "description": "请求超时时间（秒）"
+      },
+      "stream_timeout": {
+        "label": "流式超时时间",
+        "description": "流式请求的超时时间（秒）"
+      },
+      "max_fallbacks": {
+        "label": "最大回退次数",
+        "description": "调用退出前尝试回退的最大次数"
+      },
+      "fallbacks": {
+        "label": "回退模型",
+        "description": "回退模型映射列表"
+      },
+      "context_window_fallbacks": {
+        "label": "上下文窗口回退",
+        "description": "上下文窗口错误时使用的回退模型列表"
+      },
+      "content_policy_fallbacks": {
+        "label": "内容策略回退",
+        "description": "内容策略错误时使用的回退模型列表"
+      },
+      "allowed_fails": {
+        "label": "允许失败次数",
+        "description": "部署进入冷却前允许的失败次数"
+      },
+      "cooldown_time": {
+        "label": "冷却时间",
+        "description": "部署失败后进入冷却的时间（秒）"
+      },
+      "retry_after": {
+        "label": "重试等待",
+        "description": "失败请求重试前的最小等待时间（秒）"
+      },
+      "retry_policy": {
+        "label": "重试策略",
+        "description": "针对不同异常类型的自定义重试策略"
+      },
+      "model_group_alias": {
+        "label": "模型分组别名",
+        "description": "模型分组的别名"
+      },
+      "enable_pre_call_checks": {
+        "label": "启用调用前检查",
+        "description": "在路由请求前启用预检查"
+      },
+      "default_litellm_params": {
+        "label": "默认 LiteLLM 参数",
+        "description": "Router.chat.completion.create 的默认参数"
+      },
+      "set_verbose": {
+        "label": "详细日志",
+        "description": "启用路由器的详细日志"
+      },
+      "default_max_parallel_requests": {
+        "label": "最大并行请求数",
+        "description": "所有部署的默认最大并行请求数"
+      },
+      "enable_tag_filtering": {
+        "label": "启用标签过滤",
+        "description": "启用基于标签的路由"
+      },
+      "tag_filtering_match_any": {
+        "label": "标签过滤匹配任一",
+        "description": "基于标签路由时匹配任一标签，而不是要求全部匹配"
+      },
+      "disable_cooldowns": {
+        "label": "禁用冷却",
+        "description": "关闭失败部署的冷却机制"
+      }
+    },
+    "strategies": {
+      "simple-shuffle": "从列表中随机选择部署，简单快速。",
+      "least-busy": "路由到当前进行中请求数最少的部署。",
+      "latency-based-routing": "在滑动窗口内路由到延迟最低的部署。",
+      "cost-based-routing": "路由到每 token 成本最低的部署。",
+      "usage-based-routing": "路由到 TPM（每分钟 token 数）用量最低的部署。（已废弃）",
+      "usage-based-routing-v2": "usage-based routing 的改进版本，用量跟踪更准确。"
     }
   },
   "tagManagement": {

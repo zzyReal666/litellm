@@ -22,19 +22,23 @@ describe("TagFilteringToggle", () => {
     expect(screen.getByText("Enable Tag Filtering")).toBeInTheDocument();
   });
 
-  it("should name the switch with the metadata label so it is reachable by accessible name", () => {
+  it("should name the switch with the translated label so it is reachable by accessible name", () => {
     render(<TagFilteringToggle enabled={false} routerFieldsMetadata={baseMetadata} onToggle={vi.fn()} />);
-    expect(screen.getByRole("switch", { name: "Tag Filtering" })).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: "Enable Tag Filtering" })).toBeInTheDocument();
   });
 
-  it("should display the label from metadata when provided", () => {
-    render(<TagFilteringToggle enabled={false} routerFieldsMetadata={baseMetadata} onToggle={vi.fn()} />);
-    expect(screen.getByText("Tag Filtering")).toBeInTheDocument();
+  it("should prefer the translated label over a label supplied by field metadata", () => {
+    const metadata = {
+      enable_tag_filtering: { ...baseMetadata.enable_tag_filtering, ui_field_name: "Legacy Label" },
+    };
+    render(<TagFilteringToggle enabled={false} routerFieldsMetadata={metadata} onToggle={vi.fn()} />);
+    expect(screen.getByText("Enable Tag Filtering")).toBeInTheDocument();
+    expect(screen.queryByText("Legacy Label")).not.toBeInTheDocument();
   });
 
-  it("should display the description from metadata", () => {
+  it("should render the translated description", () => {
     render(<TagFilteringToggle enabled={false} routerFieldsMetadata={baseMetadata} onToggle={vi.fn()} />);
-    expect(screen.getByText("Route requests based on tags")).toBeInTheDocument();
+    expect(screen.getByText("Enable tag-based routing to route requests based on tags")).toBeInTheDocument();
   });
 
   it("should render a Learn more link when metadata provides one", () => {
