@@ -1,5 +1,6 @@
 import { OnChangeFn, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,8 +63,10 @@ const KEYWORD_ERRORS: ReadonlyArray<{ pattern: RegExp; label: string }> = [
 const truncate = (value: string): string => (value.length > 100 ? `${value.substring(0, 97)}...` : value);
 
 // Helper function to extract meaningful error information
-const extractMeaningfulError = (error: unknown): string => {
-  if (!error) return "Health check failed";
+const extractMeaningfulError = (error: unknown, fallback: string): string => {
+  if (!error) {
+    return fallback;
+  }
 
   const errorStr = typeof error === "string" ? error : JSON.stringify(error);
 
@@ -167,6 +170,10 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
   onPaginationChange,
   rowCount,
 }) => {
+  const { t } = useTranslation();
+  const healthCheckFailedLabel = t("modelDashboard.healthCheckComponent.healthCheckFailed", {
+    defaultValue: "Health check failed",
+  });
   const [modelHealthStatuses, setModelHealthStatuses] = useState<{ [key: string]: HealthStatus }>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -228,7 +235,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
               lastCheck: toCheckedAtLabel(checkData.checked_at, "None"),
               lastSuccess: toLastSuccessLabel(checkData, "None"),
               loading: false,
-              error: fullError ? extractMeaningfulError(fullError) : undefined,
+              error: fullError ? extractMeaningfulError(fullError, healthCheckFailedLabel) : undefined,
               fullError: fullError,
               successResponse: checkData.status === "healthy" ? checkData : undefined,
             };
@@ -242,7 +249,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
     };
 
     initializeHealthStatuses();
-  }, [accessToken, modelData]);
+  }, [accessToken, modelData, healthCheckFailedLabel]);
 
   const runIndividualHealthCheck = useCallback(
     async (modelId: string) => {
@@ -262,8 +269,8 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
         const currentTime = new Date().toLocaleString();
 
         if (response.unhealthy_count > 0 && response.unhealthy_endpoints && response.unhealthy_endpoints.length > 0) {
-          const rawError = response.unhealthy_endpoints[0]?.error || "Health check failed";
-          const errorMessage = extractMeaningfulError(rawError);
+          const rawError = response.unhealthy_endpoints[0]?.error || healthCheckFailedLabel;
+          const errorMessage = extractMeaningfulError(rawError, healthCheckFailedLabel);
           setModelHealthStatuses((prev) => ({
             ...prev,
             [modelId]: {
@@ -301,7 +308,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
                 lastCheck: toCheckedAtLabel(checkData.checked_at, prev[modelId]?.lastCheck || "None"),
                 lastSuccess: toLastSuccessLabel(checkData, prev[modelId]?.lastSuccess || "None"),
                 loading: false,
-                error: fullError ? extractMeaningfulError(fullError) : prev[modelId]?.error,
+                error: fullError ? extractMeaningfulError(fullError, healthCheckFailedLabel) : prev[modelId]?.error,
                 fullError: fullError || prev[modelId]?.fullError,
                 successResponse: checkData.status === "healthy" ? checkData : prev[modelId]?.successResponse,
               },
@@ -311,7 +318,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
       } catch (error) {
         const currentTime = new Date().toLocaleString();
         const rawError = error instanceof Error ? error.message : String(error);
-        const errorMessage = extractMeaningfulError(rawError);
+        const errorMessage = extractMeaningfulError(rawError, healthCheckFailedLabel);
         setModelHealthStatuses((prev) => ({
           ...prev,
           [modelId]: {
@@ -325,7 +332,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
         }));
       }
     },
-    [accessToken],
+    [accessToken, healthCheckFailedLabel],
   );
 
   const selectedModelIds = useMemo(
@@ -358,8 +365,8 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
 
         const currentTime = new Date().toLocaleString();
         if (response.unhealthy_count > 0 && response.unhealthy_endpoints && response.unhealthy_endpoints.length > 0) {
-          const rawError = response.unhealthy_endpoints[0]?.error || "Health check failed";
-          const errorMessage = extractMeaningfulError(rawError);
+          const rawError = response.unhealthy_endpoints[0]?.error || healthCheckFailedLabel;
+          const errorMessage = extractMeaningfulError(rawError, healthCheckFailedLabel);
           setModelHealthStatuses((prev) => ({
             ...prev,
             [modelId]: {
@@ -387,7 +394,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
         console.error(`Health check failed for model id ${modelId}:`, error);
         const currentTime = new Date().toLocaleString();
         const rawError = error instanceof Error ? error.message : String(error);
-        const errorMessage = extractMeaningfulError(rawError);
+        const errorMessage = extractMeaningfulError(rawError, healthCheckFailedLabel);
         setModelHealthStatuses((prev) => ({
           ...prev,
           [modelId]: {
@@ -423,7 +430,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
                 lastCheck: toCheckedAtLabel(checkData.checked_at, currentStatus?.lastCheck || "None"),
                 lastSuccess: toLastSuccessLabel(checkData, currentStatus?.lastSuccess || "None"),
                 loading: false,
-                error: fullError ? extractMeaningfulError(fullError) : currentStatus?.error,
+                error: fullError ? extractMeaningfulError(fullError, healthCheckFailedLabel) : currentStatus?.error,
                 fullError: fullError || currentStatus?.fullError,
                 successResponse: checkData.status === "healthy" ? checkData : currentStatus?.successResponse,
               },
@@ -501,9 +508,13 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Model Health Status</h2>
+            <h2 className="text-lg font-semibold text-foreground">
+              {t("modelDashboard.healthCheckComponent.title", { defaultValue: "Model Health Status" })}
+            </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Run health checks on individual models to verify they are working correctly
+              {t("modelDashboard.healthCheckComponent.subtitle", {
+                defaultValue: "Run health checks on individual models to verify they are working correctly",
+              })}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -514,7 +525,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
                 onClick={() => setRowSelection({})}
                 data-testid="clear-health-selection"
               >
-                Clear Selection
+                {t("modelDashboard.healthCheckComponent.clearSelection", { defaultValue: "Clear Selection" })}
               </Button>
             )}
             <Button
@@ -524,7 +535,9 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
               disabled={anyCheckRunning}
               data-testid="run-health-checks"
             >
-              {isPartialSelection ? "Run Selected Checks" : "Run All Checks"}
+              {isPartialSelection
+                ? t("modelDashboard.healthCheckComponent.runSelectedChecks", { defaultValue: "Run Selected Checks" })
+                : t("modelDashboard.healthCheckComponent.runAllChecks", { defaultValue: "Run All Checks" })}
             </Button>
           </div>
         </div>
@@ -556,21 +569,34 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>
-              {selectedErrorDetails ? `Health Check Error - ${selectedErrorDetails.modelName}` : "Error Details"}
+              {selectedErrorDetails
+                ? t("modelDashboard.healthCheckComponent.errorModalTitle", {
+                    modelName: selectedErrorDetails.modelName,
+                    defaultValue: "Health Check Error - {{modelName}}",
+                  })
+                : t("modelDashboard.healthCheckComponent.errorModalFallbackTitle", { defaultValue: "Error Details" })}
             </DialogTitle>
-            <DialogDescription>Details returned by the model health check.</DialogDescription>
+            <DialogDescription>
+              {t("modelDashboard.healthCheckComponent.errorModalDescription", {
+                defaultValue: "Details returned by the model health check.",
+              })}
+            </DialogDescription>
           </DialogHeader>
           {selectedErrorDetails && (
             <div className="space-y-4">
               <div>
-                <span className="font-medium">Error:</span>
+                <span className="font-medium">
+                  {t("modelDashboard.healthCheckComponent.errorLabel", { defaultValue: "Error:" })}
+                </span>
                 <div className="mt-2 rounded-md border border-destructive/30 bg-destructive/10 p-3">
                   <span className="text-destructive">{selectedErrorDetails.cleanedError}</span>
                 </div>
               </div>
 
               <div>
-                <span className="font-medium">Full Error Details:</span>
+                <span className="font-medium">
+                  {t("modelDashboard.healthCheckComponent.fullErrorLabel", { defaultValue: "Full Error Details:" })}
+                </span>
                 <div className="mt-2 max-h-96 overflow-y-auto rounded-md border bg-muted/50 p-3">
                   <pre className="whitespace-pre-wrap text-sm text-foreground">{selectedErrorDetails.fullError}</pre>
                 </div>
@@ -579,7 +605,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
           )}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={closeErrorModal}>
-              Close
+              {t("common.close", { defaultValue: "Close" })}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -595,22 +621,39 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
           <DialogHeader>
             <DialogTitle>
               {selectedSuccessDetails
-                ? `Health Check Response - ${selectedSuccessDetails.modelName}`
-                : "Response Details"}
+                ? t("modelDashboard.healthCheckComponent.successModalTitle", {
+                    modelName: selectedSuccessDetails.modelName,
+                    defaultValue: "Health Check Response - {{modelName}}",
+                  })
+                : t("modelDashboard.healthCheckComponent.successModalFallbackTitle", {
+                    defaultValue: "Response Details",
+                  })}
             </DialogTitle>
-            <DialogDescription>Response returned by the successful model health check.</DialogDescription>
+            <DialogDescription>
+              {t("modelDashboard.healthCheckComponent.successModalDescription", {
+                defaultValue: "Response returned by the successful model health check.",
+              })}
+            </DialogDescription>
           </DialogHeader>
           {selectedSuccessDetails && (
             <div className="space-y-4">
               <div>
-                <span className="font-medium">Status:</span>
+                <span className="font-medium">
+                  {t("modelDashboard.healthCheckComponent.statusLabel", { defaultValue: "Status:" })}
+                </span>
                 <div className="mt-2 rounded-md border border-primary/30 bg-primary/5 p-3">
-                  <span className="text-foreground">Health check passed successfully</span>
+                  <span className="text-foreground">
+                    {t("modelDashboard.healthCheckComponent.healthCheckPassed", {
+                      defaultValue: "Health check passed successfully",
+                    })}
+                  </span>
                 </div>
               </div>
 
               <div>
-                <span className="font-medium">Response Details:</span>
+                <span className="font-medium">
+                  {t("modelDashboard.healthCheckComponent.responseDetailsLabel", { defaultValue: "Response Details:" })}
+                </span>
                 <div className="mt-2 max-h-96 overflow-y-auto rounded-md border bg-muted/50 p-3">
                   <pre className="whitespace-pre-wrap text-sm text-foreground">
                     {JSON.stringify(selectedSuccessDetails.response, null, 2)}
@@ -621,7 +664,7 @@ const HealthCheckComponent: React.FC<HealthCheckComponentProps> = ({
           )}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={closeSuccessModal}>
-              Close
+              {t("common.close", { defaultValue: "Close" })}
             </Button>
           </DialogFooter>
         </DialogContent>

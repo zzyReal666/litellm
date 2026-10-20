@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import AgentBuilderView from "@/app/(dashboard)/playground/components/chat_ui/AgentBuilderView";
 import ChatUI from "@/app/(dashboard)/playground/components/chat_ui/ChatUI";
 import CompareUI from "@/app/(dashboard)/playground/components/compareUI/CompareUI";
@@ -21,6 +22,7 @@ interface ProxySettings {
 }
 
 export default function PlaygroundPage() {
+  const { t } = useTranslation();
   const { accessToken, userRole, userId, disabledPersonalKeyCreation, token, isViewOnly } = useAuthorized();
   const [proxySettings, setProxySettings] = useState<ProxySettings | undefined>(undefined);
   const [activeTab, setActiveTab] = useUrlTab(PLAYGROUND_TABS, "chat");
@@ -44,7 +46,9 @@ export default function PlaygroundPage() {
   if (isViewOnly) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-8 text-center">
-        <h1 className="text-2xl font-semibold">Access Denied</h1>
+        <h1 className="text-2xl font-semibold">
+          {t("molecules.notificationsManager.accessDenied", { defaultValue: "Access Denied" })}
+        </h1>
         <p className="text-muted-foreground">
           Your role does not have access to the Playground. Ask your proxy admin for access to test models.
         </p>
@@ -61,19 +65,19 @@ export default function PlaygroundPage() {
       >
         <TabsList variant="line" className="w-full shrink-0 justify-start overflow-x-auto pb-1">
           <TabsTrigger value="chat" className="flex-none">
-            Chat
+            {t("pages.playgroundPage.tabChat", { defaultValue: "Chat" })}
           </TabsTrigger>
           <TabsTrigger value="compare" className="flex-none">
-            Compare
+            {t("pages.playgroundPage.tabCompare", { defaultValue: "Compare" })}
           </TabsTrigger>
           <TabsTrigger value="compliance" className="flex-none">
-            Compliance
+            {t("guardrails.guardrailGarden.tags.compliance", { defaultValue: "Compliance" })}
           </TabsTrigger>
           <TabsTrigger value="system-one" className="flex-none">
             <BetaBadge>Decisions</BetaBadge>
           </TabsTrigger>
           <TabsTrigger value="agent-builder" className="flex-none">
-            Agent Builder (Experimental)
+            {t("pages.playgroundPage.tabAgentBuilder", { defaultValue: "Agent Builder (Experimental)" })}
           </TabsTrigger>
         </TabsList>
         <TabsContent

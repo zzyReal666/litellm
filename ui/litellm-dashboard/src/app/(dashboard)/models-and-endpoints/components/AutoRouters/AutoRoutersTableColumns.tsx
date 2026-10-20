@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -67,14 +68,19 @@ function TargetsCell({ targets }: { targets: string[] }) {
 function AutoRouterRowActions({
   row,
   onDeleteClick,
+  t,
 }: {
   row: AutoRouterRow;
   onDeleteClick: (row: AutoRouterRow) => void;
+  t: TFunction;
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open actions for ${row.name}`}
+        aria-label={t("pages.modelsAndEndpoints.openActionsFor", {
+          name: row.name,
+          defaultValue: `Open actions for ${row.name}`,
+        })}
         data-testid={`auto-router-actions-${row.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -87,7 +93,7 @@ function AutoRouterRowActions({
           onClick={() => onDeleteClick(row)}
         >
           <Trash2 />
-          Delete auto router
+          {t("pages.modelsAndEndpoints.deleteAutoRouterAction", { defaultValue: "Delete auto router" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -98,18 +104,20 @@ interface AutoRoutersTableColumnsDeps {
   canModify: boolean;
   onRouterClick: (row: AutoRouterRow) => void;
   onDeleteClick: (row: AutoRouterRow) => void;
+  t: TFunction;
 }
 
 export const getAutoRoutersTableColumns = ({
   canModify,
   onRouterClick,
   onDeleteClick,
+  t,
 }: AutoRoutersTableColumnsDeps): ColumnDef<AutoRouterRow>[] => [
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: t("common.name", { defaultValue: "Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("common.name", { defaultValue: "Name" })} />,
     size: 260,
     enableSorting: true,
     cell: ({ row }) => <IdentityCell title={row.original.name || "-"} onClick={() => onRouterClick(row.original)} />,
@@ -117,16 +125,16 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "kind",
     accessorKey: "kind",
-    meta: { title: "Type" },
-    header: "Type",
+    meta: { title: t("common.type", { defaultValue: "Type" }) },
+    header: t("common.type", { defaultValue: "Type" }),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <TypeCell row={row.original} />,
   },
   {
     id: "targets",
-    meta: { title: "Routes to" },
-    header: "Routes to",
+    meta: { title: t("pages.modelsAndEndpoints.routesTo", { defaultValue: "Routes to" }) },
+    header: t("pages.modelsAndEndpoints.routesTo", { defaultValue: "Routes to" }),
     size: 320,
     enableSorting: false,
     cell: ({ row }) => <TargetsCell targets={row.original.targets} />,
@@ -134,8 +142,8 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "defaultModel",
     accessorKey: "defaultModel",
-    meta: { title: "Default model" },
-    header: "Default model",
+    meta: { title: t("pages.modelsAndEndpoints.defaultModel", { defaultValue: "Default model" }) },
+    header: t("pages.modelsAndEndpoints.defaultModel", { defaultValue: "Default model" }),
     size: 200,
     enableSorting: false,
     cell: ({ row }) =>
@@ -150,8 +158,10 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "createdAt",
     accessorKey: "createdAt",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: t("pages.modelsAndEndpoints.created", { defaultValue: "Created" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("pages.modelsAndEndpoints.created", { defaultValue: "Created" })} />
+    ),
     size: 150,
     enableSorting: true,
     sortingFn: "datetime",
@@ -167,7 +177,9 @@ export const getAutoRoutersTableColumns = ({
           size: 60,
           enableSorting: false,
           cell: ({ row }) =>
-            row.original.canDelete ? <AutoRouterRowActions row={row.original} onDeleteClick={onDeleteClick} /> : null,
+            row.original.canDelete ? (
+              <AutoRouterRowActions row={row.original} onDeleteClick={onDeleteClick} t={t} />
+            ) : null,
         } satisfies ColumnDef<AutoRouterRow>,
       ]
     : []),

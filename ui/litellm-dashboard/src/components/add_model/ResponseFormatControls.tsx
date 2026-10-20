@@ -1,36 +1,33 @@
 import { Switch } from "@/components/ui/switch";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 
 const ResponseFormatControls: React.FC<{
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
-}> = ({ value, onChange }) => (
-  <>
-    <div className="flex items-center gap-2 mb-2">
-      <Switch
-        checked={value.return_raw_model_name ?? false}
-        onCheckedChange={(returnRawModelName) => onChange({ ...value, return_raw_model_name: returnRawModelName })}
-        aria-label="Return raw model name"
-      />
-      <strong className="font-semibold">Return raw model name</strong>
-    </div>
-    <span className="block text-xs text-muted-foreground">
-      Return the resolved underlying model name in responses instead of the autorouter alias.
-    </span>
-    <div className="mt-4 flex items-center gap-2 mb-2">
-      <Switch
-        checked={value.max_tokens_from_tier_model ?? true}
-        onCheckedChange={(enabled) => onChange({ ...value, max_tokens_from_tier_model: enabled })}
-        aria-label="Cap max_tokens at the tier model's output ceiling"
-      />
-      <strong className="font-semibold">Cap max_tokens at the tier model&apos;s output ceiling</strong>
-    </div>
-    <span className="block text-xs text-muted-foreground">
-      Replace the caller&apos;s max_tokens with the routed tier model&apos;s output ceiling so one client value fits
-      every tier. Off forwards the caller&apos;s value unchanged.
-    </span>
-  </>
-);
+}> = ({ value, onChange }) => {
+  const { t } = useTranslation();
+  const rawModelNameLabel = t("addModel.responseFormat.returnRawModelNameLabel", {
+    defaultValue: "Return raw model name",
+  });
+  return (
+    <>
+      <div className="flex items-center gap-2 mb-2">
+        <Switch
+          checked={value.return_raw_model_name ?? false}
+          onCheckedChange={(returnRawModelName) => onChange({ ...value, return_raw_model_name: returnRawModelName })}
+          aria-label={rawModelNameLabel}
+        />
+        <strong className="font-semibold">{rawModelNameLabel}</strong>
+      </div>
+      <span className="block text-xs text-muted-foreground">
+        {t("addModel.responseFormat.returnRawModelNameHint", {
+          defaultValue: "Return the resolved underlying model name in responses instead of the autorouter alias.",
+        })}
+      </span>
+    </>
+  );
+};
 
 export default ResponseFormatControls;

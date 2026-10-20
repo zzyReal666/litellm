@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const MCPConnectPicker: React.FC<Props> = ({ accessToken, selectedServers, onChange }) => {
+  const { t } = useTranslation();
   const [servers, setServers] = useState<MCPServer[]>([]);
   const [loadingServers, setLoadingServers] = useState(true);
   const [togglingOn, setTogglingOn] = useState<Set<string>>(new Set());
@@ -56,12 +58,22 @@ const MCPConnectPicker: React.FC<Props> = ({ accessToken, selectedServers, onCha
     try {
       const result = await listMCPTools(accessToken, serverName);
       if (result?.error) {
-        toast.warning(`Could not load tools for ${serverName} \u2014 it will be excluded from this message.`);
+        toast.warning(
+          t("chat.mCPConnectPicker.couldNotLoadTools", {
+            name: serverName,
+            defaultValue: "Could not load tools for {{name}} — it will be excluded from this message.",
+          }),
+        );
         return;
       }
       onChange([...selectedServers, serverName]);
     } catch {
-      toast.warning(`Could not load tools for ${serverName} \u2014 it will be excluded from this message.`);
+      toast.warning(
+        t("chat.mCPConnectPicker.couldNotLoadTools", {
+          name: serverName,
+          defaultValue: "Could not load tools for {{name}} — it will be excluded from this message.",
+        }),
+      );
     } finally {
       setTogglingOn((prev) => {
         const next = new Set(prev);
@@ -89,7 +101,9 @@ const MCPConnectPicker: React.FC<Props> = ({ accessToken, selectedServers, onCha
           ))}
         </div>
       ) : servers.length === 0 ? (
-        <div className="px-3 py-4 text-muted-foreground text-[13px] text-center">No MCP servers configured</div>
+        <div className="px-3 py-4 text-muted-foreground text-[13px] text-center">
+          {t("chat.mCPConnectPicker.noServersConfigured", { defaultValue: "No MCP servers configured" })}
+        </div>
       ) : (
         servers.map((server) => {
           const name = server.server_name ?? server.alias ?? server.server_id;

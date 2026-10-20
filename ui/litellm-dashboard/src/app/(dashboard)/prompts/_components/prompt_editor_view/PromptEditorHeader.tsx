@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowLeftIcon, SaveIcon, ClockIcon, LoaderCircleIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import PromptCodeSnippets from "./PromptCodeSnippets";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ENVIRONMENT_ITEMS = [
-  { value: "development", label: "Development" },
-  { value: "staging", label: "Staging" },
-  { value: "production", label: "Production" },
-] as const;
+  { value: "development", label: "Development", labelKey: "promptsPage.promptEditorHeader.envDevelopment" },
+  { value: "staging", label: "Staging", labelKey: "promptsPage.promptEditorHeader.envStaging" },
+  { value: "production", label: "Production", labelKey: "promptsPage.promptEditorHeader.envProduction" },
+];
 
 interface PromptEditorHeaderProps {
   promptName: string;
@@ -48,15 +49,19 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
   environment,
   onEnvironmentChange,
 }) => {
+  const { t } = useTranslation();
+  const environmentLabel = (item: (typeof ENVIRONMENT_ITEMS)[number]) => t(item.labelKey, { defaultValue: item.label });
+  const environmentItems = ENVIRONMENT_ITEMS.map((item) => ({ ...item, label: environmentLabel(item) }));
+
   return (
     <div className="bg-background border-b border-border px-6 py-3 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         <Button variant="ghost" onClick={onBack} size="sm">
           <ArrowLeftIcon />
-          Back
+          {t("common.back", { defaultValue: "Back" })}
         </Button>
         <Input
-          aria-label="Prompt name"
+          aria-label={t("promptsPage.promptEditorHeader.promptNameAriaLabel", { defaultValue: "Prompt name" })}
           value={promptName}
           onChange={(e) => onNameChange(e.target.value)}
           className="text-base font-medium border-none shadow-none"
@@ -64,23 +69,29 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
         />
         {version && <Badge>{version}</Badge>}
         <Select
-          items={ENVIRONMENT_ITEMS}
+          items={environmentItems}
           value={environment}
           onValueChange={(value) => onEnvironmentChange(String(value))}
         >
-          <SelectTrigger size="sm" className="w-[140px]" aria-label="Environment">
+          <SelectTrigger
+            size="sm"
+            className="w-[140px]"
+            aria-label={t("promptsPage.promptTable.colEnvironment", { defaultValue: "Environment" })}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {ENVIRONMENT_ITEMS.map((item) => (
               <SelectItem key={item.value} value={item.value}>
-                {item.label}
+                {environmentLabel(item)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Badge variant="secondary">Draft</Badge>
-        <span className="text-xs text-muted-foreground">Unsaved changes</span>
+        <Badge variant="secondary">{t("promptsPage.promptEditorHeader.draft", { defaultValue: "Draft" })}</Badge>
+        <span className="text-xs text-muted-foreground">
+          {t("promptsPage.promptEditorHeader.unsavedChanges", { defaultValue: "Unsaved changes" })}
+        </span>
       </div>
       <div className="flex items-center space-x-2">
         <PromptCodeSnippets
@@ -95,12 +106,12 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
         {editMode && onShowHistory && (
           <Button variant="outline" onClick={onShowHistory}>
             <ClockIcon />
-            History
+            {t("promptsPage.promptEditorHeader.history", { defaultValue: "History" })}
           </Button>
         )}
         <Button onClick={onSave} disabled={isSaving}>
           {isSaving ? <LoaderCircleIcon className="animate-spin" /> : <SaveIcon />}
-          {editMode ? "Update" : "Save"}
+          {editMode ? t("common.update", { defaultValue: "Update" }) : t("common.save", { defaultValue: "Save" })}
         </Button>
       </div>
     </div>

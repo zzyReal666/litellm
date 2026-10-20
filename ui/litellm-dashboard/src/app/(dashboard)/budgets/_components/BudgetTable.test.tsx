@@ -1,11 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders, testQueryClient } from "@/../tests/test-utils";
 import BudgetTable from "./BudgetTable";
 import type { budgetItem } from "@/app/(dashboard)/hooks/budgets/useBudgets";
 import type { ResourceListResult } from "@/app/(dashboard)/hooks/common/useResourceList";
 import { ApiError } from "@/lib/http/client";
+import i18n from "@/lib/i18n";
 
 const { copyToClipboardMock } = vi.hoisted(() => ({ copyToClipboardMock: vi.fn() }));
 
@@ -69,6 +70,10 @@ describe("BudgetTable", () => {
     testQueryClient.clear();
   });
 
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
   it("should display budget information", () => {
     renderWithProviders(<BudgetTable {...defaultProps} list={makeList()} />);
     expect(screen.getByText("budget-1")).toBeInTheDocument();
@@ -98,6 +103,26 @@ describe("BudgetTable", () => {
     renderWithProviders(<BudgetTable {...defaultProps} list={list} />);
     await showColumn(user, "budget_duration");
     expect(screen.getByText("Not set")).toBeInTheDocument();
+  });
+
+  it("should render the duration filter options in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const user = userEvent.setup();
+    renderWithProviders(<BudgetTable {...defaultProps} list={makeList()} />);
+
+    await user.click(screen.getByTestId("datatable-filters-trigger"));
+
+    for (const option of ["每小时", "每天", "每周", "每月", "未设置"]) {
+      expect(await screen.findByRole("checkbox", { name: option })).toBeInTheDocument();
+    }
+  });
+
+  it("should render the reset column's duration label in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const user = userEvent.setup();
+    renderWithProviders(<BudgetTable {...defaultProps} list={makeList()} />);
+    await showColumn(user, "budget_duration");
+    expect(screen.getByText("每月")).toBeInTheDocument();
   });
 
   it("should render the budget id in full, with no truncation", () => {

@@ -1,5 +1,8 @@
 import { CircleMinus, Plus } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
+import type { TFunction } from "i18next";
 import {
   useFieldArray,
   type Control,
@@ -8,13 +11,12 @@ import {
   type FieldValues,
   type UseFormGetValues,
 } from "react-hook-form";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 import { TeamMetadataField } from "@/app/(dashboard)/hooks/teams/useTeamMetadataSchema";
 import { FormField } from "@/components/shared/form/FormField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export interface MetadataPair {
@@ -22,15 +24,30 @@ export interface MetadataPair {
   value: string;
 }
 
-export const metadataPairsSchema = z
-  .array(z.object({ key: z.string().min(1, "Missing key"), value: z.string().optional() }))
-  .superRefine((pairs, ctx) => {
-    pairs.forEach((pair, index) => {
-      if (pair.key && pairs.filter((other) => other.key === pair.key).length > 1) {
-        ctx.addIssue({ code: "custom", message: "Duplicate key", path: [index, "key"] });
-      }
+export const createMetadataPairsSchema = (t: TFunction) =>
+  z
+    .array(
+      z.object({
+        key: z
+          .string()
+          .min(1, t("commonComponents.metadataKeyValueFields.missingKey", { defaultValue: "Missing key" })),
+        value: z.string().optional(),
+      }),
+    )
+    .superRefine((pairs, ctx) => {
+      pairs.forEach((pair, index) => {
+        if (pair.key && pairs.filter((other) => other.key === pair.key).length > 1) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("commonComponents.metadataKeyValueFields.duplicateKey", { defaultValue: "Duplicate key" }),
+            path: [index, "key"],
+          });
+        }
+      });
     });
-  });
+
+// English instance for callers that validate without a translation function, such as unit tests.
+export const metadataPairsSchema = createMetadataPairsSchema(i18n.t.bind(i18n));
 
 function formatMetadataValue(value: unknown): string {
   if (typeof value !== "string") {
@@ -57,7 +74,7 @@ export function metadataObjectToPairs(
   excludedKeys: ReadonlySet<string> = new Set(),
 ): MetadataPair[] {
   return Object.entries(metadata ?? {})
-    .filter(([key]) => key !== "" && !excludedKeys.has(key))
+    .filter(([key]) => !excludedKeys.has(key))
     .map(([key, value]) => ({ key, value: formatMetadataValue(value) }));
 }
 
@@ -79,64 +96,6 @@ interface MetadataKeyValueFieldsProps<TFieldValues extends FieldValues> {
   schemaLoading?: boolean;
 }
 
-interface MetadataRowProps<TFieldValues extends FieldValues> {
-  control: Control<TFieldValues>;
-  name: FieldArrayPath<TFieldValues>;
-  index: number;
-  rowId: string;
-  schemaLabel: string | undefined;
-  onRemove: () => void;
-}
-
-const MetadataRow = <TFieldValues extends FieldValues>({
-  control,
-  name,
-  index,
-  rowId,
-  schemaLabel,
-  onRemove,
-}: MetadataRowProps<TFieldValues>) => {
-  return (
-    <div className="mb-2 flex items-start gap-2">
-      {schemaLabel === undefined ? (
-        <FormField control={control} name={`${name}.${index}.key` as FieldPath<TFieldValues>}>
-          {({ ref, value, ...rest }) => <Input {...rest} ref={ref} value={(value as string) ?? ""} placeholder="Key" />}
-        </FormField>
-      ) : (
-        <Label
-          htmlFor={`${rowId}-value`}
-          data-testid="metadata-schema-label"
-          className="h-9 w-full items-center truncate px-3 font-medium"
-        >
-          {schemaLabel}
-        </Label>
-      )}
-      <FormField control={control} name={`${name}.${index}.value` as FieldPath<TFieldValues>}>
-        {({ ref, value, id, ...rest }) => (
-          <Input
-            {...rest}
-            id={schemaLabel === undefined ? id : `${rowId}-value`}
-            ref={ref}
-            value={(value as string) ?? ""}
-            placeholder="Value"
-          />
-        )}
-      </FormField>
-      {schemaLabel === undefined && (
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Remove key-value pair"
-          className="mt-1 text-destructive"
-          onClick={onRemove}
-        >
-          <CircleMinus className="size-4" />
-        </Button>
-      )}
-    </div>
-  );
-};
-
 const MetadataKeyValueFields = <TFieldValues extends FieldValues>({
   control,
   getValues,
@@ -144,26 +103,9 @@ const MetadataKeyValueFields = <TFieldValues extends FieldValues>({
   schemaFields = [],
   schemaLoading = false,
 }: MetadataKeyValueFieldsProps<TFieldValues>) => {
+  const { t } = useTranslation();
   const { fields, append, remove } = useFieldArray({ control, name });
   const seededRef = useRef(false);
-  const schemaLabelsByKey = new Map(schemaFields.map((field) => [field.key, field.label || field.key]));
-  const schemaReady = !schemaLoading && schemaFields.length > 0;
-  const livePairs: readonly (Partial<MetadataPair> | undefined)[] =
-    getValues(name as unknown as FieldPath<TFieldValues>) ?? [];
-  const [keysAtMount, setKeysAtMount] = useState<ReadonlyMap<string, string | undefined>>(() => new Map());
-  const unseenKeys = schemaReady
-    ? fields.flatMap((field, index) => (keysAtMount.has(field.id) ? [] : [[field.id, livePairs[index]?.key] as const]))
-    : [];
-  if (unseenKeys.length > 0) {
-    setKeysAtMount(new Map([...keysAtMount, ...unseenKeys]));
-  }
-  const rowKeysAtMount = fields.map((field, index) =>
-    keysAtMount.has(field.id) || !schemaReady ? keysAtMount.get(field.id) : livePairs[index]?.key,
-  );
-  const schemaLabelAt = (index: number): string | undefined => {
-    const key = rowKeysAtMount[index];
-    return key === undefined || rowKeysAtMount.indexOf(key) !== index ? undefined : schemaLabelsByKey.get(key);
-  };
 
   useEffect(() => {
     if (seededRef.current || schemaLoading || schemaFields.length === 0) return;
@@ -192,15 +134,39 @@ const MetadataKeyValueFields = <TFieldValues extends FieldValues>({
   return (
     <>
       {fields.map((field, index) => (
-        <MetadataRow
-          key={field.id}
-          control={control}
-          name={name}
-          index={index}
-          rowId={field.id}
-          schemaLabel={schemaLabelAt(index)}
-          onRemove={() => remove(index)}
-        />
+        <div key={field.id} className="mb-2 flex items-start gap-2">
+          <FormField control={control} name={`${name}.${index}.key` as FieldPath<TFieldValues>}>
+            {({ ref, value, ...rest }) => (
+              <Input
+                {...rest}
+                ref={ref}
+                value={(value as string) ?? ""}
+                placeholder={t("commonComponents.metadataKeyValueFields.keyPlaceholder", { defaultValue: "Key" })}
+              />
+            )}
+          </FormField>
+          <FormField control={control} name={`${name}.${index}.value` as FieldPath<TFieldValues>}>
+            {({ ref, value, ...rest }) => (
+              <Input
+                {...rest}
+                ref={ref}
+                value={(value as string) ?? ""}
+                placeholder={t("commonComponents.metadataKeyValueFields.valuePlaceholder", { defaultValue: "Value" })}
+              />
+            )}
+          </FormField>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t("commonComponents.metadataKeyValueFields.removePair", {
+              defaultValue: "Remove key-value pair",
+            })}
+            className="mt-1 text-destructive"
+            onClick={() => remove(index)}
+          >
+            <CircleMinus className="size-4" />
+          </Button>
+        </div>
       ))}
       <Button
         variant="outline"
@@ -208,7 +174,7 @@ const MetadataKeyValueFields = <TFieldValues extends FieldValues>({
         onClick={() => append({ key: "", value: "" } as never, { shouldFocus: false })}
       >
         <Plus className="size-4" />
-        Add Key-Value Pair
+        {t("projects.projectBaseForm.addKeyValue", { defaultValue: "Add Key-Value Pair" })}
       </Button>
     </>
   );

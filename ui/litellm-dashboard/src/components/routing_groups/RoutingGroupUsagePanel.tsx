@@ -2,6 +2,7 @@
 
 import { Code2 } from "lucide-react";
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import CodeBlock from "@/components/CodeBlock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,24 +15,22 @@ interface RoutingGroupUsagePanelProps {
   baseUrl: string;
 }
 
-const exampleModel = (group: RoutingGroup): string =>
-  group.routing_strategy === "priority" ? group.group_name : group.models[0] ?? "<your-model>";
+const exampleModel = (group: RoutingGroup): string => group.models[0] ?? "<your-model>";
 
 const buildCurlSnippet = (group: RoutingGroup, baseUrl: string): string =>
   `curl -X POST '${baseUrl}/v1/chat/completions' \\
   -H 'Content-Type: application/json' \\
-  -H "Authorization: Bearer $LITELLM_API_KEY" \\
+  -H 'Authorization: Bearer $LITELLM_API_KEY' \\
   -d '{
     "model": "${exampleModel(group)}",
     "messages": [{"role": "user", "content": "Hello!"}]
   }'`;
 
 const buildPythonSnippet = (group: RoutingGroup, baseUrl: string): string =>
-  `import os
-from openai import OpenAI
+  `from openai import OpenAI
 
 client = OpenAI(
-    api_key=os.environ["LITELLM_API_KEY"],
+    api_key="$LITELLM_API_KEY",
     base_url="${baseUrl}",
 )
 
@@ -58,36 +57,54 @@ const response = await client.chat.completions.create({
 console.log(response);`;
 
 const SNIPPET_TABS = [
-  { value: "curl", label: "cURL", language: "bash", build: buildCurlSnippet },
-  { value: "python", label: "Python (OpenAI SDK)", language: "python", build: buildPythonSnippet },
-  { value: "javascript", label: "JavaScript (OpenAI SDK)", language: "javascript", build: buildJsSnippet },
+  {
+    value: "curl",
+    key: "routingGroups.routingGroupsTable.tabCurl",
+    defaultValue: "cURL",
+    language: "bash",
+    build: buildCurlSnippet,
+  },
+  {
+    value: "python",
+    key: "routingGroups.routingGroupsTable.tabPython",
+    defaultValue: "Python (OpenAI SDK)",
+    language: "python",
+    build: buildPythonSnippet,
+  },
+  {
+    value: "javascript",
+    key: "routingGroups.routingGroupsTable.tabJavascript",
+    defaultValue: "JavaScript (OpenAI SDK)",
+    language: "javascript",
+    build: buildJsSnippet,
+  },
 ] as const;
 
 export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePanelProps) {
+  const { t } = useTranslation();
   return (
     <div className="border-y bg-muted/40 px-4 py-4">
       <div className="mb-2 flex items-center gap-2">
         <Code2 className="size-4 text-primary" />
-        <span className="text-sm font-medium text-foreground">How routing works for this group</span>
+        <span className="text-sm font-medium text-foreground">
+          {t("routingGroups.routingGroupsTable.howRoutingWorksTitle", {
+            defaultValue: "How routing works for this group",
+          })}
+        </span>
       </div>
       <p className="mb-3 text-sm text-muted-foreground">
-        {group.routing_strategy === "priority" ? (
-          <>
-            Request <span className="font-medium text-foreground">{group.group_name}</span> to try eligible models in
-            priority order. Direct requests to a member model keep their existing routing behavior.
-          </>
-        ) : (
-          <>
-            Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the{" "}
-            <span className="font-medium text-foreground">{formatStrategyLabel(group.routing_strategy)}</span> strategy.
-          </>
-        )}
+        <Trans
+          i18nKey="routingGroups.routingGroupsTable.howRoutingWorksDesc"
+          defaults="Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy."
+          values={{ strategy: formatStrategyLabel(group.routing_strategy, t) }}
+          components={{ strong: <span className="font-medium text-foreground" /> }}
+        />
       </p>
       <Tabs defaultValue="curl">
         <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
           {SNIPPET_TABS.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value} className="flex-none rounded-none px-4 py-2">
-              {tab.label}
+              {t(tab.key, { defaultValue: tab.defaultValue })}
             </TabsTrigger>
           ))}
         </TabsList>

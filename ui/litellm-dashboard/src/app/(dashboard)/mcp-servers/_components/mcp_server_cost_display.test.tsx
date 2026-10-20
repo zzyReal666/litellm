@@ -43,6 +43,12 @@ describe("MCPServerCostDisplay", () => {
     expect(screen.getByText("fetch")).toBeInTheDocument();
     expect(screen.getByText("$0.2500 per query")).toBeInTheDocument();
     expect(screen.queryByText("skipped")).not.toBeInTheDocument();
-    expect(screen.getByText("• 3 tool(s) with custom pricing")).toBeInTheDocument();
+    expect(screen.getByText("• 3 tools with custom pricing")).toBeInTheDocument();
+  });
+
+  it("uses the singular wording for a single custom-priced tool", () => {
+    render(<MCPServerCostDisplay costConfig={{ tool_name_to_cost_per_query: { search: 0.5 } }} />);
+
+    expect(screen.getByText("• 1 tool with custom pricing")).toBeInTheDocument();
   });
 });

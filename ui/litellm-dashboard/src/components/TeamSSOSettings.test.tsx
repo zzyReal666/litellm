@@ -1,7 +1,9 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
 import { renderWithProviders, screen, testQueryClient, waitFor, within } from "../../tests/test-utils";
+import i18n from "@/lib/i18n";
 import TeamSSOSettings from "./TeamSSOSettings";
 import * as networking from "./networking";
 import { toast } from "@/lib/toast";
@@ -580,5 +582,26 @@ describe("TeamSSOSettings", () => {
     await userEvent.click(screen.getByRole("button", { name: /Save Changes/i }));
 
     expect(screen.getByRole("button", { name: /Cancel/i })).toBeDisabled();
+  });
+
+  describe("in Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("renders the panel labels in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+      mockGetDefaultTeamSettings.mockResolvedValue(mockSettingsResponse);
+
+      renderWithProviders(<TeamSSOSettings {...defaultProps} />);
+
+      expect(await screen.findByText("默认团队设置")).toBeInTheDocument();
+      expect(screen.getByText("预算与速率限制")).toBeInTheDocument();
+      expect(screen.getByText("访问与权限")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "编辑设置" })).toBeInTheDocument();
+      expect(screen.getAllByText("最大预算").length).toBeGreaterThan(0);
+      expect(screen.getByText("团队成员权限")).toBeInTheDocument();
+    });
   });
 });

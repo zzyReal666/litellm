@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import ChatImageUpload from "../chat_ui/ChatImageUpload";
 import { createChatDisplayMessage, createChatMultimodalMessage } from "../chat_ui/ChatImageUtils";
@@ -58,6 +59,7 @@ const GENERIC_FOLLOW_UPS = [
 const SUGGESTED_PROMPTS = ["Write me a poem", "Explain quantum computing", "Draft a polite email requesting a meeting"];
 const DEFAULT_ENDPOINT = EndpointId.CHAT_COMPLETIONS;
 export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: CompareUIProps) {
+  const { t } = useTranslation();
   const [comparisons, setComparisons] = useState<ComparisonInstance[]>([
     {
       id: "1",
@@ -482,7 +484,11 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
       return;
     }
     if (!effectiveApiKey) {
-      toast.fromError("Please provide a Virtual Key or select Current UI Session");
+      toast.fromError(
+        t("playground.compareUi.provideVirtualKey", {
+          defaultValue: "Please provide a Virtual Key or select Current UI Session",
+        }),
+      );
       return;
     }
     const targetComparisons = comparisons;
@@ -692,20 +698,31 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
         <div className="border-b px-4 py-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Virtual Key Source</span>
+              <span className="text-sm font-medium text-muted-foreground">
+                {t("playground.compareUi.virtualKeySourceLabel", { defaultValue: "Virtual Key Source" })}
+              </span>
               <Select
                 value={apiKeySource}
                 onValueChange={(value) => setApiKeySource(value as "session" | "custom")}
                 disabled={disabledPersonalKeyCreation}
               >
-                <SelectTrigger className="w-48" aria-label="Virtual Key Source">
-                  <SelectValue>{apiKeySource === "custom" ? "Virtual Key" : "Current UI Session"}</SelectValue>
+                <SelectTrigger
+                  className="w-48"
+                  aria-label={t("playground.compareUi.virtualKeySourceLabel", { defaultValue: "Virtual Key Source" })}
+                >
+                  <SelectValue>
+                    {apiKeySource === "custom"
+                      ? t("playground.compareUi.virtualKeyOption", { defaultValue: "Virtual Key" })
+                      : t("playground.compareUi.currentUiSession", { defaultValue: "Current UI Session" })}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="session" disabled={!canUseSessionKey}>
-                    Current UI Session
+                    {t("playground.compareUi.currentUiSession", { defaultValue: "Current UI Session" })}
                   </SelectItem>
-                  <SelectItem value="custom">Virtual Key</SelectItem>
+                  <SelectItem value="custom">
+                    {t("playground.compareUi.virtualKeyOption", { defaultValue: "Virtual Key" })}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {apiKeySource === "custom" && (
@@ -713,15 +730,22 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                   type="password"
                   value={customApiKey}
                   onChange={(event) => setCustomApiKey(event.target.value)}
-                  placeholder="Enter Virtual Key"
+                  placeholder={t("playground.compareUi.enterVirtualKeyPlaceholder", {
+                    defaultValue: "Enter Virtual Key",
+                  })}
                   className="w-56"
                 />
               )}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Endpoint</span>
+              <span className="text-sm font-medium text-muted-foreground">
+                {t("playground.compareUi.endpointLabel", { defaultValue: "Endpoint" })}
+              </span>
               <Select value={selectedEndpoint} onValueChange={(value) => setSelectedEndpoint(value as EndpointIdType)}>
-                <SelectTrigger className="w-56" aria-label="Endpoint">
+                <SelectTrigger
+                  className="w-56"
+                  aria-label={t("playground.compareUi.endpointLabel", { defaultValue: "Endpoint" })}
+                >
                   <SelectValue>{endpointConfig.label}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -736,13 +760,13 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             <div className="flex items-center gap-3">
               <Button variant="outline" onClick={clearAllChats} disabled={!hasMessages}>
                 <Eraser />
-                Clear All Chats
+                {t("playground.compareUi.clearAllChats", { defaultValue: "Clear All Chats" })}
               </Button>
               <Tooltip>
                 <TooltipTrigger render={<span className="inline-flex" />}>
                   <Button variant="outline" onClick={addComparison} disabled={comparisons.length >= maxComparisons}>
                     <Plus />
-                    Add Comparison
+                    {t("playground.compareUi.addComparison", { defaultValue: "Add Comparison" })}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -778,7 +802,9 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             <div className="border border-border shadow-lg rounded-xl bg-card p-4">
               <div className="flex items-center justify-between gap-4 mb-3 min-h-8">
                 {hasAttachment ? (
-                  <span className="text-sm text-muted-foreground">Attachment ready to send</span>
+                  <span className="text-sm text-muted-foreground">
+                    {t("playground.compareUi.attachmentReadyToSend", { defaultValue: "Attachment ready to send" })}
+                  </span>
                 ) : showSuggestedPrompts ? (
                   <div className="flex items-center gap-2 overflow-x-auto">
                     {SUGGESTED_PROMPTS.map((prompt) => (
@@ -825,7 +851,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                       ) : (
                         <img
                           src={uploadedFilePreviewUrl || ""}
-                          alt="Upload preview"
+                          alt={t("playground.compareUi.uploadPreviewAlt", { defaultValue: "Upload preview" })}
                           className="w-10 h-10 rounded-md border border-border object-cover"
                         />
                       )}
@@ -837,7 +863,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                     <button
                       className="flex items-center justify-center w-6 h-6 text-muted-foreground hover:text-foreground hover:bg-accent rounded-full transition-colors"
                       onClick={handleRemoveFile}
-                      aria-label="Remove attachment"
+                      aria-label={t("playground.compareUi.removeAttachment", { defaultValue: "Remove attachment" })}
                     >
                       <Trash2 className="size-3" />
                     </button>

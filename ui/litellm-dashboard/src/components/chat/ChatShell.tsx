@@ -2,6 +2,7 @@
 
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { Plus, MessageSquare, LayoutGrid, KeyRound, Lock, BarChart3, ScrollText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -53,12 +54,20 @@ interface ChatShellProps {
 }
 
 const ChatShell: React.FC<ChatShellProps> = ({ children }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const pathname = stripTrailingSlash(usePathname() ?? "");
   const { conversations, activeConversationId, deleteConversation, renameConversation } = useChatShell();
 
   const routes = getChatRoutes();
   const isChatsRoute = pathname === routes.chats;
+  const newChatLabel = t("chat.conversationList.newChat", { defaultValue: "New Chat" });
+  const chatsLabel = t("chat.chatPage.chats", { defaultValue: "Chats" });
+  const integrationsLabel = t("chat.chatShell.integrations", { defaultValue: "Integrations" });
+  const credentialsLabel = t("chat.chatPage.credentials", { defaultValue: "Credentials" });
+  const apiKeysLabel = t("chat.chatShell.apiKeys", { defaultValue: "API Keys" });
+  const logsLabel = t("nav.logs", { defaultValue: "Logs" });
+  const usageLabel = t("nav.usage", { defaultValue: "Usage" });
 
   return (
     <div className="flex h-full w-full flex-col bg-background overflow-hidden">
@@ -79,7 +88,7 @@ const ChatShell: React.FC<ChatShellProps> = ({ children }) => {
           <div className="px-2 pt-3 pb-1 shrink-0">
             <Button onClick={() => router.push(routes.chats)} className="w-full justify-start gap-2.5">
               <Plus className="h-4 w-4" />
-              New Chat
+              {newChatLabel}
             </Button>
           </div>
 
@@ -88,37 +97,37 @@ const ChatShell: React.FC<ChatShellProps> = ({ children }) => {
           <div className="px-2 py-1 shrink-0">
             <NavItem
               icon={<MessageSquare className="h-4 w-4" />}
-              label="Chats"
+              label={chatsLabel}
               onClick={() => router.push(routes.chats)}
               active={isChatsRoute}
             />
             <NavItem
               icon={<LayoutGrid className="h-4 w-4" />}
-              label="Integrations"
+              label={integrationsLabel}
               onClick={() => router.push(routes.integrations)}
               active={pathname === routes.integrations}
             />
             <NavItem
               icon={<KeyRound className="h-4 w-4" />}
-              label="Credentials"
+              label={credentialsLabel}
               onClick={() => router.push(routes.credentials)}
               active={pathname === routes.credentials}
             />
             <NavItem
               icon={<Lock className="h-4 w-4" />}
-              label="API Keys"
+              label={apiKeysLabel}
               onClick={() => router.push(routes.apiKeys)}
               active={pathname === routes.apiKeys}
             />
             <NavItem
               icon={<ScrollText className="h-4 w-4" />}
-              label="Logs"
+              label={logsLabel}
               onClick={() => router.push(routes.logs)}
               active={pathname === routes.logs}
             />
             <NavItem
               icon={<BarChart3 className="h-4 w-4" />}
-              label="Usage"
+              label={usageLabel}
               onClick={() => router.push(routes.usage)}
               active={pathname === routes.usage}
             />

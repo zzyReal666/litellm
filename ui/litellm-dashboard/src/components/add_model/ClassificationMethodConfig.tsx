@@ -1,70 +1,105 @@
-import ClassifierPrimarySettings from "./ClassifierPrimarySettings";
-import { AutoRouterAllowanceNote } from "./AutoRouterAvailability";
-import { transitionClassifierType } from "./classifier_type_transition";
-import JevClassifierConfig from "./JevClassifierConfig";
 import { Info } from "lucide-react";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { MultiSelect } from "@/components/shared/MultiSelect";
+import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
+import type { TFunction } from "i18next";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ClassifierPromptEditor from "./ClassifierPromptEditor";
 import OpeningPromptEditor, { type OpeningPromptSelection } from "./OpeningPromptEditor";
-import { RestrictedSection, restrictedBy } from "./TierRestrictions";
+import { RestrictedSection, restrictedBy, restrictionReason } from "./TierRestrictions";
 import HeuristicScoringConfig from "./HeuristicScoringConfig";
 import ClassifierReasoningEffortSelect from "./ClassifierReasoningEffortSelect";
 import ClassifierCircuitBreakerConfig from "./ClassifierCircuitBreakerConfig";
 import ClassifierVisionConfig from "./ClassifierVisionConfig";
-import { getHeuristicV2SuccessThresholdError } from "./build_complexity_router_config";
-import ClassifierPluginTimeoutField from "./ClassifierPluginTimeoutField";
-import ClassifierTypeRadios from "./ClassifierTypeRadios";
-import { ClassifierMenu, ClassifierOption } from "./AutoRouterClassifierTabs";
-import { isHeuristicChain } from "./classifier_types";
-import HeuristicKeywordOverrides from "./HeuristicKeywordOverrides";
-import type { ReasoningEffort } from "./complexity_router_tiers";
+import { type ReasoningEffort, translatedDefaultTierLabel } from "./complexity_router_tiers";
+import { nonReasoningTierFields } from "./nonReasoningTierFields";
 import { useComplexityScorerDefaults } from "@/app/(dashboard)/hooks/autoRouter/useComplexityScorerDefaults";
 import {
+  ClassificationFrequency,
   ClassifierFallback,
   ClassifierLLMConfig,
   ClassifierType,
   ComplexityRouterConfigValue,
+  ComplexityTiers,
+  classificationFrequency,
+  withClassificationFrequency,
   DEFAULT_CLASSIFIER_CONTEXT_BUDGET_CHARS,
   MIN_QUOTED_CONTEXT_TURN_CHARS,
   DEFAULT_CLASSIFIER_CONTEXT_WINDOW_SIZE,
   DEFAULT_CLASSIFIER_FALLBACK,
   DEFAULT_CLASSIFIER_TIMEOUT_MS,
   DEFAULT_CLASSIFICATION_RUBRIC,
+  NEW_CLASSIFIER_CLASSIFICATION_RUBRIC,
   ClassificationRubric,
   effectiveTierLabel,
   heuristicScoringRole,
-  heuristicTuningType,
-  usesHeuristicV2,
   usesLlmClassifier,
-  usesClassifierContext,
+  DEFAULT_HEURISTIC_FIRST_MAX_TIER,
   DEFAULT_HYBRID_BOUNDARY_MARGIN,
   HEURISTIC_FIRST_MAX_TIER_KEYS,
   effectiveClassifierType,
 } from "./ComplexityRouterConfig";
 
-const DEFAULT_SCORING_EXPLANATION =
-  "The router scores each request across 7 built-in dimensions: token count, code presence, reasoning markers, technical " +
-  "terms, simple indicators, multi-step patterns, and question complexity, plus any custom dimensions you add. " +
-  "The weighted score determines the tier:";
+const DEFAULT_SCORING_EXPLANATION = {
+  key: "addModel.classificationMethod.defaultScoringExplanation",
+  value:
+    "The router scores each request across 7 built-in dimensions: token count, code presence, reasoning markers, technical " +
+    "terms, simple indicators, multi-step patterns, and question complexity, plus any custom dimensions you add. " +
+    "The weighted score determines the tier:",
+};
 
-const HEURISTIC_V2_EXPLANATION =
-  "The router estimates success probability for all four tiers with its calibrated model, then selects " +
-  "the first tier that meets the success threshold.";
+const HEURISTIC_V2_EXPLANATION = {
+  key: "addModel.classificationMethod.heuristicV2Explanation",
+  value:
+    "The router estimates success probability for all four tiers with the bundled calibrated model, then selects " +
+    "the first tier that meets its trained threshold. It runs locally with no classifier API call.",
+};
 
 const CLASSIFIER_TIMEOUT_ID = "classifier-timeout-ms";
 const CLASSIFIER_CONTEXT_WINDOW_SIZE_ID = "classifier-context-window-size";
 const CLASSIFIER_CONTEXT_BUDGET_CHARS_ID = "classifier-context-budget-chars";
 const HYBRID_BOUNDARY_MARGIN_ID = "hybrid-boundary-margin";
-const HEURISTIC_V2_SUCCESS_THRESHOLD_ID = "heuristic-v2-success-threshold";
+
+const CUSTOM_PROMPT_WITH_HEURISTIC_FALLBACK = {
+  key: "addModel.classificationMethod.customPromptWithHeuristicFallback",
+  value:
+    "This router classifies with your own prompt, so the tier comes from whatever rubric it states. The four tier " +
+    "names stay fixed. The scoring below is the heuristic, which now runs only when the classifier call fails:",
+};
+
+const CUSTOM_PROMPT_WITH_DEFAULT_MODEL_FALLBACK = {
+  key: "addModel.classificationMethod.customPromptWithDefaultModelFallback",
+  value:
+    "This router classifies with your own prompt, so the tier comes from whatever rubric it states. The four tier " +
+    "names stay fixed. The scoring below no longer runs at all, since a failed classifier routes to the default " +
+    "model instead:",
+};
+
+/**
+ * What the scoring breakdown below it actually describes. A custom prompt means the score no longer
+ * decides the tier, and pairing one with the default-model fallback means the heuristic never runs
+ * at all, so the panel must not keep implying a score is involved on either router.
+ */
+const scoringExplanation = (value: ComplexityRouterConfigValue, t: TFunction): string => {
+  const explain = (explanation: { key: string; value: string }) =>
+    t(explanation.key, { defaultValue: explanation.value });
+  if (value.classifier_type === "heuristic_v2") return explain(HEURISTIC_V2_EXPLANATION);
+  const usesCustomPrompt =
+    usesLlmClassifier(value.classifier_type) && Boolean(value.classifier_llm_config?.system_prompt?.trim());
+  if (!usesCustomPrompt) return explain(DEFAULT_SCORING_EXPLANATION);
+  return explain(
+    value.classifier_fallback === "default_model"
+      ? CUSTOM_PROMPT_WITH_DEFAULT_MODEL_FALLBACK
+      : CUSTOM_PROMPT_WITH_HEURISTIC_FALLBACK,
+  );
+};
 
 /**
  * The three boundaries this card states, as displayed strings, or null until the proxy's shipped defaults
@@ -93,6 +128,7 @@ const boundaryRanges = (
 };
 
 const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> = ({ value }) => {
+  const { t } = useTranslation();
   // The shipped boundaries come from the proxy, so this card cannot state ranges the router stopped using.
   const { data: scorerDefaults, isError } = useComplexityScorerDefaults();
   const scorerRuns = heuristicScoringRole(value) !== "never";
@@ -101,44 +137,58 @@ const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> =
     value.tier_boundaries,
     value.reasoning_override_min_score,
   );
-  const scorerDefaultsUnavailable = scorerRuns && !ranges && isError;
 
   if (value.custom_tier_set) return null;
 
   return (
     <Card className="bg-muted mt-4">
       <CardContent>
-        <strong className="block mb-2 font-semibold">How Classification Works</strong>
-        <span className="text-[13px] text-muted-foreground">
-          {usesHeuristicV2(value) ? HEURISTIC_V2_EXPLANATION : DEFAULT_SCORING_EXPLANATION}
-          {usesHeuristicV2(value) &&
-            (isHeuristicChain(value.classifier_type)
-              ? " If no tier qualifies, or the local-check policy requires a judge, the judge chooses the tier."
-              : " If none qualify, it selects Reasoning. It runs locally with no classifier API call.")}
-        </span>
+        <strong className="block mb-2 font-semibold">
+          {t("addModel.complexityRouterConfig.howClassificationWorksTitle", {
+            defaultValue: "How Classification Works",
+          })}
+        </strong>
+        <span className="text-[13px] text-muted-foreground">{scoringExplanation(value, t)}</span>
         {scorerRuns && ranges && (
           <ul className="mt-2 pl-5 text-[13px] text-muted-foreground">
             <li>
-              <strong>{effectiveTierLabel("SIMPLE", value.tier_labels)}</strong>: Score &lt; {ranges.simpleMedium}
+              <strong>{tierLabelFor("SIMPLE", value, t)}</strong>
+              {t("addModel.classificationMethod.tierScoreBelow", {
+                defaultValue: ": Score < {{score}}",
+                score: ranges.simpleMedium,
+              })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("MEDIUM", value.tier_labels)}</strong>: Score {ranges.simpleMedium} -{" "}
-              {ranges.mediumComplex}
+              <strong>{tierLabelFor("MEDIUM", value, t)}</strong>
+              {t("addModel.classificationMethod.tierScoreRange", {
+                defaultValue: ": Score {{from}} - {{to}}",
+                from: ranges.simpleMedium,
+                to: ranges.mediumComplex,
+              })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("COMPLEX", value.tier_labels)}</strong>: Score {ranges.mediumComplex} -{" "}
-              {ranges.complexReasoning}
+              <strong>{tierLabelFor("COMPLEX", value, t)}</strong>
+              {t("addModel.classificationMethod.tierScoreRange", {
+                defaultValue: ": Score {{from}} - {{to}}",
+                from: ranges.mediumComplex,
+                to: ranges.complexReasoning,
+              })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("REASONING", value.tier_labels)}</strong>: Score &gt;{" "}
-              {ranges.complexReasoning} (or 2+ reasoning markers with a score of at least{" "}
-              {ranges.reasoningOverrideFloor})
+              <strong>{tierLabelFor("REASONING", value, t)}</strong>
+              {t("addModel.classificationMethod.tierScoreAbove", {
+                defaultValue: ": Score > {{score}} (or 2+ reasoning markers with a score of at least {{floor}})",
+                score: ranges.complexReasoning,
+                floor: ranges.reasoningOverrideFloor,
+              })}
             </li>
           </ul>
         )}
-        {scorerDefaultsUnavailable && (
+        {!ranges && isError && (
           <span className="text-[13px] block mt-2 text-muted-foreground">
-            The tier score ranges could not be loaded from the proxy.
+            {t("addModel.classificationMethod.boundaryLoadFailed", {
+              defaultValue: "The tier score ranges could not be loaded from the proxy.",
+            })}
           </span>
         )}
       </CardContent>
@@ -147,7 +197,6 @@ const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> =
 };
 
 interface ClassificationMethodConfigProps {
-  jevSection?: "all" | "advanced";
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
   modelOptions: { value: string; label: string }[];
@@ -157,43 +206,105 @@ interface ClassificationMethodConfigProps {
   showValidationErrors?: boolean;
   /** The resolved default model - see resolveComplexityDefaultModel. Names and gates the radio. */
   defaultModel?: string;
-  advancedOnly?: boolean;
-  section?: "selection" | "classifier" | "heuristic";
 }
 
-export const InactiveHeuristicV2Threshold: React.FC<Pick<ClassificationMethodConfigProps, "value" | "onChange">> = ({
-  value,
-  onChange,
-}) => {
-  const threshold = value.heuristic_v2_success_threshold;
-  if (usesHeuristicV2(value) || threshold === undefined) return null;
-  const error = getHeuristicV2SuccessThresholdError(threshold);
-  if (effectiveClassifierType(value) === "llm" && !error) return null;
+const ClassifierTypeRadios: React.FC<{
+  value: ComplexityRouterConfigValue;
+  classifierType: ClassifierType;
+  onTypeChange: (classifierType: ClassifierType) => void;
+}> = ({ value, classifierType, onTypeChange }) => {
+  const { t } = useTranslation();
+  const scorerLocked = Boolean(value.custom_tier_set);
+  const scorerLockedReason = restrictionReason(restrictedBy(value, "heuristicClassifier"), t);
   return (
-    <section aria-label="Inactive Heuristic v2 threshold" className="mb-4 space-y-2 rounded-md border p-3">
-      <p className="text-sm font-medium">
-        Heuristic v2 success threshold (inactive):{" "}
-        <output aria-label="Retained Heuristic v2 threshold">
-          {Number.isFinite(threshold) ? threshold : "Invalid value"}
-        </output>
-      </p>
-      <p className="text-sm text-muted-foreground">Only used when Heuristic v2 is selected</p>
-      {error && (
-        <p className="text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      )}
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={() => onChange({ ...value, heuristic_v2_success_threshold: undefined })}
-      >
-        Clear Heuristic v2 threshold
-      </Button>
-    </section>
+    <RadioGroup
+      value={classifierType}
+      onValueChange={(classifierType: unknown) => onTypeChange(classifierType as ClassifierType)}
+      className="w-full"
+    >
+      <div className="flex w-full flex-col items-start gap-2">
+        <SimpleTooltip content={scorerLockedReason}>
+          <Label className="items-start font-normal leading-normal has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50">
+            <RadioGroupItem value="heuristic" className="mt-0.5" disabled={scorerLocked} />
+            <span>
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.heuristicLabel", { defaultValue: "Heuristic" })}
+              </strong>{" "}
+              <span className="text-muted-foreground">
+                {t("addModel.classificationMethod.heuristicDesc", {
+                  defaultValue: "(default), rule-based scoring with no API calls and <1ms latency",
+                })}
+              </span>
+            </span>
+          </Label>
+        </SimpleTooltip>
+        <SimpleTooltip content={scorerLockedReason}>
+          <Label className="items-start font-normal leading-normal has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50">
+            <RadioGroupItem value="heuristic_v2" className="mt-0.5" disabled={scorerLocked} />
+            <span>
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.heuristicV2Label", { defaultValue: "Heuristic v2" })}
+              </strong>{" "}
+              <span className="text-muted-foreground">
+                {t("addModel.classificationMethod.heuristicV2Desc", {
+                  defaultValue: "uses bundled calibrated four-tier probabilities with no API call",
+                })}
+              </span>
+            </span>
+          </Label>
+        </SimpleTooltip>
+        <Label className="items-start font-normal leading-normal">
+          <RadioGroupItem value="llm" className="mt-0.5" />
+          <span>
+            <strong className="font-semibold">
+              {t("addModel.classificationMethod.llmClassifierLabel", { defaultValue: "LLM Classifier" })}
+            </strong>{" "}
+            <span className="text-muted-foreground">
+              {t("addModel.classificationMethod.llmClassifierDesc", {
+                defaultValue: "calls a model to decide the tier (e.g. a small/fast model)",
+              })}
+            </span>
+          </span>
+        </Label>
+        <SimpleTooltip content={scorerLockedReason}>
+          <Label className="items-start font-normal leading-normal has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50">
+            <RadioGroupItem value="heuristic_first" className="mt-0.5" disabled={scorerLocked} />
+            <span>
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.heuristicFirstLabel", { defaultValue: "Heuristic first" })}
+              </strong>{" "}
+              <span className="text-muted-foreground">
+                {t("addModel.classificationMethod.heuristicFirstDesc", {
+                  defaultValue:
+                    "scores locally, and only pays for the classifier when the score does not confidently land a cheap tier",
+                })}
+              </span>
+            </span>
+          </Label>
+        </SimpleTooltip>
+        <SimpleTooltip content={scorerLockedReason}>
+          <Label className="items-start font-normal leading-normal has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50">
+            <RadioGroupItem value="hybrid" className="mt-0.5" disabled={scorerLocked} />
+            <span>
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.hybridLabel", { defaultValue: "Hybrid" })}
+              </strong>{" "}
+              <span className="text-muted-foreground">
+                {t("addModel.classificationMethod.hybridDesc", {
+                  defaultValue:
+                    "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary",
+                })}
+              </span>
+            </span>
+          </Label>
+        </SimpleTooltip>
+      </div>
+    </RadioGroup>
   );
 };
+
+const tierLabelFor = (tier: keyof ComplexityTiers, value: ComplexityRouterConfigValue, t: TFunction): string =>
+  translatedDefaultTierLabel(tier, effectiveTierLabel(tier, value.tier_labels), t);
 
 const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
   value,
@@ -204,19 +315,14 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
   onCustomTechnicalKeywordsChange,
   showValidationErrors = false,
   defaultModel,
-  advancedOnly = false,
-  jevSection,
-  section,
 }) => {
+  const { t } = useTranslation();
   const [draft, setDraft] = React.useState<{ id: string; raw: string } | null>(null);
   const hasDefaultModel = Boolean(defaultModel);
   const classifierType = effectiveClassifierType(value);
-  const showSelection = section === undefined || section === "selection";
-  const showClassifier = section === undefined || section === "classifier";
-  const heuristic = heuristicTuningType(value);
-  const showHeuristic = (section === undefined || section === "heuristic") && heuristic !== undefined;
-  const showLocalChecks =
-    showSelection && advancedOnly && ["llm", "heuristic_first", "hybrid"].includes(classifierType);
+  const sessionFrequencyRestriction = restrictedBy(value, "sessionAffinity");
+  const classifierModelMissing =
+    showValidationErrors && usesLlmClassifier(classifierType) && !value.classifier_llm_config?.model;
   const usesCustomPrompt = Boolean(value.classifier_llm_config?.system_prompt?.trim());
   const contextBudget = value.classifier_context_budget_chars ?? DEFAULT_CLASSIFIER_CONTEXT_BUDGET_CHARS;
   const contextBudgetQuotesNothing = contextBudget > 0 && contextBudget < MIN_QUOTED_CONTEXT_TURN_CHARS;
@@ -224,15 +330,37 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
   const classifierModel = value.classifier_llm_config?.model ?? "";
   const classifierReasoningEffort = value.classifier_llm_config?.reasoning_effort;
   const explicitlySupportedClassifierEfforts = effortOptionsByModel[classifierModel];
-  const successThresholdError = getHeuristicV2SuccessThresholdError(value.heuristic_v2_success_threshold);
-  const successThresholdDraft =
-    draft?.id === HEURISTIC_V2_SUCCESS_THRESHOLD_ID &&
-    Object.is(value.heuristic_v2_success_threshold, draft.raw.trim() === "" ? undefined : Number(draft.raw))
-      ? draft.raw
-      : null;
 
   const handleClassifierTypeChange = (classifierType: ClassifierType) => {
-    onChange(transitionClassifierType(value, classifierType));
+    const nextValue: ComplexityRouterConfigValue = {
+      ...value,
+      classifier_type: classifierType,
+      classifier_llm_config: usesLlmClassifier(classifierType)
+        ? value.classifier_llm_config ?? {
+            model: "",
+            timeout_ms: DEFAULT_CLASSIFIER_TIMEOUT_MS,
+            classification_rubric: NEW_CLASSIFIER_CLASSIFICATION_RUBRIC,
+          }
+        : undefined,
+      classifier_context_window_size: usesLlmClassifier(classifierType)
+        ? value.classifier_context_window_size ?? DEFAULT_CLASSIFIER_CONTEXT_WINDOW_SIZE
+        : undefined,
+      classifier_context_budget_chars: usesLlmClassifier(classifierType)
+        ? value.classifier_context_budget_chars ?? DEFAULT_CLASSIFIER_CONTEXT_BUDGET_CHARS
+        : undefined,
+      classifier_context_include_assistant_turns: usesLlmClassifier(classifierType)
+        ? value.classifier_context_include_assistant_turns
+        : undefined,
+      classifier_fallback: usesLlmClassifier(classifierType) ? value.classifier_fallback : undefined,
+      heuristic_first_max_tier:
+        classifierType === "heuristic_first"
+          ? value.heuristic_first_max_tier ?? DEFAULT_HEURISTIC_FIRST_MAX_TIER
+          : undefined,
+      hybrid_boundary_margin:
+        classifierType === "hybrid" ? value.hybrid_boundary_margin ?? DEFAULT_HYBRID_BOUNDARY_MARGIN : undefined,
+      ...nonReasoningTierFields(classifierType, value),
+    };
+    onChange(nextValue);
   };
 
   const handleHeuristicFirstMaxTierChange = (tier: string) => {
@@ -244,14 +372,6 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
     const parsed = Number(raw);
     if (raw.trim() === "" || !Number.isFinite(parsed)) return;
     onChange({ ...value, hybrid_boundary_margin: Math.min(1, Math.max(0, parsed)) });
-  };
-
-  const handleSuccessThresholdChange = (raw: string) => {
-    setDraft({ id: HEURISTIC_V2_SUCCESS_THRESHOLD_ID, raw });
-    onChange({
-      ...value,
-      heuristic_v2_success_threshold: raw.trim() === "" ? undefined : Number(raw),
-    });
   };
 
   // One write for everything the prompt dialog owns. The rubric arrives here rather than through the
@@ -275,6 +395,23 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       classification_examples: classificationExamples,
     };
     onChange(nextValue);
+  };
+
+  const handleClassifierModelChange = (model: string | null) => {
+    if (model === null) return;
+    if (model === value.classifier_llm_config?.model) return;
+    const { reasoning_effort: _reasoningEffort, ...classifierLlmConfig } = value.classifier_llm_config ?? {
+      model: "",
+      timeout_ms: DEFAULT_CLASSIFIER_TIMEOUT_MS,
+    };
+    onChange({
+      ...value,
+      classifier_llm_config: {
+        ...classifierLlmConfig,
+        model,
+        timeout_ms: classifierLlmConfig.timeout_ms,
+      },
+    });
   };
 
   const handleClassifierReasoningEffortChange = (reasoningEffort: ReasoningEffort | undefined) => {
@@ -328,6 +465,10 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
     onChange({ ...value, classifier_fallback: fallback });
   };
 
+  const handleClassificationFrequencyChange = (frequency: ClassificationFrequency) => {
+    onChange(withClassificationFrequency(value, frequency));
+  };
+
   const handleClassifierContextWindowSizeChange = (windowSize: number) => {
     onChange({
       ...value,
@@ -363,146 +504,42 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
 
   return (
     <>
-      {!advancedOnly && showSelection && (
-        <>
-          <ClassifierTypeRadios
-            value={value}
-            classifierType={classifierType}
-            onTypeChange={handleClassifierTypeChange}
-          />
-          <ClassifierPrimarySettings
-            value={value}
-            onChange={onChange}
-            modelOptions={modelOptions}
-            showValidationErrors={showValidationErrors}
-          />
-        </>
-      )}
-      {showLocalChecks && (
-        <div className="space-y-2">
-          <Label htmlFor="auto-router-local-checks">Local checks before the judge</Label>
-          <Select
-            items={[
-              { value: "llm", label: "Always use the judge" },
-              { value: "heuristic_first", label: "Heuristic first" },
-              { value: "hybrid", label: "Hybrid" },
-            ]}
-            value={classifierType}
-            onValueChange={(next) => {
-              if (next === "llm" || next === "heuristic_first" || next === "hybrid") handleClassifierTypeChange(next);
-            }}
-          >
-            <SelectTrigger id="auto-router-local-checks" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="llm">Always use the judge</SelectItem>
-              <SelectItem value="heuristic_first" disabled={Boolean(value.custom_tier_set)}>
-                Heuristic first
-              </SelectItem>
-              <SelectItem value="hybrid" disabled={Boolean(value.custom_tier_set)}>
-                Hybrid
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+      <ClassifierTypeRadios value={value} classifierType={classifierType} onTypeChange={handleClassifierTypeChange} />
 
-      {showSelection && isHeuristicChain(classifierType) && (
+      {classifierType === "heuristic_first" && (
         <div className="mt-4 space-y-2">
-          <Label htmlFor="auto-router-local-heuristic">Heuristic before the judge</Label>
-          <ClassifierMenu
-            id="auto-router-local-heuristic"
-            label="Heuristic before the judge"
-            selectedLabel={value.local_heuristic === "heuristic_v2" ? "Heuristic v2" : "Heuristic v1 (rule-based)"}
-            feature={value.local_heuristic === "heuristic_v2" ? "heuristic_v2" : undefined}
-            value={value.local_heuristic ?? "heuristic"}
-            onValueChange={(next) => {
-              if (next === "heuristic" || next === "heuristic_v2") onChange({ ...value, local_heuristic: next });
-            }}
-          >
-            <ClassifierOption
-              value="heuristic"
-              label="Heuristic v1 (rule-based)"
-              description="Score requests using configurable weights and keywords"
-            />
-            <ClassifierOption
-              value="heuristic_v2"
-              label="Heuristic v2"
-              description="Choose a tier using calibrated success probabilities"
-              feature="heuristic_v2"
-            />
-          </ClassifierMenu>
-        </div>
-      )}
-
-      {showClassifier && classifierType === "custom" && (
-        <ClassifierPluginTimeoutField value={value} onChange={onChange} showValidationErrors={showValidationErrors} />
-      )}
-
-      {showHeuristic && heuristic === "heuristic_v2" && (
-        <div className="mt-4 space-y-2">
-          <Label htmlFor={HEURISTIC_V2_SUCCESS_THRESHOLD_ID} className="block font-semibold">
-            Success threshold
-          </Label>
-          <Input
-            id={HEURISTIC_V2_SUCCESS_THRESHOLD_ID}
-            type="text"
-            inputMode="decimal"
-            placeholder="Artifact default"
-            value={successThresholdDraft ?? value.heuristic_v2_success_threshold?.toString() ?? ""}
-            onChange={(event) => handleSuccessThresholdChange(event.target.value)}
-            onBlur={() => {
-              if (!successThresholdError) setDraft(null);
-            }}
-            aria-invalid={Boolean(successThresholdError)}
-            aria-describedby={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-help${successThresholdError ? ` ${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-error` : ""}`}
-          />
-          <p id={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-help`} className="text-sm text-muted-foreground">
-            Minimum predicted success probability, from 0 to 1. Higher values favor more capable tiers. Leave blank to
-            use the artifact default
-          </p>
-          {successThresholdError && (
-            <p id={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-error`} className="text-sm text-destructive" role="alert">
-              {successThresholdError}
-            </p>
-          )}
-        </div>
-      )}
-
-      {showSelection && classifierType === "heuristic_first" && (
-        <div className="mt-4 space-y-2">
-          <Label htmlFor="auto-router-local-max-tier" className="block font-semibold">
-            Decide locally up to
-          </Label>
+          <strong className="block font-semibold">
+            {t("addModel.classificationMethod.decideLocallyUpTo", { defaultValue: "Decide locally up to" })}
+          </strong>
           <Select
             value={value.heuristic_first_max_tier}
             onValueChange={(tier: unknown) => handleHeuristicFirstMaxTierChange(tier as string)}
           >
-            <SelectTrigger id="auto-router-local-max-tier" className="w-full">
+            <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {HEURISTIC_FIRST_MAX_TIER_KEYS.map((tier) => (
                 <SelectItem key={tier} value={tier}>
-                  {effectiveTierLabel(tier, value.tier_labels)}
+                  {tierLabelFor(tier, value, t)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <p className="text-sm text-muted-foreground">
-            {usesHeuristicV2(value)
-              ? "A tier that meets the success threshold and is at or below this limit routes locally. Higher tiers, or requests where no tier qualifies, go to the judge"
-              : "A request the scorer places at or below this tier routes locally. Higher tiers, or requests with no heuristic signal, go to the judge"}
+            {t("addModel.classificationMethod.decideLocallyUpToHint", {
+              defaultValue:
+                "A request the scorer places at or below this tier routes there without a classifier call. Anything the scorer places higher, and anything it found no signal for at all, goes to the classifier instead",
+            })}
           </p>
         </div>
       )}
 
-      {showSelection && classifierType === "hybrid" && (
+      {classifierType === "hybrid" && (
         <div className="mt-4 space-y-2">
-          <Label htmlFor={HYBRID_BOUNDARY_MARGIN_ID} className="block font-semibold">
-            {usesHeuristicV2(value) ? "Success threshold margin" : "Boundary margin"}
-          </Label>
+          <strong className="block font-semibold">
+            {t("addModel.classificationMethod.boundaryMarginLabel", { defaultValue: "Boundary margin" })}
+          </strong>
           <Input
             id={HYBRID_BOUNDARY_MARGIN_ID}
             type="text"
@@ -517,18 +554,100 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             className="w-full"
           />
           <p className="text-sm text-muted-foreground">
-            {usesHeuristicV2(value)
-              ? "Use the judge when the selected tier or a lower tier has a success probability within this margin of the success threshold, or no tier meets the threshold"
-              : "A score further than this from every tier boundary routes on the scorer's own tier. A score closer than this, or a request with no heuristic signal, goes to the judge"}
+            {t("addModel.classificationMethod.boundaryMarginHint", {
+              defaultValue:
+                "A score further than this from every tier boundary routes on the scorer's own tier, however expensive that tier is. A score closer than this, and anything the scorer found no signal for at all, goes to the classifier to break the tie",
+            })}
           </p>
         </div>
       )}
 
-      {showClassifier && classifierType === "jev" && (
-        <JevClassifierConfig value={value} onChange={onChange} section={jevSection} />
-      )}
-      {showClassifier && usesLlmClassifier(classifierType) && (
+      <div className="mt-4 space-y-2">
+        <strong className="block font-semibold">
+          {t("addModel.classificationMethod.frequencyLabel", { defaultValue: "How often to classify" })}
+        </strong>
+        <RadioGroup
+          value={classificationFrequency(value)}
+          onValueChange={(frequency: unknown) =>
+            handleClassificationFrequencyChange(frequency as ClassificationFrequency)
+          }
+        >
+          <div className="inline-flex flex-col gap-2">
+            <Label className="items-start font-normal leading-normal">
+              <RadioGroupItem value="every_request" className="mt-0.5" />
+              <span>
+                <span>
+                  {t("addModel.classificationMethod.frequencyEveryRequest", { defaultValue: "Every request" })}
+                </span>{" "}
+                <span className="text-muted-foreground">
+                  {t("addModel.classificationMethod.frequencyEveryRequestHint", {
+                    defaultValue: ": score every turn, tool-result continuations included",
+                  })}
+                </span>
+              </span>
+            </Label>
+            <Label className="items-start font-normal leading-normal">
+              <RadioGroupItem value="user_turn" className="mt-0.5" />
+              <span>
+                <span>
+                  {t("addModel.classificationMethod.frequencyUserTurn", { defaultValue: "Every new user message" })}
+                </span>{" "}
+                <span className="text-muted-foreground">
+                  {t("addModel.classificationMethod.frequencyUserTurnHint", {
+                    defaultValue: ": score each new human ask, then hold that tier for the tool calls that follow it",
+                  })}
+                </span>
+              </span>
+            </Label>
+            <Label className="items-start font-normal leading-normal">
+              <RadioGroupItem value="session" className="mt-0.5" disabled={Boolean(sessionFrequencyRestriction)} />
+              <span>
+                <span>{t("addModel.classificationMethod.frequencySession", { defaultValue: "Once per session" })}</span>{" "}
+                <span className="text-muted-foreground">
+                  {restrictionReason(sessionFrequencyRestriction, t) ??
+                    t("addModel.classificationMethod.frequencySessionHint", {
+                      defaultValue:
+                        ": score the first turn only, then hold that tier and its deployment for the whole session",
+                    })}
+                </span>
+              </span>
+            </Label>
+          </div>
+        </RadioGroup>
+        <p className="text-sm text-muted-foreground">
+          {t("addModel.classificationMethod.frequencyHint", {
+            defaultValue:
+              "Holding the tier keeps an agent on one model for a whole tool loop and cuts scoring cost. A turn the router cannot match to a held decision, such as one with no session id or an expired one, is scored again",
+          })}
+        </p>
+      </div>
+
+      {usesLlmClassifier(classifierType) && (
         <div className="mt-4 space-y-3">
+          <div>
+            <strong className="block mb-1 font-semibold">
+              {t("addModel.classificationMethod.classifierModelLabel", { defaultValue: "Classifier Model" })}
+            </strong>
+            <SearchSelect
+              options={modelOptions}
+              value={value.classifier_llm_config?.model ?? ""}
+              onValueChange={handleClassifierModelChange}
+              placeholder={t("addModel.classificationMethod.classifierModelPlaceholder", {
+                defaultValue: "Select the model that will classify request complexity",
+              })}
+              emptyText={t("modelDashboard.table.noModels", { defaultValue: "No models found" })}
+              allowClear={false}
+              className={classifierModelMissing ? "border-destructive" : undefined}
+              aria-label={t("addModel.classificationMethod.classifierModelLabel", { defaultValue: "Classifier Model" })}
+            />
+            {classifierModelMissing && (
+              <span className="text-xs text-destructive">
+                {t("addModel.classificationMethod.classifierModelRequired", {
+                  defaultValue: "A classifier model is required",
+                })}
+              </span>
+            )}
+          </div>
           <ClassifierReasoningEffortSelect
             model={classifierModel}
             value={classifierReasoningEffort}
@@ -537,7 +656,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
           />
           <div>
             <Label htmlFor={CLASSIFIER_TIMEOUT_ID} className="block mb-1 font-semibold">
-              Timeout (ms)
+              {t("addModel.classificationMethod.timeoutLabel", { defaultValue: "Timeout (ms)" })}
             </Label>
             <Input
               id={CLASSIFIER_TIMEOUT_ID}
@@ -560,7 +679,9 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               className="w-full"
             />
             <span className="text-xs text-muted-foreground">
-              How long the classifier call has before it fails and the fallback below takes over.
+              {t("addModel.classificationMethod.timeoutHint", {
+                defaultValue: "How long the classifier call has before it fails and the fallback below takes over.",
+              })}
             </span>
           </div>
           <ClassifierCircuitBreakerConfig
@@ -573,15 +694,18 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
           />
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <strong className="font-semibold">Classifier Prompt</strong>
-              <SimpleTooltip content="Every rubric uses the same four tiers. They differ in the worked examples that show the classifier where the boundary between tiers sits, and the Business rubric also rewrites the tier definitions for business traffic. Pick the rubric, and write your own opening instructions and calibration examples, inside the prompt editor.">
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.classifierPromptLabel", { defaultValue: "Classifier Prompt" })}
+              </strong>
+              <SimpleTooltip
+                content={t("addModel.classificationMethod.classifierPromptTooltip", {
+                  defaultValue:
+                    "Every rubric uses the same four tiers. They differ in the worked examples that show the classifier where the boundary between tiers sits, and the Business rubric also rewrites the tier definitions for business traffic. Pick the rubric, and write your own opening instructions and calibration examples, inside the prompt editor.",
+                })}
+              >
                 <Info className="size-4 text-muted-foreground" />
               </SimpleTooltip>
             </div>
-            <AutoRouterAllowanceNote
-              feature="tier_or_classifier_prompt"
-              label="Custom instructions and examples share the custom-tier allowance"
-            />
             {!value.custom_tier_set && usesCustomPrompt ? (
               <ClassifierPromptEditor
                 systemPrompt={value.classifier_llm_config?.system_prompt}
@@ -602,18 +726,19 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                         kind: "builtIn",
                         tierLabels: value.tier_labels,
                         classificationRubric,
-                        rubricRestriction: restrictedBy(value, "classificationRubric")?.reason,
+                        rubricRestriction: restrictionReason(restrictedBy(value, "classificationRubric"), t),
                       }
                 }
                 contextWindowSize={value.classifier_context_window_size ?? DEFAULT_CLASSIFIER_CONTEXT_WINDOW_SIZE}
               />
             )}
           </div>
-        </div>
-      )}
-      {showClassifier && usesClassifierContext(classifierType) && (
-        <div className="mt-4 space-y-3">
-          <RestrictedSection heading="If the classifier fails" by={restrictedBy(value, "classifierFallback")}>
+          <RestrictedSection
+            heading={t("addModel.classificationMethod.classifierFallbackHeading", {
+              defaultValue: "If the classifier fails",
+            })}
+            by={restrictedBy(value, "classifierFallback")}
+          >
             <RadioGroup
               value={value.classifier_fallback ?? DEFAULT_CLASSIFIER_FALLBACK}
               onValueChange={(fallback: unknown) => handleClassifierFallbackChange(fallback as ClassifierFallback)}
@@ -622,8 +747,16 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                 <Label className="items-start font-normal leading-normal">
                   <RadioGroupItem value="heuristic" className="mt-0.5" />
                   <span>
-                    <span>Score with the heuristic</span>{" "}
-                    <span className="text-muted-foreground">— right when the classifier grades complexity too</span>
+                    <span>
+                      {t("addModel.classificationMethod.fallbackHeuristic", {
+                        defaultValue: "Score with the heuristic",
+                      })}
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      {t("addModel.classificationMethod.fallbackHeuristicHint", {
+                        defaultValue: "— right when the classifier grades complexity too",
+                      })}
+                    </span>
                   </span>
                 </Label>
                 <Label className="items-start font-normal leading-normal has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50">
@@ -631,14 +764,25 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                   <SimpleTooltip
                     content={
                       hasDefaultModel
-                        ? "Change it from the Default Model select."
-                        : "Set a default model on this router to use this option"
+                        ? t("addModel.classificationMethod.fallbackDefaultModelConfigured", {
+                            defaultValue: "Change it from the Default Model select.",
+                          })
+                        : t("addModel.classificationMethod.fallbackDefaultModelMissing", {
+                            defaultValue: "Set a default model on this router to use this option",
+                          })
                     }
                   >
                     <span>
-                      <span>Route to the default model{defaultModel ? ` (${defaultModel})` : ""}</span>{" "}
+                      <span>
+                        {t("addModel.classificationMethod.fallbackDefaultModel", {
+                          defaultValue: "Route to the default model",
+                        })}
+                        {defaultModel ? ` (${defaultModel})` : ""}
+                      </span>{" "}
                       <span className="text-muted-foreground">
-                        — right when your prompt grades something other than complexity
+                        {t("addModel.classificationMethod.fallbackDefaultModelHint", {
+                          defaultValue: "— right when your prompt grades something other than complexity",
+                        })}
                       </span>
                     </span>
                   </SimpleTooltip>
@@ -646,12 +790,14 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               </div>
             </RadioGroup>
             <span className="block text-xs text-muted-foreground">
-              Applies when the classifier call errors, times out, or returns an unparseable response.
+              {t("addModel.classificationMethod.fallbackHint", {
+                defaultValue: "Applies when the classifier call errors, times out, or returns an unparseable response.",
+              })}
             </span>
           </RestrictedSection>
           <div>
             <Label htmlFor={CLASSIFIER_CONTEXT_WINDOW_SIZE_ID} className="block mb-1 font-semibold">
-              Context Window Size
+              {t("addModel.classificationMethod.contextWindowSizeLabel", { defaultValue: "Context Window Size" })}
             </Label>
             <Input
               id={CLASSIFIER_CONTEXT_WINDOW_SIZE_ID}
@@ -674,14 +820,17 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               className="w-full"
             />
             <span className="text-xs text-muted-foreground">
-              Number of prior user turns sent to the classifier provider, excluding tool output and harness reminders.
-              LLM and decision model classifiers default to 3 turns. Set to 0 to omit conversation history. The current
-              message and selected system text are still sent.
+              {t("addModel.classificationMethod.contextWindowSizeHint", {
+                defaultValue:
+                  'Number of prior user turns (tool output and harness reminders excluded) sent to the classifier as context, so a referring follow-up like "now do the same for the streaming path" is classified against what it refers to. Set to 0 to send only the current message.',
+              })}
             </span>
           </div>
           <div>
             <Label htmlFor={CLASSIFIER_CONTEXT_BUDGET_CHARS_ID} className="block mb-1 font-semibold">
-              Context Character Budget
+              {t("addModel.classificationMethod.contextBudgetLabel", {
+                defaultValue: "Context Character Budget",
+              })}
             </Label>
             <Input
               id={CLASSIFIER_CONTEXT_BUDGET_CHARS_ID}
@@ -704,14 +853,18 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               className="w-full"
             />
             <span className="text-xs text-muted-foreground">
-              Total characters of prior conversation sent to the classifier. Turns are taken newest first and quoted
-              whole while they fit, so a short conversation is never cut.
+              {t("addModel.classificationMethod.contextBudgetHint", {
+                defaultValue:
+                  "Total characters of prior conversation sent to the classifier. Turns are taken newest first and quoted whole while they fit, so a short conversation is never cut.",
+              })}
             </span>
             {contextBudgetQuotesNothing && (
               <span className="block text-xs text-destructive">
-                Under {MIN_QUOTED_CONTEXT_TURN_CHARS} characters there is no room to quote a turn that does not already
-                fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0
-                to turn context off deliberately.
+                {t("addModel.classificationMethod.contextBudgetTooSmall", {
+                  defaultValue:
+                    "Under {{min}} characters there is no room to quote a turn that does not already fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0 to turn context off deliberately.",
+                  min: MIN_QUOTED_CONTEXT_TURN_CHARS,
+                })}
               </span>
             )}
           </div>
@@ -721,34 +874,56 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                 checked={value.classifier_context_include_assistant_turns ?? false}
                 onCheckedChange={handleClassifierContextIncludeAssistantTurnsChange}
                 size="sm"
-                aria-label="Include Assistant Turns"
+                aria-label={t("addModel.classificationMethod.includeAssistantTurnsLabel", {
+                  defaultValue: "Include Assistant Turns",
+                })}
               />
-              <strong className="font-semibold">Include Assistant Turns</strong>
-              <SimpleTooltip content="Off by default. Enabling it changes tier decisions, and therefore spend, for an existing router, and sends assistant text to the classifier model, which may be a different provider than the routed model.">
+              <strong className="font-semibold">
+                {t("addModel.classificationMethod.includeAssistantTurnsLabel", {
+                  defaultValue: "Include Assistant Turns",
+                })}
+              </strong>
+              <SimpleTooltip
+                content={t("addModel.classificationMethod.includeAssistantTurnsTooltip", {
+                  defaultValue:
+                    "Off by default. Enabling it changes tier decisions, and therefore spend, for an existing router, and sends assistant text to the classifier model, which may be a different provider than the routed model.",
+                })}
+              >
                 <Info className="size-4 text-muted-foreground" />
               </SimpleTooltip>
             </div>
             <span className="text-xs text-muted-foreground">
-              Let the classifier read the assistant&apos;s replies, so difficulty the model stated rather than the user
-              stays visible: a plan the assistant calls complex, approved with &quot;yes&quot;, is classified on the
-              work being approved. Context Window Size then counts the last N turns across both roles rather than the
-              last N user turns.
+              {t("addModel.classificationMethod.includeAssistantTurnsHint", {
+                defaultValue:
+                  'Let the classifier read the assistant\'s replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with "yes", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns.',
+              })}
             </span>
           </div>
         </div>
       )}
 
-      {showHeuristic && heuristic === "heuristic" && (
+      {heuristicScoringRole(value) !== "never" && (
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-1">
-            <strong className="font-semibold">Custom Technical Keywords</strong>
-            <SimpleTooltip content="Domain-specific terms appended to the built-in technical keyword list. Prompts containing these terms score higher on the technical dimension and route to more capable models.">
+            <strong className="font-semibold">
+              {t("addModel.classificationMethod.customTechnicalKeywordsLabel", {
+                defaultValue: "Custom Technical Keywords",
+              })}
+            </strong>
+            <SimpleTooltip
+              content={t("addModel.classificationMethod.customTechnicalKeywordsTooltip", {
+                defaultValue:
+                  "Domain-specific terms appended to the built-in technical keyword list. Prompts containing these terms score higher on the technical dimension and route to more capable models.",
+              })}
+            >
               <Info className="size-4 text-muted-foreground" />
             </SimpleTooltip>
           </div>
           <span className="block mb-2 text-xs text-muted-foreground">
-            Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension.
-            (e.g., udp, kafka, terraform).
+            {t("addModel.classificationMethod.customTechnicalKeywordsHint", {
+              defaultValue:
+                "Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension. (e.g., udp, kafka, terraform).",
+            })}
           </span>
           <MultiSelect
             options={(customTechnicalKeywords ?? []).map((keyword) => ({ label: keyword, value: keyword }))}
@@ -760,27 +935,21 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                 ),
               )
             }
-            placeholder="Type a keyword and press Enter"
-            emptyText="Type to add a keyword"
+            placeholder={t("addModel.classificationMethod.customKeywordsPlaceholder", {
+              defaultValue: "Type a keyword and press Enter",
+            })}
+            emptyText={t("addModel.classificationMethod.customKeywordsEmptyText", {
+              defaultValue: "Type to add a keyword",
+            })}
             allowCustomValues
             className="w-full"
           />
         </div>
       )}
 
-      {showHeuristic && heuristic === "heuristic" && (
-        <>
-          {heuristicScoringRole(value) === "decides" && (
-            <AutoRouterAllowanceNote feature="heuristic_tuning" label="Custom scoring rules" />
-          )}
-          <HeuristicScoringConfig value={value} onChange={onChange} />
-          <section className="mt-4 space-y-3">
-            <h4 className="font-semibold">Heuristic Keyword Overrides</h4>
-            <HeuristicKeywordOverrides value={value} onChange={onChange} />
-          </section>
-        </>
-      )}
-      {showHeuristic && <HowClassificationWorks value={value} />}
+      <HeuristicScoringConfig value={value} onChange={onChange} />
+
+      <HowClassificationWorks value={value} />
     </>
   );
 };

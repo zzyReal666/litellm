@@ -1,5 +1,6 @@
 import React from "react";
 import { Download, FileSpreadsheet, FileText } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +16,7 @@ interface MultiExportDropdownProps {
 }
 
 const MultiExportDropdown: React.FC<MultiExportDropdownProps> = ({ multiResult }) => {
+  const { t } = useTranslation();
   const hasResults = multiResult.entries.some((e) => e.result !== null);
 
   if (!hasResults) {
@@ -25,16 +27,16 @@ const MultiExportDropdown: React.FC<MultiExportDropdownProps> = ({ multiResult }
     <DropdownMenu>
       <DropdownMenuTrigger className={buttonVariants({ variant: "secondary", size: "xs" })}>
         <Download />
-        Export
+        {t("common.export", { defaultValue: "Export" })}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem onClick={() => exportMultiToPDF(multiResult)}>
+        <DropdownMenuItem onClick={() => exportMultiToPDF(multiResult, t)}>
           <FileText />
-          Export as PDF
+          {t("costTracking.multiExportDropdown.exportAsPdf", { defaultValue: "Export as PDF" })}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => exportMultiToCSV(multiResult)}>
+        <DropdownMenuItem onClick={() => exportMultiToCSV(multiResult, t)}>
           <FileSpreadsheet />
-          Export as CSV
+          {t("costTracking.multiExportDropdown.exportAsCsv", { defaultValue: "Export as CSV" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

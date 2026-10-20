@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 
 interface ReliabilityRetriesSectionProps {
@@ -10,11 +11,18 @@ const ReliabilityRetriesSection: React.FC<ReliabilityRetriesSectionProps> = ({
   routerSettings,
   routerFieldsMetadata,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-6">
       <div className="max-w-3xl">
-        <h3 className="text-sm font-medium text-foreground">Reliability & Retries</h3>
-        <p className="text-xs text-muted-foreground mt-1">Configure retry logic and failure handling</p>
+        <h3 className="text-sm font-medium text-foreground">
+          {t("routerSettings.reliabilityRetriesSection.title", { defaultValue: "Reliability & Retries" })}
+        </h3>
+        <p className="text-xs text-muted-foreground mt-1">
+          {t("routerSettings.reliabilityRetriesSection.subtitle", {
+            defaultValue: "Configure retry logic and failure handling",
+          })}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
@@ -34,10 +42,14 @@ const ReliabilityRetriesSection: React.FC<ReliabilityRetriesSectionProps> = ({
             <div key={param} className="space-y-2">
               <label className="block">
                 <span className="text-xs font-medium text-foreground uppercase tracking-wide">
-                  {routerFieldsMetadata[param]?.ui_field_name || param}
+                  {t(`routerSettings.fields.${param}.label`, {
+                    defaultValue: routerFieldsMetadata[param]?.ui_field_name || param,
+                  })}
                 </span>
                 <p className="text-xs text-muted-foreground mt-0.5 mb-2">
-                  {routerFieldsMetadata[param]?.field_description || ""}
+                  {t(`routerSettings.fields.${param}.description`, {
+                    defaultValue: routerFieldsMetadata[param]?.field_description || "",
+                  })}
                 </p>
                 <Input
                   name={param}

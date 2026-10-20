@@ -2,6 +2,7 @@
 
 import { CircleHelp, Eye, EyeOff } from "lucide-react";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -20,6 +21,7 @@ export const CloudZeroApiKeyInput = React.forwardRef<
   HTMLInputElement,
   Omit<React.ComponentPropsWithoutRef<"input">, "type">
 >(({ className, ...props }, ref) => {
+  const { t } = useTranslation();
   const [revealed, setRevealed] = React.useState(false);
 
   return (
@@ -29,7 +31,11 @@ export const CloudZeroApiKeyInput = React.forwardRef<
         <InputGroupButton
           size="icon-xs"
           variant="ghost"
-          aria-label={revealed ? "Hide API key" : "Show API key"}
+          aria-label={
+            revealed
+              ? t("cloudZero.cloudZeroFormControls.hideApiKey", { defaultValue: "Hide API key" })
+              : t("cloudZero.cloudZeroFormControls.showApiKey", { defaultValue: "Show API key" })
+          }
           onClick={() => setRevealed((current) => !current)}
         >
           {revealed ? <EyeOff /> : <Eye />}

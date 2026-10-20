@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PaginationState } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { MemoryRow, createMemory, deleteMemory, fetchMemoryList, updateMemory } from "@/components/networking";
 import DeleteResourceModal from "@/components/common_components/DeleteResourceModal";
@@ -25,6 +26,7 @@ interface MemoryViewProps {
 const DEFAULT_PAGE_SIZE = 50;
 
 export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
+  const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch] = useDebouncedValue(searchInput, { wait: DEBOUNCE_WAIT_MS });
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: DEFAULT_PAGE_SIZE });
@@ -72,11 +74,13 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       return createMemory(accessToken, args);
     },
     onSuccess: (row) => {
-      toast.success(`Created ${row.key}`);
+      toast.success(t("memoryView.memoryView.createdSuccess", { key: row.key, defaultValue: "Created {{key}}" }));
       invalidateList();
     },
     onError: (err: Error) => {
-      toast.error(`Save failed: ${err.message}`);
+      toast.error(
+        t("memoryView.memoryView.saveFailed", { message: err.message, defaultValue: "Save failed: {{message}}" }),
+      );
     },
   });
 
@@ -87,11 +91,13 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       return updateMemory(accessToken, key, payload);
     },
     onSuccess: (row) => {
-      toast.success(`Updated ${row.key}`);
+      toast.success(t("memoryView.memoryView.updatedSuccess", { key: row.key, defaultValue: "Updated {{key}}" }));
       invalidateList();
     },
     onError: (err: Error) => {
-      toast.error(`Save failed: ${err.message}`);
+      toast.error(
+        t("memoryView.memoryView.saveFailed", { message: err.message, defaultValue: "Save failed: {{message}}" }),
+      );
     },
   });
 
@@ -101,11 +107,13 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       return deleteMemory(accessToken, key).then(() => key);
     },
     onSuccess: (key) => {
-      toast.success(`Deleted ${key}`);
+      toast.success(t("memoryView.memoryView.deletedSuccess", { key, defaultValue: "Deleted {{key}}" }));
       invalidateList();
     },
     onError: (err: Error) => {
-      toast.error(`Delete failed: ${err.message}`);
+      toast.error(
+        t("memoryView.memoryView.deleteFailed", { message: err.message, defaultValue: "Delete failed: {{message}}" }),
+      );
     },
   });
 
@@ -147,7 +155,11 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       try {
         metadataPayload = JSON.parse(metadataText);
       } catch {
-        toast.error("Metadata must be valid JSON (or leave empty).");
+        toast.error(
+          t("memoryView.memoryView.metadataInvalidJson", {
+            defaultValue: "Metadata must be valid JSON (or leave empty).",
+          }),
+        );
         return false;
       }
     }
@@ -178,18 +190,24 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">Memory</h1>
+            <h1 className="text-2xl font-semibold text-foreground">
+              {t("memoryView.memoryView.pageTitle", { defaultValue: "Memory" })}
+            </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Inspect what your agents have stored under{" "}
-              <code className="rounded-sm border border-border bg-muted px-1 py-0.5 font-mono text-xs text-foreground">
-                /v1/memory
-              </code>
-              . Scoped to memories visible to your user / team (admins see all).
+              <Trans
+                i18nKey="memoryView.memoryView.pageDescription"
+                components={{
+                  code: (
+                    <code className="rounded-sm border border-border bg-muted px-1 py-0.5 font-mono text-xs text-foreground" />
+                  ),
+                }}
+                defaults="Inspect what your agents have stored under <code>/v1/memory</code>. Scoped to memories visible to your user / team (admins see all)."
+              />
             </p>
           </div>
           <Button onClick={() => setIsCreateOpen(true)}>
             <Plus />
-            New memory
+            {t("memoryView.memoryView.newMemory", { defaultValue: "New memory" })}
           </Button>
         </div>
 
@@ -228,16 +246,32 @@ export const MemoryView: React.FC<MemoryViewProps> = ({ accessToken }) => {
       {/* Delete confirmation modal */}
       <DeleteResourceModal
         isOpen={!!deleteRow}
-        title="Delete memory"
-        message="This action cannot be undone."
-        resourceInformationTitle="Memory"
+        title={t("memoryView.memoryView.deleteTitle", { defaultValue: "Delete memory" })}
+        message={t("memoryView.memoryView.deleteMessage", { defaultValue: "This action cannot be undone." })}
+        resourceInformationTitle={t("memoryView.memoryView.pageTitle", { defaultValue: "Memory" })}
         resourceInformation={
           deleteRow
             ? [
-                { label: "Key", value: deleteRow.key, code: true },
-                { label: "Memory ID", value: deleteRow.memory_id, code: true },
-                { label: "User ID", value: deleteRow.user_id ?? "-", code: true },
-                { label: "Team ID", value: deleteRow.team_id ?? "-", code: true },
+                {
+                  label: t("memoryView.memoryView.labelKey", { defaultValue: "Key" }),
+                  value: deleteRow.key,
+                  code: true,
+                },
+                {
+                  label: t("memoryView.memoryView.labelMemoryId", { defaultValue: "Memory ID" }),
+                  value: deleteRow.memory_id,
+                  code: true,
+                },
+                {
+                  label: t("memoryView.memoryView.colUserId", { defaultValue: "User ID" }),
+                  value: deleteRow.user_id ?? "-",
+                  code: true,
+                },
+                {
+                  label: t("memoryView.memoryView.colTeamId", { defaultValue: "Team ID" }),
+                  value: deleteRow.team_id ?? "-",
+                  code: true,
+                },
               ]
             : []
         }

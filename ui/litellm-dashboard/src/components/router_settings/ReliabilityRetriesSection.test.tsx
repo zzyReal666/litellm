@@ -49,14 +49,23 @@ describe("ReliabilityRetriesSection", () => {
     expect(screen.getByText("Number of Retries")).toBeInTheDocument();
   });
 
-  it("should fall back to the raw param name when no metadata label is available", () => {
-    render(<ReliabilityRetriesSection routerSettings={{ num_retries: 3 }} routerFieldsMetadata={{}} />);
-    expect(screen.getByText("num_retries")).toBeInTheDocument();
+  it("should fall back to the raw param name for a setting the catalog does not cover", () => {
+    render(<ReliabilityRetriesSection routerSettings={{ custom_setting: 3 }} routerFieldsMetadata={{}} />);
+    expect(screen.getByText("custom_setting")).toBeInTheDocument();
+  });
+
+  it("should use the metadata label for a setting the catalog does not cover", () => {
+    const metadata = {
+      custom_setting: { ui_field_name: "Custom Setting", field_description: "Custom description" },
+    };
+    render(<ReliabilityRetriesSection routerSettings={{ custom_setting: 3 }} routerFieldsMetadata={metadata} />);
+    expect(screen.getByText("Custom Setting")).toBeInTheDocument();
+    expect(screen.getByText("Custom description")).toBeInTheDocument();
   });
 
   it("should render null values as an empty input", () => {
     render(<ReliabilityRetriesSection routerSettings={{ timeout: null }} routerFieldsMetadata={{}} />);
-    const input = screen.getByRole("textbox", { name: /timeout/i }) as HTMLInputElement;
+    const input = screen.getByRole("textbox", { name: /^timeout/i }) as HTMLInputElement;
     expect(input.value).toBe("");
   });
 
@@ -64,7 +73,7 @@ describe("ReliabilityRetriesSection", () => {
     const settings = { model_group_alias: { "gpt-4": "gpt-4-turbo" } };
     render(<ReliabilityRetriesSection routerSettings={settings} routerFieldsMetadata={{}} />);
     // HTML input type=text strips newlines, so check that the key/value appears
-    const input = screen.getByRole("textbox", { name: /model_group_alias/i }) as HTMLInputElement;
+    const input = screen.getByRole("textbox", { name: /model group alias/i }) as HTMLInputElement;
     expect(input.value).toContain('"gpt-4"');
     expect(input.value).toContain('"gpt-4-turbo"');
   });

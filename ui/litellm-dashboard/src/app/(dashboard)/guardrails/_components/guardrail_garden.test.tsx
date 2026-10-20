@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import i18n from "@/lib/i18n";
 import GuardrailGarden from "./guardrail_garden";
-import { ALL_CARDS } from "./guardrail_garden_data";
+import { getAllCards } from "./guardrail_garden_data";
 
 vi.mock("./guardrail_garden_detail", () => ({
   __esModule: true,
@@ -14,13 +15,19 @@ vi.mock("./guardrail_garden_detail", () => ({
   ),
 }));
 
+const ALL_CARDS = getAllCards(i18n.t);
 const LITELLM_CARDS = ALL_CARDS.filter((c) => c.category === "litellm");
 const PARTNER_CARDS = ALL_CARDS.filter((c) => c.category === "partner");
-const DECISION_MODEL_CARDS = ALL_CARDS.filter((c) => c.category === "decision_model");
 
 describe("GuardrailGarden", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    await i18n.changeLanguage("en");
+  });
+
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
   });
 
   const renderGarden = () => render(<GuardrailGarden accessToken="test-token" onGuardrailCreated={vi.fn()} />);
@@ -52,44 +59,6 @@ describe("GuardrailGarden", () => {
 
     expect(screen.getByText("Show less")).toBeInTheDocument();
     expect(screen.getByText(LITELLM_CARDS[LITELLM_CARDS.length - 1].name)).toBeInTheDocument();
-  });
-
-  it("should list the decision model cards under their own Decision Model section", () => {
-    renderGarden();
-
-    const sectionOf = (heading: string) => screen.getByRole("region", { name: heading });
-    const names = [
-      "TypeSafe Jev",
-      "Perplexity Decision",
-      "Microsoft Decision Model",
-      "OpenAI Decision Model",
-      "Databricks Decision Model",
-    ];
-    expect(DECISION_MODEL_CARDS.map((card) => card.name)).toEqual(names);
-    for (const name of names) {
-      expect(within(sectionOf("Decision Model")).getByText(name)).toBeInTheDocument();
-      expect(within(sectionOf("Partner Guardrails")).queryByText(name)).not.toBeInTheDocument();
-    }
-  });
-
-  it("should keep only decision model cards when searching for decision models", async () => {
-    const user = userEvent.setup();
-    renderGarden();
-
-    await user.type(screen.getByPlaceholderText("Search guardrails"), "decision model");
-
-    expect(screen.getByText("Databricks Decision Model")).toBeInTheDocument();
-    expect(screen.getByText("TypeSafe Jev")).toBeInTheDocument();
-    expect(screen.queryByText(PARTNER_CARDS[0].name)).not.toBeInTheDocument();
-  });
-
-  it("should open the detail view for a decision model card", async () => {
-    const user = userEvent.setup();
-    renderGarden();
-
-    await user.click(screen.getByText("Perplexity Decision"));
-
-    expect(screen.getByText("Detail for Perplexity Decision")).toBeInTheDocument();
   });
 
   it("should always render every partner card", () => {

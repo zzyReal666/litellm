@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import { ToolDetail } from "@/components/ToolDetail";
@@ -12,6 +13,7 @@ interface ToolPoliciesViewProps {
 }
 
 export default function ToolPoliciesView({ accessToken }: ToolPoliciesViewProps) {
+  const { t } = useTranslation();
   const canViewToolPolicies = useCan("viewToolPolicies");
   const [view, setView] = useState<View>({ type: "overview" });
 
@@ -26,8 +28,12 @@ export default function ToolPoliciesView({ accessToken }: ToolPoliciesViewProps)
   if (!canViewToolPolicies) {
     return (
       <div className="p-6 w-full min-w-0 flex-1">
-        <h1 className="text-2xl font-semibold text-foreground mb-2">Tool Policies</h1>
-        <p className="text-sm text-muted-foreground">Tool Policies is only available to admin users.</p>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">
+          {t("toolPolicies.view.title", { defaultValue: "Tool Policies" })}
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          {t("toolPolicies.view.adminOnly", { defaultValue: "Tool Policies is only available to admin users." })}
+        </p>
       </div>
     );
   }

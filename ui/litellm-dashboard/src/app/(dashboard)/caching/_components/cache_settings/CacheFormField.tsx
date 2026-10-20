@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useFormContext } from "react-hook-form";
 import { FormField } from "@/components/shared/form/FormField";
 import { PasswordInput } from "@/components/shared/PasswordInput";
@@ -32,11 +33,17 @@ interface CacheFormFieldProps {
 }
 
 const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels, isSecretConfigured = false }) => {
+  const { t } = useTranslation();
   const form = useFormContext<CacheFormValues>();
   const placeholder = isSecretConfigured ? SECRET_ALREADY_SET_PLACEHOLDER : field.helpText;
 
   return (
-    <FormField control={form.control} name={field.name} label={field.label} description={field.helpText}>
+    <FormField
+      control={form.control}
+      name={field.name}
+      label={t(field.labelKey, { defaultValue: field.label })}
+      description={field.helpText}
+    >
       {({ ref, value, onChange, ...rest }) => {
         if (field.type === "boolean") {
           return <Switch {...rest} checked={value === true} onCheckedChange={(checked) => onChange(checked)} />;
@@ -70,7 +77,10 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
           const { id, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy, name, onBlur, disabled } = rest;
           return (
             <Select
-              items={options.map((option) => ({ label: option.label, value: option.value }))}
+              items={options.map((option) => ({
+                label: t(option.labelKey, { defaultValue: option.label }),
+                value: option.value,
+              }))}
               name={name}
               disabled={disabled}
               value={typeof value === "string" && value !== "" ? value : null}
@@ -83,12 +93,16 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
                 onBlur={onBlur}
                 className="w-full"
               >
-                <SelectValue placeholder="Select an option" />
+                <SelectValue
+                  placeholder={t("guardrails.guardrailInfo.selectOptionPlaceholder", {
+                    defaultValue: "Select an option",
+                  })}
+                />
               </SelectTrigger>
               <SelectContent>
                 {options.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.labelKey, { defaultValue: option.label })}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -107,11 +121,19 @@ const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels,
                 model.value === other.value
               }
             >
-              <ComboboxInput {...rest} placeholder="Search and select a model..." className="w-full">
+              <ComboboxInput
+                {...rest}
+                placeholder={t("cacheSettings.cacheFieldRenderer.searchAndSelectModel", {
+                  defaultValue: "Search and select a model...",
+                })}
+                className="w-full"
+              >
                 <ComboboxClear />
               </ComboboxInput>
               <ComboboxContent>
-                <ComboboxEmpty>No models found</ComboboxEmpty>
+                <ComboboxEmpty>
+                  {t("viewLogs.filterOptions.noModelsFoundLabel", { defaultValue: "No models found" })}
+                </ComboboxEmpty>
                 <ComboboxList>
                   {(model: EmbeddingModelOption) => (
                     <ComboboxItem key={model.value} value={model} title={model.label}>

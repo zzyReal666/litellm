@@ -10,6 +10,7 @@
  */
 
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 import { CrudOp, MCPToolEntry, CRUD_GROUP_META, groupToolsByCrud } from "../../utils/mcpToolCrudClassification";
@@ -40,6 +41,21 @@ interface McpCrudPermissionPanelProps {
 }
 
 const CRUD_ORDER: CrudOp[] = ["read", "create", "update", "delete", "unknown"];
+
+const RISK_LABEL = {
+  low: { key: "mcpTools.mcpCrudPermissionPanel.safe", label: "Safe" },
+  medium: { key: "mcpTools.mcpCrudPermissionPanel.mediumRisk", label: "Medium Risk" },
+  high: { key: "mcpTools.mcpCrudPermissionPanel.highRisk", label: "High Risk" },
+  unknown: { key: "mcpTools.mcpCrudPermissionPanel.unclassified", label: "Unclassified" },
+} as const;
+
+const GROUP_LABEL = {
+  read: { key: "mcpTools.mcpCrudPermissionPanel.groupRead", descKey: "groupDescRead", label: "Read" },
+  create: { key: "mcpTools.mcpCrudPermissionPanel.groupCreate", descKey: "groupDescCreate", label: "Create" },
+  update: { key: "mcpTools.mcpCrudPermissionPanel.groupUpdate", descKey: "groupDescUpdate", label: "Update" },
+  delete: { key: "mcpTools.mcpCrudPermissionPanel.groupDelete", descKey: "groupDescDelete", label: "Delete" },
+  unknown: { key: "mcpTools.mcpCrudPermissionPanel.groupOther", descKey: "groupDescOther", label: "Other" },
+} as const;
 
 const RISK_BADGE: Record<string, string> = {
   low: "bg-success/15 text-success",
@@ -76,6 +92,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
   readOnly = false,
   searchFilter = "",
 }) => {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState<Record<CrudOp, boolean>>({
     read: false,
     create: false,
@@ -93,7 +110,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
    */
   const effectiveAllowed: Set<string> = useMemo(() => {
     if (value === undefined) {
-      return new Set(tools.map((t) => t.name));
+      return new Set(tools.map((tool) => tool.name));
     }
     return new Set(value);
   }, [value, tools]);
@@ -104,13 +121,13 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
 
   const isGroupFullyAllowed = (op: CrudOp) => {
     const group = grouped[op];
-    return group.length > 0 && group.every((t) => effectiveAllowed.has(t.name));
+    return group.length > 0 && group.every((tool) => effectiveAllowed.has(tool.name));
   };
 
   const isGroupPartiallyAllowed = (op: CrudOp) => {
     const group = grouped[op];
     if (group.length === 0) return false;
-    const allowedCount = group.filter((t) => effectiveAllowed.has(t.name)).length;
+    const allowedCount = group.filter((tool) => effectiveAllowed.has(tool.name)).length;
     return allowedCount > 0 && allowedCount < group.length;
   };
 
@@ -155,12 +172,14 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
         if (searchFilter) {
           const lf = searchFilter.toLowerCase();
           const hasMatch = group.some(
-            (t) => t.name.toLowerCase().includes(lf) || (t.description ?? "").toLowerCase().includes(lf),
+            (tool) => tool.name.toLowerCase().includes(lf) || (tool.description ?? "").toLowerCase().includes(lf),
           );
           if (!hasMatch) return null;
         }
 
         const meta = CRUD_GROUP_META[op];
+        const groupLabel = t(GROUP_LABEL[op].key, { defaultValue: GROUP_LABEL[op].label });
+        const allowedInGroup = group.filter((tool) => effectiveAllowed.has(tool.name)).length;
         const fullyAllowed = isGroupFullyAllowed(op);
         const partial = isGroupPartiallyAllowed(op);
         const isCollapsed = collapsed[op];
@@ -179,29 +198,34 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                 ) : (
                   <ChevronDownIcon className="w-4 h-4 text-muted-foreground shrink-0" />
                 )}
-                <span className="font-semibold text-foreground text-sm">{meta.label}</span>
+                <span className="font-semibold text-foreground text-sm">{groupLabel}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${RISK_BADGE[meta.risk]}`}>
-                  {meta.risk === "high"
-                    ? "High Risk"
-                    : meta.risk === "medium"
-                      ? "Medium Risk"
-                      : meta.risk === "low"
-                        ? "Safe"
-                        : "Unclassified"}
+                  {t(RISK_LABEL[meta.risk].key, { defaultValue: RISK_LABEL[meta.risk].label })}
                 </span>
                 <span className="text-xs text-muted-foreground ml-1">
-                  {group.filter((t) => effectiveAllowed.has(t.name)).length}/{group.length} allowed
+                  {t("mcpTools.mcpCrudPermissionPanel.allowedCount", {
+                    allowed: allowedInGroup,
+                    total: group.length,
+                    defaultValue: "{{allowed}}/{{total}} allowed",
+                  })}
                 </span>
               </button>
 
               {!readOnly && (
                 <div className="flex items-center gap-2 ml-4">
                   <p className="text-xs text-muted-foreground">
-                    {fullyAllowed ? "All on" : partial ? "Partial" : "All off"}
+                    {fullyAllowed
+                      ? t("mcpTools.mcpCrudPermissionPanel.allOn", { defaultValue: "All on" })
+                      : partial
+                        ? t("mcpTools.mcpCrudPermissionPanel.partial", { defaultValue: "Partial" })
+                        : t("mcpTools.mcpCrudPermissionPanel.allOff", { defaultValue: "All off" })}
                   </p>
                   {/* Checkbox supports `indeterminate`; Switch does not. */}
                   <Checkbox
-                    aria-label={`Allow all ${meta.label} tools`}
+                    aria-label={t("mcpTools.mcpCrudPermissionPanel.allowAllTools", {
+                      label: groupLabel,
+                      defaultValue: "Allow all {{label}} tools",
+                    })}
                     checked={fullyAllowed}
                     indeterminate={partial}
                     onCheckedChange={(checked) => toggleGroup(op, checked)}
@@ -214,7 +238,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
             {/* Description row */}
             {!isCollapsed && (
               <div className="px-4 pt-2 pb-1 text-xs text-muted-foreground bg-card border-b border-border">
-                {meta.description}
+                {t(`mcpTools.mcpCrudPermissionPanel.${GROUP_LABEL[op].descKey}`, { defaultValue: meta.description })}
               </div>
             )}
 
@@ -223,10 +247,10 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
               <div className="bg-card divide-y divide-gray-50">
                 {group
                   .filter(
-                    (t) =>
+                    (tool) =>
                       !searchFilter ||
-                      t.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-                      (t.description ?? "").toLowerCase().includes(searchFilter.toLowerCase()),
+                      tool.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
+                      (tool.description ?? "").toLowerCase().includes(searchFilter.toLowerCase()),
                   )
                   .map((tool) => {
                     const allowed = isToolAllowed(tool.name);
@@ -256,7 +280,9 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                             allowed ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"
                           }`}
                         >
-                          {allowed ? "on" : "off"}
+                          {allowed
+                            ? t("mcpTools.mcpCrudPermissionPanel.stateOn", { defaultValue: "on" })
+                            : t("mcpTools.mcpCrudPermissionPanel.stateOff", { defaultValue: "off" })}
                         </span>
                       </div>
                     );

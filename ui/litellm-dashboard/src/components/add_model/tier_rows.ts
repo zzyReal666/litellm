@@ -1,5 +1,6 @@
-import { isForecastClassifier } from "./forecast_classifier_config";
-import type { ClassifierType, ComplexityTiers } from "./ComplexityRouterConfig";
+import type { TFunction } from "i18next";
+import i18n from "@/lib/i18n";
+import type { ComplexityTiers } from "./ComplexityRouterConfig";
 import type { ComplexityTier } from "./KeywordTierRules";
 import type { TierModelParams, TierModelParamsByTier } from "./complexity_router_tiers";
 
@@ -33,7 +34,6 @@ export const MAX_TIER_NAME_CHARS = 64;
 export const MAX_TIER_DEFINITION_CHARS = 500;
 
 export interface ActiveTierSet {
-  classifier_type?: ClassifierType;
   tiers: ComplexityTiers;
   enable_non_reasoning_tier?: boolean;
   custom_tier_set?: CustomTierSet;
@@ -64,12 +64,7 @@ export const activeTierRows = (value: ActiveTierSet): ActiveTierRow[] => {
   const rows =
     value.custom_tier_set?.tiers ??
     tierOrderFor(value.enable_non_reasoning_tier).map((tier) => builtInRow(tier, value.tiers));
-  return rows
-    .filter(
-      (row) =>
-        value.custom_tier_set || !isForecastClassifier(value.classifier_type ?? "heuristic") || row.models.length > 0,
-    )
-    .map((row) => ({ ...row, params: value.tier_model_params?.[row.id] ?? {} }));
+  return rows.map((row) => ({ ...row, params: value.tier_model_params?.[row.id] ?? {} }));
 };
 
 // The wire shape of an edited tier set, shared by the payload builder and the prompt preview so the
@@ -115,6 +110,7 @@ export const rowParamsByTier = (rows: readonly ActiveTierRow[]): TierModelParams
 
 export interface TierRestriction {
   omit: readonly string[];
+  reasonKey: string;
   reason: string;
 }
 
@@ -124,28 +120,34 @@ export interface TierRestriction {
 export const CUSTOM_TIER_RESTRICTIONS = {
   displayNames: {
     omit: ["tier_labels"],
+    reasonKey: "addModel.tierRestrictions.displayNames",
     reason: "Display names rename the built-in tiers, which your tier set replaces. Name each tier directly",
   },
   escalation: {
     omit: ["escalation_keywords"],
+    reasonKey: "addModel.tierRestrictions.escalation",
     reason: "Escalation bumps a request along the built-in tier ladder, which your tier set replaces",
   },
   stallEscalation: {
     omit: ["stall_escalation_enabled", "stall_escalation_window", "stall_escalation_repeat_threshold"],
+    reasonKey: "addModel.tierRestrictions.stallEscalation",
     reason: "Stall escalation bumps a request along the built-in tier ladder, which your tier set replaces",
   },
   adaptive: {
     omit: ["adaptive", "adaptive_weights", "tier_distance_penalty", "adaptive_eligible"],
+    reasonKey: "addModel.tierRestrictions.adaptive",
     reason: "Adaptive routing scores models along the built-in tier ladder, which your tier set replaces",
   },
   sessionAffinity: {
     omit: [],
+    reasonKey: "addModel.tierRestrictions.sessionAffinity",
     reason: "Session pinning escalates along the built-in tier ladder, which your tier set replaces",
   },
   heuristicClassifier: {
-    omit: ["heuristic_first_max_tier", "hybrid_boundary_margin", "local_heuristic"],
+    omit: ["heuristic_first_max_tier", "hybrid_boundary_margin"],
+    reasonKey: "addModel.tierRestrictions.heuristicClassifier",
     reason:
-      "The heuristic scorer only produces the built-in tiers, so an edited set needs the LLM or JEV classifier. " +
+      "The heuristic scorer only produces the built-in tiers, so an edited set needs the LLM classifier. " +
       "Heuristic first and hybrid are out for the same reason: their local scorer decides the traffic it is sure of",
   },
   heuristicScoring: {
@@ -157,14 +159,17 @@ export const CUSTOM_TIER_RESTRICTIONS = {
       "reasoning_override_min_score",
       "custom_technical_keywords",
     ],
+    reasonKey: "addModel.tierRestrictions.heuristicScoring",
     reason: "The heuristic scorer never runs under an edited tier set, so its inputs have no effect",
   },
   classificationRubric: {
     omit: [],
+    reasonKey: "addModel.tierRestrictions.classificationRubric",
     reason: "The preset calibration examples are written against the built-in tiers, which your tier set replaces",
   },
   classifierFallback: {
     omit: ["classifier_fallback"],
+    reasonKey: "addModel.tierRestrictions.classifierFallback",
     reason: "Fallback Tier is where an edited tier set routes when the classifier fails",
   },
 } as const satisfies Record<string, TierRestriction>;
@@ -174,15 +179,26 @@ export const CUSTOM_TIER_OMITTED_KEYS: readonly string[] = Object.values(CUSTOM_
 );
 
 // Row-shape errors the backend cannot phrase per row. Payload validity is the dry-run's job.
-export const getCustomTierRowsError = (customTierSet: CustomTierSet): string | null => {
+export const getCustomTierRowsError = (customTierSet: CustomTierSet, t: TFunction = i18n.t): string | null => {
   const rows = customTierSet.tiers;
   if (rows.length < MIN_TIER_COUNT || rows.length > MAX_TIER_COUNT)
-    return `A tier set needs ${MIN_TIER_COUNT} to ${MAX_TIER_COUNT} tiers`;
-  if (rows.some((row) => !activeTierName(row))) return "Name every tier";
+    return t("addModel.tierRows.tierCountOutOfRange", {
+      defaultValue: "A tier set needs {{min}} to {{max}} tiers",
+      min: MIN_TIER_COUNT,
+      max: MAX_TIER_COUNT,
+    });
+  if (rows.some((row) => !activeTierName(row)))
+    return t("addModel.tierRows.tierNameRequired", { defaultValue: "Name every tier" });
   const folded = rows.map((row) => row.name.trim().toLowerCase());
-  if (new Set(folded).size !== folded.length) return "Tier names must be unique, ignoring case";
+  if (new Set(folded).size !== folded.length)
+    return t("addModel.tierRows.tierNamesUnique", { defaultValue: "Tier names must be unique, ignoring case" });
   if (rows.some((row) => !row.definition.trim() && !isBuiltInTierName(row.name)))
-    return "Every custom tier needs a definition: it is the rubric the classifier routes on";
-  if (!tierRowById(rows, customTierSet.fallback_tier_id)) return "Pick a Fallback Tier for classifier failures";
+    return t("addModel.tierRows.tierDefinitionRequired", {
+      defaultValue: "Every custom tier needs a definition: it is the rubric the classifier routes on",
+    });
+  if (!tierRowById(rows, customTierSet.fallback_tier_id))
+    return t("addModel.tierRows.fallbackTierRequired", {
+      defaultValue: "Pick a Fallback Tier for classifier failures",
+    });
   return null;
 };

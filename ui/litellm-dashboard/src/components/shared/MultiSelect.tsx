@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Combobox,
   ComboboxChip,
@@ -56,13 +57,17 @@ export function MultiSelect({
   options,
   value = [],
   onValueChange,
-  placeholder = "Select options",
-  emptyText = "No options found",
+  placeholder,
+  emptyText,
   disabled = false,
   loading = false,
   allowCustomValues = false,
   className,
 }: MultiSelectProps) {
+  const { t } = useTranslation();
+  const resolvedPlaceholder =
+    placeholder ?? t("shared.multiSelect.selectOptionsPlaceholder", { defaultValue: "Select options" });
+  const resolvedEmptyText = emptyText ?? t("shared.multiSelect.noOptions", { defaultValue: "No options found" });
   const anchor = useComboboxAnchor();
   const [query, setQuery] = useState("");
   const safeOptions = options.filter(
@@ -119,17 +124,24 @@ export function MultiSelect({
               ))}
               <ComboboxChipsInput
                 id={id}
-                placeholder={loading ? "Loading..." : placeholder}
+                placeholder={
+                  loading ? t("shared.multiSelect.loading", { defaultValue: "Loading..." }) : resolvedPlaceholder
+                }
                 className="min-w-24"
-                aria-label={placeholder || undefined}
+                aria-label={resolvedPlaceholder || undefined}
               />
-              {canClear(selected) && <ComboboxClear className="ml-auto self-center" aria-label="Clear all" />}
+              {canClear(selected) && (
+                <ComboboxClear
+                  className="ml-auto self-center"
+                  aria-label={t("shared.multiSelect.clearAll", { defaultValue: "Clear all" })}
+                />
+              )}
             </>
           )}
         </ComboboxValue>
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>{emptyText}</ComboboxEmpty>
+        <ComboboxEmpty>{resolvedEmptyText}</ComboboxEmpty>
         <ComboboxList>
           {(option: MultiSelectOption) => (
             <ComboboxItem key={option.value} value={option} disabled={option.disabled}>

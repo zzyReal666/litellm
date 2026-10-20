@@ -1,8 +1,10 @@
 "use client";
 
 import { SortingState } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Inbox } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import DeleteResourceModal from "@/components/common_components/DeleteResourceModal";
 import { DataTable } from "@/components/shared/DataTable";
@@ -20,21 +22,27 @@ import { getAccessGroupBudgetColumns } from "@/app/(dashboard)/models-and-endpoi
 
 const DEFAULT_SORTING: SortingState = [{ id: "access_group", desc: false }];
 
-function EmptyState() {
+function EmptyState({ t }: { t: TFunction }) {
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No model access groups yet</div>
+      <div className="text-sm font-medium text-foreground">
+        {t("pages.accessGroupBudgets.emptyTitle", { defaultValue: "No model access groups yet" })}
+      </div>
       <div className="text-sm text-muted-foreground">
-        Put a deployment in an access group from its model settings, then give the group a shared budget here.
+        {t("pages.accessGroupBudgets.emptyDescription", {
+          defaultValue:
+            "Put a deployment in an access group from its model settings, then give the group a shared budget here.",
+        })}
       </div>
     </div>
   );
 }
 
 export default function AccessGroupBudgetsPanel() {
+  const { t } = useTranslation();
   const { userRole } = useAuthorized();
   const { data: accessGroups, isLoading } = useModelAccessGroups();
   const setBudget = useSetModelAccessGroupBudget();
@@ -45,10 +53,10 @@ export default function AccessGroupBudgetsPanel() {
   const [clearing, setClearing] = useState<ModelAccessGroup | null>(null);
 
   const canWrite = isProxyAdminRole(userRole ?? "");
-  const columns = useMemo(
-    () => getAccessGroupBudgetColumns({ canWrite, onSetBudget: setEditing, onClearBudget: setClearing }),
-    [canWrite],
-  );
+  const columns = useMemo(() => {
+    const columnDeps = { canWrite, onSetBudget: setEditing, onClearBudget: setClearing, t };
+    return getAccessGroupBudgetColumns(columnDeps);
+  }, [canWrite, t]);
 
   const handleSubmit = (params: SetModelAccessGroupBudgetParams) => {
     if (!editing) return;
@@ -57,7 +65,12 @@ export default function AccessGroupBudgetsPanel() {
       { accessGroup, params },
       {
         onSuccess: () => {
-          toast.success(`Budget saved for "${accessGroup}"`);
+          toast.success(
+            t("pages.accessGroupBudgets.budgetSaved", {
+              accessGroup,
+              defaultValue: `Budget saved for "${accessGroup}"`,
+            }),
+          );
           setEditing(null);
         },
       },
@@ -69,7 +82,12 @@ export default function AccessGroupBudgetsPanel() {
     const accessGroup = clearing.access_group;
     clearBudget.mutate(accessGroup, {
       onSuccess: () => {
-        toast.success(`Budget cleared for "${accessGroup}"`);
+        toast.success(
+          t("pages.accessGroupBudgets.budgetCleared", {
+            accessGroup,
+            defaultValue: `Budget cleared for "${accessGroup}"`,
+          }),
+        );
         setClearing(null);
       },
     });
@@ -78,8 +96,10 @@ export default function AccessGroupBudgetsPanel() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm text-muted-foreground">
-        A model access group can carry one budget that every key granted the group by name draws from together. Keys
-        that reach the group&apos;s models through a wildcard or all-proxy-models are not charged against it.
+        {t("pages.accessGroupBudgets.description", {
+          defaultValue:
+            "A model access group can carry one budget that every key granted the group by name draws from together. Keys that reach the group's models through a wildcard or all-proxy-models are not charged against it.",
+        })}
       </p>
 
       <DataTable
@@ -91,8 +111,10 @@ export default function AccessGroupBudgetsPanel() {
         sorting={sorting}
         onSortingChange={setSorting}
         isLoading={isLoading}
-        loadingMessage="Loading model access groups…"
-        noDataMessage={<EmptyState />}
+        loadingMessage={t("pages.accessGroupBudgets.loadingAccessGroups", {
+          defaultValue: "Loading model access groups…",
+        })}
+        noDataMessage={<EmptyState t={t} />}
         size="compact"
       />
 
@@ -105,12 +127,22 @@ export default function AccessGroupBudgetsPanel() {
 
       <DeleteResourceModal
         isOpen={clearing !== null}
-        title="Clear Budget"
-        message="Are you sure you want to clear this access group's budget? The recorded shared spend is cleared with it, and the group's models stay available."
-        resourceInformationTitle="Access Group"
+        title={t("pages.accessGroupBudgets.clearBudgetTitle", { defaultValue: "Clear Budget" })}
+        message={t("pages.accessGroupBudgets.clearBudgetMessage", {
+          defaultValue:
+            "Are you sure you want to clear this access group's budget? The recorded shared spend is cleared with it, and the group's models stay available.",
+        })}
+        resourceInformationTitle={t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" })}
         resourceInformation={[
-          { label: "Access Group", value: clearing?.access_group ?? null, code: true },
-          { label: "Max Budget", value: clearing?.budget?.max_budget?.toString() ?? null },
+          {
+            label: t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" }),
+            value: clearing?.access_group ?? null,
+            code: true,
+          },
+          {
+            label: t("budgets.budgetPanel.colMaxBudget", { defaultValue: "Max Budget" }),
+            value: clearing?.budget?.max_budget?.toString() ?? null,
+          },
         ]}
         onCancel={() => setClearing(null)}
         onOk={handleConfirmClear}

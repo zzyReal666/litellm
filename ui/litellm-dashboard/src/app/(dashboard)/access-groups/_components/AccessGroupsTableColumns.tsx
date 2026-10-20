@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { Bot, Layers, MoreHorizontal, Server, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell } from "@/components/shared/table_cells";
@@ -32,10 +34,32 @@ const RESOURCE_TONES: Record<"models" | "mcpServers" | "agents", ResourceTone> =
 };
 
 function ResourcesCell({ group }: { group: AccessGroup }) {
+  const { t } = useTranslation();
   const items = [
-    { key: "models" as const, label: "Models", count: group.modelIds.length },
-    { key: "mcpServers" as const, label: "MCP Servers", count: group.mcpServerIds.length },
-    { key: "agents" as const, label: "Agents", count: group.agentIds.length },
+    {
+      key: "models" as const,
+      count: group.modelIds.length,
+      title: t("accessGroups.accessGroupsPage.tooltipModels", {
+        count: group.modelIds.length,
+        defaultValue: "{{count}} Models",
+      }),
+    },
+    {
+      key: "mcpServers" as const,
+      count: group.mcpServerIds.length,
+      title: t("accessGroups.accessGroupsPage.tooltipMcpServers", {
+        count: group.mcpServerIds.length,
+        defaultValue: "{{count}} MCP Servers",
+      }),
+    },
+    {
+      key: "agents" as const,
+      count: group.agentIds.length,
+      title: t("accessGroups.accessGroupsPage.tooltipAgents", {
+        count: group.agentIds.length,
+        defaultValue: "{{count}} Agents",
+      }),
+    },
   ];
 
   return (
@@ -46,7 +70,7 @@ function ResourcesCell({ group }: { group: AccessGroup }) {
         return (
           <span
             key={item.key}
-            title={`${item.count} ${item.label}`}
+            title={item.title}
             className={cn(
               "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset [&_svg]:size-3.5",
               tone.className,
@@ -68,10 +92,13 @@ function AccessGroupRowActions({
   group: AccessGroup;
   onDeleteClick: (group: AccessGroup) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open access group actions"
+        aria-label={t("accessGroups.accessGroupsTableColumns.openAccessGroupActions", {
+          defaultValue: "Open access group actions",
+        })}
         data-testid={`access-group-actions-${group.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -84,7 +111,7 @@ function AccessGroupRowActions({
           onClick={() => onDeleteClick(group)}
         >
           <Trash2 />
-          Delete access group
+          {t("accessGroups.accessGroupsPage.deleteTooltip", { defaultValue: "Delete access group" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -95,19 +122,21 @@ interface AccessGroupsTableColumnsDeps {
   canModify: boolean;
   onGroupClick: (id: string) => void;
   onDeleteClick: (group: AccessGroup) => void;
+  t: TFunction;
 }
 
 export const getAccessGroupsTableColumns = ({
   canModify,
   onGroupClick,
   onDeleteClick,
+  t,
 }: AccessGroupsTableColumnsDeps): ColumnDef<AccessGroup>[] => {
   const columns: ColumnDef<AccessGroup>[] = [
     {
       id: "id",
       accessorKey: "id",
-      meta: { title: "ID" },
-      header: "ID",
+      meta: { title: t("accessGroups.accessGroupsTableColumns.colId", { defaultValue: "ID" }) },
+      header: t("accessGroups.accessGroupsTableColumns.colId", { defaultValue: "ID" }),
       size: 200,
       enableSorting: false,
       cell: ({ row }) => (
@@ -121,8 +150,10 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "name",
       accessorKey: "name",
-      meta: { title: "Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+      meta: { title: t("common.name", { defaultValue: "Name" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader column={column} title={t("common.name", { defaultValue: "Name" })} />
+      ),
       size: 220,
       enableSorting: true,
       cell: ({ row }) => {
@@ -136,8 +167,8 @@ export const getAccessGroupsTableColumns = ({
     },
     {
       id: "resources",
-      meta: { title: "Resources" },
-      header: "Resources",
+      meta: { title: t("accessGroups.accessGroupsPage.colResources", { defaultValue: "Resources" }) },
+      header: t("accessGroups.accessGroupsPage.colResources", { defaultValue: "Resources" }),
       size: 220,
       enableSorting: false,
       cell: ({ row }) => <ResourcesCell group={row.original} />,
@@ -145,8 +176,13 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "createdAt",
       accessorKey: "createdAt",
-      meta: { title: "Created" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+      meta: { title: t("accessGroups.accessGroupsDetailsPage.created", { defaultValue: "Created" }) },
+      header: ({ column }) => (
+        <DataTableSortHeader
+          column={column}
+          title={t("accessGroups.accessGroupsDetailsPage.created", { defaultValue: "Created" })}
+        />
+      ),
       size: 150,
       enableSorting: true,
       sortingFn: "datetime",
@@ -155,8 +191,8 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "updatedAt",
       accessorKey: "updatedAt",
-      meta: { title: "Updated" },
-      header: "Updated",
+      meta: { title: t("accessGroups.accessGroupsTableColumns.colUpdated", { defaultValue: "Updated" }) },
+      header: t("accessGroups.accessGroupsTableColumns.colUpdated", { defaultValue: "Updated" }),
       size: 150,
       enableSorting: false,
       cell: ({ row }) => <DateCell value={row.original.updatedAt} precision="date" />,
@@ -172,7 +208,7 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
       size: 64,
       enableSorting: false,
       enableHiding: false,

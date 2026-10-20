@@ -1,5 +1,6 @@
 import { Bot, User } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -41,6 +42,7 @@ function ChatMessageBubble({
   accessToken,
 }: ChatMessageBubbleProps) {
   const syntaxTheme = useSyntaxTheme(coy);
+  const { t } = useTranslation();
   const isUser = message.role === "user";
 
   return (
@@ -117,7 +119,7 @@ function ChatMessageBubble({
           {message.isImage ? (
             <img
               src={typeof message.content === "string" ? message.content : ""}
-              alt="Generated image"
+              alt={t("playground.chatMessageBubble.generatedImageAlt", { defaultValue: "Generated image" })}
               className="max-w-full rounded-md border border-border shadow-xs"
               style={{ maxHeight: "500px" }}
             />
@@ -175,7 +177,7 @@ function ChatMessageBubble({
                 <div className="mt-3">
                   <img
                     src={message.image.url}
-                    alt="Generated image"
+                    alt={t("playground.chatMessageBubble.generatedImageAlt", { defaultValue: "Generated image" })}
                     className="max-w-full rounded-md border border-border shadow-xs"
                     style={{ maxHeight: "500px" }}
                   />

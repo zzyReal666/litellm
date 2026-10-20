@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CodeIcon, CopyIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -9,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const LANGUAGE_ITEMS = [
+type CodeLanguage = "curl" | "python" | "javascript";
+
+const LANGUAGE_ITEMS: { value: CodeLanguage; label: string; labelKey?: string }[] = [
   { value: "curl", label: "cURL" },
-  { value: "python", label: "Python (OpenAI SDK)" },
-  { value: "javascript", label: "JavaScript (OpenAI SDK)" },
-] as const;
+  { value: "python", label: "Python (OpenAI SDK)", labelKey: "routingGroups.routingGroupsTable.tabPython" },
+  { value: "javascript", label: "JavaScript (OpenAI SDK)", labelKey: "routingGroups.routingGroupsTable.tabJavascript" },
+];
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface PromptCodeSnippetsProps {
@@ -39,10 +42,15 @@ const PromptCodeSnippets: React.FC<PromptCodeSnippetsProps> = ({
   proxySettings,
 }) => {
   const syntaxTheme = useSyntaxTheme(coy);
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<"curl" | "python" | "javascript">("curl");
+  const [selectedLanguage, setSelectedLanguage] = useState<CodeLanguage>("curl");
   const [selectedTab, setSelectedTab] = useState("basic");
   const [generatedCode, setGeneratedCode] = useState("");
+
+  const languageLabel = (item: (typeof LANGUAGE_ITEMS)[number]) =>
+    item.labelKey ? t(item.labelKey, { defaultValue: item.label }) : item.label;
+  const languageItems = LANGUAGE_ITEMS.map((item) => ({ ...item, label: languageLabel(item) }));
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -252,23 +260,25 @@ main();`;
     <>
       <Button variant="outline" onClick={showModal}>
         <CodeIcon />
-        Get Code
+        {t("promptsPage.promptCodeSnippets.getCode", { defaultValue: "Get Code" })}
       </Button>
 
       <Dialog open={isModalVisible} onOpenChange={(open) => !open && handleCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Generated Code</DialogTitle>
+            <DialogTitle>
+              {t("promptsPage.promptCodeSnippets.modalTitle", { defaultValue: "Generated Code" })}
+            </DialogTitle>
           </DialogHeader>
           <div className="flex justify-between items-center mb-4">
             <div>
               <label htmlFor="prompt-code-language" className="font-medium block mb-1 text-foreground">
-                Language
+                {t("promptsPage.promptCodeSnippets.language", { defaultValue: "Language" })}
               </label>
               <Select
-                items={LANGUAGE_ITEMS}
+                items={languageItems}
                 value={selectedLanguage}
-                onValueChange={(value) => setSelectedLanguage(value as "curl" | "python" | "javascript")}
+                onValueChange={(value) => setSelectedLanguage(value as CodeLanguage)}
               >
                 <SelectTrigger id="prompt-code-language" className="w-[180px]">
                   <SelectValue />
@@ -276,7 +286,7 @@ main();`;
                 <SelectContent>
                   {LANGUAGE_ITEMS.map((item) => (
                     <SelectItem key={item.value} value={item.value}>
-                      {item.label}
+                      {languageLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -286,19 +296,31 @@ main();`;
               variant="outline"
               onClick={() => {
                 navigator.clipboard.writeText(generatedCode);
-                toast.success("Copied to clipboard!");
+                toast.success(
+                  t("promptsPage.promptCodeSnippets.copiedToClipboard", { defaultValue: "Copied to clipboard!" }),
+                );
               }}
             >
               <CopyIcon />
-              Copy to Clipboard
+              {t("promptsPage.promptCodeSnippets.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
             </Button>
           </div>
 
           <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(String(value))}>
-            <TabsList aria-label="Generated code type">
-              <TabsTrigger value="basic">Basic</TabsTrigger>
-              <TabsTrigger value="messages">With Messages</TabsTrigger>
-              <TabsTrigger value="version">With Version</TabsTrigger>
+            <TabsList
+              aria-label={t("promptsPage.promptCodeSnippets.generatedCodeType", {
+                defaultValue: "Generated code type",
+              })}
+            >
+              <TabsTrigger value="basic">
+                {t("promptsPage.promptCodeSnippets.tabBasic", { defaultValue: "Basic" })}
+              </TabsTrigger>
+              <TabsTrigger value="messages">
+                {t("promptsPage.promptCodeSnippets.tabWithMessages", { defaultValue: "With Messages" })}
+              </TabsTrigger>
+              <TabsTrigger value="version">
+                {t("promptsPage.promptCodeSnippets.tabWithVersion", { defaultValue: "With Version" })}
+              </TabsTrigger>
             </TabsList>
           </Tabs>
 

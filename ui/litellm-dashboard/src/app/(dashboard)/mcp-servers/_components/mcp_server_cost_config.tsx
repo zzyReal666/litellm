@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Info, DollarSign, Wrench } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -61,6 +62,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
   tools = [],
   disabled = false,
 }) => {
+  const { t } = useTranslation();
   const handleDefaultCostChange = (defaultCost: number | null) => {
     const updated = {
       ...value,
@@ -86,13 +88,25 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
         <div className="space-y-6">
           <div className="mb-4 flex items-center gap-2">
             <DollarSign className="size-4 text-muted-foreground" />
-            <h3 className="text-lg font-medium">Cost Configuration</h3>
+            <h3 className="text-lg font-medium">
+              {t("mcpTools.mcpServerCostConfig.title", { defaultValue: "Cost Configuration" })}
+            </h3>
             <Tooltip>
               <TooltipTrigger
-                render={<Info className="size-4 text-muted-foreground" aria-label="About cost configuration" />}
+                render={
+                  <Info
+                    className="size-4 text-muted-foreground"
+                    aria-label={t("mcpTools.mcpServerCostConfig.aboutCostConfiguration", {
+                      defaultValue: "About cost configuration",
+                    })}
+                  />
+                }
               />
               <TooltipContent>
-                Configure costs for this MCP server&apos;s tool calls. Set a default rate and per-tool overrides.
+                {t("mcpTools.mcpServerCostConfig.titleTooltip", {
+                  defaultValue:
+                    "Configure costs for this MCP server's tool calls. Set a default rate and per-tool overrides.",
+                })}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -100,14 +114,23 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
           <div className="space-y-4">
             <div>
               <label className="mb-2 block text-sm font-medium">
-                Default Cost per Query ($)
+                {t("mcpTools.mcpServerCostConfig.defaultCostLabel", { defaultValue: "Default Cost per Query ($)" })}
                 <Tooltip>
                   <TooltipTrigger
                     render={
-                      <Info className="ml-1 inline size-4 text-muted-foreground" aria-label="About the default cost" />
+                      <Info
+                        className="ml-1 inline size-4 text-muted-foreground"
+                        aria-label={t("mcpTools.mcpServerCostConfig.aboutDefaultCost", {
+                          defaultValue: "About the default cost",
+                        })}
+                      />
                     }
                   />
-                  <TooltipContent>Default cost charged for each tool call to this server.</TooltipContent>
+                  <TooltipContent>
+                    {t("mcpTools.mcpServerCostConfig.defaultCostTooltip", {
+                      defaultValue: "Default cost charged for each tool call to this server.",
+                    })}
+                  </TooltipContent>
                 </Tooltip>
               </label>
               <CostInput
@@ -118,22 +141,34 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                 onChange={handleDefaultCostChange}
               />
               <p className="mt-1 block text-sm text-muted-foreground">
-                Set a default cost for all tool calls to this server
+                {t("mcpTools.mcpServerCostConfig.defaultCostHelp", {
+                  defaultValue: "Set a default cost for all tool calls to this server",
+                })}
               </p>
             </div>
 
             {tools.length > 0 && (
               <div className="space-y-4">
                 <label className="block text-sm font-medium">
-                  Tool-Specific Costs ($)
+                  {t("mcpTools.mcpServerCostConfig.toolSpecificCostsLabel", {
+                    defaultValue: "Tool-Specific Costs ($)",
+                  })}
                   <Tooltip>
                     <TooltipTrigger
                       render={
-                        <Info className="ml-1 inline size-4 text-muted-foreground" aria-label="About per-tool costs" />
+                        <Info
+                          className="ml-1 inline size-4 text-muted-foreground"
+                          aria-label={t("mcpTools.mcpServerCostConfig.aboutPerToolCosts", {
+                            defaultValue: "About per-tool costs",
+                          })}
+                        />
                       }
                     />
                     <TooltipContent>
-                      Override the default cost for specific tools. Leave blank to use the default rate.
+                      {t("mcpTools.mcpServerCostConfig.toolSpecificCostsTooltip", {
+                        defaultValue:
+                          "Override the default cost for specific tools. Leave blank to use the default rate.",
+                      })}
                     </TooltipContent>
                   </Tooltip>
                 </label>
@@ -142,7 +177,9 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                     render={
                       <button type="button" className="flex w-full items-center gap-2 p-3 text-left">
                         <Wrench className="size-4 text-muted-foreground" />
-                        <span className="font-medium">Available Tools</span>
+                        <span className="font-medium">
+                          {t("mcpTools.mcpServerCostConfig.availableTools", { defaultValue: "Available Tools" })}
+                        </span>
                         <Badge variant="secondary">{tools.length}</Badge>
                       </button>
                     }
@@ -160,7 +197,9 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                           <div className="ml-4">
                             <CostInput
                               value={value.tool_name_to_cost_per_query?.[tool.name]}
-                              placeholder="Use default"
+                              placeholder={t("mcpTools.mcpServerCostConfig.useDefaultPlaceholder", {
+                                defaultValue: "Use default",
+                              })}
                               disabled={disabled}
                               className="w-40"
                               onChange={(cost) => handleToolCostChange(tool.name, cost)}
@@ -178,11 +217,16 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
           {(value.default_cost_per_query ||
             (value.tool_name_to_cost_per_query && Object.keys(value.tool_name_to_cost_per_query).length > 0)) && (
             <div className="mt-6 rounded-lg border border-border bg-muted p-4">
-              <p className="text-sm font-medium">Cost Summary:</p>
+              <p className="text-sm font-medium">
+                {t("mcpTools.mcpServerCostConfig.costSummary", { defaultValue: "Cost Summary:" })}
+              </p>
               <div className="mt-2 space-y-1">
                 {value.default_cost_per_query && (
                   <p className="text-sm text-muted-foreground">
-                    • Default cost: ${value.default_cost_per_query.toFixed(4)} per query
+                    {t("mcpTools.mcpServerCostConfig.defaultCostRow", {
+                      cost: value.default_cost_per_query.toFixed(4),
+                      defaultValue: "• Default cost: ${{cost}} per query",
+                    })}
                   </p>
                 )}
                 {value.tool_name_to_cost_per_query &&
@@ -191,7 +235,11 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                       cost !== null &&
                       cost !== undefined && (
                         <p key={toolName} className="text-sm text-muted-foreground">
-                          • {toolName}: ${cost.toFixed(4)} per query
+                          {t("mcpTools.mcpServerCostConfig.toolCostRow", {
+                            toolName,
+                            cost: cost.toFixed(4),
+                            defaultValue: "• {{toolName}}: ${{cost}} per query",
+                          })}
                         </p>
                       ),
                   )}

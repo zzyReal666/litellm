@@ -1,37 +1,41 @@
-import { parseIdentityForForm } from "./agent_identity";
 /**
  * Shared configuration for agent form fields
  * Used across create, view, and update operations
  */
 
-import {
-  EMPTY_KILL_SWITCH_FORM,
-  buildKillSwitchFromForm,
-  parseKillSwitchForForm,
-  type KillSwitchConfig,
-  type KillSwitchFormValue,
-} from "./kill_switch_config";
+import type { TFunction } from "i18next";
 
 export interface FieldConfig {
   name: string;
+  labelKey: string;
   label: string;
   type: "text" | "textarea" | "url" | "switch" | "list" | "select";
   required?: boolean;
+  tooltipKey?: string;
   tooltip?: string;
+  placeholderKey?: string;
   placeholder?: string;
   defaultValue?: any;
   rows?: number;
   validation?: any[];
   options?: string[];
+  helpTextKey?: string;
   helpText?: string;
 }
 
 export interface SectionConfig {
   key: string;
+  titleKey: string;
   title: string;
   fields: FieldConfig[];
   defaultExpanded?: boolean;
 }
+
+export const translateFieldText = (
+  t: TFunction,
+  key: string | undefined,
+  text: string | undefined,
+): string | undefined => (key !== undefined && text !== undefined ? t(key, { defaultValue: text }) : text);
 
 export const AGENT_FORM_CONFIG: {
   basic: SectionConfig;
@@ -44,34 +48,43 @@ export const AGENT_FORM_CONFIG: {
 } = {
   basic: {
     key: "basic",
+    titleKey: "agentsPage.agentConfig.basicTitle",
     title: "Basic Information",
     defaultExpanded: true,
     fields: [
       {
         name: "name",
+        labelKey: "agentsPage.agentConfig.displayNameLabel",
         label: "Display Name",
         type: "text",
         required: true,
+        placeholderKey: "agentsPage.agentConfig.displayNamePlaceholder",
         placeholder: "e.g., Customer Support Agent",
       },
       {
         name: "description",
+        labelKey: "common.description",
         label: "Description",
         type: "textarea",
-        required: false,
+        required: true,
+        placeholderKey: "agentsPage.agentConfig.descriptionPlaceholder",
         placeholder: "Describe what this agent does...",
         rows: 3,
       },
       {
         name: "url",
+        labelKey: "agentsPage.agentConfig.urlLabel",
         label: "URL",
         type: "url",
         required: false,
+        placeholderKey: "agentsPage.agentConfig.urlPlaceholder",
         placeholder: "http://localhost:9999/",
+        tooltipKey: "agentsPage.agentConfig.urlTooltip",
         tooltip: "Base URL where the agent is hosted (optional)",
       },
       {
         name: "version",
+        labelKey: "agentsPage.agentConfig.versionLabel",
         label: "Version",
         type: "text",
         placeholder: "1.0.0",
@@ -79,12 +92,15 @@ export const AGENT_FORM_CONFIG: {
       },
       {
         name: "protocolVersion",
+        labelKey: "agentsPage.agentConfig.protocolVersionLabel",
         label: "Protocol Version",
         type: "select",
         options: ["1.0", "0.3"],
         defaultValue: "1.0",
+        tooltipKey: "agentsPage.agentConfig.protocolVersionTooltip",
         tooltip:
           "The A2A protocol version LiteLLM serves to clients for this agent. LiteLLM converts the upstream agent's responses to this version, so clients always see the version you pick here regardless of the original agent's version.",
+        helpTextKey: "agentsPage.agentConfig.protocolVersionHelpText",
         helpText:
           "LiteLLM serves this version to clients and converts the upstream agent's responses to match it, regardless of the original agent's version.",
       },
@@ -92,10 +108,12 @@ export const AGENT_FORM_CONFIG: {
   },
   skills: {
     key: "skills",
+    titleKey: "agentsPage.agentConfig.skillsTitle",
     title: "Skills",
     fields: [
       {
         name: "skills",
+        labelKey: "agentsPage.agentConfig.skillsTitle",
         label: "Skills",
         type: "list",
         defaultValue: [],
@@ -104,21 +122,25 @@ export const AGENT_FORM_CONFIG: {
   },
   capabilities: {
     key: "capabilities",
+    titleKey: "agentsPage.agentConfig.capabilitiesTitle",
     title: "Capabilities",
     fields: [
       {
         name: "streaming",
+        labelKey: "agentsPage.agentConfig.streamingLabel",
         label: "Streaming",
         type: "switch",
         defaultValue: false,
       },
       {
         name: "pushNotifications",
+        labelKey: "agentsPage.agentConfig.pushNotificationsLabel",
         label: "Push Notifications",
         type: "switch",
       },
       {
         name: "stateTransitionHistory",
+        labelKey: "agentsPage.agentConfig.stateTransitionHistoryLabel",
         label: "State Transition History",
         type: "switch",
       },
@@ -126,22 +148,26 @@ export const AGENT_FORM_CONFIG: {
   },
   optional: {
     key: "optional",
+    titleKey: "agentsPage.agentConfig.optionalTitle",
     title: "Optional Settings",
     fields: [
       {
         name: "iconUrl",
+        labelKey: "agentsPage.agentConfig.iconUrlLabel",
         label: "Icon URL",
         type: "url",
         placeholder: "https://example.com/icon.png",
       },
       {
         name: "documentationUrl",
+        labelKey: "agentsPage.agentConfig.documentationUrlLabel",
         label: "Documentation URL",
         type: "url",
         placeholder: "https://docs.example.com",
       },
       {
         name: "supportsAuthenticatedExtendedCard",
+        labelKey: "agentsPage.agentConfig.supportsAuthCardLabel",
         label: "Supports Authenticated Extended Card",
         type: "switch",
       },
@@ -149,15 +175,18 @@ export const AGENT_FORM_CONFIG: {
   },
   litellm: {
     key: "litellm",
+    titleKey: "agentsPage.agentConfig.litellmTitle",
     title: "LiteLLM Parameters",
     fields: [
       {
         name: "model",
+        labelKey: "agentsPage.agentConfig.modelOptionalLabel",
         label: "Model (Optional)",
         type: "text",
       },
       {
         name: "make_public",
+        labelKey: "agentsPage.agentConfig.makePublicLabel",
         label: "Make Public",
         type: "switch",
       },
@@ -165,40 +194,50 @@ export const AGENT_FORM_CONFIG: {
   },
   cost: {
     key: "cost",
+    titleKey: "agentsPage.agentConfig.costTitle",
     title: "Cost Configuration",
     fields: [
       {
         name: "cost_per_query",
+        labelKey: "agentsPage.agentConfig.costPerQueryLabel",
         label: "Cost Per Query ($)",
         type: "text",
         placeholder: "0.0",
+        tooltipKey: "agentsPage.agentConfig.costPerQueryTooltip",
         tooltip: "Fixed cost per query",
       },
       {
         name: "input_cost_per_token",
+        labelKey: "agentsPage.agentConfig.inputCostPerTokenLabel",
         label: "Input Cost Per Token ($)",
         type: "text",
         placeholder: "0.000001",
+        tooltipKey: "agentsPage.agentConfig.inputCostPerTokenTooltip",
         tooltip: "Cost per input token",
       },
       {
         name: "output_cost_per_token",
+        labelKey: "agentsPage.agentConfig.outputCostPerTokenLabel",
         label: "Output Cost Per Token ($)",
         type: "text",
         placeholder: "0.000002",
+        tooltipKey: "agentsPage.agentConfig.outputCostPerTokenTooltip",
         tooltip: "Cost per output token",
       },
     ],
   },
   tracing: {
     key: "tracing",
+    titleKey: "agentsPage.agentConfig.tracingTitle",
     title: "Tracing",
     fields: [
       {
         name: "enable_tracing",
+        labelKey: "agentsPage.agentConfig.enableTracingLabel",
         label: "Enable Tracing",
         type: "switch",
         defaultValue: false,
+        tooltipKey: "agentsPage.agentConfig.enableTracingTooltip",
         tooltip: "Enable request tracing for this agent",
       },
     ],
@@ -208,32 +247,42 @@ export const AGENT_FORM_CONFIG: {
 export const SKILL_FIELD_CONFIG = {
   id: {
     name: "id",
+    labelKey: "agentsPage.agentConfig.skillIdLabel",
     label: "Skill ID",
     required: true,
+    placeholderKey: "agentsPage.agentConfig.skillIdPlaceholder",
     placeholder: "e.g., hello_world",
   },
   name: {
     name: "name",
+    labelKey: "agentsPage.agentConfig.skillNameLabel",
     label: "Skill Name",
     required: true,
+    placeholderKey: "agentsPage.agentConfig.skillNamePlaceholder",
     placeholder: "e.g., Returns hello world",
   },
   description: {
     name: "description",
+    labelKey: "common.description",
     label: "Description",
     required: true,
+    placeholderKey: "agentsPage.agentConfig.skillDescriptionPlaceholder",
     placeholder: "What this skill does",
     rows: 2,
   },
   tags: {
     name: "tags",
+    labelKey: "agentsPage.agentConfig.skillTagsLabel",
     label: "Tags",
     required: true,
+    placeholderKey: "agentsPage.agentConfig.skillTagsPlaceholder",
     placeholder: "Type a tag and press Enter",
   },
   examples: {
     name: "examples",
+    labelKey: "agentsPage.agentConfig.skillExamplesLabel",
     label: "Examples",
+    placeholderKey: "agentsPage.agentConfig.skillExamplesPlaceholder",
     placeholder: "Type an example and press Enter",
   },
 };
@@ -245,7 +294,6 @@ export const getDefaultFormValues = () => {
   const defaults: any = {
     defaultInputModes: ["text"],
     defaultOutputModes: ["text"],
-    kill_switch: { ...EMPTY_KILL_SWITCH_FORM },
   };
 
   Object.values(AGENT_FORM_CONFIG).forEach((section) => {
@@ -320,28 +368,10 @@ export const buildAgentDataFromForm = (values: any, existingAgent?: any) => {
     agentData.extra_headers = values.extra_headers;
   }
 
-  applyKillSwitchToPayload(agentData, values.kill_switch, existingAgent);
-
   return agentData;
 };
 
-export const applyKillSwitchToPayload = (
-  agentData: { kill_switch?: KillSwitchConfig | null },
-  form: KillSwitchFormValue | undefined,
-  existingAgent?: { kill_switch?: KillSwitchConfig | null },
-) => {
-  const killSwitch = buildKillSwitchFromForm(form);
-  if (killSwitch !== undefined && (killSwitch !== null || existingAgent?.kill_switch)) {
-    agentData.kill_switch = killSwitch;
-  }
-};
-
-export const parseAccessGroupIdsForForm = (agent: { access_group_ids?: string[] | null }) => ({
-  access_group_ids: agent.access_group_ids ?? [],
-});
-
 export const parseMcpPermissionsForForm = (agent: any) => ({
-  ...parseIdentityForForm(agent),
   allowed_mcp_servers_and_groups: {
     servers: agent.object_permission?.mcp_servers ?? [],
     accessGroups: agent.object_permission?.mcp_access_groups ?? [],
@@ -365,9 +395,8 @@ export const buildMcpObjectPermission = (values: any) => ({
  * Parse agent data for form fields
  */
 export const parseAgentForForm = (agent: any) => {
-  const card = agent.agent_card_params ?? {};
   const skills =
-    card.skills?.map((skill: any) => ({
+    agent.agent_card_params?.skills?.map((skill: any) => ({
       ...skill,
       tags: skill.tags,
       examples: skill.examples || [],
@@ -375,18 +404,18 @@ export const parseAgentForForm = (agent: any) => {
 
   return {
     agent_name: agent.agent_name,
-    name: card.name || agent.agent_name,
-    description: card.description,
-    url: card.url,
-    version: card.version,
-    protocolVersion: card.protocolVersion,
-    streaming: card.capabilities?.streaming,
-    pushNotifications: card.capabilities?.pushNotifications,
-    stateTransitionHistory: card.capabilities?.stateTransitionHistory,
+    name: agent.agent_card_params?.name,
+    description: agent.agent_card_params?.description,
+    url: agent.agent_card_params?.url,
+    version: agent.agent_card_params?.version,
+    protocolVersion: agent.agent_card_params?.protocolVersion,
+    streaming: agent.agent_card_params?.capabilities?.streaming,
+    pushNotifications: agent.agent_card_params?.capabilities?.pushNotifications,
+    stateTransitionHistory: agent.agent_card_params?.capabilities?.stateTransitionHistory,
     skills: skills,
-    iconUrl: card.iconUrl,
-    documentationUrl: card.documentationUrl,
-    supportsAuthenticatedExtendedCard: card.supportsAuthenticatedExtendedCard,
+    iconUrl: agent.agent_card_params?.iconUrl,
+    documentationUrl: agent.agent_card_params?.documentationUrl,
+    supportsAuthenticatedExtendedCard: agent.agent_card_params?.supportsAuthenticatedExtendedCard,
     model: agent.litellm_params?.model,
     make_public: agent.litellm_params?.make_public,
     cost_per_query: agent.litellm_params?.cost_per_query,
@@ -405,8 +434,6 @@ export const parseAgentForForm = (agent: any) => {
       : [],
     // extra_headers: already an array of strings
     extra_headers: agent.extra_headers ?? [],
-    kill_switch: parseKillSwitchForForm(agent.kill_switch),
     ...parseMcpPermissionsForForm(agent),
-    ...parseAccessGroupIdsForForm(agent),
   };
 };

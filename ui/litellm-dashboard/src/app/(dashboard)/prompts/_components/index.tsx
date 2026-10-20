@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Plus, Upload } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
 import { getPromptsList, PromptSpec, ListPromptsResponse, deletePromptCall } from "@/components/networking";
 import PromptTable from "./PromptTable";
 import PromptInfoView from "./prompt_info";
@@ -20,23 +21,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const ALL_ENVIRONMENTS_LABEL = "All Environments";
-
-const ENVIRONMENT_OPTIONS = [
-  { label: "Development", value: "development" },
-  { label: "Staging", value: "staging" },
-  { label: "Production", value: "production" },
-];
-
-// SelectValue falls back to the raw value unless the root can map it to a label.
-const ENVIRONMENT_ITEMS = [{ label: ALL_ENVIRONMENTS_LABEL, value: null }, ...ENVIRONMENT_OPTIONS];
-
 interface PromptsProps {
   accessToken: string | null;
   userRole?: string;
 }
 
 const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
+  const { t } = useTranslation();
   const [promptsList, setPromptsList] = useState<PromptSpec[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string | undefined>(undefined);
@@ -47,6 +38,15 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
   const [editPromptData, setEditPromptData] = useState<any>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<{ id: string; name: string; environment: string } | null>(null);
+
+  const allEnvironmentsLabel = t("prompts.allEnvironments", { defaultValue: "All Environments" });
+  const environmentOptions = [
+    { label: t("prompts.envDevelopment", { defaultValue: "Development" }), value: "development" },
+    { label: t("prompts.envStaging", { defaultValue: "Staging" }), value: "staging" },
+    { label: t("prompts.envProduction", { defaultValue: "Production" }), value: "production" },
+  ];
+  // SelectValue falls back to the raw value unless the root can map it to a label.
+  const environmentItems = [{ label: allEnvironmentsLabel, value: null }, ...environmentOptions];
 
   // Admin Viewer follows the read-parity rule: see prompts, no writes.
   const canModify = userRole ? isProxyAdminRole(userRole) : false;
@@ -123,11 +123,17 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
     setIsDeleting(true);
     try {
       await deletePromptCall(accessToken, promptToDelete.id, promptToDelete.environment);
-      toast.success(`Prompt "${promptToDelete.name}" deleted successfully from ${promptToDelete.environment}`);
+      toast.success(
+        t("promptsPage.promptsPanel.deleteSuccess", {
+          defaultValue: "Prompt \"{{name}}\" deleted successfully from {{environment}}",
+          name: promptToDelete.name,
+          environment: promptToDelete.environment,
+        }),
+      );
       fetchPrompts(); // Refresh the list
     } catch (error) {
       console.error("Error deleting prompt:", error);
-      toast.fromError("Failed to delete prompt");
+      toast.fromError(t("prompts.deleteFailed", { defaultValue: "Failed to delete prompt" }));
     } finally {
       setIsDeleting(false);
       setPromptToDelete(null);
@@ -165,26 +171,26 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
                 <>
                   <Button onClick={handleAddPrompt} disabled={!accessToken}>
                     <Plus />
-                    Add New Prompt
+                    {t("promptsPage.addPromptForm.title", { defaultValue: "Add New Prompt" })}
                   </Button>
                   <Button onClick={handleAddPromptFromFile} disabled={!accessToken} variant="secondary">
                     <Upload />
-                    Upload .prompt File
+                    {t("prompts.uploadPromptFile", { defaultValue: "Upload .prompt File" })}
                   </Button>
                 </>
               )}
             </div>
             <Select
-              items={ENVIRONMENT_ITEMS}
+              items={environmentItems}
               value={selectedEnvironment ?? null}
               onValueChange={(value) => setSelectedEnvironment((value as string | null) ?? undefined)}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={ALL_ENVIRONMENTS_LABEL} />
+                <SelectValue placeholder={allEnvironmentsLabel} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>{ALL_ENVIRONMENTS_LABEL}</SelectItem>
-                {ENVIRONMENT_OPTIONS.map((option) => (
+                <SelectItem value={null}>{allEnvironmentsLabel}</SelectItem>
+                {environmentOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -220,16 +226,21 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Prompt</AlertDialogTitle>
+              <AlertDialogTitle>{t("prompts.deleteModalTitle", { defaultValue: "Delete Prompt" })}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete the {promptToDelete.environment} copy of prompt: {promptToDelete.name}?
-                This action cannot be undone.
+                <Trans
+                  i18nKey="promptsPage.promptsPanel.deleteConfirm"
+                  defaults="Are you sure you want to delete the {{environment}} copy of prompt: {{name}}? This action cannot be undone."
+                  values={{ environment: promptToDelete.environment, name: promptToDelete.name }}
+                />
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isDeleting}>
+                {t("common.cancel", { defaultValue: "Cancel" })}
+              </AlertDialogCancel>
               <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
-                Delete
+                {t("common.delete", { defaultValue: "Delete" })}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

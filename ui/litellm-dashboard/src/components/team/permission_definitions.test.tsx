@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
 import { getMethodForEndpoint, getPermissionInfo, PERMISSION_DESCRIPTIONS } from "./permission_definitions";
 
 describe("permission_definitions", () => {
@@ -24,7 +25,7 @@ describe("permission_definitions", () => {
 
   describe("getPermissionInfo", () => {
     it("should return correct info for exact match permission", () => {
-      const result = getPermissionInfo("/key/generate");
+      const result = getPermissionInfo("/key/generate", i18n.t);
       expect(result.method).toBe("POST");
       expect(result.endpoint).toBe("/key/generate");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/key/generate"]);
@@ -32,28 +33,28 @@ describe("permission_definitions", () => {
     });
 
     it("should return GET method for info endpoint", () => {
-      const result = getPermissionInfo("/key/info");
+      const result = getPermissionInfo("/key/info", i18n.t);
       expect(result.method).toBe("GET");
       expect(result.endpoint).toBe("/key/info");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/key/info"]);
     });
 
     it("should return GET method for list endpoint", () => {
-      const result = getPermissionInfo("/key/list");
+      const result = getPermissionInfo("/key/list", i18n.t);
       expect(result.method).toBe("GET");
       expect(result.endpoint).toBe("/key/list");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/key/list"]);
     });
 
     it("should find partial match for permission with pattern", () => {
-      const result = getPermissionInfo("/key/service-account/generate");
+      const result = getPermissionInfo("/key/service-account/generate", i18n.t);
       expect(result.method).toBe("POST");
       expect(result.endpoint).toBe("/key/service-account/generate");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/key/service-account/generate"]);
     });
 
     it("should return correct info for team daily activity permission", () => {
-      const result = getPermissionInfo("/team/daily/activity");
+      const result = getPermissionInfo("/team/daily/activity", i18n.t);
       expect(result.method).toBe("GET");
       expect(result.endpoint).toBe("/team/daily/activity");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/team/daily/activity"]);
@@ -61,7 +62,7 @@ describe("permission_definitions", () => {
     });
 
     it("should return fallback description for unknown permission", () => {
-      const result = getPermissionInfo("/unknown/endpoint");
+      const result = getPermissionInfo("/unknown/endpoint", i18n.t);
       expect(result.method).toBe("POST");
       expect(result.endpoint).toBe("/unknown/endpoint");
       expect(result.description).toBe("Access /unknown/endpoint");
@@ -87,7 +88,7 @@ describe("permission_definitions", () => {
     });
 
     it("should return correct info for /spend/logs permission", () => {
-      const result = getPermissionInfo("/spend/logs");
+      const result = getPermissionInfo("/spend/logs", i18n.t);
       expect(result.method).toBe("GET");
       expect(result.endpoint).toBe("/spend/logs");
       expect(result.description).toBe(PERMISSION_DESCRIPTIONS["/spend/logs"]);

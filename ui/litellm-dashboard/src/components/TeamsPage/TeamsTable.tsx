@@ -19,6 +19,7 @@ import { Download } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 
 import { Team } from "../key_team_helpers/key_list";
+import { useTranslation } from "react-i18next";
 import { getTeamTableColumns, TEAM_TABLE_HIDDEN_COLUMNS } from "./teamTableColumns";
 import { exportTeamsToCsv } from "./teamsCsvExport";
 
@@ -45,6 +46,7 @@ const FILTER_LABELS: Record<string, string> = {
 };
 
 export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDeleteTeam }: TeamsTableProps) {
+  const { t } = useTranslation();
   const { data: fetchedOrganizations } = useOrganizations();
   const organizations = useMemo(() => fetchedOrganizations ?? [], [fetchedOrganizations]);
 
@@ -118,9 +120,9 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
   }, [accessToken, isExporting, teamListOptions]);
 
   const columns = useMemo(() => {
-    const columnDeps = { organizations, userRole, onSelectTeam, onEditTeam, onDeleteTeam };
+    const columnDeps = { organizations, userRole, onSelectTeam, onEditTeam, onDeleteTeam, t };
     return getTeamTableColumns(columnDeps);
-  }, [organizations, userRole, onSelectTeam, onEditTeam, onDeleteTeam]);
+  }, [organizations, userRole, onSelectTeam, onEditTeam, onDeleteTeam, t]);
 
   const orgOptions = useMemo(
     () =>
@@ -188,39 +190,45 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
               data-testid="teams-export-csv"
             >
               <Download />
-              {isExporting ? "Exporting..." : "Export CSV"}
+              {isExporting
+                ? t("usageExport.entityUsageExportModal.exporting", { defaultValue: "Exporting..." })
+                : t("cloudzeroExportModal.exportCsvButton", { defaultValue: "Export CSV" })}
             </Button>
           </DataTableToolbar>
           <DataTableFilterDrawer
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
-            description="Narrow down your teams"
+            title={t("molecules.filter.filters", { defaultValue: "Filters" })}
+            description={t("teamPage.teamsTable.filterDescription", { defaultValue: "Narrow down your teams" })}
           >
             {({ get, set }) => (
               <>
-                <DataTableFilterField label="Organization">
+                <DataTableFilterField label={t("createUserButton.organizationLabel", { defaultValue: "Organization" })}>
                   <SearchSelect
                     options={orgOptions}
                     value={(get("org_id") as string) || undefined}
                     onValueChange={(value) => set("org_id", value ?? undefined)}
-                    placeholder="Select an organization…"
-                    emptyText="No organizations found"
+                    placeholder={t("virtualKeys.virtualKeysTable.selectOrganizationPlaceholder", {
+                      defaultValue: "Select an organization…",
+                    })}
+                    emptyText={t("virtualKeys.virtualKeysTable.noOrganizationsFound", {
+                      defaultValue: "No organizations found",
+                    })}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Team alias">
+                <DataTableFilterField label={t("teamPage.teamsTable.teamAliasLabel", { defaultValue: "Team alias" })}>
                   <Input
                     value={(get("alias") as string) ?? ""}
                     onChange={(event) => set("alias", event.target.value)}
-                    placeholder="Enter team alias…"
+                    placeholder={t("teamPage.teamsTable.teamAliasPlaceholder", { defaultValue: "Enter team alias…" })}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Team ID">
+                <DataTableFilterField label={t("molecules.modelsColumns.teamId", { defaultValue: "Team ID" })}>
                   <Input
                     value={(get("team_id") as string) ?? ""}
                     onChange={(event) => set("team_id", event.target.value)}
-                    placeholder="Enter team ID…"
+                    placeholder={t("teamPage.teamsTable.teamIdPlaceholder", { defaultValue: "Enter team ID…" })}
                   />
                 </DataTableFilterField>
               </>

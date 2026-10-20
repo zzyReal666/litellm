@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getGeneralSettingsCall } from "@/components/networking";
 import AdvancedDatePicker from "@/components/shared/advanced_date_picker";
@@ -19,6 +20,7 @@ interface PromptCachingTabProps {
 }
 
 const PromptCachingTab: React.FC<PromptCachingTabProps> = ({ accessToken, activity }) => {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState<generalSettingsItem[]>([]);
 
   const loadSettings = useCallback(() => {
@@ -29,9 +31,13 @@ const PromptCachingTab: React.FC<PromptCachingTabProps> = ({ accessToken, activi
       .then((data: generalSettingsItem[]) => setSettings(data))
       .catch((error) => {
         console.error("Failed to load prompt caching settings:", error);
-        toast.fromError("Failed to load prompt caching settings");
+        toast.fromError(
+          t("costOptimization.promptCachingTab.failedToLoad", {
+            defaultValue: "Failed to load prompt caching settings",
+          }),
+        );
       });
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   useEffect(() => {
     loadSettings();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PencilIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
     end: number;
   } | null>(null);
   const [newVariableName, setNewVariableName] = useState("");
+  const { t } = useTranslation();
 
   // Extract all variables from the text
   const extractVariables = (): Array<{ name: string; start: number; end: number }> => {
@@ -75,7 +77,9 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
       {/* Variable Management - Clear and Functional */}
       {variables.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-muted-foreground mr-1">Detected variables:</span>
+          <span className="text-xs text-muted-foreground mr-1">
+            {t("promptsPage.variableTextarea.detectedVariables", { defaultValue: "Detected variables:" })}
+          </span>
           {variables.map((variable, index) => (
             <Popover
               key={`${variable.start}-${index}`}
@@ -111,17 +115,21 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
               </PopoverTrigger>
               <PopoverContent className="w-[216px]">
                 <div className="p-2">
-                  <div className="text-xs text-muted-foreground mb-2">Edit variable name</div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    {t("promptsPage.variableTextarea.editVariableName", { defaultValue: "Edit variable name" })}
+                  </div>
                   <Input
                     value={newVariableName}
                     onChange={(e) => setNewVariableName(e.target.value)}
                     onKeyDown={(event) => event.key === "Enter" && handleVariableEdit()}
-                    placeholder="Variable name"
+                    placeholder={t("promptsPage.variableTextarea.variableNamePlaceholder", {
+                      defaultValue: "Variable name",
+                    })}
                     autoFocus
                   />
                   <div className="flex gap-2 mt-2">
                     <Button size="sm" onClick={handleVariableEdit}>
-                      Save
+                      {t("common.save", { defaultValue: "Save" })}
                     </Button>
                     <Button
                       variant="outline"
@@ -131,7 +139,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
                         setNewVariableName("");
                       }}
                     >
-                      Cancel
+                      {t("common.cancel", { defaultValue: "Cancel" })}
                     </Button>
                   </div>
                 </div>

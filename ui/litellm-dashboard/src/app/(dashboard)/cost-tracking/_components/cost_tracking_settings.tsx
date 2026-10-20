@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -28,13 +29,29 @@ import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_m
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const DOCS_LINKS = [
-  { label: "Custom pricing for models", href: "https://docs.litellm.ai/docs/proxy/custom_pricing" },
-  { label: "Spend tracking", href: "https://docs.litellm.ai/docs/proxy/cost_tracking" },
+  {
+    label: "Custom pricing for models",
+    labelKey: "costTracking.costTrackingSettings.docsLinkCustomPricing",
+    href: "https://docs.litellm.ai/docs/proxy/custom_pricing",
+  },
+  {
+    label: "Spend tracking",
+    labelKey: "costTracking.costTrackingSettings.docsLinkSpendTracking",
+    href: "https://docs.litellm.ai/docs/proxy/cost_tracking",
+  },
 ];
 
 const REMOVAL_COPY = {
-  discount: { title: "Remove Provider Discount", noun: "discount" },
-  margin: { title: "Remove Provider Margin", noun: "margin" },
+  discount: {
+    title: "Remove Provider Discount",
+    titleKey: "costTracking.costTrackingSettings.removeDiscountTitle",
+    contentKey: "costTracking.costTrackingSettings.removeDiscountContent",
+  },
+  margin: {
+    title: "Remove Provider Margin",
+    titleKey: "costTracking.costTrackingSettings.removeMarginTitle",
+    contentKey: "costTracking.costTrackingSettings.removeMarginContent",
+  },
 } as const;
 
 interface PendingRemoval {
@@ -45,17 +62,28 @@ interface PendingRemoval {
 
 const SECTION_HEADER_CLASS = "group/section flex w-full items-center justify-between px-6 py-4 text-left";
 
-const SectionHeader: React.FC<{ title: string; description: string }> = ({ title, description }) => (
-  <CollapsibleTrigger className={SECTION_HEADER_CLASS}>
-    <div className="flex flex-col items-start w-full">
-      <span className="block text-lg font-semibold text-foreground">{title}</span>
-      <span className="block text-sm text-muted-foreground mt-1">{description}</span>
-    </div>
-    <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform group-data-[panel-open]/section:rotate-180" />
-  </CollapsibleTrigger>
-);
+const SectionHeader: React.FC<{ label: string; labelKey: string; description: string; descriptionKey: string }> = ({
+  label,
+  labelKey,
+  description,
+  descriptionKey,
+}) => {
+  const { t } = useTranslation();
+  return (
+    <CollapsibleTrigger className={SECTION_HEADER_CLASS}>
+      <div className="flex flex-col items-start w-full">
+        <span className="block text-lg font-semibold text-foreground">{t(labelKey, { defaultValue: label })}</span>
+        <span className="block text-sm text-muted-foreground mt-1">
+          {t(descriptionKey, { defaultValue: description })}
+        </span>
+      </div>
+      <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform group-data-[panel-open]/section:rotate-180" />
+    </CollapsibleTrigger>
+  );
+};
 
 const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, userRole, accessToken }) => {
+  const { t } = useTranslation();
   const [selectedProvider, setSelectedProvider] = useState<string | undefined>(undefined);
   const [newDiscount, setNewDiscount] = useState<string>("");
   const [isFetching, setIsFetching] = useState(true);
@@ -78,7 +106,7 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
     handleAddProvider: addProvider,
     handleRemoveProvider: removeProvider,
     handleDiscountChange,
-  } = useDiscountConfig({ accessToken });
+  } = useDiscountConfig({ accessToken, t });
 
   const {
     marginConfig,
@@ -86,14 +114,14 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
     handleAddMargin: addMargin,
     handleRemoveMargin: removeMargin,
     handleMarginChange,
-  } = useMarginConfig({ accessToken });
+  } = useMarginConfig({ accessToken, t });
 
   const {
     blockUnpriced,
     isUpdating: isUpdatingBlockUnpriced,
     fetchBlockUnpriced,
     setBlockUnpriced,
-  } = useBlockUnpricedConfig({ accessToken });
+  } = useBlockUnpricedConfig({ accessToken, t });
 
   useEffect(() => {
     if (accessToken) {
@@ -186,11 +214,21 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-medium text-foreground">Cost Tracking Settings</p>
-            <DocsMenu items={DOCS_LINKS} />
+            <p className="text-xl font-medium text-foreground">
+              {t("costTracking.costTrackingSettings.pageTitle", { defaultValue: "Cost Tracking Settings" })}
+            </p>
+            <DocsMenu
+              items={DOCS_LINKS.map((item) => ({
+                label: t(item.labelKey, { defaultValue: item.label }),
+                href: item.href,
+              }))}
+            />
           </div>
           <p className="text-muted-foreground mt-1">
-            Configure cost discounts and margins for different LLM providers. Changes are saved automatically.
+            {t("costTracking.costTrackingSettings.pageSubtitle", {
+              defaultValue:
+                "Configure cost discounts and margins for different LLM providers. Changes are saved automatically.",
+            })}
           </p>
         </div>
       </div>
@@ -201,27 +239,37 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
             <SectionHeader
-              title="Provider Discounts"
+              label="Provider Discounts"
+              labelKey="costTracking.costTrackingSettings.providerDiscountsTitle"
               description="Apply percentage-based discounts to reduce costs for specific providers"
+              descriptionKey="costTracking.costTrackingSettings.providerDiscountsSubtitle"
             />
             <CollapsibleContent className="px-0">
               <Tabs defaultValue="discounts">
                 <TabsList variant="line" className="mx-6 mt-4 h-auto justify-start rounded-none border-b p-0">
                   <TabsTrigger value="discounts" className="flex-none rounded-none px-4 py-2">
-                    Discounts
+                    {t("costTracking.costTrackingSettings.discountsTab", { defaultValue: "Discounts" })}
                   </TabsTrigger>
                   <TabsTrigger value="test-it" className="flex-none rounded-none px-4 py-2">
-                    Test It
+                    {t("costTracking.costTrackingSettings.testItTab", { defaultValue: "Test It" })}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="discounts" keepMounted>
                   <div className="p-6">
                     <div className="flex justify-end mb-4">
-                      <Button onClick={() => setIsModalVisible(true)}>+ Add Provider Discount</Button>
+                      <Button onClick={() => setIsModalVisible(true)}>
+                        {t("costTracking.costTrackingSettings.addProviderDiscountButton", {
+                          defaultValue: "+ Add Provider Discount",
+                        })}
+                      </Button>
                     </div>
                     {isFetching ? (
                       <div className="py-12 text-center">
-                        <p className="text-muted-foreground">Loading configuration...</p>
+                        <p className="text-muted-foreground">
+                          {t("costTracking.costTrackingSettings.loadingConfiguration", {
+                            defaultValue: "Loading configuration...",
+                          })}
+                        </p>
                       </div>
                     ) : Object.keys(discountConfig).length > 0 ? (
                       <ProviderDiscountTable
@@ -244,9 +292,15 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        <p className="text-foreground font-medium mb-2">No provider discounts configured</p>
+                        <p className="text-foreground font-medium mb-2">
+                          {t("costTracking.costTrackingSettings.noDiscountsConfigured", {
+                            defaultValue: "No provider discounts configured",
+                          })}
+                        </p>
                         <p className="text-muted-foreground text-sm">
-                          Click &quot;Add Provider Discount&quot; to get started
+                          {t("costTracking.costTrackingSettings.noDiscountsHint", {
+                            defaultValue: 'Click "Add Provider Discount" to get started',
+                          })}
                         </p>
                       </div>
                     )}
@@ -266,17 +320,27 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
             <SectionHeader
-              title="Fee/Price Margin"
+              label="Fee/Price Margin"
+              labelKey="costTracking.costTrackingSettings.feePriceMarginTitle"
               description="Add fees or margins to LLM costs for internal billing and cost recovery"
+              descriptionKey="costTracking.costTrackingSettings.feePriceMarginSubtitle"
             />
             <CollapsibleContent className="px-0">
               <div className="p-6">
                 <div className="flex justify-end mb-4">
-                  <Button onClick={() => setIsMarginModalVisible(true)}>+ Add Provider Margin</Button>
+                  <Button onClick={() => setIsMarginModalVisible(true)}>
+                    {t("costTracking.costTrackingSettings.addProviderMarginButton", {
+                      defaultValue: "+ Add Provider Margin",
+                    })}
+                  </Button>
                 </div>
                 {isFetching ? (
                   <div className="py-12 text-center">
-                    <p className="text-muted-foreground">Loading configuration...</p>
+                    <p className="text-muted-foreground">
+                      {t("costTracking.costTrackingSettings.loadingConfiguration", {
+                        defaultValue: "Loading configuration...",
+                      })}
+                    </p>
                   </div>
                 ) : Object.keys(marginConfig).length > 0 ? (
                   <ProviderMarginTable
@@ -299,9 +363,15 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
                         d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <p className="text-foreground font-medium mb-2">No provider margins configured</p>
+                    <p className="text-foreground font-medium mb-2">
+                      {t("costTracking.costTrackingSettings.noMarginsConfigured", {
+                        defaultValue: "No provider margins configured",
+                      })}
+                    </p>
                     <p className="text-muted-foreground text-sm">
-                      Click &quot;Add Provider Margin&quot; to get started
+                      {t("costTracking.costTrackingSettings.noMarginsHint", {
+                        defaultValue: 'Click "Add Provider Margin" to get started',
+                      })}
                     </p>
                   </div>
                 )}
@@ -314,17 +384,25 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {isProxyAdmin && (
           <Collapsible className="rounded-lg border">
             <SectionHeader
-              title="Block Unpriced Models"
+              label="Block Unpriced Models"
+              labelKey="costTracking.costTrackingSettings.blockUnpricedModelsTitle"
               description="Reject requests for models that have no pricing in the cost map instead of logging them as $0 spend"
+              descriptionKey="costTracking.costTrackingSettings.blockUnpricedModelsSubtitle"
             />
             <CollapsibleContent className="px-0">
               <div className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="pr-6">
-                    <p className="text-foreground font-medium">Block requests for models without pricing</p>
+                    <p className="text-foreground font-medium">
+                      {t("costTracking.costTrackingSettings.blockUnpricedToggleLabel", {
+                        defaultValue: "Block requests for models without pricing",
+                      })}
+                    </p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      When enabled, a request whose resolved model has no cost mapping is rejected with a 403 so an
-                      admin can add pricing for it. Off by default
+                      {t("costTracking.costTrackingSettings.blockUnpricedToggleHint", {
+                        defaultValue:
+                          "When enabled, a request whose resolved model has no cost mapping is rejected with a 403 so an admin can add pricing for it. Off by default",
+                      })}
                     </p>
                   </div>
                   <Switch
@@ -341,8 +419,10 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         {/* Accordion 4: Pricing Calculator - Available to all roles */}
         <Collapsible defaultOpen={true} className="rounded-lg border">
           <SectionHeader
-            title="Pricing Calculator"
+            label="Pricing Calculator"
+            labelKey="costTracking.costTrackingSettings.pricingCalculatorTitle"
             description="Estimate LLM costs based on expected token usage and request volume"
+            descriptionKey="costTracking.costTrackingSettings.pricingCalculatorSubtitle"
           />
           <CollapsibleContent className="px-0">
             <div className="p-6">
@@ -356,16 +436,27 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         <AlertDialog open onOpenChange={(open) => !open && !isRemoving && setPendingRemoval(null)}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{REMOVAL_COPY[pendingRemoval.kind].title}</AlertDialogTitle>
+              <AlertDialogTitle>
+                {t(REMOVAL_COPY[pendingRemoval.kind].titleKey, {
+                  defaultValue: REMOVAL_COPY[pendingRemoval.kind].title,
+                })}
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to remove the {REMOVAL_COPY[pendingRemoval.kind].noun} for{" "}
-                {pendingRemoval.displayName}?
+                {t(REMOVAL_COPY[pendingRemoval.kind].contentKey, {
+                  defaultValue: "Are you sure you want to remove the {{noun}} for {{providerDisplayName}}?",
+                  noun: pendingRemoval.kind,
+                  providerDisplayName: pendingRemoval.displayName,
+                })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isRemoving}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isRemoving}>
+                {t("common.cancel", { defaultValue: "Cancel" })}
+              </AlertDialogCancel>
               <Button variant="destructive" onClick={handleConfirmRemoval} disabled={isRemoving}>
-                {isRemoving ? "Removing…" : "Remove"}
+                {isRemoving
+                  ? t("common.removing", { defaultValue: "Removing…" })
+                  : t("costTracking.costTrackingSettings.removeOkText", { defaultValue: "Remove" })}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -376,13 +467,19 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         <DialogContent className="top-8 max-h-[calc(100dvh-4rem)] translate-y-0 overflow-y-auto sm:max-w-[1000px]">
           <DialogHeader>
             <div className="flex items-center space-x-3 pb-4 border-b border-border">
-              <DialogTitle className="text-xl font-semibold text-foreground">Add Provider Discount</DialogTitle>
+              <DialogTitle className="text-xl font-semibold text-foreground">
+                {t("costTracking.costTrackingSettings.addDiscountModalTitle", {
+                  defaultValue: "Add Provider Discount",
+                })}
+              </DialogTitle>
             </div>
           </DialogHeader>
           <div className="mt-6">
             <p className="text-sm text-muted-foreground mb-6">
-              Select a provider and set its discount percentage. Enter a value between 0% and 100% (e.g., 5 for a 5%
-              discount).
+              {t("costTracking.costTrackingSettings.addDiscountModalDesc", {
+                defaultValue:
+                  "Select a provider and set its discount percentage. Enter a value between 0% and 100% (e.g., 5 for a 5% discount).",
+              })}
             </p>
             <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
               <AddProviderForm
@@ -402,13 +499,17 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
         <DialogContent className="top-8 max-h-[calc(100dvh-4rem)] translate-y-0 overflow-y-auto sm:max-w-[1000px]">
           <DialogHeader>
             <div className="flex items-center space-x-3 pb-4 border-b border-border">
-              <DialogTitle className="text-xl font-semibold text-foreground">Add Provider Margin</DialogTitle>
+              <DialogTitle className="text-xl font-semibold text-foreground">
+                {t("costTracking.costTrackingSettings.addMarginModalTitle", { defaultValue: "Add Provider Margin" })}
+              </DialogTitle>
             </div>
           </DialogHeader>
           <div className="mt-6">
             <p className="text-sm text-muted-foreground mb-6">
-              Select a provider (or &quot;Global&quot; for all providers) and configure the margin. You can use
-              percentage-based or fixed amount.
+              {t("costTracking.costTrackingSettings.addMarginModalDesc", {
+                defaultValue:
+                  'Select a provider (or "Global" for all providers) and configure the margin. You can use percentage-based or fixed amount.',
+              })}
             </p>
             <form onSubmit={(event) => event.preventDefault()} className="space-y-6">
               <AddMarginForm

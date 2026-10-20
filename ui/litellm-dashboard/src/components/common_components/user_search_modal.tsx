@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { Info, UserPlus } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { Alert, AlertTitle } from "@/components/shared/Alert";
 import { useForm } from "react-hook-form";
 import { userFilterUICall } from "@/components/networking";
@@ -30,6 +32,38 @@ interface Role {
   description: string;
 }
 
+interface RoleSource {
+  label: string;
+  value: string;
+  description: string;
+  labelKey: string;
+  descriptionKey: string;
+}
+
+const DEFAULT_ROLES: RoleSource[] = [
+  {
+    label: "admin",
+    value: "admin",
+    description: "Admin role. Can create team keys, add members, and manage settings.",
+    labelKey: "commonComponents.userSearchModal.roleAdminLabel",
+    descriptionKey: "commonComponents.userSearchModal.roleAdminDescription",
+  },
+  {
+    label: "user",
+    value: "user",
+    description: "User role. Can view team info, but not manage it.",
+    labelKey: "commonComponents.userSearchModal.roleUserLabel",
+    descriptionKey: "commonComponents.userSearchModal.roleUserDescription",
+  },
+];
+
+const localizeRoles = (t: TFunction, roles: RoleSource[]): Role[] =>
+  roles.map((role) => ({
+    label: t(role.labelKey, { defaultValue: role.label }),
+    value: role.value,
+    description: t(role.descriptionKey, { defaultValue: role.description }),
+  }));
+
 interface FormValues {
   user_email: string | null | undefined;
   user_id: string | null | undefined;
@@ -52,18 +86,13 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
   onCancel,
   onSubmit,
   accessToken,
-  title = "Add Team Member",
-  roles = [
-    {
-      label: "admin",
-      value: "admin",
-      description: "Admin role. Can create team keys, add members, and manage settings.",
-    },
-    { label: "user", value: "user", description: "User role. Can view team info, but not manage it." },
-  ],
+  title,
+  roles,
   defaultRole = "user",
   teamId,
 }) => {
+  const { t } = useTranslation();
+  const roleOptions = roles ?? localizeRoles(t, DEFAULT_ROLES);
   const emptyValues: FormValues = { user_email: undefined, user_id: undefined, role: defaultRole };
   const form = useForm<FormValues>({ defaultValues: emptyValues });
   const selectedUserId = form.watch("user_id");
@@ -172,8 +201,8 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
           autoHighlight="always"
           isLoading={loading}
           placeholder={placeholder}
-          emptyText="No results"
-          loadingText="Loading..."
+          emptyText={t("shared.paginatedSearchSelect.noResults", { defaultValue: "No results" })}
+          loadingText={t("common.loading", { defaultValue: "Loading..." })}
           inputId={controlProps.id}
         />
       </div>
@@ -184,39 +213,70 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
     <Dialog open={isVisible} onOpenChange={(open) => !open && handleClose()} disablePointerDismissal={isSubmitting}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>
+            {title ?? t("commonComponents.userSearchModal.title", { defaultValue: "Add Team Member" })}
+          </DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
             <Alert variant="info" className="mb-4" data-testid="member-existing-users-notice">
               <Info />
               <AlertTitle>
-                Search selects from users that already exist. To add someone new, ask a proxy admin to create their
-                account first.
+                <Trans
+                  i18nKey="commonComponents.userSearchModal.existingUsersNotice"
+                  defaults="Search selects from users that already exist. To add someone new, ask a proxy admin to create their account first."
+                />
               </AlertTitle>
             </Alert>
 
             <FieldGroup>
-              <FormField control={form.control} name="user_email" label="Email">
+              <FormField
+                control={form.control}
+                name="user_email"
+                label={t("commonComponents.userSearchModal.emailLabel", { defaultValue: "Email" })}
+              >
                 {({ id, value, onChange }) =>
-                  renderUserSearch("user_email", "Search by email", { id, value, onChange }, "member-email-search")
+                  renderUserSearch(
+                    "user_email",
+                    t("commonComponents.userSearchModal.searchByEmailPlaceholder", { defaultValue: "Search by email" }),
+                    { id, value, onChange },
+                    "member-email-search",
+                  )
                 }
               </FormField>
 
-              <div className="text-center">OR</div>
+              <div className="text-center">
+                {t("commonComponents.userSearchModal.orDivider", { defaultValue: "OR" })}
+              </div>
 
-              <FormField control={form.control} name="user_id" label="User ID">
-                {({ id, value, onChange }) => renderUserSearch("user_id", "Search by user ID", { id, value, onChange })}
+              <FormField
+                control={form.control}
+                name="user_id"
+                label={t("commonComponents.userSearchModal.userIdLabel", { defaultValue: "User ID" })}
+              >
+                {({ id, value, onChange }) =>
+                  renderUserSearch(
+                    "user_id",
+                    t("commonComponents.userSearchModal.searchByUserIdPlaceholder", {
+                      defaultValue: "Search by user ID",
+                    }),
+                    { id, value, onChange },
+                  )
+                }
               </FormField>
 
-              <FormField control={form.control} name="role" label="Member Role">
+              <FormField
+                control={form.control}
+                name="role"
+                label={t("commonComponents.userSearchModal.memberRoleLabel", { defaultValue: "Member Role" })}
+              >
                 {({ id, value, onChange }) => (
-                  <Select items={roles} value={value} onValueChange={(next) => onChange(next as string)}>
+                  <Select items={roleOptions} value={value} onValueChange={(next) => onChange(next as string)}>
                     <SelectTrigger id={id}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {roles.map((role) => (
+                      {roleOptions.map((role) => (
                         <SelectItem key={role.value} value={role.value}>
                           <Tooltip>
                             <TooltipTrigger
@@ -240,7 +300,9 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
             <div className="mt-4 text-right">
               <Button type="submit" disabled={isSubmitting || (!selectedUserId && !selectedUserEmail)}>
                 {isSubmitting ? <UiLoadingSpinner className="size-4" /> : <UserPlus />}
-                {isSubmitting ? "Adding..." : "Add Member"}
+                {isSubmitting
+                  ? t("commonComponents.userSearchModal.adding", { defaultValue: "Adding..." })
+                  : t("commonComponents.userSearchModal.addMember", { defaultValue: "Add Member" })}
               </Button>
             </div>
           </form>

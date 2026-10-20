@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+
 export const ALL_PROXY_MODELS = "all-proxy-models";
 export const NO_DEFAULT_MODELS = "no-default-models";
 
@@ -28,13 +30,16 @@ export function computeTeamModelBadges(
   models: string[],
   accessGroupModels: string[],
   accessGroupDetails: TeamAccessGroupModelGrant[] | undefined,
+  t: TFunction,
 ): TeamModelBadge[] {
   const grants = accessGroupDetails ?? [];
   const groupNamesFor = (model: string): string[] =>
     grants.filter((g) => g.models.includes(model)).map((g) => g.access_group_name);
   const viaGroups = (model: string): string => {
     const names = groupNamesFor(model);
-    return names.length > 0 ? describeGroups(names) : "an access group";
+    return names.length > 0
+      ? describeGroups(names)
+      : t("teamPage.teamModelAccess.anAccessGroup", { defaultValue: "an access group" });
   };
 
   const allProxy = models.length === 0 || models.includes(ALL_PROXY_MODELS);
@@ -44,16 +49,22 @@ export function computeTeamModelBadges(
   );
 
   const allProxyBadge: TeamModelBadge = {
-    label: "All proxy models",
+    label: t("teamPage.teamInfo.allProxyModels", { defaultValue: "All proxy models" }),
     kind: "all-proxy",
     tooltip: models.includes(ALL_PROXY_MODELS)
-      ? "Granted by the All Proxy Models entry in the team's model list"
-      : "The team's model list is empty, so it can access every model on the proxy",
+      ? t("teamPage.teamModelAccess.allProxyFromEntry", {
+          defaultValue: "Granted by the All Proxy Models entry in the team's model list",
+        })
+      : t("teamPage.teamModelAccess.allProxyEmptyList", {
+          defaultValue: "The team's model list is empty, so it can access every model on the proxy",
+        }),
   };
   const noDefaultBadge: TeamModelBadge = {
-    label: "No default models",
+    label: t("teamPage.teamModelAccess.noDefaultModels", { defaultValue: "No default models" }),
     kind: "no-default",
-    tooltip: "No models are granted directly. Access comes only from access groups",
+    tooltip: t("teamPage.teamModelAccess.noDefaultTooltip", {
+      defaultValue: "No models are granted directly. Access comes only from access groups",
+    }),
   };
   const headBadge = (): TeamModelBadge[] => {
     if (allProxy) return [allProxyBadge];
@@ -69,15 +80,23 @@ export function computeTeamModelBadges(
         kind: "direct",
         tooltip:
           groupNamesFor(m).length > 0
-            ? `Granted directly in the team's model list, and also via ${viaGroups(m)}`
-            : "Granted directly in the team's model list",
+            ? t("teamPage.teamModelAccess.grantedDirectlyAndVia", {
+                source: viaGroups(m),
+                defaultValue: "Granted directly in the team's model list, and also via {{source}}",
+              })
+            : t("teamPage.teamModelAccess.grantedDirectly", {
+                defaultValue: "Granted directly in the team's model list",
+              }),
       }),
     ),
     ...groupModels.map(
       (m): TeamModelBadge => ({
         label: m,
         kind: "access-group",
-        tooltip: `Granted via ${viaGroups(m)}`,
+        tooltip: t("teamPage.teamModelAccess.grantedVia", {
+          source: viaGroups(m),
+          defaultValue: "Granted via {{source}}",
+        }),
       }),
     ),
   ];

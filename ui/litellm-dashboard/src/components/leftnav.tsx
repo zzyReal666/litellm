@@ -1,4 +1,3 @@
-import { canViewProjectsPage, projectReaderRoles } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useIsOrgAdmin from "@/app/(dashboard)/hooks/useIsOrgAdmin";
@@ -24,7 +23,6 @@ import {
 } from "@/components/shared/Sidebar";
 import {
   Activity,
-  Aperture,
   BarChart3,
   Bell,
   Blocks,
@@ -40,7 +38,6 @@ import {
   FlaskConical,
   Folder,
   HeartPulse,
-  House,
   KeyRound,
   LayoutGrid,
   Network,
@@ -58,7 +55,6 @@ import {
   ShieldCheck,
   Tags,
   Terminal,
-  Trophy,
   User,
   Users,
   Wallet,
@@ -68,6 +64,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/cva.config";
 import { rolesWithCapability } from "../utils/capabilities";
 import {
@@ -85,13 +83,7 @@ import { routeSegmentForPathname, uiHref } from "@/utils/uiHref";
 
 const ICON = { strokeWidth: 1.75 } as const;
 
-const LOGO_CLASS_NAME =
-  "h-5 w-auto max-w-[150px] object-contain group-data-[collapsed=true]/sidebar:h-7 group-data-[collapsed=true]/sidebar:w-7";
-
-function bundledLogoSrc(baseUrl: string, { dark, monogram }: { dark: boolean; monogram: boolean }): string {
-  const query = [dark && "theme=dark", monogram && "variant=monogram"].filter(Boolean).join("&");
-  return `${baseUrl}/get_image${query ? `?${query}` : ""}`;
-}
+const LOGO_CLASS_NAME = "h-7 w-auto max-w-[150px] object-contain group-data-[collapsed=true]/sidebar:w-7";
 
 interface SidebarProps {
   collapsed?: boolean;
@@ -104,7 +96,7 @@ interface SidebarProps {
   allowVectorStoresForTeamAdmins?: boolean;
 }
 
-export interface MenuItem {
+interface MenuItem {
   key: string;
   page: string;
   route?: string;
@@ -115,91 +107,11 @@ export interface MenuItem {
   external_url?: string;
 }
 
-export interface MenuGroup {
+interface MenuGroup {
   groupLabel: string;
   items: MenuItem[];
   roles?: string[];
 }
-
-export interface MenuVisibilityContext {
-  userRole: string;
-  isViewOnly: boolean;
-  isOrgAdmin: boolean;
-  isTeamAdmin: boolean;
-  enabledPagesInternalUsers?: string[] | null;
-  enableProjectsUI?: boolean;
-  disableAgentsForInternalUsers?: boolean;
-  allowAgentsForTeamAdmins?: boolean;
-  disableVectorStoresForInternalUsers?: boolean;
-  allowVectorStoresForTeamAdmins?: boolean;
-}
-
-const adminPageVisibility = (item: MenuItem, context: MenuVisibilityContext, isAdmin: boolean): boolean | null => {
-  if (item.key !== "organizations" && item.key !== "users") return null;
-  const hasRoleAccess = !item.roles || item.roles.includes(context.userRole) || context.isOrgAdmin;
-  if (!hasRoleAccess) return false;
-  if (!isAdmin && context.enabledPagesInternalUsers != null) {
-    return context.enabledPagesInternalUsers.includes(item.page);
-  }
-  return true;
-};
-
-const projectPageIsVisible = (item: MenuItem, context: MenuVisibilityContext): boolean => {
-  if (item.key !== "projects") return true;
-  if (!context.enableProjectsUI) return false;
-  return canViewProjectsPage({
-    userRole: context.userRole,
-    isOrgAdmin: context.isOrgAdmin,
-    isTeamAdmin: context.isTeamAdmin,
-  });
-};
-
-const pageIsDisabledForInternalUsers = (
-  item: MenuItem,
-  pageKey: "agents" | "vector-stores",
-  isAdmin: boolean,
-  context: MenuVisibilityContext,
-): boolean => {
-  const isDisabled =
-    pageKey === "agents" ? context.disableAgentsForInternalUsers : context.disableVectorStoresForInternalUsers;
-  const allowedForTeamAdmins =
-    pageKey === "agents" ? context.allowAgentsForTeamAdmins : context.allowVectorStoresForTeamAdmins;
-  if (item.key !== pageKey || isAdmin || !isDisabled) return false;
-  return !(allowedForTeamAdmins && context.isTeamAdmin);
-};
-
-const pageIsEnabledForInternalUser = (item: MenuItem, context: MenuVisibilityContext): boolean => {
-  const enabledPages = context.enabledPagesInternalUsers;
-  if (enabledPages == null) return true;
-  if (item.children?.some((child) => enabledPages.includes(child.page))) return true;
-  return enabledPages.includes(item.page);
-};
-
-const menuItemIsVisible = (item: MenuItem, context: MenuVisibilityContext, isAdmin: boolean): boolean => {
-  if (item.children && item.children.length === 0) return false;
-  if (item.key === "llm-playground" && context.isViewOnly) return false;
-  const adminVisibility = adminPageVisibility(item, context, isAdmin);
-  if (adminVisibility !== null) return adminVisibility;
-  if (!projectPageIsVisible(item, context)) return false;
-  if (pageIsDisabledForInternalUsers(item, "agents", isAdmin, context)) return false;
-  if (pageIsDisabledForInternalUsers(item, "vector-stores", isAdmin, context)) return false;
-  if (item.roles && !item.roles.includes(context.userRole)) return false;
-  if (!isAdmin && context.enabledPagesInternalUsers != null) return pageIsEnabledForInternalUser(item, context);
-  return true;
-};
-
-export const visibleMenuGroups = (groups: readonly MenuGroup[], context: MenuVisibilityContext): MenuGroup[] => {
-  const isAdmin = isAdminRole(context.userRole);
-  const filterItems = (items: MenuItem[]): MenuItem[] =>
-    items
-      .map((item) => ({ ...item, children: item.children ? filterItems(item.children) : undefined }))
-      .filter((item) => menuItemIsVisible(item, context, isAdmin));
-
-  return groups
-    .filter((group) => !group.roles || group.roles.includes(context.userRole))
-    .map((group) => ({ groupLabel: group.groupLabel, items: filterItems(group.items) }))
-    .filter((group) => group.items.length > 0);
-};
 
 // Menu groups organized by category - defined outside component for export.
 // Shape (key/page/label/roles/children) is consumed by page_utils.ts; only the
@@ -208,7 +120,6 @@ const menuGroups: MenuGroup[] = [
   {
     groupLabel: "AI GATEWAY",
     items: [
-      { key: "home", page: "home", label: "Home", icon: <House {...ICON} /> },
       { key: "api-keys", page: "api-keys", label: "Virtual Keys", icon: <KeyRound {...ICON} /> },
       {
         key: "llm-playground",
@@ -296,17 +207,6 @@ const menuGroups: MenuGroup[] = [
         label: "Usage",
       },
       {
-        key: "model-insights",
-        page: "model-insights",
-        icon: <Trophy {...ICON} />,
-        roles: all_admin_roles,
-        label: (
-          <span className="flex items-center gap-2">
-            Model Leaderboard <BetaBadge />
-          </span>
-        ),
-      },
-      {
         key: "cost-optimization",
         page: "cost-optimization",
         icon: <PiggyBank {...ICON} />,
@@ -314,16 +214,6 @@ const menuGroups: MenuGroup[] = [
         label: "Cost Optimization",
       },
       { key: "logs", page: "logs", label: "Logs", icon: <Activity {...ICON} /> },
-      {
-        key: "lens",
-        page: "lens",
-        label: (
-          <span className="flex items-center gap-2">
-            Lens <BetaBadge />
-          </span>
-        ),
-        icon: <Aperture {...ICON} />,
-      },
       {
         key: "guardrails-monitor",
         page: "guardrails-monitor",
@@ -346,7 +236,7 @@ const menuGroups: MenuGroup[] = [
           </span>
         ),
         icon: <Folder {...ICON} />,
-        roles: [...projectReaderRoles],
+        roles: all_admin_roles,
       },
       { key: "users", page: "users", label: "Internal Users", icon: <User {...ICON} />, roles: all_admin_roles },
       {
@@ -470,9 +360,9 @@ const menuGroups: MenuGroup[] = [
   },
 ];
 
-const HOME_ROUTE = "home";
+const HOME_ROUTE = "api-keys";
 
-export const routeOf = (item: MenuItem): string => item.route ?? item.page;
+const routeOf = (item: MenuItem): string => item.route ?? item.page;
 
 const routeForPathname = (pathname: string): string => routeSegmentForPathname(pathname) || HOME_ROUTE;
 
@@ -504,25 +394,98 @@ const SECTION_DISPLAY: Record<string, string> = {
   SETTINGS: "Settings",
 };
 
-export const sectionText = (groupLabel: string): string => SECTION_DISPLAY[groupLabel] ?? groupLabel;
-
 const prettify = (key: string): string =>
   key
     .split(/[-_]/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
-export const labelText = (item: MenuItem): string => (typeof item.label === "string" ? item.label : prettify(item.key));
+const labelText = (item: MenuItem, fallback?: string): string =>
+  typeof item.label === "string" ? item.label : fallback ?? prettify(item.key);
+
+const NAV_LABEL_KEYS: Record<string, string> = {
+  "api-keys": "nav.virtualKeys",
+  "llm-playground": "nav.playground",
+  models: "nav.modelsEndpoints",
+  agentic: "nav.agentic",
+  agents: "nav.agents",
+  workflows: "nav.workflowRuns",
+  memory: "nav.memory",
+  "mcp-servers": "nav.mcpServers",
+  skills: "nav.skills",
+  guardrails: "nav.guardrails",
+  policies: "nav.policies",
+  tools: "nav.tools",
+  "search-tools": "nav.searchTools",
+  "vector-stores": "nav.vectorStores",
+  "tool-policies": "nav.toolPolicies",
+  new_usage: "nav.usage",
+  "cost-optimization": "nav.costOptimization",
+  logs: "nav.logs",
+  "guardrails-monitor": "nav.guardrailsMonitor",
+  teams: "nav.teams",
+  projects: "nav.projects",
+  users: "nav.internalUsers",
+  organizations: "nav.organizations",
+  "access-groups": "nav.accessGroups",
+  budgets: "nav.budgets",
+  api_ref: "nav.apiReference",
+  "model-hub-table": "nav.aiHub",
+  "learning-resources": "nav.learningResources",
+  caching: "nav.caching",
+  experimental: "nav.experimental",
+  prompts: "nav.prompts",
+  "transform-request": "nav.apiPlayground",
+  "tag-management": "nav.tagManagement",
+  "4": "nav.oldUsage",
+  settings: "nav.settings",
+  "router-settings": "nav.routerSettings",
+  "logging-and-alerts": "nav.loggingAlerts",
+  "admin-panel": "nav.adminSettings",
+  "cost-tracking": "nav.costTracking",
+  "ui-theme": "nav.uiTheme",
+};
+
+const NAV_GROUP_LABEL_KEYS: Record<string, string> = {
+  "AI GATEWAY": "nav.groups.aiGateway",
+  OBSERVABILITY: "nav.groups.observability",
+  "ACCESS CONTROL": "nav.groups.accessControl",
+  "DEVELOPER TOOLS": "nav.groups.developerTools",
+  SETTINGS: "nav.groups.settings",
+};
+
+// Items whose label carries inline markup (the beta badge) keep their own React
+// node, so the tooltip text comes from this plain-text lookup instead.
+const LABEL_FALLBACKS: Record<string, string> = {
+  "cost-optimization": "Cost Optimization",
+};
+
+const itemLabel = (item: MenuItem, t?: TFunction): string => {
+  const fallback = labelText(item, LABEL_FALLBACKS[item.key]);
+  const key = NAV_LABEL_KEYS[item.key];
+  return key && t ? t(key, { defaultValue: fallback }) : fallback;
+};
+
+const groupLabel = (group: MenuGroup, t?: TFunction): string => {
+  const fallback = SECTION_DISPLAY[group.groupLabel] ?? group.groupLabel;
+  const key = NAV_GROUP_LABEL_KEYS[group.groupLabel];
+  return key && t ? t(key, { defaultValue: fallback }) : fallback;
+};
+
+const sidebarGroupLabel = (label: string, t: TFunction): string => {
+  const key = NAV_GROUP_LABEL_KEYS[label];
+  return key ? t(key, { defaultValue: label }) : label;
+};
 
 // Breadcrumb ("Section" / "Page") for the top bar, derived from the same nav config.
-export const getBreadcrumb = (pathname: string): { section: string | null; title: string } => {
+export const getBreadcrumb = (pathname: string, t?: TFunction): { section: string | null; title: string } => {
   const route = routeForPathname(pathname);
   for (const group of menuGroups) {
     for (const item of group.items) {
-      const section = sectionText(group.groupLabel);
-      if (routeOf(item) === route) return { section, title: labelText(item) };
+      const section = groupLabel(group, t);
+      if (routeOf(item) === route) return { section, title: itemLabel(item, t) };
       const child = item.children?.find((c) => routeOf(c) === route);
-      if (child) return { section, title: labelText(child) };
+      if (child) return { section, title: itemLabel(child, t) };
     }
   }
   return { section: null, title: prettify(route) };
@@ -538,6 +501,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
   disableVectorStoresForInternalUsers,
   allowVectorStoresForTeamAdmins,
 }) => {
+  const { t } = useTranslation();
   const { userId, accessToken, userRole, isViewOnly } = useAuthorized();
   const isOrgAdmin = useIsOrgAdmin();
   const { data: teams } = useTeams();
@@ -570,32 +534,52 @@ const Sidebar_: React.FC<SidebarProps> = ({
 
   const isTeamAdmin = useMemo(() => isUserTeamAdminForAnyTeam(teams ?? null, userId ?? ""), [teams, userId]);
 
-  const visibleGroups = useMemo(() => {
-    const context: MenuVisibilityContext = {
-      userRole,
-      isViewOnly,
-      isOrgAdmin,
-      isTeamAdmin,
-      enabledPagesInternalUsers,
-      enableProjectsUI,
-      disableAgentsForInternalUsers,
-      allowAgentsForTeamAdmins,
-      disableVectorStoresForInternalUsers,
-      allowVectorStoresForTeamAdmins,
-    };
-    return visibleMenuGroups(menuGroups, context);
-  }, [
-    allowAgentsForTeamAdmins,
-    allowVectorStoresForTeamAdmins,
-    disableAgentsForInternalUsers,
-    disableVectorStoresForInternalUsers,
-    enableProjectsUI,
-    enabledPagesInternalUsers,
-    isOrgAdmin,
-    isTeamAdmin,
-    isViewOnly,
-    userRole,
-  ]);
+  const filterItemsByRole = (items: MenuItem[]): MenuItem[] => {
+    const isAdmin = isAdminRole(userRole);
+    return items
+      .map((item) => ({ ...item, children: item.children ? filterItemsByRole(item.children) : undefined }))
+      .filter((item) => {
+        // A parent whose children were all filtered out renders as a leaf link
+        // to its own page id, which is not a real route. Drop it instead.
+        if (item.children && item.children.length === 0) return false;
+        if (item.key === "llm-playground" && isViewOnly) return false;
+        if (item.key === "organizations" || item.key === "users") {
+          const hasRoleAccess = !item.roles || item.roles.includes(userRole) || isOrgAdmin;
+          if (!hasRoleAccess) return false;
+          if (!isAdmin && enabledPagesInternalUsers != null) return enabledPagesInternalUsers.includes(item.page);
+          return true;
+        }
+        if (item.key === "projects" && !enableProjectsUI) return false;
+        if (
+          !isAdmin &&
+          item.key === "agents" &&
+          disableAgentsForInternalUsers &&
+          !(allowAgentsForTeamAdmins && isTeamAdmin)
+        )
+          return false;
+        if (
+          !isAdmin &&
+          item.key === "vector-stores" &&
+          disableVectorStoresForInternalUsers &&
+          !(allowVectorStoresForTeamAdmins && isTeamAdmin)
+        )
+          return false;
+        if (item.roles && !item.roles.includes(userRole)) return false;
+        if (!isAdmin && enabledPagesInternalUsers != null) {
+          if (item.children && item.children.length > 0) {
+            const hasVisibleChildren = item.children.some((child) => enabledPagesInternalUsers.includes(child.page));
+            if (hasVisibleChildren) return true;
+          }
+          return enabledPagesInternalUsers.includes(item.page);
+        }
+        return true;
+      });
+  };
+
+  const visibleGroups = menuGroups
+    .filter((group) => !group.roles || group.roles.includes(userRole))
+    .map((group) => ({ groupLabel: group.groupLabel, items: filterItemsByRole(group.items) }))
+    .filter((group) => group.items.length > 0);
 
   const toggleGroup = (key: string) => {
     if (collapsed) {
@@ -614,7 +598,12 @@ const Sidebar_: React.FC<SidebarProps> = ({
   const renderLeaf = (item: MenuItem, isChild: boolean) => {
     const active = selectedKey === item.key;
     const size = isChild ? "sub" : "default";
-    const label = <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>;
+    const label = (
+      <span className="flex flex-1 items-center gap-2 truncate group-data-[collapsed=true]/sidebar:hidden">
+        {itemLabel(item, t)}
+        {item.key === "cost-optimization" ? <BetaBadge /> : null}
+      </span>
+    );
 
     if (item.external_url) {
       return (
@@ -623,7 +612,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
           href={item.external_url}
           target="_blank"
           rel="noopener noreferrer"
-          title={collapsed ? labelText(item) : undefined}
+          title={collapsed ? itemLabel(item, t) : undefined}
           data-active={active || undefined}
           className={cn(sidebarMenuButtonVariants({ isActive: active, size }))}
         >
@@ -638,7 +627,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
       <Link
         key={item.key}
         href={uiHref(routeOf(item))}
-        title={collapsed ? labelText(item) : undefined}
+        title={collapsed ? itemLabel(item, t) : undefined}
         data-active={active || undefined}
         className={cn(sidebarMenuButtonVariants({ isActive: active, size }))}
       >
@@ -662,10 +651,13 @@ const Sidebar_: React.FC<SidebarProps> = ({
           isActive={active}
           aria-expanded={open}
           onClick={() => toggleGroup(item.key)}
-          title={collapsed ? labelText(item) : undefined}
+          title={collapsed ? itemLabel(item, t) : undefined}
         >
           {item.icon}
-          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>
+          <span className="flex flex-1 items-center gap-2 truncate group-data-[collapsed=true]/sidebar:hidden">
+            {itemLabel(item, t)}
+            {item.key === "cost-optimization" ? <BetaBadge /> : null}
+          </span>
           <ChevronRight
             className={cn(
               "size-4 shrink-0 transition-transform group-data-[collapsed=true]/sidebar:hidden",
@@ -684,17 +676,25 @@ const Sidebar_: React.FC<SidebarProps> = ({
     );
   };
 
-  const logoSrc = logoUrl || bundledLogoSrc(baseUrl, { dark: false, monogram: collapsed });
+  const logoSrc = logoUrl || `${baseUrl}/get_image`;
   const reachableDarkLogo = logoUrlDark === erroredDarkLogo ? null : logoUrlDark;
-  const darkLogoSrc = reachableDarkLogo || logoUrl || bundledLogoSrc(baseUrl, { dark: true, monogram: collapsed });
+  const darkLogoSrc = reachableDarkLogo || logoUrl || `${baseUrl}/get_image?theme=dark`;
 
   return (
     <Sidebar collapsed={collapsed}>
       <SidebarHeader className="h-14 border-b border-border group-data-[collapsed=true]/sidebar:h-auto">
         <div className="flex items-center justify-between gap-2 group-data-[collapsed=true]/sidebar:flex-col">
           <div className="flex min-w-0 items-center gap-2">
-            <Link href={uiHref("")} className="flex min-w-0 items-center" aria-label="LiteLLM home">
-              <img src={logoSrc} alt="LiteLLM" className={cn(LOGO_CLASS_NAME, "dark:hidden")} />
+            <Link
+              href={uiHref("")}
+              className="flex min-w-0 items-center"
+              aria-label={t("navbar.liteLLMHome", { defaultValue: "LiteLLM home" })}
+            >
+              <img
+                src={logoSrc}
+                alt={t("navbar.logoAlt", { defaultValue: "LiteLLM Brand" })}
+                className={cn(LOGO_CLASS_NAME, "dark:hidden")}
+              />
               <img
                 src={darkLogoSrc}
                 alt=""
@@ -718,7 +718,11 @@ const Sidebar_: React.FC<SidebarProps> = ({
               variant="ghost"
               size="icon-sm"
               onClick={onToggleCollapsed}
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-label={
+                collapsed
+                  ? t("navbar.expandSidebar", { defaultValue: "Expand sidebar" })
+                  : t("navbar.collapseSidebar", { defaultValue: "Collapse sidebar" })
+              }
               className="flex-none text-muted-foreground"
             >
               {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
@@ -732,7 +736,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
           {visibleGroups.map((group, gi) => (
             <SidebarGroup key={group.groupLabel}>
               {gi > 0 && <SidebarSeparator className="hidden group-data-[collapsed=true]/sidebar:block" />}
-              <SidebarGroupLabel>{group.groupLabel}</SidebarGroupLabel>
+              <SidebarGroupLabel>{sidebarGroupLabel(group.groupLabel, t)}</SidebarGroupLabel>
               <SidebarMenu>{group.items.map((item) => renderItem(item))}</SidebarMenu>
             </SidebarGroup>
           ))}

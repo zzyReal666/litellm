@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface RoutingStrategySelectorProps {
@@ -16,14 +17,19 @@ const RoutingStrategySelector: React.FC<RoutingStrategySelectorProps> = ({
   routerFieldsMetadata,
   onStrategyChange,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-2 max-w-3xl">
       <div>
         <label className="text-xs font-medium text-foreground uppercase tracking-wide">
-          {routerFieldsMetadata["routing_strategy"]?.ui_field_name || "Routing Strategy"}
+          {t("routerSettings.fields.routing_strategy.label", {
+            defaultValue: routerFieldsMetadata["routing_strategy"]?.ui_field_name || "Routing Strategy",
+          })}
         </label>
         <p className="text-xs text-muted-foreground mt-0.5 mb-2">
-          {routerFieldsMetadata["routing_strategy"]?.field_description || ""}
+          {t("routerSettings.fields.routing_strategy.description", {
+            defaultValue: routerFieldsMetadata["routing_strategy"]?.field_description || "",
+          })}
         </p>
       </div>
       <div className="routing-strategy-select max-w-3xl">
@@ -41,7 +47,9 @@ const RoutingStrategySelector: React.FC<RoutingStrategySelectorProps> = ({
                   <span className="font-mono text-sm font-medium">{strategy}</span>
                   {routingStrategyDescriptions[strategy] && (
                     <span className="text-xs font-normal text-muted-foreground">
-                      {routingStrategyDescriptions[strategy]}
+                      {t(`routerSettings.strategies.${strategy}`, {
+                        defaultValue: routingStrategyDescriptions[strategy],
+                      })}
                     </span>
                   )}
                 </div>

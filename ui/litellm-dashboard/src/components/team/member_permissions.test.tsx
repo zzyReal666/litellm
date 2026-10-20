@@ -1,5 +1,6 @@
 import * as networking from "@/components/networking";
-import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
+import i18n from "@/lib/i18n";
+import { act, cleanup, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { renderWithProviders } from "../../../tests/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import MemberPermissions from "./member_permissions";
@@ -13,8 +14,10 @@ const checkboxFor = (endpoint: string) =>
   within(screen.getByText(endpoint).closest("tr") as HTMLElement).getByRole("checkbox");
 
 describe("MemberPermissions", () => {
-  afterEach(() => {
+  afterEach(async () => {
+    cleanup();
     vi.clearAllMocks();
+    await i18n.changeLanguage("en");
   });
 
   it("should render", async () => {
@@ -129,6 +132,29 @@ describe("MemberPermissions", () => {
 
     expect(checkboxFor("/key/list")).not.toBeChecked();
     expect(screen.queryByRole("button", { name: /save changes/i })).not.toBeInTheDocument();
+  });
+
+  it("should render the permissions screen in Chinese when the language is zh-CN", async () => {
+    vi.mocked(networking.getTeamPermissionsCall).mockResolvedValue({
+      all_available_permissions: ["/key/generate", "/key/list"],
+      team_member_permissions: ["/key/generate"],
+    });
+
+    await i18n.changeLanguage("zh-CN");
+
+    renderWithProviders(<MemberPermissions teamId="team-123" accessToken="token-123" canEditTeam={true} />);
+
+    expect(await screen.findByText("成员权限")).toBeInTheDocument();
+    expect(screen.getByText("控制非团队管理员的成员可以执行的操作。")).toBeInTheDocument();
+    expect(screen.getByText("方法")).toBeInTheDocument();
+    expect(screen.getByText("描述")).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(checkboxFor("/key/list"));
+    });
+
+    expect(screen.getByRole("button", { name: "重置" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "保存更改" })).toBeInTheDocument();
   });
 
   it("should handle reset button click", async () => {

@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import { CheckCircle } from "lucide-react";
 import { getProxyBaseUrl, ConnectFlowStatus } from "@/components/networking";
 import { OAuth2ConnectButton } from "@/components/chat/MCPAppsPanel";
@@ -24,34 +26,63 @@ export function isLoopbackOrigin(origin: string | null): boolean {
   }
 }
 
-const copyFor = (flow: ConnectFlowStatus | undefined, failed: boolean): readonly [string, string] => {
-  const clientLabel = flow?.client_origin ?? "the application";
-  const serverLabel = flow?.server_name ?? "the requested MCP server";
+const copyFor = (flow: ConnectFlowStatus | undefined, failed: boolean, t: TFunction): readonly [string, string] => {
+  const clientLabel =
+    flow?.client_origin ?? t("chat.connectFlowBanner.clientFallback", { defaultValue: "the application" });
+  const serverLabel =
+    flow?.server_name ?? t("chat.connectFlowBanner.serverFallback", { defaultValue: "the requested MCP server" });
   if (failed || flow === undefined || flow.state === "stale") {
     return [
-      "The connection cannot continue",
-      `The gateway could not validate this connection. Cancel to return to ${clientLabel}.`,
+      t("chat.connectFlowBanner.cannotContinue", { defaultValue: "The connection cannot continue" }),
+      t("chat.connectFlowBanner.validateFailed", {
+        client: clientLabel,
+        defaultValue: "The gateway could not validate this connection. Cancel to return to {{client}}.",
+      }),
     ];
   }
   if (flow.state === "unscoped") {
     return [
-      `Connect your MCP servers to ${clientLabel}`,
-      `Authorize the servers you want to use below, then click Finish connecting to return to ${clientLabel}.`,
+      t("chat.connectFlowBanner.connectServers", {
+        client: clientLabel,
+        defaultValue: "Connect your MCP servers to {{client}}",
+      }),
+      t("chat.connectFlowBanner.authorizeServers", {
+        client: clientLabel,
+        defaultValue:
+          "Authorize the servers you want to use below, then click Finish connecting to return to {{client}}.",
+      }),
     ];
   }
   if (flow.state === "interactive" && !flow.connected) {
     return [
-      `Allow ${clientLabel} to use ${serverLabel}`,
-      `Authorize ${serverLabel} below to continue, or cancel to send ${clientLabel} away.`,
+      t("chat.connectFlowBanner.allowClientUseServer", {
+        client: clientLabel,
+        server: serverLabel,
+        defaultValue: "Allow {{client}} to use {{server}}",
+      }),
+      t("chat.connectFlowBanner.authorizeToContinue", {
+        client: clientLabel,
+        server: serverLabel,
+        defaultValue: "Authorize {{server}} below to continue, or cancel to send {{client}} away.",
+      }),
     ];
   }
   return [
-    `Allow ${clientLabel} to use ${serverLabel}`,
-    `Click Finish connecting to give ${clientLabel} access to ${serverLabel} as you.`,
+    t("chat.connectFlowBanner.allowClientUseServer", {
+      client: clientLabel,
+      server: serverLabel,
+      defaultValue: "Allow {{client}} to use {{server}}",
+    }),
+    t("chat.connectFlowBanner.finishToGrant", {
+      client: clientLabel,
+      server: serverLabel,
+      defaultValue: "Click Finish connecting to give {{client}} access to {{server}} as you.",
+    }),
   ];
 };
 
 const ConnectFlowBanner: React.FC<Props> = ({ flowHandle, flow, accessToken, onConnected, failed }) => {
+  const { t } = useTranslation();
   const action = `${getProxyBaseUrl()}/authorize/complete`;
   const state = failed || flow === undefined ? "stale" : flow.state;
   const canFinish = state === "unscoped" || (state !== "stale" && flow?.connected === true);
@@ -61,7 +92,7 @@ const ConnectFlowBanner: React.FC<Props> = ({ flowHandle, flow, accessToken, onC
     state === "interactive" && flow?.connected === false && flow.server_id !== null
       ? { server_id: flow.server_id, server_name: flow.server_name }
       : null;
-  const copy = copyFor(flow, failed);
+  const copy = copyFor(flow, failed, t);
 
   return (
     <div className="mb-6 rounded-lg border border-primary/30 bg-primary/5 px-5 py-4">
@@ -90,7 +121,7 @@ const ConnectFlowBanner: React.FC<Props> = ({ flowHandle, flow, accessToken, onC
                 type="submit"
                 className="h-[38px] rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
               >
-                Finish connecting
+                {t("chat.connectFlowBanner.finishConnecting", { defaultValue: "Finish connecting" })}
               </button>
             )}
             {canCancel && (
@@ -100,13 +131,15 @@ const ConnectFlowBanner: React.FC<Props> = ({ flowHandle, flow, accessToken, onC
                 value="deny"
                 className="ml-2 h-[38px] rounded-md border px-4 text-sm font-semibold text-foreground hover:bg-accent/40"
               >
-                Cancel
+                {t("common.cancel", { defaultValue: "Cancel" })}
               </button>
             )}
             {loopbackClient && (
               <label className="mt-2 flex items-center gap-2 text-[13px] text-muted-foreground">
                 <input type="checkbox" name="delivery" value="manual" />
-                My client is on a remote or SSH machine
+                {t("chat.connectFlowBanner.remoteClient", {
+                  defaultValue: "My client is on a remote or SSH machine",
+                })}
               </label>
             )}
           </form>

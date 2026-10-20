@@ -1,17 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { components } from "@/lib/http/schema";
-import type { KeySpendActivityRow } from "@/components/UsagePage/dailyActivityApi";
-import { EMPTY_DAILY_ACTIVITY_METADATA } from "@/components/UsagePage/dailyActivityApi";
-import type { DailyData, SpendMetrics } from "@/components/UsagePage/types";
+import i18n from "@/lib/i18n";
+
+import type { DailyData, KeyMetricWithMetadata, SpendMetrics } from "@/components/UsagePage/types";
 import type { DailyActivityRange } from "./useDailyActivityRange";
-
-const mockCacheLeakageKeysCall = vi.fn();
-
-vi.mock("@/components/networking", () => ({
-  cacheLeakageKeysCall: (...args: unknown[]) => mockCacheLeakageKeysCall(...args),
-}));
 
 vi.mock("@/components/shared/advanced_date_picker", () => ({
   __esModule: true,
@@ -20,9 +13,8 @@ vi.mock("@/components/shared/advanced_date_picker", () => ({
 
 import CacheLeakageCard from "./CacheLeakageCard";
 
-const baseMetrics = (overrides: Partial<SpendMetrics>): components["schemas"]["SpendMetrics"] => ({
+const baseMetrics = (overrides: Partial<SpendMetrics>): SpendMetrics => ({
   spend: 0,
-  flat_cost: 0,
   prompt_tokens: 0,
   completion_tokens: 0,
   total_tokens: 0,
@@ -31,33 +23,38 @@ const baseMetrics = (overrides: Partial<SpendMetrics>): components["schemas"]["S
   failed_requests: 0,
   cache_read_input_tokens: 0,
   cache_creation_input_tokens: 0,
-  compression_saved_tokens: 0,
-  compression_savings_spend: 0,
-  prompt_caching_savings_spend: 0,
-  gateway_injected_caching_savings_spend: 0,
-  autorouter_savings_spend: 0,
-  total_response_time_ms: 0,
-  timed_requests: 0,
   ...overrides,
 });
 
-const keyRow = (hash: string, alias: string, metrics: Partial<SpendMetrics>): KeySpendActivityRow => ({
-  api_key: hash,
+const key = (alias: string, metrics: Partial<SpendMetrics>): KeyMetricWithMetadata => ({
   metrics: baseMetrics(metrics),
   metadata: { key_alias: alias, team_id: null },
+});
+
+const dayWithKeys = (date: string, apiKeys: Record<string, KeyMetricWithMetadata>): DailyData => ({
+  date,
+  metrics: baseMetrics({}),
+  breakdown: {
+    models: {},
+    model_groups: {},
+    mcp_servers: {},
+    providers: {},
+    api_keys: apiKeys,
+    entities: {},
+  },
 });
 
 const dayWithModels = (date: string, models: Record<string, Partial<SpendMetrics>>): DailyData => ({
   date,
   metrics: baseMetrics({}),
   breakdown: {
-    models: {},
-    model_groups: Object.fromEntries(
+    models: Object.fromEntries(
       Object.entries(models).map(([name, m]) => [
         name,
         { metrics: baseMetrics(m), metadata: {}, api_key_breakdown: {} },
       ]),
     ),
+    model_groups: {},
     mcp_servers: {},
     providers: {},
     api_keys: {},
@@ -72,37 +69,26 @@ const renderWith = (results: DailyData[], overrides: Partial<DailyActivityRange>
         dateValue: {},
         onDateChange: vi.fn(),
         results,
-        metadata: EMPTY_DAILY_ACTIVITY_METADATA,
         loading: false,
-        failed: false,
-        scope: {
-          accessToken: "test-token",
-          startTime: new Date(2025, 0, 1),
-          endTime: new Date(2025, 0, 31),
-          userId: null,
-          apiKey: null,
-        },
+        isFetchingMore: false,
+        progress: { currentPage: 1, totalPages: 1 },
+        cancelled: false,
+        cancel: vi.fn(),
         ...overrides,
       }}
     />,
   );
 
 describe("CacheLeakageCard", () => {
-  beforeEach(() => {
-    mockCacheLeakageKeysCall.mockReset();
-    mockCacheLeakageKeysCall.mockResolvedValue({ api_keys: [] });
-  });
+  it("ranks leaking keys by uncached prompt tokens and shows cache hit ratio", () => {
+    renderWith([
+      dayWithKeys("2026-07-12", {
+        "hash-caching": key("caching-key", { prompt_tokens: 1000, cache_read_input_tokens: 900 }),
+        "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+      }),
+    ]);
 
-  it("ranks leaking keys from the server-ranked key list and shows cache hit ratio", async () => {
-    mockCacheLeakageKeysCall.mockResolvedValue({
-      api_keys: [
-        keyRow("hash-caching", "caching-key", { prompt_tokens: 1000, cache_read_input_tokens: 900 }),
-        keyRow("hash-leaky", "leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
-      ],
-    });
-    renderWith([]);
-
-    expect(await screen.findByText("leaky-key")).toBeInTheDocument();
+    expect(screen.getByText("leaky-key")).toBeInTheDocument();
     expect(screen.getByText("0.0%")).toBeInTheDocument();
     expect(screen.getByText("90.0%")).toBeInTheDocument();
     [
@@ -112,42 +98,23 @@ describe("CacheLeakageCard", () => {
     ].forEach((info) => expect(screen.getByLabelText(info)).toBeInTheDocument());
   });
 
-  it("asks the server for the key ranking under the activity scope", async () => {
-    renderWith([], {
-      scope: {
-        accessToken: "test-token",
-        startTime: new Date(2025, 0, 1),
-        endTime: new Date(2025, 0, 31),
-        userId: "u1",
-        apiKey: "hash-1",
-      },
-    });
-
-    await screen.findByText("No key usage in this range.");
-    expect(mockCacheLeakageKeysCall).toHaveBeenCalledWith(
-      expect.objectContaining({ entityIds: ["u1"], apiKey: "hash-1", includeCurrentUtcDay: true }),
-    );
-  });
-
-  it("sorts by the clicked column, worst cache hit rate first", async () => {
-    mockCacheLeakageKeysCall.mockResolvedValue({
-      api_keys: [
-        keyRow("hash-a", "alpha", {
+  it("sorts by the clicked column, worst cache hit rate first", () => {
+    renderWith([
+      dayWithKeys("2026-07-12", {
+        "hash-a": key("alpha", {
           prompt_tokens: 10000,
           cache_read_input_tokens: 9000,
           prompt_caching_savings_spend: 9.0,
         }),
-        keyRow("hash-b", "bravo", {
+        "hash-b": key("bravo", {
           prompt_tokens: 500,
           cache_read_input_tokens: 50,
           prompt_caching_savings_spend: 0.05,
         }),
-      ],
-    });
-    renderWith([]);
+      }),
+    ]);
     const firstDataRow = () => screen.getAllByRole("row")[1];
 
-    expect(await screen.findByText("alpha")).toBeInTheDocument();
     expect(firstDataRow()).toHaveTextContent("alpha");
 
     fireEvent.click(screen.getByText("Cache hit rate"));
@@ -157,40 +124,104 @@ describe("CacheLeakageCard", () => {
     expect(firstDataRow()).toHaveTextContent("alpha");
   });
 
-  it("switches to the model view and lists models from every provider", async () => {
+  it("switches to the model view and lists only Anthropic models", () => {
     renderWith([
       dayWithModels("2026-07-12", {
         "claude-sonnet-5": { prompt_tokens: 5000, cache_read_input_tokens: 0 },
-        "vertex_ai/gemini-2.5-pro": { prompt_tokens: 8000, cache_read_input_tokens: 2000 },
+        "gpt-4o": { prompt_tokens: 8000, cache_read_input_tokens: 0 },
       }),
     ]);
 
-    fireEvent.click(await screen.findByText("By model"));
+    fireEvent.click(screen.getByText("By model"));
 
     expect(screen.getByText("Cache leakage by model")).toBeInTheDocument();
     expect(screen.getByText("claude-sonnet-5")).toBeInTheDocument();
-    expect(screen.getByText("vertex_ai/gemini-2.5-pro")).toBeInTheDocument();
+    expect(screen.queryByText("gpt-4o")).not.toBeInTheDocument();
   });
 
-  it("shows an empty state when no key used tokens in the range", async () => {
-    renderWith([]);
+  it("shows an empty state when no key used tokens in the range", () => {
+    renderWith([dayWithKeys("2026-07-12", {})]);
 
-    expect(await screen.findByText("No key usage in this range.")).toBeInTheDocument();
+    expect(screen.getByText("No key usage in this range.")).toBeInTheDocument();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
   });
 
-  it("reports a load failure instead of claiming the range is empty", async () => {
-    mockCacheLeakageKeysCall.mockRejectedValue(new Error("route unavailable"));
-    renderWith([]);
+  it("tells the user the table is still filling in while fallback pages stream", () => {
+    const day = dayWithKeys("2026-07-12", {
+      "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+    });
+    renderWith([day], { isFetchingMore: true });
 
-    expect(await screen.findByText("Could not load key usage for this range.")).toBeInTheDocument();
-    expect(screen.queryByText("No key usage in this range.")).not.toBeInTheDocument();
+    expect(screen.getByRole("table")).toBeInTheDocument();
+    expect(
+      screen.getByText("Data is still loading; rows and totals will update as the rest of the range arrives."),
+    ).toBeInTheDocument();
   });
 
-  it("shows a loading state while the key ranking is in flight", () => {
-    mockCacheLeakageKeysCall.mockReturnValue(new Promise(() => {}));
-    renderWith([]);
+  it("keeps the streaming note off while a fresh range loads over the previous range's rows", () => {
+    const day = dayWithKeys("2026-07-12", {
+      "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+    });
+    renderWith([day], { loading: true });
 
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Data is still loading; rows and totals will update as the rest of the range arrives."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("drops the streaming note once the range has settled", () => {
+    const day = dayWithKeys("2026-07-12", {
+      "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+    });
+    renderWith([day]);
+
+    expect(
+      screen.queryByText("Data is still loading; rows and totals will update as the rest of the range arrives."),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe("CacheLeakageCard in Chinese", () => {
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  it("renders the key table and its column headers in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([
+      dayWithKeys("2026-07-12", {
+        "hash-leaky": key("leaky-key", { prompt_tokens: 10000, cache_read_input_tokens: 0 }),
+      }),
+    ]);
+
+    expect(screen.getByText("按虚拟密钥")).toBeInTheDocument();
+    expect(screen.getByText("按模型")).toBeInTheDocument();
+    expect(screen.getByText("未缓存输入 Token")).toBeInTheDocument();
+    expect(screen.getByText("缓存命中率")).toBeInTheDocument();
+    expect(screen.getByText("潜在节省")).toBeInTheDocument();
+  });
+
+  it("switches to the model view with a Chinese title", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([
+      dayWithModels("2026-07-12", {
+        "claude-sonnet-5": { prompt_tokens: 5000, cache_read_input_tokens: 0 },
+      }),
+    ]);
+
+    fireEvent.click(screen.getByText("按模型"));
+
+    expect(screen.getByText("按模型统计的缓存流失")).toBeInTheDocument();
+  });
+
+  it("renders the empty state in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+
+    renderWith([dayWithKeys("2026-07-12", {})]);
+
+    expect(screen.getByText("该时间范围内没有密钥用量。")).toBeInTheDocument();
   });
 });

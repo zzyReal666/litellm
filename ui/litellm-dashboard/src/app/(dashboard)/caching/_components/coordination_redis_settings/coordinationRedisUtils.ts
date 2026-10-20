@@ -115,31 +115,41 @@ export const buildCoordinationPayload = (
 export interface SourceBadgeDescriptor {
   readonly tone: StatusTone;
   readonly label: string;
+  readonly labelKey: string;
   readonly tooltip: string;
+  readonly tooltipKey: string;
 }
 
 const SOURCE_BADGES: Readonly<Record<CoordinationRedisSource, SourceBadgeDescriptor>> = {
   coordination_redis: {
     tone: "success",
     label: "Configured here",
+    labelKey: "caching.coordinationRedis.configuredHere",
     tooltip: "general_settings.coordination_redis is set, so coordination uses its own Redis connection.",
+    tooltipKey: "caching.coordinationRedis.configuredHereTooltip",
   },
   cache_backend: {
     tone: "info",
     label: "Borrowed from response cache",
+    labelKey: "caching.coordinationRedis.borrowedFromCache",
     tooltip: "No coordination Redis is configured; the proxy reuses the response cache's Redis connection.",
+    tooltipKey: "caching.coordinationRedis.borrowedFromCacheTooltip",
   },
   environment: {
     tone: "info",
     label: "From REDIS_* environment",
+    labelKey: "caching.coordinationRedis.fromRedisEnv",
     tooltip: "No coordination Redis is configured; the proxy falls back to the REDIS_* environment variables.",
+    tooltipKey: "caching.coordinationRedis.fromRedisEnvTooltip",
   },
 };
 
 const NOT_CONFIGURED_BADGE: SourceBadgeDescriptor = {
   tone: "neutral",
   label: "Not configured",
+  labelKey: "settingsPages.hashicorpVault.notConfigured",
   tooltip: "Cross-pod rate limits, spend tracking, and the pod lock manager have no Redis to coordinate through.",
+  tooltipKey: "caching.coordinationRedis.notConfiguredTooltip",
 };
 
 export const sourceBadge = (source: string | null | undefined): SourceBadgeDescriptor => {

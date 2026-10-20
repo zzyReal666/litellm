@@ -7,6 +7,7 @@ import { MultiSelect } from "@/components/shared/MultiSelect";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { AlertCircle, ArrowDown, X } from "lucide-react";
 import React, { useId } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface FallbackGroup {
   id: string;
@@ -29,6 +30,7 @@ export function FallbackGroupConfig({
   maxFallbacks,
   disablePrimaryModel = false,
 }: FallbackGroupConfigProps) {
+  const { t } = useTranslation();
   // Filter available options for fallbacks (exclude primary only, allow already selected to be shown for deselection)
   const availableFallbackOptions = availableModels.filter((m) => m !== group.primaryModel);
 
@@ -67,22 +69,29 @@ export function FallbackGroupConfig({
       {/* Primary Model Section */}
       <div className="relative">
         <label htmlFor={primaryModelInputId} className="block text-sm font-semibold text-foreground mb-2">
-          Primary Model <span className="text-destructive">*</span>
+          {t("settingsPages.fallbackGroupConfig.primaryModelLabel", { defaultValue: "Primary Model" })}{" "}
+          <span className="text-destructive">*</span>
         </label>
         <SearchSelect
           inputId={primaryModelInputId}
           options={availableModels.map((m) => ({ label: m, value: m }))}
           value={group.primaryModel}
           onValueChange={handlePrimaryChange}
-          placeholder="Select primary model"
-          emptyText="No models found"
+          placeholder={t("settingsPages.fallbackGroupConfig.selectPrimaryModelPlaceholder", {
+            defaultValue: "Select primary model",
+          })}
+          emptyText={t("modelSelect.paginatedModelSelect.noModelsFound", { defaultValue: "No models found" })}
           disabled={disablePrimaryModel}
           className="h-12"
         />
         {!disablePrimaryModel && !group.primaryModel && (
           <div className="mt-2 flex items-center gap-2 text-warning text-xs bg-warning/10 p-2 rounded-sm">
             <AlertCircle className="w-4 h-4" />
-            <span>Select a model to begin configuring fallbacks</span>
+            <span>
+              {t("settingsPages.fallbackGroupConfig.selectModelHint", {
+                defaultValue: "Select a model to begin configuring fallbacks",
+              })}
+            </span>
           </div>
         )}
       </div>
@@ -91,7 +100,7 @@ export function FallbackGroupConfig({
       <div className="flex items-center justify-center -my-4 z-raised">
         <div className="bg-indigo-50 text-indigo-500 px-4 py-1 rounded-full text-xs font-bold border border-indigo-100 flex items-center gap-2 shadow-xs dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-900">
           <ArrowDown className="w-4 h-4" />
-          IF FAILS, TRY...
+          {t("settingsPages.fallbackGroupConfig.ifFailsTry", { defaultValue: "IF FAILS, TRY..." })}
         </div>
       </div>
 
@@ -100,9 +109,13 @@ export function FallbackGroupConfig({
         className={`transition-opacity duration-300 ${!group.primaryModel ? "opacity-50 pointer-events-none" : "opacity-100"}`}
       >
         <label className="block text-sm font-semibold text-foreground mb-2">
-          Fallback Chain <span className="text-destructive">*</span>
+          {t("settingsPages.fallbackGroupConfig.fallbackChainLabel", { defaultValue: "Fallback Chain" })}{" "}
+          <span className="text-destructive">*</span>
           <span className="text-xs text-muted-foreground font-normal ml-2">
-            (Max {maxFallbacks} fallbacks at a time)
+            {t("settingsPages.fallbackGroupConfig.maxFallbacksHint", {
+              maxFallbacks,
+              defaultValue: "(Max {{maxFallbacks}} fallbacks at a time)",
+            })}
           </span>
         </label>
 
@@ -114,16 +127,31 @@ export function FallbackGroupConfig({
               value={group.fallbackModels}
               onValueChange={handleFallbackSelect}
               placeholder={
-                canAddMoreFallbacks ? "Select fallback models to add..." : `Maximum ${maxFallbacks} fallbacks reached`
+                canAddMoreFallbacks
+                  ? t("settingsPages.fallbackGroupConfig.selectFallbackPlaceholder", {
+                      defaultValue: "Select fallback models to add...",
+                    })
+                  : t("settingsPages.fallbackGroupConfig.maxFallbacksReached", {
+                      maxFallbacks,
+                      defaultValue: "Maximum {{maxFallbacks}} fallbacks reached",
+                    })
               }
-              emptyText="No models found"
+              emptyText={t("modelSelect.paginatedModelSelect.noModelsFound", { defaultValue: "No models found" })}
               disabled={!group.primaryModel}
               className="w-full"
             />
             <p className="text-xs text-muted-foreground mt-1 ml-1">
               {canAddMoreFallbacks
-                ? `Search and select multiple models. Selected models will appear below in order. (${group.fallbackModels.length}/${maxFallbacks} used)`
-                : `Maximum ${maxFallbacks} fallbacks reached. Remove some to add more.`}
+                ? t("settingsPages.fallbackGroupConfig.selectHint", {
+                    used: group.fallbackModels.length,
+                    max: maxFallbacks,
+                    defaultValue:
+                      "Search and select multiple models. Selected models will appear below in order. ({{used}}/{{max}} used)",
+                  })
+                : t("settingsPages.fallbackGroupConfig.maxReachedHint", {
+                    maxFallbacks,
+                    defaultValue: "Maximum {{maxFallbacks}} fallbacks reached. Remove some to add more.",
+                  })}
             </p>
           </div>
 
@@ -131,11 +159,24 @@ export function FallbackGroupConfig({
           <div className="space-y-2 min-h-[100px]">
             {group.fallbackModels.length === 0 ? (
               <div className="h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center text-muted-foreground">
-                <span className="text-sm">No fallback models selected</span>
-                <span className="text-xs mt-1">Add models from the dropdown above</span>
+                <span className="text-sm">
+                  {t("settingsPages.fallbackGroupConfig.noFallbacksSelected", {
+                    defaultValue: "No fallback models selected",
+                  })}
+                </span>
+                <span className="text-xs mt-1">
+                  {t("settingsPages.fallbackGroupConfig.addFromDropdown", {
+                    defaultValue: "Add models from the dropdown above",
+                  })}
+                </span>
               </div>
             ) : (
-              <ol aria-label="Fallback chain" className="space-y-2">
+              <ol
+                aria-label={t("settingsPages.fallbackGroupConfig.fallbackChainAriaLabel", {
+                  defaultValue: "Fallback chain",
+                })}
+                className="space-y-2"
+              >
                 {group.fallbackModels.map((modelValue, index) => (
                   <li
                     key={`${modelValue}-${index}`}
@@ -152,7 +193,10 @@ export function FallbackGroupConfig({
 
                     <button
                       type="button"
-                      aria-label={`Remove ${modelValue}`}
+                      aria-label={t("settingsPages.fallbackGroupConfig.removeModelAriaLabel", {
+                        model: modelValue,
+                        defaultValue: "Remove {{model}}",
+                      })}
                       onClick={() => removeFallback(index)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive p-1"
                     >

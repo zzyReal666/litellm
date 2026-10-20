@@ -1,6 +1,8 @@
+import { cleanup } from "@testing-library/react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
+import { describe, it, expect, vi, beforeEach, beforeAll, afterEach } from "vitest";
+import i18n from "@/lib/i18n";
 import AdvancedDatePicker from "./advanced_date_picker";
 
 // Polyfill requestIdleCallback for test environment
@@ -233,6 +235,30 @@ describe("AdvancedDatePicker", () => {
       // Find the button element (the Apply button's actual button element)
       const applyButton = screen.getByText("Apply").closest("button");
       expect(applyButton).toBeDisabled();
+    });
+  });
+
+  describe("in Simplified Chinese", () => {
+    afterEach(async () => {
+      cleanup();
+      await i18n.changeLanguage("en");
+    });
+
+    it("labels the presets, the panel headings and the actions in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+      const { container } = render(<AdvancedDatePicker value={defaultValue} onValueChange={mockOnValueChange} />);
+
+      expect(screen.getByText("选择时间范围")).toBeInTheDocument();
+
+      openDropdown(container);
+      await waitFor(() => {
+        expect(screen.getByText("相对时间")).toBeInTheDocument();
+      });
+      expect(screen.getByText("过去 7 天")).toBeInTheDocument();
+      expect(screen.getByText("本月至今")).toBeInTheDocument();
+      expect(screen.getByText("开始日期")).toBeInTheDocument();
+      expect(screen.getByText("结束日期")).toBeInTheDocument();
+      expect(screen.getByText("应用")).toBeInTheDocument();
     });
   });
 });

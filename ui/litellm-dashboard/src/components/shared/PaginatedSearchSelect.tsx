@@ -14,6 +14,7 @@ import {
 
 import type { SearchSelectOption } from "./SearchSelect";
 import { usePaginatedCombobox } from "./usePaginatedCombobox";
+import { useTranslation } from "react-i18next";
 
 interface PaginatedSearchSelectProps {
   options: SearchSelectOption[];
@@ -64,10 +65,10 @@ export function PaginatedSearchSelect({
   hasNextPage = false,
   isLoading = false,
   isFetchingNextPage = false,
-  placeholder = "Search…",
-  emptyText = "No results",
+  placeholder,
+  emptyText,
   errorText,
-  loadingText = "Loading…",
+  loadingText,
   autoHighlight = false,
   disabled = false,
   className,
@@ -76,6 +77,11 @@ export function PaginatedSearchSelect({
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
 }: PaginatedSearchSelectProps) {
+  const { t } = useTranslation();
+  const resolvedPlaceholder =
+    placeholder ?? t("shared.paginatedSearchSelect.searchPlaceholder", { defaultValue: "Search…" });
+  const resolvedEmptyText = emptyText ?? t("shared.paginatedSearchSelect.noResults", { defaultValue: "No results" });
+  const resolvedLoadingText = loadingText ?? t("shared.paginatedSearchSelect.loading", { defaultValue: "Loading…" });
   const [pickedOption, setPickedOption] = useState<SearchSelectOption | null>(null);
   const wholeSelectionRef = useRef(false);
 
@@ -138,13 +144,13 @@ export function PaginatedSearchSelect({
         onFocus={(event) => event.currentTarget.select()}
         onKeyDown={snapshotWholeSelection}
         onPaste={snapshotWholeSelection}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         showClear={value != null && value !== ""}
         className={`w-full ${className ?? ""}`}
       />
       <ComboboxContent>
         <ComboboxEmpty className={errorText == null ? undefined : "text-destructive"}>
-          {errorText ?? (isLoading ? loadingText : emptyText)}
+          {errorText ?? (isLoading ? resolvedLoadingText : resolvedEmptyText)}
         </ComboboxEmpty>
         <ComboboxList onScroll={handleScroll} data-testid="paginated-search-select-list">
           {(item: SearchSelectOption) => (

@@ -1,5 +1,6 @@
 import React from "react";
 import { CircleHelp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Providers, provider_map } from "@/components/provider_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { Field, FieldLabel, FieldTitle } from "@/components/ui/field";
@@ -33,12 +34,14 @@ interface AddMarginFormProps {
 interface ProviderOption {
   value: string;
   label: string;
+  labelKey: string | null;
   providerEnum: string | null;
 }
 
 const GLOBAL_OPTION: ProviderOption = {
   value: "global",
   label: "Global (All Providers)",
+  labelKey: "costTracking.addMarginForm.globalOption",
   providerEnum: null,
 };
 
@@ -49,7 +52,7 @@ const buildProviderOptions = (marginConfig: MarginConfig): ProviderOption[] => [
     if (providerValue && marginConfig[providerValue]) {
       return [];
     }
-    return [{ value: providerEnum, label: providerDisplayName, providerEnum }];
+    return [{ value: providerEnum, label: providerDisplayName, labelKey: null, providerEnum }];
   }),
 ];
 
@@ -75,8 +78,11 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
   onFixedAmountChange,
   onAddProvider,
 }) => {
+  const { t } = useTranslation();
   const providerOptions = buildProviderOptions(marginConfig);
   const selectedOption = providerOptions.find((option) => option.value === selectedProvider) ?? null;
+  const optionLabel = (option: ProviderOption): string =>
+    option.labelKey === null ? option.label : t(option.labelKey, { defaultValue: option.label });
 
   return (
     <TooltipProvider>
@@ -84,20 +90,30 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
         <Field>
           <FieldLabel htmlFor="margin-provider">
             {labelWithHint(
-              "Provider",
-              "Select 'Global' to apply margin to all providers, or select a specific provider",
+              t("costTracking.addMarginForm.providerLabel", { defaultValue: "Provider" }),
+              t("costTracking.addMarginForm.providerTooltip", {
+                defaultValue: "Select 'Global' to apply margin to all providers, or select a specific provider",
+              }),
             )}
           </FieldLabel>
           <Combobox
             items={providerOptions}
             value={selectedOption}
             onValueChange={(option: ProviderOption | null) => onProviderChange(option?.value)}
-            itemToStringLabel={(option: ProviderOption) => option.label}
+            itemToStringLabel={optionLabel}
             isItemEqualToValue={(option: ProviderOption, selected: ProviderOption) => option.value === selected.value}
           >
-            <ComboboxInput id="margin-provider" placeholder="Select provider or 'Global'" className="w-full" />
+            <ComboboxInput
+              id="margin-provider"
+              placeholder={t("costTracking.addMarginForm.providerPlaceholder", {
+                defaultValue: "Select provider or 'Global'",
+              })}
+              className="w-full"
+            />
             <ComboboxContent>
-              <ComboboxEmpty>No matching providers</ComboboxEmpty>
+              <ComboboxEmpty>
+                {t("guardrails.addGuardrailForm.noMatchingProviders", { defaultValue: "No matching providers" })}
+              </ComboboxEmpty>
               <ComboboxList>
                 {(option: ProviderOption) => (
                   <ComboboxItem key={option.value} value={option}>
@@ -105,7 +121,9 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
                       {option.providerEnum !== null && (
                         <Logo provider={option.providerEnum} label={option.label} className="w-5 h-5" />
                       )}
-                      <span className={option.providerEnum === null ? "font-medium" : undefined}>{option.label}</span>
+                      <span className={option.providerEnum === null ? "font-medium" : undefined}>
+                        {optionLabel(option)}
+                      </span>
                     </span>
                   </ComboboxItem>
                 )}
@@ -116,7 +134,12 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
 
         <Field>
           <FieldTitle>
-            {labelWithHint("Margin Type", "Choose how to apply the margin: percentage-based or fixed amount")}
+            {labelWithHint(
+              t("costTracking.addMarginForm.marginTypeLabel", { defaultValue: "Margin Type" }),
+              t("costTracking.addMarginForm.marginTypeTooltip", {
+                defaultValue: "Choose how to apply the margin: percentage-based or fixed amount",
+              }),
+            )}
           </FieldTitle>
           <RadioGroup
             value={marginType}
@@ -125,11 +148,11 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
           >
             <FieldLabel className="font-normal">
               <RadioGroupItem value="percentage" />
-              Percentage-based
+              {t("costTracking.addMarginForm.percentageBased", { defaultValue: "Percentage-based" })}
             </FieldLabel>
             <FieldLabel className="font-normal">
               <RadioGroupItem value="fixed" />
-              Fixed Amount
+              {t("costTracking.addMarginForm.fixedAmount", { defaultValue: "Fixed Amount" })}
             </FieldLabel>
           </RadioGroup>
         </Field>
@@ -137,7 +160,12 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
         {marginType === "percentage" && (
           <Field>
             <FieldLabel htmlFor="margin-percentage">
-              {labelWithHint("Margin Percentage", "Enter a percentage value (e.g., 10 for 10% margin)")}
+              {labelWithHint(
+                t("costTracking.addMarginForm.marginPercentageLabel", { defaultValue: "Margin Percentage" }),
+                t("costTracking.addMarginForm.marginPercentageTooltip", {
+                  defaultValue: "Enter a percentage value (e.g., 10 for 10% margin)",
+                }),
+              )}
             </FieldLabel>
             <div className="flex items-center gap-2">
               <Input
@@ -155,7 +183,12 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
         {marginType === "fixed" && (
           <Field>
             <FieldLabel htmlFor="margin-fixed-amount">
-              {labelWithHint("Fixed Margin Amount", "Enter a fixed amount in USD (e.g., 0.001 for $0.001 per request)")}
+              {labelWithHint(
+                t("costTracking.addMarginForm.fixedAmountLabel", { defaultValue: "Fixed Margin Amount" }),
+                t("costTracking.addMarginForm.fixedAmountTooltip", {
+                  defaultValue: "Enter a fixed amount in USD (e.g., 0.001 for $0.001 per request)",
+                }),
+              )}
             </FieldLabel>
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">$</span>
@@ -180,7 +213,7 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
               (marginType === "fixed" && !fixedAmountValue)
             }
           >
-            Add Provider Margin
+            {t("costTracking.addMarginForm.addButton", { defaultValue: "Add Provider Margin" })}
           </Button>
         </div>
       </div>

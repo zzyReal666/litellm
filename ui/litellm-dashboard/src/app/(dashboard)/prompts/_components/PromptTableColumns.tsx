@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { TFunction } from "i18next";
 import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, IdentityCell, StatusBadge, StatusTone } from "@/components/shared/table_cells";
@@ -69,10 +71,11 @@ interface PromptRowActionsProps {
 }
 
 function PromptRowActions({ prompt, isAdmin, onDeleteClick }: PromptRowActionsProps) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open prompt actions"
+        aria-label={t("promptsPage.promptTable.openPromptActions", { defaultValue: "Open prompt actions" })}
         data-testid={`prompt-actions-${prompt.prompt_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -81,10 +84,15 @@ function PromptRowActions({ prompt, isAdmin, onDeleteClick }: PromptRowActionsPr
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem
           data-testid="prompt-action-copy"
-          onClick={() => void copyToClipboard(prompt.prompt_id, "Prompt ID copied")}
+          onClick={() =>
+            void copyToClipboard(
+              prompt.prompt_id,
+              t("promptsPage.promptTable.promptIdCopied", { defaultValue: "Prompt ID copied" }),
+            )
+          }
         >
           <Copy />
-          Copy prompt ID
+          {t("promptsPage.promptTable.copyPromptId", { defaultValue: "Copy prompt ID" })}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -95,13 +103,13 @@ function PromptRowActions({ prompt, isAdmin, onDeleteClick }: PromptRowActionsPr
               onClick={() =>
                 onDeleteClick?.(
                   prompt.prompt_id,
-                  prompt.prompt_id || "Unknown Prompt",
+                  prompt.prompt_id || t("promptsPage.promptTable.unknownPrompt", { defaultValue: "Unknown Prompt" }),
                   prompt.environment || "development",
                 )
               }
             >
               <Trash2 />
-              Delete
+              {t("common.delete", { defaultValue: "Delete" })}
             </DropdownMenuItem>
           </>
         )}
@@ -115,6 +123,7 @@ interface PromptTableColumnsDeps {
   isAdmin: boolean;
   onPromptClick?: (id: string, environment: string) => void;
   onDeleteClick?: (id: string, name: string, environment: string) => void;
+  t: TFunction;
 }
 
 export const getPromptTableColumns = ({
@@ -122,12 +131,18 @@ export const getPromptTableColumns = ({
   isAdmin,
   onPromptClick,
   onDeleteClick,
+  t,
 }: PromptTableColumnsDeps): ColumnDef<PromptSpec>[] => [
   {
     id: "prompt_id",
     accessorKey: "prompt_id",
-    meta: { title: "Prompt ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Prompt ID" />,
+    meta: { title: t("promptsPage.promptTable.colPromptId", { defaultValue: "Prompt ID" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("promptsPage.promptTable.colPromptId", { defaultValue: "Prompt ID" })}
+      />
+    ),
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -145,8 +160,8 @@ export const getPromptTableColumns = ({
   },
   {
     id: "model",
-    meta: { title: "Model" },
-    header: "Model",
+    meta: { title: t("promptsPage.promptTable.colModel", { defaultValue: "Model" }) },
+    header: t("promptsPage.promptTable.colModel", { defaultValue: "Model" }),
     size: 200,
     enableSorting: false,
     cell: ({ row }) => <PromptModelCell prompt={row.original} modelHubData={modelHubData} />,
@@ -155,8 +170,10 @@ export const getPromptTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("common.createdAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("common.createdAt", { defaultValue: "Created At" })} />
+    ),
     size: 160,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -165,8 +182,10 @@ export const getPromptTableColumns = ({
     id: "updated_at",
     accessorKey: "updated_at",
     sortingFn: "datetime",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: { title: t("common.updatedAt", { defaultValue: "Updated At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("common.updatedAt", { defaultValue: "Updated At" })} />
+    ),
     size: 160,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.updated_at} />,
@@ -174,8 +193,11 @@ export const getPromptTableColumns = ({
   {
     id: "environment",
     accessorKey: "environment",
-    meta: { title: "Environment", skeleton: "badge" },
-    header: "Environment",
+    meta: {
+      title: t("promptsPage.promptTable.colEnvironment", { defaultValue: "Environment" }),
+      skeleton: "badge",
+    },
+    header: t("promptsPage.promptTable.colEnvironment", { defaultValue: "Environment" }),
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {
@@ -186,8 +208,8 @@ export const getPromptTableColumns = ({
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By" },
-    header: "Created By",
+    meta: { title: t("promptsPage.promptTable.colCreatedBy", { defaultValue: "Created By" }) },
+    header: t("promptsPage.promptTable.colCreatedBy", { defaultValue: "Created By" }),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -209,8 +231,8 @@ export const getPromptTableColumns = ({
   {
     id: "prompt_type",
     accessorKey: "prompt_info.prompt_type",
-    meta: { title: "Type" },
-    header: "Type",
+    meta: { title: t("promptsPage.promptTable.colType", { defaultValue: "Type" }) },
+    header: t("promptsPage.promptTable.colType", { defaultValue: "Type" }),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => {
@@ -225,7 +247,7 @@ export const getPromptTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircle, Pencil } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { fetchAvailableModels } from "@/components/llm_calls/fetch_models";
 import { toast } from "@/lib/toast";
 import { AddFallbacksModal } from "./AddFallbacksModal";
@@ -42,6 +43,7 @@ export default function EditFallbacks({
   onClose,
   maxFallbacks = 10,
 }: EditFallbacksProps) {
+  const { t } = useTranslation();
   const [group, setGroup] = useState<FallbackGroup>(() => toGroup(fallbackEntry));
   const [isSaving, setIsSaving] = useState(false);
 
@@ -69,7 +71,12 @@ export default function EditFallbacks({
     setIsSaving(true);
     try {
       await onChange(updatedFallbacks);
-      toast.success(`Fallbacks for ${primaryModel} updated successfully!`);
+      toast.success(
+        t("settingsPages.editFallbacks.updateSuccess", {
+          model: primaryModel,
+          defaultValue: "Fallbacks for {{model}} updated successfully!",
+        }),
+      );
       onClose();
     } catch (error) {
       console.error("Error updating fallbacks:", error);
@@ -89,11 +96,13 @@ export default function EditFallbacks({
       />
       <div className="flex items-center justify-end space-x-3 pt-6 mt-6 border-t border-border">
         <Button variant="outline" onClick={onClose} disabled={isSaving}>
-          Cancel
+          {t("common.cancel", { defaultValue: "Cancel" })}
         </Button>
         <Button onClick={handleSave} disabled={isSaving || group.fallbackModels.length === 0}>
           {isSaving ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Pencil className="w-4 h-4" />}
-          {isSaving ? "Saving Changes..." : "Save Changes"}
+          {isSaving
+            ? t("settingsPages.editFallbacks.savingChanges", { defaultValue: "Saving Changes..." })
+            : t("routerSettings.index.saveChanges", { defaultValue: "Save Changes" })}
         </Button>
       </div>
     </AddFallbacksModal>

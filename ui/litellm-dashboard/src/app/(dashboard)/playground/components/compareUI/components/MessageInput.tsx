@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -13,6 +14,7 @@ interface MessageInputProps {
 }
 
 export function MessageInput({ value, onChange, onSend, disabled, hasAttachment, uploadComponent }: MessageInputProps) {
+  const { t } = useTranslation();
   const canSend = !disabled && (value.trim().length > 0 || Boolean(hasAttachment));
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -43,7 +45,7 @@ export function MessageInput({ value, onChange, onSend, disabled, hasAttachment,
           size="icon-sm"
           variant="outline"
           className="rounded-full"
-          aria-label="Send message"
+          aria-label={t("playground.chatComposer.sendMessage", { defaultValue: "Send message" })}
         >
           <ArrowUp />
         </Button>

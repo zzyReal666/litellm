@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Bot,
   CheckCircle,
@@ -82,6 +83,7 @@ const copyToClipboard = (text: string) => {
 };
 
 const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, totalLatency }) => {
+  const { t } = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
 
   if (!a2aMetadata && !timeToFirstToken && !totalLatency) return null;
@@ -94,7 +96,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
       {/* A2A Metadata Header */}
       <div className="flex items-center mb-2 text-muted-foreground">
         <Bot className="mr-1.5 size-4 text-info" />
-        <span className="font-medium text-foreground">A2A Metadata</span>
+        <span className="font-medium text-foreground">
+          {t("playground.a2AMetrics.header", { defaultValue: "A2A Metadata" })}
+        </span>
       </div>
 
       {/* Main metrics row */}
@@ -127,7 +131,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
               <Clock className="mr-1 size-3" />
               {(totalLatency / 1000).toFixed(2)}s
             </TooltipTrigger>
-            <TooltipContent>Total latency</TooltipContent>
+            <TooltipContent>
+              {t("playground.a2AMetrics.totalLatency", { defaultValue: "Total latency" })}
+            </TooltipContent>
           </Tooltip>
         )}
 
@@ -135,9 +141,11 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
         {timeToFirstToken !== undefined && (
           <Tooltip>
             <TooltipTrigger render={<span className="flex items-center text-success" />}>
-              TTFT: {(timeToFirstToken / 1000).toFixed(2)}s
+              {t("playground.a2AMetrics.ttftPrefix", { defaultValue: "TTFT:" })} {(timeToFirstToken / 1000).toFixed(2)}s
             </TooltipTrigger>
-            <TooltipContent>Time to first token</TooltipContent>
+            <TooltipContent>
+              {t("playground.a2AMetrics.timeToFirstToken", { defaultValue: "Time to first token" })}
+            </TooltipContent>
           </Tooltip>
         )}
       </div>
@@ -160,10 +168,13 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
               }
             >
               <FileText className="size-3" />
-              Task: {truncateId(taskId)}
+              {t("playground.a2AMetrics.taskPrefix", { defaultValue: "Task: " })}
+              {truncateId(taskId)}
               <Copy className="size-3 text-muted-foreground" />
             </TooltipTrigger>
-            <TooltipContent>Click to copy: {taskId}</TooltipContent>
+            <TooltipContent>
+              {t("playground.a2AMetrics.clickToCopy", { defaultValue: "Click to copy: {{id}}", id: taskId })}
+            </TooltipContent>
           </Tooltip>
         )}
 
@@ -183,10 +194,13 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
               }
             >
               <Link className="size-3" />
-              Session: {truncateId(contextId)}
+              {t("playground.a2AMetrics.sessionPrefix", { defaultValue: "Session: " })}
+              {truncateId(contextId)}
               <Copy className="size-3 text-muted-foreground" />
             </TooltipTrigger>
-            <TooltipContent>Click to copy: {contextId}</TooltipContent>
+            <TooltipContent>
+              {t("playground.a2AMetrics.clickToCopy", { defaultValue: "Click to copy: {{id}}", id: contextId })}
+            </TooltipContent>
           </Tooltip>
         )}
 
@@ -204,7 +218,7 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
               }
             >
               {showDetails ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
-              Details
+              {t("playground.a2AMetrics.details", { defaultValue: "Details" })}
             </CollapsibleTrigger>
           </Collapsible>
         )}
@@ -217,7 +231,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
             {/* Status message */}
             {status?.message && (
               <div className="mb-2">
-                <span className="font-medium text-foreground">Status Message:</span>
+                <span className="font-medium text-foreground">
+                  {t("playground.a2AMetrics.statusMessage", { defaultValue: "Status Message:" })}
+                </span>
                 <span className="ml-2">{status.message}</span>
               </div>
             )}
@@ -225,7 +241,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
             {/* Full IDs */}
             {taskId && (
               <div className="mb-1.5 flex items-center">
-                <span className="font-medium text-foreground w-24">Task ID:</span>
+                <span className="font-medium text-foreground w-24">
+                  {t("playground.a2AMetrics.taskId", { defaultValue: "Task ID:" })}
+                </span>
                 <code className="ml-2 px-2 py-1 bg-card border border-border rounded-sm text-xs font-mono">
                   {taskId}
                 </code>
@@ -244,7 +262,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
 
             {contextId && (
               <div className="mb-1.5 flex items-center">
-                <span className="font-medium text-foreground w-24">Session ID:</span>
+                <span className="font-medium text-foreground w-24">
+                  {t("playground.a2AMetrics.sessionId", { defaultValue: "Session ID:" })}
+                </span>
                 <code className="ml-2 px-2 py-1 bg-card border border-border rounded-sm text-xs font-mono">
                   {contextId}
                 </code>
@@ -264,7 +284,9 @@ const A2AMetrics: React.FC<A2AMetricsProps> = ({ a2aMetadata, timeToFirstToken, 
             {/* Metadata fields */}
             {metadata && Object.keys(metadata).length > 0 && (
               <div className="mt-3">
-                <span className="font-medium text-foreground">Custom Metadata:</span>
+                <span className="font-medium text-foreground">
+                  {t("playground.a2AMetrics.customMetadata", { defaultValue: "Custom Metadata:" })}
+                </span>
                 <pre className="mt-1.5 p-2 bg-card border border-border rounded-sm text-xs font-mono overflow-x-auto whitespace-pre-wrap">
                   {JSON.stringify(metadata, null, 2)}
                 </pre>

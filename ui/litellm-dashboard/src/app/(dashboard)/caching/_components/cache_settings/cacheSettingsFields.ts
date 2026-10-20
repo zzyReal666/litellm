@@ -11,6 +11,7 @@ export type CacheFieldType =
 export interface CacheFieldOption {
   readonly value: string;
   readonly label: string;
+  readonly labelKey: string;
 }
 
 export type RedisType = "node" | "cluster" | "sentinel" | "semantic";
@@ -26,6 +27,7 @@ export const REDACTED_VALUE = "***REDACTED***";
 export interface CacheField {
   readonly name: string;
   readonly label: string;
+  readonly labelKey: string;
   readonly type: CacheFieldType;
   readonly section: CacheSection;
   readonly helpText: string;
@@ -89,6 +91,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "url",
     label: "Redis URL",
+    labelKey: "cacheSettings.fields.redisUrl",
     type: "string",
     section: "connection",
     helpText:
@@ -99,6 +102,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "host",
     label: "Host",
+    labelKey: "cacheSettings.fields.host",
     type: "string",
     section: "connection",
     helpText: "Redis server hostname or IP address",
@@ -107,6 +111,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "port",
     label: "Port",
+    labelKey: "cacheSettings.fields.port",
     type: "string",
     section: "connection",
     helpText: "Redis server port number",
@@ -117,6 +122,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "db",
     label: "Database Index",
+    labelKey: "cacheSettings.fields.databaseIndex",
     type: "integer",
     section: "connection",
     helpText: "Logical database index to isolate the cache (e.g. 1 for redis://host:6379/1)",
@@ -126,6 +132,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "password",
     label: "Password",
+    labelKey: "login.password",
     type: "password",
     section: "connection",
     helpText: "Redis server password",
@@ -135,6 +142,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "username",
     label: "Username",
+    labelKey: "login.username",
     type: "string",
     section: "connection",
     helpText: "Redis server username (if required)",
@@ -143,6 +151,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "redis_startup_nodes",
     label: "Startup Nodes",
+    labelKey: "cacheHealth.startupNodes",
     type: "list",
     section: "cluster",
     helpText: 'List of startup nodes for Redis Cluster (e.g., [{"host": "127.0.0.1", "port": "7001"}])',
@@ -152,6 +161,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "sentinel_nodes",
     label: "Sentinel Nodes",
+    labelKey: "cacheSettings.fields.sentinelNodes",
     type: "list",
     section: "sentinel",
     helpText: 'List of Sentinel nodes (e.g., [["localhost", 26379]])',
@@ -161,6 +171,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "service_name",
     label: "Service Name",
+    labelKey: "cacheSettings.fields.serviceName",
     type: "string",
     section: "sentinel",
     helpText: "Master service name for Redis Sentinel",
@@ -169,6 +180,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "sentinel_password",
     label: "Sentinel Password",
+    labelKey: "cacheSettings.fields.sentinelPassword",
     type: "password",
     section: "sentinel",
     helpText: "Password for Redis Sentinel authentication",
@@ -178,6 +190,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "similarity_threshold",
     label: "Similarity Threshold",
+    labelKey: "settingsPages.mcpSemanticFilterSettings.similarityThresholdLabel",
     type: "float",
     section: "semantic",
     helpText: "Similarity threshold for semantic cache",
@@ -188,6 +201,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "redis_semantic_cache_embedding_model",
     label: "Embedding Model",
+    labelKey: "settingsPages.mcpSemanticFilterSettings.embeddingModelLabel",
     type: "model-select",
     section: "semantic",
     helpText: "Embedding model for semantic cache",
@@ -196,6 +210,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "semantic_cache_scope",
     label: "Semantic Cache Scope",
+    labelKey: "cacheSettings.fields.semanticCacheScope",
     type: "select",
     section: "semantic",
     helpText:
@@ -203,13 +218,22 @@ export const CACHE_FIELDS: readonly CacheField[] = [
     redisType: "semantic",
     defaultValue: "key",
     options: [
-      { value: "key", label: "Key (shared by all end users of the key/team/org)" },
-      { value: "end_user", label: "End user (isolated per end user)" },
+      {
+        value: "key",
+        label: "Key (shared by all end users of the key/team/org)",
+        labelKey: "cacheSettings.fields.semanticScopeKeyOption",
+      },
+      {
+        value: "end_user",
+        label: "End user (isolated per end user)",
+        labelKey: "cacheSettings.fields.semanticScopeEndUserOption",
+      },
     ],
   },
   {
     name: "ssl",
     label: "SSL",
+    labelKey: "cacheSettings.fields.ssl",
     type: "boolean",
     section: "ssl",
     helpText: "Enable SSL/TLS connection",
@@ -219,6 +243,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "ssl_cert_reqs",
     label: "SSL Cert Reqs",
+    labelKey: "cacheSettings.fields.sslCertReqs",
     type: "string",
     section: "ssl",
     helpText: "SSL certificate requirements (None, CERT_REQUIRED, CERT_OPTIONAL)",
@@ -227,6 +252,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "ssl_check_hostname",
     label: "SSL Check Hostname",
+    labelKey: "cacheSettings.fields.sslCheckHostname",
     type: "boolean",
     section: "ssl",
     helpText: "Enable SSL hostname verification",
@@ -236,6 +262,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "namespace",
     label: "Namespace",
+    labelKey: "cacheHealth.namespace",
     type: "string",
     section: "cacheManagement",
     helpText: "Namespace prefix for cache keys",
@@ -244,6 +271,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "ttl",
     label: "TTL (seconds)",
+    labelKey: "cacheSettings.fields.ttlSeconds",
     type: "float",
     section: "cacheManagement",
     helpText: "Time-to-live for cached items in seconds",
@@ -253,6 +281,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "max_connections",
     label: "Max Connections",
+    labelKey: "cacheSettings.fields.maxConnections",
     type: "integer",
     section: "cacheManagement",
     helpText: "Maximum number of connections in the connection pool",
@@ -262,6 +291,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "gcp_service_account",
     label: "GCP Service Account",
+    labelKey: "cacheSettings.fields.gcpServiceAccount",
     type: "string",
     section: "gcp",
     helpText:
@@ -271,6 +301,7 @@ export const CACHE_FIELDS: readonly CacheField[] = [
   {
     name: "gcp_ssl_ca_certs",
     label: "GCP SSL CA Certs",
+    labelKey: "cacheSettings.fields.gcpSslCaCerts",
     type: "string",
     section: "gcp",
     helpText: "Path to SSL CA certificate file for GCP Memorystore Redis",

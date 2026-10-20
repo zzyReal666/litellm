@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import {
@@ -56,8 +57,8 @@ interface ProviderParamsResponse {
 }
 
 const BOOLEAN_ITEMS = [
-  { label: "True", value: true },
-  { label: "False", value: false },
+  { label: i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: "True" }), value: true },
+  { label: i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" }), value: false },
 ];
 
 const isSecretKey = (fieldKey: string): boolean =>
@@ -90,7 +91,11 @@ const commitObjectField = (raw: string, onChange: (value: unknown) => void): voi
   if (isPlainObject(parsed)) {
     onChange(parsed);
   } else {
-    toast.error("Enter a valid JSON object for this configuration");
+    toast.error(
+      i18n.t("guardrails.guardrailProviderFields.invalidJsonObject", {
+        defaultValue: "Enter a valid JSON object for this configuration",
+      }),
+    );
   }
 };
 
@@ -98,7 +103,14 @@ const fieldRules = (field: ProviderParam, fieldKey: string): GuardrailFieldRules
   if (field.type === "object") {
     return jsonObjectRule(fieldKey);
   }
-  return field.required ? requiredRule(`${fieldKey} is required`) : undefined;
+  return field.required
+    ? requiredRule(
+        i18n.t("guardrails.guardrailProviderFields.fieldRequired", {
+          fieldKey,
+          defaultValue: "{{fieldKey}} is required",
+        }),
+      )
+    : undefined;
 };
 
 interface ProviderFieldInputProps {
@@ -154,8 +166,12 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
           <SelectValue placeholder={descriptor.description} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={true}>True</SelectItem>
-          <SelectItem value={false}>False</SelectItem>
+          <SelectItem value={true}>
+            {i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: "True" })}
+          </SelectItem>
+          <SelectItem value={false}>
+            {i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" })}
+          </SelectItem>
         </SelectContent>
       </Select>
     );
@@ -279,7 +295,11 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
         populateGuardrailProviderMap(data);
       } catch (error) {
         console.error("Error fetching provider params:", error);
-        setError("Failed to load provider parameters");
+        setError(
+          i18n.t("guardrails.guardrailProviderFields.loadFailed", {
+            defaultValue: "Failed to load provider parameters",
+          }),
+        );
       } finally {
         setLoading(false);
       }
@@ -301,7 +321,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <UiLoadingSpinner className="size-4" />
-        Loading provider parameters...
+        {i18n.t("guardrails.guardrailProviderFields.loadingTip", { defaultValue: "Loading provider parameters..." })}
       </div>
     );
   }
@@ -318,7 +338,13 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
   const providerFields = providerParams && providerParams[providerKey];
 
   if (!providerFields || Object.keys(providerFields).length === 0) {
-    return <div>No configuration fields available for this provider.</div>;
+    return (
+      <div>
+        {i18n.t("guardrails.guardrailProviderFields.noFields", {
+          defaultValue: "No configuration fields available for this provider.",
+        })}
+      </div>
+    );
   }
 
   // Fields to skip for content filter provider (handled in dedicated steps)

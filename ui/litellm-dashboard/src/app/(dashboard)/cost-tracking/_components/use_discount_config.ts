@@ -1,12 +1,17 @@
 import { useState, useCallback } from "react";
+import { TFunction } from "i18next";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { toast } from "@/lib/toast";
 import { DiscountConfig } from "./types";
 import { getProviderBackendValue } from "./provider_display_helpers";
 import { Providers } from "@/components/provider_info_helpers";
 
+const untranslated: TFunction = ((key: string, options?: { defaultValue?: string }) =>
+  options?.defaultValue ?? key) as TFunction;
+
 export interface UseDiscountConfigProps {
   accessToken: string | null;
+  t?: TFunction;
 }
 
 export interface UseDiscountConfigReturn {
@@ -19,7 +24,7 @@ export interface UseDiscountConfigReturn {
   handleDiscountChange: (provider: string, value: string) => Promise<void>;
 }
 
-export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseDiscountConfigReturn {
+export function useDiscountConfig({ accessToken, t = untranslated }: UseDiscountConfigProps): UseDiscountConfigReturn {
   const [discountConfig, setDiscountConfig] = useState<DiscountConfig>({});
 
   const fetchDiscountConfig = useCallback(async () => {
@@ -43,9 +48,11 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
       }
     } catch (error) {
       console.error("Error fetching discount config:", error);
-      toast.fromError("Failed to fetch discount configuration");
+      toast.fromError(
+        t("costTracking.useDiscountConfig.fetchFailed", { defaultValue: "Failed to fetch discount configuration" }),
+      );
     }
-  }, [accessToken]);
+  }, [accessToken, t]);
 
   const saveDiscountConfig = useCallback(
     async (config: DiscountConfig) => {
@@ -63,7 +70,11 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
         });
 
         if (response.ok) {
-          toast.success("Discount configuration updated successfully");
+          toast.success(
+            t("costTracking.useDiscountConfig.updateSuccess", {
+              defaultValue: "Discount configuration updated successfully",
+            }),
+          );
           await fetchDiscountConfig();
         } else {
           const errorData = await response.json();
@@ -72,35 +83,50 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
         }
       } catch (error) {
         console.error("Error updating discount config:", error);
-        toast.fromError("Failed to update discount configuration");
+        toast.fromError(
+          t("costTracking.useDiscountConfig.updateFailed", { defaultValue: "Failed to update discount configuration" }),
+        );
       }
     },
-    [accessToken, fetchDiscountConfig],
+    [accessToken, fetchDiscountConfig, t],
   );
 
   const handleAddProvider = useCallback(
     async (selectedProvider: string | undefined, newDiscount: string): Promise<boolean> => {
       if (!selectedProvider || !newDiscount) {
-        toast.fromError("Please select a provider and enter discount percentage");
+        toast.fromError(
+          t("costTracking.useDiscountConfig.selectProviderAndDiscount", {
+            defaultValue: "Please select a provider and enter discount percentage",
+          }),
+        );
         return false;
       }
 
       const percentageValue = parseFloat(newDiscount);
       if (isNaN(percentageValue) || percentageValue < 0 || percentageValue > 100) {
-        toast.fromError("Discount must be between 0% and 100%");
+        toast.fromError(
+          t("costTracking.useDiscountConfig.invalidDiscountRange", {
+            defaultValue: "Discount must be between 0% and 100%",
+          }),
+        );
         return false;
       }
 
       const providerValue = getProviderBackendValue(selectedProvider);
 
       if (!providerValue) {
-        toast.fromError("Invalid provider selected");
+        toast.fromError(
+          t("costTracking.useDiscountConfig.invalidProvider", { defaultValue: "Invalid provider selected" }),
+        );
         return false;
       }
 
       if (discountConfig[providerValue]) {
         toast.fromError(
-          `Discount for ${Providers[selectedProvider as keyof typeof Providers]} already exists. Edit it in the table above.`,
+          t("costTracking.useDiscountConfig.discountAlreadyExists", {
+            defaultValue: "Discount for {{providerName}} already exists. Edit it in the table above.",
+            providerName: Providers[selectedProvider as keyof typeof Providers],
+          }),
         );
         return false;
       }
@@ -115,7 +141,7 @@ export function useDiscountConfig({ accessToken }: UseDiscountConfigProps): UseD
       await saveDiscountConfig(updatedConfig);
       return true;
     },
-    [discountConfig, saveDiscountConfig],
+    [discountConfig, saveDiscountConfig, t],
   );
 
   const handleRemoveProvider = useCallback(

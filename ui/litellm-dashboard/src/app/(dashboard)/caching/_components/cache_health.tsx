@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle2, XCircle, ClipboardCopy } from "lucide-react";
@@ -74,6 +75,7 @@ interface ErrorDetails {
 
 // Update HealthCheckDetails component to handle errors
 const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
+  const { t } = useTranslation();
   // Initialize with safe default values
   let errorDetails: ErrorDetails | null = null;
   let parsedLitellmParams: any = {};
@@ -86,8 +88,9 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
           typeof response.error.message === "string" ? JSON.parse(response.error.message) : response.error.message;
 
         errorDetails = {
-          message: errorMessage?.message || "Unknown error",
-          traceback: errorMessage?.traceback || "No traceback available",
+          message: errorMessage?.message || t("cacheHealth.unknownError", { defaultValue: "Unknown error" }),
+          traceback:
+            errorMessage?.traceback || t("cacheHealth.noTraceback", { defaultValue: "No traceback available" }),
           litellm_params: errorMessage?.litellm_cache_params || {},
           health_check_cache_params: errorMessage?.health_check_cache_params || {},
         };
@@ -97,8 +100,8 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
       } catch (e) {
         console.warn("Error parsing error details:", e);
         errorDetails = {
-          message: String(response.error.message || "Unknown error"),
-          traceback: "Error parsing details",
+          message: String(response.error.message || t("cacheHealth.unknownError", { defaultValue: "Unknown error" })),
+          traceback: t("cacheHealth.errorParsingDetails", { defaultValue: "Error parsing details" }),
           litellm_params: {},
           health_check_cache_params: {},
         };
@@ -157,10 +160,10 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
       <Tabs defaultValue="summary">
         <TabsList className="border-b border-border px-4">
           <TabsTrigger value="summary" className="flex-none">
-            Summary
+            {t("cacheHealth.tabSummary", { defaultValue: "Summary" })}
           </TabsTrigger>
           <TabsTrigger value="raw" className="flex-none">
-            Raw Response
+            {t("cacheHealth.tabRawResponse", { defaultValue: "Raw Response" })}
           </TabsTrigger>
         </TabsList>
 
@@ -175,7 +178,10 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
               <p
                 className={`text-sm font-medium ${response?.status === "healthy" ? "text-success" : "text-destructive"}`}
               >
-                Cache Status: {response?.status || "unhealthy"}
+                {t("cacheHealth.cacheStatus", {
+                  defaultValue: "Cache Status: {{status}}",
+                  status: response?.status || t("cacheHealth.statusUnhealthy", { defaultValue: "unhealthy" }),
+                })}
               </p>
             </div>
 
@@ -186,23 +192,38 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                   <>
                     <tr>
                       <td colSpan={2} className="pt-4 pb-2 font-semibold text-destructive">
-                        Error Details
+                        {t("cacheHealth.errorDetails", { defaultValue: "Error Details" })}
                       </td>
                     </tr>
-                    <TableClickableErrorField label="Error Message" value={errorDetails.message} />
-                    <TableClickableErrorField label="Traceback" value={errorDetails.traceback} />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.errorMessage", { defaultValue: "Error Message" })}
+                      value={errorDetails.message}
+                    />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.traceback", { defaultValue: "Traceback" })}
+                      value={errorDetails.traceback}
+                    />
                   </>
                 )}
 
                 {/* Always show cache details, regardless of error state */}
                 <tr>
                   <td colSpan={2} className="pt-4 pb-2 font-semibold">
-                    Cache Details
+                    {t("cacheHealth.cacheDetails", { defaultValue: "Cache Details" })}
                   </td>
                 </tr>
-                <TableClickableErrorField label="Cache Configuration" value={String(parsedLitellmParams?.type)} />
-                <TableClickableErrorField label="Ping Response" value={String(response.ping_response)} />
-                <TableClickableErrorField label="Set Cache Response" value={response.set_cache_response || "N/A"} />
+                <TableClickableErrorField
+                  label={t("cacheHealth.cacheConfiguration", { defaultValue: "Cache Configuration" })}
+                  value={String(parsedLitellmParams?.type)}
+                />
+                <TableClickableErrorField
+                  label={t("cacheHealth.pingResponse", { defaultValue: "Ping Response" })}
+                  value={String(response.ping_response)}
+                />
+                <TableClickableErrorField
+                  label={t("cacheHealth.setCacheResponse", { defaultValue: "Set Cache Response" })}
+                  value={response.set_cache_response || "N/A"}
+                />
                 <TableClickableErrorField
                   label="litellm_settings.cache_params"
                   value={JSON.stringify(parsedLitellmParams, null, 2)}
@@ -213,14 +234,29 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                   <>
                     <tr>
                       <td colSpan={2} className="pt-4 pb-2 font-semibold">
-                        Redis Details
+                        {t("cacheHealth.redisDetails", { defaultValue: "Redis Details" })}
                       </td>
                     </tr>
-                    <TableClickableErrorField label="Redis Host" value={redisDetails.redis_host || "N/A"} />
-                    <TableClickableErrorField label="Redis Port" value={redisDetails.redis_port || "N/A"} />
-                    <TableClickableErrorField label="Redis Version" value={redisDetails.redis_version || "N/A"} />
-                    <TableClickableErrorField label="Startup Nodes" value={redisDetails.startup_nodes || "N/A"} />
-                    <TableClickableErrorField label="Namespace" value={redisDetails.namespace || "N/A"} />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.redisHost", { defaultValue: "Redis Host" })}
+                      value={redisDetails.redis_host || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.redisPort", { defaultValue: "Redis Port" })}
+                      value={redisDetails.redis_port || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.redisVersion", { defaultValue: "Redis Version" })}
+                      value={redisDetails.redis_version || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.startupNodes", { defaultValue: "Startup Nodes" })}
+                      value={redisDetails.startup_nodes || "N/A"}
+                    />
+                    <TableClickableErrorField
+                      label={t("cacheHealth.namespace", { defaultValue: "Namespace" })}
+                      value={redisDetails.namespace || "N/A"}
+                    />
                   </>
                 )}
               </tbody>
@@ -254,7 +290,10 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
                   // Then stringify with proper formatting
                   return JSON.stringify(prettyData, null, 2);
                 } catch (e) {
-                  return "Error formatting JSON: " + (e as Error).message;
+                  return t("cacheHealth.jsonFormatError", {
+                    defaultValue: "Error formatting JSON: {{error}}",
+                    error: (e as Error).message,
+                  });
                 }
               })()}
             </pre>
@@ -271,6 +310,7 @@ export const CacheHealthTab: React.FC<{
   runCachingHealthCheck: () => void;
   responseTimeMs?: number | null;
 }> = ({ accessToken, healthCheckResponse, runCachingHealthCheck, responseTimeMs }) => {
+  const { t } = useTranslation();
   const [localResponseTimeMs, setLocalResponseTimeMs] = React.useState<number | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -287,7 +327,9 @@ export const CacheHealthTab: React.FC<{
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Button onClick={handleHealthCheck} disabled={isLoading}>
-          {isLoading ? "Running Health Check..." : "Run Health Check"}
+          {isLoading
+            ? t("cacheHealth.runningHealthCheck", { defaultValue: "Running Health Check..." })
+            : t("cacheHealth.runHealthCheck", { defaultValue: "Run Health Check" })}
         </Button>
         <ResponseTimeIndicator responseTimeMs={localResponseTimeMs} />
       </div>

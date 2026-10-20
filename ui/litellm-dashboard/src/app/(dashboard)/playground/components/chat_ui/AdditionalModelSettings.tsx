@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cva.config";
+import { Trans, useTranslation } from "react-i18next";
 
 interface AdditionalModelSettingsProps {
   temperature?: number;
@@ -37,6 +38,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
   onStreamingChange,
   showAdvancedParams = true,
 }) => {
+  const { t } = useTranslation();
   const [internalUseAdvancedParams, setInternalUseAdvancedParams] = useState(false);
   const useAdvancedParams =
     externalUseAdvancedParams !== undefined ? externalUseAdvancedParams : internalUseAdvancedParams;
@@ -111,18 +113,24 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={streamingId}
             checked={streamingEnabled}
             onCheckedChange={(checked) => onStreamingChange(checked === true)}
-            aria-label="Stream responses"
+            aria-label={t("playground.additionalModelSettings.streamResponses", { defaultValue: "Stream responses" })}
           />
           <label htmlFor={streamingId} className="cursor-pointer text-sm font-medium">
-            Stream responses
+            {t("playground.additionalModelSettings.streamResponses", { defaultValue: "Stream responses" })}
           </label>
           <Tooltip>
-            <TooltipTrigger aria-label="Help: Stream responses">
+            <TooltipTrigger
+              aria-label={t("playground.additionalModelSettings.streamResponsesAriaLabel", {
+                defaultValue: "Help: Stream responses",
+              })}
+            >
               <Info className="size-3 shrink-0 cursor-pointer text-muted-foreground hover:text-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Streams the answer token by token. Uncheck to send a non-streaming request and render the full response at
-              once.
+              {t("playground.additionalModelSettings.streamResponsesTooltip", {
+                defaultValue:
+                  "Streams the answer token by token. Uncheck to send a non-streaming request and render the full response at once.",
+              })}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -134,10 +142,12 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={advancedId}
             checked={useAdvancedParams}
             onCheckedChange={(checked) => handleUseAdvancedParamsChange(checked === true)}
-            aria-label="Use Advanced Parameters"
+            aria-label={t("playground.additionalModelSettings.useAdvancedParams", {
+              defaultValue: "Use Advanced Parameters",
+            })}
           />
           <label htmlFor={advancedId} className="cursor-pointer text-sm font-medium">
-            Use Advanced Parameters
+            {t("playground.additionalModelSettings.useAdvancedParams", { defaultValue: "Use Advanced Parameters" })}
           </label>
         </div>
       )}
@@ -148,30 +158,45 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             id={fallbacksId}
             checked={mockTestFallbacks ?? false}
             onCheckedChange={(checked) => onMockTestFallbacksChange(checked === true)}
-            aria-label="Simulate failure to test fallbacks"
+            aria-label={t("playground.additionalModelSettings.simulateFailure", {
+              defaultValue: "Simulate failure to test fallbacks",
+            })}
           />
           <label htmlFor={fallbacksId} className="cursor-pointer text-sm font-medium">
-            Simulate failure to test fallbacks
+            {t("playground.additionalModelSettings.simulateFailure", {
+              defaultValue: "Simulate failure to test fallbacks",
+            })}
           </label>
           <Popover>
-            <PopoverTrigger aria-label="Help: Simulate failure to test fallbacks">
+            <PopoverTrigger
+              aria-label={t("playground.additionalModelSettings.simulateFailureAriaLabel", {
+                defaultValue: "Help: Simulate failure to test fallbacks",
+              })}
+            >
               <Info className="size-3 shrink-0 cursor-pointer text-muted-foreground hover:text-foreground" />
             </PopoverTrigger>
             <PopoverContent side="right" className="max-w-[340px] gap-2 p-3 text-sm">
               <p>
-                Causes the first request to fail so the router tries fallbacks (if configured). Use this to verify your
-                fallback setup.
+                {t("playground.additionalModelSettings.simulateFailureDesc", {
+                  defaultValue:
+                    "Causes the first request to fail so the router tries fallbacks (if configured). Use this to verify your fallback setup.",
+                })}
               </p>
               <p>
-                Behavior can differ when keys, teams, or router settings are configured.{" "}
-                <a
-                  href="https://docs.litellm.ai/docs/proxy/keys_teams_router_settings"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-info hover:text-info/80"
-                >
-                  Learn more
-                </a>
+                <Trans
+                  i18nKey="playground.additionalModelSettings.simulateFailureNote"
+                  defaults="Behavior can differ when keys, teams, or router settings are configured. <learnMoreLink>Learn more</learnMoreLink>"
+                  components={{
+                    learnMoreLink: (
+                      <a
+                        href="https://docs.litellm.ai/docs/proxy/keys_teams_router_settings"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-info hover:text-info/80"
+                      />
+                    ),
+                  }}
+                />
               </p>
             </PopoverContent>
           </Popover>
@@ -186,14 +211,21 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <label htmlFor={temperatureId} className={cn("text-sm", disabledTextColor)}>
-                  Temperature
+                  {t("playground.additionalModelSettings.temperature", { defaultValue: "Temperature" })}
                 </label>
                 <Tooltip>
-                  <TooltipTrigger aria-label="Help: Temperature">
+                  <TooltipTrigger
+                    aria-label={t("playground.additionalModelSettings.temperatureAriaLabel", {
+                      defaultValue: "Help: Temperature",
+                    })}
+                  >
                     <Info className={cn("size-3 cursor-help", disabledTextColor)} />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    Controls randomness. Lower values make output more deterministic, higher values more creative.
+                    {t("playground.additionalModelSettings.temperatureTooltip", {
+                      defaultValue:
+                        "Controls randomness. Lower values make output more deterministic, higher values more creative.",
+                    })}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -201,7 +233,9 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
                 id={`${temperatureId}-number`}
                 type="text"
                 inputMode="decimal"
-                aria-label="Temperature value"
+                aria-label={t("playground.additionalModelSettings.temperatureValueAriaLabel", {
+                  defaultValue: "Temperature value",
+                })}
                 value={temperatureText}
                 disabled={!useAdvancedParams}
                 className="h-8 w-20"
@@ -217,7 +251,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
               step={0.1}
               value={localTemperature}
               disabled={!useAdvancedParams}
-              aria-label="Temperature"
+              aria-label={t("playground.additionalModelSettings.temperature", { defaultValue: "Temperature" })}
               className="w-full accent-primary disabled:cursor-not-allowed"
               onChange={(event) => handleTemperatureChange(Number(event.target.value))}
             />
@@ -232,14 +266,20 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <label htmlFor={maxTokensId} className={cn("text-sm", disabledTextColor)}>
-                  Max Tokens
+                  {t("playground.additionalModelSettings.maxTokens", { defaultValue: "Max Tokens" })}
                 </label>
                 <Tooltip>
-                  <TooltipTrigger aria-label="Help: Max Tokens">
+                  <TooltipTrigger
+                    aria-label={t("playground.additionalModelSettings.maxTokensAriaLabel", {
+                      defaultValue: "Help: Max Tokens",
+                    })}
+                  >
                     <Info className={cn("size-3 cursor-help", disabledTextColor)} />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    Maximum number of tokens to generate in the response.
+                    {t("playground.additionalModelSettings.maxTokensTooltip", {
+                      defaultValue: "Maximum number of tokens to generate in the response.",
+                    })}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -247,7 +287,9 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
                 id={`${maxTokensId}-number`}
                 type="text"
                 inputMode="numeric"
-                aria-label="Max tokens value"
+                aria-label={t("playground.additionalModelSettings.maxTokensValueAriaLabel", {
+                  defaultValue: "Max tokens value",
+                })}
                 value={maxTokensText}
                 disabled={!useAdvancedParams}
                 className="h-8 w-24"
@@ -263,7 +305,7 @@ const AdditionalModelSettings: React.FC<AdditionalModelSettingsProps> = ({
               step={1}
               value={localMaxTokens}
               disabled={!useAdvancedParams}
-              aria-label="Max Tokens"
+              aria-label={t("playground.additionalModelSettings.maxTokens", { defaultValue: "Max Tokens" })}
               className="w-full accent-primary disabled:cursor-not-allowed"
               onChange={(event) => handleMaxTokensChange(Number(event.target.value))}
             />

@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import ModelSelector from "@/components/common_components/ModelSelector";
 import { TestResult } from "./semanticFilterTestUtils";
+import { useTranslation } from "react-i18next";
 
 interface MCPSemanticFilterTestPanelProps {
   accessToken: string | null;
@@ -34,22 +35,25 @@ export default function MCPSemanticFilterTestPanel({
   testError,
   curlCommand,
 }: MCPSemanticFilterTestPanelProps) {
+  const { t } = useTranslation();
   const canRunTest = testQuery && testModel && filterEnabled;
   const testDisabled = isTesting || !canRunTest;
 
   return (
     <Card className="mb-4">
       <CardHeader>
-        <CardTitle>Test Configuration</CardTitle>
+        <CardTitle>
+          {t("settingsPages.mcpSemanticFilterTestPanel.testConfigCardTitle", { defaultValue: "Test Configuration" })}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="test">
           <TabsList>
             <TabsTrigger value="test" className="flex-none">
-              Test
+              {t("settingsPages.mcpSemanticFilterTestPanel.testTabLabel", { defaultValue: "Test" })}
             </TabsTrigger>
             <TabsTrigger value="api" className="flex-none">
-              API Usage
+              {t("settingsPages.mcpSemanticFilterTestPanel.apiTabLabel", { defaultValue: "API Usage" })}
             </TabsTrigger>
           </TabsList>
 
@@ -57,11 +61,14 @@ export default function MCPSemanticFilterTestPanel({
             <div className="flex w-full flex-col gap-6">
               <div>
                 <p className="mb-2 flex items-center gap-1.5 font-medium">
-                  <CirclePlay className="size-4" /> Test Query
+                  <CirclePlay className="size-4" />{" "}
+                  {t("settingsPages.mcpSemanticFilterTestPanel.testQueryLabel", { defaultValue: "Test Query" })}
                 </p>
                 <Textarea
                   className="field-sizing-fixed"
-                  placeholder="Enter a test query to see which tools would be selected..."
+                  placeholder={t("settingsPages.mcpSemanticFilterTestPanel.testQueryPlaceholder", {
+                    defaultValue: "Enter a test query to see which tools would be selected...",
+                  })}
                   value={testQuery}
                   onChange={(e) => setTestQuery(e.target.value)}
                   rows={4}
@@ -76,45 +83,72 @@ export default function MCPSemanticFilterTestPanel({
                   onChange={setTestModel}
                   disabled={isTesting}
                   showLabel={true}
-                  labelText="Select Model"
+                  labelText={t("settingsPages.mcpSemanticFilterTestPanel.selectModelLabel", {
+                    defaultValue: "Select Model",
+                  })}
                 />
               </div>
 
               <Button className="w-full" onClick={onTest} disabled={testDisabled}>
                 <CirclePlay />
-                Test Filter
+                {t("settingsPages.mcpSemanticFilterTestPanel.testFilterButton", { defaultValue: "Test Filter" })}
               </Button>
 
               {!filterEnabled && (
                 <Alert>
                   <Info />
-                  <AlertTitle>Semantic filtering is disabled</AlertTitle>
-                  <AlertDescription>Enable semantic filtering and save settings to test the filter.</AlertDescription>
+                  <AlertTitle>
+                    {t("settingsPages.mcpSemanticFilterTestPanel.filterDisabledTitle", {
+                      defaultValue: "Semantic filtering is disabled",
+                    })}
+                  </AlertTitle>
+                  <AlertDescription>
+                    {t("settingsPages.mcpSemanticFilterTestPanel.filterDisabledDesc", {
+                      defaultValue: "Enable semantic filtering and save settings to test the filter.",
+                    })}
+                  </AlertDescription>
                 </Alert>
               )}
 
               {testError && (
                 <Alert variant="destructive" className="mb-4">
                   <CircleAlert />
-                  <AlertTitle>Semantic filtering did not run</AlertTitle>
+                  <AlertTitle>
+                    {t("settingsPages.mcpSemanticFilterTestPanel.filterFailedTitle", {
+                      defaultValue: "Semantic filtering did not run",
+                    })}
+                  </AlertTitle>
                   <AlertDescription>{testError}</AlertDescription>
                 </Alert>
               )}
 
               {testResult && (
                 <div>
-                  <h5 className="mb-2 text-base font-medium">Results</h5>
+                  <h5 className="mb-2 text-base font-medium">
+                    {t("settingsPages.mcpSemanticFilterTestPanel.resultsTitle", { defaultValue: "Results" })}
+                  </h5>
                   <Alert className="mb-4">
                     <Info />
                     <AlertTitle>
-                      {testResult.selectedTools} of {testResult.totalTools} tools selected
+                      {t("settingsPages.mcpSemanticFilterTestPanel.toolsSelectedOfTotal", {
+                        defaultValue: "{{selected}} of {{total}} tools selected",
+                        selected: testResult.selectedTools,
+                        total: testResult.totalTools,
+                      })}
                     </AlertTitle>
                     <AlertDescription>
-                      {testResult.totalTools - testResult.selectedTools} tools filtered out
+                      {t("settingsPages.mcpSemanticFilterTestPanel.toolsFilteredOut", {
+                        defaultValue: "{{count}} tools filtered out",
+                        count: testResult.totalTools - testResult.selectedTools,
+                      })}
                     </AlertDescription>
                   </Alert>
                   <div>
-                    <p className="mb-2 block font-medium">Selected Tools:</p>
+                    <p className="mb-2 block font-medium">
+                      {t("settingsPages.mcpSemanticFilterTestPanel.selectedToolsLabel", {
+                        defaultValue: "Selected Tools:",
+                      })}
+                    </p>
                     <ul className="m-0 list-disc pl-5">
                       {testResult.tools.map((tool, index) => (
                         <li key={index} className="mb-1">
@@ -124,7 +158,10 @@ export default function MCPSemanticFilterTestPanel({
                     </ul>
                     {testResult.selectedTools > testResult.tools.length && (
                       <p className="mt-2 block text-sm text-muted-foreground">
-                        +{testResult.selectedTools - testResult.tools.length} more selected tools not shown
+                        {t("settingsPages.mcpSemanticFilterTestPanel.moreToolsNotShown", {
+                          defaultValue: "+{{count}} more selected tools not shown",
+                          count: testResult.selectedTools - testResult.tools.length,
+                        })}
                       </p>
                     )}
                   </div>
@@ -137,21 +174,43 @@ export default function MCPSemanticFilterTestPanel({
             <div>
               <div className="mb-2 flex items-center gap-2">
                 <Code className="size-4" />
-                <p className="font-medium">API Usage</p>
+                <p className="font-medium">
+                  {t("settingsPages.mcpSemanticFilterTestPanel.apiUsageTitle", { defaultValue: "API Usage" })}
+                </p>
               </div>
               <p className="mb-2 block text-sm text-muted-foreground">
-                Use this curl command to test the semantic filter with your current configuration.
+                {t("settingsPages.mcpSemanticFilterTestPanel.apiUsageDesc", {
+                  defaultValue: "Use this curl command to test the semantic filter with your current configuration.",
+                })}
               </p>
-              <p className="mb-2 block font-medium">Response headers to check:</p>
+              <p className="mb-2 block font-medium">
+                {t("settingsPages.mcpSemanticFilterTestPanel.responseHeadersLabel", {
+                  defaultValue: "Response headers to check:",
+                })}
+              </p>
               <ul className="mt-0 mr-0 mb-3 ml-0 list-disc pl-5">
                 <li>
-                  <span>x-litellm-semantic-filter: shows total tools → selected tools</span>
-                  <span className="block text-sm text-muted-foreground">Example: 10→3</span>
+                  <span>
+                    {t("settingsPages.mcpSemanticFilterTestPanel.semanticFilterHeader", {
+                      defaultValue: "x-litellm-semantic-filter: shows total tools → selected tools",
+                    })}
+                  </span>
+                  <span className="block text-sm text-muted-foreground">
+                    {t("settingsPages.mcpSemanticFilterTestPanel.semanticFilterHeaderExample", {
+                      defaultValue: "Example: 10→3",
+                    })}
+                  </span>
                 </li>
                 <li>
-                  <span>x-litellm-semantic-filter-tools: CSV of selected tool names</span>
+                  <span>
+                    {t("settingsPages.mcpSemanticFilterTestPanel.semanticFilterToolsHeader", {
+                      defaultValue: "x-litellm-semantic-filter-tools: CSV of selected tool names",
+                    })}
+                  </span>
                   <span className="block text-sm text-muted-foreground">
-                    Example: wikipedia-fetch,github-search,slack-post
+                    {t("settingsPages.mcpSemanticFilterTestPanel.semanticFilterToolsHeaderExample", {
+                      defaultValue: "Example: wikipedia-fetch,github-search,slack-post",
+                    })}
                   </span>
                 </li>
               </ul>

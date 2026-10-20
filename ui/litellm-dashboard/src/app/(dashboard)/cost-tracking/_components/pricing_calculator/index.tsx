@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -23,6 +24,7 @@ const createDefaultEntry = (): ModelEntry => ({
 });
 
 const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, models }) => {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<ModelEntry[]>([createDefaultEntry()]);
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("month");
   const { debouncedFetchForEntry, removeEntry, getMultiModelResult } = useMultiCostEstimate(accessToken);
@@ -80,11 +82,11 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
         >
           <label className="flex cursor-pointer items-center gap-2 text-sm">
             <RadioGroupItem value="day" />
-            Per Day
+            {t("costTracking.pricingCalculator.perDay", { defaultValue: "Per Day" })}
           </label>
           <label className="flex cursor-pointer items-center gap-2 text-sm">
             <RadioGroupItem value="month" />
-            Per Month
+            {t("costTracking.pricingCalculator.perMonth", { defaultValue: "Per Month" })}
           </label>
         </RadioGroup>
       </div>
@@ -92,12 +94,26 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[35%]">Model</TableHead>
-            <TableHead className="w-[18%]">Input Tokens</TableHead>
-            <TableHead className="w-[18%]">Output Tokens</TableHead>
-            <TableHead className="w-[20%]">Requests/{timePeriod === "day" ? "Day" : "Month"}</TableHead>
+            <TableHead className="w-[35%]">
+              {t("costTracking.pricingCalculator.colModel", { defaultValue: "Model" })}
+            </TableHead>
+            <TableHead className="w-[18%]">
+              {t("costTracking.pricingCalculator.colInputTokens", { defaultValue: "Input Tokens" })}
+            </TableHead>
+            <TableHead className="w-[18%]">
+              {t("costTracking.pricingCalculator.colOutputTokens", { defaultValue: "Output Tokens" })}
+            </TableHead>
+            <TableHead className="w-[20%]">
+              {t("costTracking.pricingCalculator.colRequestsPer", {
+                defaultValue: "Requests/{{period}}",
+                period:
+                  timePeriod === "day"
+                    ? t("costTracking.pricingCalculator.periodDay", { defaultValue: "Day" })
+                    : t("costTracking.pricingCalculator.periodMonth", { defaultValue: "Month" }),
+              })}
+            </TableHead>
             <TableHead className="w-[50px]">
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -109,7 +125,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
                   options={modelOptions}
                   value={record.model || undefined}
                   onValueChange={(value) => handleEntryChange(record.id, "model", value)}
-                  placeholder="Select a model"
+                  placeholder={t("costTracking.pricingCalculator.modelPlaceholder", { defaultValue: "Select a model" })}
                 />
               </TableCell>
               <TableCell>
@@ -154,7 +170,10 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={`Remove model row ${index + 1}`}
+                  aria-label={t("costTracking.pricingCalculator.removeRowLabel", {
+                    defaultValue: "Remove model row {{row}}",
+                    row: index + 1,
+                  })}
                   onClick={() => handleRemoveEntry(record.id)}
                   disabled={entries.length === 1}
                   className="text-destructive"
@@ -170,7 +189,7 @@ const PricingCalculator: React.FC<PricingCalculatorProps> = ({ accessToken, mode
             <TableCell colSpan={5}>
               <Button variant="outline" onClick={handleAddEntry} className="w-full border-dashed">
                 <Plus className="size-3.5" />
-                Add Another Model
+                {t("costTracking.pricingCalculator.addAnotherModel", { defaultValue: "Add Another Model" })}
               </Button>
             </TableCell>
           </TableRow>

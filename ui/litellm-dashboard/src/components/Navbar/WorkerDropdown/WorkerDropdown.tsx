@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/combobox";
 import { InputGroupAddon } from "@/components/ui/input-group";
 import { useWorker } from "@/hooks/useWorker";
+import { useTranslation } from "react-i18next";
 
 interface WorkerDropdownProps {
   onWorkerSwitch: (workerId: string) => void;
@@ -24,6 +25,7 @@ interface WorkerOption {
 }
 
 const WorkerDropdown: React.FC<WorkerDropdownProps> = ({ onWorkerSwitch }) => {
+  const { t } = useTranslation();
   const { isControlPlane, selectedWorker, workers } = useWorker();
 
   if (!isControlPlane || !selectedWorker) return null;
@@ -45,13 +47,13 @@ const WorkerDropdown: React.FC<WorkerDropdownProps> = ({ onWorkerSwitch }) => {
         }
       }}
     >
-      <ComboboxInput className="min-w-[180px]" aria-label="Worker">
+      <ComboboxInput className="min-w-[180px]" aria-label={t("login.worker", { defaultValue: "Worker" })}>
         <InputGroupAddon align="inline-start">
           <Server className="size-4" />
         </InputGroupAddon>
       </ComboboxInput>
       <ComboboxContent>
-        <ComboboxEmpty>No matching workers</ComboboxEmpty>
+        <ComboboxEmpty>{t("navbar.noMatchingWorkers", { defaultValue: "No matching workers" })}</ComboboxEmpty>
         <ComboboxList>
           {(option: WorkerOption) => (
             <ComboboxItem key={option.value} value={option} disabled={option.disabled}>

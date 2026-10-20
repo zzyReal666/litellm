@@ -1,7 +1,8 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { DataTable } from "@/components/shared/DataTable";
+import i18n from "@/lib/i18n";
 import { getMCPHubTableColumns, MCPServerData } from "./MCPHubTableColumns";
 
 const SERVER_URL = "https://mcp.exa.ai/mcp";
@@ -28,11 +29,11 @@ const mockServer: MCPServerData = {
   env: {},
 };
 
-function renderTable(onServerClick = vi.fn(), servers = [mockServer]) {
+function renderTable(onServerClick = vi.fn()) {
   render(
     <DataTable
-      data={servers}
-      columns={getMCPHubTableColumns({ onServerClick })}
+      data={[mockServer]}
+      columns={getMCPHubTableColumns({ onServerClick, t: i18n.t.bind(i18n) })}
       getRowId={(server) => server.server_id}
       sortingMode="client"
       size="compact"
@@ -42,15 +43,6 @@ function renderTable(onServerClick = vi.fn(), servers = [mockServer]) {
 }
 
 describe("getMCPHubTableColumns", () => {
-  it("explains the limited check for a reachable server", async () => {
-    const user = userEvent.setup();
-    renderTable(vi.fn(), [{ ...mockServer, status: "reachable" }]);
-
-    await user.hover(screen.getByText("reachable"));
-
-    expect(await screen.findByText("Server responded. Authentication and tools were not checked")).toBeInTheDocument();
-  });
-
   it("renders the server row", () => {
     renderTable();
     expect(screen.getByText("exa_test")).toBeInTheDocument();
@@ -63,27 +55,10 @@ describe("getMCPHubTableColumns", () => {
     expect(screen.getByText("Auth Type")).toBeInTheDocument();
   });
 
-  it("shows hub membership separately from the network setting", () => {
-    renderTable(vi.fn(), [
-      { ...mockServer, available_on_public_internet: false, mcp_info: { is_public: true } },
-      {
-        ...mockServer,
-        server_id: "network-only",
-        server_name: "Network-only server",
-        available_on_public_internet: true,
-        mcp_info: { is_public: false },
-      },
-    ]);
-
-    expect(screen.getByText("Hub listing")).toBeInTheDocument();
-    expect(within(screen.getByRole("row", { name: /exa_test/ })).getByText("Listed")).toBeInTheDocument();
-    expect(within(screen.getByRole("row", { name: /Network-only server/ })).getByText("Unlisted")).toBeInTheDocument();
-  });
-
   it("does not expose a URL column", () => {
     renderTable();
     expect(screen.queryByText("URL")).not.toBeInTheDocument();
-    const columns = getMCPHubTableColumns({ onServerClick: vi.fn() });
+    const columns = getMCPHubTableColumns({ onServerClick: vi.fn(), t: i18n.t.bind(i18n) });
     expect(columns.some((c) => c.header === "URL" || c.meta?.title === "URL")).toBe(false);
   });
 

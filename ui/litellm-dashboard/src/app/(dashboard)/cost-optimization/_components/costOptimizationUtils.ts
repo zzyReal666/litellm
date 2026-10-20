@@ -1,4 +1,5 @@
-import type { KeySpendActivityRow } from "@/components/UsagePage/dailyActivityApi";
+import type { TFunction } from "i18next";
+
 import { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { ToolSpendDailyEntry, ToolSpendEntry } from "@/components/networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -11,11 +12,21 @@ export const usd = (value: number): string => {
   return `${value < 0 ? "-" : ""}$${formatNumberWithCommas(magnitude, decimals)}`;
 };
 
-export const classificationRatePer1kTurns = (classifierCost: number, turns: number): string => {
-  if (turns <= 0) return `(${usd(0)} / 1K turns)`;
+export const classificationRatePer1kTurns = (classifierCost: number, turns: number, t: TFunction): string => {
+  if (turns <= 0)
+    return t("costOptimization.autoRouterBenchmarks.classificationRate", {
+      defaultValue: "({{rate}} / 1K turns)",
+      rate: usd(0),
+    });
   const rate = (classifierCost * 1000) / turns;
-  if (rate > 0 && rate < 0.0001) return "(<$0.0001 / 1K turns)";
-  return `(${usd(rate)} / 1K turns)`;
+  if (rate > 0 && rate < 0.0001)
+    return t("costOptimization.autoRouterBenchmarks.classificationRateBelow", {
+      defaultValue: "(<$0.0001 / 1K turns)",
+    });
+  return t("costOptimization.autoRouterBenchmarks.classificationRate", {
+    defaultValue: "({{rate}} / 1K turns)",
+    rate: usd(rate),
+  });
 };
 
 export const pct = (ratio: number): string => `${formatNumberWithCommas(ratio * 100, 1)}%`;
@@ -44,6 +55,8 @@ export interface CacheLeakageResult {
   rows: CacheLeakageRow[];
   netSavingsPerCachedToken: number | null;
 }
+
+export const isAnthropicModel = (model: string): boolean => /claude|anthropic/i.test(model);
 
 interface LeakageAccumulator {
   alias: string | null;
@@ -94,78 +107,14 @@ const aggregateByKey = (results: readonly DailyData[]): Map<string, LeakageAccum
 const aggregateByModel = (results: readonly DailyData[]): Map<string, LeakageAccumulator> => {
   const byModel = new Map<string, LeakageAccumulator>();
   for (const day of results) {
-    for (const [model, entry] of Object.entries(day.breakdown?.model_groups ?? {})) {
+    for (const [model, entry] of Object.entries(day.breakdown?.models ?? {})) {
+      if (!isAnthropicModel(model)) continue;
       const acc = byModel.get(model) ?? emptyAccumulator();
       byModel.set(model, addMetrics(acc, entry.metrics, null, null));
     }
   }
   return byModel;
 };
-
-export const netSavingsPerCachedToken = (results: readonly DailyData[]): number | null => {
-  const totals = [...aggregateByModel(results).values()].reduce(
-    (agg, a) => ({
-      cachedTokens: agg.cachedTokens + a.cacheReadTokens + a.cacheCreationTokens,
-      realizedCachingSavings: agg.realizedCachingSavings + a.realizedCachingSavings,
-    }),
-    { cachedTokens: 0, realizedCachingSavings: 0 },
-  );
-  const rate = totals.cachedTokens > 0 ? totals.realizedCachingSavings / totals.cachedTokens : null;
-  return rate != null && rate > 0 ? rate : null;
-};
-
-const toLeakageRow = (
-  id: string,
-  a: {
-    alias: string | null;
-    teamId: string | null;
-    promptTokens: number;
-    cacheReadTokens: number;
-    cacheCreationTokens: number;
-  },
-  rate: number | null,
-  dimension: CacheLeakageDimension,
-): CacheLeakageRow => {
-  const uncachedPromptTokens = Math.max(0, a.promptTokens - a.cacheReadTokens - a.cacheCreationTokens);
-  return {
-    id,
-    label: dimension === "model" ? id : a.alias ?? `${id.slice(0, 8)}...`,
-    sublabel: dimension === "model" ? null : a.teamId,
-    uncachedPromptTokens,
-    cacheHitRatio: a.promptTokens > 0 ? a.cacheReadTokens / a.promptTokens : 0,
-    potentialSavings: rate != null ? uncachedPromptTokens * rate : null,
-  };
-};
-
-const sortAndLimit = (rows: CacheLeakageRow[], rate: number | null, limit: number): CacheLeakageRow[] =>
-  rows
-    .filter((row) => row.uncachedPromptTokens > 0)
-    .sort((x, y) =>
-      rate != null
-        ? (y.potentialSavings ?? 0) - (x.potentialSavings ?? 0)
-        : y.uncachedPromptTokens - x.uncachedPromptTokens,
-    )
-    .slice(0, limit);
-
-export const leakageRowsFromKeyRows = (
-  rows: readonly KeySpendActivityRow[],
-  rate: number | null,
-  limit = 10,
-): CacheLeakageRow[] =>
-  sortAndLimit(
-    rows.map((row) => {
-      const metrics = {
-        alias: row.metadata.key_alias ?? null,
-        teamId: row.metadata.team_id ?? null,
-        promptTokens: row.metrics.prompt_tokens ?? 0,
-        cacheReadTokens: row.metrics.cache_read_input_tokens ?? 0,
-        cacheCreationTokens: row.metrics.cache_creation_input_tokens ?? 0,
-      };
-      return toLeakageRow(row.api_key, metrics, rate, "key");
-    }),
-    rate,
-    limit,
-  );
 
 export const computeCacheLeakage = (
   results: readonly DailyData[],
@@ -189,13 +138,27 @@ export const computeCacheLeakage = (
   // A non-positive rate prices no leakage: there is no saving to extrapolate from
   const rate = netSavingsPerCachedToken != null && netSavingsPerCachedToken > 0 ? netSavingsPerCachedToken : null;
 
-  const rows = sortAndLimit(
-    [...byEntity.entries()].map(([id, a]) => toLeakageRow(id, a, rate, dimension)),
-    rate,
-    limit,
+  const rows: CacheLeakageRow[] = [...byEntity.entries()]
+    .map(([id, a]) => {
+      const uncachedPromptTokens = Math.max(0, a.promptTokens - a.cacheReadTokens - a.cacheCreationTokens);
+      return {
+        id,
+        label: dimension === "model" ? id : a.alias ?? `${id.slice(0, 8)}...`,
+        sublabel: dimension === "model" ? null : a.teamId,
+        uncachedPromptTokens,
+        cacheHitRatio: a.promptTokens > 0 ? a.cacheReadTokens / a.promptTokens : 0,
+        potentialSavings: rate != null ? uncachedPromptTokens * rate : null,
+      };
+    })
+    .filter((row) => row.uncachedPromptTokens > 0);
+
+  const sorted = rows.sort((x, y) =>
+    rate != null
+      ? (y.potentialSavings ?? 0) - (x.potentialSavings ?? 0)
+      : y.uncachedPromptTokens - x.uncachedPromptTokens,
   );
 
-  return { rows, netSavingsPerCachedToken };
+  return { rows: sorted.slice(0, limit), netSavingsPerCachedToken };
 };
 
 export interface DailyToolSpendPoint {
@@ -249,9 +212,14 @@ export type SavingsPoint = {
  * mapping. Colour travels with the driver so filtering cannot separate them.
  */
 export const SAVINGS_DRIVERS = [
-  { name: "Compression", color: "emerald", of: compressionOf },
-  { name: "Prompt caching", color: "blue", of: gatewayAttributedCachingOf },
-  { name: "Auto-router", color: "amber", of: autorouterOf },
+  { name: "Compression", color: "emerald", of: compressionOf, labelKey: "costOptimization.savingsDrivers.compression" },
+  {
+    name: "Prompt caching",
+    color: "blue",
+    of: gatewayAttributedCachingOf,
+    labelKey: "costOptimization.savingsDrivers.promptCaching",
+  },
+  { name: "Auto-router", color: "amber", of: autorouterOf, labelKey: "costOptimization.savingsDrivers.autoRouter" },
 ] as const;
 
 export const SAVINGS_SERIES = SAVINGS_DRIVERS.map((d) => d.name);

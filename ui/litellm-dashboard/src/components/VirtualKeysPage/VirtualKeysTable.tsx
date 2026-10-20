@@ -3,7 +3,6 @@
 import { useKeyInfo } from "@/app/(dashboard)/hooks/keys/useKeyInfo";
 import { useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
-import { useApplyUserBudgetToTeamKeys } from "@/app/(dashboard)/hooks/uiSettings/useApplyUserBudgetToTeamKeys";
 import { useAllTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { DEBOUNCE_WAIT_MS } from "@/utils/debounceConstants";
 import {
@@ -11,20 +10,16 @@ import {
   DataTableFilterDrawer,
   DataTableFilterField,
   DataTableToolbar,
-  usePersistedColumnVisibility,
-  useUrlTableState,
-  type UrlTableStateOptions,
 } from "@/components/shared/DataTable";
 import { SearchSelect } from "@/components/shared/SearchSelect";
-import { PageContent } from "@/components/shared/Page";
-import { PageHeader, PageHeaderControls, PageHeaderDescription, PageHeaderTitle } from "@/components/shared/PageHeader";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
-import { ColumnFiltersState, functionalUpdate, OnChangeFn } from "@tanstack/react-table";
+import { ColumnFiltersState, functionalUpdate, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import { KeyRound } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
+import { createParser, parseAsInteger, parseAsString, parseAsStringLiteral, useQueryState, useQueryStates } from "nuqs";
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { KeyResponse, Team } from "../key_team_helpers/key_list";
 import KeyInfoView from "../templates/key_info_view";
@@ -34,98 +29,95 @@ interface VirtualKeysTableProps {
   headerActions?: React.ReactNode;
 }
 
-const FILTER_COLUMNS = ["team_id", "org_id", "user_id", "key_hash", "status"] as const;
+const FILTER_COLUMNS = ["team_id", "org_id", "user_id", "key_hash"] as const;
 type FilterColumn = (typeof FILTER_COLUMNS)[number];
 
-const FILTER_LABELS: Record<FilterColumn, string> = {
-  team_id: "Team",
-  org_id: "Organization",
-  user_id: "User ID",
-  key_hash: "Key ID",
-  status: "Status",
+const DEFAULT_SORT_BY = "created_at";
+const DEFAULT_SORT_ORDER = "desc";
+const DEFAULT_PAGE_SIZE = 50;
+const MAX_PAGE_SIZE = 100;
+const MAX_PAGE = 100_000;
+
+const boundedInteger = (min: number, max: number, fallback: number) =>
+  createParser({
+    parse: (value: string) => {
+      const parsed = parseAsInteger.parse(value);
+      return parsed === null ? null : Math.min(Math.max(parsed, min), max);
+    },
+    serialize: String,
+  }).withDefault(fallback);
+
+// The filters carry a prefix because /api-keys also takes team_id, key_alias and key_type
+// as create-key prefills; an unprefixed filter would hijack those deep links.
+const TABLE_STATE = {
+  key_search: parseAsString.withDefault(""),
+  sort_by: parseAsString.withDefault(DEFAULT_SORT_BY),
+  sort_order: parseAsStringLiteral(["asc", "desc"] as const).withDefault(DEFAULT_SORT_ORDER),
+  page: boundedInteger(1, MAX_PAGE, 1),
+  page_size: boundedInteger(1, MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE),
+  filter_team: parseAsString.withDefault(""),
+  filter_org: parseAsString.withDefault(""),
+  filter_user: parseAsString.withDefault(""),
+  filter_key_id: parseAsString.withDefault(""),
 };
 
-const KEY_STATUS_VALUES = ["active", "expired", "revoked", "deleted"] as const;
-type KeyStatusFilter = (typeof KEY_STATUS_VALUES)[number];
-const ALL_STATUSES = "all";
+const toSortOrder = (active: SortingState[number]): "asc" | "desc" => (active.desc ? "desc" : "asc");
 
-const KEY_STATUS_LABELS: Record<KeyStatusFilter, string> = {
-  active: "Active",
-  expired: "Expired",
-  revoked: "Revoked (blocked)",
-  deleted: "Deleted",
-};
-
-const STATUS_FILTER_ITEMS = [
-  { value: ALL_STATUSES, label: "All statuses" },
-  ...KEY_STATUS_VALUES.map((value) => ({ value, label: KEY_STATUS_LABELS[value] })),
-];
-
-const isKeyStatusFilter = (value: unknown): value is KeyStatusFilter =>
-  (KEY_STATUS_VALUES as readonly unknown[]).includes(value);
-
-const isUsableFilter = (filter: ColumnFiltersState[number]): boolean =>
-  filter.id !== "status" || isKeyStatusFilter(filter.value);
-
-const TABLE_STATE_OPTIONS: UrlTableStateOptions<FilterColumn> = {
-  sortFields: KEY_TABLE_SORT_FIELDS,
-  defaultSort: { id: "created_at", desc: true },
-  defaultPageSize: 50,
-  maxPageSize: 100,
-  filterColumns: FILTER_COLUMNS,
-  urlKeys: {
-    search: "key_search",
-    filter_team_id: "filter_team",
-    filter_org_id: "filter_org",
-    filter_user_id: "filter_user",
-    filter_key_hash: "filter_key_id",
-  },
-};
-
-const appliedFilter = (filters: ColumnFiltersState, column: FilterColumn): string | undefined => {
+const filterValue = (filters: ColumnFiltersState, column: FilterColumn): string | null => {
   const value = filters.find((filter) => filter.id === column)?.value;
-  return typeof value === "string" ? value : undefined;
+  return (typeof value === "string" ? value.trim() : "") || null;
 };
 
 export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
+  const { t } = useTranslation();
   const { data: fetchedOrganizations } = useOrganizations();
   const organizations = useMemo(() => fetchedOrganizations ?? [], [fetchedOrganizations]);
   const { data: fetchedTeams } = useAllTeams();
   const allTeams = useMemo<Team[]>(() => fetchedTeams ?? [], [fetchedTeams]);
 
   const [selectedKeyId, setSelectedKeyId] = useQueryState("key", parseAsString.withOptions({ history: "push" }));
-  const {
-    search: searchInput,
-    setSearch,
-    sorting,
-    onSortingChange,
-    pagination,
-    onPaginationChange,
-    columnFilters: urlColumnFilters,
-    onColumnFiltersChange: setUrlColumnFilters,
-  } = useUrlTableState(TABLE_STATE_OPTIONS);
-  const columnFilters = useMemo(() => urlColumnFilters.filter(isUsableFilter), [urlColumnFilters]);
-  const onColumnFiltersChange = useCallback<OnChangeFn<ColumnFiltersState>>(
-    (updaterOrValue) => setUrlColumnFilters(functionalUpdate(updaterOrValue, columnFilters)),
-    [columnFilters, setUrlColumnFilters],
-  );
-  const { columnVisibility, onColumnVisibilityChange } = usePersistedColumnVisibility(
-    "virtual-keys",
-    KEY_TABLE_HIDDEN_COLUMNS,
-  );
+  const [tableState, setTableState] = useQueryStates(TABLE_STATE);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const searchInput = tableState.key_search;
   const [searchQuery] = useDebouncedValue(searchInput, { wait: DEBOUNCE_WAIT_MS });
 
-  const [activeSort] = sorting;
+  // A hand-edited sort_by the table cannot sort by would 400 at /key/list and leave the page loading.
+  const sortBy = KEY_TABLE_SORT_FIELDS.includes(tableState.sort_by) ? tableState.sort_by : DEFAULT_SORT_BY;
+  const sorting = useMemo<SortingState>(
+    () => [{ id: sortBy, desc: tableState.sort_order === "desc" }],
+    [sortBy, tableState.sort_order],
+  );
+  const tablePagination = useMemo<PaginationState>(
+    () => ({ pageIndex: tableState.page - 1, pageSize: tableState.page_size }),
+    [tableState.page, tableState.page_size],
+  );
+  const { filter_team, filter_org, filter_user, filter_key_id } = tableState;
+  const appliedFilters = useMemo(
+    () => ({
+      team_id: filter_team.trim(),
+      org_id: filter_org.trim(),
+      user_id: filter_user.trim(),
+      key_hash: filter_key_id.trim(),
+    }),
+    [filter_team, filter_org, filter_user, filter_key_id],
+  );
+  const columnFilters = useMemo<ColumnFiltersState>(
+    () =>
+      FILTER_COLUMNS.filter((column) => appliedFilters[column]).map((column) => ({
+        id: column,
+        value: appliedFilters[column],
+      })),
+    [appliedFilters],
+  );
+
   const keyListOptions = {
-    teamID: appliedFilter(columnFilters, "team_id"),
-    organizationID: appliedFilter(columnFilters, "org_id"),
+    teamID: appliedFilters.team_id || undefined,
+    organizationID: appliedFilters.org_id || undefined,
     search: searchQuery.trim() || undefined,
-    userID: appliedFilter(columnFilters, "user_id"),
-    keyHash: appliedFilter(columnFilters, "key_hash"),
-    status: appliedFilter(columnFilters, "status"),
-    sortBy: activeSort.id,
-    sortOrder: activeSort.desc ? "desc" : "asc",
+    userID: appliedFilters.user_id || undefined,
+    keyHash: appliedFilters.key_hash || undefined,
+    sortBy,
+    sortOrder: tableState.sort_order,
     expand: "user",
   };
 
@@ -134,25 +126,63 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
     isPending,
     isPlaceholderData,
     isFetching,
-    isError,
     refetch,
-  } = useKeys(pagination.pageIndex + 1, pagination.pageSize, keyListOptions);
+  } = useKeys(tablePagination.pageIndex + 1, tablePagination.pageSize, keyListOptions);
 
   const keyList = useMemo(() => keys?.keys ?? [], [keys]);
   const rowCount = keys?.total_count ?? 0;
 
-  const applyUserBudgetToTeamKeys = useApplyUserBudgetToTeamKeys();
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      void setTableState({ key_search: value || null, page: null });
+    },
+    [setTableState],
+  );
 
-  const columnDeps = useMemo(
-    () => ({
+  const handleSortingChange = useCallback<OnChangeFn<SortingState>>(
+    (updaterOrValue) => {
+      const active = functionalUpdate(updaterOrValue, sorting)[0];
+      void setTableState({
+        sort_by: active?.id ?? null,
+        sort_order: active ? toSortOrder(active) : null,
+        page: null,
+      });
+    },
+    [sorting, setTableState],
+  );
+
+  const handleColumnFiltersChange = useCallback<OnChangeFn<ColumnFiltersState>>(
+    (updaterOrValue) => {
+      const next = functionalUpdate(updaterOrValue, columnFilters);
+      const nextFilters = {
+        filter_team: filterValue(next, "team_id"),
+        filter_org: filterValue(next, "org_id"),
+        filter_user: filterValue(next, "user_id"),
+        filter_key_id: filterValue(next, "key_hash"),
+        page: null,
+      };
+      void setTableState(nextFilters);
+    },
+    [columnFilters, setTableState],
+  );
+
+  const handlePaginationChange = useCallback<OnChangeFn<PaginationState>>(
+    (updaterOrValue) => {
+      const next = functionalUpdate(updaterOrValue, tablePagination);
+      void setTableState({ page: next.pageIndex + 1, page_size: next.pageSize });
+    },
+    [tablePagination, setTableState],
+  );
+
+  const columns = useMemo(() => {
+    const deps = {
       allTeams,
       organizations,
       onSelectKey: (key: KeyResponse) => void setSelectedKeyId(key.token),
-      applyUserBudgetToTeamKeys,
-    }),
-    [allTeams, organizations, setSelectedKeyId, applyUserBudgetToTeamKeys],
-  );
-  const columns = useMemo(() => getKeyTableColumns(columnDeps), [columnDeps]);
+      t,
+    };
+    return getKeyTableColumns(deps);
+  }, [allTeams, organizations, setSelectedKeyId, t]);
 
   const selectedKeyFromList = useMemo(
     () => keyList.find((key) => key.token === selectedKeyId),
@@ -203,9 +233,6 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
       if (columnId === "org_id") {
         return organizations.find((org) => org.organization_id === raw)?.organization_alias || raw;
       }
-      if (columnId === "status" && isKeyStatusFilter(raw)) {
-        return KEY_STATUS_LABELS[raw];
-      }
       return raw;
     },
     [allTeams, organizations],
@@ -213,7 +240,11 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
 
   if (selectedKeyId) {
     if (!selectedKey && !selectedKeyLoadFailed) {
-      return <div className="p-4 text-sm text-muted-foreground">Loading key...</div>;
+      return (
+        <div className="p-4 text-sm text-muted-foreground">
+          {t("virtualKeys.virtualKeysTable.loadingKey", { defaultValue: "Loading key..." })}
+        </div>
+      );
     }
     return (
       <div className="w-full h-full overflow-hidden">
@@ -230,37 +261,35 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
   }
 
   return (
-    <PageContent>
-      <PageHeader>
-        <PageHeaderTitle>
-          <KeyRound />
-          Virtual Keys
-        </PageHeaderTitle>
-        <PageHeaderDescription>Every key that authenticates requests to the gateway.</PageHeaderDescription>
-        {headerActions != null && <PageHeaderControls>{headerActions}</PageHeaderControls>}
-      </PageHeader>
+    <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <PageHeader
+        icon={<KeyRound />}
+        title={t("nav.virtualKeys", { defaultValue: "Virtual Keys" })}
+        subtitle={t("virtualKeys.virtualKeysTable.subtitle", {
+          defaultValue: "Every key that authenticates requests to the gateway.",
+        })}
+        primaryAction={headerActions}
+      />
       <DataTable
         data={keyList}
         columns={columns}
         getRowId={(row) => row.token}
-        columnVisibility={columnVisibility}
-        onColumnVisibilityChange={onColumnVisibilityChange}
+        defaultColumnVisibility={KEY_TABLE_HIDDEN_COLUMNS}
         sortingMode="server"
         sorting={sorting}
-        onSortingChange={onSortingChange}
+        onSortingChange={handleSortingChange}
         paginationMode="server"
-        pagination={pagination}
-        onPaginationChange={onPaginationChange}
+        pagination={tablePagination}
+        onPaginationChange={handlePaginationChange}
         rowCount={rowCount}
         filterMode="server"
         columnFilters={columnFilters}
-        onColumnFiltersChange={onColumnFiltersChange}
+        onColumnFiltersChange={handleColumnFiltersChange}
         enableColumnResizing
         columnResizeMode="onChange"
         isLoading={isPending || isPlaceholderData}
-        isError={isError}
-        loadingMessage="Loading keys..."
-        noDataMessage="No keys found"
+        loadingMessage={t("teamPage.teamVirtualKeysTable.loadingKeys", { defaultValue: "Loading keys..." })}
+        noDataMessage={t("virtualKeys.virtualKeysTable.noKeysFound", { defaultValue: "No keys found" })}
         fillHeight
         size="compact"
         toolbar={(table) => (
@@ -268,72 +297,77 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
             <DataTableToolbar
               table={table}
               searchValue={searchInput}
-              onSearchChange={setSearch}
-              searchPlaceholder="Search by key alias or ID…"
+              onSearchChange={handleSearchChange}
+              searchPlaceholder={t("virtualKeys.virtualKeysTable.searchPlaceholder", {
+                defaultValue: "Search by key alias or ID…",
+              })}
               onRefresh={() => refetch?.()}
               isRefreshing={isFetching}
               onOpenFilters={() => setFiltersOpen(true)}
-              filterLabels={FILTER_LABELS}
+              filterLabels={{
+                team_id: t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" }),
+                org_id: t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }),
+                user_id: t("virtualKeys.virtualKeysTable.filterUserId", { defaultValue: "User ID" }),
+                key_hash: t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" }),
+              }}
               formatFilterValue={formatFilterValue}
             />
             <DataTableFilterDrawer
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
-              description="Narrow down virtual keys"
+              title={t("molecules.filter.filters", { defaultValue: "Filters" })}
+              description={t("virtualKeys.virtualKeysTable.filtersDescription", {
+                defaultValue: "Narrow down virtual keys",
+              })}
             >
               {({ get, set }) => (
                 <>
-                  <DataTableFilterField label="Team">
+                  <DataTableFilterField label={t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" })}>
                     <SearchSelect
                       options={teamOptions}
                       value={(get("team_id") as string) || undefined}
                       onValueChange={(value) => set("team_id", value ?? undefined)}
-                      placeholder="Select a team…"
-                      emptyText="No teams found"
+                      placeholder={t("virtualKeys.virtualKeysTable.selectTeamPlaceholder", {
+                        defaultValue: "Select a team…",
+                      })}
+                      emptyText={t("commonComponents.teamDropdown.notFound", { defaultValue: "No teams found" })}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="Organization">
+                  <DataTableFilterField
+                    label={t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" })}
+                  >
                     <SearchSelect
                       options={orgOptions}
                       value={(get("org_id") as string) || undefined}
                       onValueChange={(value) => set("org_id", value ?? undefined)}
-                      placeholder="Select an organization…"
-                      emptyText="No organizations found"
+                      placeholder={t("virtualKeys.virtualKeysTable.selectOrganizationPlaceholder", {
+                        defaultValue: "Select an organization…",
+                      })}
+                      emptyText={t("virtualKeys.virtualKeysTable.noOrganizationsFound", {
+                        defaultValue: "No organizations found",
+                      })}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="User ID">
+                  <DataTableFilterField
+                    label={t("virtualKeys.virtualKeysTable.filterUserId", { defaultValue: "User ID" })}
+                  >
                     <Input
                       value={(get("user_id") as string) ?? ""}
                       onChange={(event) => set("user_id", event.target.value)}
-                      placeholder="Enter User ID…"
+                      placeholder={t("virtualKeys.virtualKeysTable.enterUserIdPlaceholder", {
+                        defaultValue: "Enter User ID…",
+                      })}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="Key ID">
+                  <DataTableFilterField label={t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" })}>
                     <Input
                       value={(get("key_hash") as string) ?? ""}
                       onChange={(event) => set("key_hash", event.target.value)}
-                      placeholder="Enter Key ID…"
+                      placeholder={t("virtualKeys.virtualKeysTable.enterKeyIdPlaceholder", {
+                        defaultValue: "Enter Key ID…",
+                      })}
                     />
-                  </DataTableFilterField>
-                  <DataTableFilterField label="Status">
-                    <Select
-                      items={STATUS_FILTER_ITEMS}
-                      value={(get("status") as string) || ALL_STATUSES}
-                      onValueChange={(value) => set("status", value === ALL_STATUSES ? undefined : value)}
-                    >
-                      <SelectTrigger className="w-full" aria-label="Status">
-                        <SelectValue placeholder="All statuses" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {STATUS_FILTER_ITEMS.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
                   </DataTableFilterField>
                 </>
               )}
@@ -341,6 +375,6 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
           </>
         )}
       />
-    </PageContent>
+    </div>
   );
 }

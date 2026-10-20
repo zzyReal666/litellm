@@ -1,14 +1,13 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldGroup } from "@/components/ui/field";
 import { AgentCreateInfo, AgentCredentialFieldMetadata } from "@/components/networking";
 import { PasswordInput } from "@/components/shared/PasswordInput";
-import { AGENT_FORM_CONFIG, applyKillSwitchToPayload } from "./agent_config";
+import { AGENT_FORM_CONFIG } from "./agent_config";
 import CostConfigFields, { COST_FIELD_NAMES } from "./cost_config_fields";
-import KillSwitchFormFields from "./KillSwitchFormFields";
-import { KILL_SWITCH_PANEL_KEY, type KillSwitchConfig } from "./kill_switch_config";
 import {
   AgentFormField,
   AgentFormPanel,
@@ -23,10 +22,8 @@ interface DynamicAgentFormFieldsProps {
   panels: CollapsiblePanelsState;
 }
 
-export const unmountedDynamicFieldNames = (mountedPanels: readonly string[]): readonly string[] => [
-  ...(mountedPanels.includes(AGENT_FORM_CONFIG.cost.key) ? [] : COST_FIELD_NAMES),
-  ...(mountedPanels.includes(KILL_SWITCH_PANEL_KEY) ? [] : ["kill_switch"]),
-];
+export const unmountedDynamicFieldNames = (mountedPanels: readonly string[]): readonly string[] =>
+  mountedPanels.includes(AGENT_FORM_CONFIG.cost.key) ? [] : COST_FIELD_NAMES;
 
 // A field's validation_pattern is server-supplied metadata; if it's ever not a valid regex, skip
 // validation rather than throwing during render and taking the whole form down with it.
@@ -45,6 +42,7 @@ const buildValidationPatternRule = (
 };
 
 const CredentialField = ({ field }: { field: AgentCredentialFieldMetadata }) => {
+  const { t } = useTranslation();
   const patternRule = buildValidationPatternRule(field);
   return (
     <AgentFormField
@@ -52,7 +50,14 @@ const CredentialField = ({ field }: { field: AgentCredentialFieldMetadata }) => 
       label={field.tooltip ? labelWithHint(field.label, field.tooltip) : field.label}
       defaultValue={field.default_value ?? undefined}
       rules={{
-        ...(field.required ? { required: `Please enter ${field.label}` } : {}),
+        ...(field.required
+          ? {
+              required: t("agentsPage.dynamicAgentFormFields.credentialFieldRequired", {
+                defaultValue: "Please enter {{label}}",
+                label: field.label,
+              }),
+            }
+          : {}),
         ...(patternRule ? { pattern: patternRule } : {}),
       }}
     >
@@ -103,62 +108,81 @@ const CredentialField = ({ field }: { field: AgentCredentialFieldMetadata }) => 
   );
 };
 
-const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTypeInfo, panels }) => (
-  <>
-    <FieldGroup className="mb-4">
-      <AgentFormField
-        name="agent_name"
-        label={labelWithHint("Agent Name", "Unique identifier for the agent")}
-        rules={{ required: "Please enter a unique agent name" }}
-      >
-        {({ value, onChange, ref, ...control }) => (
-          <Input
-            {...control}
-            ref={ref}
-            placeholder="e.g., my-langgraph-agent"
-            value={typeof value === "string" ? value : ""}
-            onChange={onChange}
-          />
-        )}
-      </AgentFormField>
+const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTypeInfo, panels }) => {
+  const { t } = useTranslation();
 
-      <AgentFormField
-        name="description"
-        label={labelWithHint("Description", "Brief description of what this agent does")}
-      >
-        {({ value, onChange, ref, ...control }) => (
-          <Textarea
-            {...control}
-            ref={ref}
-            rows={2}
-            placeholder="Describe what this agent does..."
-            value={typeof value === "string" ? value : ""}
-            onChange={onChange}
-          />
-        )}
-      </AgentFormField>
+  return (
+    <>
+      <FieldGroup className="mb-4">
+        <AgentFormField
+          name="agent_name"
+          label={labelWithHint(
+            t("agentsPage.dynamicAgentFormFields.agentNameLabel", { defaultValue: "Agent Name" }),
+            t("agentsPage.dynamicAgentFormFields.agentNameTooltip", {
+              defaultValue: "Unique identifier for the agent",
+            }),
+          )}
+          rules={{
+            required: t("agentsPage.dynamicAgentFormFields.agentNameRequired", {
+              defaultValue: "Please enter a unique agent name",
+            }),
+          }}
+        >
+          {({ value, onChange, ref, ...control }) => (
+            <Input
+              {...control}
+              ref={ref}
+              placeholder={t("agentsPage.dynamicAgentFormFields.agentNamePlaceholder", {
+                defaultValue: "e.g., my-langgraph-agent",
+              })}
+              value={typeof value === "string" ? value : ""}
+              onChange={onChange}
+            />
+          )}
+        </AgentFormField>
 
-      {agentTypeInfo.credential_fields.map((field) => (
-        <CredentialField key={field.key} field={field} />
-      ))}
-    </FieldGroup>
+        <AgentFormField
+          name="description"
+          label={labelWithHint(
+            t("common.description", { defaultValue: "Description" }),
+            t("agentsPage.dynamicAgentFormFields.descriptionTooltip", {
+              defaultValue: "Brief description of what this agent does",
+            }),
+          )}
+        >
+          {({ value, onChange, ref, ...control }) => (
+            <Textarea
+              {...control}
+              ref={ref}
+              rows={2}
+              placeholder={t("agentsPage.dynamicAgentFormFields.descriptionPlaceholder", {
+                defaultValue: "Describe what this agent does...",
+              })}
+              value={typeof value === "string" ? value : ""}
+              onChange={onChange}
+            />
+          )}
+        </AgentFormField>
 
-    <div className="mb-4 rounded-md border border-border px-4">
-      <AgentFormPanel panelKey={AGENT_FORM_CONFIG.cost.key} title={AGENT_FORM_CONFIG.cost.title} panels={panels}>
-        <CostConfigFields />
-      </AgentFormPanel>
-      <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title="Kill Switch" panels={panels}>
-        <KillSwitchFormFields />
-      </AgentFormPanel>
-    </div>
-  </>
-);
+        {agentTypeInfo.credential_fields.map((field) => (
+          <CredentialField key={field.key} field={field} />
+        ))}
+      </FieldGroup>
 
-export const buildDynamicAgentData = (
-  values: AgentFormValues,
-  agentTypeInfo: AgentCreateInfo,
-  existingAgent?: { kill_switch?: KillSwitchConfig | null },
-): AgentRequestPayload => {
+      <div className="mb-4 rounded-md border border-border px-4">
+        <AgentFormPanel
+          panelKey={AGENT_FORM_CONFIG.cost.key}
+          title={t(AGENT_FORM_CONFIG.cost.titleKey, { defaultValue: AGENT_FORM_CONFIG.cost.title })}
+          panels={panels}
+        >
+          <CostConfigFields />
+        </AgentFormPanel>
+      </div>
+    </>
+  );
+};
+
+export const buildDynamicAgentData = (values: AgentFormValues, agentTypeInfo: AgentCreateInfo): AgentRequestPayload => {
   const litellmParams: Record<string, unknown> = {
     ...(agentTypeInfo.litellm_params_template || {}),
   };
@@ -217,8 +241,6 @@ export const buildDynamicAgentData = (
   if (values.rpm_limit != null) agentData.rpm_limit = values.rpm_limit;
   if (values.session_tpm_limit != null) agentData.session_tpm_limit = values.session_tpm_limit;
   if (values.session_rpm_limit != null) agentData.session_rpm_limit = values.session_rpm_limit;
-
-  applyKillSwitchToPayload(agentData, values.kill_switch, existingAgent);
 
   return agentData;
 };

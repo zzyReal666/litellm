@@ -1,7 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { TFunction } from "i18next";
 import { Copy, ExternalLink, Info, MoreHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { IdentityCell, StatusBadge } from "@/components/shared/table_cells";
@@ -38,10 +40,11 @@ interface SkillHubRowActionsProps {
 }
 
 function SkillHubRowActions({ skill, onSkillClick }: SkillHubRowActionsProps) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open skill actions"
+        aria-label={t("aiHub.skillHubTableColumns.openSkillActions", { defaultValue: "Open skill actions" })}
         data-testid={`skill-hub-actions-${skill.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -50,14 +53,19 @@ function SkillHubRowActions({ skill, onSkillClick }: SkillHubRowActionsProps) {
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="skill-hub-action-details" onClick={() => onSkillClick(skill)}>
           <Info />
-          View details
+          {t("vectorStoreManagement.documentsTable.viewDetails", { defaultValue: "View details" })}
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="skill-hub-action-copy"
-          onClick={() => void copyToClipboard(skill.name, "Skill name copied")}
+          onClick={() =>
+            void copyToClipboard(
+              skill.name,
+              t("aiHub.skillHubTableColumns.skillNameCopied", { defaultValue: "Skill name copied" }),
+            )
+          }
         >
           <Copy />
-          Copy skill name
+          {t("skillHubTableColumns.copySkillName", { defaultValue: "Copy skill name" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -66,14 +74,20 @@ function SkillHubRowActions({ skill, onSkillClick }: SkillHubRowActionsProps) {
 
 interface SkillHubTableColumnsDeps {
   onSkillClick: (skill: Plugin) => void;
+  t: TFunction;
 }
 
-export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDeps): ColumnDef<Plugin>[] => [
+export const getSkillHubTableColumns = ({ onSkillClick, t }: SkillHubTableColumnsDeps): ColumnDef<Plugin>[] => [
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Skill Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Skill Name" />,
+    meta: { title: t("skillHubTableColumns.skillName", { defaultValue: "Skill Name" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader
+        column={column}
+        title={t("skillHubTableColumns.skillName", { defaultValue: "Skill Name" })}
+      />
+    ),
     size: 200,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -84,8 +98,8 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: { title: t("skillHubTableColumns.description", { defaultValue: "Description" }) },
+    header: t("skillHubTableColumns.description", { defaultValue: "Description" }),
     size: 260,
     enableSorting: false,
     cell: ({ row }) => (
@@ -97,8 +111,10 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "category",
     accessorKey: "category",
-    meta: { title: "Category", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Category" />,
+    meta: { title: t("skillHubTableColumns.category", { defaultValue: "Category" }), skeleton: "badge" },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("skillHubTableColumns.category", { defaultValue: "Category" })} />
+    ),
     size: 130,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -112,8 +128,10 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "domain",
     accessorKey: "domain",
-    meta: { title: "Domain" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Domain" />,
+    meta: { title: t("skillHubTableColumns.domain", { defaultValue: "Domain" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("skillHubTableColumns.domain", { defaultValue: "Domain" })} />
+    ),
     size: 130,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -121,8 +139,8 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   },
   {
     id: "source",
-    meta: { title: "Source" },
-    header: "Source",
+    meta: { title: t("skillHubTableColumns.source", { defaultValue: "Source" }) },
+    header: t("skillHubTableColumns.source", { defaultValue: "Source" }),
     size: 200,
     enableSorting: false,
     cell: ({ row }) => {
@@ -145,21 +163,27 @@ export const getSkillHubTableColumns = ({ onSkillClick }: SkillHubTableColumnsDe
   {
     id: "enabled",
     accessorKey: "enabled",
-    meta: { title: "Status", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Status" />,
+    meta: { title: t("common.status", { defaultValue: "Status" }), skeleton: "badge" },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={t("common.status", { defaultValue: "Status" })} />
+    ),
     size: 100,
     enableSorting: true,
     cell: ({ row }) => (
       <StatusBadge
         tone={row.original.enabled ? "success" : "neutral"}
-        label={row.original.enabled ? "Public" : "Draft"}
+        label={
+          row.original.enabled
+            ? t("skillHubTableColumns.statusPublic", { defaultValue: "Public" })
+            : t("skillHubTableColumns.statusDraft", { defaultValue: "Draft" })
+        }
       />
     ),
   },
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

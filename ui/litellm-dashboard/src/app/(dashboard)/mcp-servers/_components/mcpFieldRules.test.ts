@@ -1,9 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
+import type { TFunction } from "i18next";
 import type { MountedFieldControlProps } from "@/components/common_components/MountedFormField";
-import { tagsControl } from "./mcpFieldRules";
+import { tagsControl as tagsControlWithT } from "./mcpFieldRules";
 
 const controlWith = (value: unknown, onChange = vi.fn()): MountedFieldControlProps =>
   ({ id: "field", name: "field", value, onChange, onBlur: vi.fn() }) as unknown as MountedFieldControlProps;
+
+const t = ((_key: string, options?: { defaultValue?: string }) =>
+  options?.defaultValue ?? _key) as unknown as TFunction;
+
+const tagsControl = (control: MountedFieldControlProps) => tagsControlWithT(control, t);
 
 // These fields were antd Selects with tokenSeparators={[","]}, so a comma commits a tag as an admin
 // types. MultiSelect owns that rule now, which leaves this adapter one job: hand the stored value to

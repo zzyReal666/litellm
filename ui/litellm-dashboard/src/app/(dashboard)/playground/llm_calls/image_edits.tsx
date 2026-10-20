@@ -1,6 +1,6 @@
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
-import { buildPlaygroundHeaders, type CustomHeaders } from "@/components/llm_calls/request_headers";
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 
 export async function makeOpenAIImageEditsRequest(
@@ -12,7 +12,6 @@ export async function makeOpenAIImageEditsRequest(
   tags?: string[],
   signal?: AbortSignal,
   customBaseUrl?: string,
-  customHeaders?: CustomHeaders,
 ) {
   // base url should be the current base_url
   const isLocal = process.env.NODE_ENV === "development";
@@ -25,7 +24,7 @@ export async function makeOpenAIImageEditsRequest(
     apiKey: accessToken,
     baseURL: proxyBaseUrl,
     dangerouslyAllowBrowser: true,
-    defaultHeaders: buildPlaygroundHeaders(tags, customHeaders),
+    defaultHeaders: tags && tags.length > 0 ? { "x-litellm-tags": tags.join(",") } : undefined,
   });
 
   try {
@@ -72,7 +71,9 @@ export async function makeOpenAIImageEditsRequest(
 
     if (signal?.aborted) {
     } else {
-      let errorMessage = "Failed to edit image(s)";
+      let errorMessage = i18n.t("playground.imageEdits.editFailed", {
+        defaultValue: "Failed to edit image(s)",
+      });
 
       if (error?.error?.message) {
         errorMessage = error.error.message;
