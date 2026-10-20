@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Check, ChevronDown, ChevronRight, CircleAlert, Copy, Info } from "lucide-react";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,11 +8,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
-import { LogEntry } from "../columns";
+import { LogEntry } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { PROMPT_CACHE_CREATION_TOOLTIP, PROMPT_CACHE_READ_TOOLTIP } from "@/utils/promptCacheUsage";
-import GuardrailViewer from "../GuardrailViewer/GuardrailViewer";
-import EvalViewer from "../EvalViewer/EvalViewer";
+import GuardrailViewer from "./sections/GuardrailViewer/GuardrailViewer";
+import EvalViewer from "./sections/EvalViewer/EvalViewer";
 import {
   getBatchIdFromRequestId,
   getBatchModels,
@@ -21,9 +20,10 @@ import {
   getReasoningTokens,
   isBatchCallType,
 } from "../batchLogUtils";
-import { CostBreakdownViewer } from "../CostBreakdownViewer";
-import { ConfigInfoMessage } from "../ConfigInfoMessage";
-import { VectorStoreViewer } from "../VectorStoreViewer";
+import { CostBreakdownViewer } from "./sections/CostBreakdownViewer";
+import { ConfigInfoMessage } from "./sections/ConfigInfoMessage";
+import { VectorStoreViewer } from "./sections/VectorStoreViewer";
+import { CREDENTIAL_LABELS } from "../constants";
 import { TruncatedValue } from "./TruncatedValue";
 import { TokenFlow } from "./TokenFlow";
 import { JsonViewer } from "./JsonViewer";
@@ -47,7 +47,7 @@ import {
   FONT_FAMILY_MONO,
   SPACING_XLARGE,
 } from "./constants";
-import { ToolsSection } from "../ToolsSection";
+import { ToolsSection } from "./sections/ToolsSection";
 import { PrettyMessagesView } from "./PrettyMessagesView";
 import { ClassifierAuditView } from "./ClassifierAuditView";
 import { AUTOROUTER_CLASSIFIER_ORIGIN } from "./ClassifyTag";
@@ -57,6 +57,7 @@ export interface LogDetailContentProps {
   /** When true, log details (messages/response) are still being lazy-loaded. */
   isLoadingDetails?: boolean;
   accessToken?: string | null;
+  userEmail?: string;
 }
 
 /**
@@ -67,8 +68,12 @@ export interface LogDetailContentProps {
  * Designed to be placed inside LogDetailsDrawer's right panel so it can
  * be reused for both single-log and session-mode views.
  */
-export function LogDetailContent({ logEntry, isLoadingDetails = false, accessToken }: LogDetailContentProps) {
-  const { t } = useTranslation();
+export function LogDetailContent({
+  logEntry,
+  isLoadingDetails = false,
+  accessToken,
+  userEmail,
+}: LogDetailContentProps) {
   const metadata = logEntry.metadata || {};
   const hasError = metadata.status === "failure";
   const errorInfo = hasError ? metadata.error_information : null;
@@ -122,9 +127,7 @@ export function LogDetailContent({ logEntry, isLoadingDetails = false, accessTok
         >
           <CircleAlert className="size-4 shrink-0 text-destructive" />
           <div>
-            <div className="font-medium text-destructive">
-              {t("viewLogs.logDetailContent.requestFailed", { defaultValue: "Request Failed" })}
-            </div>
+            <div className="font-medium text-destructive">Request Failed</div>
             <ErrorDescription errorInfo={errorInfo} />
           </div>
         </div>
@@ -139,32 +142,34 @@ export function LogDetailContent({ logEntry, isLoadingDetails = false, accessTok
       <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
         <Card size="sm" style={{ marginBottom: 0 }}>
           <CardHeader>
-            <CardTitle>{t("viewLogs.logDetailContent.requestDetails", { defaultValue: "Request Details" })}</CardTitle>
+            <CardTitle>Request Details</CardTitle>
           </CardHeader>
           <CardContent>
             <DescriptionList>
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelModel", { defaultValue: "Model" })}>
-                {logEntry.model}
-              </DescriptionItem>
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelProvider", { defaultValue: "Provider" })}>
-                {logEntry.custom_llm_provider || "-"}
-              </DescriptionItem>
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelCallType", { defaultValue: "Call Type" })}>
-                {logEntry.call_type}
-              </DescriptionItem>
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelModelId", { defaultValue: "Model ID" })}>
+              <DescriptionItem label="Model">{logEntry.model}</DescriptionItem>
+              <DescriptionItem label="Provider">{logEntry.custom_llm_provider || "-"}</DescriptionItem>
+              <DescriptionItem label="Call Type">{logEntry.call_type}</DescriptionItem>
+              {logEntry.user && (
+                <DescriptionItem label="User">
+                  <UserIdentity userId={logEntry.user} email={userEmail} />
+                </DescriptionItem>
+              )}
+              <DescriptionItem label="Model ID">
                 <TruncatedValue value={logEntry.model_id} />
               </DescriptionItem>
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelApiBase", { defaultValue: "API Base" })}>
+              <DescriptionItem label="API Base">
                 <TruncatedValue value={logEntry.api_base} maxWidth={API_BASE_MAX_WIDTH} />
               </DescriptionItem>
               {logEntry.requester_ip_address && (
-                <DescriptionItem label={t("viewLogs.logDetailContent.labelIpAddress", { defaultValue: "IP Address" })}>
-                  {logEntry.requester_ip_address}
+                <DescriptionItem label="IP Address">{logEntry.requester_ip_address}</DescriptionItem>
+              )}
+              {typeof logEntry.metadata?.used_client_oauth_token === "boolean" && (
+                <DescriptionItem label="Credential">
+                  {CREDENTIAL_LABELS[String(logEntry.metadata.used_client_oauth_token)]}
                 </DescriptionItem>
               )}
               {hasGuardrailData && (
-                <DescriptionItem label={t("viewLogs.logDetailContent.labelGuardrail", { defaultValue: "Guardrail" })}>
+                <DescriptionItem label="Guardrail">
                   <GuardrailLabel label={primaryGuardrailLabel} maskedCount={totalMaskedEntities} />
                 </DescriptionItem>
               )}
@@ -312,23 +317,16 @@ function CopyButton({
 }
 
 function ErrorDescription({ errorInfo }: { errorInfo: any }) {
-  const { t } = useTranslation();
   return (
     <div>
       {errorInfo.error_code && (
         <div>
-          <span className="font-semibold">
-            {t("viewLogs.logDetailContent.errorCode", { defaultValue: "Error Code:" })}
-          </span>{" "}
-          {errorInfo.error_code}
+          <span className="font-semibold">Error Code:</span> {errorInfo.error_code}
         </div>
       )}
       {errorInfo.error_message && (
         <div>
-          <span className="font-semibold">
-            {t("viewLogs.logDetailContent.errorMessage", { defaultValue: "Message:" })}
-          </span>{" "}
-          {errorInfo.error_message}
+          <span className="font-semibold">Message:</span> {errorInfo.error_message}
         </div>
       )}
     </div>
@@ -336,11 +334,10 @@ function ErrorDescription({ errorInfo }: { errorInfo: any }) {
 }
 
 function TagsSection({ tags }: { tags: Record<string, any> }) {
-  const { t } = useTranslation();
   return (
     <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden p-4 mb-6">
       <span className="font-semibold" style={{ display: "block", marginBottom: 8, fontSize: 16 }}>
-        {t("viewLogs.logDetailContent.tags", { defaultValue: "Tags" })}
+        Tags
       </span>
       <div className="flex flex-wrap items-center gap-2">
         {Object.entries(tags).map(([key, value]) => (
@@ -353,8 +350,17 @@ function TagsSection({ tags }: { tags: Record<string, any> }) {
   );
 }
 
+function UserIdentity({ userId, email }: { userId: string; email?: string }) {
+  if (!email || email === userId) return <TruncatedValue value={userId} />;
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span>{email}</span>
+      <TruncatedValue value={userId} />
+    </span>
+  );
+}
+
 function GuardrailLabel({ label, maskedCount }: { label: string; maskedCount: number }) {
-  const { t } = useTranslation();
   const handleClick = () => {
     const el = document.getElementById("guardrail-section");
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -365,11 +371,7 @@ function GuardrailLabel({ label, maskedCount }: { label: string; maskedCount: nu
       <a onClick={handleClick} style={{ cursor: "pointer" }}>
         {label}
       </a>
-      {maskedCount > 0 && (
-        <Badge variant="secondary">
-          {t("viewLogs.logDetailContent.masked", { count: maskedCount, defaultValue: `${maskedCount} masked` })}
-        </Badge>
-      )}
+      {maskedCount > 0 && <Badge variant="secondary">{maskedCount} masked</Badge>}
     </span>
   );
 }
@@ -395,7 +397,6 @@ const CACHE_KEY_TOOLTIP =
 const PROMPT_CACHE_DOCS_URL = "https://docs.litellm.ai/docs/completion/prompt_caching";
 
 function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: string; docsUrl: string }) {
-  const { t } = useTranslation();
   return (
     <span className="inline-flex items-center gap-1">
       {label}
@@ -409,7 +410,7 @@ function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: stri
           <TooltipContent>
             {tooltip}{" "}
             <a href={docsUrl} target="_blank" rel="noreferrer" className="underline">
-              {t("viewLogs.logDetailContent.docs", { defaultValue: "Docs" })}
+              Docs
             </a>
           </TooltipContent>
         </Tooltip>
@@ -423,7 +424,6 @@ function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: stri
  * from the parsed output and error files, and the models the batch actually ran on.
  */
 function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: Record<string, unknown> }) {
-  const { t } = useTranslation();
   const counts = getBatchRequestCounts(metadata);
   const batchId = getBatchIdFromRequestId(logEntry.request_id);
   const batchModels = getBatchModels(metadata);
@@ -433,27 +433,21 @@ function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metad
     <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
       <Card size="sm" style={{ marginBottom: 0 }}>
         <CardHeader>
-          <CardTitle>{t("viewLogs.logDetailContent.batchResults", { defaultValue: "Batch Results" })}</CardTitle>
+          <CardTitle>Batch Results</CardTitle>
         </CardHeader>
         <CardContent>
           <DescriptionList>
             {batchId && (
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelBatchId", { defaultValue: "Batch ID" })}>
+              <DescriptionItem label="Batch ID">
                 <TruncatedValue value={batchId} />
               </DescriptionItem>
             )}
             {counts && (
               <>
-                <DescriptionItem
-                  label={t("viewLogs.logDetailContent.labelSuccessfulRequests", {
-                    defaultValue: "Successful Requests",
-                  })}
-                >
+                <DescriptionItem label="Successful Requests">
                   {formatNumberWithCommas(counts.successful)}
                 </DescriptionItem>
-                <DescriptionItem
-                  label={t("viewLogs.logDetailContent.labelFailedRequests", { defaultValue: "Failed Requests" })}
-                >
+                <DescriptionItem label="Failed Requests">
                   {counts.failed > 0 ? (
                     <Badge variant="secondary" className="bg-destructive/15 text-destructive">
                       {formatNumberWithCommas(counts.failed)}
@@ -464,11 +458,7 @@ function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metad
                 </DescriptionItem>
               </>
             )}
-            {batchModels && (
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelModels", { defaultValue: "Models" })}>
-                {batchModels.join(", ")}
-              </DescriptionItem>
-            )}
+            {batchModels && <DescriptionItem label="Models">{batchModels.join(", ")}</DescriptionItem>}
           </DescriptionList>
         </CardContent>
       </Card>
@@ -477,7 +467,6 @@ function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metad
 }
 
 function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: Record<string, any> }) {
-  const { t } = useTranslation();
   const completionStartTime = logEntry.completionStartTime;
   const ttftMs =
     completionStartTime && completionStartTime !== logEntry.endTime
@@ -500,25 +489,19 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
     <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
       <Card size="sm" style={{ marginBottom: 0 }}>
         <CardHeader>
-          <CardTitle>{t("viewLogs.logDetailContent.metrics", { defaultValue: "Metrics" })}</CardTitle>
+          <CardTitle>Metrics</CardTitle>
         </CardHeader>
         <CardContent>
           <DescriptionList>
             {showAnthropicMessagesInputOutput ? (
               <>
-                <DescriptionItem
-                  label={t("viewLogs.logDetailContent.labelInputTokens", { defaultValue: "Input Tokens" })}
-                >
-                  {formatNumberWithCommas(uncachedInputTokens)}
-                </DescriptionItem>
-                <DescriptionItem
-                  label={t("viewLogs.logDetailContent.labelOutputTokens", { defaultValue: "Output Tokens" })}
-                >
+                <DescriptionItem label="Input Tokens">{formatNumberWithCommas(uncachedInputTokens)}</DescriptionItem>
+                <DescriptionItem label="Output Tokens">
                   {formatNumberWithCommas(logEntry.completion_tokens)}
                 </DescriptionItem>
               </>
             ) : (
-              <DescriptionItem label={t("viewLogs.logDetailContent.labelTokens", { defaultValue: "Tokens" })}>
+              <DescriptionItem label="Tokens">
                 <TokenFlow
                   prompt={logEntry.prompt_tokens}
                   completion={logEntry.completion_tokens}
@@ -527,58 +510,34 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               </DescriptionItem>
             )}
             {reasoningTokens !== undefined && reasoningTokens > 0 && (
-              <DescriptionItem
-                label={t("viewLogs.logDetailContent.labelReasoningTokens", { defaultValue: "Reasoning Tokens" })}
-              >
-                {formatNumberWithCommas(reasoningTokens)}
-              </DescriptionItem>
+              <DescriptionItem label="Reasoning Tokens">{formatNumberWithCommas(reasoningTokens)}</DescriptionItem>
             )}
-            <DescriptionItem label={t("viewLogs.logDetailContent.labelCost", { defaultValue: "Cost" })}>
-              ${formatNumberWithCommas(logEntry.spend || 0, 8)}
-            </DescriptionItem>
-            <DescriptionItem label={t("viewLogs.logDetailContent.labelDuration", { defaultValue: "Duration" })}>
+            <DescriptionItem label="Cost">${formatNumberWithCommas(logEntry.spend || 0, 8)}</DescriptionItem>
+            <DescriptionItem label="Duration">
               {logEntry.request_duration_ms != null ? (logEntry.request_duration_ms / 1000).toFixed(3) : "-"} s
             </DescriptionItem>
             {ttftMs != null && ttftMs > 0 && (
-              <DescriptionItem
-                label={t("viewLogs.logDetailContent.labelTimeToFirstToken", { defaultValue: "Time to First Token" })}
-              >
-                {(ttftMs / 1000).toFixed(3)} s
-              </DescriptionItem>
+              <DescriptionItem label="Time to First Token">{(ttftMs / 1000).toFixed(3)} s</DescriptionItem>
             )}
 
             {showResponseCache && (
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label={t("viewLogs.logDetailContent.labelResponseCache", { defaultValue: "Response Cache" })}
-                    tooltip={t("viewLogs.logDetailContent.responseCacheTooltip", {
-                      defaultValue:
-                        "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
-                    })}
+                    label="Response Cache"
+                    tooltip={RESPONSE_CACHE_TOOLTIP}
                     docsUrl={RESPONSE_CACHE_DOCS_URL}
                   />
                 }
               >
                 <Badge variant="secondary" className={isResponseCacheHit ? "bg-success/15 text-success" : undefined}>
-                  {isResponseCacheHit
-                    ? t("viewLogs.logDetailContent.cacheHitLabel", { defaultValue: "Hit" })
-                    : t("viewLogs.logDetailContent.cacheMissLabel", { defaultValue: "Miss" })}
+                  {isResponseCacheHit ? "Hit" : "Miss"}
                 </Badge>
               </DescriptionItem>
             )}
             {responseCacheKey && (
               <DescriptionItem
-                label={
-                  <MetricLabel
-                    label={t("viewLogs.logDetailContent.labelCacheKey", { defaultValue: "Cache Key" })}
-                    tooltip={t("viewLogs.logDetailContent.cacheKeyTooltip", {
-                      defaultValue:
-                        "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
-                    })}
-                    docsUrl={RESPONSE_CACHE_DOCS_URL}
-                  />
-                }
+                label={<MetricLabel label="Cache Key" tooltip={CACHE_KEY_TOOLTIP} docsUrl={RESPONSE_CACHE_DOCS_URL} />}
               >
                 <TruncatedValue value={responseCacheKey} />
               </DescriptionItem>
@@ -587,12 +546,8 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label={t("viewLogs.logDetailContent.labelPromptCacheReadTokens", {
-                      defaultValue: "Prompt Cache Read Tokens",
-                    })}
-                    tooltip={t("viewLogs.logDetailContent.promptCacheReadTooltip", {
-                      defaultValue: PROMPT_CACHE_READ_TOOLTIP,
-                    })}
+                    label="Prompt Cache Read Tokens"
+                    tooltip={PROMPT_CACHE_READ_TOOLTIP}
                     docsUrl={PROMPT_CACHE_DOCS_URL}
                   />
                 }
@@ -604,12 +559,8 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label={t("viewLogs.logDetailContent.labelPromptCacheCreationTokens", {
-                      defaultValue: "Prompt Cache Creation Tokens",
-                    })}
-                    tooltip={t("viewLogs.logDetailContent.promptCacheCreationTooltip", {
-                      defaultValue: PROMPT_CACHE_CREATION_TOOLTIP,
-                    })}
+                    label="Prompt Cache Creation Tokens"
+                    tooltip={PROMPT_CACHE_CREATION_TOOLTIP}
                     docsUrl={PROMPT_CACHE_DOCS_URL}
                   />
                 }
@@ -619,14 +570,12 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
             )}
 
             {metadata?.litellm_overhead_time_ms !== undefined && metadata.litellm_overhead_time_ms !== null && (
-              <DescriptionItem
-                label={t("viewLogs.logDetailContent.labelLitellmOverhead", { defaultValue: "LiteLLM Overhead" })}
-              >
+              <DescriptionItem label="LiteLLM Overhead">
                 {metadata.litellm_overhead_time_ms.toFixed(2)} ms
               </DescriptionItem>
             )}
 
-            <DescriptionItem label={t("viewLogs.logDetailContent.labelRetries", { defaultValue: "Retries" })}>
+            <DescriptionItem label="Retries">
               {metadata?.attempted_retries != null && metadata.attempted_retries > 0 && (
                 <>
                   {metadata.attempted_retries}
@@ -637,16 +586,16 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               )}
               {metadata?.attempted_retries != null && metadata.attempted_retries <= 0 && (
                 <Badge variant="secondary" className="bg-success/15 text-success">
-                  {t("viewLogs.logDetailContent.retriesNone", { defaultValue: "None" })}
+                  None
                 </Badge>
               )}
               {metadata?.attempted_retries == null && "-"}
             </DescriptionItem>
 
-            <DescriptionItem label={t("viewLogs.logDetailContent.labelStartTime", { defaultValue: "Start Time" })}>
+            <DescriptionItem label="Start Time">
               {moment(logEntry.startTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")}
             </DescriptionItem>
-            <DescriptionItem label={t("viewLogs.logDetailContent.labelEndTime", { defaultValue: "End Time" })}>
+            <DescriptionItem label="End Time">
               {moment(logEntry.endTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")}
             </DescriptionItem>
           </DescriptionList>
@@ -671,7 +620,6 @@ function RequestResponseSection({
   getFormattedResponse,
   logEntry,
 }: RequestResponseSectionProps) {
-  const { t } = useTranslation();
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState<typeof TAB_REQUEST | typeof TAB_RESPONSE>(TAB_REQUEST);
   const [viewMode, setViewMode] = useState<"pretty" | "json">("pretty");
@@ -704,13 +652,11 @@ function RequestResponseSection({
                 <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
               )}
               <h3 className="text-lg font-medium text-foreground" style={{ margin: 0 }}>
-                {t("viewLogs.logDetailContent.requestAndResponse", { defaultValue: "Request & Response" })}
+                Request & Response
               </h3>
             </CollapsibleTrigger>
             <TabsList className="mr-4">
-              <TabsTrigger value="pretty">
-                {t("viewLogs.logDetailContent.viewPretty", { defaultValue: "Pretty" })}
-              </TabsTrigger>
+              <TabsTrigger value="pretty">Pretty</TabsTrigger>
               <TabsTrigger value="json">JSON</TabsTrigger>
             </TabsList>
           </div>
@@ -735,16 +681,12 @@ function RequestResponseSection({
                 >
                   <div className="flex items-center justify-between">
                     <TabsList>
-                      <TabsTrigger value={TAB_REQUEST}>
-                        {t("viewLogs.logDetailContent.tabRequest", { defaultValue: "Request" })}
-                      </TabsTrigger>
-                      <TabsTrigger value={TAB_RESPONSE}>
-                        {t("viewLogs.logDetailContent.tabResponse", { defaultValue: "Response" })}
-                      </TabsTrigger>
+                      <TabsTrigger value={TAB_REQUEST}>Request</TabsTrigger>
+                      <TabsTrigger value={TAB_RESPONSE}>Response</TabsTrigger>
                     </TabsList>
                     <CopyButton
                       getText={getCopyText}
-                      label={t("viewLogs.logDetailContent.copyJson", { defaultValue: "Copy JSON" })}
+                      label="Copy JSON"
                       disabled={activeTab === TAB_RESPONSE && !hasResponse && !hasError}
                     />
                   </div>
@@ -766,9 +708,7 @@ function RequestResponseSection({
                             fontStyle: "italic",
                           }}
                         >
-                          {t("viewLogs.logDetailContent.responseNotAvailable", {
-                            defaultValue: "Response data not available",
-                          })}
+                          Response data not available
                         </div>
                       )}
                     </div>
@@ -787,21 +727,25 @@ const GUARDRAIL_JUMP_LINK_STYLE = {
   passed: { className: "border border-success/20 bg-success/10 text-success", glyph: "\u2713" },
   flagged: { className: "border border-warning/20 bg-warning/10 text-warning", glyph: "\u26A0" },
   failed: { className: "border border-destructive/20 bg-destructive/10 text-destructive", glyph: "\u2717" },
+  not_run: { className: "border border-border bg-muted text-muted-foreground", glyph: "\u2013" },
 } as const;
 
 const isPassedStatus = (status: unknown) => status === "pass" || status === "passed" || status === "success";
 const isFlaggedStatus = (status: unknown) => status === "flagged" || status === "guardrail_flagged";
+const isNotRunStatus = (status: unknown) => status === "not_run";
 
-const guardrailJumpLinkOutcome = (statuses: unknown[]): keyof typeof GUARDRAIL_JUMP_LINK_STYLE => {
-  if (statuses.every(isPassedStatus)) return "passed";
-  if (statuses.every((s) => isPassedStatus(s) || isFlaggedStatus(s))) return "flagged";
+const guardrailJumpLinkOutcome = (evaluated: unknown[]): keyof typeof GUARDRAIL_JUMP_LINK_STYLE => {
+  if (evaluated.length === 0) return "not_run";
+  if (evaluated.every(isPassedStatus)) return "passed";
+  if (evaluated.every((s) => isPassedStatus(s) || isFlaggedStatus(s))) return "flagged";
   return "failed";
 };
 
 export function GuardrailJumpLink({ guardrailEntries }: { guardrailEntries: any[] }) {
-  const { t } = useTranslation();
-  const outcome = guardrailJumpLinkOutcome(guardrailEntries.map((e) => e?.guardrail_status || e?.status));
-  const { className, glyph } = GUARDRAIL_JUMP_LINK_STYLE[outcome];
+  const statuses = guardrailEntries.map((e) => e?.guardrail_status || e?.status);
+  const evaluated = statuses.filter((s) => !isNotRunStatus(s));
+  const notRunCount = statuses.length - evaluated.length;
+  const { className, glyph } = GUARDRAIL_JUMP_LINK_STYLE[guardrailJumpLinkOutcome(evaluated)];
 
   const handleClick = () => {
     const el = document.getElementById("guardrail-section");
@@ -824,11 +768,9 @@ export function GuardrailJumpLink({ guardrailEntries }: { guardrailEntries: any[
           fontWeight: 500,
         }}
       >
-        {glyph}{" "}
-        {t("viewLogs.logDetailContent.guardrailsEvaluated", {
-          count: guardrailEntries.length,
-          defaultValue: `${guardrailEntries.length} guardrail${guardrailEntries.length !== 1 ? "s" : ""} evaluated`,
-        })}
+        {glyph} {evaluated.length} guardrail
+        {evaluated.length !== 1 ? "s" : ""} evaluated
+        {notRunCount > 0 ? `, ${notRunCount} not run` : ""}
         <span style={{ fontSize: 11, opacity: 0.7 }}>{"\u2193"}</span>
       </div>
     </div>
@@ -836,7 +778,6 @@ export function GuardrailJumpLink({ guardrailEntries }: { guardrailEntries: any[
 }
 
 function MetadataSection({ metadata }: { metadata: Record<string, any> }) {
-  const { t } = useTranslation();
   const [open, setOpen] = useState(true);
 
   return (
@@ -848,17 +789,12 @@ function MetadataSection({ metadata }: { metadata: Record<string, any> }) {
           ) : (
             <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
           )}
-          <h3 className="text-lg font-medium text-foreground">
-            {t("viewLogs.logDetailContent.metadata", { defaultValue: "Metadata" })}
-          </h3>
+          <h3 className="text-lg font-medium text-foreground">Metadata</h3>
         </CollapsibleTrigger>
         <CollapsibleContent>
           <div>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-              <CopyButton
-                getText={() => JSON.stringify(metadata, null, 2)}
-                label={t("viewLogs.logDetailContent.copyMetadata", { defaultValue: "Copy Metadata" })}
-              />
+              <CopyButton getText={() => JSON.stringify(metadata, null, 2)} label="Copy Metadata" />
             </div>
             <pre
               style={{

@@ -1,7 +1,5 @@
-import { useEffect, useMemo } from "react";
-import type { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
-import { z } from "zod/v4";
+import { useEffect } from "react";
+import { z } from "zod";
 
 import { useCloudZeroCreate } from "@/app/(dashboard)/hooks/cloudzero/useCloudZeroCreate";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -23,28 +21,15 @@ interface CloudZeroCreationModalProps {
   onCancel: () => void;
 }
 
-const createSchema = (t: TFunction) =>
-  z.object({
-    api_key: z
-      .string()
-      .min(
-        1,
-        t("cloudZero.cloudZeroCreateModal.apiKeyRequired", { defaultValue: "Please enter your CloudZero API key" }),
-      ),
-    connection_id: z.string().min(
-      1,
-      t("cloudZero.cloudZeroCreateModal.connectionIdRequired", {
-        defaultValue: "Please enter your CloudZero connection ID",
-      }),
-    ),
-    timezone: z.string(),
-  });
+const createSchema = z.object({
+  api_key: z.string().min(1, "Please enter your CloudZero API key"),
+  connection_id: z.string().min(1, "Please enter your CloudZero connection ID"),
+  timezone: z.string(),
+});
 
 export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZeroCreationModalProps) {
-  const { t } = useTranslation();
   const { accessToken } = useAuthorized();
-  const schema = useMemo(() => createSchema(t), [t]);
-  const form = useZodForm(schema, { defaultValues: EMPTY_CLOUDZERO_FORM_VALUES });
+  const form = useZodForm(createSchema, { defaultValues: EMPTY_CLOUDZERO_FORM_VALUES });
   const createMutation = useCloudZeroCreate(accessToken || "");
 
   useEffect(() => {
@@ -56,21 +41,12 @@ export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZe
   const handleSubmit = (values: CloudZeroFormValues) => {
     createMutation.mutate(buildCloudZeroPayload(values), {
       onSuccess: () => {
-        toast.success(
-          t("cloudZero.cloudZeroCreateModal.createSuccess", {
-            defaultValue: "CloudZero integration created successfully",
-          }),
-        );
+        toast.success("CloudZero integration created successfully");
         form.reset(EMPTY_CLOUDZERO_FORM_VALUES);
         onOk();
       },
       onError: (error: Error) => {
-        toast.error(
-          error.message ||
-            t("cloudZero.cloudZeroCreateModal.createFailed", {
-              defaultValue: "Failed to create CloudZero integration",
-            }),
-        );
+        toast.error(error.message || "Failed to create CloudZero integration");
       },
     });
   };
@@ -84,52 +60,23 @@ export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZe
     <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {t("cloudZero.cloudZeroCreateModal.title", { defaultValue: "Create CloudZero Integration" })}
-          </DialogTitle>
+          <DialogTitle>Create CloudZero Integration</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
             <FieldGroup>
-              <FormField
-                control={form.control}
-                name="api_key"
-                label={t("cloudZero.cloudZeroCreateModal.apiKeyLabel", { defaultValue: "CloudZero API Key" })}
-              >
+              <FormField control={form.control} name="api_key" label="CloudZero API Key">
                 {({ ref, ...field }) => (
-                  <CloudZeroApiKeyInput
-                    {...field}
-                    ref={ref}
-                    placeholder={t("cloudZero.cloudZeroCreateModal.apiKeyPlaceholder", {
-                      defaultValue: "Enter your CloudZero API key",
-                    })}
-                  />
+                  <CloudZeroApiKeyInput {...field} ref={ref} placeholder="Enter your CloudZero API key" />
                 )}
               </FormField>
-              <FormField
-                control={form.control}
-                name="connection_id"
-                label={t("cloudzeroExportModal.connectionIdLabel", { defaultValue: "Connection ID" })}
-              >
-                {({ ref, ...field }) => (
-                  <Input
-                    {...field}
-                    ref={ref}
-                    placeholder={t("cloudZero.cloudZeroCreateModal.connectionIdPlaceholder", {
-                      defaultValue: "Enter your CloudZero connection ID",
-                    })}
-                  />
-                )}
+              <FormField control={form.control} name="connection_id" label="Connection ID">
+                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="Enter your CloudZero connection ID" />}
               </FormField>
               <FormField
                 control={form.control}
                 name="timezone"
-                label={labelWithHint(
-                  t("cloudZero.cloudZeroCreateModal.timezoneLabel", { defaultValue: "Timezone" }),
-                  t("cloudZero.cloudZeroCreateModal.timezoneTooltip", {
-                    defaultValue: "Timezone for date handling (defaults to UTC if not provided)",
-                  }),
-                )}
+                label={labelWithHint("Timezone", "Timezone for date handling (defaults to UTC if not provided)")}
               >
                 {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="UTC" />}
               </FormField>
@@ -138,16 +85,14 @@ export default function CloudZeroCreationModal({ open, onOk, onCancel }: CloudZe
         </TooltipProvider>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={createMutation.isPending}>
-            {t("common.cancel", { defaultValue: "Cancel" })}
+            Cancel
           </Button>
           <Button
             onClick={() => void form.handleSubmit(handleSubmit)()}
             disabled={createMutation.isPending}
             aria-busy={createMutation.isPending}
           >
-            {createMutation.isPending
-              ? t("cloudZero.cloudZeroCreateModal.creating", { defaultValue: "Creating..." })
-              : t("common.create", { defaultValue: "Create" })}
+            {createMutation.isPending ? "Creating..." : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

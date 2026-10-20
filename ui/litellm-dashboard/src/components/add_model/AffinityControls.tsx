@@ -1,5 +1,4 @@
 import React from "react";
-import { Trans, useTranslation } from "react-i18next";
 
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -11,7 +10,6 @@ export const AffinityControls: React.FC<{
   value: ComplexityRouterConfigValue;
   onChange: (value: ComplexityRouterConfigValue) => void;
 }> = ({ value, onChange }) => {
-  const { t } = useTranslation();
   const [ttlDraft, setTtlDraft] = React.useState<string | null>(null);
   const commitTtl = (raw: string) => {
     setTtlDraft(null);
@@ -23,9 +21,6 @@ export const AffinityControls: React.FC<{
     if (!Number.isFinite(parsed)) return;
     onChange({ ...value, session_affinity_ttl_seconds: Math.max(1, Math.round(parsed)) });
   };
-  const pinLabel = t("addModel.affinityControls.pinSessionLabel", {
-    defaultValue: "Pin a session to one deployment per model group",
-  });
 
   return (
     <>
@@ -33,19 +28,17 @@ export const AffinityControls: React.FC<{
         <Switch
           checked={value.deployment_affinity ?? DEFAULT_DEPLOYMENT_AFFINITY}
           onCheckedChange={(deploymentAffinity) => onChange({ ...value, deployment_affinity: deploymentAffinity })}
-          aria-label={pinLabel}
+          aria-label="Pin one model deployment per tier"
         />
-        <strong className="font-semibold">{pinLabel}</strong>
+        <strong className="font-semibold">Pin one model deployment per tier</strong>
       </div>
       <span className="block text-xs mb-3 text-muted-foreground">
-        {t("addModel.affinityControls.pinSessionHint", {
-          defaultValue:
-            "Keeps a session on the same deployment within a group, so provider prompt caches stay warm. Turn off to load-balance every turn.",
-        })}
+        Reuses the model chosen for each tier and its deployment when available. Requests can still move between tiers.
+        Turn off to select models and load-balance deployments every turn.
       </span>
       <div style={{ maxWidth: 320 }}>
         <label className="block text-sm font-medium mb-1" htmlFor="session-affinity-ttl">
-          {t("addModel.affinityControls.ttlLabel", { defaultValue: "How long a pin survives idle (seconds)" })}
+          How long a pin survives idle (seconds)
         </label>
         <Input
           id="session-affinity-ttl"
@@ -56,11 +49,8 @@ export const AffinityControls: React.FC<{
           onBlur={(event) => commitTtl(event.target.value)}
         />
         <span className="block text-xs mt-1 text-muted-foreground">
-          <Trans
-            i18nKey="addModel.affinityControls.ttlHint"
-            defaults="Refreshes after every request that reuses a pin. Empty tracks the backend default of {{seconds}} seconds."
-            values={{ seconds: DEFAULT_SESSION_AFFINITY_TTL_SECONDS }}
-          />
+          Refreshes after every request that reuses a pin. Empty tracks the backend default of{" "}
+          {DEFAULT_SESSION_AFFINITY_TTL_SECONDS} seconds.
         </span>
       </div>
     </>

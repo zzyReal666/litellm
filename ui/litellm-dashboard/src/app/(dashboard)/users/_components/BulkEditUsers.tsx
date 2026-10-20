@@ -1,5 +1,4 @@
 import React, { useId, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { userBulkUpdateUserCall, teamBulkMemberAddCall, Member } from "@/components/networking";
 import { UserEditView } from "./user_edit_view";
 import { toast } from "@/lib/toast";
@@ -10,7 +9,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  NUMERIC_CELL_CLASS,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/cva.config";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 
 interface BulkEditUserModalProps {
@@ -38,7 +46,6 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
   userModels,
   allowAllUsers = false,
 }) => {
-  const { t } = useTranslation();
   const { premiumUser } = useAuthorized();
   const [loading, setLoading] = useState(false);
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
@@ -82,7 +89,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
   const handleSubmit = async (formValues: any) => {
     if (!accessToken) {
-      toast.fromError(t("bulkEditUsers.notifications.accessTokenNotFound", { defaultValue: "Access token not found" }));
+      toast.fromError("Access token not found");
       return;
     }
 
@@ -118,11 +125,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       const hasTeamAdditions = addToTeams && selectedTeams.length > 0;
 
       if (!hasUserUpdates && !hasTeamAdditions) {
-        toast.fromError(
-          t("bulkEditUsers.notifications.noFieldsModified", {
-            defaultValue: "Please modify at least one field or select teams to add users to",
-          }),
-        );
+        toast.fromError("Please modify at least one field or select teams to add users to");
         return;
       }
 
@@ -132,20 +135,10 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       if (hasUserUpdates) {
         if (updateAllUsers) {
           const result = await userBulkUpdateUserCall(accessToken, updatePayload, undefined, true);
-          successMessages.push(
-            t("bulkEditUsers.notifications.updatedAllUsers", {
-              total: result.total_requested,
-              defaultValue: "Updated all users ({{total}} total)",
-            }),
-          );
+          successMessages.push(`Updated all users (${result.total_requested} total)`);
         } else {
           await userBulkUpdateUserCall(accessToken, updatePayload, userIds);
-          successMessages.push(
-            t("bulkEditUsers.notifications.updatedUsers", {
-              count: userIds.length,
-              defaultValue: "Updated {{count}} user(s)",
-            }),
-          );
+          successMessages.push(`Updated ${userIds.length} user(s)`);
         }
       }
 
@@ -197,22 +190,11 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         if (successfulTeams.length > 0) {
           const totalAdditions = successfulTeams.reduce((sum, r) => sum + r.successfulAdditions, 0);
-          successMessages.push(
-            t("bulkEditUsers.notifications.addedToTeams", {
-              count: successfulTeams.length,
-              total: totalAdditions,
-              defaultValue: "Added users to {{count}} team(s) ({{total}} total additions)",
-            }),
-          );
+          successMessages.push(`Added users to ${successfulTeams.length} team(s) (${totalAdditions} total additions)`);
         }
 
         if (failedTeams.length > 0) {
-          toast.warning(
-            t("bulkEditUsers.notifications.failedToAddToTeams", {
-              count: failedTeams.length,
-              defaultValue: "Failed to add users to {{count}} team(s)",
-            }),
-          );
+          toast.warning(`Failed to add users to ${failedTeams.length} team(s)`);
         }
       }
 
@@ -230,9 +212,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       onCancel();
     } catch (error) {
       console.error("Bulk operation failed:", error);
-      toast.fromError(
-        t("bulkEditUsers.notifications.bulkOpFailed", { defaultValue: "Failed to perform bulk operations" }),
-      );
+      toast.fromError("Failed to perform bulk operations");
     } finally {
       setLoading(false);
     }
@@ -243,12 +223,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>
-            {updateAllUsers
-              ? t("bulkEditUsers.titleAllUsers", { defaultValue: "Bulk Edit All Users" })
-              : t("bulkEditUsers.titleSelectedUsers", {
-                  count: selectedUsers.length,
-                  defaultValue: "Bulk Edit {{count}} User(s)",
-                })}
+            {updateAllUsers ? "Bulk Edit All Users" : `Bulk Edit ${selectedUsers.length} User(s)`}
           </DialogTitle>
         </DialogHeader>
         {allowAllUsers && (
@@ -258,21 +233,16 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                 id={updateAllUsersId}
                 checked={updateAllUsers}
                 onCheckedChange={(checked) => setUpdateAllUsers(checked === true)}
-                aria-label={t("bulkEditUsers.updateAllUsersLabel", {
-                  defaultValue: "Update ALL users in the system",
-                })}
+                aria-label="Update ALL users in the system"
               />
               <label htmlFor={updateAllUsersId} className="cursor-pointer text-sm font-medium text-foreground">
-                {t("bulkEditUsers.updateAllUsersLabel", { defaultValue: "Update ALL users in the system" })}
+                Update ALL users in the system
               </label>
             </div>
             {updateAllUsers && (
               <div className="mt-2">
                 <span className="text-xs text-warning">
-                  {"⚠️ "}
-                  {t("bulkEditUsers.updateAllUsersWarning", {
-                    defaultValue: "This will apply changes to ALL users in the system, not just the selected ones.",
-                  })}
+                  ⚠️ This will apply changes to ALL users in the system, not just the selected ones.
                 </span>
               </div>
             )}
@@ -281,28 +251,15 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         {!updateAllUsers && (
           <div className="mb-4">
-            <h5 className="mb-2 text-sm font-semibold text-foreground">
-              {t("bulkEditUsers.selectedUsersTitle", {
-                count: selectedUsers.length,
-                defaultValue: "Selected Users ({{count}}):",
-              })}
-            </h5>
+            <h5 className="mb-2 text-sm font-semibold text-foreground">Selected Users ({selectedUsers.length}):</h5>
             <div className="max-h-[200px] overflow-y-auto rounded-md border border-border">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[30%]">
-                      {t("bulkEditUsers.columns.userId", { defaultValue: "User ID" })}
-                    </TableHead>
-                    <TableHead className="w-[25%]">
-                      {t("bulkEditUsers.columns.email", { defaultValue: "Email" })}
-                    </TableHead>
-                    <TableHead className="w-[25%]">
-                      {t("bulkEditUsers.columns.currentRole", { defaultValue: "Current Role" })}
-                    </TableHead>
-                    <TableHead className="w-[20%]">
-                      {t("bulkEditUsers.columns.budget", { defaultValue: "Budget" })}
-                    </TableHead>
+                    <TableHead className="w-[30%]">User ID</TableHead>
+                    <TableHead className="w-[25%]">Email</TableHead>
+                    <TableHead className="w-[25%]">Current Role</TableHead>
+                    <TableHead className={cn("w-[20%]", NUMERIC_CELL_CLASS)}>Budget</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -311,19 +268,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                       <TableCell className="text-xs font-medium text-foreground">
                         {user.user_id.length > 20 ? `${user.user_id.slice(0, 20)}...` : user.user_id}
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {user.user_email || t("bulkEditUsers.noEmail", { defaultValue: "No email" })}
-                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{user.user_email || "No email"}</TableCell>
                       <TableCell className="text-xs text-foreground">
                         {possibleUIRoles?.[user.user_role]?.ui_label || user.user_role}
                       </TableCell>
-                      <TableCell>
-                        <MoneyCell
-                          value={user.max_budget}
-                          decimals={2}
-                          emptyText={t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })}
-                          showZero
-                        />
+                      <TableCell className={NUMERIC_CELL_CLASS}>
+                        <MoneyCell value={user.max_budget} decimals={2} emptyText="Unlimited" showZero />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -337,18 +287,15 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         <div className="mb-4">
           <p className="text-sm text-foreground">
-            <strong>{t("bulkEditUsers.instructionsLabel", { defaultValue: "Instructions:" })}</strong>{" "}
-            {t("bulkEditUsers.instructions", {
-              defaultValue:
-                "Fill in the fields below with the values you want to apply to all selected users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.",
-            })}
+            <strong>Instructions:</strong> Fill in the fields below with the values you want to apply to all selected
+            users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.
           </p>
         </div>
 
         {/* Team Management Section */}
         <Card size="sm" className="mb-4 bg-muted/50">
           <CardHeader>
-            <CardTitle>{t("bulkEditUsers.teamManagement.sectionTitle", { defaultValue: "Team Management" })}</CardTitle>
+            <CardTitle>Team Management</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-2">
@@ -357,12 +304,10 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                   id={addToTeamsId}
                   checked={addToTeams}
                   onCheckedChange={(checked) => setAddToTeams(checked === true)}
-                  aria-label={t("bulkEditUsers.teamManagement.addToTeamsLabel", {
-                    defaultValue: "Add selected users to teams",
-                  })}
+                  aria-label="Add selected users to teams"
                 />
                 <label htmlFor={addToTeamsId} className="cursor-pointer text-sm text-foreground">
-                  {t("bulkEditUsers.teamManagement.addToTeamsLabel", { defaultValue: "Add selected users to teams" })}
+                  Add selected users to teams
                 </label>
               </div>
 
@@ -370,14 +315,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                 <>
                   <div>
                     <label htmlFor={selectedTeamsId} className="block text-sm font-medium text-foreground">
-                      {t("bulkEditUsers.teamManagement.selectTeamsLabel", { defaultValue: "Select Teams:" })}
+                      Select Teams:
                     </label>
                     <MultiSelect
                       id={selectedTeamsId}
                       className="mt-2"
-                      placeholder={t("bulkEditUsers.teamManagement.selectTeamsPlaceholder", {
-                        defaultValue: "Select teams to add users to",
-                      })}
+                      placeholder="Select teams to add users to"
                       value={selectedTeams}
                       onValueChange={setSelectedTeams}
                       options={
@@ -391,14 +334,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
                   <div>
                     <label htmlFor={teamBudgetId} className="block text-sm font-medium text-foreground">
-                      {t("bulkEditUsers.teamManagement.teamBudgetLabel", { defaultValue: "Team Budget (Optional):" })}
+                      Team Budget (Optional):
                     </label>
                     <NumericalInput
                       id={teamBudgetId}
                       className="mt-2"
-                      placeholder={t("bulkEditUsers.teamManagement.teamBudgetPlaceholder", {
-                        defaultValue: "Max budget per user in team",
-                      })}
+                      placeholder="Max budget per user in team"
                       value={teamBudget ?? ""}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         setTeamBudget(event.target.value === "" ? null : Number(event.target.value))
@@ -407,17 +348,13 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                       step={0.01}
                     />
                     <span className="text-xs text-muted-foreground">
-                      {t("bulkEditUsers.teamManagement.teamBudgetHint", {
-                        defaultValue: "Leave empty for unlimited budget within team limits",
-                      })}
+                      Leave empty for unlimited budget within team limits
                     </span>
                   </div>
 
                   <span className="text-xs text-muted-foreground">
-                    {t("bulkEditUsers.teamManagement.defaultRoleNote", {
-                      defaultValue:
-                        'Users will be added with "user" role by default. All users will be added to each selected team.',
-                    })}
+                    Users will be added with &quot;user&quot; role by default. All users will be added to each selected
+                    team.
                   </span>
                 </>
               )}
@@ -442,12 +379,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         {loading && (
           <div className="mt-2.5 text-center">
             <span className="text-sm text-foreground">
-              {updateAllUsers
-                ? t("bulkEditUsers.updatingAllUsers", { defaultValue: "Updating all users..." })
-                : t("bulkEditUsers.updatingUsers", {
-                    count: selectedUsers.length,
-                    defaultValue: "Updating {{count}} user(s)...",
-                  })}
+              Updating {updateAllUsers ? "all users" : selectedUsers.length} user(s)...
             </span>
           </div>
         )}

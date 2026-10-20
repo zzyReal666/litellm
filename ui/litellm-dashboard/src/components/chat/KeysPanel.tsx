@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Loader2, RefreshCw, KeyRound, Copy, Check } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -11,7 +10,16 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  NUMERIC_CELL_CLASS,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/cva.config";
 import { toast } from "@/lib/toast";
 import { keyListCall, regenerateKeyCall } from "../networking";
 import { KeyResponse } from "../key_team_helpers/key_list";
@@ -60,7 +68,6 @@ interface FormState {
 }
 
 const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
-  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [rotateTarget, setRotateTarget] = useState<KeyResponse | null>(null);
   const [regeneratedKey, setRegeneratedKey] = useState<string | null>(null);
@@ -134,10 +141,10 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
 
       const response = await regenerateKeyCall(accessToken, rotateTarget.token || rotateTarget.token_id, payload);
       setRegeneratedKey(response.key);
-      toast.success(t("chat.keysPanel.rotatedSuccess", { defaultValue: "Key rotated successfully" }));
+      toast.success("Key rotated successfully");
       queryClient.invalidateQueries({ queryKey: [KEYS_QUERY_KEY] });
     } catch {
-      toast.error(t("chat.keysPanel.rotateFailed", { defaultValue: "Failed to rotate key" }));
+      toast.error("Failed to rotate key");
     } finally {
       setIsRegenerating(false);
     }
@@ -156,9 +163,6 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
       ? calculateExpiryPreviewFromDuration(formState.duration)
       : null;
 
-  const copyKeyLabel = t("organisms.regenerateKeyModal.copyKey", { defaultValue: "Copy Key" });
-  const copiedLabel = t("common.copied", { defaultValue: "Copied" });
-
   const updateField = (field: keyof FormState, value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
     if (formErrors[field]) setFormErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -167,16 +171,11 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
   return (
     <div className="w-full">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground mb-0.5">
-          {t("chat.keysPanel.yourApiKeys", { defaultValue: "Your API Keys" })}
-        </h2>
+        <h2 className="text-base font-semibold text-foreground mb-0.5">Your API Keys</h2>
         <p className="text-sm text-muted-foreground m-0">
-          {t("chat.keysPanel.viewVirtualKeys", { defaultValue: "View your virtual keys and spend" })}
+          View your virtual keys and spend
           {premiumUser &&
-            t("chat.keysPanel.rotateHint", {
-              defaultValue:
-                ". Rotate keys to generate new credentials while optionally keeping the old key valid during a grace period",
-            })}
+            ". Rotate keys to generate new credentials while optionally keeping the old key valid during a grace period"}
         </p>
       </div>
 
@@ -185,18 +184,12 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("chat.keysPanel.colKey", { defaultValue: "Key" })}
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Key</TableHead>
+                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
+                  Spend
                 </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("usage.colSpend", { defaultValue: "Spend" })}
-                </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("teamPage.teamVirtualKeysTable.colExpires", { defaultValue: "Expires" })}
-                </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("oldTeams.columns.created", { defaultValue: "Created" })}
-                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Expires</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Created</TableHead>
                 {premiumUser && (
                   <TableHead className="text-xs font-semibold uppercase tracking-wide text-right w-[80px]" />
                 )}
@@ -230,25 +223,19 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
       ) : keys.length === 0 ? (
         <div className="text-center text-muted-foreground text-sm py-12 border border-dashed rounded-lg">
           <KeyRound className="h-6 w-6 mb-3 mx-auto text-muted-foreground/50" />
-          {t("teamPage.teamVirtualKeysTable.noKeysFound", { defaultValue: "No keys found" })}
+          No keys found
         </div>
       ) : (
         <div className="rounded-lg border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("chat.keysPanel.colKey", { defaultValue: "Key" })}
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Key</TableHead>
+                <TableHead className={cn("text-xs font-semibold uppercase tracking-wide", NUMERIC_CELL_CLASS)}>
+                  Spend
                 </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("usage.colSpend", { defaultValue: "Spend" })}
-                </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("teamPage.teamVirtualKeysTable.colExpires", { defaultValue: "Expires" })}
-                </TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                  {t("oldTeams.columns.created", { defaultValue: "Created" })}
-                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Expires</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">Created</TableHead>
                 {premiumUser && (
                   <TableHead className="text-xs font-semibold uppercase tracking-wide text-right w-[80px]" />
                 )}
@@ -263,7 +250,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                       <span className="font-mono text-[13px]">{maskKey(record.key_name)}</span>
                       {record.key_alias && <div className="text-xs text-muted-foreground">{record.key_alias}</div>}
                     </TableCell>
-                    <TableCell className="text-[13px]">
+                    <TableCell className={cn("text-[13px]", NUMERIC_CELL_CLASS)}>
                       ${record.spend?.toFixed(2) ?? "0.00"}
                       {record.max_budget != null && record.max_budget > 0 && (
                         <span className="text-muted-foreground"> / ${record.max_budget.toFixed(2)}</span>
@@ -271,14 +258,10 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     </TableCell>
                     <TableCell>
                       {!record.expires ? (
-                        <span className="text-muted-foreground text-[13px]">
-                          {t("common.neverExpires", { defaultValue: "Never" })}
-                        </span>
+                        <span className="text-muted-foreground text-[13px]">Never</span>
                       ) : (
                         <Badge variant={expired ? "destructive" : "outline"}>
-                          {expired
-                            ? t("usageIndicator.expired", { defaultValue: "Expired" })
-                            : formatExpiresUtc(record.expires)}
+                          {expired ? "Expired" : formatExpiresUtc(record.expires)}
                         </Badge>
                       )}
                     </TableCell>
@@ -287,14 +270,9 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     </TableCell>
                     {premiumUser && (
                       <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="xs"
-                          onClick={() => openRotateModal(record)}
-                          title={t("chat.keysPanel.rotateTooltip", { defaultValue: "Rotate key" })}
-                        >
+                        <Button variant="outline" size="xs" onClick={() => openRotateModal(record)} title="Rotate key">
                           <RefreshCw className="h-3 w-3" />
-                          {t("chat.keysPanel.rotate", { defaultValue: "Rotate" })}
+                          Rotate
                         </Button>
                       </TableCell>
                     )}
@@ -309,19 +287,15 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
       <Dialog open={!!rotateTarget} onOpenChange={(v) => !v && closeModal()}>
         <DialogContent className="sm:max-w-[520px]">
           <DialogHeader>
-            <DialogTitle>{t("chat.keysPanel.rotateTitle", { defaultValue: "Rotate Key" })}</DialogTitle>
+            <DialogTitle>Rotate Key</DialogTitle>
           </DialogHeader>
 
           {regeneratedKey ? (
             <div>
               <div className="rounded-lg border border-warning/20 bg-warning/10 px-3 py-2 text-sm text-warning mb-4">
-                {t("chat.keysPanel.saveKeyWarning", {
-                  defaultValue: "Save this key now; you will not see it again",
-                })}
+                Save this key now; you will not see it again
               </div>
-              <div className="text-xs text-muted-foreground mb-1">
-                {t("chat.keysPanel.newKeyLabel", { defaultValue: "New Key" })}
-              </div>
+              <div className="text-xs text-muted-foreground mb-1">New Key</div>
               <div className="bg-muted border rounded-md px-4 py-3 font-mono text-sm break-all text-foreground">
                 {regeneratedKey}
               </div>
@@ -329,12 +303,12 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           ) : (
             <div className="flex flex-col gap-4 mt-1">
               <div className="flex flex-col gap-1.5">
-                <Label>{t("viewLogs.filterOptions.keyAliasLabel", { defaultValue: "Key Alias" })}</Label>
+                <Label>Key Alias</Label>
                 <Input value={formState.key_alias} disabled />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>{t("oldTeams.form.maxBudget", { defaultValue: "Max Budget (USD)" })}</Label>
+                  <Label>Max Budget (USD)</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -343,7 +317,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>{t("teamSsoSettings.tpmLimitLabel", { defaultValue: "TPM Limit" })}</Label>
+                  <Label>TPM Limit</Label>
                   <Input
                     type="number"
                     value={formState.tpm_limit}
@@ -351,7 +325,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>{t("teamSsoSettings.rpmLimitLabel", { defaultValue: "RPM Limit" })}</Label>
+                  <Label>RPM Limit</Label>
                   <Input
                     type="number"
                     value={formState.rpm_limit}
@@ -361,9 +335,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>
-                    {t("commonComponents.keyLifecycleSettings.expireKeyLabel", { defaultValue: "Expire Key" })}
-                  </Label>
+                  <Label>Expire Key</Label>
                   <Input
                     placeholder="e.g. 30s, 30h, 30d"
                     value={formState.duration}
@@ -371,21 +343,13 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                   {formErrors.duration && <p className="text-xs text-destructive">{formErrors.duration}</p>}
                   <p className={`text-xs ${keyIsExpired ? "text-destructive" : "text-muted-foreground"}`}>
-                    {t("chat.keysPanel.currentExpiry", { defaultValue: "Current: " })}
-                    {rotateTarget?.expires
-                      ? formatExpiresUtc(rotateTarget.expires)
-                      : t("common.neverExpires", { defaultValue: "Never" })}
-                    {keyIsExpired && t("chat.keysPanel.expiredSuffix", { defaultValue: " (expired)" })}
+                    Current: {rotateTarget?.expires ? formatExpiresUtc(rotateTarget.expires) : "Never"}
+                    {keyIsExpired && " (expired)"}
                   </p>
-                  {newExpiryTime && (
-                    <p className="text-xs text-success">
-                      {t("chat.keysPanel.newExpiry", { defaultValue: "New: " })}
-                      {newExpiryTime}
-                    </p>
-                  )}
+                  {newExpiryTime && <p className="text-xs text-success">New: {newExpiryTime}</p>}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>{t("organisms.regenerateKeyModal.gracePeriod", { defaultValue: "Grace Period" })}</Label>
+                  <Label>Grace Period</Label>
                   <Input
                     placeholder="e.g. 24h, 2d"
                     value={formState.grace_period}
@@ -401,19 +365,19 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
             {regeneratedKey ? (
               <>
                 <Button variant="outline" onClick={closeModal}>
-                  {t("common.close", { defaultValue: "Close" })}
+                  Close
                 </Button>
                 <CopyToClipboard text={regeneratedKey} onCopy={() => setCopied(true)}>
                   <Button>
                     {copied ? <Check className="h-4 w-4 mr-1.5" /> : <Copy className="h-4 w-4 mr-1.5" />}
-                    {copied ? copiedLabel : copyKeyLabel}
+                    {copied ? "Copied" : "Copy Key"}
                   </Button>
                 </CopyToClipboard>
               </>
             ) : (
               <>
                 <Button variant="outline" onClick={closeModal}>
-                  {t("common.cancel", { defaultValue: "Cancel" })}
+                  Cancel
                 </Button>
                 <Button onClick={handleRegenerate} disabled={isRegenerating}>
                   {isRegenerating ? (
@@ -421,7 +385,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   ) : (
                     <RefreshCw className="h-4 w-4 mr-1.5" />
                   )}
-                  {t("chat.keysPanel.rotate", { defaultValue: "Rotate" })}
+                  Rotate
                 </Button>
               </>
             )}

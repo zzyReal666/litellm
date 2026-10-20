@@ -3,7 +3,6 @@
 import { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import { Search, Settings } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { ModelData } from "@/components/model_dashboard/types";
 import {
@@ -32,6 +31,17 @@ export const ALL_MODEL_GROUPS_VALUE = "all";
 export const WILDCARD_MODEL_GROUP_VALUE = "wildcard";
 
 const MODEL_TABLE_BODY_HEIGHT = 600;
+const ALL_PROXY_MODELS_LABEL = "All Proxy Models";
+
+const FILTER_LABELS: Record<string, string> = {
+  [MODEL_NAME_COLUMN_ID]: "Public Model Name",
+  [ACCESS_GROUPS_COLUMN_ID]: "Model Access Group",
+};
+
+const VIEW_MODE_LABELS: Record<ModelViewMode, string> = {
+  current_team: "Current Team Models",
+  all: ALL_PROXY_MODELS_LABEL,
+};
 
 export interface ModelsTableTeamOption {
   value: string;
@@ -70,22 +80,18 @@ interface AllModelsTableProps {
   onDeleteClick: (modelId: string) => void;
   onTogglePauseClick: (modelId: string, blocked: boolean) => void | Promise<void>;
   pausingModelId: string | null;
+  credentialLabels?: ReadonlyMap<string, string>;
 }
 
 function EmptyState() {
-  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-11 items-center justify-center rounded-xl bg-muted">
         <Search className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-base font-semibold text-foreground">
-        {t("modelDashboard.allModelsTable.noModels", { defaultValue: "No models found" })}
-      </div>
+      <div className="text-base font-semibold text-foreground">No models found</div>
       <div className="max-w-80 text-sm text-muted-foreground">
-        {t("pages.allModelsTab.emptyStateDescription", {
-          defaultValue: "No models match your search or filters. Try resetting them.",
-        })}
+        No models match your search or filters. Try resetting them.
       </div>
     </div>
   );
@@ -123,8 +129,8 @@ export function AllModelsTable({
   onDeleteClick,
   onTogglePauseClick,
   pausingModelId,
+  credentialLabels,
 }: AllModelsTableProps) {
-  const { t } = useTranslation();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const columns = useMemo(() => {
@@ -137,7 +143,7 @@ export function AllModelsTable({
       onDeleteClick,
       onTogglePauseClick,
       pausingModelId,
-      t,
+      credentialLabels,
     };
     return getModelsTableColumns(columnDeps);
   }, [
@@ -149,47 +155,36 @@ export function AllModelsTable({
     onDeleteClick,
     onTogglePauseClick,
     pausingModelId,
-    t,
+    credentialLabels,
   ]);
 
   const modelGroupOptions = useMemo(
     () => [
-      { label: t("pages.allModelsTab.allModels", { defaultValue: "All Models" }), value: ALL_MODEL_GROUPS_VALUE },
-      {
-        label: t("pages.allModelsTab.wildcardModels", { defaultValue: "Wildcard Models (*)" }),
-        value: WILDCARD_MODEL_GROUP_VALUE,
-      },
+      { label: ALL_PROXY_MODELS_LABEL, value: ALL_MODEL_GROUPS_VALUE },
+      { label: "Wildcard Models (*)", value: WILDCARD_MODEL_GROUP_VALUE },
       ...availableModelGroups.map((group) => ({ label: group, value: group })),
     ],
-    [availableModelGroups, t],
+    [availableModelGroups],
   );
 
   const accessGroupOptions = useMemo(
     () => [
-      {
-        label: t("pages.allModelsTab.allModelAccessGroups", { defaultValue: "All Model Access Groups" }),
-        value: ALL_MODEL_GROUPS_VALUE,
-      },
+      { label: "All Model Access Groups", value: ALL_MODEL_GROUPS_VALUE },
       ...availableModelAccessGroups.map((accessGroup) => ({ label: accessGroup, value: accessGroup })),
     ],
-    [availableModelAccessGroups, t],
+    [availableModelAccessGroups],
   );
 
   const formatFilterValue = (columnId: string, value: unknown): string => {
     const raw = String(value);
     if (columnId === MODEL_NAME_COLUMN_ID && raw === WILDCARD_MODEL_GROUP_VALUE) {
-      return t("pages.allModelsTab.wildcardModels", { defaultValue: "Wildcard Models (*)" });
+      return "Wildcard Models (*)";
     }
     return raw;
   };
 
   const selectedTeamLabel =
     teamOptions.find((option) => option.value === selectedTeamValue)?.label ?? teamOptions[0]?.label ?? "";
-
-  const viewModeLabels: Record<ModelViewMode, string> = {
-    current_team: t("pages.allModelsTab.currentTeamModels", { defaultValue: "Current Team Models" }),
-    all: t("pages.allModelsTab.allAvailableModels", { defaultValue: "All Available Models" }),
-  };
 
   return (
     <DataTable
@@ -212,7 +207,7 @@ export function AllModelsTable({
       enableColumnResizing
       maxBodyHeight={MODEL_TABLE_BODY_HEIGHT}
       isLoading={isLoading}
-      loadingMessage={t("pages.allModelsTab.loadingModels", { defaultValue: "Loading models…" })}
+      loadingMessage="Loading models…"
       noDataMessage={<EmptyState />}
       size="compact"
       toolbar={(table) => (
@@ -221,26 +216,17 @@ export function AllModelsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder={t("pages.allModelsTab.searchPlaceholderEllipsis", {
-              defaultValue: "Search model names…",
-            })}
+            searchPlaceholder="Search model names…"
             onOpenFilters={() => setFiltersOpen(true)}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
-            filterLabels={{
-              [MODEL_NAME_COLUMN_ID]: t("molecules.modelsColumns.publicModelName", {
-                defaultValue: "Public Model Name",
-              }),
-              [ACCESS_GROUPS_COLUMN_ID]: t("molecules.modelsColumns.modelAccessGroup", {
-                defaultValue: "Model Access Group",
-              }),
-            }}
+            filterLabels={FILTER_LABELS}
             formatFilterValue={formatFilterValue}
           >
             <Select value={selectedTeamValue} onValueChange={(value) => onTeamChange(String(value))}>
               <SelectTrigger
                 size="sm"
-                aria-label={t("pages.allModelsTab.currentTeamAria", { defaultValue: "Current team" })}
+                aria-label="Current team"
                 data-testid="models-team-select"
                 className="gap-2 bg-secondary"
               >
@@ -250,9 +236,7 @@ export function AllModelsTable({
                     selectedTeamValue === PERSONAL_TEAM_VALUE ? "bg-info" : "bg-success",
                   )}
                 />
-                <span className="text-muted-foreground">
-                  {t("pages.allModelsTab.teamLabel", { defaultValue: "Team" })}
-                </span>
+                <span className="text-muted-foreground">Team</span>
                 <span className="truncate font-semibold">{selectedTeamLabel}</span>
               </SelectTrigger>
               <SelectContent>
@@ -272,18 +256,13 @@ export function AllModelsTable({
             </Select>
 
             <Select value={viewMode} onValueChange={(value) => onViewModeChange(value as ModelViewMode)}>
-              <SelectTrigger
-                size="sm"
-                aria-label={t("common.view", { defaultValue: "View" })}
-                data-testid="models-view-select"
-                className="gap-2"
-              >
-                <span className="text-muted-foreground">{t("common.view", { defaultValue: "View" })}</span>
-                <span className="truncate">{viewModeLabels[viewMode]}</span>
+              <SelectTrigger size="sm" aria-label="View" data-testid="models-view-select" className="gap-2">
+                <span className="text-muted-foreground">View</span>
+                <span className="truncate">{VIEW_MODE_LABELS[viewMode]}</span>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="current_team">{viewModeLabels.current_team}</SelectItem>
-                <SelectItem value="all">{viewModeLabels.all}</SelectItem>
+                <SelectItem value="current_team">{VIEW_MODE_LABELS.current_team}</SelectItem>
+                <SelectItem value="all">{VIEW_MODE_LABELS.all}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -292,8 +271,8 @@ export function AllModelsTable({
             <Button
               variant="outline"
               size="icon-sm"
-              aria-label={t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
-              title={t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
+              aria-label="Model Settings"
+              title="Model Settings"
               data-testid="models-settings-trigger"
               onClick={onOpenModelSettings}
             >
@@ -304,45 +283,33 @@ export function AllModelsTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title={t("pages.allModelsTab.filters", { defaultValue: "Filters" })}
-            description={t("pages.modelsAndEndpoints.filtersDrawerDescription", {
-              defaultValue: "Narrow down models + endpoints",
-            })}
-            resetLabel={t("pages.allModelsTab.resetFilters", { defaultValue: "Reset Filters" })}
+            title="Filters"
+            description="Narrow down models + endpoints"
+            resetLabel="Reset Filters"
             onReset={onResetFilters}
           >
             {({ get, set }) => (
               <>
-                <DataTableFilterField
-                  label={t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" })}
-                >
+                <DataTableFilterField label="Public Model Name">
                   <SearchSelect
                     options={modelGroupOptions}
                     value={(get(MODEL_NAME_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(MODEL_NAME_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder={t("pages.allModelsTab.filterByPublicModelName", {
-                      defaultValue: "Filter by Public Model Name",
-                    })}
-                    emptyText={t("modelDashboard.allModelsTable.noModels", { defaultValue: "No models found" })}
+                    placeholder="Filter by Public Model Name"
+                    emptyText="No models found"
                   />
                 </DataTableFilterField>
-                <DataTableFilterField
-                  label={t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" })}
-                >
+                <DataTableFilterField label="Model Access Group">
                   <SearchSelect
                     options={accessGroupOptions}
                     value={(get(ACCESS_GROUPS_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(ACCESS_GROUPS_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder={t("pages.allModelsTab.filterByModelAccessGroup", {
-                      defaultValue: "Filter by Model Access Group",
-                    })}
-                    emptyText={t("pages.allModelsTab.noModelAccessGroups", {
-                      defaultValue: "No model access groups found",
-                    })}
+                    placeholder="Filter by Model Access Group"
+                    emptyText="No model access groups found"
                   />
                 </DataTableFilterField>
               </>

@@ -2,10 +2,9 @@
 
 import { Info } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 
 import { DataTableMultiSortHeader, DataTableSortHeader, type DataTableSortField } from "@/components/shared/DataTable";
-import { inheritedBudgetGates } from "@/components/shared/InheritedBudgetHint";
+import { inheritedBudgetGates, keyOwnerBudgetSource } from "@/components/shared/InheritedBudgetHint";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -14,6 +13,7 @@ import {
   IdCell,
   IdentityCell,
   ModelsCell,
+  MoneyCell,
   SpendBudgetCell,
   StatusBadge,
   UserPopoverCell,
@@ -30,13 +30,9 @@ interface KeyStatus {
   tooltip?: string;
 }
 
-interface SpendBudgetSortField extends DataTableSortField {
-  labelKey: string;
-}
-
-const SPEND_BUDGET_SORT_FIELDS: SpendBudgetSortField[] = [
-  { id: "spend", labelKey: "usage.colSpend", label: "Spend" },
-  { id: "max_budget", labelKey: "templates.keyInfoView.budget", label: "Budget" },
+const SPEND_BUDGET_SORT_FIELDS: DataTableSortField[] = [
+  { id: "spend", label: "Spend" },
+  { id: "max_budget", label: "Budget" },
 ];
 
 export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
@@ -47,37 +43,32 @@ export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
   ...SPEND_BUDGET_SORT_FIELDS.map((field) => field.id),
 ];
 
-const getKeyStatus = (key: KeyResponse, t: TFunction): KeyStatus => {
+const getKeyStatus = (key: KeyResponse): KeyStatus => {
+  if (key.deleted_at) {
+    return {
+      tone: "neutral",
+      label: "Deleted",
+      tooltip: `Deleted ${new Date(key.deleted_at).toLocaleString()}${key.deleted_by ? ` by ${key.deleted_by}` : ""}. Kept for audit and spend history; requests using this key are rejected.`,
+    };
+  }
   if (key.blocked === true) {
     const isScimBlocked = (key.metadata as Record<string, unknown> | null | undefined)?.scim_blocked === true;
     return {
       tone: "error",
-      label: t("virtualKeys.virtualKeysTable.blocked", { defaultValue: "Blocked" }),
+      label: "Blocked",
       tooltip: isScimBlocked
-        ? t("virtualKeys.virtualKeysTable.blockedByScimReason", {
-            defaultValue: "Blocked by SCIM (external identity provider deactivated or deleted the owning user).",
-          })
-        : t("virtualKeys.virtualKeysTable.blockedReason", {
-            defaultValue: "Blocked. Requests using this key will be rejected with 401.",
-          }),
+        ? "Blocked by SCIM (external identity provider deactivated or deleted the owning user)."
+        : "Blocked. Requests using this key will be rejected with 401.",
     };
   }
   const expiresAt = key.expires ? Date.parse(key.expires) : Number.NaN;
   if (!Number.isNaN(expiresAt) && expiresAt < Date.now()) {
-    return {
-      tone: "warning",
-      label: t("usageIndicator.expired", { defaultValue: "Expired" }),
-      tooltip: t("virtualKeys.virtualKeysTable.expiredReason", {
-        defaultValue: "This key has passed its expiry date.",
-      }),
-    };
+    return { tone: "warning", label: "Expired", tooltip: "This key has passed its expiry date." };
   }
   return {
     tone: "success",
-    label: t("common.active", { defaultValue: "Active" }),
-    tooltip: t("virtualKeys.virtualKeysTable.activeReason", {
-      defaultValue: "This key is not blocked and has not expired.",
-    }),
+    label: "Active",
+    tooltip: "This key is not blocked and has not expired.",
   };
 };
 
@@ -95,20 +86,20 @@ interface KeyTableColumnsDeps {
   allTeams: Team[];
   organizations: Organization[];
   onSelectKey: (key: KeyResponse) => void;
-  t: TFunction;
+  applyUserBudgetToTeamKeys: boolean;
 }
 
 export const getKeyTableColumns = ({
   allTeams,
   organizations,
   onSelectKey,
-  t,
+  applyUserBudgetToTeamKeys,
 }: KeyTableColumnsDeps): ColumnDef<KeyResponse>[] => [
   {
     id: "key_alias",
     accessorKey: "key_alias",
     meta: {
-      title: t("toolDetail.scopeKey", { defaultValue: "Key" }),
+      title: "Key",
       renderSkeleton: () => (
         <div className="flex flex-col gap-1 py-1">
           <Skeleton className="h-4 w-32" />
@@ -119,17 +110,11 @@ export const getKeyTableColumns = ({
         </div>
       ),
     },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("toolDetail.scopeKey", { defaultValue: "Key" })}
-        variant="header-cycle"
-      />
-    ),
+    header: ({ column }) => <DataTableSortHeader column={column} title="Key" variant="header-cycle" />,
     size: 260,
     enableSorting: true,
     cell: ({ row }) => {
-      const status = getKeyStatus(row.original, t);
+      const status = getKeyStatus(row.original);
       return (
         <IdentityCell
           title={row.original.key_alias || "-"}
@@ -150,14 +135,8 @@ export const getKeyTableColumns = ({
   {
     id: "token",
     accessorKey: "token",
-    meta: { title: t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" })}
-        variant="header-cycle"
-      />
-    ),
+    meta: { title: "Key ID" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Key ID" variant="header-cycle" />,
     size: 120,
     enableSorting: true,
     cell: (info) => <IdCell value={info.getValue() as string | null} onClick={() => onSelectKey(info.row.original)} />,
@@ -165,8 +144,8 @@ export const getKeyTableColumns = ({
   {
     id: "team_alias",
     accessorKey: "team_id",
-    meta: { title: t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" }) },
-    header: t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" }),
+    meta: { title: "Team" },
+    header: "Team",
     size: 120,
     enableSorting: false,
     cell: (info) => {
@@ -185,8 +164,8 @@ export const getKeyTableColumns = ({
   {
     id: "organization_alias",
     accessorKey: "org_id",
-    meta: { title: t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }) },
-    header: t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }),
+    meta: { title: "Organization" },
+    header: "Organization",
     size: 140,
     enableSorting: false,
     cell: (info) => {
@@ -205,14 +184,9 @@ export const getKeyTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    meta: { title: t("virtualKeys.virtualKeysTable.user", { defaultValue: "User" }) },
+    meta: { title: "User" },
     header: () => (
-      <InfoHeader
-        label={t("virtualKeys.virtualKeysTable.user", { defaultValue: "User" })}
-        tooltip={t("virtualKeys.virtualKeysTable.userPopoverHint", {
-          defaultValue: "Displays the first available value: User Alias, User Email, or User ID.",
-        })}
-      />
+      <InfoHeader label="User" tooltip="Displays the first available value: User Alias, User Email, or User ID." />
     ),
     size: 160,
     enableSorting: false,
@@ -231,14 +205,8 @@ export const getKeyTableColumns = ({
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: t("common.createdAt", { defaultValue: "Created At" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("common.createdAt", { defaultValue: "Created At" })}
-        variant="header-cycle"
-      />
-    ),
+    meta: { title: "Created At" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" variant="header-cycle" />,
     size: 120,
     enableSorting: true,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" />,
@@ -246,8 +214,8 @@ export const getKeyTableColumns = ({
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: t("virtualKeys.virtualKeysTable.createdBy", { defaultValue: "Created By" }) },
-    header: t("virtualKeys.virtualKeysTable.createdBy", { defaultValue: "Created By" }),
+    meta: { title: "Created By" },
+    header: "Created By",
     size: 160,
     enableSorting: false,
     cell: (info) => {
@@ -267,74 +235,40 @@ export const getKeyTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: t("common.updatedAt", { defaultValue: "Updated At" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("common.updatedAt", { defaultValue: "Updated At" })}
-        variant="header-cycle"
-      />
-    ),
+    meta: { title: "Updated At" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" variant="header-cycle" />,
     size: 120,
     enableSorting: true,
-    cell: (info) => (
-      <DateCell
-        value={info.getValue() as string | null}
-        precision="date"
-        fallback={t("common.never", { defaultValue: "Never" })}
-      />
-    ),
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
   },
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: t("virtualKeys.virtualKeysTable.lastActive", { defaultValue: "Last Active" }) },
+    meta: { title: "Last Active" },
     header: () => (
       <InfoHeader
-        label={t("virtualKeys.virtualKeysTable.lastActive", { defaultValue: "Last Active" })}
-        tooltip={t("virtualKeys.virtualKeysTable.lastActiveHint", {
-          defaultValue: "This is a new field and is not backfilled. Only new key usage will update this value.",
-        })}
+        label="Last Active"
+        tooltip="This is a new field and is not backfilled. Only new key usage will update this value."
       />
     ),
     size: 130,
     enableSorting: false,
-    cell: (info) => (
-      <DateCell
-        value={info.getValue() as string | null}
-        precision="date"
-        fallback={t("common.unknown", { defaultValue: "Unknown" })}
-      />
-    ),
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Unknown" />,
   },
   {
     id: "expires",
     accessorKey: "expires",
-    meta: { title: t("virtualKeys.virtualKeysTable.expires", { defaultValue: "Expires" }) },
-    header: t("virtualKeys.virtualKeysTable.expires", { defaultValue: "Expires" }),
+    meta: { title: "Expires" },
+    header: "Expires",
     size: 120,
     enableSorting: false,
-    cell: (info) => (
-      <DateCell
-        value={info.getValue() as string | null}
-        precision="date"
-        fallback={t("common.neverExpires", { defaultValue: "Never" })}
-      />
-    ),
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
   },
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: t("oldTeams.columns.spendBudget", { defaultValue: "Spend / Budget" }), skeleton: "meter" },
-    header: ({ table }) => (
-      <DataTableMultiSortHeader
-        table={table}
-        fields={SPEND_BUDGET_SORT_FIELDS.map((field) => ({
-          id: field.id,
-          label: t(field.labelKey, { defaultValue: field.label }),
-        }))}
-      />
-    ),
+    meta: { title: "Spend / Budget", skeleton: "meter", numeric: true },
+    header: ({ table }) => <DataTableMultiSortHeader table={table} fields={SPEND_BUDGET_SORT_FIELDS} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => {
@@ -345,27 +279,43 @@ export const getKeyTableColumns = ({
         <SpendBudgetCell
           spend={row.original.spend}
           maxBudget={row.original.max_budget}
-          inheritedGates={row.original.max_budget == null ? inheritedBudgetGates(team, organization) : []}
+          inheritedGates={
+            row.original.max_budget == null
+              ? inheritedBudgetGates(team, organization, keyOwnerBudgetSource(row.original, applyUserBudgetToTeamKeys))
+              : []
+          }
         />
       );
     },
   },
   {
-    id: "budget_reset_at",
-    accessorKey: "budget_reset_at",
-    meta: { title: t("virtualKeys.virtualKeysTable.budgetReset", { defaultValue: "Budget Reset" }) },
-    header: t("virtualKeys.virtualKeysTable.budgetReset", { defaultValue: "Budget Reset" }),
+    id: "total_spend",
+    accessorKey: "total_spend",
+    meta: { title: "Lifetime Spend" },
+    header: () => (
+      <InfoHeader
+        label="Lifetime Spend"
+        tooltip="Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
+      />
+    ),
     size: 130,
     enableSorting: false,
-    cell: (info) => (
-      <DateCell value={info.getValue() as string | null} fallback={t("common.neverResets", { defaultValue: "Never" })} />
-    ),
+    cell: (info) => <MoneyCell value={info.getValue() as number | null | undefined} showZero />,
+  },
+  {
+    id: "budget_reset_at",
+    accessorKey: "budget_reset_at",
+    meta: { title: "Budget Reset" },
+    header: "Budget Reset",
+    size: 130,
+    enableSorting: false,
+    cell: (info) => <DateCell value={info.getValue() as string | null} fallback="Never" />,
   },
   {
     id: "models",
     accessorKey: "models",
-    meta: { title: t("virtualKeys.virtualKeysTable.models", { defaultValue: "Models" }), skeleton: "chips" },
-    header: t("virtualKeys.virtualKeysTable.models", { defaultValue: "Models" }),
+    meta: { title: "Models", skeleton: "chips" },
+    header: "Models",
     size: 220,
     enableSorting: false,
     cell: (info) => (
@@ -378,27 +328,16 @@ export const getKeyTableColumns = ({
   },
   {
     id: "rate_limits",
-    meta: { title: t("virtualKeys.virtualKeysTable.rateLimits", { defaultValue: "Rate Limits" }) },
-    header: t("virtualKeys.virtualKeysTable.rateLimits", { defaultValue: "Rate Limits" }),
+    meta: { title: "Rate Limits" },
+    header: "Rate Limits",
     size: 140,
     enableSorting: false,
     cell: ({ row }) => {
       const key = row.original;
-      const unlimited = t("virtualKeys.virtualKeysTable.unlimited", { defaultValue: "Unlimited" });
       return (
         <div className="text-xs">
-          <div>
-            {t("virtualKeys.virtualKeysTable.tpmLimit", {
-              value: key.tpm_limit !== null ? key.tpm_limit : unlimited,
-              defaultValue: "TPM: {{value}}",
-            })}
-          </div>
-          <div>
-            {t("virtualKeys.virtualKeysTable.rpmLimit", {
-              value: key.rpm_limit !== null ? key.rpm_limit : unlimited,
-              defaultValue: "RPM: {{value}}",
-            })}
-          </div>
+          <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : "Unlimited"}</div>
+          <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : "Unlimited"}</div>
         </div>
       );
     },

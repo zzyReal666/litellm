@@ -1,9 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 import { MoreHorizontal, Trash2, Wallet } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 import { getBudgetDurationLabel } from "@/components/common_components/budget_duration_dropdown";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
@@ -27,16 +25,10 @@ const budgetDecimals = (maxBudget: number | null | undefined): number =>
  */
 export const isBudgetAddressable = (accessGroup: string): boolean => !accessGroup.includes("/");
 
-const writeBlockedReason = (accessGroup: ModelAccessGroup, canWrite: boolean, t: TFunction): string | undefined => {
-  if (!canWrite) {
-    return t("pages.accessGroupBudgets.onlyAdminCanChange", {
-      defaultValue: "Only a proxy admin can change an access group budget",
-    });
-  }
+const writeBlockedReason = (accessGroup: ModelAccessGroup, canWrite: boolean): string | undefined => {
+  if (!canWrite) return "Only a proxy admin can change an access group budget";
   if (!isBudgetAddressable(accessGroup.access_group)) {
-    return t("pages.accessGroupBudgets.slashGroupNoBudget", {
-      defaultValue: "A budget cannot be set on a group whose name contains a slash",
-    });
+    return "A budget cannot be set on a group whose name contains a slash";
   }
   return undefined;
 };
@@ -49,17 +41,13 @@ interface AccessGroupRowActionsProps {
 }
 
 function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudget }: AccessGroupRowActionsProps) {
-  const { t } = useTranslation();
   const hasBudget = accessGroup.budget != null;
-  const blocked = writeBlockedReason(accessGroup, canWrite, t);
+  const blocked = writeBlockedReason(accessGroup, canWrite);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("pages.accessGroupBudgets.openBudgetActionsFor", {
-          name: accessGroup.access_group,
-          defaultValue: `Open budget actions for ${accessGroup.access_group}`,
-        })}
+        aria-label={`Open budget actions for ${accessGroup.access_group}`}
         data-testid={`access-group-actions-${accessGroup.access_group}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -73,26 +61,17 @@ function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudg
           onClick={() => onSetBudget(accessGroup)}
         >
           <Wallet />
-          {hasBudget
-            ? t("budgets.budgetPanel.editBudgetTooltip", { defaultValue: "Edit budget" })
-            : t("pages.accessGroupBudgets.setBudget", { defaultValue: "Set budget" })}
+          {hasBudget ? "Edit budget" : "Set budget"}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
           disabled={blocked !== undefined || !hasBudget}
           data-testid="access-group-action-clear-budget"
-          title={
-            blocked ??
-            (hasBudget
-              ? undefined
-              : t("pages.accessGroupBudgets.noBudgetToClear", {
-                  defaultValue: "This access group has no budget to clear",
-                }))
-          }
+          title={blocked ?? (hasBudget ? undefined : "This access group has no budget to clear")}
           onClick={() => onClearBudget(accessGroup)}
         >
           <Trash2 />
-          {t("pages.accessGroupBudgets.clearBudget", { defaultValue: "Clear budget" })}
+          Clear budget
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -103,25 +82,18 @@ interface AccessGroupBudgetColumnsDeps {
   canWrite: boolean;
   onSetBudget: (accessGroup: ModelAccessGroup) => void;
   onClearBudget: (accessGroup: ModelAccessGroup) => void;
-  t: TFunction;
 }
 
 export const getAccessGroupBudgetColumns = ({
   canWrite,
   onSetBudget,
   onClearBudget,
-  t,
 }: AccessGroupBudgetColumnsDeps): ColumnDef<ModelAccessGroup>[] => [
   {
     id: "access_group",
     accessorKey: "access_group",
-    meta: { title: t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" })}
-      />
-    ),
+    meta: { title: "Access Group" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Access Group" />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -132,8 +104,8 @@ export const getAccessGroupBudgetColumns = ({
   },
   {
     id: "models",
-    meta: { title: t("pages.accessGroupBudgets.models", { defaultValue: "Models" }), skeleton: "chips" },
-    header: t("pages.accessGroupBudgets.models", { defaultValue: "Models" }),
+    meta: { title: "Models", skeleton: "chips" },
+    header: "Models",
     size: 280,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.model_names} />,
@@ -141,13 +113,8 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "deployment_count",
     accessorKey: "deployment_count",
-    meta: { title: t("pages.accessGroupBudgets.deployments", { defaultValue: "Deployments" }), numeric: true },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("pages.accessGroupBudgets.deployments", { defaultValue: "Deployments" })}
-      />
-    ),
+    meta: { title: "Deployments", numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Deployments" />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => row.original.deployment_count,
@@ -155,13 +122,8 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: t("pages.accessGroupBudgets.sharedSpend", { defaultValue: "Shared Spend" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("pages.accessGroupBudgets.sharedSpend", { defaultValue: "Shared Spend" })}
-      />
-    ),
+    meta: { title: "Shared Spend" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Shared Spend" />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => (
@@ -174,20 +136,20 @@ export const getAccessGroupBudgetColumns = ({
   },
   {
     id: "budget_duration",
-    meta: { title: t("pages.accessGroupBudgets.resets", { defaultValue: "Resets" }) },
-    header: t("pages.accessGroupBudgets.resets", { defaultValue: "Resets" }),
+    meta: { title: "Resets" },
+    header: "Resets",
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
       <span className="text-sm text-muted-foreground">
-        {getBudgetDurationLabel(row.original.budget?.budget_duration, t)}
+        {getBudgetDurationLabel(row.original.budget?.budget_duration)}
       </span>
     ),
   },
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
+    header: () => <span className="sr-only">Actions</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

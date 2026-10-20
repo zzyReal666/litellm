@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useMemo, useState } from "react";
 import { PaginatedSearchSelect } from "@/components/shared/PaginatedSearchSelect";
 import { useInfiniteTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { Team } from "../key_team_helpers/key_list";
@@ -14,6 +13,7 @@ interface TeamDropdownProps {
   organizationId?: string | null;
   pageSize?: number;
   id?: string;
+  filterTeam?: (team: Team) => boolean;
 }
 
 const TeamDropdown: React.FC<TeamDropdownProps> = ({
@@ -24,11 +24,11 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
   organizationId,
   pageSize = 20,
   id,
+  filterTeam,
 }) => {
-  const { t } = useTranslation();
   const [search, setSearch] = useState("");
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteTeams(
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError, isLoading } = useInfiniteTeams(
     pageSize,
     search || undefined,
     organizationId,
@@ -48,6 +48,31 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
     return result;
   }, [data]);
 
+  const eligibleTeams = useMemo(() => teams.filter((team) => !filterTeam || filterTeam(team)), [teams, filterTeam]);
+  const hasTeamFilter = filterTeam != null;
+
+  useEffect(() => {
+    if (
+      hasTeamFilter &&
+      eligibleTeams.length < pageSize &&
+      hasNextPage &&
+      !isLoading &&
+      !isFetchingNextPage &&
+      !isFetchNextPageError
+    ) {
+      void fetchNextPage();
+    }
+  }, [
+    hasTeamFilter,
+    eligibleTeams.length,
+    pageSize,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    fetchNextPage,
+  ]);
+
   const handleChange = (teamId: string | null) => {
     onChange?.(teamId);
     if (onTeamSelect) {
@@ -58,7 +83,7 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
   return (
     <div data-testid="team-dropdown">
       <PaginatedSearchSelect
-        options={teams.map((team) => ({
+        options={eligibleTeams.map((team) => ({
           label: team.team_alias || team.team_id,
           value: team.team_id,
           sublabel: team.team_id,
@@ -70,9 +95,9 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder={t("commonComponents.teamDropdown.placeholder", { defaultValue: "Search or select a team" })}
-        emptyText={t("commonComponents.teamDropdown.notFound", { defaultValue: "No teams found" })}
-        loadingText={t("commonComponents.teamDropdown.loading", { defaultValue: "Loading teams…" })}
+        placeholder="Search or select a team"
+        emptyText="No teams found"
+        loadingText="Loading teams…"
         disabled={disabled}
         inputId={id}
       />

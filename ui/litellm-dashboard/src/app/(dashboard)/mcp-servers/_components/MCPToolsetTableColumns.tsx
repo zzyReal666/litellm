@@ -1,9 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import type { TFunction } from "i18next";
 import { Copy, Link2, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdCell, IdentityCell } from "@/components/shared/table_cells";
@@ -43,11 +41,10 @@ interface ToolsetRowActionsProps {
 }
 
 function ToolsetRowActions({ toolset, isAdmin, onEditClick, onDeleteClick }: ToolsetRowActionsProps) {
-  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("mcpTools.mCPToolsetTableColumns.openToolsetActions", { defaultValue: "Open toolset actions" })}
+        aria-label="Open toolset actions"
         data-testid={`toolset-actions-${toolset.toolset_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -56,34 +53,24 @@ function ToolsetRowActions({ toolset, isAdmin, onEditClick, onDeleteClick }: Too
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem
           data-testid="toolset-action-copy-url"
-          onClick={() =>
-            void copyToClipboard(
-              toolsetEndpointUrl(toolset.toolset_name),
-              t("mcpTools.mCPToolsetTableColumns.endpointUrlCopied", { defaultValue: "Endpoint URL copied" }),
-            )
-          }
+          onClick={() => void copyToClipboard(toolsetEndpointUrl(toolset.toolset_name), "Endpoint URL copied")}
         >
           <Link2 />
-          {t("mcpTools.mCPToolsetTableColumns.copyEndpointUrl", { defaultValue: "Copy endpoint URL" })}
+          Copy endpoint URL
         </DropdownMenuItem>
         <DropdownMenuItem
           data-testid="toolset-action-copy-id"
-          onClick={() =>
-            void copyToClipboard(
-              toolset.toolset_id,
-              t("mcpTools.mCPToolsetTableColumns.toolsetIdCopied", { defaultValue: "Toolset ID copied" }),
-            )
-          }
+          onClick={() => void copyToClipboard(toolset.toolset_id, "Toolset ID copied")}
         >
           <Copy />
-          {t("mcpTools.mCPToolsetTableColumns.copyToolsetId", { defaultValue: "Copy toolset ID" })}
+          Copy toolset ID
         </DropdownMenuItem>
         {isAdmin && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem data-testid="toolset-action-edit" onClick={() => onEditClick(toolset)}>
               <Pencil />
-              {t("common.edit", { defaultValue: "Edit" })}
+              Edit
             </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
@@ -91,7 +78,7 @@ function ToolsetRowActions({ toolset, isAdmin, onEditClick, onDeleteClick }: Too
               onClick={() => onDeleteClick(toolset.toolset_id)}
             >
               <Trash2 />
-              {t("common.delete", { defaultValue: "Delete" })}
+              Delete
             </DropdownMenuItem>
           </>
         )}
@@ -105,7 +92,6 @@ interface MCPToolsetTableColumnsDeps {
   serverPrefixById: Map<string, string>;
   onEditClick: (toolset: MCPToolset) => void;
   onDeleteClick: (toolsetId: string) => void;
-  t: TFunction;
 }
 
 export const getMCPToolsetTableColumns = ({
@@ -113,13 +99,12 @@ export const getMCPToolsetTableColumns = ({
   serverPrefixById,
   onEditClick,
   onDeleteClick,
-  t,
 }: MCPToolsetTableColumnsDeps): ColumnDef<MCPToolset>[] => [
   {
     id: "toolset_id",
     accessorKey: "toolset_id",
-    meta: { title: t("mcpTools.mCPToolsetsTab.colToolsetId", { defaultValue: "Toolset ID" }) },
-    header: t("mcpTools.mCPToolsetsTab.colToolsetId", { defaultValue: "Toolset ID" }),
+    meta: { title: "Toolset ID" },
+    header: "Toolset ID",
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.toolset_id} />,
@@ -127,8 +112,8 @@ export const getMCPToolsetTableColumns = ({
   {
     id: "toolset_name",
     accessorKey: "toolset_name",
-    meta: { title: t("common.name", { defaultValue: "Name" }) },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("common.name", { defaultValue: "Name" })} />,
+    meta: { title: "Name" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
     size: 260,
     enableSorting: true,
     sortingFn: "alphanumeric",
@@ -144,8 +129,8 @@ export const getMCPToolsetTableColumns = ({
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: t("common.description", { defaultValue: "Description" }) },
-    header: t("common.description", { defaultValue: "Description" }),
+    meta: { title: "Description" },
+    header: "Description",
     size: 200,
     enableSorting: false,
     cell: ({ row }) => (
@@ -156,8 +141,8 @@ export const getMCPToolsetTableColumns = ({
   },
   {
     id: "tools",
-    meta: { title: t("mcpTools.mCPToolsetsTab.colTools", { defaultValue: "Tools" }), skeleton: "chips" },
-    header: t("mcpTools.mCPToolsetsTab.colTools", { defaultValue: "Tools" }),
+    meta: { title: "Tools", skeleton: "chips" },
+    header: "Tools",
     size: 260,
     enableSorting: false,
     cell: ({ row }) => {
@@ -173,12 +158,7 @@ export const getMCPToolsetTableColumns = ({
             </span>
           ))}
           {tools.length > 4 && (
-            <span className="self-center text-xs text-muted-foreground">
-              {t("mcpTools.mCPToolsetsTab.moreTools", {
-                count: tools.length - 4,
-                defaultValue: `+${tools.length - 4} more`,
-              })}
-            </span>
+            <span className="self-center text-xs text-muted-foreground">+{tools.length - 4} more</span>
           )}
         </div>
       );
@@ -187,10 +167,8 @@ export const getMCPToolsetTableColumns = ({
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: t("oldTeams.columns.created", { defaultValue: "Created" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader column={column} title={t("oldTeams.columns.created", { defaultValue: "Created" })} />
-    ),
+    meta: { title: "Created" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -198,7 +176,7 @@ export const getMCPToolsetTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
+    header: () => <span className="sr-only">Actions</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

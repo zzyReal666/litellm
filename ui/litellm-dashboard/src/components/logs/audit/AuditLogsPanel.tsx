@@ -1,11 +1,10 @@
 import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ColumnFiltersState, OnChangeFn, PaginationState } from "@tanstack/react-table";
 import { resolveLogoSrc } from "@/lib/assetPaths";
 import { DEBOUNCE_WAIT_MS } from "@/utils/debounceConstants";
-import { uiAuditLogsCall } from "../networking";
+import { uiAuditLogsCall } from "../../networking";
 import { AuditLogEntry } from "./AuditLogsTableColumns";
 import { AuditLogsTable } from "./AuditLogsTable";
 import { AuditLogDrawer } from "./AuditLogDrawer/AuditLogDrawer";
@@ -40,7 +39,6 @@ export default function AuditLogsPanel({
   isActive,
   premiumUser,
 }: AuditLogsProps) {
-  const { t } = useTranslation();
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: PAGE_SIZE });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchInput, setSearchInput] = useState("");
@@ -55,7 +53,8 @@ export default function AuditLogsPanel({
     return typeof entry?.value === "string" && entry.value.trim() ? entry.value.trim() : undefined;
   };
 
-  const canQueryAuditLogs = !!accessToken && !!token && !!userRole && !!userID && isActive && premiumUser;
+  const hasSession = [accessToken, token, userRole, userID].every(Boolean);
+  const canQueryAuditLogs = hasSession && isActive && premiumUser;
 
   const query = useQuery<AuditLogsResponse>({
     queryKey: ["audit_logs", pagination.pageIndex, pagination.pageSize, columnFilters, searchTerm],
@@ -101,21 +100,17 @@ export default function AuditLogsPanel({
 
   if (!premiumUser) {
     return (
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <h1 style={{ display: "block", marginBottom: "10px" }}>
-          ✨ {t("viewLogs.auditLogs.enterpriseTitle", { defaultValue: "Enterprise Feature." })}
-        </h1>
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto text-center">
+        <h1 style={{ display: "block", marginBottom: "10px" }}>✨ Enterprise Feature.</h1>
         <p style={{ display: "block", marginBottom: "10px" }}>
-          {t("viewLogs.auditLogs.enterpriseDesc", {
-            defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
-          })}
+          This is a LiteLLM Enterprise feature, and requires a valid key to use.
         </p>
         <p style={{ display: "block", marginBottom: "20px", fontStyle: "italic" }}>
-          {t("viewLogs.auditLogs.previewText", { defaultValue: "Here's a preview of what Audit Logs offer:" })}
+          Here&apos;s a preview of what Audit Logs offer:
         </p>
         <img
           src={resolveLogoSrc(auditLogsPreviewImg)}
-          alt={t("viewLogs.auditLogs.previewAlt", { defaultValue: "Audit Logs Preview" })}
+          alt="Audit Logs Preview"
           style={{
             maxWidth: "100%",
             maxHeight: "700px",
@@ -133,10 +128,6 @@ export default function AuditLogsPanel({
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">{t("viewLogs.auditLogs.pageTitle", { defaultValue: "Audit Logs" })}</h1>
-      </div>
-
       <AuditLogsTable
         data={query.data?.audit_logs ?? []}
         rowCount={query.data?.total ?? 0}

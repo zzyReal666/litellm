@@ -1,16 +1,15 @@
 import React from "react";
-import { describe, it, expect, afterEach } from "vitest";
-import i18n from "@/lib/i18n";
+import { describe, it, expect } from "vitest";
 import BedrockGuardrailDetails, {
   BedrockGuardrailResponse,
-} from "@/components/view_logs/GuardrailViewer/BedrockGuardrailDetails";
-import { cleanup, renderWithProviders, screen } from "../../../../tests/test-utils";
+} from "@/components/logs/detail/sections/GuardrailViewer/BedrockGuardrailDetails";
+import { renderWithProviders, screen } from "../../../../../../tests/test-utils";
 import {
   makeAssessment,
   makeBedrockCoverage,
   makeBedrockResponse,
   makeBedrockUsage,
-} from "@/components/view_logs/GuardrailViewer/__tests__/fixtures";
+} from "@/components/logs/detail/sections/GuardrailViewer/__tests__/fixtures";
 
 describe("BedrockGuardrailDetails", () => {
   it("returns null when response is falsy", () => {
@@ -27,10 +26,7 @@ describe("BedrockGuardrailDetails", () => {
     });
     renderWithProviders(<BedrockGuardrailDetails response={resp} />);
 
-    expect(screen.getAllByText("Action").length).toBeGreaterThan(0);
-    expect(screen.getByText("Action Reason")).toBeInTheDocument();
-    expect(screen.getByText("Blocked Response")).toBeInTheDocument();
-    expect(screen.getAllByText("GUARDRAIL_INTERVENED").length).toBeGreaterThan(0);
+    expect(screen.getByText("Action:")).toBeInTheDocument();
     expect(screen.getByText("Policy violation")).toBeInTheDocument();
     expect(screen.getByText("[blocked]")).toBeInTheDocument();
   });
@@ -118,27 +114,5 @@ describe("BedrockGuardrailDetails", () => {
     renderWithProviders(<BedrockGuardrailDetails response={resp} />);
     // No crash, minimal render: Assessment + Invocation Metrics present, but no usage/coverage chips at top
     expect(screen.getByText("Assessment #1")).toBeInTheDocument();
-  });
-
-  describe("Chinese catalog", () => {
-    afterEach(async () => {
-      cleanup();
-      await i18n.changeLanguage("en");
-    });
-
-    it("renders the top summary and outputs in Chinese", async () => {
-      await i18n.changeLanguage("zh-CN");
-      const resp = makeBedrockResponse({
-        action: "GUARDRAIL_INTERVENED",
-        actionReason: "Policy violation",
-        outputs: [{ text: "hello" }],
-      });
-      renderWithProviders(<BedrockGuardrailDetails response={resp} />);
-
-      expect(screen.getAllByText("动作").length).toBeGreaterThan(0);
-      expect(screen.getByText("动作原因")).toBeInTheDocument();
-      expect(screen.getByText("输出")).toBeInTheDocument();
-      expect(screen.queryByText("Action Reason")).not.toBeInTheDocument();
-    });
   });
 });

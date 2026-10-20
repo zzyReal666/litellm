@@ -2,55 +2,14 @@
  * Utility functions for parsing and formatting messages for pretty view
  */
 
-import type { TFunction } from "i18next";
-
 import {
   MessageRole,
   ParsedMessage,
   ParsedMessages,
   RequestPayload,
   ResponsePayload,
-  RoleStyle,
   ToolCall,
 } from "./prettyMessagesTypes";
-
-/**
- * Role color styles for message cards - minimal, professional design
- * Color only used for labels and left border accent
- */
-export const ROLE_STYLE_LABEL_KEYS: Record<string, string> = {
-  system: "viewLogs.prettyMessagesUtils.roleSystem",
-  user: "viewLogs.prettyMessagesUtils.roleUser",
-  assistant: "viewLogs.prettyMessagesUtils.roleAssistant",
-  tool: "viewLogs.prettyMessagesUtils.roleTool",
-};
-
-export const ROLE_STYLES: Record<string, RoleStyle> = {
-  system: {
-    background: "transparent",
-    borderColor: "var(--color-muted-foreground)",
-    label: "SYSTEM",
-    labelColor: "var(--color-muted-foreground)",
-  },
-  user: {
-    background: "transparent",
-    borderColor: "var(--color-info)",
-    label: "USER",
-    labelColor: "var(--color-info)",
-  },
-  assistant: {
-    background: "transparent",
-    borderColor: "var(--color-success)",
-    label: "ASSISTANT",
-    labelColor: "var(--color-success)",
-  },
-  tool: {
-    background: "transparent",
-    borderColor: "var(--color-warning)",
-    label: "TOOL RESULT",
-    labelColor: "var(--color-warning)",
-  },
-};
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -88,15 +47,15 @@ const classifyResponse = (response: unknown): ResponsePayload => {
 /**
  * Parse request messages and response message from log data
  */
-export const parseMessages = (request: unknown, response: unknown, t?: TFunction): ParsedMessages => ({
-  requestMessages: parseRequestMessages(classifyRequest(request), t),
-  responseMessage: parseResponseMessage(classifyResponse(response), t),
+export const parseMessages = (request: unknown, response: unknown): ParsedMessages => ({
+  requestMessages: parseRequestMessages(classifyRequest(request)),
+  responseMessage: parseResponseMessage(classifyResponse(response)),
 });
 
-const parseRequestMessages = (payload: RequestPayload, t?: TFunction): ParsedMessage[] => {
+const parseRequestMessages = (payload: RequestPayload): ParsedMessage[] => {
   switch (payload.kind) {
     case "chat":
-      return payload.messages.map((message) => parseChatMessage(message, t));
+      return payload.messages.map(parseChatMessage);
     case "responses": {
       const instructions: ParsedMessage[] = payload.instructions
         ? [{ role: "system", content: payload.instructions }]
@@ -104,7 +63,7 @@ const parseRequestMessages = (payload: RequestPayload, t?: TFunction): ParsedMes
       const input: ParsedMessage[] =
         typeof payload.input === "string"
           ? [{ role: "user", content: payload.input }]
-          : payload.input.flatMap((item) => parseResponsesInputItem(item, t));
+          : payload.input.flatMap(parseResponsesInputItem);
       return [...instructions, ...input];
     }
     case "unknown":
@@ -112,7 +71,7 @@ const parseRequestMessages = (payload: RequestPayload, t?: TFunction): ParsedMes
   }
 };
 
-const parseResponseMessage = (payload: ResponsePayload, t?: TFunction): ParsedMessage | null => {
+const parseResponseMessage = (payload: ResponsePayload): ParsedMessage | null => {
   switch (payload.kind) {
     case "chat": {
       const choice = payload.choices[0];
@@ -120,19 +79,17 @@ const parseResponseMessage = (payload: ResponsePayload, t?: TFunction): ParsedMe
       if (!isRecord(message)) return null;
       return {
         role: toRole(message.role, "assistant"),
-        content: parseMessageContent(message.content, t),
-        toolCalls: parseChatToolCalls(message.tool_calls, t),
+        content: parseMessageContent(message.content),
+        toolCalls: parseChatToolCalls(message.tool_calls),
       };
     }
     case "responses": {
       const content = payload.output
         .filter((item): item is UnknownRecord => isRecord(item) && item.type === "message")
-        .map((item) => parseMessageContent(item.content, t))
+        .map((item) => parseMessageContent(item.content))
         .filter((text) => text.length > 0)
         .join("\n");
-      const toolCalls = payload.output
-        .filter(isResponsesFunctionCall)
-        .map((item) => parseResponsesFunctionCall(item, t));
+      const toolCalls = payload.output.filter(isResponsesFunctionCall).map(parseResponsesFunctionCall);
       if (content.length === 0 && toolCalls.length === 0) return null;
       return { role: "assistant", content, toolCalls: toolCalls.length > 0 ? toolCalls : undefined };
     }
@@ -141,28 +98,28 @@ const parseResponseMessage = (payload: ResponsePayload, t?: TFunction): ParsedMe
   }
 };
 
-const parseChatMessage = (message: unknown, t?: TFunction): ParsedMessage => {
-  if (!isRecord(message)) return { role: "user", content: parseMessageContent(message, t) };
+const parseChatMessage = (message: unknown): ParsedMessage => {
+  if (!isRecord(message)) return { role: "user", content: parseMessageContent(message) };
   return {
     role: toRole(message.role, "user"),
-    content: parseMessageContent(message.content, t),
-    toolCalls: parseChatToolCalls(message.tool_calls, t),
+    content: parseMessageContent(message.content),
+    toolCalls: parseChatToolCalls(message.tool_calls),
     toolCallId: typeof message.tool_call_id === "string" ? message.tool_call_id : undefined,
   };
 };
 
-const parseResponsesInputItem = (item: unknown, t?: TFunction): ParsedMessage[] => {
+const parseResponsesInputItem = (item: unknown): ParsedMessage[] => {
   if (typeof item === "string") return [{ role: "user", content: item }];
   if (!isRecord(item)) return [];
   if (item.type === "function_call") {
-    return [{ role: "assistant", content: "", toolCalls: [parseResponsesFunctionCall(item, t)] }];
+    return [{ role: "assistant", content: "", toolCalls: [parseResponsesFunctionCall(item)] }];
   }
   if (item.type === "function_call_output") {
-    return [{ role: "tool", content: parseMessageContent(item.output, t), toolCallId: asString(item.call_id) }];
+    return [{ role: "tool", content: parseMessageContent(item.output), toolCallId: asString(item.call_id) }];
   }
   if (item.type === "reasoning") return [];
   if ("role" in item || "content" in item) {
-    return [{ role: toRole(item.role, "user"), content: parseMessageContent(item.content, t) }];
+    return [{ role: toRole(item.role, "user"), content: parseMessageContent(item.content) }];
   }
   return [];
 };
@@ -170,26 +127,23 @@ const parseResponsesInputItem = (item: unknown, t?: TFunction): ParsedMessage[] 
 const isResponsesFunctionCall = (item: unknown): item is UnknownRecord =>
   isRecord(item) && item.type === "function_call";
 
-const unknownLabel = (t?: TFunction): string =>
-  t ? t("viewLogs.prettyMessagesUtils.unknown", { defaultValue: "unknown" }) : "unknown";
-
-const parseResponsesFunctionCall = (item: UnknownRecord, t?: TFunction): ToolCall => ({
+const parseResponsesFunctionCall = (item: UnknownRecord): ToolCall => ({
   id: asString(item.call_id) || asString(item.id),
-  name: asString(item.name) || unknownLabel(t),
+  name: asString(item.name) || "unknown",
   arguments: parseToolArguments(item.arguments),
 });
 
 /**
  * Parse message content - handle strings and content arrays (for vision, etc.)
  */
-const parseMessageContent = (content: unknown, t?: TFunction): string => {
+const parseMessageContent = (content: unknown): string => {
   if (typeof content === "string") return content;
   if (content === null || content === undefined) return "";
-  if (Array.isArray(content)) return content.map((part) => parseContentPart(part, t)).join("\n");
+  if (Array.isArray(content)) return content.map(parseContentPart).join("\n");
   return JSON.stringify(content);
 };
 
-const parseContentPart = (part: unknown, t?: TFunction): string => {
+const parseContentPart = (part: unknown): string => {
   if (typeof part === "string") return part;
   if (!isRecord(part)) return JSON.stringify(part);
   switch (part.type) {
@@ -201,11 +155,11 @@ const parseContentPart = (part: unknown, t?: TFunction): string => {
       return asString(part.refusal);
     case "image_url":
     case "input_image":
-      return t ? t("viewLogs.prettyMessagesUtils.imageMarker", { defaultValue: "[Image]" }) : "[Image]";
+      return "[Image]";
     case "input_file":
-      return t ? t("viewLogs.prettyMessagesUtils.fileMarker", { defaultValue: "[File]" }) : "[File]";
+      return "[File]";
     case "input_audio":
-      return t ? t("viewLogs.prettyMessagesUtils.audioMarker", { defaultValue: "[Audio]" }) : "[Audio]";
+      return "[Audio]";
     default:
       return JSON.stringify(part);
   }
@@ -214,14 +168,14 @@ const parseContentPart = (part: unknown, t?: TFunction): string => {
 /**
  * Parse tool calls from response message
  */
-const parseChatToolCalls = (toolCalls: unknown, t?: TFunction): ToolCall[] | undefined => {
+const parseChatToolCalls = (toolCalls: unknown): ToolCall[] | undefined => {
   if (!Array.isArray(toolCalls)) return undefined;
   return toolCalls.map((toolCall) => {
     const call = isRecord(toolCall) ? toolCall : {};
     const fn = isRecord(call.function) ? call.function : {};
     return {
       id: asString(call.id),
-      name: asString(fn.name) || unknownLabel(t),
+      name: asString(fn.name) || "unknown",
       arguments: parseToolArguments(fn.arguments),
     };
   });

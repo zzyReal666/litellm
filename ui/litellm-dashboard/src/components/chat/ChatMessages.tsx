@@ -1,12 +1,14 @@
 "use client";
 
 import { Wrench, Copy, Check, Pencil } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import { Bubble, BubbleContent } from "@/components/ui/Bubble";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -65,6 +67,25 @@ function MarkdownCodeRenderer({
   );
 }
 
+const markdownComponents: Components = {
+  code: MarkdownCodeRenderer,
+  pre: ({ node, ...props }) => <pre className="max-w-full overflow-x-auto" {...props} />,
+  p: ({ node, ...props }) => <p className="my-3 first:mt-0 last:mb-0" {...props} />,
+  ul: ({ node, ...props }) => <ul className="my-3 list-disc space-y-1 pl-5" {...props} />,
+  ol: ({ node, ...props }) => <ol className="my-3 list-decimal space-y-1 pl-5" {...props} />,
+  table: ({ node, ...props }) => <Table {...props} />,
+  thead: ({ node, ...props }) => <TableHeader {...props} />,
+  tbody: ({ node, ...props }) => <TableBody {...props} />,
+  tr: ({ node, ...props }) => <TableRow {...props} />,
+  th: ({ node, ...props }) => <TableHead {...props} />,
+  td: ({ node, ...props }) => <TableCell {...props} />,
+};
+
+const markdownWithoutImages: Components = {
+  ...markdownComponents,
+  img: ({ alt }) => <span>{alt || "Image omitted"}</span>,
+};
+
 interface UserBubbleProps {
   message: ChatMessage;
   onEdit?: (messageId: string, newContent: string) => void;
@@ -72,11 +93,11 @@ interface UserBubbleProps {
 }
 
 function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
-  const { t } = useTranslation();
   const [hovered, setHovered] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.content);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const showEditAction = hovered && !isStreaming && Boolean(onEdit);
 
   useEffect(() => {
     if (editing && textareaRef.current) {
@@ -115,8 +136,9 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
     return (
       <div className="flex flex-col items-end">
         <div className="w-[72%] bg-background border-2 border-primary rounded-xl overflow-hidden shadow-[0_0_0_3px_rgba(var(--primary)/0.1)]">
-          <textarea
+          <Textarea
             ref={textareaRef}
+            aria-label="Edit message"
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -131,10 +153,10 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 setEditing(false);
               }}
             >
-              {t("common.cancel", { defaultValue: "Cancel" })}
+              Cancel
             </Button>
             <Button size="sm" onClick={handleSave} disabled={!editValue.trim()}>
-              {t("chat.chatMessages.saveAndSend", { defaultValue: "Save & Send" })}
+              Save & Send
             </Button>
           </div>
         </div>
@@ -148,8 +170,8 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="flex items-end gap-1.5 max-w-[72%]">
-        {hovered && !isStreaming && onEdit && (
+      <div className="flex min-w-0 max-w-[80%] items-end gap-1.5">
+        {showEditAction && (
           <TooltipProvider delay={300}>
             <Tooltip>
               <TooltipTrigger
@@ -157,6 +179,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                   <Button
                     variant="ghost"
                     size="icon-xs"
+                    aria-label="Edit message"
                     onClick={() => {
                       setEditValue(message.content);
                       setEditing(true);
@@ -168,14 +191,14 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 }
               />
               <TooltipContent>
-                <p>{t("chat.chatMessages.editMessage", { defaultValue: "Edit message" })}</p>
+                <p>Edit message</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
-        <div className="bg-muted rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words text-foreground">
-          {message.content}
-        </div>
+        <Bubble variant="muted" align="end" className="max-w-full">
+          <BubbleContent className="whitespace-pre-wrap">{message.content}</BubbleContent>
+        </Bubble>
       </div>
       <span className="text-[11px] text-muted-foreground mt-1">{formatTimestamp(message.timestamp)}</span>
     </div>
@@ -184,14 +207,21 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
 
 interface AssistantBubbleProps {
   message: ChatMessage;
+  allowImages: boolean;
   isLastMessage: boolean;
   isStreaming: boolean;
   isTypingIndicator: boolean;
   mcpEvents?: ChatMessage["mcpEvents"];
 }
 
-function AssistantBubble({ message, isLastMessage, isStreaming, isTypingIndicator, mcpEvents }: AssistantBubbleProps) {
-  const { t } = useTranslation();
+function AssistantBubble({
+  message,
+  allowImages,
+  isLastMessage,
+  isStreaming,
+  isTypingIndicator,
+  mcpEvents,
+}: AssistantBubbleProps) {
   const [reasoningKey, setReasoningKey] = useState(0);
   const prevStreamingRef = useRef<boolean>(isStreaming);
 
@@ -215,16 +245,15 @@ function AssistantBubble({ message, isLastMessage, isStreaming, isTypingIndicato
     );
   }
 
-  const stoppedLabel = t("chat.chatMessages.streamStopped", { defaultValue: "[stopped]" });
   let mainContent = message.content;
   let stoppedSuffix = false;
-  if (mainContent.endsWith(stoppedLabel)) {
-    mainContent = mainContent.slice(0, -stoppedLabel.length);
+  if (mainContent.endsWith("[stopped]")) {
+    mainContent = mainContent.slice(0, -"[stopped]".length);
     stoppedSuffix = true;
   }
 
   return (
-    <div className="flex flex-col items-start max-w-[80%]">
+    <Bubble variant="ghost" className="w-full items-start">
       {showReasoning &&
         (showReasoningPlaceholder ? (
           <ThinkingPlaceholder />
@@ -232,17 +261,15 @@ function AssistantBubble({ message, isLastMessage, isStreaming, isTypingIndicato
           <ReasoningContent key={reasoningKey} reasoningContent={message.reasoningContent!} />
         ))}
 
-      <div className="text-sm leading-[1.7] text-foreground break-words">
+      <BubbleContent className="w-full text-foreground">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
-          components={{
-            code: MarkdownCodeRenderer as React.ComponentType<React.ComponentPropsWithoutRef<"code">>,
-          }}
+          components={allowImages ? markdownComponents : markdownWithoutImages}
         >
           {mainContent}
         </ReactMarkdown>
-        {stoppedSuffix && <span className="text-muted-foreground italic"> {stoppedLabel}</span>}
-      </div>
+        {stoppedSuffix && <span className="text-muted-foreground italic"> [stopped]</span>}
+      </BubbleContent>
 
       <CopyButton text={mainContent} />
       {mcpEvents && mcpEvents.length > 0 && (
@@ -256,12 +283,11 @@ function AssistantBubble({ message, isLastMessage, isStreaming, isTypingIndicato
         totalLatency={message.totalLatency}
         usage={message.usage}
       />
-    </div>
+    </Bubble>
   );
 }
 
 function CopyButton({ text }: { text: string }) {
-  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -283,6 +309,7 @@ function CopyButton({ text }: { text: string }) {
               <Button
                 variant="ghost"
                 size="icon-xs"
+                aria-label={copied ? "Copied message" : "Copy message"}
                 onClick={handleCopy}
                 className={copied ? "text-success" : "text-muted-foreground hover:text-foreground"}
               >
@@ -291,9 +318,7 @@ function CopyButton({ text }: { text: string }) {
             }
           />
           <TooltipContent>
-            <p>
-              {copied ? t("common.copied", { defaultValue: "Copied" }) : t("common.copy", { defaultValue: "Copy" })}
-            </p>
+            <p>{copied ? "Copied!" : "Copy"}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -302,7 +327,6 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function ThinkingPlaceholder() {
-  const { t } = useTranslation();
   return (
     <>
       <style>{`
@@ -315,9 +339,7 @@ function ThinkingPlaceholder() {
         }
       `}</style>
       <div className="inline-flex items-center gap-1.5 px-2.5 mb-2 bg-muted/50 border rounded-lg text-xs text-muted-foreground">
-        <span className="chat-thinking-text py-1">
-          {t("chat.chatMessages.thinking", { defaultValue: "Thinking..." })}
-        </span>
+        <span className="chat-thinking-text py-1">Thinking...</span>
       </div>
     </>
   );
@@ -353,7 +375,6 @@ interface ToolCardProps {
 }
 
 function ToolCard({ message }: ToolCardProps) {
-  const { t } = useTranslation();
   const redactedArgs = message.toolArgs ? redactSensitiveValues(message.toolArgs) : undefined;
   const [open, setOpen] = useState(false);
 
@@ -362,15 +383,13 @@ function ToolCard({ message }: ToolCardProps) {
       <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger className="flex items-center gap-1.5 text-[13px] px-3 py-2 border rounded-lg bg-muted/50 hover:bg-muted transition-colors w-full text-left">
           <Wrench className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="font-medium text-foreground">
-            {message.toolName ?? t("chat.chatMessages.toolCall", { defaultValue: "Tool call" })}
-          </span>
+          <span className="font-medium text-foreground">{message.toolName ?? "Tool call"}</span>
         </CollapsibleTrigger>
         <CollapsibleContent className="border border-t-0 rounded-b-lg px-3 py-2 bg-muted/30">
           {redactedArgs !== undefined && (
             <div className={message.toolResult ? "mb-3" : ""}>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                {t("chat.chatMessages.arguments", { defaultValue: "Arguments" })}
+                Arguments
               </div>
               <pre className="m-0 p-2 bg-muted rounded-md text-xs font-mono whitespace-pre-wrap break-words text-foreground">
                 {JSON.stringify(redactedArgs, null, 2)}
@@ -380,7 +399,7 @@ function ToolCard({ message }: ToolCardProps) {
           {message.toolResult && (
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                {t("chat.chatMessages.result", { defaultValue: "Result" })}
+                Result
               </div>
               <div className="text-[13px] text-foreground whitespace-pre-wrap break-words font-mono">
                 {message.toolResult}
@@ -400,35 +419,53 @@ interface Props {
   onEditMessage?: (messageId: string, newContent: string) => void;
 }
 
-const ChatMessages: React.FC<Props> = ({ messages, isStreaming, onEditMessage }) => {
-  const lastIndex = messages.length - 1;
-  const lastMsg = messages[lastIndex] ?? null;
-  const isTypingIndicator = isStreaming && lastMsg !== null && lastMsg.role === "assistant" && lastMsg.content === "";
+interface ChatMessageContentProps {
+  message: ChatMessage;
+  allowImages?: boolean;
+  isStreaming?: boolean;
+  isLastMessage?: boolean;
+  onEditMessage?: (messageId: string, newContent: string) => void;
+}
+
+export function ChatMessageContent({
+  message,
+  allowImages = true,
+  isStreaming = false,
+  isLastMessage = true,
+  onEditMessage,
+}: ChatMessageContentProps) {
+  if (message.role === "user") {
+    return <UserBubble message={message} onEdit={onEditMessage} isStreaming={isStreaming} />;
+  }
+
+  if (message.role === "tool") {
+    return <ToolCard message={message} />;
+  }
 
   return (
+    <AssistantBubble
+      message={message}
+      allowImages={allowImages}
+      isLastMessage={isLastMessage}
+      isStreaming={isStreaming}
+      isTypingIndicator={isLastMessage && isStreaming && message.content === ""}
+      mcpEvents={message.mcpEvents}
+    />
+  );
+}
+
+const ChatMessages: React.FC<Props> = ({ messages, isStreaming, onEditMessage }) => {
+  return (
     <div className="flex flex-col gap-4">
-      {messages.map((msg, idx) => {
-        const isLastMessage = idx === lastIndex;
-
-        if (msg.role === "user") {
-          return <UserBubble key={msg.id} message={msg} onEdit={onEditMessage} isStreaming={isStreaming} />;
-        }
-
-        if (msg.role === "tool") {
-          return <ToolCard key={msg.id} message={msg} />;
-        }
-
-        return (
-          <AssistantBubble
-            key={msg.id}
-            message={msg}
-            isLastMessage={isLastMessage}
-            isStreaming={isStreaming}
-            isTypingIndicator={isLastMessage && isTypingIndicator}
-            mcpEvents={msg.mcpEvents}
-          />
-        );
-      })}
+      {messages.map((message, index) => (
+        <ChatMessageContent
+          key={message.id}
+          message={message}
+          isLastMessage={index === messages.length - 1}
+          isStreaming={isStreaming}
+          onEditMessage={onEditMessage}
+        />
+      ))}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { TFunction } from "i18next";
 
 import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdminTag";
 import { KeyResponse } from "@/components/key_team_helpers/key_list";
@@ -23,16 +22,12 @@ function OwnerCell({ record }: { record: KeyResponse }) {
   );
 }
 
-interface ProjectKeysTableColumnsDeps {
-  t: TFunction;
-}
-
-export const getProjectKeysTableColumns = ({ t }: ProjectKeysTableColumnsDeps): ColumnDef<KeyResponse>[] => [
+export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "key_alias",
     accessorKey: "key_alias",
-    meta: { title: t("projects.projectKeysTable.colKeyName", { defaultValue: "Key Name" }) },
-    header: t("projects.projectKeysTable.colKeyName", { defaultValue: "Key Name" }),
+    meta: { title: "Key Name" },
+    header: "Key Name",
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
@@ -44,16 +39,16 @@ export const getProjectKeysTableColumns = ({ t }: ProjectKeysTableColumnsDeps): 
   },
   {
     id: "owner",
-    meta: { title: t("projects.projectKeysTable.colOwner", { defaultValue: "Owner" }) },
-    header: t("projects.projectKeysTable.colOwner", { defaultValue: "Owner" }),
+    meta: { title: "Owner" },
+    header: "Owner",
     enableSorting: false,
     cell: ({ row }) => <OwnerCell record={row.original} />,
   },
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: t("oldTeams.columns.created", { defaultValue: "Created" }) },
-    header: t("oldTeams.columns.created", { defaultValue: "Created" }),
+    meta: { title: "Created" },
+    header: "Created",
     size: 130,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -61,16 +56,10 @@ export const getProjectKeysTableColumns = ({ t }: ProjectKeysTableColumnsDeps): 
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: t("projects.projectKeysTable.colLastActive", { defaultValue: "Last Active" }) },
-    header: t("projects.projectKeysTable.colLastActive", { defaultValue: "Last Active" }),
+    meta: { title: "Last Active" },
+    header: "Last Active",
     size: 130,
     enableSorting: false,
-    cell: ({ row }) => (
-      <DateCell
-        value={row.original.last_active}
-        precision="date"
-        fallback={t("common.never", { defaultValue: "Never" })}
-      />
-    ),
+    cell: ({ row }) => <DateCell value={row.original.last_active} precision="date" fallback="Never" />,
   },
 ];

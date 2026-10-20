@@ -1,24 +1,14 @@
-import type { TFunction } from "i18next";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const NEVER_RESETS_BUDGET_DURATION = "none";
 
-interface DurationLabel {
-  key: string;
-  label: string;
-}
-
-const DURATION_LABELS: Record<string, DurationLabel> = {
-  [NEVER_RESETS_BUDGET_DURATION]: {
-    key: "commonComponents.budgetDurationDropdown.neverResets",
-    label: "Never resets",
-  },
-  "1h": { key: "commonComponents.budgetDurationDropdown.hourly", label: "hourly" },
-  "24h": { key: "commonComponents.budgetDurationDropdown.daily", label: "daily" },
-  "7d": { key: "commonComponents.budgetDurationDropdown.weekly", label: "weekly" },
-  "30d": { key: "commonComponents.budgetDurationDropdown.monthly", label: "monthly" },
+const DURATION_LABELS: Record<string, string> = {
+  [NEVER_RESETS_BUDGET_DURATION]: "Never resets",
+  "1h": "hourly",
+  "24h": "daily",
+  "7d": "weekly",
+  "30d": "monthly",
 };
 
 interface BudgetDurationDropdownProps {
@@ -40,42 +30,34 @@ const BudgetDurationDropdown: React.FC<BudgetDurationDropdownProps> = ({
   placeholder = "n/a",
   showNeverResets = false,
 }) => {
-  const { t } = useTranslation();
-  const labelFor = (duration: string): string => {
-    const entry = DURATION_LABELS[duration];
-    return entry ? t(entry.key, { defaultValue: entry.label }) : duration;
-  };
-
   return (
-    <Select
-      items={Object.fromEntries(Object.entries(DURATION_LABELS).map(([k, v]) => [k, labelFor(k)]))}
-      value={value || null}
-      onValueChange={onChange}
-    >
+    <Select items={DURATION_LABELS} value={value || null} onValueChange={onChange}>
       <SelectTrigger id={id} className={`w-full ${className}`} style={style}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value={null}>{placeholder}</SelectItem>
-        {showNeverResets ? (
-          <SelectItem value={NEVER_RESETS_BUDGET_DURATION}>{labelFor(NEVER_RESETS_BUDGET_DURATION)}</SelectItem>
-        ) : null}
-        <SelectItem value="1h">{labelFor("1h")}</SelectItem>
-        <SelectItem value="24h">{labelFor("24h")}</SelectItem>
-        <SelectItem value="7d">{labelFor("7d")}</SelectItem>
-        <SelectItem value="30d">{labelFor("30d")}</SelectItem>
+        {showNeverResets ? <SelectItem value={NEVER_RESETS_BUDGET_DURATION}>Never resets</SelectItem> : null}
+        <SelectItem value="1h">hourly</SelectItem>
+        <SelectItem value="24h">daily</SelectItem>
+        <SelectItem value="7d">weekly</SelectItem>
+        <SelectItem value="30d">monthly</SelectItem>
       </SelectContent>
     </Select>
   );
 };
 
-export const getBudgetDurationLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) {
-    return t("defaultUserSettings.displayValues.notSet", { defaultValue: "Not set" });
-  }
+export const getBudgetDurationLabel = (value: string | null | undefined): string => {
+  if (!value) return "Not set";
 
-  const entry = DURATION_LABELS[value];
-  return entry ? t(entry.key, { defaultValue: entry.label }) : value;
+  const budgetDurationMap: Record<string, string> = {
+    "1h": "hourly",
+    "24h": "daily",
+    "7d": "weekly",
+    "30d": "monthly",
+  };
+
+  return budgetDurationMap[value] || value;
 };
 
 export default BudgetDurationDropdown;

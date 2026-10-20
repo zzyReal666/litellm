@@ -1,8 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
 import { Copy, KeyRound, Layers, MoreHorizontal, Pencil, Trash2, Users } from "lucide-react";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
@@ -43,23 +41,10 @@ const teamModelCount = (team: Team): number => team.models?.length ?? 0;
 const teamKeyCount = (team: Team): number => team.keys_count ?? team.keys?.length ?? 0;
 
 function ResourcesCell({ team }: { team: Team }) {
-  const { t } = useTranslation();
   const items = [
-    {
-      key: "members" as const,
-      label: t("teamPage.teamsTable.resourceMembers", { defaultValue: "members" }),
-      count: teamMemberCount(team),
-    },
-    {
-      key: "models" as const,
-      label: t("teamPage.teamsTable.resourceModels", { defaultValue: "models" }),
-      count: teamModelCount(team),
-    },
-    {
-      key: "keys" as const,
-      label: t("teamPage.teamsTable.resourceKeys", { defaultValue: "keys" }),
-      count: teamKeyCount(team),
-    },
+    { key: "members" as const, label: "members", count: teamMemberCount(team) },
+    { key: "models" as const, label: "models", count: teamModelCount(team) },
+    { key: "keys" as const, label: "keys", count: teamKeyCount(team) },
   ];
 
   return (
@@ -86,13 +71,10 @@ function ResourcesCell({ team }: { team: Team }) {
 }
 
 function RateLimitLine({ label, value }: { label: string; value: number | null }) {
-  const { t } = useTranslation();
   return (
     <div>
       <span className="text-[10px] font-semibold text-muted-foreground">{label} </span>
-      <span className="tabular-nums">
-        {value != null ? formatNumberWithCommas(value) : t("oldTeams.unlimited", { defaultValue: "Unlimited" })}
-      </span>
+      <span className="tabular-nums">{value != null ? formatNumberWithCommas(value) : "Unlimited"}</span>
     </div>
   );
 }
@@ -105,15 +87,14 @@ interface TeamRowActionsProps {
 }
 
 function TeamRowActions({ team, canManage, onEditTeam, onDeleteTeam }: TeamRowActionsProps) {
-  const { t } = useTranslation();
   const handleCopy = () => {
-    void copyToClipboard(team.team_id, t("oldTeams.actions.teamIdCopied", { defaultValue: "Team ID copied" }));
+    void copyToClipboard(team.team_id, "Team ID copied");
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("teamPage.availableTeams.openTeamActions", { defaultValue: "Open team actions" })}
+        aria-label="Open team actions"
         data-testid={`team-actions-${team.team_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -123,19 +104,19 @@ function TeamRowActions({ team, canManage, onEditTeam, onDeleteTeam }: TeamRowAc
         {canManage && (
           <DropdownMenuItem onClick={() => onEditTeam(team)} data-testid="team-action-edit">
             <Pencil />
-            {t("oldTeams.actions.editTeam", { defaultValue: "Edit team" })}
+            Edit team
           </DropdownMenuItem>
         )}
         <DropdownMenuItem onClick={handleCopy} data-testid="team-action-copy">
           <Copy />
-          {t("teamPage.teamsTable.copyTeamId", { defaultValue: "Copy team ID" })}
+          Copy team ID
         </DropdownMenuItem>
         {canManage && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={() => onDeleteTeam(team)} data-testid="team-action-delete">
               <Trash2 />
-              {t("oldTeams.actions.deleteTeam", { defaultValue: "Delete team" })}
+              Delete team
             </DropdownMenuItem>
           </>
         )}
@@ -150,7 +131,6 @@ interface TeamTableColumnsDeps {
   onSelectTeam: (team: Team) => void;
   onEditTeam: (team: Team) => void;
   onDeleteTeam: (team: Team) => void;
-  t: TFunction;
 }
 
 export const getTeamTableColumns = ({
@@ -159,7 +139,6 @@ export const getTeamTableColumns = ({
   onSelectTeam,
   onEditTeam,
   onDeleteTeam,
-  t,
 }: TeamTableColumnsDeps): ColumnDef<Team>[] => {
   const canManage = userRole === "Admin";
 
@@ -168,7 +147,7 @@ export const getTeamTableColumns = ({
       id: "team_alias",
       accessorKey: "team_alias",
       meta: {
-        title: t("createUserButton.teamLabel", { defaultValue: "Team" }),
+        title: "Team",
         renderSkeleton: () => (
           <div className="flex flex-col gap-2 py-1">
             <Skeleton className="h-4 w-32" />
@@ -176,13 +155,7 @@ export const getTeamTableColumns = ({
           </div>
         ),
       },
-      header: ({ column }) => (
-        <DataTableSortHeader
-          column={column}
-          title={t("createUserButton.teamLabel", { defaultValue: "Team" })}
-          variant="header-cycle"
-        />
-      ),
+      header: ({ column }) => <DataTableSortHeader column={column} title="Team" variant="header-cycle" />,
       size: 260,
       enableSorting: true,
       cell: ({ row }) => {
@@ -200,7 +173,7 @@ export const getTeamTableColumns = ({
     {
       id: "organization_alias",
       accessorKey: "organization_id",
-      meta: { title: t("createUserButton.organizationLabel", { defaultValue: "Organization" }) },
+      meta: { title: "Organization" },
       header: "Organization",
       size: 160,
       enableSorting: false,
@@ -220,7 +193,7 @@ export const getTeamTableColumns = ({
     {
       id: "resources",
       meta: {
-        title: t("oldTeams.columns.resources", { defaultValue: "Resources" }),
+        title: "Resources",
         renderSkeleton: () => (
           <div className="flex items-center gap-1.5">
             <Skeleton className="h-6 w-12 rounded-md" />
@@ -237,7 +210,7 @@ export const getTeamTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: "Spend / Budget", skeleton: "meter" },
+      meta: { title: "Spend / Budget", skeleton: "meter", numeric: true },
       header: "Spend / Budget",
       size: 200,
       enableSorting: false,
@@ -253,21 +226,15 @@ export const getTeamTableColumns = ({
     {
       id: "created_at",
       accessorKey: "created_at",
-      meta: { title: t("oldTeams.columns.created", { defaultValue: "Created" }) },
-      header: ({ column }) => (
-        <DataTableSortHeader
-          column={column}
-          title={t("oldTeams.columns.created", { defaultValue: "Created" })}
-          variant="header-cycle"
-        />
-      ),
+      meta: { title: "Created" },
+      header: ({ column }) => <DataTableSortHeader column={column} title="Created" variant="header-cycle" />,
       size: 130,
       enableSorting: true,
       cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" />,
     },
     {
       id: "members",
-      meta: { title: t("oldTeams.deleteModal.labelMembers", { defaultValue: "Members" }) },
+      meta: { title: "Members", numeric: true },
       header: "Members",
       size: 110,
       enableSorting: false,
@@ -275,7 +242,7 @@ export const getTeamTableColumns = ({
     },
     {
       id: "models",
-      meta: { title: t("createUserButton.modelsLabel", { defaultValue: "Models" }) },
+      meta: { title: "Models", numeric: true },
       header: "Models",
       size: 100,
       enableSorting: false,
@@ -283,7 +250,7 @@ export const getTeamTableColumns = ({
     },
     {
       id: "rate_limits",
-      meta: { title: t("publicModelHub.rateLimits", { defaultValue: "Rate Limits" }), skeleton: "twoLine" },
+      meta: { title: "Rate Limits", skeleton: "twoLine" },
       header: "Rate Limits",
       size: 140,
       enableSorting: false,
@@ -297,7 +264,7 @@ export const getTeamTableColumns = ({
     {
       id: "updated_at",
       accessorKey: "updated_at",
-      meta: { title: t("viewLogs.auditLogs.actionUpdated", { defaultValue: "Updated" }) },
+      meta: { title: "Updated" },
       header: "Updated",
       size: 130,
       enableSorting: false,
@@ -306,7 +273,7 @@ export const getTeamTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
+      header: () => <span className="sr-only">Actions</span>,
       size: 60,
       enableSorting: false,
       enableHiding: false,

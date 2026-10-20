@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Bot, Check, Copy, Sparkles, Wrench } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogEntry } from "../types";
@@ -123,7 +122,6 @@ export function LogDetailsDrawer({
   startTime,
   backTo,
 }: LogDetailsDrawerProps) {
-  const { t } = useTranslation();
   const isSessionMode = Boolean(sessionId);
   const [selectedSessionRequestId, setSelectedSessionRequestId] = useState<string | null>(null);
   const [sessionSortMode, setSessionSortMode] = useState<SessionLogSortMode>("duration");
@@ -340,7 +338,7 @@ export function LogDetailsDrawer({
                         type="button"
                         onClick={handleCopyLeftPanelId}
                         className="text-muted-foreground hover:text-foreground"
-                        aria-label={t("viewLogs.logDetailsDrawer.copyTraceId", { defaultValue: "Copy trace id" })}
+                        aria-label="Copy trace id"
                       >
                         {copiedLeftPanelId ? <Check className="size-3" /> : <Copy className="size-3" />}
                       </button>
@@ -348,10 +346,7 @@ export function LogDetailsDrawer({
                   </div>
                 </div>
                 <div className="mt-1 text-[11px] text-muted-foreground font-mono">
-                  {t("viewLogs.logDetailsDrawer.labelReqCount", {
-                    count: logsForList.length,
-                    defaultValue: `${logsForList.length} req`,
-                  })}
+                  {logsForList.length} req
                   {[
                     isSessionMode
                       ? llmCount
@@ -401,10 +396,10 @@ export function LogDetailsDrawer({
                   >
                     <TabsList className="w-full">
                       <TabsTrigger value="duration" className="text-[11px]">
-                        {t("viewLogs.logDetailsDrawer.sortDuration", { defaultValue: "Duration" })}
+                        Duration
                       </TabsTrigger>
                       <TabsTrigger value="start_time" className="text-[11px]">
-                        {t("viewLogs.logDetailsDrawer.sortStartTime", { defaultValue: "Start time" })}
+                        Start time
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>

@@ -1,5 +1,37 @@
-import i18n from "@/lib/i18n";
-import { MCPEnvVar, MCPEnvVarScope } from "@/components/mcp_tools/types";
+import { MCPEnvVar, MCPEnvVarScope, type MCPServer } from "@/components/mcp_tools/types";
+
+export const getMCPNetworkAccess = (
+  server: Pick<MCPServer, "available_on_public_internet" | "mcp_info">,
+): {
+  readonly label: "All Networks" | "Internal Only" | "Unknown";
+  readonly dotClassName: string;
+  readonly description: string;
+} => {
+  const explicitlyPublished = server.mcp_info?.is_public_explicit;
+  if (server.available_on_public_internet === true || explicitlyPublished === true) {
+    return {
+      label: "All Networks",
+      dotClassName: "bg-success",
+      description:
+        server.available_on_public_internet === true
+          ? "Allows requests from public and internal IPs. Authentication and access permissions still apply"
+          : "Allows requests from public and internal IPs because this server is published in MCP Hub. Authentication and access permissions still apply",
+    };
+  }
+  if (server.available_on_public_internet === false && explicitlyPublished === false) {
+    return {
+      label: "Internal Only",
+      dotClassName: "bg-warning",
+      description:
+        "Allows requests only from internal/private IP ranges. Authentication and access permissions still apply",
+    };
+  }
+  return {
+    label: "Unknown",
+    dotClassName: "bg-border",
+    description: "The proxy did not report enough network and publication settings to determine allowed client IPs",
+  };
+};
 
 export const extractMCPToken = (url: string): { token: string | null; baseUrl: string } => {
   try {
@@ -46,20 +78,12 @@ export const validateMCPServerUrl = (value: string) => {
   const urlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
   return urlPattern.test(value)
     ? Promise.resolve()
-    : Promise.reject(
-        i18n.t("mcpTools.mcpServerEdit.serverUrlInvalid", {
-          defaultValue: "Please enter a valid URL (e.g., http://service-name.domain:1234/path or https://example.com)",
-        }),
-      );
+    : Promise.reject("Please enter a valid URL (e.g., http://service-name.domain:1234/path or https://example.com)");
 };
 
 export const validateMCPServerName = (value: string) => {
   return value && (value.includes("-") || value.includes(" "))
-    ? Promise.reject(
-        i18n.t("mcpTools.mcpServerEdit.serverNameInvalid", {
-          defaultValue: "Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead.",
-        }),
-      )
+    ? Promise.reject("Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead.")
     : Promise.resolve();
 };
 
@@ -67,11 +91,7 @@ export const TOOL_DISPLAY_NAME_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
 export const validateToolDisplayName = (value: string) => {
   return value && !TOOL_DISPLAY_NAME_PATTERN.test(value)
-    ? Promise.reject(
-        i18n.t("mcpTools.mcpServerEdit.displayNameInvalid", {
-          defaultValue: "Only letters, digits, underscores, and hyphens are allowed (no spaces).",
-        }),
-      )
+    ? Promise.reject("Only letters, digits, underscores, and hyphens are allowed (no spaces).")
     : Promise.resolve();
 };
 

@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { ArrowLeft, Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
 import moment from "moment";
-import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { LogEntry } from "../columns";
+import { LogEntry } from "../types";
 import { AutoRouterTag } from "@/components/shared/table_cells";
 import { ClassifyTag } from "./ClassifyTag";
 import { SidebarToggle } from "./SidebarToggle";
@@ -30,6 +29,12 @@ interface DrawerHeaderProps {
   environment: string;
   isSidebarCollapsed: boolean;
   onToggleSidebar: () => void;
+  backTo?: DrawerBackTo;
+}
+
+export interface DrawerBackTo {
+  label: string;
+  icon: ReactNode;
 }
 
 /**
@@ -46,11 +51,14 @@ export function DrawerHeader({
   environment,
   isSidebarCollapsed,
   onToggleSidebar,
+  backTo,
 }: DrawerHeaderProps) {
   const provider = log.custom_llm_provider || "";
   const providerInfo = provider ? getProviderLogoAndName(provider) : null;
   const showToggleWithProvider = isSidebarCollapsed && Boolean(providerInfo || log.model);
   const showToggleWithRequestId = isSidebarCollapsed && !showToggleWithProvider;
+  const callId: string | null =
+    log.litellm_call_id && log.litellm_call_id !== log.request_id ? log.litellm_call_id : null;
 
   return (
     <div
@@ -63,6 +71,13 @@ export function DrawerHeader({
         top: 0,
       }}
     >
+      {backTo && (
+        <Button variant="outline" size="sm" onClick={onClose} className="mb-3 max-w-full">
+          <ArrowLeft data-icon="inline-start" />
+          {backTo.icon}
+          <span className="truncate">Back to {backTo.label}</span>
+        </Button>
+      )}
       {/* Row 0: Model + Provider with Logo */}
       <div className="flex items-center gap-2" style={{ marginBottom: SPACING_MEDIUM }}>
         {showToggleWithProvider && <SidebarToggle isCollapsed onToggle={onToggleSidebar} />}
@@ -86,7 +101,20 @@ export function DrawerHeader({
         }}
       >
         {showToggleWithRequestId && <SidebarToggle isCollapsed onToggle={onToggleSidebar} />}
-        <RequestIdSection requestId={log.request_id} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <CopyableId value={log.request_id} label="Request ID" fontSize={FONT_SIZE_HEADER} />
+          {callId && (
+            <div className="flex items-center gap-1">
+              <span
+                className="text-muted-foreground"
+                style={{ fontSize: FONT_SIZE_MEDIUM, fontFamily: FONT_FAMILY_MONO, whiteSpace: "nowrap" }}
+              >
+                x-litellm-call-id:
+              </span>
+              <CopyableId value={callId} label="x-litellm-call-id" fontSize={FONT_SIZE_MEDIUM} muted />
+            </div>
+          )}
+        </div>
         <NavigationSection onPrevious={onPrevious} onNext={onNext} onClose={onClose} />
       </div>
 
@@ -112,13 +140,12 @@ function ModelProviderSection({
   providerLogo?: string;
   providerName?: string;
 }) {
-  const { t } = useTranslation();
   return (
     <div className="flex min-w-0 items-center gap-2">
       {providerLogo && (
         <img
           src={providerLogo}
-          alt={providerName || t("viewLogs.drawerHeader.providerAlt", { defaultValue: "Provider" })}
+          alt={providerName || "Provider"}
           style={{ width: 24, height: 24 }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -142,16 +169,22 @@ function ModelProviderSection({
   );
 }
 
-/**
- * Request ID display with copy functionality
- */
-function RequestIdSection({ requestId }: { requestId: string }) {
-  const { t } = useTranslation();
+function CopyableId({
+  value,
+  label,
+  fontSize,
+  muted,
+}: {
+  value: string;
+  label: string;
+  fontSize: number;
+  muted?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(requestId);
+      await navigator.clipboard.writeText(value);
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
     } catch {
@@ -160,42 +193,36 @@ function RequestIdSection({ requestId }: { requestId: string }) {
   };
 
   return (
-    <div style={{ flex: 1, minWidth: 0 }}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <span
-                className="font-semibold"
-                style={{
-                  fontSize: FONT_SIZE_HEADER,
-                  fontFamily: FONT_FAMILY_MONO,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  display: "block",
-                }}
-              />
-            }
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <span
+              className={muted ? "text-muted-foreground" : "font-semibold"}
+              style={{
+                fontSize,
+                fontFamily: FONT_FAMILY_MONO,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                display: "block",
+              }}
+            />
+          }
+        >
+          {value}
+          <button
+            type="button"
+            aria-label={copied ? "Copied!" : `Copy ${label}`}
+            onClick={handleCopy}
+            className="ml-1 align-middle text-muted-foreground hover:text-foreground"
           >
-            {requestId}
-            <button
-              type="button"
-              aria-label={
-                copied
-                  ? t("viewLogs.columns.copied", { defaultValue: "Copied!" })
-                  : t("viewLogs.drawerHeader.copyRequestId", { defaultValue: "Copy Request ID" })
-              }
-              onClick={handleCopy}
-              className="ml-1 align-middle text-muted-foreground hover:text-foreground"
-            >
-              {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>{requestId}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
+            {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>{value}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -212,7 +239,6 @@ function NavigationSection({
   onNext: () => void;
   onClose: () => void;
 }) {
-  const { t } = useTranslation();
   const keyboardShortcutStyle = {
     border: "1px solid var(--color-border)",
     borderRadius: 4,
@@ -241,7 +267,7 @@ function NavigationSection({
           <TooltipTrigger render={<Button variant="ghost" size="icon-sm" onClick={onClose} />}>
             <X className="size-4" />
           </TooltipTrigger>
-          <TooltipContent>{t("viewLogs.drawerHeader.escToClose", { defaultValue: "ESC to close" })}</TooltipContent>
+          <TooltipContent>ESC to close</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </div>
@@ -262,13 +288,10 @@ function StatusBar({
   statusColor: "error" | "success";
   environment: string;
 }) {
-  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-3">
       <Badge variant={statusColor === "error" ? "destructive" : "secondary"}>{statusLabel}</Badge>
-      <Badge variant="outline">
-        {t("viewLogs.drawerHeader.envLabel", { environment, defaultValue: `Env: ${environment}` })}
-      </Badge>
+      <Badge variant="outline">Env: {environment}</Badge>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground" style={{ fontSize: FONT_SIZE_MEDIUM }}>
           {moment(log.startTime).format("MMM D, YYYY h:mm:ss A")}

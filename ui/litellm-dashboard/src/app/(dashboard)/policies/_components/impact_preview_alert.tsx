@@ -2,7 +2,6 @@ import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Info } from "lucide-react";
-import { Trans, useTranslation } from "react-i18next";
 
 interface ImpactResult {
   affected_keys_count: number;
@@ -13,6 +12,7 @@ interface ImpactResult {
 
 interface ImpactPreviewAlertProps {
   impactResult: ImpactResult;
+  isDefault?: boolean;
 }
 
 interface SampleListProps {
@@ -21,76 +21,59 @@ interface SampleListProps {
   totalCount: number;
 }
 
-const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="mt-1 flex flex-wrap items-center gap-1">
-      <span className="text-xs text-muted-foreground">{label} </span>
-      {samples.slice(0, 5).map((sample) => (
-        <Badge key={sample} variant="outline">
-          {sample}
-        </Badge>
-      ))}
-      {totalCount > 5 && (
-        <span className="text-xs text-muted-foreground">
-          {t("policies.impactPreviewAlert.andMore", {
-            count: totalCount - 5,
-            defaultValue: "and {{count}} more...",
-          })}
-        </span>
-      )}
-    </div>
-  );
-};
+const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) => (
+  <div className="mt-1 flex flex-wrap items-center gap-1">
+    <span className="text-xs text-muted-foreground">{label}: </span>
+    {samples.slice(0, 5).map((sample) => (
+      <Badge key={sample} variant="outline">
+        {sample}
+      </Badge>
+    ))}
+    {totalCount > 5 && <span className="text-xs text-muted-foreground">and {totalCount - 5} more...</span>}
+  </div>
+);
 
-const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult }) => {
-  const { t } = useTranslation();
+const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, isDefault = false }) => {
   const isGlobal = impactResult.affected_keys_count === -1;
+  const qualifier = isDefault ? "up to " : "";
 
   return (
     <Alert className="mb-4">
       {isGlobal ? <AlertTriangle /> : <Info />}
-      <AlertTitle>{t("policies.impactPreviewAlert.message", { defaultValue: "Impact Preview" })}</AlertTitle>
+      <AlertTitle>Impact Preview</AlertTitle>
       <AlertDescription>
         {isGlobal ? (
           <span>
-            <Trans
-              i18nKey="policies.impactPreviewAlert.globalScopeDesc"
-              defaults="Global scope — this will affect <strong>all keys and teams</strong>."
-              components={{ strong: <strong /> }}
-            />
+            Global scope — this will affect <strong>all keys and teams</strong>.
           </span>
         ) : (
           <div>
             <span>
-              This attachment would affect{" "}
+              This attachment would affect {qualifier}
               <strong>
-                {impactResult.affected_keys_count}{" "}
-                {t("policies.impactPreviewAlert.keyWord", {
-                  count: impactResult.affected_keys_count,
-                  defaultValue: "keys",
-                })}
+                {impactResult.affected_keys_count} key{impactResult.affected_keys_count !== 1 ? "s" : ""}
               </strong>{" "}
               and{" "}
               <strong>
-                {impactResult.affected_teams_count}{" "}
-                {t("policies.impactPreviewAlert.teamWord", {
-                  count: impactResult.affected_teams_count,
-                  defaultValue: "teams",
-                })}
+                {impactResult.affected_teams_count} team{impactResult.affected_teams_count !== 1 ? "s" : ""}
               </strong>
               .
             </span>
+            {isDefault && (
+              <div className="text-xs text-muted-foreground">
+                Default attachments only apply to requests no non-default attachment matches, so fewer may be affected.
+              </div>
+            )}
             {impactResult.sample_keys.length > 0 && (
               <SampleList
-                label={t("policies.impactPreviewAlert.keysLabel", { defaultValue: "Keys:" })}
+                label="Keys"
                 samples={impactResult.sample_keys}
                 totalCount={impactResult.affected_keys_count}
               />
             )}
             {impactResult.sample_teams.length > 0 && (
               <SampleList
-                label={t("policies.impactPreviewAlert.teamsLabel", { defaultValue: "Teams:" })}
+                label="Teams"
                 samples={impactResult.sample_teams}
                 totalCount={impactResult.affected_teams_count}
               />

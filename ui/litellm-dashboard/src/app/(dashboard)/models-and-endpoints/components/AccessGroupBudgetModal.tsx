@@ -1,9 +1,8 @@
 "use client";
 
 import { CircleHelp } from "lucide-react";
-import React, { useMemo } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { z } from "zod/v4";
+import React from "react";
+import { z } from "zod";
 import BudgetDurationDropdown from "@/components/common_components/budget_duration_dropdown";
 import { FieldGroup } from "@/components/ui/field";
 import { FormField } from "@/components/shared/form/FormField";
@@ -26,17 +25,17 @@ const labelWithHint = (label: React.ReactNode, hint: string): React.ReactNode =>
   </>
 );
 
-const budgetSchema = (message: string) =>
-  z
-    .object({
-      max_budget: z.string().optional(),
-      soft_budget: z.string().optional(),
-      budget_duration: z.string().optional(),
-    })
-    .refine(hasAnyBudgetValue, {
-      message,
-      path: ["max_budget"],
-    });
+const budgetSchema = z
+  .object({
+    max_budget: z.string().optional(),
+    soft_budget: z.string().optional(),
+    budget_duration: z.string().optional(),
+  })
+  .refine(hasAnyBudgetValue, {
+    message: "Set at least one of max budget, soft budget or reset window",
+    path: ["max_budget"],
+  });
+
 interface AccessGroupBudgetModalProps {
   accessGroup: ModelAccessGroup | null;
   isSaving: boolean;
@@ -50,43 +49,20 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
   onCancel,
   onSubmit,
 }) => {
-  const { t } = useTranslation();
   const budget = accessGroup?.budget ?? null;
-  const form = useZodForm(
-    useMemo(
-      () =>
-        budgetSchema(
-          t("pages.accessGroupBudgets.validationError", {
-            defaultValue: "Set at least one of max budget, soft budget or reset window",
-          }),
-        ),
-      [t],
-    ),
-    { values: accessGroupBudgetFormValues(budget) },
-  );
+  const form = useZodForm(budgetSchema, { values: accessGroupBudgetFormValues(budget) });
 
   return (
     <Dialog open={accessGroup !== null} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {budget
-              ? t("pages.accessGroupBudgets.editBudgetFor", {
-                  accessGroup: accessGroup?.access_group,
-                  defaultValue: `Edit budget for "${accessGroup?.access_group}"`,
-                })
-              : t("pages.accessGroupBudgets.setBudgetFor", {
-                  accessGroup: accessGroup?.access_group,
-                  defaultValue: `Set budget for "${accessGroup?.access_group}"`,
-                })}
+            {budget ? "Edit" : "Set"} budget for &quot;{accessGroup?.access_group}&quot;
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
-          <Trans
-            i18nKey="pages.accessGroupBudgets.modalDescription"
-            defaults="Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it."
-            components={{ code: <code /> }}
-          />
+          Every key granted this access group by name draws from this one budget. A key that reaches the group&apos;s
+          models through a wildcard or <code>all-proxy-models</code> is not charged against it.
         </p>
         <form onSubmit={form.handleSubmit((values) => onSubmit(buildAccessGroupBudgetBody(values)))} noValidate>
           <TooltipProvider>
@@ -95,11 +71,8 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="max_budget"
                 label={labelWithHint(
-                  t("budgets.budgetModal.maxBudgetLabel", { defaultValue: "Max Budget (USD)" }),
-                  t("pages.accessGroupBudgets.maxBudgetHint", {
-                    defaultValue:
-                      "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused",
-                  }),
+                  "Max Budget (USD)",
+                  "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused",
                 )}
               >
                 {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -109,10 +82,8 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="soft_budget"
                 label={labelWithHint(
-                  t("teamPage.teamInfo.softBudgetLabel", { defaultValue: "Soft Budget (USD)" }),
-                  t("pages.accessGroupBudgets.softBudgetHint", {
-                    defaultValue: "Fires an alert when the group's spend reaches this. Requests keep succeeding",
-                  }),
+                  "Soft Budget (USD)",
+                  "Fires an alert when the group's spend reaches this. Requests keep succeeding",
                 )}
               >
                 {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -122,10 +93,8 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="budget_duration"
                 label={labelWithHint(
-                  t("budgets.budgetModal.resetBudgetLabel", { defaultValue: "Reset Budget" }),
-                  t("pages.accessGroupBudgets.resetBudgetHint", {
-                    defaultValue: "How often the group's spend resets. Leave empty for a budget that never resets",
-                  }),
+                  "Reset Budget",
+                  "How often the group's spend resets. Leave empty for a budget that never resets",
                 )}
               >
                 {({ id, value, onChange }) => (
@@ -139,20 +108,15 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
             </FieldGroup>
 
             <p className="mt-3 text-xs text-muted-foreground">
-              {t("pages.accessGroupBudgets.blankFieldHint", {
-                defaultValue:
-                  "A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself.",
-              })}
+              A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself.
             </p>
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={onCancel}>
-                {t("common.cancel", { defaultValue: "Cancel" })}
+                Cancel
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving
-                  ? t("common.saving", { defaultValue: "Saving..." })
-                  : t("pages.accessGroupBudgets.saveBudget", { defaultValue: "Save Budget" })}
+                {isSaving ? "Saving..." : "Save Budget"}
               </Button>
             </div>
           </TooltipProvider>

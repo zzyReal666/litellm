@@ -1,8 +1,6 @@
 "use client";
 
 import { Waypoints } from "lucide-react";
-import type { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cva.config";
@@ -26,16 +24,30 @@ export interface RoutingDecision {
   matched_keyword?: string;
   escalation_keyword?: string;
   classifier_model?: string;
+  classifier_p_solve?: number;
+  classifier_calibrated_p_solve?: number;
+  classifier_threshold?: number;
+  classifier_capability_boundary?: string;
+  classifier_primary_rule?: string;
+  classifier_calibration_version?: string;
+  classifier_efficient_p_solve?: number;
+  classifier_capable_p_solve?: number;
+  classifier_calibrated_efficient_p_solve?: number;
+  classifier_calibrated_capable_p_solve?: number;
+  classifier_max_quality_gap?: number;
+  classifier_confidence?: number;
+  classifier_probabilities?: Record<string, number>;
+  classifier_cost?: number;
   escalated?: boolean;
   tier_boundaries?: RoutingDecisionTierBoundaries;
   reasoning_override_min_score?: number;
+  heuristic_v2_forecast?: {
+    probabilities: Record<string, number>;
+    threshold: number;
+    predicted_tier: string;
+    request_type: string;
+  };
 }
-
-const ROUTER_TYPE_LABEL_KEYS: Record<string, string> = {
-  complexity: "viewLogs.routingDecisionCard.routerTypeComplexity",
-  adaptive: "viewLogs.routingDecisionCard.routerTypeAdaptive",
-  quality: "viewLogs.routingDecisionCard.routerTypeQuality",
-};
 
 const ROUTER_TYPE_LABELS: Record<string, string> = {
   complexity: "Auto-Router v2",
@@ -43,16 +55,12 @@ const ROUTER_TYPE_LABELS: Record<string, string> = {
   quality: "Quality router",
 };
 
-const tierName = (t: TFunction, tier: string): string =>
-  t(`viewLogs.routingDecisionCard.tierName${tier}`, { defaultValue: tier });
-
 /**
  * The tier the score alone would have produced, given the boundaries in effect when
  * the decision was made. Rendered as the bracket that explains a score, so it must
  * use the snapshot rather than today's config.
  */
 function describeScoreAgainstBoundaries(
-  t: TFunction,
   score: number,
   boundaries?: RoutingDecisionTierBoundaries,
   renamed?: boolean,
@@ -66,49 +74,16 @@ function describeScoreAgainstBoundaries(
   if (simpleMedium === undefined || mediumComplex === undefined || complexReasoning === undefined) return null;
 
   const named = (range: string, tier: string): string => (renamed ? range : `${range}, ${tier}`);
-  if (score < simpleMedium)
-    return named(
-      t("viewLogs.routingDecisionCard.rangeBelow", { bound: simpleMedium, defaultValue: `below ${simpleMedium}` }),
-      tierName(t, "SIMPLE"),
-    );
-  if (score < mediumComplex)
-    return named(
-      t("viewLogs.routingDecisionCard.rangeBetween", {
-        lower: simpleMedium,
-        upper: mediumComplex,
-        defaultValue: `${simpleMedium} to ${mediumComplex}`,
-      }),
-      tierName(t, "MEDIUM"),
-    );
-  if (score < complexReasoning)
-    return named(
-      t("viewLogs.routingDecisionCard.rangeBetween", {
-        lower: mediumComplex,
-        upper: complexReasoning,
-        defaultValue: `${mediumComplex} to ${complexReasoning}`,
-      }),
-      tierName(t, "COMPLEX"),
-    );
-  return named(
-    t("viewLogs.routingDecisionCard.rangeAtOrAbove", {
-      bound: complexReasoning,
-      defaultValue: `at or above ${complexReasoning}`,
-    }),
-    tierName(t, "REASONING"),
-  );
+  if (score < simpleMedium) return named(`below ${simpleMedium}`, "SIMPLE");
+  if (score < mediumComplex) return named(`${simpleMedium} to ${mediumComplex}`, "MEDIUM");
+  if (score < complexReasoning) return named(`${mediumComplex} to ${complexReasoning}`, "COMPLEX");
+  return named(`at or above ${complexReasoning}`, "REASONING");
 }
 
-function describePlanModeFloor(t: TFunction, matchedKeyword: string | undefined): string {
-  if (matchedKeyword === "exit_plan_mode")
-    return t("viewLogs.routingDecisionCard.planModeFloorTool", {
-      defaultValue: "Plan-mode floor (exit_plan_mode tool)",
-    });
-  if (matchedKeyword)
-    return t("viewLogs.routingDecisionCard.planModeFloorKeyword", {
-      keyword: matchedKeyword,
-      defaultValue: `Plan-mode floor: "${matchedKeyword}"`,
-    });
-  return t("viewLogs.routingDecisionCard.planModeFloor", { defaultValue: "Plan-mode floor" });
+function describePlanModeFloor(matchedKeyword: string | undefined): string {
+  if (matchedKeyword === "exit_plan_mode") return "Plan-mode floor (exit_plan_mode tool)";
+  if (matchedKeyword) return `Plan-mode floor: "${matchedKeyword}"`;
+  return "Plan-mode floor";
 }
 
 /**
@@ -116,86 +91,41 @@ function describePlanModeFloor(t: TFunction, matchedKeyword: string | undefined)
  * would add to housekeeping_patterns to cover another client, so naming it turns the row into
  * the instruction. Without it the drawer says only that the classifier was skipped.
  */
-function describeHousekeeping(t: TFunction, matchedKeyword: string | undefined): string {
-  if (matchedKeyword)
-    return t("viewLogs.routingDecisionCard.housekeepingKeyword", {
-      keyword: matchedKeyword,
-      defaultValue: `Client housekeeping call: "${matchedKeyword}"`,
-    });
-  return t("viewLogs.routingDecisionCard.housekeepingNoKeyword", {
-    defaultValue: "Client housekeeping call, classifier skipped",
-  });
+function describeHousekeeping(matchedKeyword: string | undefined): string {
+  if (matchedKeyword) return `Client housekeeping call: "${matchedKeyword}"`;
+  return "Client housekeeping call, classifier skipped";
 }
 
 /** Rows logged before the floor was recorded name what it tracked back then instead of a number. */
-function describeReasoningOverride(t: TFunction, tierLabel: string | undefined, floor: number | undefined): string {
-  const stated =
-    floor === undefined
-      ? t("viewLogs.routingDecisionCard.simpleToMediumBoundary", { defaultValue: "the Simple to Medium boundary" })
-      : String(floor);
-  return t("viewLogs.routingDecisionCard.reasoningOverride", {
-    tier: tierLabel ?? tierName(t, "REASONING"),
-    stated,
-    defaultValue: `Heuristic, ${tierLabel ?? "REASONING"} override (2 or more reasoning markers, score of at least ${stated})`,
-  });
+function describeReasoningOverride(tierLabel: string | undefined, floor: number | undefined): string {
+  const stated = floor === undefined ? "the Simple to Medium boundary" : String(floor);
+  return `Heuristic, ${tierLabel ?? "REASONING"} override (2 or more reasoning markers, score of at least ${stated})`;
 }
 
-const CONSTANT_CAUSE_LABELS: Record<string, { labelKey: string; label: string }> = {
-  heuristic_scorer: { labelKey: "viewLogs.routingDecisionCard.causeHeuristicScorer", label: "Heuristic scorer" },
-  heuristic_v2: { labelKey: "viewLogs.routingDecisionCard.causeHeuristicV2", label: "Heuristic v2" },
-  heuristic_first_short_circuit: {
-    labelKey: "viewLogs.routingDecisionCard.causeHeuristicFirstShortCircuit",
-    label: "Heuristic scorer, classifier skipped",
-  },
-  hybrid_short_circuit: {
-    labelKey: "viewLogs.routingDecisionCard.causeHybridShortCircuit",
-    label: "Heuristic scorer, score clear of every boundary",
-  },
-  classifier_plugin: {
-    labelKey: "viewLogs.routingDecisionCard.causeClassifierPlugin",
-    label: "Custom classifier plugin",
-  },
-  semantic_keyword_match: {
-    labelKey: "viewLogs.routingDecisionCard.causeSemanticKeywordMatch",
-    label: "Semantic keyword match",
-  },
-  session_affinity_pin: {
-    labelKey: "viewLogs.routingDecisionCard.causeSessionAffinityPin",
-    label: "Pinned to session",
-  },
-  session_affinity_escalation: {
-    labelKey: "viewLogs.routingDecisionCard.causeSessionAffinityEscalation",
-    label: "Escalated from session pin",
-  },
-  user_turn_continuation: {
-    labelKey: "viewLogs.routingDecisionCard.causeUserTurnContinuation",
-    label: "Continuation turn, classifier skipped",
-  },
-  modality_escalation: {
-    labelKey: "viewLogs.routingDecisionCard.causeModalityEscalation",
-    label: "Escalated for image input",
-  },
-  modality_pin_override: {
-    labelKey: "viewLogs.routingDecisionCard.causeModalityPinOverride",
-    label: "Overrode session pin for image input",
-  },
-  quality_tier: { labelKey: "viewLogs.routingDecisionCard.causeQualityTier", label: "Quality tier mapping" },
-  bandit: { labelKey: "viewLogs.routingDecisionCard.causeBandit", label: "Adaptive bandit" },
-  default_fallback: {
-    labelKey: "viewLogs.routingDecisionCard.causeDefaultFallback",
-    label: "Default model, no route matched",
-  },
-  classifier_fallback: {
-    labelKey: "viewLogs.routingDecisionCard.causeClassifierFallback",
-    label: "Fallback tier, LLM classifier failed",
-  },
-  default_model_fallback: {
-    labelKey: "viewLogs.routingDecisionCard.causeDefaultModelFallback",
-    label: "Default model, LLM classifier failed",
-  },
+const CONSTANT_CAUSE_LABELS: Record<string, string> = {
+  heuristic_scorer: "Heuristic scorer",
+  heuristic_v2: "Heuristic v2",
+  capability_classifier: "Capability",
+  capability_classifier_fallback: "Capable tier, Capability classifier failed",
+  llm_v2_classifier: "FUSE v2",
+  llm_v2_fallback: "Capable tier, FUSE v2 classifier failed",
+  heuristic_first_short_circuit: "Heuristic scorer, classifier skipped",
+  hybrid_short_circuit: "Heuristic scorer, score clear of every boundary",
+  classifier_plugin: "Custom classifier plugin",
+  semantic_keyword_match: "Semantic keyword match",
+  session_affinity_pin: "Pinned to session",
+  session_affinity_escalation: "Escalated from session pin",
+  user_turn_continuation: "Continuation turn, classifier skipped",
+  modality_escalation: "Escalated for image input",
+  modality_pin_override: "Overrode session pin for image input",
+  quality_tier: "Quality tier mapping",
+  bandit: "Adaptive bandit",
+  default_fallback: "Default model, no route matched",
+  classifier_fallback: "Fallback tier, classifier failed",
+  default_model_fallback: "Default model, classifier failed",
 };
 
-function describeCause(t: TFunction, decision: RoutingDecision): string {
+function describeCause(decision: RoutingDecision): string {
   const {
     cause,
     classifier_model: classifierModel,
@@ -205,32 +135,24 @@ function describeCause(t: TFunction, decision: RoutingDecision): string {
   } = decision;
 
   const constant = cause ? CONSTANT_CAUSE_LABELS[cause] : undefined;
-  if (constant) return t(constant.labelKey, { defaultValue: constant.label });
+  if (constant) return constant;
 
   switch (cause) {
     case "reasoning_override":
-      return describeReasoningOverride(t, tierLabel, overrideFloor);
+      return describeReasoningOverride(tierLabel, overrideFloor);
     case "llm_classifier":
-      return classifierModel
-        ? t("viewLogs.routingDecisionCard.classifierWithModel", {
-            model: classifierModel,
-            defaultValue: `LLM classifier (${classifierModel})`,
-          })
-        : t("viewLogs.routingDecisionCard.classifier", { defaultValue: "LLM classifier" });
+      return classifierModel ? `LLM classifier (${classifierModel})` : "LLM classifier";
+    case "jev_classifier":
+      return "OSS classifier";
     case "literal_keyword_match":
     case "keyword":
-      return matchedKeyword
-        ? t("viewLogs.routingDecisionCard.keywordMatchWithKeyword", {
-            keyword: matchedKeyword,
-            defaultValue: `Keyword match: "${matchedKeyword}"`,
-          })
-        : t("viewLogs.routingDecisionCard.keywordMatch", { defaultValue: "Keyword match" });
+      return matchedKeyword ? `Keyword match: "${matchedKeyword}"` : "Keyword match";
     case "plan_mode":
-      return describePlanModeFloor(t, matchedKeyword);
+      return describePlanModeFloor(matchedKeyword);
     case "housekeeping":
-      return describeHousekeeping(t, matchedKeyword);
+      return describeHousekeeping(matchedKeyword);
     default:
-      return cause ?? t("viewLogs.routingDecisionCard.unknownCause", { defaultValue: "Unknown" });
+      return cause ?? "Unknown";
   }
 }
 
@@ -240,22 +162,9 @@ function describeCause(t: TFunction, decision: RoutingDecision): string {
  * ordinary route; it just must not claim a bump that did not happen. Only called when
  * the request escalated or asked to, so there is no "did not escalate" case.
  */
-function describeEscalation(t: TFunction, escalated: boolean, keyword: string | undefined): string {
-  if (escalated)
-    return keyword
-      ? t("viewLogs.routingDecisionCard.escalatedWithKeyword", {
-          keyword,
-          defaultValue: `Yes, keyword "${keyword}"`,
-        })
-      : t("viewLogs.routingDecisionCard.escalatedYes", { defaultValue: "Yes" });
-  return keyword
-    ? t("viewLogs.routingDecisionCard.requestedWithKeyword", {
-        keyword,
-        defaultValue: `Requested via "${keyword}"; already at the highest tier`,
-      })
-    : t("viewLogs.routingDecisionCard.requestedNoKeyword", {
-        defaultValue: "Requested; already at the highest tier",
-      });
+function describeEscalation(escalated: boolean, keyword: string | undefined): string {
+  if (escalated) return keyword ? `Yes, keyword "${keyword}"` : "Yes";
+  return keyword ? `Requested via "${keyword}"; already at the highest tier` : "Requested; already at the highest tier";
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -267,6 +176,71 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
+function PercentageRow({ label, value, unit = "%" }: { label: string; value?: number; unit?: string }) {
+  if (value === undefined) return null;
+  return (
+    <Row label={label}>
+      <span className="tabular-nums">{`${(value * 100).toFixed(1)}${unit}`}</span>
+    </Row>
+  );
+}
+
+function CapabilityForecast({ decision }: { decision: RoutingDecision }) {
+  const {
+    classifier_p_solve: raw,
+    classifier_calibrated_p_solve: calibrated,
+    classifier_threshold: threshold,
+    classifier_capability_boundary: boundary,
+    classifier_primary_rule: rule,
+    classifier_calibration_version: version,
+  } = decision;
+  if ([raw, calibrated, threshold, boundary, rule].every((value) => value === undefined)) return null;
+
+  return (
+    <div className="mt-3 border-t pt-3">
+      <div className="mb-1 text-sm font-medium">Capability estimates</div>
+      <div className="mb-2 text-xs text-muted-foreground">Efficient model solve chance</div>
+      <PercentageRow label="Raw" value={raw} />
+      <PercentageRow label="Calibrated" value={calibrated} />
+      <PercentageRow label="Threshold" value={threshold} />
+      {boundary && <Row label="Boundary">{boundary}</Row>}
+      {rule && <Row label="Rule">{rule}</Row>}
+      {version && <Row label="Calibration">{version}</Row>}
+    </div>
+  );
+}
+
+function FuseV2Forecast({ decision }: { decision: RoutingDecision }) {
+  const {
+    classifier_efficient_p_solve: rawEfficient,
+    classifier_capable_p_solve: rawCapable,
+    classifier_calibrated_efficient_p_solve: calibratedEfficient,
+    classifier_calibrated_capable_p_solve: calibratedCapable,
+    classifier_max_quality_gap: allowedGap,
+    classifier_calibration_version: version,
+  } = decision;
+  if ([rawEfficient, rawCapable, calibratedEfficient, calibratedCapable, allowedGap].every((v) => v === undefined)) {
+    return null;
+  }
+  const isCalibrated = [calibratedEfficient, calibratedCapable, version].some((value) => value !== undefined);
+  const efficient = isCalibrated ? calibratedEfficient : rawEfficient;
+  const capable = isCalibrated ? calibratedCapable : rawCapable;
+  const gap = efficient !== undefined && capable !== undefined ? capable - efficient : undefined;
+
+  return (
+    <div className="mt-3 border-t pt-3">
+      <div className="mb-1 text-sm font-medium">FUSE v2 estimates</div>
+      <PercentageRow label="Efficient (raw)" value={rawEfficient} />
+      <PercentageRow label="Capable (raw)" value={rawCapable} />
+      <PercentageRow label="Efficient (calibrated)" value={calibratedEfficient} />
+      <PercentageRow label="Capable (calibrated)" value={calibratedCapable} />
+      <PercentageRow label="Applied gap" value={gap} unit=" percentage points" />
+      <PercentageRow label="Allowed gap" value={allowedGap} unit=" percentage points" />
+      {version && <Row label="Calibration">{version}</Row>}
+    </div>
+  );
+}
+
 export function RoutingDecisionCard({
   decision,
   className,
@@ -274,7 +248,6 @@ export function RoutingDecisionCard({
   decision?: RoutingDecision | null;
   className?: string;
 }) {
-  const { t } = useTranslation();
   if (!decision || !decision.cause) return null;
 
   const {
@@ -289,6 +262,7 @@ export function RoutingDecisionCard({
     escalated,
     escalation_keyword: escalationKeyword,
     tier_boundaries: tierBoundaries,
+    heuristic_v2_forecast: forecast,
   } = decision;
 
   // On an override row the score did not decide the tier, so showing it against a
@@ -296,14 +270,12 @@ export function RoutingDecisionCard({
   // inside `signals`, which redaction can remove.
   const scoreExplanation =
     score !== undefined && decision.cause !== "reasoning_override" && decision.cause !== "plan_mode"
-      ? describeScoreAgainstBoundaries(t, score, tierBoundaries, tierLabel !== undefined)
+      ? describeScoreAgainstBoundaries(score, tierBoundaries, tierLabel !== undefined)
       : null;
 
   return (
     <div className={cn("mb-6 w-full max-w-full overflow-hidden rounded-lg bg-card shadow-sm", className)}>
-      <div className="border-b px-4 py-2.5 text-sm font-medium">
-        {t("viewLogs.routingDecisionCard.title", { defaultValue: "Routing" })}
-      </div>
+      <div className="border-b px-4 py-2.5 text-sm font-medium">Routing</div>
       <div className="px-4 py-3">
         {routerModelName && (
           <div className="mb-2 flex items-center gap-2 text-sm font-medium">
@@ -311,55 +283,74 @@ export function RoutingDecisionCard({
             <span>{routerModelName}</span>
             {routerType && (
               <span className="font-normal text-muted-foreground">
-                (
-                {t(ROUTER_TYPE_LABEL_KEYS[routerType] ?? "", {
-                  defaultValue: ROUTER_TYPE_LABELS[routerType] ?? routerType,
-                })}
-                )
+                ({ROUTER_TYPE_LABELS[routerType] ?? routerType})
               </span>
             )}
           </div>
         )}
 
         {tier && (
-          <Row label={t("viewLogs.routingDecisionCard.labelTier", { defaultValue: "Tier" })}>
+          <Row label="Tier">
             <Badge variant="secondary" className="font-normal">
               {tierLabel ?? tier}
             </Badge>
           </Row>
         )}
 
-        {requestType && (
-          <Row label={t("viewLogs.routingDecisionCard.labelRequestType", { defaultValue: "Request type" })}>
-            {requestType}
+        {requestType && <Row label="Request type">{requestType}</Row>}
+
+        <Row label="Decided by">{describeCause(decision)}</Row>
+        {decision.classifier_model && <Row label="Classifier model">{decision.classifier_model}</Row>}
+        {decision.classifier_confidence != null && (
+          <Row label="Confidence">{(decision.classifier_confidence * 100).toFixed(1)}%</Row>
+        )}
+        {decision.classifier_probabilities && (
+          <Row label="Probabilities">
+            {Object.entries(decision.classifier_probabilities).map(([name, probability]) => (
+              <div key={name}>
+                {name}: {(probability * 100).toFixed(1)}%
+              </div>
+            ))}
           </Row>
         )}
-
-        <Row label={t("viewLogs.routingDecisionCard.labelDecidedBy", { defaultValue: "Decided by" })}>
-          {describeCause(t, decision)}
-        </Row>
+        {decision.classifier_cost != null && <Row label="Classifier cost">${decision.classifier_cost.toFixed(8)}</Row>}
 
         {score !== undefined && (
-          <Row label={t("viewLogs.routingDecisionCard.labelScore", { defaultValue: "Score" })}>
+          <Row label="Score">
             <span className="tabular-nums">{score.toFixed(2)}</span>
             {scoreExplanation && <span className="ml-2 text-muted-foreground">({scoreExplanation})</span>}
           </Row>
         )}
 
-        {routedModel && (
-          <Row label={t("viewLogs.routingDecisionCard.labelRoutedTo", { defaultValue: "Routed to" })}>
-            {routedModel}
-          </Row>
+        {routedModel && <Row label="Routed to">{routedModel}</Row>}
+
+        {escalated !== undefined && <Row label="Escalated">{describeEscalation(escalated, escalationKeyword)}</Row>}
+
+        {forecast && (
+          <div className="mt-3 border-t pt-3">
+            <div className="mb-1 text-sm font-medium">Heuristic v2 estimates</div>
+            <Row label="Success by tier">
+              <span className="flex flex-wrap gap-1">
+                {["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"].map((predictedTier) => (
+                  <Badge key={predictedTier} variant="outline" className="font-normal tabular-nums">
+                    {predictedTier} {(forecast.probabilities[predictedTier] * 100).toFixed(1)}%
+                  </Badge>
+                ))}
+              </span>
+            </Row>
+            <Row label="Threshold">
+              <span className="tabular-nums">{(forecast.threshold * 100).toFixed(1)}%</span>
+            </Row>
+            <Row label="Predicted tier">{forecast.predicted_tier}</Row>
+            <Row label="Request type">{forecast.request_type}</Row>
+          </div>
         )}
 
-        {escalated !== undefined && (
-          <Row label={t("viewLogs.routingDecisionCard.labelEscalated", { defaultValue: "Escalated" })}>
-            {describeEscalation(t, escalated, escalationKeyword)}
-          </Row>
-        )}
+        <CapabilityForecast decision={decision} />
+        <FuseV2Forecast decision={decision} />
 
         {signals && signals.length > 0 && (
-          <Row label={t("viewLogs.routingDecisionCard.labelSignals", { defaultValue: "Signals" })}>
+          <Row label="Signals">
             <span className="flex flex-wrap gap-1">
               {signals.map((signal) => (
                 <Badge key={signal} variant="outline" className="font-normal">

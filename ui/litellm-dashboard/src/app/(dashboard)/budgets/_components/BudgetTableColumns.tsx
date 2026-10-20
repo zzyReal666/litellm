@@ -1,9 +1,7 @@
 "use client";
 
 import { ColumnDef, FilterFn } from "@tanstack/react-table";
-import { TFunction } from "i18next";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdCell, MoneyCell } from "@/components/shared/table_cells";
@@ -29,27 +27,17 @@ const serverFilter: FilterFn<budgetItem> = () => true;
 serverFilter.autoRemove = () => false;
 
 function RateLimitCell({ value }: { value: number | null | undefined }) {
-  const { t } = useTranslation();
   if (value == null) {
-    return (
-      <span className="text-muted-foreground">
-        {t("commonComponents.rateLimitCell.notAvailable", { defaultValue: "n/a" })}
-      </span>
-    );
+    return <span className="text-muted-foreground">n/a</span>;
   }
   return <span className="tabular-nums">{value}</span>;
 }
 
 function BudgetDurationCell({ value }: { value: string | null | undefined }) {
-  const { t } = useTranslation();
   if (!value) {
-    return (
-      <span className="text-muted-foreground">
-        {t("defaultUserSettings.displayValues.notSet", { defaultValue: "Not set" })}
-      </span>
-    );
+    return <span className="text-muted-foreground">Not set</span>;
   }
-  return <span className="whitespace-nowrap">{getBudgetDurationLabel(value, t)}</span>;
+  return <span className="whitespace-nowrap">{getBudgetDurationLabel(value)}</span>;
 }
 
 interface BudgetRowActionsProps {
@@ -59,11 +47,10 @@ interface BudgetRowActionsProps {
 }
 
 function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActionsProps) {
-  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("budgetsPage.budgetTableColumns.openBudgetActions", { defaultValue: "Open budget actions" })}
+        aria-label="Open budget actions"
         data-testid={`budget-actions-${budget.budget_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -72,7 +59,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="budget-action-edit" onClick={() => onEditClick(budget)}>
           <Pencil />
-          {t("budgets.budgetPanel.editBudgetTooltip", { defaultValue: "Edit budget" })}
+          Edit budget
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -81,7 +68,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
           onClick={() => onDeleteClick(budget)}
         >
           <Trash2 />
-          {t("budgets.budgetPanel.deleteBudgetTooltip", { defaultValue: "Delete budget" })}
+          Delete budget
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -98,25 +85,18 @@ interface BudgetTableColumnsDeps {
   canModify: boolean;
   onEditClick: (budget: budgetItem) => void;
   onDeleteClick: (budget: budgetItem) => void;
-  t: TFunction;
 }
 
 export const getBudgetTableColumns = ({
   canModify,
   onEditClick,
   onDeleteClick,
-  t,
 }: BudgetTableColumnsDeps): ColumnDef<budgetItem>[] => [
   {
     id: "budget_id",
     accessorKey: "budget_id",
-    meta: { title: t("budgets.budgetModal.budgetIdLabel", { defaultValue: "Budget ID" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("budgets.budgetModal.budgetIdLabel", { defaultValue: "Budget ID" })}
-      />
-    ),
+    meta: { title: "Budget ID" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Budget ID" />,
     cell: ({ row }) => (
       <IdCell value={row.original.budget_id} variant="plain" truncate={false} copyable className="whitespace-nowrap" />
     ),
@@ -125,40 +105,24 @@ export const getBudgetTableColumns = ({
     id: "max_budget",
     accessorKey: "max_budget",
     filterFn: serverFilter,
-    meta: { title: t("budgets.budgetPanel.colMaxBudget", { defaultValue: "Max Budget" }), numeric: true },
-    header: ({ column }) => (
-      <DataTableSortHeader
-        column={column}
-        title={t("budgets.budgetPanel.colMaxBudget", { defaultValue: "Max Budget" })}
-      />
-    ),
+    meta: { title: "Max Budget", numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Max Budget" />,
     size: 120,
-    cell: ({ row }) => (
-      <MoneyCell
-        value={row.original.max_budget}
-        decimals={2}
-        showZero
-        emptyText={t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })}
-      />
-    ),
+    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={2} showZero emptyText="Unlimited" />,
   },
   {
     id: "tpm_limit",
     accessorKey: "tpm_limit",
-    meta: { title: t("budgets.budgetPanel.colTpm", { defaultValue: "TPM" }), numeric: true },
-    header: ({ column }) => (
-      <DataTableSortHeader column={column} title={t("budgets.budgetPanel.colTpm", { defaultValue: "TPM" })} />
-    ),
+    meta: { title: "TPM", numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title="TPM" />,
     size: 100,
     cell: ({ row }) => <RateLimitCell value={row.original.tpm_limit} />,
   },
   {
     id: "rpm_limit",
     accessorKey: "rpm_limit",
-    meta: { title: t("budgets.budgetPanel.colRpm", { defaultValue: "RPM" }), numeric: true },
-    header: ({ column }) => (
-      <DataTableSortHeader column={column} title={t("budgets.budgetPanel.colRpm", { defaultValue: "RPM" })} />
-    ),
+    meta: { title: "RPM", numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title="RPM" />,
     size: 100,
     cell: ({ row }) => <RateLimitCell value={row.original.rpm_limit} />,
   },
@@ -174,12 +138,10 @@ export const getBudgetTableColumns = ({
     id: "budget_duration",
     accessorKey: "budget_duration",
     filterFn: serverFilter,
-    meta: { title: t("common.reset", { defaultValue: "Reset" }) },
+    meta: { title: "Reset" },
     // "7d"/"30d" sort lexicographically, not chronologically, so the route does not offer it.
     enableSorting: false,
-    header: ({ column }) => (
-      <DataTableSortHeader column={column} title={t("common.reset", { defaultValue: "Reset" })} />
-    ),
+    header: ({ column }) => <DataTableSortHeader column={column} title="Reset" />,
     size: 110,
     cell: ({ row }) => <BudgetDurationCell value={row.original.budget_duration} />,
   },
@@ -187,10 +149,8 @@ export const getBudgetTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     filterFn: serverFilter,
-    meta: { title: t("oldTeams.columns.created", { defaultValue: "Created" }) },
-    header: ({ column }) => (
-      <DataTableSortHeader column={column} title={t("oldTeams.columns.created", { defaultValue: "Created" })} />
-    ),
+    meta: { title: "Created" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
     size: 160,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
   },
@@ -199,7 +159,7 @@ export const getBudgetTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">{t("common.actions", { defaultValue: "Actions" })}</span>,
+          header: () => <span className="sr-only">Actions</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

@@ -6,8 +6,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "next-themes";
 
 import { AuthProvider } from "@/contexts/AuthContext";
-import { I18nInit } from "@/contexts/I18nInit";
 import ReactQueryProvider from "@/contexts/ReactQueryProvider";
+import HotkeysProvider from "@/contexts/HotkeysProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,9 +31,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <NuqsAdapter>
             <ReactQueryProvider>
-              <I18nInit>
+              <HotkeysProvider>
                 <AuthProvider>{children}</AuthProvider>
-              </I18nInit>
+              </HotkeysProvider>
               <Toaster />
             </ReactQueryProvider>
           </NuqsAdapter>

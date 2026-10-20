@@ -7,19 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Upload as UploadIcon } from "lucide-react";
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { requiredRule } from "../common_components/formRules";
 import {
   MountedFormField,
   type MountedFieldControlProps,
   type MountedFormValues,
 } from "../common_components/MountedFormField";
-import { CredentialItem, ProviderCredentialFieldMetadata } from "../networking";
-import { provider_map, Providers } from "../provider_info_helpers";
+import { ProviderCredentialFieldMetadata } from "../networking";
+import { Providers } from "../provider_info_helpers";
 import { labelWithHint } from "@/components/shared/form/LabelWithHint";
+import type { ProviderFieldValidators } from "../model_add/credential_federation";
 
 interface ProviderSpecificFieldsProps {
   selectedProvider: string | null;
+  hiddenFieldKeys?: readonly string[];
+  fieldValidators?: ProviderFieldValidators;
 }
 
 const readTextFile = (file: File, onLoaded: (contents: string) => void) => {
@@ -41,11 +43,6 @@ interface ProviderCredentialField {
   type?: "text" | "password" | "select" | "upload" | "textarea";
   options?: string[];
   defaultValue?: string;
-}
-
-export interface CredentialValues {
-  key: string;
-  value: string;
 }
 
 const getApiVersionFromApiBase = (apiBase: string): string | null => {
@@ -84,42 +81,13 @@ const mapFieldMetadataToUiField = (field: ProviderCredentialFieldMetadata): Prov
   };
 };
 
-// In-memory cache of provider credential fields keyed by provider display name.
-// This lets us reuse the data across multiple mounts and also supports
-// non-React helpers like createCredentialFromModel.
 const providerFieldsByDisplayName: Record<string, ProviderCredentialField[]> = {};
 
-export const createCredentialFromModel = (provider: string, modelData: any): CredentialItem => {
-  const enumKey = Object.keys(provider_map).find((key) => provider_map[key].toLowerCase() === provider.toLowerCase());
-  if (!enumKey) {
-    throw new Error(`Provider ${provider} not found in provider_map`);
-  }
-  const providerDisplayName = Providers[enumKey as keyof typeof Providers];
-  const providerFields = providerFieldsByDisplayName[providerDisplayName] || [];
-  const credentialValues: object = {};
-
-  // Go through each field defined for this provider
-  providerFields.forEach((field) => {
-    const value = modelData.litellm_params[field.key];
-    if (value !== undefined) {
-      (credentialValues as Record<string, string>)[field.key] = value.toString();
-    }
-  });
-
-  const credential: CredentialItem = {
-    credential_name: `${provider}-credential-${Math.floor(Math.random() * 1000000)}`,
-    credential_values: credentialValues,
-    credential_info: {
-      custom_llm_provider: provider,
-      description: `Credential for ${provider}. Created from model ${modelData.model_name}`,
-    },
-  };
-
-  return credential;
-};
-
-const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selectedProvider }) => {
-  const { t } = useTranslation();
+const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
+  selectedProvider,
+  hiddenFieldKeys,
+  fieldValidators,
+}) => {
   const selectedProviderEnum = Providers[selectedProvider as keyof typeof Providers] as Providers;
   const form = useFormContext<MountedFormValues>();
   const credentialsFileRef = React.useRef<HTMLInputElement>(null);
@@ -169,7 +137,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selecte
     Object.assign(providerFieldsByDisplayName, cacheEntries);
   }, [cacheEntries]);
 
-  const allFields = React.useMemo(() => {
+  const providerFields = React.useMemo(() => {
     if (selectedProvider === null) return [];
     // First try to resolve from the in-memory cache. We support both the
     // enum/display-name form and the raw provider slug (e.g. "petals").
@@ -203,6 +171,11 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selecte
     }
     return mapped;
   }, [selectedProviderEnum, selectedProvider, providerMetadata]);
+
+  const allFields = React.useMemo(
+    () => (hiddenFieldKeys ? providerFields.filter((field) => !hiddenFieldKeys.includes(field.key)) : providerFields),
+    [providerFields, hiddenFieldKeys],
+  );
 
   const hasApiVersionField = React.useMemo(() => allFields.some((field) => field.key === "api_version"), [allFields]);
   const lastInferredApiVersionRef = React.useRef<string | null>(null);
@@ -255,7 +228,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selecte
         <>
           <Button type="button" variant="outline" className="w-fit" onClick={() => credentialsFileRef.current?.click()}>
             <UploadIcon />
-            {t("addModel.providerSpecificFields.clickToUpload", { defaultValue: "Click to Upload" })}
+            Click to Upload
           </Button>
           <input
             ref={credentialsFileRef}
@@ -318,37 +291,24 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selecte
 
   return (
     <>
-      {isLoading && allFields.length === 0 && (
-        <p className="text-sm mb-2">
-          {t("addModel.providerSpecificFields.loadingFields", { defaultValue: "Loading provider fields..." })}
-        </p>
-      )}
+      {isLoading && allFields.length === 0 && <p className="text-sm mb-2">Loading provider fields...</p>}
       {loadError && allFields.length === 0 && (
         <p className="text-sm mb-2 text-destructive">
-          {loadError instanceof Error
-            ? loadError.message
-            : t("addModel.providerSpecificFields.loadFailed", {
-                defaultValue: "Failed to load provider credential fields",
-              })}
+          {loadError instanceof Error ? loadError.message : "Failed to load provider credential fields"}
         </p>
       )}
       {allFields.map((field) => (
-        <React.Fragment key={field.key}>
+        <React.Fragment key={`${selectedProvider}:${field.key}`}>
           <MountedFormField
             label={field.tooltip ? labelWithHint(field.label, field.tooltip) : field.label}
             name={field.key}
             required={field.required}
-            rules={
-              field.required
-                ? {
-                    validate: {
-                      required: requiredRule(
-                        t("addModel.providerSpecificFields.required", { defaultValue: "Required" }),
-                      ),
-                    },
-                  }
-                : undefined
-            }
+            rules={{
+              validate: {
+                ...(field.required ? { required: requiredRule("Required") } : {}),
+                ...(fieldValidators?.[field.key] ? { provider: fieldValidators[field.key] } : {}),
+              },
+            }}
             className={field.key === "vertex_credentials" ? "mb-0" : "mb-4"}
           >
             {(control) => renderFieldControl(field, control)}
@@ -356,28 +316,21 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({ selecte
 
           {/* Special case for Vertex Credentials help text */}
           {field.key === "vertex_credentials" && (
-            <p className="text-sm mb-3 mt-1">
-              {t("addModel.providerSpecificFields.vertexCredentialsHelp", {
-                defaultValue: "Give a gcp service account(.json file)",
-              })}
-            </p>
+            <p className="text-sm mb-3 mt-1">Give a gcp service account(.json file)</p>
           )}
 
           {/* Special case for Azure Base Model help text */}
           {field.key === "base_model" && (
             <div className="grid grid-cols-24">
               <p className="col-start-11 col-span-10 text-sm mb-2">
-                {t("addModel.providerSpecificFields.baseModelHelp", {
-                  defaultValue:
-                    "The actual model your azure deployment uses. Used for accurate cost tracking. Select name from",
-                })}{" "}
+                The actual model your azure deployment uses. Used for accurate cost tracking. Select name from{" "}
                 <a
                   href="https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline-offset-4 hover:underline"
                 >
-                  {t("addModel.providerSpecificFields.baseModelHelpLink", { defaultValue: "here" })}
+                  here
                 </a>
               </p>
             </div>
