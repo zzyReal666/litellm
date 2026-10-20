@@ -114,7 +114,7 @@ describe("HomePage", () => {
   it("shows the usage totals from the daily activity API and links Create New Virtual Key to the key creation flow", async () => {
     renderHome();
     expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeInTheDocument();
-    expect(await screen.findByText("$501.74")).toBeInTheDocument();
+    expect(await screen.findByText("¥501.74")).toBeInTheDocument();
     expect(screen.getByText("5,118")).toBeInTheDocument();
     expect(screen.getByText("98.6M")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /create new virtual key/i })).toHaveAttribute(
@@ -134,9 +134,9 @@ describe("HomePage", () => {
     network.aggregated.mockRejectedValueOnce(new Error("boom"));
     renderHome();
     expect(await screen.findByText("Failed to load usage")).toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Retry" }));
-    expect(await screen.findByText("$501.74")).toBeInTheDocument();
+    expect(await screen.findByText("¥501.74")).toBeInTheDocument();
     expect(network.aggregated).toHaveBeenCalledTimes(2);
   });
 

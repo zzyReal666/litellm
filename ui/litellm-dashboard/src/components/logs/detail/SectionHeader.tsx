@@ -63,7 +63,7 @@ export function SectionHeader({
 
       {cost !== undefined && (
         <span className="text-xs text-muted-foreground">
-          {t("viewLogs.sectionHeader.cost", { amount: cost.toFixed(6), defaultValue: `Cost: $${cost.toFixed(6)}` })}
+          {t("viewLogs.sectionHeader.cost", { amount: cost.toFixed(6), defaultValue: `Cost: ¥${cost.toFixed(6)}` })}
         </span>
       )}
 

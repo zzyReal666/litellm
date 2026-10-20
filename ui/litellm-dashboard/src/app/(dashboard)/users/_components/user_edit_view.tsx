@@ -291,7 +291,7 @@ export function UserEditView({
             name="max_budget"
             label={
               <>
-                Max Budget (USD)
+                Max Budget (CNY)
                 <label className="ml-3 inline-flex items-center gap-2 font-normal">
                   <Checkbox checked={unlimitedBudget} onCheckedChange={handleUnlimitedBudgetChange} />
                   Unlimited Budget

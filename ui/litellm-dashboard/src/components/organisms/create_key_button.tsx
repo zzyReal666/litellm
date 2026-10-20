@@ -980,17 +980,17 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                         className="mt-4"
                         label={
                           <span>
-                            Max Budget (USD){" "}
-                            <SimpleTooltip content="Maximum amount in USD this key can spend. When reached, the key will be blocked from making further requests">
+                            Max Budget (CNY){" "}
+                            <SimpleTooltip content="Maximum amount in CNY this key can spend. When reached, the key will be blocked from making further requests">
                               <Info className="ml-1 inline size-3.5 align-text-bottom" />
                             </SimpleTooltip>
                           </span>
                         }
                         name="max_budget"
-                        help={`Budget cannot exceed team max budget: $${team?.max_budget !== null && team?.max_budget !== undefined ? team?.max_budget : "unlimited"}`}
+                        help={`Budget cannot exceed team max budget: ¥${team?.max_budget !== null && team?.max_budget !== undefined ? team?.max_budget : "unlimited"}`}
                         rules={ceilingRule(
                           team?.max_budget,
-                          (limit) => `Budget cannot exceed team max budget: $${formatNumberWithCommas(limit, 4)}`,
+                          (limit) => `Budget cannot exceed team max budget: ¥${formatNumberWithCommas(limit, 4)}`,
                         )}
                       >
                         {(control) => (
@@ -1030,7 +1030,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                         <FieldLabel>
                           <span>
                             Budget Windows{" "}
-                            <SimpleTooltip content="Set multiple independent budget windows (e.g., hourly $10 AND monthly $200). Each window tracks spend separately and resets on its own schedule.">
+                            <SimpleTooltip content="Set multiple independent budget windows (e.g., hourly ¥10 AND monthly ¥200). Each window tracks spend separately and resets on its own schedule.">
                               <Info className="ml-1 inline size-3.5 align-text-bottom" />
                             </SimpleTooltip>
                           </span>

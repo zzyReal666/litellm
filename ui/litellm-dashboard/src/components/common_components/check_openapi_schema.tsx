@@ -90,7 +90,7 @@ const getFieldHelp = (key: string, property: SchemaProperty, type: string, t: TF
   const specificHelp: { [key: string]: { key: string; defaultValue: string } } = {
     max_budget: {
       key: "commonComponents.checkOpenapiSchema.helpMaxBudget",
-      defaultValue: "Enter maximum budget in USD (e.g., 100.50)",
+      defaultValue: "Enter maximum budget in CNY (e.g., 100.50)",
     },
     budget_duration: {
       key: "commonComponents.checkOpenapiSchema.helpBudgetDuration",

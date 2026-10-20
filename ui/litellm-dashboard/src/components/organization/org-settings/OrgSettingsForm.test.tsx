@@ -109,7 +109,7 @@ describe("OrgSettingsForm", () => {
     const user = userEvent.setup();
     const { patchOrganization } = renderForm();
 
-    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (USD)");
+    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (CNY)");
     await user.clear(budget);
     fireEvent.change(budget, { target: { value: "0.001" } });
 

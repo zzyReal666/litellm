@@ -235,12 +235,12 @@ export function ProjectBaseForm({ form, advancedOpen, onAdvancedOpenChange }: Pr
           <FormField
             control={form.control}
             name="max_budget"
-            label={t("projects.projectBaseForm.maxBudgetLabel", { defaultValue: "Max Budget (USD)" })}
+            label={t("projects.projectBaseForm.maxBudgetLabel", { defaultValue: "Max Budget (CNY)" })}
           >
             {({ ref, value, onChange, ...field }) => (
               <InputGroup>
                 <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
+                  <InputGroupText>¥</InputGroupText>
                 </InputGroupAddon>
                 <InputGroupInput
                   {...field}

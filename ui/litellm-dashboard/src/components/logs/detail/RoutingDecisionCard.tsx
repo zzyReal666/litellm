@@ -313,7 +313,7 @@ export function RoutingDecisionCard({
             ))}
           </Row>
         )}
-        {decision.classifier_cost != null && <Row label="Classifier cost">${decision.classifier_cost.toFixed(8)}</Row>}
+        {decision.classifier_cost != null && <Row label="Classifier cost">¥{decision.classifier_cost.toFixed(8)}</Row>}
 
         {score !== undefined && (
           <Row label="Score">

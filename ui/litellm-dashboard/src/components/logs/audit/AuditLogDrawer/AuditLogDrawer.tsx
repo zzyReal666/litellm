@@ -145,12 +145,12 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
               )}
               {value.spend !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">Spend:</span> ${Number(value.spend).toFixed(6)}
+                  <span className="text-muted-foreground">Spend:</span> ¥{Number(value.spend).toFixed(6)}
                 </p>
               )}
               {value.max_budget !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">Max Budget:</span> ${Number(value.max_budget).toFixed(6)}
+                  <span className="text-muted-foreground">Max Budget:</span> ¥{Number(value.max_budget).toFixed(6)}
                 </p>
               )}
             </div>

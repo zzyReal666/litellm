@@ -186,12 +186,12 @@ const AddMarginForm: React.FC<AddMarginFormProps> = ({
               {labelWithHint(
                 t("costTracking.addMarginForm.fixedAmountLabel", { defaultValue: "Fixed Margin Amount" }),
                 t("costTracking.addMarginForm.fixedAmountTooltip", {
-                  defaultValue: "Enter a fixed amount in USD (e.g., 0.001 for $0.001 per request)",
+                  defaultValue: "Enter a fixed amount in CNY (e.g., 0.001 for ¥0.001 per request)",
                 }),
               )}
             </FieldLabel>
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">$</span>
+              <span className="text-muted-foreground">¥</span>
               <Input
                 id="margin-fixed-amount"
                 placeholder="0.001"

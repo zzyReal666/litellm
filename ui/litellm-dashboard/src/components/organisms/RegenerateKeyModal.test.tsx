@@ -95,7 +95,7 @@ describe("RegenerateKeyModal", () => {
   it("should render form fields for budget and rate limits", () => {
     renderWithProviders(<RegenerateKeyModal {...defaultProps} />);
 
-    expect(screen.getByText("Max Budget (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Max Budget (CNY)")).toBeInTheDocument();
     expect(screen.getByText("TPM Limit")).toBeInTheDocument();
     expect(screen.getByText("RPM Limit")).toBeInTheDocument();
   });

@@ -58,7 +58,7 @@ interface PtuEditField {
 
 const PTU_EDIT_FIELDS: PtuEditField[] = [
   { name: PTU_COUNT_FIELD, label: "PTU Count", input: "number", placeholder: "e.g. 15", isCount: true },
-  { name: PTU_RATE_FIELD, label: "Cost per PTU / Hour (USD)", input: "number", placeholder: "e.g. 2.00" },
+  { name: PTU_RATE_FIELD, label: "Cost per PTU / Hour (CNY)", input: "number", placeholder: "e.g. 2.00" },
   { name: PTU_START_FIELD, label: "PTU Effective From (UTC)", input: "datetime" },
   { name: PTU_END_FIELD, label: "PTU Effective To (UTC)", input: "datetime" },
 ];

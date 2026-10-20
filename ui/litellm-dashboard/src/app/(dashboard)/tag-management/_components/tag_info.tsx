@@ -128,9 +128,9 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
             <FormField
               control={form.control}
               name="max_budget"
-              label={t("tagManagement.tagInfo.maxBudgetLabel", { defaultValue: "Max Budget (USD)" })}
+              label={t("tagManagement.tagInfo.maxBudgetLabel", { defaultValue: "Max Budget (CNY)" })}
               description={t("tagManagement.tagInfo.maxBudgetTooltip", {
-                defaultValue: "Maximum amount in USD this tag can spend",
+                defaultValue: "Maximum amount in CNY this tag can spend",
               })}
             >
               {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -377,7 +377,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                         <p className="font-medium">
                           {t("tagManagement.tagInfo.maxBudget", { defaultValue: "Max Budget" })}
                         </p>
-                        <p>${tagDetails.litellm_budget_table.max_budget}</p>
+                        <p>¥{tagDetails.litellm_budget_table.max_budget}</p>
                       </div>
                     )}
                   {tagDetails.litellm_budget_table.budget_duration && (

@@ -69,7 +69,7 @@ export const keyOwnerBudgetSource = (
 ): UserBudgetSource | null => (!key.team_id || applyUserBudgetToTeamKeys ? key.user ?? null : null);
 
 const formatGate = (gate: InheritedBudgetGate): string =>
-  `${gate.scope} ${gate.alias}: $${formatNumberWithCommas(gate.maxBudget, 2)}${gate.budgetDuration ? ` / ${gate.budgetDuration}` : ""}`;
+  `${gate.scope} ${gate.alias}: ¥${formatNumberWithCommas(gate.maxBudget, 2)}${gate.budgetDuration ? ` / ${gate.budgetDuration}` : ""}`;
 
 interface InheritedBudgetHintProps {
   gates: readonly InheritedBudgetGate[];

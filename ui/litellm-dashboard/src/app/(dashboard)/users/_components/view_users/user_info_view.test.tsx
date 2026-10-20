@@ -175,8 +175,8 @@ describe("UserInfoView", () => {
 
     render(<UserInfoView {...defaultProps} />);
 
-    expect(await screen.findByText("$98.85")).toBeInTheDocument();
-    expect(screen.getByText(/of \$3,000,000\.00/)).toBeInTheDocument();
+    expect(await screen.findByText("¥98.85")).toBeInTheDocument();
+    expect(screen.getByText(/of ¥3,000,000\.00/)).toBeInTheDocument();
   });
 
   it("should render teams in a table with team names", async () => {
@@ -322,7 +322,7 @@ describe("UserInfoView", () => {
     expect(await screen.findByText("list_issues")).toBeInTheDocument();
 
     await user.click(screen.getByRole("tab", { name: "Overview" }));
-    expect(await screen.findByText(/of \$100\.00/)).toBeVisible();
+    expect(await screen.findByText(/of ¥100\.00/)).toBeVisible();
     await user.click(screen.getByRole("tab", { name: "Details" }));
 
     expect(screen.getByText("list_issues")).toBeVisible();

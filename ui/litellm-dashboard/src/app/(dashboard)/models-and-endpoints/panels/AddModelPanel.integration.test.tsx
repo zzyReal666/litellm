@@ -460,7 +460,7 @@ describe("AddModelPanel validation gates", () => {
     await fillRequired();
     await openAdvanced();
     await user.type(screen.getByLabelText("PTU Count"), "15");
-    await user.type(screen.getByLabelText("Calculated Cost per PTU / Hour (USD)"), "2");
+    await user.type(screen.getByLabelText("Calculated Cost per PTU / Hour (CNY)"), "2");
     await submitExpectingRejection("PTU Effective From is required when PTU Count is set");
 
     expect(modelCreateCall).not.toHaveBeenCalled();

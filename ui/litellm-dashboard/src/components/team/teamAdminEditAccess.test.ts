@@ -12,7 +12,7 @@ describe("teamAdminFieldLabel", () => {
   it.each([
     ["tpm_limit", "Tokens per minute Limit (TPM)"],
     ["rpm_limit", "Requests per minute Limit (RPM)"],
-    ["max_budget", "Max Budget (USD)"],
+    ["max_budget", "Max Budget (CNY)"],
     ["projects", "Create and update projects"],
   ])("names %s the way the team settings form does", (field, label) => {
     expect(teamAdminFieldLabel(field)).toBe(label);

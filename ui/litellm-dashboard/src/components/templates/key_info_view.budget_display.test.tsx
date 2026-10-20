@@ -13,7 +13,7 @@ import type { Organization } from "../networking";
 // IMPORTANT: do not mock `@/utils/dataUtils` here. We want to exercise the
 // real `formatNumberWithCommas` so this test catches the LIT-2845 regression
 // where the overview "Spend" card formatted `max_budget` with the default 0
-// decimals, truncating sub-dollar budgets (e.g. $0.10) to "$0".
+// decimals, truncating sub-dollar budgets (e.g. ¥0.10) to "¥0".
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
@@ -185,7 +185,7 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
     vi.mocked(useApplyUserBudgetToTeamKeys).mockReturnValue(false);
   });
 
-  it("renders a sub-dollar max_budget ($0.10) with 2-decimal precision in the overview Spend card", async () => {
+  it("renders a sub-dollar max_budget (¥0.10) with 2-decimal precision in the overview Spend card", async () => {
     renderWithProviders(
       <KeyInfoView
         keyData={{ ...MOCK_KEY_DATA, max_budget: 0.1 }}
@@ -198,12 +198,12 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
 
     // Regression for LIT-2845: the overview card used to call
     // `formatNumberWithCommas(max_budget)` with no second arg, which
-    // defaults to 0 decimals — so $0.10 rendered as "$0".
-    // After the fix it must render "$0.10".
+    // defaults to 0 decimals — so ¥0.10 rendered as "¥0".
+    // After the fix it must render "¥0.10".
     await waitFor(() => {
-      expect(screen.getByText(/of \$0\.10/)).toBeInTheDocument();
+      expect(screen.getByText(/of ¥0\.10/)).toBeInTheDocument();
     });
-    expect(screen.queryByText(/of \$0$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/of ¥0$/)).not.toBeInTheDocument();
   });
 
   it("still renders whole-dollar max_budget with 2-decimal precision", async () => {
@@ -217,8 +217,8 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       />,
     );
     await waitFor(() => {
-      // 2-decimal formatting -> "$100.00"
-      expect(screen.getByText(/of \$100\.00/)).toBeInTheDocument();
+      // 2-decimal formatting -> "¥100.00"
+      expect(screen.getByText(/of ¥100\.00/)).toBeInTheDocument();
     });
   });
 
@@ -254,10 +254,10 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
     await waitFor(() => {
       expect(screen.getByText(/of Unlimited/)).toBeInTheDocument();
     });
-    expect(screen.queryByText(/of \$1,200\.00/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/of ¥1,200\.00/)).not.toBeInTheDocument();
     expect(screen.queryByText(/\(Team: Test Budget/)).not.toBeInTheDocument();
     await userEvent.setup().hover(screen.getByLabelText("question-circle"));
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: $1,200.00 / 30d");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: ¥1,200.00 / 30d");
   });
 
   it("lists the organization budget in the hint when the team's org has one", async () => {
@@ -279,7 +279,7 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       expect(screen.getByText(/of Unlimited/)).toBeInTheDocument();
     });
     await userEvent.setup().hover(screen.getByLabelText("question-circle"));
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Organization Acme Org: $5,000.00");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Organization Acme Org: ¥5,000.00");
     expect(screen.getByTestId("inherited-budget-hint")).not.toHaveTextContent("Team Org Team");
   });
 
@@ -310,7 +310,7 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       expect(screen.getByText(/of Unlimited/)).toBeInTheDocument();
     });
     await userEvent.setup().hover(screen.getByLabelText("question-circle"));
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("User Budget Owner: $1,500.00 / 1mo");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("User Budget Owner: ¥1,500.00 / 1mo");
   });
 
   it("omits the owner's user budget from the hint for a team key when apply_user_budget_to_team_keys is off", async () => {
@@ -331,7 +331,7 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       expect(screen.getByText(/of Unlimited/)).toBeInTheDocument();
     });
     await userEvent.setup().hover(screen.getByLabelText("question-circle"));
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: $1,200.00 / 30d");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: ¥1,200.00 / 30d");
     expect(screen.getByTestId("inherited-budget-hint")).not.toHaveTextContent("User Budget Owner");
   });
 
@@ -354,8 +354,8 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       expect(screen.getByText(/of Unlimited/)).toBeInTheDocument();
     });
     await userEvent.setup().hover(screen.getByLabelText("question-circle"));
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: $1,200.00 / 30d");
-    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("User Budget Owner: $1,500.00 / 1mo");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("Team Test Budget: ¥1,200.00 / 30d");
+    expect(screen.getByTestId("inherited-budget-hint")).toHaveTextContent("User Budget Owner: ¥1,500.00 / 1mo");
   });
 
   it("renders 'Unlimited' with no hint when neither key, team, nor org has a budget", async () => {
@@ -393,7 +393,7 @@ describe("KeyInfoView overview budget display (LIT-2845)", () => {
       />,
     );
     await waitFor(() => {
-      expect(screen.getByText(/of \$25\.00/)).toBeInTheDocument();
+      expect(screen.getByText(/of ¥25\.00/)).toBeInTheDocument();
     });
     expect(screen.queryByLabelText("question-circle")).not.toBeInTheDocument();
   });
@@ -439,7 +439,7 @@ describe("KeyInfoView budget reset visibility", () => {
       />,
     );
     await waitFor(() => {
-      expect(screen.getByText(/of \$0\.10/)).toBeInTheDocument();
+      expect(screen.getByText(/of ¥0\.10/)).toBeInTheDocument();
     });
     expect(screen.queryByText(/^Resets /)).not.toBeInTheDocument();
   });

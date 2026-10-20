@@ -7,7 +7,7 @@ describe("MCPServerCostDisplay", () => {
     render(<MCPServerCostDisplay costConfig={null} />);
 
     expect(
-      screen.getByText("No cost configuration set for this server. Tool calls will be charged at $0.00 per tool call."),
+      screen.getByText("No cost configuration set for this server. Tool calls will be charged at ¥0.00 per tool call."),
     ).toBeInTheDocument();
   });
 
@@ -21,14 +21,14 @@ describe("MCPServerCostDisplay", () => {
     render(<MCPServerCostDisplay costConfig={{ default_cost_per_query: 0 }} />);
 
     expect(screen.getByText("Default Cost per Query")).toBeInTheDocument();
-    expect(screen.getByText("$0.0000")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0000")).toBeInTheDocument();
   });
 
   it("renders the default cost to four decimal places and summarises it", () => {
     render(<MCPServerCostDisplay costConfig={{ default_cost_per_query: 0.0125 }} />);
 
-    expect(screen.getByText("$0.0125")).toBeInTheDocument();
-    expect(screen.getByText("• Default cost: $0.0125 per query")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0125")).toBeInTheDocument();
+    expect(screen.getByText("• Default cost: ¥0.0125 per query")).toBeInTheDocument();
   });
 
   it("lists each tool-specific cost and counts them in the summary", () => {
@@ -39,9 +39,9 @@ describe("MCPServerCostDisplay", () => {
     );
 
     expect(screen.getByText("search")).toBeInTheDocument();
-    expect(screen.getByText("$0.5000 per query")).toBeInTheDocument();
+    expect(screen.getByText("¥0.5000 per query")).toBeInTheDocument();
     expect(screen.getByText("fetch")).toBeInTheDocument();
-    expect(screen.getByText("$0.2500 per query")).toBeInTheDocument();
+    expect(screen.getByText("¥0.2500 per query")).toBeInTheDocument();
     expect(screen.queryByText("skipped")).not.toBeInTheDocument();
     expect(screen.getByText("• 3 tools with custom pricing")).toBeInTheDocument();
   });

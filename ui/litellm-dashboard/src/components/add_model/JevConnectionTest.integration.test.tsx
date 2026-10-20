@@ -137,7 +137,7 @@ describe("JEV network probes", () => {
     expect(screen.getByText("80.0%")).toBeInTheDocument();
     expect(screen.getByText("SIMPLE: 80.0%")).toBeInTheDocument();
     expect(screen.getByText("REASONING: 20.0%")).toBeInTheDocument();
-    expect(screen.getByText("$0.00001234")).toBeInTheDocument();
+    expect(screen.getByText("¥0.00001234")).toBeInTheDocument();
   });
 
   it("reports a classifier endpoint error while still checking downstream models", async () => {

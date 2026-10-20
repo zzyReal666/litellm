@@ -42,7 +42,7 @@ export const formatMetric = (value: number, metric: Metric) => {
     const compact = value >= COMPACT_SPEND_FROM;
     const options: Intl.NumberFormatOptions = {
       style: "currency",
-      currency: "USD",
+      currency: "CNY", currencyDisplay: "narrowSymbol",
       notation: compact ? "compact" : "standard",
       maximumFractionDigits: compact ? 1 : 2,
     };

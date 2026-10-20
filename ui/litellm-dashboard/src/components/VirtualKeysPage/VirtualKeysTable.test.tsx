@@ -243,8 +243,8 @@ it("should display key information correctly", async () => {
   await waitFor(() => {
     expect(screen.getByText("Test Key Alias")).toBeInTheDocument();
     expect(screen.getByText("Test Team")).toBeInTheDocument();
-    expect(screen.getByText("$5.5000")).toBeInTheDocument();
-    expect(screen.getByText("of $100")).toBeInTheDocument();
+    expect(screen.getByText("¥5.5000")).toBeInTheDocument();
+    expect(screen.getByText("of ¥100")).toBeInTheDocument();
   });
 });
 
@@ -252,8 +252,8 @@ it("shows lifetime spend in its own column next to the period spend meter", asyn
   renderWithProviders(<VirtualKeysTable />);
 
   expect(await screen.findByText("Lifetime Spend")).toBeInTheDocument();
-  expect(screen.getByText("$42.2500")).toBeInTheDocument();
-  expect(screen.getByText("$5.5000")).toBeInTheDocument();
+  expect(screen.getByText("¥42.2500")).toBeInTheDocument();
+  expect(screen.getByText("¥5.5000")).toBeInTheDocument();
 });
 
 it("should display user email correctly", async () => {

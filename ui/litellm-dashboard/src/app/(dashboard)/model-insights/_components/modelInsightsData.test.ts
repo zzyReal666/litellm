@@ -163,7 +163,7 @@ describe("rankModels", () => {
 
 describe("formatMetric", () => {
   it("formats spend as currency and counts compactly", () => {
-    expect(formatMetric(12.5, "spend")).toBe("$12.50");
+    expect(formatMetric(12.5, "spend")).toBe("¥12.50");
     expect(formatMetric(1_500_000, "tokens")).toBe("1.5M");
   });
 });

@@ -464,15 +464,15 @@ describe("ShadowEvalSection", () => {
     const j = job();
     mockHooks({ jobs: [j], detailsById: { "job-1": j } });
     render(<ShadowEvalSection />);
-    expect(screen.getByText(/\$3\.21 of \$10\.00 eval spend/)).toBeInTheDocument();
+    expect(screen.getByText(/¥3\.21 of ¥10\.00 eval spend/)).toBeInTheDocument();
   });
 
   it("shows spend without a budget cap for a job from before spend budgets existed", () => {
     const j = job({ targets: [targetEntry("hashed-key-abc", { max_budget: null, spend: 3.21 })] });
     mockHooks({ jobs: [j], detailsById: { "job-1": j } });
     render(<ShadowEvalSection />);
-    expect(screen.getByText(/\$3\.21 eval spend/)).toBeInTheDocument();
-    expect(screen.queryByText(/of \$/)).not.toBeInTheDocument();
+    expect(screen.getByText(/¥3\.21 eval spend/)).toBeInTheDocument();
+    expect(screen.queryByText(/of ¥/)).not.toBeInTheDocument();
   });
 
   it("flags rows with fewer than 30 judged turns as low sample", () => {
@@ -838,11 +838,11 @@ describe("ShadowEvalSection", () => {
     if (!spent || !hungry) throw new Error("expected a table row per scoped key");
 
     expect(within(spent).getByText("stopped")).toBeInTheDocument();
-    expect(within(spent).getByText("$1.50 / $2.00")).toBeInTheDocument();
+    expect(within(spent).getByText("¥1.50 / ¥2.00")).toBeInTheDocument();
     expect(within(spent).getByText("60.0%")).toBeInTheDocument();
 
     expect(within(hungry).getByText("running")).toBeInTheDocument();
-    expect(within(hungry).getByText("$0.2000 / $5.00")).toBeInTheDocument();
+    expect(within(hungry).getByText("¥0.2000 / ¥5.00")).toBeInTheDocument();
     expect(within(hungry).getByText("No verdicts yet")).toBeInTheDocument();
 
     expect(screen.getByText(/205 turns judged/)).toBeInTheDocument();
@@ -868,7 +868,7 @@ describe("ShadowEvalSection", () => {
     const hungry = screen.getByText("hash-hungr…").closest("tr");
     if (!spent || !hungry) throw new Error("expected a table row per scoped key");
     expect(within(spent).getByText("completed")).toBeInTheDocument();
-    expect(within(spent).getByText("$2.00 / $2.00")).toBeInTheDocument();
+    expect(within(spent).getByText("¥2.00 / ¥2.00")).toBeInTheDocument();
     expect(within(hungry).getByText("running")).toBeInTheDocument();
     expect(within(hungry).getByText("3 / 500 turns")).toBeInTheDocument();
   });
@@ -891,7 +891,7 @@ describe("ShadowEvalSection", () => {
     const spent = screen.getByText("hash-spent…").closest("tr");
     if (!spent) throw new Error("expected a per-key row before verdicts exist");
     expect(within(spent).getByText("completed")).toBeInTheDocument();
-    expect(within(spent).getByText("$0.5000 / $0.5000")).toBeInTheDocument();
+    expect(within(spent).getByText("¥0.5000 / ¥0.5000")).toBeInTheDocument();
     expect(screen.getByText("Budget used")).toBeInTheDocument();
     expect(screen.queryByText("Judged turns")).not.toBeInTheDocument();
     expect(screen.getByText(/Collecting verdicts/)).toBeInTheDocument();
@@ -924,7 +924,7 @@ describe("ShadowEvalSection", () => {
     expect(screen.getByText("Router cost vs your current model")).toBeInTheDocument();
     expect(screen.getByText("-50.0%")).toBeInTheDocument();
     expect(
-      screen.getByText("$0.3000 vs $0.6000 on the same judged turns; 2 cache-served turns excluded"),
+      screen.getByText("¥0.3000 vs ¥0.6000 on the same judged turns; 2 cache-served turns excluded"),
     ).toBeInTheDocument();
     expect(screen.getAllByText("Router cost").length).toBeGreaterThan(0);
   });
@@ -948,7 +948,7 @@ describe("ShadowEvalSection", () => {
     mockHooks({ jobs: [reverse], detailsById: { "job-1": reverse } });
     render(<ShadowEvalSection />);
     expect(screen.getByText("Router cost vs the baseline")).toBeInTheDocument();
-    expect(screen.getByText(/\$0\.6000 vs \$0\.3000 on the same judged turns/)).toBeInTheDocument();
+    expect(screen.getByText(/¥0\.6000 vs ¥0\.3000 on the same judged turns/)).toBeInTheDocument();
     expect(screen.getByText("+100.0%")).toBeInTheDocument();
   });
 

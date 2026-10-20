@@ -153,7 +153,7 @@ const TeamsField = ({ control }: { control: SettingsControl }) => {
               control={control}
               name={`teams.${index}.max_budget_in_team`}
               label={t("defaultUserSettingsForm.teamEntry.maxBudgetInTeamLabel", {
-                defaultValue: "Max Budget in Team (USD)",
+                defaultValue: "Max Budget in Team (CNY)",
               })}
             >
               {({ ref, ...budgetField }) => (
@@ -236,7 +236,7 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
       <ViewRow label={t("ssoModals.defaultRoleLabel", { defaultValue: "Default Role" })}>
         {roleLabel === "" ? notSet : roleLabel}
       </ViewRow>
-      <ViewRow label={t("oldTeams.form.maxBudget", { defaultValue: "Max Budget (USD)" })}>
+      <ViewRow label={t("oldTeams.form.maxBudget", { defaultValue: "Max Budget (CNY)" })}>
         {values.max_budget === "" ? notSet : values.max_budget}
       </ViewRow>
       <ViewRow label={t("oldTeams.form.resetBudget", { defaultValue: "Reset Budget" })}>{durationLabel}</ViewRow>
@@ -344,7 +344,7 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         <FormField
           control={form.control}
           name="max_budget"
-          label={t("oldTeams.form.maxBudget", { defaultValue: "Max Budget (USD)" })}
+          label={t("oldTeams.form.maxBudget", { defaultValue: "Max Budget (CNY)" })}
           description={t("defaultUserSettingsForm.budgetField.description", {
             defaultValue: "Default maximum budget for new users",
           })}

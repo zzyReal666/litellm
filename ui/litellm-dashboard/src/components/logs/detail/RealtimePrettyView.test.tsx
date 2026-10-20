@@ -313,7 +313,7 @@ describe("RealtimePrettyView", () => {
       <RealtimePrettyView response={sampleRealtimeResponse} metrics={{ completion_tokens: 500, output_cost: 0.005 }} />,
     );
     expect(screen.getByText(/Tokens: 500/)).toBeInTheDocument();
-    expect(screen.getByText(/Cost: \$0\.005000/)).toBeInTheDocument();
+    expect(screen.getByText(/Cost: ¥0\.005000/)).toBeInTheDocument();
   });
 
   it("should toggle output section collapse when header is clicked", async () => {

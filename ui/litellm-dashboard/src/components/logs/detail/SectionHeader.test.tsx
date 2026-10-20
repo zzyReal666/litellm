@@ -9,7 +9,7 @@ describe("SectionHeader", () => {
 
     expect(screen.getByText("Input")).toBeInTheDocument();
     expect(screen.getByText("Tokens: 1,234")).toBeInTheDocument();
-    expect(screen.getByText("Cost: $0.000123")).toBeInTheDocument();
+    expect(screen.getByText("Cost: ¥0.000123")).toBeInTheDocument();
     expect(screen.getByText("Turns: 3")).toBeInTheDocument();
   });
 

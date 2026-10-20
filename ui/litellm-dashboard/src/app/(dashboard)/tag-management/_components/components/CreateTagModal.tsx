@@ -127,8 +127,8 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                     control={form.control}
                     name="max_budget"
                     label={labelWithHint(
-                      "Max Budget (USD)",
-                      "Maximum amount in USD this tag can spend. When reached, requests with this tag will be blocked",
+                      "Max Budget (CNY)",
+                      "Maximum amount in CNY this tag can spend. When reached, requests with this tag will be blocked",
                     )}
                   >
                     {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}

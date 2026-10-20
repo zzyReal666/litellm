@@ -514,7 +514,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
                   }
                   successRequests={formatAbbreviatedNumber(tag.successful_requests)}
                   totalTokens={formatAbbreviatedNumber(tag.total_tokens)}
-                  totalCost={`$${formatAbbreviatedNumber(tag.total_spend, 4)}`}
+                  totalCost={`¥${formatAbbreviatedNumber(tag.total_spend, 4)}`}
                 />
               );
             })}

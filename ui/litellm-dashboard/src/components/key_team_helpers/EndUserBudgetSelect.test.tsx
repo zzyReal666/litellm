@@ -35,7 +35,7 @@ describe("EndUserBudgetSelect", () => {
 
     await user.click(screen.getByRole("combobox"));
 
-    expect(await screen.findByRole("option", { name: /svc-a-budget/ })).toHaveTextContent("$0.5, resets 30d");
+    expect(await screen.findByRole("option", { name: /svc-a-budget/ })).toHaveTextContent("¥0.5, resets 30d");
   });
 
   it("clears to null so the edit form can send an explicit empty value", async () => {

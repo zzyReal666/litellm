@@ -155,7 +155,7 @@ describe("old usage page", () => {
       const providerCell = await screen.findByText("openai");
       const row = providerCell.closest("tr");
       expect(row).not.toBeNull();
-      expect(within(row as HTMLElement).getByText("$6.75")).toBeInTheDocument();
+      expect(within(row as HTMLElement).getByText("¥6.75")).toBeInTheDocument();
       expect(screen.getByRole("columnheader", { name: "Provider" })).toBeInTheDocument();
     });
 
@@ -168,7 +168,7 @@ describe("old usage page", () => {
       const customerCell = await screen.findByText("customer-alpha");
       const row = customerCell.closest("tr");
       expect(row).not.toBeNull();
-      expect(within(row as HTMLElement).getByText("$3.50")).toBeInTheDocument();
+      expect(within(row as HTMLElement).getByText("¥3.50")).toBeInTheDocument();
       expect(within(row as HTMLElement).getByText("42")).toBeInTheDocument();
       expect(screen.getByRole("columnheader", { name: "Total Events" })).toBeInTheDocument();
     });

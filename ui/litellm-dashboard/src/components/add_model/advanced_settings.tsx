@@ -269,7 +269,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                   name={PTU_RATE_FIELD}
                   label={labelWithHint(
                     t("addModel.advancedSettings.ptuRateLabel", {
-                      defaultValue: "Calculated Cost per PTU / Hour (USD)",
+                      defaultValue: "Calculated Cost per PTU / Hour (CNY)",
                     }),
                     t("addModel.advancedSettings.ptuRateTooltip", {
                       defaultValue:

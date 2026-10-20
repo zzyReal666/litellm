@@ -268,8 +268,8 @@ describe("Lens findings and runs", () => {
     expect(screen.getByText("Previously reviewed traces were reused.", { exact: false })).toBeVisible();
     expect(screen.getByRole("heading", { name: "Reused 1 review with no new findings" })).toBeVisible();
     expect(within(screen.getByRole("region", { name: "Run report" })).getByText("1 reused")).toBeVisible();
-    expect(screen.getByText("$44.576 of $100.00 this month", { exact: false })).toHaveTextContent(
-      "$9.602 reserved for active requests · $45.822 available",
+    expect(screen.getByText("¥44.576 of ¥100.00 this month", { exact: false })).toHaveTextContent(
+      "¥9.602 reserved for active requests · ¥45.822 available",
     );
     fireEvent.change(screen.getByRole("combobox", { name: "Investigation run" }), { target: { value: "all" } });
     expect(await screen.findByText(issue.title)).toBeVisible();
@@ -280,7 +280,7 @@ describe("Lens findings and runs", () => {
     async (status) => {
       testQueryClient.clear();
       const error =
-        "This model request needs up to $9.600, but $5.000 remains in the investigation budget. Use a smaller deployment output allowance or increase the limit.";
+        "This model request needs up to ¥9.600, but ¥5.000 remains in the investigation budget. Use a smaller deployment output allowance or increase the limit.";
       const jobs = lens.jobs.map((job) => ({ ...job, status, error, findings: [] }));
       proxy.get.mockImplementation(async (path) => {
         if (path === "/lens") return { lenses: [{ ...lens, jobs }], workers: [], tracing_enabled: true };
@@ -524,13 +524,13 @@ it("keeps history status and cost updating when an older run fails to load", asy
     await user.click(await screen.findByRole("tab", { name: "History" }));
     const history = within(screen.getByRole("tabpanel", { name: "History" }));
     expect(await history.findByText("Running")).toBeVisible();
-    expect(history.getByText("$0.25")).toBeVisible();
+    expect(history.getByText("¥0.25")).toBeVisible();
     await user.selectOptions(screen.getByRole("combobox", { name: "Investigation run" }), "older");
     expect(await screen.findByText(/Could not load this run/)).toBeVisible();
 
     runs.mockResolvedValue([{ ...running, status: "completed", cost: 1.75 }, older]);
     await act(async () => vi.advanceTimersByTimeAsync(10_000));
-    expect(await history.findByText("$1.75")).toBeVisible();
+    expect(await history.findByText("¥1.75")).toBeVisible();
     expect(history.queryByText("Running")).not.toBeInTheDocument();
     expect(history.getAllByText("Completed")).toHaveLength(2);
   } finally {
@@ -1055,7 +1055,7 @@ it("updates elapsed time without reformatting the activity log and still shows n
       view({ ...running, cost: 2.01, steps: [...running.steps, { ...running.steps[0], label: "New model call" }] }),
     );
     expect(screen.getByText("201 model calls")).toBeVisible();
-    expect(screen.getByText("$2.01")).toBeVisible();
+    expect(screen.getByText("¥2.01")).toBeVisible();
     expect(screen.getByText(/New model call/)).toBeVisible();
   } finally {
     unmount();

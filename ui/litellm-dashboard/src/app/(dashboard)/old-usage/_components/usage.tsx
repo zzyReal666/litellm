@@ -630,7 +630,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                         layout="vertical"
                         showXAxis={false}
                         showLegend={false}
-                        valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+                        valueFormatter={(value) => `¥${formatNumberWithCommas(value, 2)}`}
                       />
                     </CardContent>
                   </Card>
@@ -651,7 +651,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                             index="provider"
                             category="spend"
                             colors={["cyan"]}
-                            valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+                            valueFormatter={(value) => `¥${formatNumberWithCommas(value, 2)}`}
                           />
                         </div>
                         <div className="col-span-1">

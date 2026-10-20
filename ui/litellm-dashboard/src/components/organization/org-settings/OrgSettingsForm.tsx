@@ -116,7 +116,7 @@ export const OrgSettingsForm = ({
         <FormField
           control={form.control}
           name="max_budget"
-          label={t("organization.organizationView.formMaxBudget", { defaultValue: "Max Budget (USD)" })}
+          label={t("organization.organizationView.formMaxBudget", { defaultValue: "Max Budget (CNY)" })}
         >
           {({ ref, ...field }) => <Input {...field} ref={ref} type="number" step="any" min={0} />}
         </FormField>

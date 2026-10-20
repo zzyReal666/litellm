@@ -44,7 +44,7 @@ export function AnalysisAccessFields() {
       </div>
       <div className="space-y-2">
         <label htmlFor="analysis-access-budget" className="block text-sm font-medium">
-          Monthly limit (USD)
+          Monthly limit (CNY)
         </label>
         <Input {...register("access.budget")} id="analysis-access-budget" type="number" min="0.01" step="0.01" />
         <p className="text-xs text-muted-foreground">Shared across all investigations.</p>

@@ -146,7 +146,7 @@ describe("ProjectDetail", () => {
 
     it("should show the current spend amount", () => {
       renderWithProviders(<ProjectDetail projectId="proj-1" onBack={onBack} />);
-      expect(screen.getByText("$12.50")).toBeInTheDocument();
+      expect(screen.getByText("¥12.50")).toBeInTheDocument();
     });
 
     it("should show 'No budget limit' when no max budget is set", () => {
@@ -163,7 +163,7 @@ describe("ProjectDetail", () => {
         isLoading: false,
       });
       renderWithProviders(<ProjectDetail projectId="proj-1" onBack={onBack} />);
-      expect(screen.getByText("of $100.00 budget")).toBeInTheDocument();
+      expect(screen.getByText("of ¥100.00 budget")).toBeInTheDocument();
     });
 
     it("should show the project description", () => {
@@ -258,7 +258,7 @@ describe("ProjectDetail", () => {
         mockUseProjectDetails.mockReturnValue({ data: multiModelProject, isLoading: false });
         const { container } = renderWithProviders(<ProjectDetail projectId="proj-1" onBack={onBack} />);
 
-        expect(container.querySelector(".recharts-xAxis-tick-labels")?.textContent).toMatch(/\$\d+\.\d{4}/);
+        expect(container.querySelector(".recharts-xAxis-tick-labels")?.textContent).toMatch(/¥\d+\.\d{4}/);
       });
 
       it("should scale the chart height at 40px per model with a 120px floor", () => {

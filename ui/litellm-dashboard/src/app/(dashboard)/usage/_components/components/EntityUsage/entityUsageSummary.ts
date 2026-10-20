@@ -41,7 +41,7 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
       ? {
           title: "Total Cost",
           titleKey: "usagePage.entityUsage.totalCost",
-          value: `$${formatNumberWithCommas(metadata.total_spend + flatCost, 2)}`,
+          value: `¥${formatNumberWithCommas(metadata.total_spend + flatCost, 2)}`,
           tooltip: TOTAL_COST_TOOLTIP,
           tooltipKey: TOTAL_COST_TOOLTIP_KEY,
           expandable: true,
@@ -49,7 +49,7 @@ export const buildSummaryTiles = (metadata: SpendSummaryMetadata, showFlatCost: 
       : {
           title: "Total Spend",
           titleKey: "usagePage.entityUsage.totalSpend",
-          value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
+          value: `¥${formatNumberWithCommas(metadata.total_spend, 2)}`,
         },
     {
       title: "Total Requests",
@@ -80,7 +80,7 @@ export const buildCostBreakdownTiles = (metadata: SpendSummaryMetadata): Summary
   {
     title: "Request Cost",
     titleKey: "usagePage.entityUsage.requestCost",
-    value: `$${formatNumberWithCommas(metadata.total_spend, 2)}`,
+    value: `¥${formatNumberWithCommas(metadata.total_spend, 2)}`,
     className: "text-info",
     tooltip: REQUEST_COST_TOOLTIP,
     tooltipKey: REQUEST_COST_TOOLTIP_KEY,
@@ -88,7 +88,7 @@ export const buildCostBreakdownTiles = (metadata: SpendSummaryMetadata): Summary
   {
     title: "Flat Cost",
     titleKey: "usagePage.entityUsage.flatCost",
-    value: `$${formatNumberWithCommas(metadata.total_flat_cost ?? 0, 2)}`,
+    value: `¥${formatNumberWithCommas(metadata.total_flat_cost ?? 0, 2)}`,
     className: "text-violet-600",
     tooltip: FLAT_COST_TOOLTIP,
     tooltipKey: FLAT_COST_TOOLTIP_KEY,

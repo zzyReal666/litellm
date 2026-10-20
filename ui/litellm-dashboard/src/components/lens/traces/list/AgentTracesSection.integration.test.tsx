@@ -403,7 +403,7 @@ describe("AgentTracesSection", () => {
     renderSection();
 
     const row = await screen.findByTestId("agent-trace-row");
-    expect(within(row).getByText("$0.03")).toBeInTheDocument();
+    expect(within(row).getByText("¥0.03")).toBeInTheDocument();
   });
 
   it("filters by input text and by trace id", async () => {

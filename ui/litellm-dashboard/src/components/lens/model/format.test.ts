@@ -23,9 +23,9 @@ describe("Lens labels", () => {
     expect(durationLabel(36, "hours")).toBe("1.5 days");
   });
 
-  it("keeps USD precision and the placeholder for a scan that has not run", () => {
-    expect(money(12.12345)).toBe("$12.123");
-    expect(money(0)).toBe("$0.00");
+  it("keeps CNY precision and the placeholder for a scan that has not run", () => {
+    expect(money(12.12345)).toBe("¥12.123");
+    expect(money(0)).toBe("¥0.00");
     expect(when()).toBe("Not yet");
     expect(when(null)).toBe("Not yet");
   });

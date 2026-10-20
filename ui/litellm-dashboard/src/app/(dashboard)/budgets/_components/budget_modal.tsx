@@ -137,7 +137,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
                 <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+                <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
                   {({ ref, value, onChange, ...field }) => (
                     <Input
                       {...field}

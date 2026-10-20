@@ -70,7 +70,7 @@ describe("teamUserSpend", () => {
   it("writes one CSV line per (team, user) with the team kept on every line", () => {
     const lines = buildTeamUserSpendCsv(response).split(/\r?\n/);
     expect(lines[0]).toBe(
-      "Start Date,End Date,Team,Team ID,User,User ID,User Email,Spend (USD),Requests,Successful,Failed,Prompt Tokens,Completion Tokens,Total Tokens",
+      "Start Date,End Date,Team,Team ID,User,User ID,User Email,Spend (CNY),Requests,Successful,Failed,Prompt Tokens,Completion Tokens,Total Tokens",
     );
     expect(lines.slice(1)).toEqual([
       "2026-09-01,2026-09-04,Team Alpha,team-alpha,alice@example.com,alice@example.com,alice@example.com,0.5,3,2,1,10,5,15",

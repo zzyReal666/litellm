@@ -43,7 +43,7 @@ describe("GuardrailUsageBreakdown", () => {
     render(<GuardrailUsageBreakdown detail={detail} />);
 
     const cost = screen.getByRole("group", { name: "Cost" });
-    expect(cost).toHaveTextContent("$0.1800");
+    expect(cost).toHaveTextContent("¥0.1800");
     expect(cost).toHaveTextContent("7 units unpriced");
 
     const units = screen.getByRole("group", { name: "Usage Units" });
@@ -56,7 +56,7 @@ describe("GuardrailUsageBreakdown", () => {
 
     const content = rowNamed("Content Policy");
     expect(within(content).getByText("1,000")).toBeInTheDocument();
-    expect(within(content).getByText("$0.1500")).toBeInTheDocument();
+    expect(within(content).getByText("¥0.1500")).toBeInTheDocument();
     expect(within(content).getByText("—")).toBeInTheDocument();
 
     const future = rowNamed("Some Future Counter");
@@ -71,13 +71,13 @@ describe("GuardrailUsageBreakdown", () => {
     expect(screen.getByRole("heading", { name: "By key" })).toBeInTheDocument();
     const teamA = rowNamed("team-a");
     expect(within(teamA).getByText("1,200")).toBeInTheDocument();
-    expect(within(teamA).getByText("$0.1650")).toBeInTheDocument();
+    expect(within(teamA).getByText("¥0.1650")).toBeInTheDocument();
     expect(within(teamA).getByText("—")).toBeInTheDocument();
     expect(within(teamA).queryByText("7")).not.toBeInTheDocument();
 
     const noTeam = rowNamed("No team");
     expect(within(noTeam).getByText("107")).toBeInTheDocument();
-    expect(within(noTeam).getByText("$0.0150")).toBeInTheDocument();
+    expect(within(noTeam).getByText("¥0.0150")).toBeInTheDocument();
     expect(within(noTeam).getByText("7", { selector: ".text-warning" })).toBeInTheDocument();
 
     const unpricedKey = rowNamed("hash-2");
@@ -104,11 +104,11 @@ describe("GuardrailUsageBreakdown", () => {
 
     const dialog = await screen.findByRole("dialog", { name: "How this cost is calculated" });
     expect(cellsOf(dialog)).toEqual([
-      ["Content Policy", "1,000", "× $0.00015", "= $0.1500"],
-      ["Sensitive Information Policy", "300", "× $0.0001", "= $0.0300"],
+      ["Content Policy", "1,000", "× ¥0.00015", "= ¥0.1500"],
+      ["Sensitive Information Policy", "300", "× ¥0.0001", "= ¥0.0300"],
       ["Some Future Counter", "7", "× —", "= —"],
       ["no known price, left out"],
-      ["Total", "$0.1800"],
+      ["Total", "¥0.1800"],
     ]);
     expect(within(dialog).getByText(/7 units with no known price are left out of the cost/)).toBeInTheDocument();
     const issueLink = within(dialog).getByRole("link", { name: "Request pricing on GitHub" });
@@ -138,8 +138,8 @@ describe("GuardrailUsageBreakdown", () => {
 
     const dialog = await screen.findByRole("dialog", { name: "How this cost is calculated" });
     expect(cellsOf(dialog)).toEqual([
-      ["Content Policy", "1,000", "× $0.00015", "= $0.1500"],
-      ["Total", "$0.1500"],
+      ["Content Policy", "1,000", "× ¥0.00015", "= ¥0.1500"],
+      ["Total", "¥0.1500"],
     ]);
     expect(within(dialog).queryByRole("link", { name: "Request pricing on GitHub" })).not.toBeInTheDocument();
   });

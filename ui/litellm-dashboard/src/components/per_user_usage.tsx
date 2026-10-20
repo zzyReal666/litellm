@@ -115,7 +115,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
       header: "Total Cost",
       accessorKey: "spend",
       meta: { numeric: true },
-      cell: ({ row }) => `$${formatAbbreviatedNumber(row.original.spend, 4)}`,
+      cell: ({ row }) => `¥${formatAbbreviatedNumber(row.original.spend, 4)}`,
     },
   ];
 

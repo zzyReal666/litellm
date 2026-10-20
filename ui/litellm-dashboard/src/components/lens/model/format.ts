@@ -38,7 +38,7 @@ export function agoLabel(thenMs: number, nowMs: number): string {
 }
 
 export const money = (n: number) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 3 }).format(n);
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "CNY", currencyDisplay: "narrowSymbol", maximumFractionDigits: 3 }).format(n);
 export const when = (value?: string | null) => (value ? runTime(value) : "Not yet");
 
 export const sourceLabels = { both: "Traces and requests", requests: "LLM requests", traces: "Agent traces" };

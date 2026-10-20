@@ -30,7 +30,7 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
     ...(card.category === "decision_model"
       ? [{ property: "Cost", value: "Billed per call by the decision model provider" }]
       : []),
-    ...(card.category === "litellm" ? [{ property: "Cost", value: "$0 / request" }] : []),
+    ...(card.category === "litellm" ? [{ property: "Cost", value: "¥0 / request" }] : []),
     ...(card.category === "litellm" ? [{ property: "External Dependencies", value: "None" }] : []),
     ...(card.category === "litellm" ? [{ property: "Latency", value: card.eval?.latency || "<1ms" }] : []),
   ];

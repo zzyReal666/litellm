@@ -140,12 +140,12 @@ describe("GuardrailsOverview", () => {
 
     const priced = rowNamed("High Failure Guardrail");
     expect(within(priced).getByText("1,250")).toBeInTheDocument();
-    expect(within(priced).getByText("$0.1500")).toBeInTheDocument();
+    expect(within(priced).getByText("¥0.1500")).toBeInTheDocument();
     expect(within(priced).getByLabelText("250 units unpriced")).toBeInTheDocument();
 
     const free = rowNamed("Free Bedrock Guardrail");
     expect(within(free).getByText("40")).toBeInTheDocument();
-    expect(within(free).getByText("$0.0000")).toBeInTheDocument();
+    expect(within(free).getByText("¥0.0000")).toBeInTheDocument();
     expect(within(free).queryByLabelText(/unpriced/)).not.toBeInTheDocument();
 
     const unmetered = rowNamed("Low Failure Guardrail");
@@ -209,7 +209,7 @@ describe("GuardrailsOverview", () => {
     renderOverview();
 
     const card = await screen.findByRole("group", { name: "Guardrail Cost" });
-    expect(card).toHaveTextContent("$0.1500");
+    expect(card).toHaveTextContent("¥0.1500");
     expect(card).toHaveTextContent("250 units unpriced");
   });
 
@@ -229,9 +229,9 @@ describe("GuardrailsOverview", () => {
           .map((cell) => cell.textContent ?? ""),
       );
     expect(cells).toEqual([
-      ["High Failure Guardrail", "$0.1500"],
-      ["Free Bedrock Guardrail", "$0.0000"],
-      ["Total", "$0.1500"],
+      ["High Failure Guardrail", "¥0.1500"],
+      ["Free Bedrock Guardrail", "¥0.0000"],
+      ["Total", "¥0.1500"],
     ]);
     expect(within(dialog).getByText(/250 units with no known price are left out of the cost/)).toBeInTheDocument();
     const issueLink = within(dialog).getByRole("link", { name: "Request pricing on GitHub" });

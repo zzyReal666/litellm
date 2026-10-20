@@ -50,7 +50,7 @@ describe("OutputCard", () => {
 
   it("should display cost when provided", () => {
     render(<OutputCard message={mockMessage} outputCost={0.0025} />);
-    expect(screen.getByText(/Cost: \$0\.002500/)).toBeInTheDocument();
+    expect(screen.getByText(/Cost: ¥0\.002500/)).toBeInTheDocument();
   });
 
   it("should copy message content when copy button is clicked", async () => {
@@ -131,7 +131,7 @@ describe("OutputCard", () => {
   it("should display both token count and cost when both are provided", () => {
     render(<OutputCard message={mockMessage} completionTokens={300} outputCost={0.003} />);
     expect(screen.getByText(/Tokens: 300/)).toBeInTheDocument();
-    expect(screen.getByText(/Cost: \$0\.003000/)).toBeInTheDocument();
+    expect(screen.getByText(/Cost: ¥0\.003000/)).toBeInTheDocument();
   });
 
   it("should handle collapse toggle when message is null", async () => {

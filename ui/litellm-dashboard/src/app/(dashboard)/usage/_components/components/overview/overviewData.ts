@@ -206,13 +206,13 @@ export const dailyTotals = (results: readonly DailyData[]): SeriesDay[] =>
   }));
 
 export const formatUsd = (value: number, digits = 2): string =>
-  `$${value.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
+  `¥${value.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
 
 export const formatCompactUsd = (value: number): string => {
-  if (value === 0) return "$0";
-  if (Math.abs(value) < 100) return `$${value.toFixed(2)}`;
-  if (Math.abs(value) < 1000) return `$${value.toFixed(0)}`;
-  return `$${Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value)}`;
+  if (value === 0) return "¥0";
+  if (Math.abs(value) < 100) return `¥${value.toFixed(2)}`;
+  if (Math.abs(value) < 1000) return `¥${value.toFixed(0)}`;
+  return `¥${Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value)}`;
 };
 
 export const formatCompact = (value: number): string =>

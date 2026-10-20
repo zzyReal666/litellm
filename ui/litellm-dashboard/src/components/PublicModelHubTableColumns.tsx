@@ -81,7 +81,7 @@ const formatCapabilityName = (key: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-const formatCost = (cost: number) => `$${(cost * 1_000_000).toFixed(4)}`;
+const formatCost = (cost: number) => `¥${(cost * 1_000_000).toFixed(4)}`;
 
 const translate = (t: TFunction | undefined, key: string, defaultValue: string): string =>
   t === undefined ? defaultValue : t(key, { defaultValue });

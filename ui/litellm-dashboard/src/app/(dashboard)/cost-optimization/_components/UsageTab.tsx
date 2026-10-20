@@ -76,7 +76,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
 
   const perInterval = useMemo<SavingsPoint[]>(() => savingsSeriesOf(results), [results]);
 
-  // Cumulative anchors on a synthetic $0 point at the range start so a short
+  // Cumulative anchors on a synthetic ¥0 point at the range start so a short
   // range (down to a single day) rises from zero instead of floating as one dot.
   const overTime = useMemo(() => {
     if (accumulation !== "cumulative") return perInterval;

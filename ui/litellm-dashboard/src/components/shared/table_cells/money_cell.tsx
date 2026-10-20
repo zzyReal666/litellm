@@ -21,7 +21,7 @@ export function MoneyCell({ value, decimals = 4, emptyText = "-", showZero = fal
   }
 
   const formattedValue =
-    value === 0 ? `$${formatNumberWithCommas(0, decimals, false, true)}` : getSpendString(value, decimals);
+    value === 0 ? `¥${formatNumberWithCommas(0, decimals, false, true)}` : getSpendString(value, decimals);
 
   return (
     <span data-slot="money-cell" className={moneyClassName}>

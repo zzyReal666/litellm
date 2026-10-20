@@ -26,7 +26,7 @@ describe("TeamAdminSettingsForm", () => {
 
     expect(screen.getByLabelText("Tokens per minute Limit (TPM)")).toHaveValue(1000);
     expect(screen.getByLabelText("Requests per minute Limit (RPM)")).toHaveValue(50);
-    expect(screen.getByLabelText("Max Budget (USD)")).toHaveValue(20);
+    expect(screen.getByLabelText("Max Budget (CNY)")).toHaveValue(20);
   });
 
   it("hides the fields the proxy has not enabled for team admins", () => {
@@ -34,7 +34,7 @@ describe("TeamAdminSettingsForm", () => {
 
     expect(screen.getByLabelText("Requests per minute Limit (RPM)")).toBeInTheDocument();
     expect(screen.queryByLabelText("Tokens per minute Limit (TPM)")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("Max Budget (USD)")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Max Budget (CNY)")).not.toBeInTheDocument();
   });
 
   it("saves the new TPM limit and nothing else", async () => {
@@ -52,7 +52,7 @@ describe("TeamAdminSettingsForm", () => {
     const { onSave } = renderForm(new Set(["tpm_limit", "rpm_limit", "max_budget"]));
 
     fireEvent.change(screen.getByLabelText("Requests per minute Limit (RPM)"), { target: { value: "80" } });
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "12.5" } });
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "12.5" } });
     await user.click(screen.getByRole("button", { name: /save changes/i }));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledWith({ rpm_limit: 80, max_budget: 12.5 }));

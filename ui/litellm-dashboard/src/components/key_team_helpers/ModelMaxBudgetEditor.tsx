@@ -169,7 +169,7 @@ export function ModelMaxBudgetEditor({
             <div className="flex gap-2 items-center">
               <InputGroup className="w-40">
                 <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
+                  <InputGroupText>¥</InputGroupText>
                 </InputGroupAddon>
                 <InputGroupInput
                   type="number"
@@ -210,12 +210,12 @@ export function ModelMaxBudgetEditor({
               <div className="text-[11px] text-muted-foreground mt-2 ml-1">
                 {t("keyTeamHelpers.modelMaxBudget.currentWindowSpend", {
                   amount: spent,
-                  defaultValue: "Current window spend: ${{amount}}",
+                  defaultValue: "Current window spend: ¥{{amount}}",
                 })}
                 {entry.budgetLimit !== null &&
                   t("keyTeamHelpers.modelMaxBudget.ofBudgetLimit", {
                     amount: entry.budgetLimit,
-                    defaultValue: " of ${{amount}}",
+                    defaultValue: " of ¥{{amount}}",
                   })}
               </div>
             )}

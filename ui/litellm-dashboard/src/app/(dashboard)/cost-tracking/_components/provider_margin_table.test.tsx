@@ -130,7 +130,7 @@ describe("ProviderMarginTable", () => {
         onRemoveProvider={onRemoveProvider}
       />,
     );
-    expect(screen.getByText("$0.001000")).toBeInTheDocument();
+    expect(screen.getByText("¥0.001000")).toBeInTheDocument();
   });
 
   it("should display a combined percentage and fixed margin", () => {
@@ -141,7 +141,7 @@ describe("ProviderMarginTable", () => {
         onRemoveProvider={onRemoveProvider}
       />,
     );
-    expect(screen.getByText(/10\.0%.*\$0\.001000/)).toBeInTheDocument();
+    expect(screen.getByText(/10\.0%.*¥0\.001000/)).toBeInTheDocument();
   });
 
   it("should show edit inputs when the pencil icon is clicked", async () => {

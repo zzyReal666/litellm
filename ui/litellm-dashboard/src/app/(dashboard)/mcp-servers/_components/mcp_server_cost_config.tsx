@@ -40,7 +40,7 @@ const CostInput: React.FC<CostInputProps> = ({ value, placeholder, disabled, cla
   return (
     <InputGroup className={className}>
       <InputGroupAddon>
-        <InputGroupText>$</InputGroupText>
+        <InputGroupText>¥</InputGroupText>
       </InputGroupAddon>
       <InputGroupInput
         type="text"
@@ -225,7 +225,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                   <p className="text-sm text-muted-foreground">
                     {t("mcpTools.mcpServerCostConfig.defaultCostRow", {
                       cost: value.default_cost_per_query.toFixed(4),
-                      defaultValue: "• Default cost: ${{cost}} per query",
+                      defaultValue: "• Default cost: ¥{{cost}} per query",
                     })}
                   </p>
                 )}
@@ -238,7 +238,7 @@ const MCPServerCostConfig: React.FC<MCPServerCostConfigProps> = ({
                           {t("mcpTools.mcpServerCostConfig.toolCostRow", {
                             toolName,
                             cost: cost.toFixed(4),
-                            defaultValue: "• {{toolName}}: ${{cost}} per query",
+                            defaultValue: "• {{toolName}}: ¥{{cost}} per query",
                           })}
                         </p>
                       ),

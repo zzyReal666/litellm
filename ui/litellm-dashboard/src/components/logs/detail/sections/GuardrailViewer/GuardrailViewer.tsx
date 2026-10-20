@@ -504,7 +504,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
 // Shared spend formatter so this chip renders the same dollar string as the
 // Cost Breakdown panel above it (and never falls into JS e-notation below 1e-6).
 const formatGuardrailCost = (cost: number): string => {
-  if (cost === 0) return "$0.00";
+  if (cost === 0) return "¥0.00";
   return getSpendString(cost, 8);
 };
 

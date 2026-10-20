@@ -28,14 +28,14 @@ const makeAgent = (overrides: Partial<Agent> = {}): Agent => ({
 describe("AgentsTable", () => {
   it("renders every column header", () => {
     render(<AgentsTable agents={[]} {...baseProps} />);
-    for (const header of ["Agent Name", "Agent ID", "Spend (USD)", "Model", "Created", "Status"]) {
+    for (const header of ["Agent Name", "Agent ID", "Spend (CNY)", "Model", "Created", "Status"]) {
       expect(screen.getByText(header)).toBeInTheDocument();
     }
   });
 
-  it("right-aligns the Spend (USD) column", () => {
+  it("right-aligns the Spend (CNY) column", () => {
     render(<AgentsTable agents={[]} {...baseProps} />);
-    expect(screen.getByRole("columnheader", { name: "Spend (USD)" })).toHaveClass("text-right");
+    expect(screen.getByRole("columnheader", { name: "Spend (CNY)" })).toHaveClass("text-right");
     expect(screen.getByRole("columnheader", { name: "Agent Name" })).not.toHaveClass("text-right");
   });
 

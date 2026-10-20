@@ -79,8 +79,8 @@ describe("PromptCachingRequestsTable", () => {
     const write = within(table).getByRole("row", { name: /injected\/write/ });
     expect(within(write).getByText("Recorded")).toBeInTheDocument();
     expect(within(write).getByText("1,000")).toBeInTheDocument();
-    expect(within(write).getByText("$0.0375")).toBeInTheDocument();
-    expect(within(write).getByText("-$0.0075")).toBeInTheDocument();
+    expect(within(write).getByText("¥0.0375")).toBeInTheDocument();
+    expect(within(write).getByText("-¥0.0075")).toBeInTheDocument();
     expect(within(write).getByText(new Date("2026-09-01T12:00:00Z").toLocaleString())).toBeInTheDocument();
     expect(within(write).getByText("cache-test-model")).toHaveAttribute("title", "cache-test-model");
     expect(within(write).getByRole("link")).toHaveAttribute("href", "/ui/logs?log_id=injected%2Fwrite%3F%26");
@@ -88,9 +88,9 @@ describe("PromptCachingRequestsTable", () => {
     const hit = within(table).getByRole("row", { name: /client-hit/ });
     expect(within(hit).getByText("Not recorded")).toBeInTheDocument();
     expect(within(hit).getByText("10,000")).toBeInTheDocument();
-    expect(within(hit).getByText("$0.2700")).toBeInTheDocument();
+    expect(within(hit).getByText("¥0.2700")).toBeInTheDocument();
     expect(within(table).getByRole("row", { name: /unknown-price/ })).toHaveTextContent("Unavailable");
-    expect(within(table).getByRole("row", { name: /no-benefit/ })).toHaveTextContent("$0.00");
+    expect(within(table).getByRole("row", { name: /no-benefit/ })).toHaveTextContent("¥0.00");
     expect(screen.getByText(/after cache-write premiums/)).toBeInTheDocument();
     expect(lastQuery().get("start_date")).toBe("2026-09-01T00:00:00.000Z");
     expect(lastQuery().get("end_date")).toBe("2026-09-02T23:59:59.999Z");

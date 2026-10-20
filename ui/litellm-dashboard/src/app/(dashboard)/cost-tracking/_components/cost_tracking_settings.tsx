@@ -386,7 +386,7 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
             <SectionHeader
               label="Block Unpriced Models"
               labelKey="costTracking.costTrackingSettings.blockUnpricedModelsTitle"
-              description="Reject requests for models that have no pricing in the cost map instead of logging them as $0 spend"
+              description="Reject requests for models that have no pricing in the cost map instead of logging them as ¥0 spend"
               descriptionKey="costTracking.costTrackingSettings.blockUnpricedModelsSubtitle"
             />
             <CollapsibleContent className="px-0">

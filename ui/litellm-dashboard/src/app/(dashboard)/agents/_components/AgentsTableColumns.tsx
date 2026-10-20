@@ -90,8 +90,8 @@ export const getAgentsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend (USD)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (USD)" />,
+    meta: { title: "Spend (CNY)", numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (CNY)" />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,

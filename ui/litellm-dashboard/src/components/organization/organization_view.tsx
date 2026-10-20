@@ -156,7 +156,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
 
   const orgExtraColumns: MemberTableColumn[] = [
     {
-      title: t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (USD)" }),
+      title: t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }),
       key: "spend",
       numeric: true,
       sortValue: (record: Member) => orgMemberFor(record)?.spend ?? null,
@@ -242,12 +242,12 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                   {t("organization.organizationView.budgetStatus", { defaultValue: "Budget Status" })}
                 </p>
                 <div className="mt-2 text-sm text-foreground">
-                  <p className="text-xl font-semibold">${formatNumberWithCommas(orgData.spend, 4)}</p>
+                  <p className="text-xl font-semibold">¥{formatNumberWithCommas(orgData.spend, 4)}</p>
                   <p>
                     {t("organization.organizationView.budgetOf", { defaultValue: "of" })}{" "}
                     {orgData.litellm_budget_table.max_budget === null
                       ? t("organization.organizationView.unlimited", { defaultValue: "Unlimited" })
-                      : `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`}
+                      : `¥${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`}
                   </p>
                   {orgData.litellm_budget_table.budget_duration && (
                     <p className="text-muted-foreground">
@@ -442,7 +442,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                       {t("organization.organizationView.displayMax", {
                         value:
                           orgData.litellm_budget_table.max_budget !== null
-                            ? `$${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`
+                            ? `¥${formatNumberWithCommas(orgData.litellm_budget_table.max_budget, 4)}`
                             : t("organization.organizationView.noLimit", { defaultValue: "No Limit" }),
                         defaultValue: "Max: {{value}}",
                       })}

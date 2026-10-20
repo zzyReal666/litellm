@@ -82,7 +82,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
       parts.push(`${(margin.percentage * 100).toFixed(1)}%`);
     }
     if (margin.fixed_amount !== undefined) {
-      parts.push(`$${margin.fixed_amount.toFixed(6)}`);
+      parts.push(`¥${margin.fixed_amount.toFixed(6)}`);
     }
     return parts.join(" + ") || "0%";
   };
@@ -140,7 +140,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                       />
                       <span className="text-muted-foreground">%</span>
                       <span className="text-muted-foreground">+</span>
-                      <span className="text-muted-foreground">$</span>
+                      <span className="text-muted-foreground">¥</span>
                       <Input
                         value={editFixedAmount}
                         onChange={(e) => setEditFixedAmount(e.target.value)}

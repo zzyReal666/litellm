@@ -106,7 +106,7 @@ describe("/ui/chat request metrics", () => {
     expect(screen.getByLabelText("Total Latency: 1.20s")).toBeInTheDocument();
     expect(screen.getByLabelText("In: 12")).toBeInTheDocument();
     expect(screen.getByLabelText("Out: 8")).toBeInTheDocument();
-    expect(screen.getByLabelText("Cost: $0.000063")).toBeInTheDocument();
+    expect(screen.getByLabelText("Cost: ¥0.000063")).toBeInTheDocument();
   });
 
   it("supplies the timing, usage and latency callbacks at the positional slots the Responses helper reads", async () => {

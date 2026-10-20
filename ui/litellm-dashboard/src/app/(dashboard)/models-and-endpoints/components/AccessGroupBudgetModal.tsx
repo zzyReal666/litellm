@@ -71,7 +71,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="max_budget"
                 label={labelWithHint(
-                  "Max Budget (USD)",
+                  "Max Budget (CNY)",
                   "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused",
                 )}
               >
@@ -82,7 +82,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="soft_budget"
                 label={labelWithHint(
-                  "Soft Budget (USD)",
+                  "Soft Budget (CNY)",
                   "Fires an alert when the group's spend reaches this. Requests keep succeeding",
                 )}
               >

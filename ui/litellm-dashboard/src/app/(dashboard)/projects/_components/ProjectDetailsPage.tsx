@@ -144,9 +144,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div>
-              <p className="text-[28px] leading-none font-medium text-foreground">${spend.toFixed(2)}</p>
+              <p className="text-[28px] leading-none font-medium text-foreground">¥{spend.toFixed(2)}</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {hasLimit ? `of $${maxBudget.toFixed(2)} budget` : "No budget limit"}
+                {hasLimit ? `of ¥${maxBudget.toFixed(2)} budget` : "No budget limit"}
               </p>
             </div>
             {hasLimit && (
@@ -176,7 +176,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 categories={["spend"]}
                 colors={["cyan"]}
                 layout="vertical"
-                valueFormatter={(value) => `$${value.toFixed(4)}`}
+                valueFormatter={(value) => `¥${value.toFixed(4)}`}
                 yAxisWidth={140}
                 showLegend={false}
                 style={{ height: Math.max(modelSpendData.length * 40, 120) }}
@@ -237,7 +237,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                         <span className="text-xs text-foreground">
                           ${teamSpend.toFixed(2)}
                           <span className="text-muted-foreground">
-                            {teamHasLimit ? ` / $${teamBudget.toFixed(2)}` : " (Unlimited)"}
+                            {teamHasLimit ? ` / ¥${teamBudget.toFixed(2)}` : " (Unlimited)"}
                           </span>
                         </span>
                       </div>

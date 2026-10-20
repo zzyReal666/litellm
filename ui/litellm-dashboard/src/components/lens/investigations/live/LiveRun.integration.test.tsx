@@ -156,7 +156,7 @@ it.each([
   const { rerender } = renderWithLens(<LiveRun job={planned} reviews={[]} name="Task quality" />);
   const strip = within(screen.getByRole("region", { name: "Live trace results" }));
   expect(strip.getByText("30 eligible for reuse · 8 need review")).toBeVisible();
-  expect(strip.getByText(/0 of 38 traces/)).toHaveTextContent("$0");
+  expect(strip.getByText(/0 of 38 traces/)).toHaveTextContent("¥0");
   const finished = { ...planned, status, reviewed, coverage: { ...planned.coverage, screened: reviewed, reused } };
   rerender(<LiveRun job={finished} reviews={[]} name="Task quality" />);
   expect(strip.getByText(`${reused} reused without review cost · ${reviewed - reused} newly reviewed`)).toBeVisible();

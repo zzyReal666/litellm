@@ -20,7 +20,7 @@ interface EndUserBudgetSelectProps {
 
 const budgetSublabel = (budget: budgetItem): string | undefined => {
   const parts = [
-    budget.max_budget != null ? `$${budget.max_budget}` : null,
+    budget.max_budget != null ? `¥${budget.max_budget}` : null,
     budget.budget_duration ? `resets ${budget.budget_duration}` : null,
   ].filter((part): part is string => part !== null);
   return parts.length > 0 ? parts.join(", ") : undefined;

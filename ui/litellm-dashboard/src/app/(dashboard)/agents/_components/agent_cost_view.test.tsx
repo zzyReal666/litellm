@@ -26,7 +26,7 @@ describe("AgentCostView", () => {
   it("omits null costs while still displaying a configured zero", () => {
     renderWithProviders(<AgentCostView agent={makeAgent({ cost_per_query: null, input_cost_per_token: 0 })} />);
     expect(screen.queryByText("Cost Per Query")).not.toBeInTheDocument();
-    expect(screen.getByText("$0")).toBeInTheDocument();
+    expect(screen.getByText("¥0")).toBeInTheDocument();
   });
 
   it("renders every configured cost with a dollar-prefixed value", () => {
@@ -40,18 +40,18 @@ describe("AgentCostView", () => {
 
     expect(screen.getByText("Cost Configuration")).toBeInTheDocument();
     expect(screen.getByText("Cost Per Query")).toBeInTheDocument();
-    expect(screen.getByText("$0.05")).toBeInTheDocument();
+    expect(screen.getByText("¥0.05")).toBeInTheDocument();
     expect(screen.getByText("Input Cost Per Token")).toBeInTheDocument();
-    expect(screen.getByText("$0.000012")).toBeInTheDocument();
+    expect(screen.getByText("¥0.000012")).toBeInTheDocument();
     expect(screen.getByText("Output Cost Per Token")).toBeInTheDocument();
-    expect(screen.getByText("$0.000034")).toBeInTheDocument();
+    expect(screen.getByText("¥0.000034")).toBeInTheDocument();
   });
 
   it("omits the rows whose cost is not configured", () => {
     renderWithProviders(<AgentCostView agent={makeAgent({ model: "gpt-4", cost_per_query: 0.25 })} />);
 
     expect(screen.getByText("Cost Per Query")).toBeInTheDocument();
-    expect(screen.getByText("$0.25")).toBeInTheDocument();
+    expect(screen.getByText("¥0.25")).toBeInTheDocument();
     expect(screen.queryByText("Input Cost Per Token")).not.toBeInTheDocument();
     expect(screen.queryByText("Output Cost Per Token")).not.toBeInTheDocument();
   });
@@ -61,6 +61,6 @@ describe("AgentCostView", () => {
 
     expect(screen.getByText("Cost Configuration")).toBeInTheDocument();
     expect(screen.getByText("Cost Per Query")).toBeInTheDocument();
-    expect(screen.getByText("$0")).toBeInTheDocument();
+    expect(screen.getByText("¥0")).toBeInTheDocument();
   });
 });

@@ -164,7 +164,7 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
           label="Cost"
           tooltip="Cost"
           icon={<DollarSign className="size-3" aria-hidden="true" />}
-          value={`$${usage.cost.toFixed(6)}`}
+          value={`¥${usage.cost.toFixed(6)}`}
         />
       )}
 

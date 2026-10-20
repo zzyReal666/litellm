@@ -221,8 +221,8 @@ function CostsCell({ model }: { model: ModelData }) {
       content={hasPerSecond ? "Cost per 1M tokens; /s is cost per second of output" : "Cost per 1M tokens"}
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
-          {showInput && <CostRow label="IN" value={`$${inputCost}`} />}
-          {showOutput && <CostRow label="OUT" value={`$${outputCost}`} />}
+          {showInput && <CostRow label="IN" value={`¥${inputCost}`} />}
+          {showOutput && <CostRow label="OUT" value={`¥${outputCost}`} />}
           {hasPerSecond && <CostRow label="OUT" value={formatPerSecondCost(perSecond)} />}
         </div>
       }

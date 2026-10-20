@@ -44,7 +44,7 @@ const AgentCostView: React.FC<AgentCostViewProps> = ({ agent }) => {
             <dt className="bg-muted/50 px-4 py-3 text-sm font-medium text-foreground">
               {t(row.labelKey, { defaultValue: row.label })}
             </dt>
-            <dd className="px-4 py-3 text-sm text-foreground sm:col-span-2">${value}</dd>
+            <dd className="px-4 py-3 text-sm text-foreground sm:col-span-2">¥{value}</dd>
           </div>
         ))}
       </dl>

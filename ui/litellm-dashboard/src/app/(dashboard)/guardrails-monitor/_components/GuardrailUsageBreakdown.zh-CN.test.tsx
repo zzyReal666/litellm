@@ -51,7 +51,7 @@ describe("GuardrailUsageBreakdown in Chinese", () => {
     expect(screen.getByText("提供商为此护栏上报的可计费单位，以及 LiteLLM 为它们定价的结果")).toBeInTheDocument();
 
     const cost = screen.getByRole("group", { name: "费用" });
-    expect(cost).toHaveTextContent("$0.1800");
+    expect(cost).toHaveTextContent("¥0.1800");
     const units = screen.getByRole("group", { name: "用量单位" });
     expect(units).toHaveTextContent("1,307");
     expect(units).toHaveTextContent("3 个计数器");

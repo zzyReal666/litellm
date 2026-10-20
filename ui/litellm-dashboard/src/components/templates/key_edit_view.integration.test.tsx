@@ -560,7 +560,7 @@ describe("KeyEditView", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Max Budget (USD)")).toBeInTheDocument();
+      expect(screen.getByLabelText("Max Budget (CNY)")).toBeInTheDocument();
     });
   });
 
@@ -2230,7 +2230,7 @@ describe("KeyEditView", () => {
       };
 
       await retype("Key Alias", "typed-alias");
-      await retype("Max Budget (USD)", "12.5");
+      await retype("Max Budget (CNY)", "12.5");
       await retype("TPM Limit", "111");
       await retype("RPM Limit", "222");
       await retype("Max Parallel Requests", "3");
@@ -2590,7 +2590,7 @@ describe("KeyEditView", () => {
         renderForPayload(onSubmitMock);
         await screen.findByRole("button", { name: /save changes/i });
 
-        await userEvent.clear(screen.getByLabelText("Max Budget (USD)"));
+        await userEvent.clear(screen.getByLabelText("Max Budget (CNY)"));
         await userEvent.click(screen.getByRole("button", { name: /save changes/i }));
 
         await waitFor(() => {

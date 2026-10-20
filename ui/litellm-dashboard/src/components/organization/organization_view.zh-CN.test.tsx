@@ -173,7 +173,7 @@ describe("OrganizationInfoView in Chinese", () => {
     expect(within(settings).getByText("组织名称")).toBeInTheDocument();
     expect(within(settings).getByText("组织 ID")).toBeInTheDocument();
     expect(within(settings).getByText("预算")).toBeInTheDocument();
-    expect(within(settings).getByText("最大值：$1,000.0000")).toBeInTheDocument();
+    expect(within(settings).getByText("最大值：¥1,000.0000")).toBeInTheDocument();
     expect(within(settings).getByText("重置：30d")).toBeInTheDocument();
   });
 
@@ -186,7 +186,7 @@ describe("OrganizationInfoView in Chinese", () => {
     await user.click(await screen.findByRole("button", { name: "编辑设置" }));
 
     expect(await screen.findByLabelText("组织名称")).toHaveValue("Acme Corp");
-    expect(screen.getByLabelText("最大预算（USD）")).toBeInTheDocument();
+    expect(screen.getByLabelText("最大预算（CNY）")).toBeInTheDocument();
     expect(screen.getByLabelText("每分钟 Token 限制（TPM）")).toBeInTheDocument();
     expect(screen.getByLabelText("每分钟请求限制（RPM）")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "保存更改" })).toBeDisabled();

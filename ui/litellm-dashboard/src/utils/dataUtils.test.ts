@@ -106,30 +106,30 @@ describe("dataUtils", () => {
     });
 
     it("should format spend with dollar sign", () => {
-      expect(getSpendString(1234.5, 2)).toBe("$1,234.50");
+      expect(getSpendString(1234.5, 2)).toBe("¥1,234.50");
       expect(getSpendString(-2500, 0)).toBe("$-2,500");
     });
 
     it("should return threshold string for very small values", () => {
-      expect(getSpendString(0.0000004, 6)).toBe("< $0.000001");
-      expect(getSpendString(-0.0000004, 6)).toBe("< $0.000001");
+      expect(getSpendString(0.0000004, 6)).toBe("< ¥0.000001");
+      expect(getSpendString(-0.0000004, 6)).toBe("< ¥0.000001");
     });
 
     it("should respect custom decimals", () => {
-      expect(getSpendString(0.01234, 3)).toBe("$0.012");
-      expect(getSpendString(999.9999, 1)).toBe("$1,000.0");
+      expect(getSpendString(0.01234, 3)).toBe("¥0.012");
+      expect(getSpendString(999.9999, 1)).toBe("¥1,000.0");
     });
   });
 
   describe("formatPerSecondCost", () => {
     it("should keep at least two decimals and append the per-second unit", () => {
-      expect(formatPerSecondCost(0.4)).toBe("$0.40/s");
-      expect(formatPerSecondCost(1)).toBe("$1.00/s");
+      expect(formatPerSecondCost(0.4)).toBe("¥0.40/s");
+      expect(formatPerSecondCost(1)).toBe("¥1.00/s");
     });
 
     it("should show sub-cent rates without rounding them to zero", () => {
-      expect(formatPerSecondCost(0.015)).toBe("$0.015/s");
-      expect(formatPerSecondCost(0.000025)).toBe("$0.000025/s");
+      expect(formatPerSecondCost(0.015)).toBe("¥0.015/s");
+      expect(formatPerSecondCost(0.000025)).toBe("¥0.000025/s");
     });
   });
 

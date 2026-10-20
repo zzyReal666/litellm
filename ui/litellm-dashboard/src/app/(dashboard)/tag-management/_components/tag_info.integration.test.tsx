@@ -79,7 +79,7 @@ describe("TagInfoView save payload", () => {
 
     await user.click(screen.getByRole("button", { name: /Budget & Rate Limits/ }));
 
-    const maxBudgetInput = await screen.findByLabelText("Max Budget (USD)");
+    const maxBudgetInput = await screen.findByLabelText("Max Budget (CNY)");
     await user.clear(maxBudgetInput);
     fireEvent.change(maxBudgetInput, { target: { value: "150.75" } });
 
@@ -101,7 +101,7 @@ describe("TagInfoView save payload", () => {
   it("sends null when the budget is cleared", async () => {
     const { user } = await renderEditor();
     await user.click(screen.getByRole("button", { name: /Budget & Rate Limits/ }));
-    const maxBudgetInput = await screen.findByLabelText("Max Budget (USD)");
+    const maxBudgetInput = await screen.findByLabelText("Max Budget (CNY)");
     fireEvent.change(maxBudgetInput, { target: { value: "" } });
     await user.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(mockTagUpdateCall).toHaveBeenCalledWith("sk-test", expect.objectContaining({ max_budget: null }));
@@ -110,7 +110,7 @@ describe("TagInfoView save payload", () => {
   it("sends zero as a budget value", async () => {
     const { user } = await renderEditor();
     await user.click(screen.getByRole("button", { name: /Budget & Rate Limits/ }));
-    fireEvent.change(await screen.findByLabelText("Max Budget (USD)"), { target: { value: "0" } });
+    fireEvent.change(await screen.findByLabelText("Max Budget (CNY)"), { target: { value: "0" } });
     await user.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(mockTagUpdateCall).toHaveBeenCalledWith("sk-test", expect.objectContaining({ max_budget: 0 }));
   });
@@ -118,7 +118,7 @@ describe("TagInfoView save payload", () => {
   it("sends the prefilled budget when it is left unchanged", async () => {
     const { user } = await renderEditor();
     await user.click(screen.getByRole("button", { name: /Budget & Rate Limits/ }));
-    expect(await screen.findByLabelText("Max Budget (USD)")).toHaveValue(10);
+    expect(await screen.findByLabelText("Max Budget (CNY)")).toHaveValue(10);
     await user.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(mockTagUpdateCall).toHaveBeenCalledWith("sk-test", expect.objectContaining({ max_budget: 10 }));
   });
@@ -126,7 +126,7 @@ describe("TagInfoView save payload", () => {
   it("blocks negative budgets before sending the request", async () => {
     const { user } = await renderEditor();
     await user.click(screen.getByRole("button", { name: /Budget & Rate Limits/ }));
-    fireEvent.change(await screen.findByLabelText("Max Budget (USD)"), { target: { value: "-1" } });
+    fireEvent.change(await screen.findByLabelText("Max Budget (CNY)"), { target: { value: "-1" } });
     await user.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(await screen.findByText("Enter a nonnegative budget")).toBeInTheDocument();
     expect(mockTagUpdateCall).not.toHaveBeenCalled();
@@ -147,14 +147,14 @@ describe("TagInfoView save payload", () => {
     const toggle = () => screen.getByRole("button", { name: /Budget & Rate Limits/ });
 
     await user.click(toggle());
-    const maxBudgetInput = await screen.findByLabelText("Max Budget (USD)");
+    const maxBudgetInput = await screen.findByLabelText("Max Budget (CNY)");
     await user.clear(maxBudgetInput);
     fireEvent.change(maxBudgetInput, { target: { value: "150.75" } });
 
     await user.click(toggle());
     await user.click(toggle());
 
-    expect(await screen.findByLabelText("Max Budget (USD)")).toHaveValue(150.75);
+    expect(await screen.findByLabelText("Max Budget (CNY)")).toHaveValue(150.75);
 
     await user.click(screen.getByRole("button", { name: "Save Changes" }));
 

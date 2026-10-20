@@ -36,7 +36,7 @@ const save = async (user: ReturnType<typeof userEvent.setup>) =>
 
 const openOptionalSettings = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.click(screen.getByText("Optional Settings"));
-  await screen.findByLabelText("Max Budget (USD)");
+  await screen.findByLabelText("Max Budget (CNY)");
 };
 
 describe("EditBudgetModal", () => {
@@ -71,8 +71,8 @@ describe("EditBudgetModal", () => {
     fireEvent.change(screen.getByLabelText("Max Requests per minute"), { target: { value: "7" } });
 
     await openOptionalSettings(user);
-    await user.clear(screen.getByLabelText("Max Budget (USD)"));
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "42.567" } });
+    await user.clear(screen.getByLabelText("Max Budget (CNY)"));
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "42.567" } });
 
     await chooseSelectOption(user, screen.getByRole("combobox"), "monthly");
 
@@ -95,14 +95,14 @@ describe("EditBudgetModal", () => {
     renderModal();
 
     await openOptionalSettings(user);
-    const maxBudget = screen.getByLabelText("Max Budget (USD)");
+    const maxBudget = screen.getByLabelText("Max Budget (CNY)");
     await user.clear(maxBudget);
     fireEvent.change(maxBudget, { target: { value: "99.25" } });
 
     await user.click(screen.getByText("Optional Settings"));
     await user.click(screen.getByText("Optional Settings"));
 
-    expect(await screen.findByLabelText("Max Budget (USD)")).toHaveValue(99.25);
+    expect(await screen.findByLabelText("Max Budget (CNY)")).toHaveValue(99.25);
 
     await save(user);
 

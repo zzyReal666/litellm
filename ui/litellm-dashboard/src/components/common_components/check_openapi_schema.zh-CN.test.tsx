@@ -51,9 +51,9 @@ describe("SchemaFormFields zh-CN", () => {
   it("renders the per-field help text in Chinese", async () => {
     render(<Harness />);
 
-    expect(await screen.findByText("输入最大预算（美元，例如：100.50）")).toBeInTheDocument();
+    expect(await screen.findByText("输入最大预算（元，例如：100.50）")).toBeInTheDocument();
     expect(screen.getByText("输入时长（例如：30s、24h、7d）")).toBeInTheDocument();
-    expect(screen.queryByText("Enter maximum budget in USD (e.g., 100.50)")).not.toBeInTheDocument();
+    expect(screen.queryByText("Enter maximum budget in CNY (e.g., 100.50)")).not.toBeInTheDocument();
   });
 
   it("renders the duration placeholder and the JSON field chrome in Chinese", async () => {

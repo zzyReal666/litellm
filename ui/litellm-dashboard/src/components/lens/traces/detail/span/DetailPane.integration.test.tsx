@@ -275,7 +275,7 @@ describe("DetailPane", () => {
     vi.mocked(uiSpendLogsCall).mockResolvedValue({ data: [{ request_id: "req_7f3a9c2e1b44" }] });
     renderPane(spanRow(llm));
     const link = screen.getByRole("button", { name: "Open LiteLLM spend log req_7f3a9c2e1b44" });
-    expect(link).toHaveTextContent("LiteLLM Spend Log$0.0002");
+    expect(link).toHaveTextContent("LiteLLM Spend Log¥0.0002");
     await user.click(link);
     expect(await screen.findByRole("dialog", { name: "Request log" })).toHaveTextContent("req_7f3a9c2e1b44");
     expect(vi.mocked(uiSpendLogsCall).mock.calls[0][0].params).toEqual({ request_id: "req_7f3a9c2e1b44" });
@@ -310,7 +310,7 @@ describe("DetailPane", () => {
     const pricedFromRetries: SpanFields = { ...llmFields, spend: 0.0005, spend_log_request_id: null };
     renderPane(spanRow(span(pricedFromRetries)));
     expect(screen.queryByRole("button", { name: /Open LiteLLM spend log/ })).not.toBeInTheDocument();
-    expect(screen.getByText("Cost").parentElement).toHaveTextContent("Cost$0.0005");
+    expect(screen.getByText("Cost").parentElement).toHaveTextContent("Cost¥0.0005");
   });
 
   it("summarizes a ×N group with its failure pattern", () => {

@@ -111,19 +111,19 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
         <Card>
           <CardContent>
             {labelWithTooltip(
-              t("teamPage.myUserTab.currentCycleSpendLabel", { defaultValue: "Current Cycle Spend (USD)" }),
+              t("teamPage.myUserTab.currentCycleSpendLabel", { defaultValue: "Current Cycle Spend (CNY)" }),
               t("teamPage.myUserTab.currentCycleSpendTooltip", {
-                defaultValue: "Spend for the current budget cycle. Resets to $0 when the budget window rolls over.",
+                defaultValue: "Spend for the current budget cycle. Resets to ¥0 when the budget window rolls over.",
               }),
               labelInfoAria(
-                t("teamPage.myUserTab.currentCycleSpendLabel", { defaultValue: "Current Cycle Spend (USD)" }),
+                t("teamPage.myUserTab.currentCycleSpendLabel", { defaultValue: "Current Cycle Spend (CNY)" }),
               ),
             )}
             <div className="mt-2">
-              <h3 className="text-2xl font-semibold">${formatNumber(spend, 4)}</h3>
+              <h3 className="text-2xl font-semibold">¥{formatNumber(spend, 4)}</h3>
               <span className="text-muted-foreground">
                 {t("teamPage.myUserTab.ofBudget", {
-                  budget: maxBudget === null ? unlimited : `$${formatNumber(maxBudget, 4)}`,
+                  budget: maxBudget === null ? unlimited : `¥${formatNumber(maxBudget, 4)}`,
                   defaultValue: "of {{budget}}",
                 })}
               </span>
@@ -166,13 +166,13 @@ export default function MyUserTab({ teamId }: MyUserTabProps) {
         <Card>
           <CardContent>
             {labelWithTooltip(
-              t("teamPage.myUserTab.totalSpendLabel", { defaultValue: "Total Spend (USD)" }),
+              t("teamPage.myUserTab.totalSpendLabel", { defaultValue: "Total Spend (CNY)" }),
               t("teamPage.myUserTab.totalSpendTooltip", {
                 defaultValue: "Cumulative spend across all budget cycles within this team.",
               }),
-              labelInfoAria(t("teamPage.myUserTab.totalSpendLabel", { defaultValue: "Total Spend (USD)" })),
+              labelInfoAria(t("teamPage.myUserTab.totalSpendLabel", { defaultValue: "Total Spend (CNY)" })),
             )}
-            <h4 className="mt-2 text-xl font-semibold">${formatNumber(totalSpend, 4)}</h4>
+            <h4 className="mt-2 text-xl font-semibold">¥{formatNumber(totalSpend, 4)}</h4>
           </CardContent>
         </Card>
 

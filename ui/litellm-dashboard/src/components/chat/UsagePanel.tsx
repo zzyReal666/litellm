@@ -121,7 +121,7 @@ const UsagePanel: React.FC<Props> = ({ accessToken, userId }) => {
     ? [
         {
           label: t("activityMetrics.totalSpend", { defaultValue: "Total Spend" }),
-          value: `$${meta.total_spend.toFixed(2)}`,
+          value: `¥${meta.total_spend.toFixed(2)}`,
         },
         {
           label: t("chat.usagePanel.apiRequests", { defaultValue: "API Requests" }),

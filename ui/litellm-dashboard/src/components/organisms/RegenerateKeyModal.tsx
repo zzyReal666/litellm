@@ -181,7 +181,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                 </FormField>
 
                 <div className="grid grid-cols-3 gap-3">
-                  <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+                  <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}

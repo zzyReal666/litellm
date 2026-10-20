@@ -34,6 +34,6 @@ describe("EndpointUsageTable", () => {
     ]);
     expect(screen.getByText("endpoint-1")).toBeInTheDocument();
     expect(screen.getByText("95.00%")).toBeInTheDocument();
-    expect(screen.getByText("$100.50")).toBeInTheDocument();
+    expect(screen.getByText("¥100.50")).toBeInTheDocument();
   });
 });

@@ -94,13 +94,13 @@ describe("buildTeamsCsvRows", () => {
       "Team ID": "team-42",
       "Organization ID": "org-9",
       Models: "gpt-4o, claude-sonnet-4-5",
-      "Max Budget (USD)": 250,
+      "Max Budget (CNY)": 250,
       "Budget Duration": "30d",
       "Budget Reset At": "2026-02-01T00:00:00Z",
-      "Spend (USD)": 12.5,
+      "Spend (CNY)": 12.5,
       "TPM Limit": 1000,
       "RPM Limit": 50,
-      "Team Member Budget (USD)": "",
+      "Team Member Budget (CNY)": "",
       "Team Member Budget Duration": "",
       "Team Member TPM Limit": "",
       "Team Member RPM Limit": "",
@@ -120,11 +120,11 @@ describe("buildTeamsCsvRows", () => {
     const rows = buildTeamsCsvRows(teams, [
       { budget_id: "bud-1", max_budget: 25, budget_duration: "7d", tpm_limit: 200, rpm_limit: 10 },
     ]);
-    expect(rows[0]["Team Member Budget (USD)"]).toBe(25);
+    expect(rows[0]["Team Member Budget (CNY)"]).toBe(25);
     expect(rows[0]["Team Member Budget Duration"]).toBe("7d");
     expect(rows[0]["Team Member TPM Limit"]).toBe(200);
     expect(rows[0]["Team Member RPM Limit"]).toBe(10);
-    expect(rows[1]["Team Member Budget (USD)"]).toBe("");
+    expect(rows[1]["Team Member Budget (CNY)"]).toBe("");
   });
 
   it("falls back to members_with_roles and keys lengths when counts are absent", () => {
@@ -146,8 +146,8 @@ describe("buildTeamsCsv", () => {
     const csv = buildTeamsCsv([makeTeam({ team_alias: "sales, emea", models: ["m1", "m2"] })], []);
     const [header, row] = csv.split("\r\n");
     expect(header).toBe(
-      "Team Alias,Team ID,Organization ID,Models,Max Budget (USD),Budget Duration,Budget Reset At,Spend (USD)," +
-        "TPM Limit,RPM Limit,Team Member Budget (USD),Team Member Budget Duration,Team Member TPM Limit," +
+      "Team Alias,Team ID,Organization ID,Models,Max Budget (CNY),Budget Duration,Budget Reset At,Spend (CNY)," +
+        "TPM Limit,RPM Limit,Team Member Budget (CNY),Team Member Budget Duration,Team Member TPM Limit," +
         "Team Member RPM Limit,Members,Keys,Blocked,Created At",
     );
     expect(row).toContain('"sales, emea"');

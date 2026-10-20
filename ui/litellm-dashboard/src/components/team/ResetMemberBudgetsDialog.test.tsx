@@ -29,7 +29,7 @@ describe("ResetMemberBudgetsDialog", () => {
 
     expect(
       screen.getByText(
-        "3 members have a custom budget, so the new team default of $10.00 will not apply to them. " +
+        "3 members have a custom budget, so the new team default of ¥10.00 will not apply to them. " +
           "Reset them to the default, or keep the custom budgets?",
       ),
     ).toBeInTheDocument();
@@ -40,19 +40,19 @@ describe("ResetMemberBudgetsDialog", () => {
 
     expect(
       screen.getByText(
-        "1 member has a custom budget, so the new team default of $10.00 will not apply to that member. " +
+        "1 member has a custom budget, so the new team default of ¥10.00 will not apply to that member. " +
           "Reset it to the default, or keep the custom budget?",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reset to $10.00" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset to ¥10.00" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Keep custom budget" })).toBeInTheDocument();
   });
 
   it("formats large budgets like the rest of the team page", () => {
     render(<ResetMemberBudgetsDialog state={promptingWith(2, 1000)} {...defaultHandlers()} />);
 
-    expect(screen.getByRole("button", { name: "Reset all to $1,000.00" })).toBeInTheDocument();
-    expect(screen.getByText(/new team default of \$1,000\.00/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset all to ¥1,000.00" })).toBeInTheDocument();
+    expect(screen.getByText(/new team default of ¥1,000\.00/)).toBeInTheDocument();
   });
 
   it("routes each choice to the matching action", async () => {
@@ -60,7 +60,7 @@ describe("ResetMemberBudgetsDialog", () => {
     const user = userEvent.setup();
     render(<ResetMemberBudgetsDialog state={promptingWith(2)} {...handlers} />);
 
-    await user.click(screen.getByRole("button", { name: "Reset all to $10.00" }));
+    await user.click(screen.getByRole("button", { name: "Reset all to ¥10.00" }));
     expect(handlers.onReset).toHaveBeenCalledTimes(1);
 
     await user.click(screen.getByRole("button", { name: "Keep custom budgets" }));
@@ -74,7 +74,7 @@ describe("ResetMemberBudgetsDialog", () => {
     const state: MemberBudgetResetState = { phase: "resetting", pending: pendingFor(2), attempted: 0 };
     render(<ResetMemberBudgetsDialog state={state} {...defaultHandlers()} />);
 
-    expect(screen.getByRole("button", { name: "Reset all to $10.00" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Reset all to ¥10.00" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Keep custom budgets" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
   });
@@ -92,7 +92,7 @@ describe("ResetMemberBudgetsDialog", () => {
     expect(handlers.onDismiss).toHaveBeenCalledTimes(1);
 
     expect(screen.queryByRole("button", { name: "Keep custom budgets" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Reset all to $10.00" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Reset all to ¥10.00" })).not.toBeInTheDocument();
   });
 
   it("renders nothing while idle", () => {

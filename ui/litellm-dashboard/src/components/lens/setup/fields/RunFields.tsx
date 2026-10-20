@@ -74,7 +74,7 @@ export function RunFields({ models, gate }: AnalysisModelFieldProps) {
           )}
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="grid content-start gap-2 text-sm font-medium">
-              Monthly limit (USD)
+              Monthly limit (CNY)
               <Input {...register("budget", { valueAsNumber: true })} type="number" min="0.01" step="1" />
               {errors.budget?.message && (
                 <p role="alert" className="text-sm text-destructive">

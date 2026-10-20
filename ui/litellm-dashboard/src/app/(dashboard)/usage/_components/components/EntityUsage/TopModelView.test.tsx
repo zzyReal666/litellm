@@ -36,7 +36,7 @@ describe("TopModelView", () => {
   it("should display all table column headers", () => {
     render(<TopModelView topModels={[]} topModelsLimit={5} setTopModelsLimit={mockSetTopModelsLimit} />);
     expect(screen.getByText("Model")).toBeInTheDocument();
-    expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
     expect(screen.getByText("Successful")).toBeInTheDocument();
     expect(screen.getByText("Failed")).toBeInTheDocument();
     expect(screen.getByText("Tokens")).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("TopModelView", () => {
       />,
     );
     expect(screen.getByText("gpt-4")).toBeInTheDocument();
-    expect(screen.getByText("$150.50")).toBeInTheDocument();
+    expect(screen.getByText("¥150.50")).toBeInTheDocument();
     expect(screen.getByText("100")).toBeInTheDocument();
     const failedRequestsCell = screen
       .getAllByText("5")
@@ -80,7 +80,7 @@ describe("TopModelView", () => {
     await clickControl(user, "Chart View");
 
     expect(showsChart(container)).toBe(true);
-    expect(screen.queryByText("Spend (USD)")).not.toBeInTheDocument();
+    expect(screen.queryByText("Spend (CNY)")).not.toBeInTheDocument();
   });
 
   it("should switch to table view when table view button is clicked", async () => {
@@ -93,7 +93,7 @@ describe("TopModelView", () => {
     await clickControl(user, "Table View");
 
     expect(showsChart(container)).toBe(false);
-    expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
   });
 
   it("renders one brand-blue bar per model with model names on the axis in chart view", async () => {
@@ -196,7 +196,7 @@ describe("TopModelView", () => {
         setTopModelsLimit={mockSetTopModelsLimit}
       />,
     );
-    expect(screen.getByText("$123.46")).toBeInTheDocument();
+    expect(screen.getByText("¥123.46")).toBeInTheDocument();
   });
 
   it("should display zero values correctly", () => {
@@ -285,7 +285,7 @@ describe("TopModelView", () => {
   it("should handle empty model list", () => {
     render(<TopModelView topModels={[]} topModelsLimit={5} setTopModelsLimit={mockSetTopModelsLimit} />);
     expect(screen.getByText("Model")).toBeInTheDocument();
-    expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
   });
 
   it("should display dash for missing model key", () => {

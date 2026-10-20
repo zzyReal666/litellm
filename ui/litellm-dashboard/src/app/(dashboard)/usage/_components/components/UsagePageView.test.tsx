@@ -527,12 +527,12 @@ describe("UsagePage", () => {
       expect(mockUserDailyActivityAggregatedCall).toHaveBeenCalledTimes(2);
     });
     expect(overview().queryByText("75K")).not.toBeInTheDocument();
-    expect(overview().queryByText("$0.00")).not.toBeInTheDocument();
+    expect(overview().queryByText("¥0.00")).not.toBeInTheDocument();
     expect(overview().getByText("Total Tokens")).toBeInTheDocument();
     expect(await overview().findByText("425,151")).toBeInTheDocument();
     // The Total Tokens stat (label, value and hint) must hold no number while its range is in flight.
     expect(overview().getByText("Total Tokens").parentElement).not.toHaveTextContent(/\d/);
-    expect(overview().queryByText("$0.0000")).not.toBeInTheDocument();
+    expect(overview().queryByText("¥0.0000")).not.toBeInTheDocument();
 
     await act(async () => {
       releaseSecondFetch();
@@ -541,7 +541,7 @@ describe("UsagePage", () => {
       expect(overview().getAllByText("75K").length).toBeGreaterThan(0);
     });
     expect(overview().getByText("Total Tokens")).toBeInTheDocument();
-    expect(overview().getByText("$0.0838")).toBeInTheDocument();
+    expect(overview().getByText("¥0.0838")).toBeInTheDocument();
   });
 
   it("loads key pages separately from the aggregate and refreshes them when the range changes", async () => {

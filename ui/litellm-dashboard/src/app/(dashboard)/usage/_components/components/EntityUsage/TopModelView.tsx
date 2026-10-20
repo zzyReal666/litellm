@@ -60,7 +60,7 @@ export default function TopModelView({ topModels, topModelsLimit, setTopModelsLi
       cell: (info: any) => <ModelName name={info.getValue()} />,
     },
     {
-      header: "Spend (USD)",
+      header: "Spend (CNY)",
       accessorKey: "spend",
       meta: { numeric: true, ...QUIET_HEADER },
       cell: (info: any) => <MoneyCell value={info.getValue()} decimals={2} />,
@@ -111,7 +111,7 @@ export default function TopModelView({ topModels, topModelsLimit, setTopModelsLi
             index="key"
             categories={["spend"]}
             colors={[BAR_COLOR]}
-            valueFormatter={(value) => `$${formatNumberWithCommas(value, 2)}`}
+            valueFormatter={(value) => `¥${formatNumberWithCommas(value, 2)}`}
             layout="vertical"
             yAxisWidth={200}
             tickGap={5}

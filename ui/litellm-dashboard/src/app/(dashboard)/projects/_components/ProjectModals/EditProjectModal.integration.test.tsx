@@ -106,7 +106,7 @@ describe("EditProjectModal submit payload", () => {
     const user = setup();
     renderModal();
 
-    const budgetInput = screen.getByRole("spinbutton", { name: "Max Budget (USD)" });
+    const budgetInput = screen.getByRole("spinbutton", { name: "Max Budget (CNY)" });
     await user.clear(budgetInput);
     await user.tab();
     expect(budgetInput).toHaveValue(null);

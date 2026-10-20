@@ -160,10 +160,10 @@ describe("UsageTab", () => {
     };
     renderWith([day("2026-07-12", firstDay), day("2026-07-13", secondDay)]);
 
-    expect(screen.getByText("$0.1500")).toBeInTheDocument();
-    expect(screen.getByText("$0.1400")).toBeInTheDocument();
-    expect(screen.getByText("$0.0100")).toBeInTheDocument();
-    expect(screen.getByText("$0.0160")).toBeInTheDocument();
+    expect(screen.getByText("¥0.1500")).toBeInTheDocument();
+    expect(screen.getByText("¥0.1400")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0100")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0160")).toBeInTheDocument();
     expect(screen.getByText("140,000 tokens compressed")).toBeInTheDocument();
   });
 
@@ -172,10 +172,10 @@ describe("UsageTab", () => {
     day("2026-07-13", { compression_savings_spend: 0.1, gateway_injected_caching_savings_spend: 0.01 }),
   ];
 
-  it("opens on a running total anchored at $0 at the start of the range", () => {
+  it("opens on a running total anchored at ¥0 at the start of the range", () => {
     renderWith(twoDays());
 
-    // Cumulative prepends a synthetic $0 point at the range start (Jul 1) so the
+    // Cumulative prepends a synthetic ¥0 point at the range start (Jul 1) so the
     // line rises from zero rather than floating; the daily running totals follow.
     const series = readSeries(screen.getByTestId("area-chart"));
     expect(series).toHaveLength(3);
@@ -185,7 +185,7 @@ describe("UsageTab", () => {
     expect(series[2]["Prompt caching"]).toBeCloseTo(0.016, 5);
   });
 
-  it("rises from $0 to the day's cumulative total for a single-day range", () => {
+  it("rises from ¥0 to the day's cumulative total for a single-day range", () => {
     // The original complaint: a one-day range plotted a single floating dot. The
     // synthetic start anchor gives the line a zero origin to climb from.
     const oneDay = new Date(2026, 6, 24);
@@ -210,7 +210,7 @@ describe("UsageTab", () => {
     ];
     renderWith(newestFirst);
 
-    // The $0 anchor leads, then the days climb oldest to newest.
+    // The ¥0 anchor leads, then the days climb oldest to newest.
     const cumulative = readSeries(screen.getByTestId("area-chart"));
     expect(cumulative.map((p: { date: string }) => p.date)).toEqual(["Jul 1", "Jul 12", "Jul 13"]);
     expect(cumulative[1]["Prompt caching"]).toBeCloseTo(0.04, 5);
@@ -328,12 +328,12 @@ describe("UsageTab", () => {
       }),
     ]);
 
-    expect(screen.getByText("$0.0700")).toBeInTheDocument();
-    expect(screen.getByText("-$0.0500")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0700")).toBeInTheDocument();
+    expect(screen.getByText("-¥0.0500")).toBeInTheDocument();
 
     const slices = JSON.parse(screen.getByTestId("donut-chart").getAttribute("data-slices") ?? "[]");
     expect(slices.map((d: { driver: string }) => d.driver)).toEqual(["Compression", "Prompt caching"]);
-    expect(screen.getByTestId("donut-chart")).toHaveAttribute("data-label", "$0.1200");
+    expect(screen.getByTestId("donut-chart")).toHaveAttribute("data-label", "¥0.1200");
   });
 
   it("carries auto-router savings into the summary card, donut slice, and cumulative series", () => {
@@ -351,8 +351,8 @@ describe("UsageTab", () => {
     ]);
 
     // Total saved now sums three drivers, and the auto-router card carries its own total.
-    expect(screen.getByText("$0.2260")).toBeInTheDocument();
-    expect(screen.getByText("$0.0700")).toBeInTheDocument();
+    expect(screen.getByText("¥0.2260")).toBeInTheDocument();
+    expect(screen.getByText("¥0.0700")).toBeInTheDocument();
 
     // The driver donut gains a third slice priced from the range totals.
     const slices = JSON.parse(screen.getByTestId("donut-chart").getAttribute("data-slices") ?? "[]");

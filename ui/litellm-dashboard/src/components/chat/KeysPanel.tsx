@@ -308,7 +308,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>Max Budget (USD)</Label>
+                  <Label>Max Budget (CNY)</Label>
                   <Input
                     type="number"
                     step="0.01"

@@ -151,8 +151,8 @@ describe("Worker setup", () => {
     expect(screen.getByRole("button", { name: "Enable investigations" })).toBeDisabled();
     await user.click(screen.getByRole("combobox", { name: "Analysis model" }));
     await user.click(await screen.findByRole("option", { name: "analysis-model" }));
-    await user.clear(screen.getByLabelText("Monthly limit (USD)"));
-    await user.type(screen.getByLabelText("Monthly limit (USD)"), "12");
+    await user.clear(screen.getByLabelText("Monthly limit (CNY)"));
+    await user.type(screen.getByLabelText("Monthly limit (CNY)"), "12");
     await user.click(screen.getByRole("button", { name: "Enable investigations" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Registration unavailable");
     expect(writes()[0]).toMatchObject({

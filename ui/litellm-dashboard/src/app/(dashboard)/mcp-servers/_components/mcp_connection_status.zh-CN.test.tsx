@@ -76,13 +76,13 @@ describe("MCP 连接状态与费用展示的中文界面", () => {
 
     expect(screen.getByText("每次查询默认费用")).toBeInTheDocument();
     expect(screen.getByText("费用汇总：")).toBeInTheDocument();
-    expect(screen.getByText("• 默认费用：$0.0125 / 次查询")).toBeInTheDocument();
+    expect(screen.getByText("• 默认费用：¥0.0125 / 次查询")).toBeInTheDocument();
     expect(screen.getByText("• 2 个工具使用自定义定价")).toBeInTheDocument();
   });
 
   it("把未配置费用的说明渲染成中文", () => {
     render(<MCPServerCostDisplay costConfig={null} />);
 
-    expect(screen.getByText("此服务器未配置费用。工具调用将按每次 $0.00 收费。")).toBeInTheDocument();
+    expect(screen.getByText("此服务器未配置费用。工具调用将按每次 ¥0.00 收费。")).toBeInTheDocument();
   });
 });

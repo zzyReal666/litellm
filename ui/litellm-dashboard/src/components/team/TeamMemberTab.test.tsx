@@ -290,10 +290,10 @@ describe("TeamMembersComponent", () => {
       />,
     );
 
-    expect(screen.getByText("$100.50")).toBeInTheDocument();
-    expect(screen.getByText("$1,538.26")).toBeInTheDocument();
-    expect(screen.getByRole("cell", { name: "$100.50" })).toHaveClass("text-right");
-    expect(screen.getByRole("columnheader", { name: /^Team Member Budget \(USD\)/ })).toHaveClass("text-right");
+    expect(screen.getByText("¥100.50")).toBeInTheDocument();
+    expect(screen.getByText("¥1,538.26")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "¥100.50" })).toHaveClass("text-right");
+    expect(screen.getByRole("columnheader", { name: /^Team Member Budget \(CNY\)/ })).toHaveClass("text-right");
     expect(screen.getByRole("columnheader", { name: "User Email" })).not.toHaveClass("text-right");
     expect(screen.getByText(/100 RPM/)).toBeInTheDocument();
     expect(screen.getByText(/10000 TPM/)).toBeInTheDocument();
@@ -330,7 +330,7 @@ describe("TeamMembersComponent", () => {
       />,
     );
 
-    expect(screen.getByText("$1,000.00")).toBeInTheDocument();
+    expect(screen.getByText("¥1,000.00")).toBeInTheDocument();
     expect(screen.getByText("Unlimited")).toBeInTheDocument();
   });
 
@@ -550,7 +550,7 @@ describe("TeamMembersComponent", () => {
         />,
       );
 
-    it("resets the member's current cycle spend to $0 after confirming, then refreshes the team", async () => {
+    it("resets the member's current cycle spend to ¥0 after confirming, then refreshes the team", async () => {
       const user = userEvent.setup();
       POST.mockResolvedValue({ data: {} });
       renderEditableTab();
@@ -560,7 +560,7 @@ describe("TeamMembersComponent", () => {
 
       const dialog = await screen.findByRole("dialog", { name: "Reset Team Member Spend" });
       expect(dialog).toHaveTextContent("user1@test.com");
-      expect(dialog).toHaveTextContent("$100.5000");
+      expect(dialog).toHaveTextContent("¥100.5000");
       expect(POST).not.toHaveBeenCalled();
 
       await user.click(within(dialog).getByRole("button", { name: "Reset" }));
@@ -696,9 +696,9 @@ describe("TeamMembersComponent", () => {
       const customRow = screen.getByRole("row", { name: /user1@test\.com/ });
       const inheritedRow = screen.getByRole("row", { name: /user2@test\.com/ });
       expect(within(customRow).getByTestId("member-budget-source")).toHaveTextContent("Custom");
-      expect(customRow).toHaveTextContent("$1,000.00");
+      expect(customRow).toHaveTextContent("¥1,000.00");
       expect(within(inheritedRow).getByTestId("member-budget-source")).toHaveTextContent("Team default");
-      expect(inheritedRow).toHaveTextContent("$25.00");
+      expect(inheritedRow).toHaveTextContent("¥25.00");
     });
 
     it("caps a Custom member at the team default when the private row has no budget limit", () => {
@@ -735,7 +735,7 @@ describe("TeamMembersComponent", () => {
 
       const row = screen.getByRole("row", { name: /user2@test\.com/ });
       expect(within(row).getByTestId("member-budget-source")).toHaveTextContent("Custom");
-      expect(row).toHaveTextContent("$20.00");
+      expect(row).toHaveTextContent("¥20.00");
       expect(row).not.toHaveTextContent("Unlimited");
     });
 
@@ -770,8 +770,8 @@ describe("TeamMembersComponent", () => {
 
       const dialog = await screen.findByRole("dialog", { name: "Reset Team Member Budget" });
       expect(dialog).toHaveTextContent("user1@test.com");
-      expect(dialog).toHaveTextContent("team default of $25.00");
-      expect(dialog).toHaveTextContent("Custom budget: $1,000.00");
+      expect(dialog).toHaveTextContent("team default of ¥25.00");
+      expect(dialog).toHaveTextContent("Custom budget: ¥1,000.00");
       expect(POST).not.toHaveBeenCalled();
 
       await user.click(within(dialog).getByRole("button", { name: "Use team default" }));

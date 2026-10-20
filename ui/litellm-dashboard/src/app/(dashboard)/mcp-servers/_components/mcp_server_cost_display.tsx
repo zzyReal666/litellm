@@ -22,7 +22,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
             <p className="text-sm text-muted-foreground">
               {t("mcpTools.mcpServerCostDisplay.noCostConfig", {
                 defaultValue:
-                  "No cost configuration set for this server. Tool calls will be charged at $0.00 per tool call.",
+                  "No cost configuration set for this server. Tool calls will be charged at ¥0.00 per tool call.",
               })}
             </p>
           </div>
@@ -41,7 +41,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
               <p className="text-sm font-medium">
                 {t("mcpTools.mcpServerCostDisplay.defaultCostPerQuery", { defaultValue: "Default Cost per Query" })}
               </p>
-              <div className="font-mono text-sm">${costConfig.default_cost_per_query.toFixed(4)}</div>
+              <div className="font-mono text-sm">¥{costConfig.default_cost_per_query.toFixed(4)}</div>
             </div>
           )}
 
@@ -60,7 +60,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
                       <p className="font-mono text-sm">
                         {t("mcpTools.mcpServerCostDisplay.costPerQuery", {
                           cost: cost.toFixed(4),
-                          defaultValue: "${{cost}} per query",
+                          defaultValue: "¥{{cost}} per query",
                         })}
                       </p>
                     </div>
@@ -81,7 +81,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
                 <p className="text-sm text-muted-foreground">
                   {t("mcpTools.mcpServerCostDisplay.defaultCostRow", {
                     cost: costConfig.default_cost_per_query.toFixed(4),
-                    defaultValue: "• Default cost: ${{cost}} per query",
+                    defaultValue: "• Default cost: ¥{{cost}} per query",
                   })}
                 </p>
               )}

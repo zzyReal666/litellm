@@ -559,7 +559,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("Total Spend")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$100.50");
+      const spendElements = screen.getAllByText("¥100.50");
       expect(spendElements.length).toBeGreaterThan(0);
     });
 
@@ -578,7 +578,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("Team Spend Overview")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$100.50");
+      const spendElements = screen.getAllByText("¥100.50");
       expect(spendElements.length).toBeGreaterThan(0);
     });
   });
@@ -613,7 +613,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("Organization Spend Overview")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$100.50");
+      const spendElements = screen.getAllByText("¥100.50");
       expect(spendElements.length).toBeGreaterThan(0);
     });
   });
@@ -628,7 +628,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("Customer Spend Overview")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$100.50");
+      const spendElements = screen.getAllByText("¥100.50");
       expect(spendElements.length).toBeGreaterThan(0);
     });
   });
@@ -643,7 +643,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("Agent Spend Overview")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$444.30");
+      const spendElements = screen.getAllByText("¥444.30");
       expect(spendElements.length).toBeGreaterThan(0);
     });
   });
@@ -658,7 +658,7 @@ describe("EntityUsage", () => {
     expect(screen.getByText("User Spend Overview")).toBeInTheDocument();
 
     await waitFor(() => {
-      const spendElements = screen.getAllByText("$100.50");
+      const spendElements = screen.getAllByText("¥100.50");
       expect(spendElements.length).toBeGreaterThan(0);
     });
   });
@@ -808,7 +808,7 @@ describe("EntityUsage", () => {
 
     expect(await screen.findByText("Tag Spend Overview")).toBeInTheDocument();
     const costTab = screen.getByRole("tabpanel");
-    expect(await within(costTab).findByText("$0.00")).toBeInTheDocument();
+    expect(await within(costTab).findByText("¥0.00")).toBeInTheDocument();
     expect(within(costTab).getByText("Total Spend")).toBeInTheDocument();
     expect(within(costTab).getAllByText("0")[0]).toBeInTheDocument();
   });
@@ -1024,7 +1024,7 @@ describe("EntityUsage", () => {
     expect(screen.getAllByText("Loading chart data...")).toHaveLength(2);
     expect(screen.queryByText("Total Spend")).not.toBeInTheDocument();
     expect(screen.queryByText("Overall Usage")).not.toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
 
     await act(async () => {
       resolveSpend(mockSpendData);
@@ -1033,7 +1033,7 @@ describe("EntityUsage", () => {
     expect(screen.queryByText("Loading chart data...")).not.toBeInTheDocument();
     expect(screen.getByText("Overall Usage")).toBeInTheDocument();
     expect(screen.getByText("Total Spend")).toBeInTheDocument();
-    expect(screen.getAllByText("$100.50").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("¥100.50").length).toBeGreaterThan(0);
   });
 
   it("should not fetch agent activity data for non-team entity types", async () => {
@@ -1114,7 +1114,7 @@ describe("EntityUsage", () => {
     const segments = screen.getAllByTestId("provider-share-segment");
     expect(segments).toHaveLength(1);
     expect(segments[0]).toHaveStyle({ backgroundColor: "rgb(236, 72, 153)" });
-    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("$100.50");
+    expect(screen.getByTestId("provider-spend-total")).toHaveTextContent("¥100.50");
   });
 
   it("should label the chart with user_email metadata instead of the raw UUID (LIT-3889)", async () => {
@@ -1295,7 +1295,7 @@ describe("EntityUsage", () => {
     expect(mockDailyActivityAggregatedCall.mock.calls.filter((c) => c[0] === "team")).toHaveLength(1);
 
     await waitFor(() => {
-      expect(screen.getAllByText("$100.50").length).toBeGreaterThan(0);
+      expect(screen.getAllByText("¥100.50").length).toBeGreaterThan(0);
     });
   });
 

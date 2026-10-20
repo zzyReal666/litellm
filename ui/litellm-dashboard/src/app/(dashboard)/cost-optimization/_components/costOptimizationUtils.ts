@@ -8,13 +8,13 @@ export const usd = (value: number): string => {
   // loss rendered at two decimals would read as "$-0.00"
   const magnitude = Math.abs(value);
   const decimals = magnitude > 0 && magnitude < 1 ? 4 : 2;
-  return `${value < 0 ? "-" : ""}$${formatNumberWithCommas(magnitude, decimals)}`;
+  return `${value < 0 ? "-" : ""}¥${formatNumberWithCommas(magnitude, decimals)}`;
 };
 
 export const classificationRatePer1kTurns = (classifierCost: number, turns: number): string => {
   if (turns <= 0) return `(${usd(0)} / 1K turns)`;
   const rate = (classifierCost * 1000) / turns;
-  if (rate > 0 && rate < 0.0001) return "(<$0.0001 / 1K turns)";
+  if (rate > 0 && rate < 0.0001) return "(<¥0.0001 / 1K turns)";
   return `(${usd(rate)} / 1K turns)`;
 };
 
@@ -301,10 +301,10 @@ export const toCumulative = (points: readonly SavingsPoint[]): SavingsPoint[] =>
   }, []);
 
 /**
- * Prepend a synthetic $0 point at the start of the range so the cumulative line
+ * Prepend a synthetic ¥0 point at the start of the range so the cumulative line
  * rises from zero instead of floating as a single dot. The daily rollup only
  * resolves whole days, so a one-day range would otherwise be one point; with the
- * anchor it reads as "start of range $0 climbing to the range's running total".
+ * anchor it reads as "start of range ¥0 climbing to the range's running total".
  * An empty series is left untouched so the chart's own "No data" state shows.
  */
 export const withStartAnchor = (cumulative: readonly SavingsPoint[], startLabel: string): SavingsPoint[] =>

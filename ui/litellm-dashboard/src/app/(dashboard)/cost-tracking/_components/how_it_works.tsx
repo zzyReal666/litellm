@@ -51,7 +51,7 @@ const HowItWorks: React.FC = () => {
         </h3>
         <p className="text-xs text-muted-foreground">
           {t("costTracking.howItWorks.exampleDesc", {
-            defaultValue: "A 5% discount on a $10.00 request results in: $10.00 × (1 - 0.05) = $9.50",
+            defaultValue: "A 5% discount on a ¥10.00 request results in: ¥10.00 × (1 - 0.05) = ¥9.50",
           })}
         </p>
       </div>
@@ -166,19 +166,19 @@ const HowItWorks: React.FC = () => {
                 <p className="text-xs text-muted-foreground">
                   {t("costTracking.howItWorks.originalCostLabel", { defaultValue: "Original Cost:" })}
                 </p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.originalCost}</code>
+                <code className="font-mono text-xs text-foreground">¥{calculatedDiscount.originalCost}</code>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">
                   {t("costTracking.howItWorks.finalCostLabel", { defaultValue: "Final Cost:" })}
                 </p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.finalCost}</code>
+                <code className="font-mono text-xs text-foreground">¥{calculatedDiscount.finalCost}</code>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">
                   {t("costTracking.howItWorks.discountAmountResultLabel", { defaultValue: "Discount Amount:" })}
                 </p>
-                <code className="font-mono text-xs text-foreground">${calculatedDiscount.discountAmount}</code>
+                <code className="font-mono text-xs text-foreground">¥{calculatedDiscount.discountAmount}</code>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-2">
                 <p className="text-xs font-semibold text-foreground">

@@ -94,7 +94,7 @@ const SettingValueEditor: React.FC<{
   if (setting.field_type === "Dollar") {
     return (
       <InputGroup className={NUMERIC_INPUT_WIDTH}>
-        <InputGroupAddon>$</InputGroupAddon>
+        <InputGroupAddon>¥</InputGroupAddon>
         <InputGroupInput
           type="number"
           min={0.01}

@@ -1184,7 +1184,7 @@ describe("Teams - which fields reach the create payload depends on the open sect
       expect(screen.getByLabelText("Team ID")).toBeInTheDocument();
     });
     fireEvent.change(screen.getByLabelText("Team ID"), { target: { value: "tid-open" } });
-    fireEvent.change(screen.getByLabelText("Team Member Budget (USD)"), { target: { value: "12.5" } });
+    fireEvent.change(screen.getByLabelText("Team Member Budget (CNY)"), { target: { value: "12.5" } });
 
     const payload = await submit();
 
@@ -1399,14 +1399,14 @@ describe("Teams - the exact bytes the create call sends", () => {
   it("carries every typed value to the payload at the type antd sends today", async () => {
     await openCreateModal();
 
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "150.75" } });
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "150.75" } });
     fireEvent.change(screen.getByLabelText("Tokens per minute Limit (TPM)"), { target: { value: "900" } });
     fireEvent.change(screen.getByLabelText("Requests per minute Limit (RPM)"), { target: { value: "800" } });
 
     await openSection("Additional Settings", /Team Member Key Duration/);
 
     fireEvent.change(screen.getByLabelText("Team ID"), { target: { value: "tid-1" } });
-    fireEvent.change(screen.getByLabelText("Team Member Budget (USD)"), { target: { value: "12.5" } });
+    fireEvent.change(screen.getByLabelText("Team Member Budget (CNY)"), { target: { value: "12.5" } });
     fireEvent.change(screen.getByLabelText(/Team Member Key Duration/), { target: { value: "30d" } });
     fireEvent.change(screen.getByLabelText("Team Member RPM Limit"), { target: { value: "7" } });
     fireEvent.change(screen.getByLabelText("Team Member TPM Limit"), { target: { value: "8" } });

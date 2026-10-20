@@ -126,7 +126,7 @@ describe("GuardrailDetail", () => {
   it("should show the usage and cost breakdown for the guardrail on the overview tab", async () => {
     renderDetail();
     const section = await screen.findByRole("region", { name: "Usage and cost" });
-    expect(section).toHaveTextContent("$0.0004");
+    expect(section).toHaveTextContent("¥0.0004");
     expect(section).toHaveTextContent("Sensitive Information Policy");
   });
 

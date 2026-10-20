@@ -21,7 +21,7 @@ vi.mock("@/app/(dashboard)/hooks/uiSettings/useUpdateUISettings", () => ({
 }));
 
 const TPM_LABEL = "Tokens per minute Limit (TPM)";
-const MAX_BUDGET_LABEL = "Max Budget (USD)";
+const MAX_BUDGET_LABEL = "Max Budget (CNY)";
 
 const mockSettings = (supported: readonly string[], enabled: readonly string[]) =>
   mockUseUISettings.mockReturnValue({

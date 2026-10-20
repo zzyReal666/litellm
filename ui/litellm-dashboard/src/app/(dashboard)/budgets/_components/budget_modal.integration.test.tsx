@@ -27,7 +27,7 @@ const create = async (user: ReturnType<typeof userEvent.setup>) =>
 
 const openOptionalSettings = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.click(screen.getByText("Optional Settings"));
-  await screen.findByLabelText("Max Budget (USD)");
+  await screen.findByLabelText("Max Budget (CNY)");
 };
 
 describe("BudgetModal", () => {
@@ -62,7 +62,7 @@ describe("BudgetModal", () => {
     fireEvent.change(screen.getByLabelText("Max Requests per minute"), { target: { value: "7" } });
 
     await openOptionalSettings(user);
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "42.567" } });
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "42.567" } });
 
     await chooseSelectOption(user, screen.getByRole("combobox"), "monthly");
 
@@ -79,11 +79,11 @@ describe("BudgetModal", () => {
     fireEvent.change(screen.getByLabelText("Budget ID"), { target: { value: "budget-alpha" } });
 
     await openOptionalSettings(user);
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "42.567" } });
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "42.567" } });
     await chooseSelectOption(user, screen.getByRole("combobox"), "monthly");
 
     await user.click(screen.getByText("Optional Settings"));
-    await waitFor(() => expect(screen.queryByLabelText("Max Budget (USD)")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByLabelText("Max Budget (CNY)")).not.toBeInTheDocument());
     await create(user);
 
     await waitFor(() => expect(createMock).toHaveBeenCalledTimes(1));
@@ -123,12 +123,12 @@ describe("BudgetModal", () => {
     fireEvent.change(screen.getByLabelText("Budget ID"), { target: { value: "probe-budget" } });
 
     await openOptionalSettings(user);
-    fireEvent.change(screen.getByLabelText("Max Budget (USD)"), { target: { value: "42.5" } });
+    fireEvent.change(screen.getByLabelText("Max Budget (CNY)"), { target: { value: "42.5" } });
 
     await user.click(screen.getByText("Optional Settings"));
     await user.click(screen.getByText("Optional Settings"));
 
-    expect(await screen.findByLabelText("Max Budget (USD)")).toHaveValue(42.5);
+    expect(await screen.findByLabelText("Max Budget (CNY)")).toHaveValue(42.5);
 
     await create(user);
 

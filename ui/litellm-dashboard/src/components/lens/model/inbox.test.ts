@@ -129,7 +129,7 @@ const step = (overrides: Partial<Step>): Step =>
 describe("step feed helpers", () => {
   it("summarizes a model call with its token count and cost", () => {
     expect(stepLine(step({ prompt_tokens: 1000, completion_tokens: 200, cost: 0.0031 }))).toBe(
-      "Reviewed a run · 1.2k tok · $0.0031",
+      "Reviewed a run · 1.2k tok · ¥0.0031",
     );
     expect(stepLine(step({ kind: "stage", label: "Grouping observations" }))).toBe("Grouping observations");
   });

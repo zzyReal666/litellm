@@ -86,7 +86,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
               </Select>
               <InputGroup className="w-40">
                 <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
+                  <InputGroupText>¥</InputGroupText>
                 </InputGroupAddon>
                 <InputGroupInput
                   type="number"

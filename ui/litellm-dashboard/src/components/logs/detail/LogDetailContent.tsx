@@ -512,7 +512,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
             {reasoningTokens !== undefined && reasoningTokens > 0 && (
               <DescriptionItem label="Reasoning Tokens">{formatNumberWithCommas(reasoningTokens)}</DescriptionItem>
             )}
-            <DescriptionItem label="Cost">${formatNumberWithCommas(logEntry.spend || 0, 8)}</DescriptionItem>
+            <DescriptionItem label="Cost">¥{formatNumberWithCommas(logEntry.spend || 0, 8)}</DescriptionItem>
             <DescriptionItem label="Duration">
               {logEntry.request_duration_ms != null ? (logEntry.request_duration_ms / 1000).toFixed(3) : "-"} s
             </DescriptionItem>

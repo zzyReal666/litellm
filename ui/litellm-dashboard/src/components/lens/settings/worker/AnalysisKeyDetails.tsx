@@ -16,7 +16,7 @@ function budgetLabel(amount: number | null, duration?: string | null): string {
   };
   const dollars = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "CNY", currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 2,
   }).format(amount);
   return duration ? `${dollars} / ${periods[duration] ?? duration}` : `${dollars} total`;

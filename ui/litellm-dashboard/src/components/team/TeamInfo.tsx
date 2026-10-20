@@ -1308,13 +1308,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           <Card className="block p-6">
             <p>Budget Status</p>
             <div className="mt-2">
-              <h3 className="text-lg font-medium">${formatNumberWithCommas(info.spend, 2)}</h3>
-              <p>of {info.max_budget === null ? "Unlimited" : `$${formatNumberWithCommas(info.max_budget, 2)}`}</p>
+              <h3 className="text-lg font-medium">¥{formatNumberWithCommas(info.spend, 2)}</h3>
+              <p>of {info.max_budget === null ? "Unlimited" : `¥${formatNumberWithCommas(info.max_budget, 2)}`}</p>
               {info.budget_duration && <p className="text-muted-foreground">Reset: {info.budget_duration}</p>}
               <br />
               {info.team_member_budget_table && (
                 <p className="text-muted-foreground">
-                  Team Member Budget: ${formatNumberWithCommas(info.team_member_budget_table.max_budget, 2)}
+                  Team Member Budget: ¥{formatNumberWithCommas(info.team_member_budget_table.max_budget, 2)}
                 </p>
               )}
             </div>
@@ -1536,13 +1536,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     />
                   </Field>
 
-                  <FormField control={form.control} name="max_budget" label="Max Budget (USD)">
+                  <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="soft_budget" label="Soft Budget (USD)">
+                  <FormField control={form.control} name="soft_budget" label="Soft Budget (CNY)">
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
@@ -1605,7 +1605,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                           control={form.control}
                           name="team_member_budget"
                           label={labelWithHint(
-                            "Default Budget (USD)",
+                            "Default Budget (CNY)",
                             "Default spend budget for each member in this team.",
                           )}
                         >
@@ -2269,12 +2269,12 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               <div>
                 <p className="font-medium">Team Budget</p>
                 <div>
-                  Max Budget: {info.max_budget !== null ? `$${formatNumberWithCommas(info.max_budget, 4)}` : "No Limit"}
+                  Max Budget: {info.max_budget !== null ? `¥${formatNumberWithCommas(info.max_budget, 4)}` : "No Limit"}
                 </div>
                 <div>
                   Soft Budget:{" "}
                   {info.soft_budget !== null && info.soft_budget !== undefined
-                    ? `$${formatNumberWithCommas(info.soft_budget, 4)}`
+                    ? `¥${formatNumberWithCommas(info.soft_budget, 4)}`
                     : "No Limit"}
                 </div>
                 <div>Budget Reset: {info.budget_duration || "Never"}</div>
@@ -2283,8 +2283,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     const spent = model === null ? undefined : info.model_max_budget_usage?.[model]?.current_spend;
                     return (
                       <div key={model}>
-                        Per-Model Budget ({model}): ${budgetLimit ?? "?"} per {timePeriod}
-                        {spent !== undefined && `, spent $${spent}`}
+                        Per-Model Budget ({model}): ¥{budgetLimit ?? "?"} per {timePeriod}
+                        {spent !== undefined && `, spent ¥${spent}`}
                       </div>
                     );
                   },
@@ -2461,8 +2461,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "max_budget_in_team",
               label: (
                 <span>
-                  Team Member Budget (USD){" "}
-                  <SimpleTooltip content="Maximum amount in USD this member can spend within this team. This is separate from any global user budget limits">
+                  Team Member Budget (CNY){" "}
+                  <SimpleTooltip content="Maximum amount in CNY this member can spend within this team. This is separate from any global user budget limits">
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </span>
@@ -2488,8 +2488,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "temp_budget_increase",
               label: (
                 <span>
-                  Temporary Budget Increase (USD){" "}
-                  <SimpleTooltip content="Extra USD added on top of the team member budget until the expiry below. The permanent budget is left unchanged and the increase stops applying at expiry.">
+                  Temporary Budget Increase (CNY){" "}
+                  <SimpleTooltip content="Extra CNY added on top of the team member budget until the expiry below. The permanent budget is left unchanged and the increase stops applying at expiry.">
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </span>

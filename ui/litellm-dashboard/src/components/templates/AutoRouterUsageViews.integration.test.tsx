@@ -119,22 +119,22 @@ describe("Auto-router usage views", () => {
     renderWithProviders(<KeyAutoRouterUsageTab accessToken="test-token" keyToken="key-hash-1" activity={activity} />);
 
     const savings = within(await screen.findByRole("region", { name: "Auto-router savings" }));
-    expect(savings.getByText("$8.75")).toBeInTheDocument();
+    expect(savings.getByText("¥8.75")).toBeInTheDocument();
     expect(savings.getByText("Actual auto-router spend")).toBeInTheDocument();
-    expect(savings.getByText("$1.25")).toBeInTheDocument();
+    expect(savings.getByText("¥1.25")).toBeInTheDocument();
     expect(savings.getByText("LLM spend")).toBeInTheDocument();
-    expect(savings.getByText("$1.00")).toBeInTheDocument();
+    expect(savings.getByText("¥1.00")).toBeInTheDocument();
     expect(savings.getByText("Classification cost")).toBeInTheDocument();
-    expect(savings.getByText("$0.2500")).toBeInTheDocument();
-    expect(savings.getByText("($62.50 / 1K turns)")).toBeInTheDocument();
+    expect(savings.getByText("¥0.2500")).toBeInTheDocument();
+    expect(savings.getByText("(¥62.50 / 1K turns)")).toBeInTheDocument();
     expect(savings.getByText("Estimated baseline spend")).toBeInTheDocument();
-    expect(savings.getByText("$10.00")).toBeInTheDocument();
+    expect(savings.getByText("¥10.00")).toBeInTheDocument();
     expect(screen.getByText("Auto-router prompt caching")).toBeInTheDocument();
     expect(screen.getAllByText("50.0%").length).toBeGreaterThan(0);
     expect(screen.getByText("All auto-routers")).toBeInTheDocument();
     const summary = within(screen.getByRole("table", { name: "Router usage and savings" }));
-    expect(summary.getByRole("row", { name: /router-one.*\$1\.25.*\$8\.75/ })).toBeInTheDocument();
-    expect(summary.getByRole("row", { name: /router-two.*\$0\.25.*\$0\.75/ })).toBeInTheDocument();
+    expect(summary.getByRole("row", { name: /router-one.*¥1\.25.*¥8\.75/ })).toBeInTheDocument();
+    expect(summary.getByRole("row", { name: /router-two.*¥0\.25.*¥0\.75/ })).toBeInTheDocument();
 
     const benchmarkUrl = new URL(requestedUrls().find((url) => url.includes("/auto_router/benchmarks")) ?? "");
     expect(benchmarkUrl.searchParams.get("api_key")).toBe("key-hash-1");
@@ -153,12 +153,12 @@ describe("Auto-router usage views", () => {
       within(rows[1])
         .getAllByRole("cell")
         .map((cell) => cell.textContent),
-    ).toEqual(["claude-auto", "100,000,000", "$20,000.00", "$200.00", "$4,000.00", "16.7%"]);
+    ).toEqual(["claude-auto", "100,000,000", "¥20,000.00", "¥200.00", "¥4,000.00", "16.7%"]);
     expect(
       within(rows[2])
         .getAllByRole("cell")
         .map((cell) => cell.textContent),
-    ).toEqual(["gpt-auto", "2,000,000", "$15.00", "$7.50", "-$5.00", "-50.0%"]);
+    ).toEqual(["gpt-auto", "2,000,000", "¥15.00", "¥7.50", "-¥5.00", "-50.0%"]);
     expect(
       table.compareDocumentPosition(screen.getByText("Auto-router prompt caching")) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
@@ -168,7 +168,7 @@ describe("Auto-router usage views", () => {
     await user.click(await screen.findByRole("option", { name: "gpt-auto" }));
     await waitFor(() => expect(within(table).getAllByRole("row")).toHaveLength(2));
     expect(within(table).queryByText("claude-auto")).not.toBeInTheDocument();
-    expect(within(table).getByText("-$5.00")).toBeInTheDocument();
+    expect(within(table).getByText("-¥5.00")).toBeInTheDocument();
   });
 
   it.each([null, undefined, 0])("keeps token coverage and unit costs honest for %s tokens", async (total_tokens) => {
@@ -183,7 +183,7 @@ describe("Auto-router usage views", () => {
     ).toEqual([
       "claude-auto",
       total_tokens === 0 ? "0" : "Unavailable",
-      "$1.25",
+      "¥1.25",
       "Unavailable",
       "Unavailable",
       "Unavailable",

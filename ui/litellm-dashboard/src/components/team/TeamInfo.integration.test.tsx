@@ -412,7 +412,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     await user.click(screen.getByRole("tab", { name: "Settings" }));
     await user.click(await screen.findByRole("button", { name: /edit settings/i }));
     await user.click(screen.getByText("Team Member Settings"));
-    return await screen.findByLabelText("Default Budget (USD)");
+    return await screen.findByLabelText("Default Budget (CNY)");
   };
 
   const submitNewDefault = async (user: ReturnType<typeof userEvent.setup>, input: HTMLElement, value: string) => {
@@ -657,7 +657,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     await user.click(screen.getByRole("tab", { name: "Settings" }));
     await user.click(await screen.findByRole("button", { name: /edit settings/i }));
     await user.click(screen.getByText("Team Member Settings"));
-    const input = await screen.findByLabelText("Default Budget (USD)");
+    const input = await screen.findByLabelText("Default Budget (CNY)");
 
     await submitNewDefault(user, input, "20");
     expect(await screen.findByText("Reset member budgets?")).toBeInTheDocument();
@@ -686,7 +686,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     await user.click(screen.getByRole("tab", { name: "Settings" }));
     await user.click(await screen.findByRole("button", { name: /edit settings/i }));
     await user.click(screen.getByText("Team Member Settings"));
-    const input = await screen.findByLabelText("Default Budget (USD)");
+    const input = await screen.findByLabelText("Default Budget (CNY)");
 
     await submitNewDefault(user, input, "20");
     await user.click(await screen.findByRole("button", { name: "Reset to $20.00" }));

@@ -50,6 +50,6 @@ describe("Lens billing key", () => {
     await user.click(await screen.findByRole("option", { name: "Second page" }));
     expect(screen.getByRole("combobox", { name: "Charge analysis to" })).toHaveValue("Second page");
     expect(await screen.findByText("restricted-model")).toBeInTheDocument();
-    expect(screen.getByText("$4.00 / day")).toBeInTheDocument();
+    expect(screen.getByText("¥4.00 / day")).toBeInTheDocument();
   });
 });

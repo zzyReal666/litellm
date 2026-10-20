@@ -461,7 +461,7 @@ describe("ModelInfoView", () => {
     });
   });
 
-  it("shows per-second pricing with resolution tiers instead of $0.00 per 1M tokens for a video model", async () => {
+  it("shows per-second pricing with resolution tiers instead of ¥0.00 per 1M tokens for a video model", async () => {
     mockUseModelsInfo.mockReturnValue({
       data: {
         data: [
@@ -486,10 +486,10 @@ describe("ModelInfoView", () => {
 
     render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
 
-    expect(await screen.findByText("Output: $0.10/s")).toBeInTheDocument();
-    expect(screen.getByText("Output (1080p): $0.12/s")).toBeInTheDocument();
-    expect(screen.getByText("Output (4k): $0.30/s")).toBeInTheDocument();
-    expect(screen.queryByText(/\$0\.00\/1M tokens/)).not.toBeInTheDocument();
+    expect(await screen.findByText("Output: ¥0.10/s")).toBeInTheDocument();
+    expect(screen.getByText("Output (1080p): ¥0.12/s")).toBeInTheDocument();
+    expect(screen.getByText("Output (4k): ¥0.30/s")).toBeInTheDocument();
+    expect(screen.queryByText(/¥0\.00\/1M tokens/)).not.toBeInTheDocument();
   });
 
   it("should display edit settings button when user can edit model", async () => {
@@ -747,7 +747,7 @@ describe("ModelInfoView", () => {
       });
 
       expect(screen.queryByText("PTU Count")).not.toBeInTheDocument();
-      expect(screen.queryByText("Cost per PTU / Hour (USD)")).not.toBeInTheDocument();
+      expect(screen.queryByText("Cost per PTU / Hour (CNY)")).not.toBeInTheDocument();
       expect(screen.queryByText("PTU Effective From (UTC)")).not.toBeInTheDocument();
       expect(screen.queryByText("PTU Effective To (UTC)")).not.toBeInTheDocument();
     });
@@ -759,7 +759,7 @@ describe("ModelInfoView", () => {
       await waitFor(() => {
         expect(screen.getByText("PTU Count")).toBeInTheDocument();
       });
-      expect(screen.getByText("Cost per PTU / Hour (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Cost per PTU / Hour (CNY)")).toBeInTheDocument();
       expect(screen.getByText("PTU Effective From (UTC)")).toBeInTheDocument();
       expect(screen.getByText("PTU Effective To (UTC)")).toBeInTheDocument();
     });

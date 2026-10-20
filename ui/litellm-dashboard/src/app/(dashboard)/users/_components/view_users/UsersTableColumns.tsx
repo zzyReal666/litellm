@@ -188,11 +188,11 @@ export const getUsersTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: t("viewUsers.columns.spendUsd", { defaultValue: "Spend (USD)" }), numeric: true },
+      meta: { title: t("viewUsers.columns.spendUsd", { defaultValue: "Spend (CNY)" }), numeric: true },
       header: ({ column }) => (
         <DataTableSortHeader
           column={column}
-          title={t("viewUsers.columns.spendUsd", { defaultValue: "Spend (USD)" })}
+          title={t("viewUsers.columns.spendUsd", { defaultValue: "Spend (CNY)" })}
           variant="header-cycle"
         />
       ),
@@ -203,8 +203,8 @@ export const getUsersTableColumns = ({
     {
       id: "max_budget",
       accessorKey: "max_budget",
-      meta: { title: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (USD)" }), numeric: true },
-      header: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (USD)" }),
+      meta: { title: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (CNY)" }), numeric: true },
+      header: t("viewUsers.columns.budgetUsd", { defaultValue: "Budget (CNY)" }),
       size: 130,
       enableSorting: false,
       cell: ({ row }) => (

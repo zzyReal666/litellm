@@ -264,7 +264,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
   };
 
   const formatCost = (cost: number) => {
-    return `$${(cost * 1_000_000).toFixed(4)}`;
+    return `¥${(cost * 1_000_000).toFixed(4)}`;
   };
 
   const models = usePublicModelHubList(proxyConfigured);

@@ -57,14 +57,14 @@ export const getSpendString = (value: number | null | undefined, decimals: numbe
 
   if (numericFormatted === 0) {
     const threshold = (1 / 10 ** decimals).toFixed(decimals);
-    return `< $${threshold}`;
+    return `< ¥${threshold}`;
   }
 
-  return `$${formatted}`;
+  return `¥${formatted}`;
 };
 
 export const formatPerSecondCost = (cost: number): string =>
-  `$${cost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}/s`;
+  `¥${cost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}/s`;
 
 export const copyToClipboard = async (
   text: string | null | undefined,

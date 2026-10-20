@@ -337,7 +337,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                       <p className="text-sm">
                         {t("passThroughInfo.costPerRequest", {
                           cost: endpointData.cost_per_request,
-                          defaultValue: "Cost per request: ${{cost}}",
+                          defaultValue: "Cost per request: ¥{{cost}}",
                         })}
                       </p>
                     </div>
@@ -620,7 +620,7 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                         <p className="text-sm font-medium">
                           {t("passThroughInfo.formCostPerRequest", { defaultValue: "Cost per Request" })}
                         </p>
-                        <div>${endpointData.cost_per_request}</div>
+                        <div>¥{endpointData.cost_per_request}</div>
                       </div>
                     )}
                     {endpointData.timeout !== undefined && endpointData.timeout !== null && (

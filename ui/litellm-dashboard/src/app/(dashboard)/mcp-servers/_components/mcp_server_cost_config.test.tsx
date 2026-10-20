@@ -75,8 +75,8 @@ describe("MCPServerCostConfig", () => {
       />,
     );
 
-    expect(screen.getByText("• Default cost: $0.0100 per query")).toBeInTheDocument();
-    expect(screen.getByText("• search: $0.2500 per query")).toBeInTheDocument();
+    expect(screen.getByText("• Default cost: ¥0.0100 per query")).toBeInTheDocument();
+    expect(screen.getByText("• search: ¥0.2500 per query")).toBeInTheDocument();
   });
 
   it("shows no summary when nothing is configured", () => {

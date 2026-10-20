@@ -256,7 +256,7 @@ describe("CommandPalette integration", () => {
     const keyOption = await screen.findByRole("option", { name: /prod-backend/ });
     expect(firstKeyOption).toHaveAttribute("aria-selected", "true");
     expect(keyOption).toHaveTextContent("platform-team");
-    expect(keyOption).toHaveTextContent("$2.50");
+    expect(keyOption).toHaveTextContent("¥2.50");
     expect(screen.queryByRole("option", { name: /staging-agent/ })).not.toBeInTheDocument();
 
     fireEvent.keyDown(input, { key: "ArrowDown" });

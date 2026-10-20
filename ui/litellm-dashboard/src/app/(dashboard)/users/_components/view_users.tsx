@@ -442,7 +442,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
               "-",
           },
           {
-            label: t("viewUsers.deleteModal.labelTotalSpend", { defaultValue: "Total Spend (USD)" }),
+            label: t("viewUsers.deleteModal.labelTotalSpend", { defaultValue: "Total Spend (CNY)" }),
             value: userToDelete?.spend?.toFixed(2),
           },
         ]}

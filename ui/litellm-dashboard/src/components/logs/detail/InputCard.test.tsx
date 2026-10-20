@@ -88,7 +88,7 @@ describe("InputCard", () => {
 
   it("should display cost when provided", () => {
     render(<InputCard messages={mockMessages} inputCost={0.0015} />);
-    expect(screen.getByText(/Cost: \$0\.001500/)).toBeInTheDocument();
+    expect(screen.getByText(/Cost: ¥0\.001500/)).toBeInTheDocument();
   });
 
   it("should copy last message content when copy button is clicked", async () => {

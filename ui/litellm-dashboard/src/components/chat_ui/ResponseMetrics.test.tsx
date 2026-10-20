@@ -68,6 +68,6 @@ describe("ResponseMetrics prompt cache chips", () => {
   it("renders the Cost chip for a finite cost", () => {
     render(<ResponseMetrics usage={{ ...baseUsage, cost: 0.000063 }} />);
 
-    expect(screen.getByText("Cost: $0.000063")).toBeInTheDocument();
+    expect(screen.getByText("Cost: ¥0.000063")).toBeInTheDocument();
   });
 });

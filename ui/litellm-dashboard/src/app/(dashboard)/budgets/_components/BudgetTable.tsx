@@ -154,7 +154,7 @@ function BudgetFilterFields({ get, set }: FilterDraft) {
           onChange={(selected) => set("budget_duration", selected)}
         />
       </DataTableFilterField>
-      <DataTableFilterField label={t("budgets.budgetModal.maxBudgetLabel", { defaultValue: "Max Budget (USD)" })}>
+      <DataTableFilterField label={t("budgets.budgetModal.maxBudgetLabel", { defaultValue: "Max Budget (CNY)" })}>
         <div className="flex items-center gap-2">
           <Input
             type="number"
@@ -230,8 +230,8 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ list, canModify, onEditClick,
         return t("budgetsPage.budgetTable.unlimitedOnly", { defaultValue: "Unlimited only" });
       }
       return t("budgetsPage.budgetTable.rangeValue", {
-        min: min ? `$${min}` : anyValue,
-        max: max ? `$${max}` : anyValue,
+        min: min ? `¥${min}` : anyValue,
+        max: max ? `¥${max}` : anyValue,
         defaultValue: "{{min}} to {{max}}",
       });
     }

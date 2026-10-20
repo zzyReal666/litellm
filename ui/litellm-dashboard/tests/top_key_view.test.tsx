@@ -288,7 +288,7 @@ describe("TopKeyView", () => {
       expect(screen.getByText("Key ID")).toBeInTheDocument();
       expect(screen.getByText("Key Alias")).toBeInTheDocument();
       expect(screen.getByText("Tags")).toBeInTheDocument();
-      expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
     });
 
     it("should render table with correct headers when showTags is false", () => {
@@ -297,7 +297,7 @@ describe("TopKeyView", () => {
       expect(screen.getByText("Key ID")).toBeInTheDocument();
       expect(screen.getByText("Key Alias")).toBeInTheDocument();
       expect(screen.queryByText("Tags")).not.toBeInTheDocument();
-      expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+      expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
     });
   });
 
@@ -319,7 +319,7 @@ describe("TopKeyView", () => {
       expect(screen.getByText("Test Key")).toBeInTheDocument();
 
       // Check that spend is formatted correctly
-      expect(screen.getByText("$25.50")).toBeInTheDocument();
+      expect(screen.getByText("¥25.50")).toBeInTheDocument();
     });
   });
 });

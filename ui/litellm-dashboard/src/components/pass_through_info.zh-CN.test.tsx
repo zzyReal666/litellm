@@ -60,7 +60,7 @@ describe("pass_through_info in zh-CN", () => {
     expect(screen.getByText("包含子路径")).toBeInTheDocument();
     expect(screen.getByText("无需认证")).toBeInTheDocument();
     expect(screen.getByText("HTTP 方法：")).toBeInTheDocument();
-    expect(screen.getByText("每次请求费用：$2")).toBeInTheDocument();
+    expect(screen.getByText("每次请求费用：¥2")).toBeInTheDocument();
     expect(screen.getByText("请求头")).toBeInTheDocument();
     expect(screen.getByText("已配置 1 个请求头")).toBeInTheDocument();
   });

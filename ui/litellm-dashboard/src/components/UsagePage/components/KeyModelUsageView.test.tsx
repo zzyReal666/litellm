@@ -58,7 +58,7 @@ describe("KeyModelUsageView", () => {
   it("should display all table column headers", () => {
     render(<KeyModelUsageView topModels={mockTopModels} />);
     expect(screen.getByText("Model")).toBeInTheDocument();
-    expect(screen.getByText("Spend (USD)")).toBeInTheDocument();
+    expect(screen.getByText("Spend (CNY)")).toBeInTheDocument();
     expect(screen.getByText("Successful")).toBeInTheDocument();
     expect(screen.getByText("Failed")).toBeInTheDocument();
     expect(screen.getByText("Tokens")).toBeInTheDocument();
@@ -68,8 +68,8 @@ describe("KeyModelUsageView", () => {
     render(<KeyModelUsageView topModels={mockTopModels} />);
     expect(screen.getByText("gpt-4")).toBeInTheDocument();
     expect(screen.getByText("gpt-3.5-turbo")).toBeInTheDocument();
-    expect(screen.getByText("$150.50")).toBeInTheDocument();
-    expect(screen.getByText("$75.25")).toBeInTheDocument();
+    expect(screen.getByText("¥150.50")).toBeInTheDocument();
+    expect(screen.getByText("¥75.25")).toBeInTheDocument();
   });
 
   it("should format spend values with two decimal places", () => {
@@ -84,7 +84,7 @@ describe("KeyModelUsageView", () => {
       },
     ];
     render(<KeyModelUsageView topModels={modelsWithDecimalSpend} />);
-    expect(screen.getByText("$123.46")).toBeInTheDocument();
+    expect(screen.getByText("¥123.46")).toBeInTheDocument();
   });
 
   it("should format large spend values with commas", () => {
@@ -99,7 +99,7 @@ describe("KeyModelUsageView", () => {
       },
     ];
     render(<KeyModelUsageView topModels={modelsWithLargeSpend} />);
-    expect(screen.getByText("$1,234,567.89")).toBeInTheDocument();
+    expect(screen.getByText("¥1,234,567.89")).toBeInTheDocument();
   });
 
   it("should display successful requests with green styling", () => {

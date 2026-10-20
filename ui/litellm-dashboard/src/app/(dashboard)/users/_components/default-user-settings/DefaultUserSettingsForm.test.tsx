@@ -103,7 +103,7 @@ describe("DefaultUserSettingsForm", () => {
     expect(screen.getByText("gpt-5.2")).toBeInTheDocument();
     expect(screen.getByText(/team-alpha/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save Changes" })).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("Max Budget (USD)")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Max Budget (CNY)")).not.toBeInTheDocument();
   });
 
   it("labels model sentinels in the read-only summary", async () => {
@@ -138,8 +138,8 @@ describe("DefaultUserSettingsForm", () => {
     const { updateSettings } = renderForm();
 
     await enterEditMode(user);
-    await user.clear(await screen.findByLabelText("Max Budget (USD)"));
-    await user.type(screen.getByLabelText("Max Budget (USD)"), "250");
+    await user.clear(await screen.findByLabelText("Max Budget (CNY)"));
+    await user.type(screen.getByLabelText("Max Budget (CNY)"), "250");
     await user.click(await saveButton());
 
     await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
@@ -151,11 +151,11 @@ describe("DefaultUserSettingsForm", () => {
     const { updateSettings } = renderForm();
 
     await enterEditMode(user);
-    const budget: HTMLInputElement = await screen.findByLabelText("Max Budget (USD)");
+    const budget: HTMLInputElement = await screen.findByLabelText("Max Budget (CNY)");
     await user.clear(budget);
     await user.type(budget, "0.001");
 
-    const teamBudget: HTMLInputElement = screen.getByLabelText("Max Budget in Team (USD)");
+    const teamBudget: HTMLInputElement = screen.getByLabelText("Max Budget in Team (CNY)");
     await user.clear(teamBudget);
     await user.type(teamBudget, "0.002");
 
@@ -179,7 +179,7 @@ describe("DefaultUserSettingsForm", () => {
     const { updateSettings } = renderForm();
 
     await enterEditMode(user);
-    await user.clear(await screen.findByLabelText("Max Budget (USD)"));
+    await user.clear(await screen.findByLabelText("Max Budget (CNY)"));
     await user.click(await saveButton());
 
     await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
@@ -267,8 +267,8 @@ describe("DefaultUserSettingsForm", () => {
     });
 
     await enterEditMode(user);
-    await user.clear(await screen.findByLabelText("Max Budget (USD)"));
-    await user.type(screen.getByLabelText("Max Budget (USD)"), "250");
+    await user.clear(await screen.findByLabelText("Max Budget (CNY)"));
+    await user.type(screen.getByLabelText("Max Budget (CNY)"), "250");
     await user.click(await saveButton());
 
     await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
@@ -288,14 +288,14 @@ describe("DefaultUserSettingsForm", () => {
     });
 
     await enterEditMode(user);
-    await user.clear(await screen.findByLabelText("Max Budget (USD)"));
-    await user.type(screen.getByLabelText("Max Budget (USD)"), "250");
+    await user.clear(await screen.findByLabelText("Max Budget (CNY)"));
+    await user.type(screen.getByLabelText("Max Budget (CNY)"), "250");
     await user.click(await saveButton());
 
     await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(toast.fromError).toHaveBeenCalledWith("Team(s) not found: team-alhpa."));
     expect(await saveButton()).toBeEnabled();
-    expect(screen.getByLabelText("Max Budget (USD)")).toHaveValue(250);
+    expect(screen.getByLabelText("Max Budget (CNY)")).toHaveValue(250);
   });
 
   it("discards edits and returns to the read-only view when Cancel is pressed", async () => {
@@ -303,8 +303,8 @@ describe("DefaultUserSettingsForm", () => {
     const { updateSettings } = renderForm();
 
     await enterEditMode(user);
-    await user.clear(await screen.findByLabelText("Max Budget (USD)"));
-    await user.type(screen.getByLabelText("Max Budget (USD)"), "250");
+    await user.clear(await screen.findByLabelText("Max Budget (CNY)"));
+    await user.type(screen.getByLabelText("Max Budget (CNY)"), "250");
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(await screen.findByRole("button", { name: "Edit Settings" })).toBeInTheDocument();
@@ -313,7 +313,7 @@ describe("DefaultUserSettingsForm", () => {
     expect(updateSettings).not.toHaveBeenCalled();
 
     await enterEditMode(user);
-    expect(screen.getByLabelText("Max Budget (USD)")).toHaveValue(100);
+    expect(screen.getByLabelText("Max Budget (CNY)")).toHaveValue(100);
     expect(await saveButton()).toBeDisabled();
   });
 });

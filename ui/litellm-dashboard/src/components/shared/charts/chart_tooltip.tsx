@@ -63,7 +63,7 @@ const rawMetricValue = (row: unknown, dataKey: string): number | undefined => {
 
 const formatMetricValue = (rawValue: number | undefined, isSpend: boolean): string => {
   if (rawValue === undefined) return "N/A";
-  if (isSpend) return `$${rawValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  if (isSpend) return `¥${rawValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   return rawValue.toLocaleString();
 };
 

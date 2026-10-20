@@ -33,7 +33,7 @@ interface CostBreakdownViewerProps {
 
 const formatCost = (cost: number | undefined): string => {
   if (cost === undefined || cost === null) return "-";
-  return `$${formatNumberWithCommas(cost, 8)}`;
+  return `¥${formatNumberWithCommas(cost, 8)}`;
 };
 
 const formatPercent = (percent: number | undefined): string => {
@@ -86,7 +86,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
       (costBreakdown.margin_fixed_amount !== undefined && costBreakdown.margin_fixed_amount !== 0) ||
       (costBreakdown.margin_total_amount !== undefined && costBreakdown.margin_total_amount !== 0));
 
-  // When cached, show $0 (authoritative total) instead of pre-cache costs from cost_breakdown
+  // When cached, show ¥0 (authoritative total) instead of pre-cache costs from cost_breakdown
   const inputCost = isCached ? 0 : costBreakdown?.input_cost;
   const outputCost = isCached ? 0 : costBreakdown?.output_cost;
   const originalCost = isCached ? 0 : costBreakdown?.original_cost;
@@ -245,7 +245,7 @@ export const CostBreakdownViewer: React.FC<CostBreakdownViewerProps> = ({
                   ))}
             </div>
 
-            {/* Subtotal / Original Cost - hide when cached since it would be $0 */}
+            {/* Subtotal / Original Cost - hide when cached since it would be ¥0 */}
             {!isCached && (
               <div className="pt-2 border-t border-border max-w-2xl">
                 <div className="flex text-sm font-semibold">

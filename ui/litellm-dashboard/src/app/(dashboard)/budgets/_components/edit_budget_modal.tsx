@@ -159,7 +159,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
                 <FormField
                   control={form.control}
                   name="max_budget"
-                  label={t("budgets.editBudgetModal.maxBudgetLabel", { defaultValue: "Max Budget (USD)" })}
+                  label={t("budgets.editBudgetModal.maxBudgetLabel", { defaultValue: "Max Budget (CNY)" })}
                 >
                   {({ ref, value, onChange, ...field }) => (
                     <Input

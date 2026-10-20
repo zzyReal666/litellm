@@ -131,11 +131,11 @@ describe("TeamVirtualKeysTable", () => {
     });
   });
 
-  it("right-aligns the Spend (USD) and Budget (USD) columns", async () => {
+  it("right-aligns the Spend (CNY) and Budget (CNY) columns", async () => {
     renderWithProviders(<TeamVirtualKeysTable {...defaultProps} />);
 
-    expect(await screen.findByRole("columnheader", { name: "Spend (USD)" })).toHaveClass("text-right");
-    expect(screen.getByRole("columnheader", { name: "Budget (USD)" })).toHaveClass("text-right");
+    expect(await screen.findByRole("columnheader", { name: "Spend (CNY)" })).toHaveClass("text-right");
+    expect(screen.getByRole("columnheader", { name: "Budget (CNY)" })).toHaveClass("text-right");
     expect(screen.getByRole("columnheader", { name: "Key ID" })).not.toHaveClass("text-right");
   });
 

@@ -85,7 +85,7 @@ describe("OrgCreateDialog", () => {
     const { createOrganization } = renderDialog();
 
     await user.type(screen.getByLabelText("Organization Name"), "new-org");
-    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (USD)");
+    const budget: HTMLInputElement = screen.getByLabelText("Max Budget (CNY)");
     await user.type(budget, "0.001");
 
     // jsdom never blocks the submit itself, so assert the constraint the real browser

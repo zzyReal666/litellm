@@ -233,14 +233,14 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
           <div className="border-t border-border">
             <SettingRow
               label="Max Budget"
-              description="Maximum budget (in USD) for new automatically created teams."
+              description="Maximum budget (in CNY) for new automatically created teams."
               isEditing={isEditing}
               viewContent={
-                values.max_budget != null ? <span>${Number(values.max_budget).toLocaleString()}</span> : <NotSet />
+                values.max_budget != null ? <span>¥{Number(values.max_budget).toLocaleString()}</span> : <NotSet />
               }
               editContent={
                 <InputGroup className="max-w-80">
-                  <InputGroupAddon>$</InputGroupAddon>
+                  <InputGroupAddon>¥</InputGroupAddon>
                   <InputGroupInput
                     type="number"
                     step="any"

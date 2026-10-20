@@ -39,7 +39,7 @@ export default function ResetMemberBudgetsDialog({
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
           {memberCount} {pluralize(memberCount, "member has", "members have")} a custom budget, so the new team default
-          of ${formatNumberWithCommas(newBudget, 2)} will not apply to {pluralize(memberCount, "that member", "them")}.
+          of ¥{formatNumberWithCommas(newBudget, 2)} will not apply to {pluralize(memberCount, "that member", "them")}.
           Reset {pluralize(memberCount, "it", "them")} to the default, or keep the custom{" "}
           {pluralize(memberCount, "budget", "budgets")}?
         </p>

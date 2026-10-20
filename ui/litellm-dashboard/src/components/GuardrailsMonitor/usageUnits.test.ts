@@ -26,16 +26,16 @@ describe("formatCost", () => {
   });
 
   it("keeps an explicit zero as a real price rather than a dash", () => {
-    expect(formatCost(0)).toBe("$0.0000");
+    expect(formatCost(0)).toBe("¥0.0000");
   });
 
   it("shows four decimals for the sub-cent amounts guardrail units cost", () => {
-    expect(formatCost(0.0003)).toBe("$0.0003");
-    expect(formatCost(12.5)).toBe("$12.5000");
+    expect(formatCost(0.0003)).toBe("¥0.0003");
+    expect(formatCost(12.5)).toBe("¥12.5000");
   });
 
   it("flags amounts below the displayed precision instead of rounding them to zero", () => {
-    expect(formatCost(0.00001)).toBe("< $0.0001");
+    expect(formatCost(0.00001)).toBe("< ¥0.0001");
   });
 });
 
@@ -85,14 +85,14 @@ describe("unitPrice", () => {
 
 describe("formatUnitPrice", () => {
   it("keeps the significant decimals and drops trailing zeros", () => {
-    expect(formatUnitPrice(0.0001)).toBe("$0.0001");
-    expect(formatUnitPrice(0.00015)).toBe("$0.00015");
-    expect(formatUnitPrice(0)).toBe("$0");
-    expect(formatUnitPrice(1)).toBe("$1");
+    expect(formatUnitPrice(0.0001)).toBe("¥0.0001");
+    expect(formatUnitPrice(0.00015)).toBe("¥0.00015");
+    expect(formatUnitPrice(0)).toBe("¥0");
+    expect(formatUnitPrice(1)).toBe("¥1");
   });
 
   it("never shows a positive price as free", () => {
-    expect(formatUnitPrice(0.0000002)).toBe("< $0.000001");
+    expect(formatUnitPrice(0.0000002)).toBe("< ¥0.000001");
   });
 });
 
@@ -100,7 +100,7 @@ describe("counterMathRow", () => {
   it("shows units × price = cost for a fully priced counter", () => {
     expect(counterMathRow(counterOf("contentPolicyUnits", 1000, 0, 0.15))).toEqual({
       label: "Content Policy",
-      parts: ["1,000", "× $0.00015", "= $0.1500"],
+      parts: ["1,000", "× ¥0.00015", "= ¥0.1500"],
       note: null,
     });
   });
@@ -108,7 +108,7 @@ describe("counterMathRow", () => {
   it("prices only the priced share and calls out the rest", () => {
     expect(counterMathRow(counterOf("sensitiveInformationPolicyUnits", 8, 2, 0.0006))).toEqual({
       label: "Sensitive Information Policy",
-      parts: ["6", "× $0.0001", "= $0.0006"],
+      parts: ["6", "× ¥0.0001", "= ¥0.0006"],
       note: "2 unpriced units left out",
     });
     expect(counterMathRow(counterOf("sensitiveInformationPolicyUnits", 8, 1, 0.0007)).note).toBe(
@@ -124,8 +124,8 @@ describe("counterMathRow", () => {
     });
   });
 
-  it("shows a free counter as × $0", () => {
-    expect(counterMathRow(counterOf("wordPolicyUnits", 2, 0, 0)).parts).toEqual(["2", "× $0", "= $0.0000"]);
+  it("shows a free counter as × ¥0", () => {
+    expect(counterMathRow(counterOf("wordPolicyUnits", 2, 0, 0)).parts).toEqual(["2", "× ¥0", "= ¥0.0000"]);
   });
 });
 

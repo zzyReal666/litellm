@@ -116,12 +116,12 @@ describe("AgentTracesTable virtualization", () => {
 
 describe("runCost", () => {
   it.each([
-    { spend: 0.42, priced_calls: 20, llm_calls: 20, expected: { label: "$0.42", partial: null } },
+    { spend: 0.42, priced_calls: 20, llm_calls: 20, expected: { label: "¥0.42", partial: null } },
     {
       spend: 0.38,
       priced_calls: 18,
       llm_calls: 20,
-      expected: { label: "≥ $0.38", partial: { short: "18/20 priced", long: "18 of 20 calls priced" } },
+      expected: { label: "≥ ¥0.38", partial: { short: "18/20 priced", long: "18 of 20 calls priced" } },
     },
     { spend: null, priced_calls: 0, llm_calls: 20, expected: null },
     { spend: 0, priced_calls: 0, llm_calls: 0, expected: null },
@@ -151,12 +151,12 @@ describe("AgentTracesTable cost cell", () => {
   };
 
   it("shows an exact cost when every call is priced", () => {
-    expect(costCell({ spend: 0.42, priced_calls: 20 })).toHaveTextContent("$0.42");
+    expect(costCell({ spend: 0.42, priced_calls: 20 })).toHaveTextContent("¥0.42");
   });
 
   it("marks a partial cost as a lower bound and says how many calls were priced", () => {
     const cell = costCell({ spend: 0.38, priced_calls: 18 });
-    expect(cell).toHaveTextContent("≥ $0.38");
+    expect(cell).toHaveTextContent("≥ ¥0.38");
     expect(cell).toHaveTextContent("18/20 priced");
     expect(within(cell).getByTitle("18 of 20 calls priced")).toBeInTheDocument();
   });
