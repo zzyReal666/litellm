@@ -254,7 +254,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                     <div>
                       <span className="text-muted-foreground">Spend: </span>
                       <span className="font-medium tabular-nums text-foreground">
-                        ${formatNumberWithCommas(item?.spend, 2)}
+                        ¥{formatNumberWithCommas(item?.spend, 2)}
                       </span>
                     </div>
                   </div>

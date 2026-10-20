@@ -183,7 +183,7 @@ export function ModelMaxBudgetEditor({
                     updateEntry(entry.id, { budgetLimit: Number.isNaN(typed) ? null : typed });
                   }}
                   placeholder={t("keyTeamHelpers.budgetWindowsEditor.maxSpendPlaceholder", {
-                    defaultValue: "Max spend ($)",
+                    defaultValue: "Max spend (¥)",
                   })}
                   disabled={!premiumUser}
                 />

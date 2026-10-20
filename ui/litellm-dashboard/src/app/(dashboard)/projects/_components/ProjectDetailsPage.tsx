@@ -235,7 +235,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                       <div className="mb-0.5 flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">Spend</span>
                         <span className="text-xs text-foreground">
-                          ${teamSpend.toFixed(2)}
+                          ¥{teamSpend.toFixed(2)}
                           <span className="text-muted-foreground">
                             {teamHasLimit ? ` / ¥${teamBudget.toFixed(2)}` : " (Unlimited)"}
                           </span>

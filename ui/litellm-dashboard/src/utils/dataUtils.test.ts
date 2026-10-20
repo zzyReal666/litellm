@@ -105,9 +105,9 @@ describe("dataUtils", () => {
       expect(getSpendString(Number.NaN)).toBe("-");
     });
 
-    it("should format spend with dollar sign", () => {
+    it("should format spend with yuan sign", () => {
       expect(getSpendString(1234.5, 2)).toBe("¥1,234.50");
-      expect(getSpendString(-2500, 0)).toBe("$-2,500");
+      expect(getSpendString(-2500, 0)).toBe("¥-2,500");
     });
 
     it("should return threshold string for very small values", () => {

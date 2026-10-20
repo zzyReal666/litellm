@@ -60,7 +60,7 @@ export default function ResetMemberBudgetsDialog({
                 Keep custom {pluralize(memberCount, "budget", "budgets")}
               </Button>
               <Button onClick={onReset} disabled={busy}>
-                {pluralize(memberCount, "Reset", "Reset all")} to ${formatNumberWithCommas(newBudget, 2)}
+                {pluralize(memberCount, "Reset", "Reset all")} to ¥{formatNumberWithCommas(newBudget, 2)}
               </Button>
             </>
           )}

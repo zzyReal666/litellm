@@ -88,7 +88,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
           <div className="flex items-baseline justify-between gap-3">
             <span className="text-xs text-muted-foreground">Total provider spend</span>
             <span data-testid="provider-spend-total" className="text-sm font-semibold tabular-nums">
-              ${formatNumberWithCommas(total, 2)}
+              ¥{formatNumberWithCommas(total, 2)}
             </span>
           </div>
           <div className="flex h-2 w-full overflow-hidden rounded-full bg-muted">

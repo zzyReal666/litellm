@@ -437,7 +437,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
 
     expect(await screen.findByText("Reset member budgets?")).toBeInTheDocument();
     expect(screen.getByText(/1 member has a custom budget/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reset to $20.00" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset to ¥20.00" })).toBeInTheDocument();
     expect(networking.teamUpdateCall).not.toHaveBeenCalled();
     expect(bulkUpdatePOST).not.toHaveBeenCalled();
   });
@@ -468,7 +468,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     });
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset all to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset all to ¥20.00" }));
 
     await waitFor(() => expect(bulkUpdatePOST).toHaveBeenCalledTimes(1));
     expect(networking.teamUpdateCall).toHaveBeenCalled();
@@ -493,7 +493,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     bulkUpdatePOST.mockImplementationOnce(() => bulk.promise);
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset to ¥20.00" }));
 
     await waitFor(() => expect(bulkUpdatePOST).toHaveBeenCalled());
     expect(screen.getByText("Reset member budgets?")).toBeInTheDocument();
@@ -511,7 +511,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
       .mockResolvedValueOnce({ data: { data: [{ success: true, user_id: "user-custom" }] } });
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset to ¥20.00" }));
 
     await waitFor(() =>
       expect(toast.fromError).toHaveBeenCalledWith("Team updated, but member budgets could not be reset"),
@@ -534,9 +534,9 @@ describe("TeamInfoView - member budget reset prompt", () => {
     vi.mocked(networking.teamUpdateCall).mockRejectedValueOnce(new Error("save failed"));
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset to ¥20.00" }));
 
-    expect(await screen.findByRole("button", { name: "Reset to $20.00" })).toBeEnabled();
+    expect(await screen.findByRole("button", { name: "Reset to ¥20.00" })).toBeEnabled();
     expect(bulkUpdatePOST).not.toHaveBeenCalled();
     expect(toast.fromError).not.toHaveBeenCalled();
     expect(toast.error).not.toHaveBeenCalled();
@@ -559,7 +559,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
       });
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset all to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset all to ¥20.00" }));
 
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith(
@@ -598,7 +598,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     });
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset all to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset all to ¥20.00" }));
 
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith("Team updated, but 1 member budget could not be reset"),
@@ -689,7 +689,7 @@ describe("TeamInfoView - member budget reset prompt", () => {
     const input = await screen.findByLabelText("Default Budget (CNY)");
 
     await submitNewDefault(user, input, "20");
-    await user.click(await screen.findByRole("button", { name: "Reset to $20.00" }));
+    await user.click(await screen.findByRole("button", { name: "Reset to ¥20.00" }));
     await waitFor(() => expect(bulkUpdatePOST).toHaveBeenCalled());
 
     const infoCallsBeforeSwitch = vi.mocked(networking.teamInfoCall).mock.calls.length;

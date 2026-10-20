@@ -244,9 +244,9 @@ export const getPublicModelHubColumns = ({
     {
       id: "input_cost_per_token",
       accessorKey: "input_cost_per_token",
-      meta: { title: translate(t, "publicModelHub.colInputCost", "Input $/1M") },
+      meta: { title: translate(t, "publicModelHub.colInputCost", "Input ¥/1M") },
       header: ({ column }) => (
-        <DataTableSortHeader column={column} title={translate(t, "publicModelHub.colInputCost", "Input $/1M")} />
+        <DataTableSortHeader column={column} title={translate(t, "publicModelHub.colInputCost", "Input ¥/1M")} />
       ),
       size: 110,
       cell: ({ row }) => (
@@ -260,9 +260,9 @@ export const getPublicModelHubColumns = ({
     {
       id: "output_cost_per_token",
       accessorKey: "output_cost_per_token",
-      meta: { title: translate(t, "publicModelHub.colOutputCost", "Output $/1M") },
+      meta: { title: translate(t, "publicModelHub.colOutputCost", "Output ¥/1M") },
       header: ({ column }) => (
-        <DataTableSortHeader column={column} title={translate(t, "publicModelHub.colOutputCost", "Output $/1M")} />
+        <DataTableSortHeader column={column} title={translate(t, "publicModelHub.colOutputCost", "Output ¥/1M")} />
       ),
       size: 110,
       cell: ({ row }) => (

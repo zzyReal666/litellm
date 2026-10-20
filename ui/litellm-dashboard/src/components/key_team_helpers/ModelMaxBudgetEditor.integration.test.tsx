@@ -23,14 +23,14 @@ describe("ModelMaxBudgetEditor without an enterprise license", () => {
   it("locks every control on an existing row", () => {
     renderEditor(false);
 
-    expect(screen.getByPlaceholderText("Max spend ($)")).toBeDisabled();
+    expect(screen.getByPlaceholderText("Max spend (¥)")).toBeDisabled();
     expect(addButton()).toBeDisabled();
   });
 
   it("still shows the budgets already stored, so they stay auditable", () => {
     renderEditor(false);
 
-    expect(screen.getByPlaceholderText("Max spend ($)")).toHaveValue(5);
+    expect(screen.getByPlaceholderText("Max spend (¥)")).toHaveValue(5);
   });
 
   it("says why the controls are locked instead of failing silently", () => {
@@ -51,7 +51,7 @@ describe("ModelMaxBudgetEditor with an enterprise license", () => {
   it("leaves every control usable", () => {
     renderEditor(true);
 
-    expect(screen.getByPlaceholderText("Max spend ($)")).toBeEnabled();
+    expect(screen.getByPlaceholderText("Max spend (¥)")).toBeEnabled();
     expect(addButton()).toBeEnabled();
   });
 

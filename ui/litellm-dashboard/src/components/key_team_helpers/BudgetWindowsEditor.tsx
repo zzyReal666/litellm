@@ -104,7 +104,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
                     }
                   }}
                   placeholder={t("keyTeamHelpers.budgetWindowsEditor.maxSpendPlaceholder", {
-                    defaultValue: "Max spend ($)",
+                    defaultValue: "Max spend (¥)",
                   })}
                 />
               </InputGroup>

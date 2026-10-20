@@ -641,14 +641,14 @@ describe("ActivityMetrics charts", () => {
     render(<ActivityMetrics modelMetrics={twoDayModelMetrics} />);
 
     const spendTicks = tickTexts(chartTitled("Spend per day"));
-    expect(spendTicks.some((text) => text.startsWith("$"))).toBe(true);
+    expect(spendTicks.some((text) => text.startsWith("¥"))).toBe(true);
 
     const tokenTicks = tickTexts(chartTitled("Total Tokens"));
     expect(tokenTicks.some((text) => text.endsWith("k"))).toBe(true);
-    expect(tokenTicks.some((text) => text.startsWith("$"))).toBe(false);
+    expect(tokenTicks.some((text) => text.startsWith("¥"))).toBe(false);
 
     const requestTicks = tickTexts(chartTitled("Requests per day"));
-    expect(requestTicks.some((text) => text.startsWith("$"))).toBe(false);
+    expect(requestTicks.some((text) => text.startsWith("¥"))).toBe(false);
   });
 });
 
