@@ -53,7 +53,7 @@ function VectorStoreFilesCell({ vectorStore }: { vectorStore: VectorStore }) {
   const displayText =
     ingestedFiles.length === 1
       ? ingestedFiles[0].filename || ingestedFiles[0].file_url || t("vectorStoreManagement.vectorStoreTable.oneFile", { defaultValue: "1 file" })
-      : `${ingestedFiles.length} files`;
+      : t("vectorStoreManagement.vectorStoreTable.nFiles", { count: ingestedFiles.length, defaultValue: "{{count}} files" });
 
   return (
     <CellTooltip

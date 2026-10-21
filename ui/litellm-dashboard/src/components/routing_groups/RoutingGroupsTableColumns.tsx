@@ -94,7 +94,7 @@ export const getRoutingGroupsTableColumns = ({
     cell: ({ row }) => (
       <span className="flex items-center gap-1.5 text-sm">
         <GitBranch className="size-4 shrink-0 text-muted-foreground" />
-        {formatStrategyLabel(row.original.routing_strategy)}
+        {formatStrategyLabel(row.original.routing_strategy, i18n.t)}
       </span>
     ),
   },

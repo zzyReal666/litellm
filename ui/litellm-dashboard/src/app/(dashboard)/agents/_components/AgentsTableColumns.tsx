@@ -39,7 +39,7 @@ function AgentRowActions({ agent, onDeleteClick }: AgentRowActionsProps) {
           onClick={() => onDeleteClick(agent.agent_id, agent.agent_name)}
         >
           <Trash2 />
-          Delete
+          {i18n.t("common.delete", { defaultValue: "Delete" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -99,8 +99,8 @@ export const getAgentsTableColumns = ({
   },
   {
     id: "model",
-    meta: { title: "Model" },
-    header: "Model",
+    meta: { title: i18n.t("agents.colModel", { defaultValue: "Model" }) },
+    header: i18n.t("agents.colModel", { defaultValue: "Model" }),
     size: 170,
     enableSorting: false,
     cell: ({ row }) => {
@@ -123,21 +123,23 @@ export const getAgentsTableColumns = ({
       const timestamp = agent.created_at ? new Date(agent.created_at).getTime() : 0;
       return Number.isNaN(timestamp) ? 0 : timestamp;
     },
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: i18n.t("agents.colCreated", { defaultValue: "Created" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={i18n.t("agents.colCreated", { defaultValue: "Created" })} />
+    ),
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
   },
   {
     id: "status",
-    meta: { title: "Status" },
-    header: "Status",
+    meta: { title: i18n.t("common.status", { defaultValue: "Status" }) },
+    header: i18n.t("common.status", { defaultValue: "Status" }),
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {
       const hasKeys = (row.original.keys?.length ?? 0) > 0;
-      if (row.original.jwt_auth_configured) return <StatusBadge tone="success" label="JWT configured" />;
+      if (row.original.jwt_auth_configured) return <StatusBadge tone="success" label={i18n.t("agents.jwtConfigured", { defaultValue: "JWT configured" })} />;
       return hasKeys ? (
         <StatusBadge tone="success" label={i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" })} />
       ) : (
@@ -150,7 +152,7 @@ export const getAgentsTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">Actions</span>,
+          header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

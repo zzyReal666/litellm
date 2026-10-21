@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -146,7 +146,7 @@ const RoutingGroups: React.FC = () => {
                 {t("routingGroups.index.createGroup", { defaultValue: "Create Group" })}
               </Button>
               <span className="text-sm whitespace-nowrap text-muted-foreground">
-                Showing {filteredGroups.length} {filteredGroups.length === 1 ? "result" : "results"}
+                {t("routingGroups.index.showingResults", { count: filteredGroups.length, defaultValue: "Showing {{count}} results" })}
               </span>
             </div>
           </div>
@@ -187,10 +187,12 @@ const RoutingGroups: React.FC = () => {
                 requests to its member models keep their existing routing behavior. This cannot be undone.
               </>
             ) : (
-              <>
-                Models in <span className="font-medium">{deletingGroup?.group_name}</span> will fall back to the
-                proxy&apos;s top-level routing strategy. This cannot be undone.
-              </>
+              <Trans
+                i18nKey="routingGroups.index.deleteFallbackNote"
+                defaults="Models in <strong>{{groupName}}</strong> will fall back to the proxy's top-level routing strategy. This cannot be undone."
+                values={{ groupName: deletingGroup?.group_name ?? "" }}
+                components={{ strong: <strong /> }}
+              />
             )}
           </p>
           <DialogFooter>

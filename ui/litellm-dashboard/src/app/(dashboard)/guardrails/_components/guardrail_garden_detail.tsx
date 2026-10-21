@@ -1,6 +1,7 @@
 import i18n from "@/lib/i18n";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import { tByEnglish } from "@/lib/tByEnglish";
 import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
     ...(card.category === "decision_model"
       ? [{ property: t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" }), value: "Billed per call by the decision model provider" }]
       : []),
-    ...(card.category === "litellm" ? [{ property: t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" }), value: "¥0 / request" }] : []),
+    ...(card.category === "litellm" ? [{ property: t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" }), value: t("guardrails.guardrailGardenDetail.costFree", { defaultValue: "¥0 / request" }) }] : []),
     ...(card.category === "litellm" ? [{ property: t("guardrails.guardrailGardenDetail.propertyExternalDeps", { defaultValue: "External Dependencies" }), value: t("guardrails.guardrailGardenDetail.externalDepsNone", { defaultValue: "None" }) }] : []),
     ...(card.category === "litellm" ? [{ property: t("guardrails.guardrailGardenDetail.propertyLatency", { defaultValue: "Latency" }), value: card.eval?.latency || "<1ms" }] : []),
   ];
@@ -71,16 +72,16 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
         className="mb-6 inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground"
       >
         <ArrowLeft className="size-3" />
-        <span>{card.name}</span>
+        <span>{tByEnglish(t, card.name)}</span>
       </div>
 
       {/* ── Header block (Vertex-style) ── */}
       <div className="mb-2 flex items-center gap-4">
-        <Logo src={card.logo} label={card.name} className="w-10 h-10 rounded-lg object-contain shrink-0" />
-        <h1 className="m-0 text-[28px] font-normal leading-tight text-foreground">{card.name}</h1>
+        <Logo src={card.logo} label={tByEnglish(t, card.name)} className="w-10 h-10 rounded-lg object-contain shrink-0" />
+        <h1 className="m-0 text-[28px] font-normal leading-tight text-foreground">{tByEnglish(t, card.name)}</h1>
       </div>
 
-      <p className="m-0 mb-5 text-sm leading-relaxed text-muted-foreground">{card.description}</p>
+      <p className="m-0 mb-5 text-sm leading-relaxed text-muted-foreground">{tByEnglish(t, card.description)}</p>
 
       {/* Action buttons — outlined style like Vertex */}
       <div className="mb-8 flex gap-2.5">

@@ -73,7 +73,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
             ) : (
               <>
                 <ArrowRight className="size-3" />
-                {`Show all (${litellmCards.length})`}
+                {t("guardrails.guardrailGarden.showAll", { count: litellmCards.length, defaultValue: "Show all ({{count}})" })}
               </>
             )}
           </span>

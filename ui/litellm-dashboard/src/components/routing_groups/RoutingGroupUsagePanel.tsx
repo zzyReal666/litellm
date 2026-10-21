@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Code2 } from "lucide-react";
 import React from "react";
 
@@ -59,9 +59,27 @@ const response = await client.chat.completions.create({
 console.log(response);`;
 
 const SNIPPET_TABS = [
-  { value: "curl", label: "cURL", language: "bash", build: buildCurlSnippet },
-  { value: "python", label: "Python (OpenAI SDK)", language: "python", build: buildPythonSnippet },
-  { value: "javascript", label: "JavaScript (OpenAI SDK)", language: "javascript", build: buildJsSnippet },
+  {
+    value: "curl",
+    labelKey: "routingGroups.routingGroupsTable.tabCurl",
+    label: "cURL",
+    language: "bash",
+    build: buildCurlSnippet,
+  },
+  {
+    value: "python",
+    labelKey: "routingGroups.routingGroupsTable.tabPython",
+    label: "Python (OpenAI SDK)",
+    language: "python",
+    build: buildPythonSnippet,
+  },
+  {
+    value: "javascript",
+    labelKey: "routingGroups.routingGroupsTable.tabJavascript",
+    label: "JavaScript (OpenAI SDK)",
+    language: "javascript",
+    build: buildJsSnippet,
+  },
 ] as const;
 
 export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePanelProps) {
@@ -80,8 +98,12 @@ export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePane
           </>
         ) : (
           <>
-            Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the{" "}
-            <span className="font-medium text-foreground">{formatStrategyLabel(group.routing_strategy)}</span> strategy.
+            <Trans
+              i18nKey="routingGroups.routingGroupsTable.howRoutingWorksDesc"
+              defaults="Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy."
+              values={{ strategy: formatStrategyLabel(group.routing_strategy, t) }}
+              components={{ strong: <strong /> }}
+            />
           </>
         )}
       </p>
@@ -89,7 +111,7 @@ export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePane
         <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
           {SNIPPET_TABS.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value} className="flex-none rounded-none px-4 py-2">
-              {tab.label}
+              {t(tab.labelKey, { defaultValue: tab.label })}
             </TabsTrigger>
           ))}
         </TabsList>

@@ -512,7 +512,13 @@ export default function UserInfoView({
               <div className="mt-2">
                 <h3 className="text-lg font-medium">¥{formatNumberWithCommas(userData.spend || 0, 2)}</h3>
                 <p>
-                  of {userData.max_budget !== null ? `¥${formatNumberWithCommas(userData.max_budget, 2)}` : i18n.t("viewUsers.userInfoView.unlimitedBudget", { defaultValue: "Unlimited" })}
+                  {i18n.t("projects.projectDetailsPage.budgetOf", {
+                    budget:
+                      userData.max_budget !== null
+                        ? formatNumberWithCommas(userData.max_budget, 2)
+                        : i18n.t("viewUsers.userInfoView.unlimitedBudget", { defaultValue: "Unlimited" }),
+                    defaultValue: "of ¥{{budget}} budget",
+                  })}
                 </p>
               </div>
             </Card>
@@ -643,7 +649,7 @@ export default function UserInfoView({
                 </div>
 
                 <div>
-                  <p className="font-medium">User Alias</p>
+                  <p className="font-medium">{i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}</p>
                   <p>{userData.user_alias || "Not Set"}</p>
                 </div>
 
@@ -653,12 +659,12 @@ export default function UserInfoView({
                 </div>
 
                 <div>
-                  <p className="font-medium">Created</p>
+                  <p className="font-medium">{i18n.t("viewUsers.userInfoView.createdLabel", { defaultValue: "Created" })}</p>
                   <p>{userData.created_at ? new Date(userData.created_at).toLocaleString() : "Unknown"}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Last Updated</p>
+                  <p className="font-medium">{i18n.t("viewUsers.userInfoView.lastUpdatedLabel", { defaultValue: "Last Updated" })}</p>
                   <p>{userData.updated_at ? new Date(userData.updated_at).toLocaleString() : "Unknown"}</p>
                 </div>
 
@@ -678,7 +684,7 @@ export default function UserInfoView({
                 </div>
 
                 <div>
-                  <p className="font-medium">Max Budget</p>
+                  <p className="font-medium">{i18n.t("viewUsers.userInfoView.maxBudgetLabel", { defaultValue: "Max Budget" })}</p>
                   <p>
                     {userData.max_budget !== null && userData.max_budget !== undefined
                       ? `¥${formatNumberWithCommas(userData.max_budget, 4)}`

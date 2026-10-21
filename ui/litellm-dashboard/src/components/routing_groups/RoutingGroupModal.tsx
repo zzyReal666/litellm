@@ -49,8 +49,11 @@ interface RoutingGroupModalProps {
   saving?: boolean;
 }
 
-const ARGS_EXAMPLES: Record<string, string> = {
-  "latency-based-routing": 'Example: { "ttl": 3600, "lowest_latency_buffer": 0 }',
+const ARGS_EXAMPLES: Record<string, { key: string; text: string }> = {
+  "latency-based-routing": {
+    key: "routingGroups.routingGroupModal.strategyArgsExampleLatency",
+    text: 'Example: { "ttl": 3600, "lowest_latency_buffer": 0 }',
+  },
 };
 
 const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
@@ -126,7 +129,7 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {mode === "create" ? i18n.t("routingGroups.routingGroupModal.titleCreate", { defaultValue: "Create Routing Group" }) : `Edit ${initialValue?.group_name ?? ""}`}
+            {mode === "create" ? i18n.t("routingGroups.routingGroupModal.titleCreate", { defaultValue: "Create Routing Group" }) : i18n.t("routingGroups.routingGroupModal.titleEdit", { groupName: initialValue?.group_name ?? "", defaultValue: "Edit {{groupName}}" })}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={(event) => event.preventDefault()} noValidate>
@@ -288,7 +291,10 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
                 control={form.control}
                 name="routing_strategy_args"
                 label={i18n.t("routingGroups.routingGroupModal.strategyArgsLabel", { defaultValue: "Strategy Arguments (JSON)" })}
-                description={ARGS_EXAMPLES[selectedStrategy] ?? 'Example: { "ttl": 60 }'}
+                description={i18n.t(
+                  ARGS_EXAMPLES[selectedStrategy]?.key ?? "routingGroups.routingGroupModal.strategyArgsExampleUsage",
+                  { defaultValue: ARGS_EXAMPLES[selectedStrategy]?.text ?? 'Example: { "ttl": 60 }' },
+                )}
               >
                 {({ ref, ...field }) => (
                   <Textarea {...field} ref={ref} rows={4} placeholder='{ "ttl": 3600 }' className="font-mono text-xs" />
@@ -298,8 +304,12 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
 
             <p className="text-xs text-muted-foreground">
               {selectedStrategy === "priority"
-                ? "Direct requests to a member model keep their existing routing behavior."
-                : "Models outside non-priority groups use the proxy's top-level routing strategy."}
+                ? i18n.t("routingGroups.routingGroupModal.priorityNote", {
+                    defaultValue: "Direct requests to a member model keep their existing routing behavior.",
+                  })
+                : i18n.t("routingGroups.routingGroupModal.fallbackNote", {
+                    defaultValue: "Models outside non-priority groups use the proxy's top-level routing strategy.",
+                  })}
             </p>
           </FieldGroup>
         </form>

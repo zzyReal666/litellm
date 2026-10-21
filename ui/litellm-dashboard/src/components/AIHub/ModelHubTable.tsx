@@ -509,7 +509,11 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {filteredData.length} of {modelHubData?.length || 0} models
+                    {i18n.t("publicModelHub.showingModels", {
+                      shown: filteredData.length,
+                      total: modelHubData?.length || 0,
+                      defaultValue: "Showing {{shown}} of {{total}} models",
+                    })}
                   </p>
                 </div>
               </TabsContent>
@@ -576,7 +580,11 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {filteredAgentData.length} of {agentHubData?.length || 0} agents
+                    {i18n.t("publicModelHub.showingAgents", {
+                      shown: filteredAgentData.length,
+                      total: agentHubData?.length || 0,
+                      defaultValue: "Showing {{shown}} of {{total}} agents",
+                    })}
                   </p>
                 </div>
               </TabsContent>
@@ -591,7 +599,9 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                         onClick={() => handleMakeMcpPublicPage()}
                         disabled={isMCPHubVisibilityDisabled(mcpLoading, mcpHubData)}
                       >
-                        Manage MCP Hub Visibility
+                        {i18n.t("aiHub.modelHubTable.selectMcpPublic", {
+                          defaultValue: "Select MCP Servers to Make Public",
+                        })}
                       </Button>
                     </div>
                   )}
@@ -619,7 +629,11 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
 
                 <div className="mt-4 text-center space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Showing {mcpHubData?.length || 0} MCP server{mcpHubData?.length !== 1 ? "s" : ""}
+                    {i18n.t("publicModelHub.showingMcpServers", {
+                      shown: mcpHubData?.length || 0,
+                      total: mcpHubData?.length || 0,
+                      defaultValue: "Showing {{shown}} of {{total}} MCP servers",
+                    })}
                   </p>
                 </div>
               </TabsContent>

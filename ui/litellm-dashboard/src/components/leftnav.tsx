@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import { canViewProjectsPage, projectReaderRoles } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
@@ -513,17 +515,80 @@ const prettify = (key: string): string =>
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
+const NAV_LABEL_KEYS: Record<string, string> = {
+  "api-keys": "nav.virtualKeys",
+  "llm-playground": "nav.playground",
+  models: "nav.modelsEndpoints",
+  agentic: "nav.agentic",
+  agents: "nav.agents",
+  workflows: "nav.workflowRuns",
+  memory: "nav.memory",
+  "mcp-servers": "nav.mcpServers",
+  skills: "nav.skills",
+  guardrails: "nav.guardrails",
+  policies: "nav.policies",
+  tools: "nav.tools",
+  "search-tools": "nav.searchTools",
+  "vector-stores": "nav.vectorStores",
+  "tool-policies": "nav.toolPolicies",
+  new_usage: "nav.usage",
+  "cost-optimization": "nav.costOptimization",
+  logs: "nav.logs",
+  "guardrails-monitor": "nav.guardrailsMonitor",
+  teams: "nav.teams",
+  projects: "nav.projects",
+  users: "nav.internalUsers",
+  organizations: "nav.organizations",
+  "access-groups": "nav.accessGroups",
+  budgets: "nav.budgets",
+  api_ref: "nav.apiReference",
+  "model-hub-table": "nav.aiHub",
+  "learning-resources": "nav.learningResources",
+  caching: "nav.caching",
+  experimental: "nav.experimental",
+  prompts: "nav.prompts",
+  "transform-request": "nav.apiPlayground",
+  "tag-management": "nav.tagManagement",
+  "4": "nav.oldUsage",
+  settings: "nav.settings",
+  "router-settings": "nav.routerSettings",
+  "logging-and-alerts": "nav.loggingAlerts",
+  "admin-panel": "nav.adminSettings",
+  "cost-tracking": "nav.costTracking",
+  "ui-theme": "nav.uiTheme",
+};
+
+const NAV_GROUP_LABEL_KEYS: Record<string, string> = {
+  "AI GATEWAY": "nav.groups.aiGateway",
+  OBSERVABILITY: "nav.groups.observability",
+  "ACCESS CONTROL": "nav.groups.accessControl",
+  "DEVELOPER TOOLS": "nav.groups.developerTools",
+  SETTINGS: "nav.groups.settings",
+};
+
+const itemLabel = (item: MenuItem, t?: TFunction): string => {
+  const fallback = labelText(item);
+  const key = NAV_LABEL_KEYS[item.key];
+  return key && t ? t(key, { defaultValue: fallback }) : fallback;
+};
+
+const sectionLabel = (groupLabel: string, t?: TFunction): string => {
+  const fallback = sectionText(groupLabel);
+  const key = NAV_GROUP_LABEL_KEYS[groupLabel];
+  return key && t ? t(key, { defaultValue: fallback }) : fallback;
+};
+
 export const labelText = (item: MenuItem): string => (typeof item.label === "string" ? item.label : prettify(item.key));
 
 // Breadcrumb ("Section" / "Page") for the top bar, derived from the same nav config.
-export const getBreadcrumb = (pathname: string): { section: string | null; title: string } => {
+export const getBreadcrumb = (pathname: string, t?: TFunction): { section: string | null; title: string } => {
   const route = routeForPathname(pathname);
   for (const group of menuGroups) {
     for (const item of group.items) {
-      const section = sectionText(group.groupLabel);
-      if (routeOf(item) === route) return { section, title: labelText(item) };
+      const section = sectionLabel(group.groupLabel, t);
+      if (routeOf(item) === route) return { section, title: itemLabel(item, t) };
       const child = item.children?.find((c) => routeOf(c) === route);
-      if (child) return { section, title: labelText(child) };
+      if (child) return { section, title: itemLabel(child, t) };
     }
   }
   return { section: null, title: prettify(route) };
@@ -539,6 +604,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
   disableVectorStoresForInternalUsers,
   allowVectorStoresForTeamAdmins,
 }) => {
+  const { t } = useTranslation();
   const { userId, accessToken, userRole, isViewOnly } = useAuthorized();
   const isOrgAdmin = useIsOrgAdmin();
   const { data: teams } = useTeams();
@@ -615,7 +681,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
   const renderLeaf = (item: MenuItem, isChild: boolean) => {
     const active = selectedKey === item.key;
     const size = isChild ? "sub" : "default";
-    const label = <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>;
+    const label = <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{itemLabel(item, t)}</span>;
 
     if (item.external_url) {
       return (
@@ -624,7 +690,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
           href={item.external_url}
           target="_blank"
           rel="noopener noreferrer"
-          title={collapsed ? labelText(item) : undefined}
+          title={collapsed ? itemLabel(item, t) : undefined}
           data-active={active || undefined}
           className={cn(sidebarMenuButtonVariants({ isActive: active, size }))}
         >
@@ -639,7 +705,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
       <Link
         key={item.key}
         href={uiHref(routeOf(item))}
-        title={collapsed ? labelText(item) : undefined}
+        title={collapsed ? itemLabel(item, t) : undefined}
         data-active={active || undefined}
         className={cn(sidebarMenuButtonVariants({ isActive: active, size }))}
       >
@@ -663,10 +729,10 @@ const Sidebar_: React.FC<SidebarProps> = ({
           isActive={active}
           aria-expanded={open}
           onClick={() => toggleGroup(item.key)}
-          title={collapsed ? labelText(item) : undefined}
+          title={collapsed ? itemLabel(item, t) : undefined}
         >
           {item.icon}
-          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>
+          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{itemLabel(item, t)}</span>
           <ChevronRight
             className={cn(
               "size-4 shrink-0 transition-transform group-data-[collapsed=true]/sidebar:hidden",
@@ -695,7 +761,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
         <div className="flex items-center justify-between gap-2 group-data-[collapsed=true]/sidebar:flex-col">
           <div className="flex min-w-0 items-center gap-2">
             <Link href={uiHref("")} className="flex min-w-0 items-center" aria-label={i18n.t("navbar.liteLLMHome", { defaultValue: "LiteLLM home" })}>
-              <img src={logoSrc} alt="LiteLLM" className={cn(LOGO_CLASS_NAME, "dark:hidden")} />
+              <img src={logoSrc} alt={t("navbar.logoAlt", { defaultValue: "LiteLLM" })} className={cn(LOGO_CLASS_NAME, "dark:hidden")} />
               <img
                 src={darkLogoSrc}
                 alt=""
@@ -733,7 +799,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
           {visibleGroups.map((group, gi) => (
             <SidebarGroup key={group.groupLabel}>
               {gi > 0 && <SidebarSeparator className="hidden group-data-[collapsed=true]/sidebar:block" />}
-              <SidebarGroupLabel>{group.groupLabel}</SidebarGroupLabel>
+              <SidebarGroupLabel>{sectionLabel(group.groupLabel, t)}</SidebarGroupLabel>
               <SidebarMenu>{group.items.map((item) => renderItem(item))}</SidebarMenu>
             </SidebarGroup>
           ))}

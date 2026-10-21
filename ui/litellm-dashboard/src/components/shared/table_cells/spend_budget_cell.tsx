@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { InheritedBudgetHint, type InheritedBudgetGate } from "@/components/shared/InheritedBudgetHint";
 import { Meter, MeterIndicator, MeterTrack } from "@/components/shared/Meter";
 import { formatNumberWithCommas, getSpendString } from "@/utils/dataUtils";
@@ -25,13 +26,20 @@ export function SpendBudgetCell({
   spendDecimals = 4,
   budgetDecimals = 0,
 }: SpendBudgetCellProps) {
+  const { t } = useTranslation();
   const spendValue = typeof spend === "number" && !Number.isNaN(spend) ? spend : 0;
   const budget = maxBudget ?? null;
   const hasBudget = typeof budget === "number" && budget > 0;
   const pct = hasBudget ? (spendValue / budget) * 100 : 0;
 
   const spendText = spendValue > 0 ? getSpendString(spendValue, spendDecimals) : "¥0.00";
-  const budgetLabel = budget === null ? "· Unlimited" : `of ¥${formatNumberWithCommas(budget, budgetDecimals)}`;
+  const budgetLabel =
+    budget === null
+      ? `· ${t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })}`
+      : t("projects.projectDetailsPage.budgetOf", {
+          budget: formatNumberWithCommas(budget, budgetDecimals),
+          defaultValue: "of ¥{{budget}} budget",
+        });
 
   return (
     <div className="flex min-w-[130px] flex-col gap-1">

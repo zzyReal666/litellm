@@ -1193,7 +1193,8 @@
     "deleteConfirm": "确定要删除 Agent：{{name}}？",
     "deleteCannotUndo": "此操作无法撤销。",
     "deleteSuccess": "Agent「{{name}}」已成功删除",
-    "deleteFailed": "删除 Agent 失败"
+    "deleteFailed": "删除 Agent 失败",
+    "jwtConfigured": "已配置 JWT"
   },
   "bulkCreateUsers": {
     "openButton": "+ 批量邀请用户",

@@ -1193,7 +1193,8 @@
     "deleteConfirm": "Are you sure you want to delete agent: {{name}}?",
     "deleteCannotUndo": "This action cannot be undone.",
     "deleteSuccess": "Agent \"{{name}}\" deleted successfully",
-    "deleteFailed": "Failed to delete agent"
+    "deleteFailed": "Failed to delete agent",
+    "jwtConfigured": "JWT configured"
   },
   "bulkCreateUsers": {
     "openButton": "+ Bulk Invite Users",

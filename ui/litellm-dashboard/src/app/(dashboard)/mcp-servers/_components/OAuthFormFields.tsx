@@ -309,7 +309,7 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
               />
             }
             name="token_validation_json"
-            rules={{ validate: { json: parsesAsJson(i18n.t("mcpTools.oAuthFormFields.mustBeValidJson", { defaultValue: "Must be valid JSON" })) } }}
+            rules={{ validate: { json: parsesAsJson(i18n.t("mcpTools.oAuthFormFields.mustBeValidJson", { defaultValue: i18n.t("routingGroups.routingGroupModal.strategyArgsMustBeJson", { defaultValue: "Must be valid JSON" }) })) } }}
           >
             {(control) => (
               <Textarea
