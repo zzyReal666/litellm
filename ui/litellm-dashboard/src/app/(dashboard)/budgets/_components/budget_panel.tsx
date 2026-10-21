@@ -3,6 +3,7 @@
  *
  */
 
+import { useTranslation } from "react-i18next";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import { Plus, Wallet } from "lucide-react";
 import React, { useCallback, useState } from "react";
@@ -29,6 +30,7 @@ interface BudgetSettingsPageProps {
 }
 
 const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
+  const { t } = useTranslation();
   const syntaxTheme = useSyntaxTheme(prism);
   const [isCreateModelVisible, setIsCreateModelVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -65,10 +67,10 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
     }
     try {
       await deleteBudget.mutateAsync(selectedBudget.budget_id);
-      toast.success("Budget deleted.");
+      toast.success(t("budgets.budgetPanel.budgetDeleted", { defaultValue: "Budget deleted." }));
     } catch (error) {
       console.error("Error deleting budget:", error);
-      toast.fromError("Failed to delete budget");
+      toast.fromError(t("budgets.budgetPanel.failedToDelete", { defaultValue: "Failed to delete budget" }));
     } finally {
       setIsDeleteModalVisible(false);
       setSelectedBudget(null);
@@ -85,22 +87,22 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
         <PageHeader>
           <PageHeaderTitle>
             <Wallet />
-            Budgets
+            {t("budgets.budgetPanel.tabBudgets", { defaultValue: "Budgets" })}
           </PageHeaderTitle>
-          <PageHeaderDescription>Spend, TPM and RPM limits you can assign to customers.</PageHeaderDescription>
+          <PageHeaderDescription>{t("budgetsPage.budgetPanel.subtitle", { defaultValue: "Spend, TPM and RPM limits you can assign to customers." })}</PageHeaderDescription>
           <PageHeaderControls>
             <PageTabsList>
               {canModify && (
                 <>
                   <Button onClick={() => setIsCreateModelVisible(true)}>
                     <Plus className="size-4" />
-                    Create Budget
+                    {t("budgets.budgetModal.title", { defaultValue: "Create Budget" })}
                   </Button>
                   <ToolbarSeparator className="mx-0 h-6" />
                 </>
               )}
-              <PageTabsTrigger value="budgets">Budgets</PageTabsTrigger>
-              <PageTabsTrigger value="examples">Examples</PageTabsTrigger>
+              <PageTabsTrigger value="budgets">{t("budgets.budgetPanel.tabBudgets", { defaultValue: "Budgets" })}</PageTabsTrigger>
+              <PageTabsTrigger value="examples">{t("budgets.budgetPanel.tabExamples", { defaultValue: "Examples" })}</PageTabsTrigger>
             </PageTabsList>
           </PageHeaderControls>
         </PageHeader>
@@ -122,14 +124,14 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
             />
             <DeleteResourceModal
               isOpen={isDeleteModalVisible}
-              title="Delete Budget?"
-              message="Are you sure you want to delete this budget? This action cannot be undone."
-              resourceInformationTitle="Budget Information"
+              title={t("budgets.budgetPanel.deleteTitle", { defaultValue: "Delete Budget?" })}
+              message={t("budgets.budgetPanel.deleteMessage", { defaultValue: "Are you sure you want to delete this budget? This action cannot be undone." })}
+              resourceInformationTitle={t("budgets.budgetPanel.budgetInformation", { defaultValue: "Budget Information" })}
               resourceInformation={[
-                { label: "Budget ID", value: selectedBudget?.budget_id, code: true },
-                { label: "Max Budget", value: selectedBudget?.max_budget },
-                { label: "TPM", value: selectedBudget?.tpm_limit },
-                { label: "RPM", value: selectedBudget?.rpm_limit },
+                { label: t("budgets.budgetPanel.colBudgetId", { defaultValue: "Budget ID" }), value: selectedBudget?.budget_id, code: true },
+                { label: t("budgets.budgetPanel.colMaxBudget", { defaultValue: "Max Budget" }), value: selectedBudget?.max_budget },
+                { label: t("budgets.budgetPanel.colTpm", { defaultValue: "TPM" }), value: selectedBudget?.tpm_limit },
+                { label: t("budgets.budgetPanel.colRpm", { defaultValue: "RPM" }), value: selectedBudget?.rpm_limit },
                 { label: "TPD (batch)", value: selectedBudget?.tpd_limit },
               ]}
               onCancel={handleDeleteCancel}
@@ -140,17 +142,17 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
         </TabsContent>
         <TabsContent value="examples" className="min-h-0 flex-1 overflow-y-auto" keepMounted>
           <div className="pt-6">
-            <p className="text-base text-muted-foreground">How to use budget id</p>
+            <p className="text-base text-muted-foreground">{t("budgets.budgetPanel.howToUseBudgetId", { defaultValue: "How to use budget id" })}</p>
             <Tabs defaultValue="assign-budget">
               <TabsList variant="line" className="h-auto w-full justify-start rounded-none border-b p-0">
                 <TabsTrigger value="assign-budget" className="flex-none rounded-none px-4 py-2">
-                  Assign Budget to Customer
+                  {t("budgets.budgetPanel.tabAssignBudget", { defaultValue: "Assign Budget to Customer" })}
                 </TabsTrigger>
                 <TabsTrigger value="curl" className="flex-none rounded-none px-4 py-2">
-                  Test it (Curl)
+                  {t("budgets.budgetPanel.tabTestCurl", { defaultValue: "Test it (Curl)" })}
                 </TabsTrigger>
                 <TabsTrigger value="openai-sdk" className="flex-none rounded-none px-4 py-2">
-                  Test it (OpenAI SDK)
+                  {t("budgets.budgetPanel.tabTestSdk", { defaultValue: "Test it (OpenAI SDK)" })}
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="assign-budget" keepMounted>

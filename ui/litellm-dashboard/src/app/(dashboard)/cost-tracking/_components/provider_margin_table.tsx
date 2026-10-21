@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useState } from "react";
 import { Check, SquarePen, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -103,12 +104,12 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
       data={data}
       columns={[
         {
-          header: "Provider",
+          header: i18n.t("costTracking.providerMarginTable.colProvider", { defaultValue: "Provider" }),
           cell: (row) => {
             if (row.provider === "global") {
               return (
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium">Global (All Providers)</span>
+                  <span className="font-medium">{i18n.t("costTracking.providerMarginTable.globalProviderLabel", { defaultValue: "Global (All Providers)" })}</span>
                 </div>
               );
             }
@@ -122,7 +123,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           },
         },
         {
-          header: "Margin",
+          header: i18n.t("costTracking.providerMarginTable.colMargin", { defaultValue: "Margin" }),
           numeric: true,
           cell: (row) => {
             const displayName = marginRowDisplayName(row.provider);
@@ -187,7 +188,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           width: "350px",
         },
         {
-          header: "Actions",
+          header: i18n.t("costTracking.providerMarginTable.colActions", { defaultValue: "Actions" }),
           cell: (row) => {
             const displayName = marginRowDisplayName(row.provider);
             return (
@@ -206,7 +207,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider margins configured"
+      emptyMessage={i18n.t("costTracking.providerMarginTable.emptyMessage", { defaultValue: "No provider margins configured" })}
     />
   );
 };

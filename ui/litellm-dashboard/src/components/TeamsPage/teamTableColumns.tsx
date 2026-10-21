@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -301,7 +302,7 @@ export const getTeamTableColumns = ({
       header: "Updated",
       size: 130,
       enableSorting: false,
-      cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
+      cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
     },
     {
       id: "actions",

@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import {
   ArrowDown,
   Bot,
@@ -536,7 +537,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
       setIsLoading(false);
-      toast.info("Request cancelled");
+      toast.info(i18n.t("playground.chatUi.requestCancelled", { defaultValue: "Request cancelled" }));
     }
   };
 
@@ -668,8 +669,8 @@ const ChatUI: React.FC<ChatUIProps> = ({
     if (endpointType !== EndpointType.MCP) {
       options.push({
         value: "__all__",
-        label: "All MCP Servers",
-        description: "Use all available MCP servers",
+        label: i18n.t("playground.chatUi.allMCPServers", { defaultValue: "All MCP Servers" }),
+        description: i18n.t("playground.chatUi.useAllMCPServers", { defaultValue: "Use all available MCP servers" }),
       });
     }
     for (const toolset of mcpToolsets) {
@@ -727,7 +728,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
   const handleSendMessage = async () => {
     if (endpointType === null) {
-      toast.fromError("Please select an endpoint before sending a request");
+      toast.fromError(i18n.t("playground.chatUi.pleaseSelectEndpoint", { defaultValue: "Please select an endpoint before sending a request" }));
       return;
     }
 
@@ -736,19 +737,19 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
     // For image edits, require both image and prompt
     if (endpointType === EndpointType.IMAGE_EDITS && uploadedImages.length === 0) {
-      toast.fromError("Please upload at least one image for editing");
+      toast.fromError(i18n.t("playground.chatUi.pleaseUploadImage", { defaultValue: "Please upload at least one image for editing" }));
       return;
     }
 
     // For audio transcriptions, require audio file
     if (endpointType === EndpointType.TRANSCRIPTION && !uploadedAudio) {
-      toast.fromError("Please upload an audio file for transcription");
+      toast.fromError(i18n.t("playground.chatUi.pleaseUploadAudio", { defaultValue: "Please upload an audio file for transcription" }));
       return;
     }
 
     // For A2A agents, require agent selection
     if (endpointType === EndpointType.A2A_AGENTS && !selectedAgent) {
-      toast.fromError("Please select an agent to send a message");
+      toast.fromError(i18n.t("playground.chatUi.pleaseSelectAgent", { defaultValue: "Please select an agent to send a message" }));
       return;
     }
 
@@ -758,11 +759,11 @@ const ChatUI: React.FC<ChatUIProps> = ({
       const rawSelected =
         selectedMCPServers.length === 1 && selectedMCPServers[0] !== "__all__" ? selectedMCPServers[0] : null;
       if (!rawSelected) {
-        toast.fromError("Please select an MCP server to test");
+        toast.fromError(i18n.t("playground.chatUi.pleaseSelectMCPServer", { defaultValue: "Please select an MCP server to test" }));
         return;
       }
       if (!selectedMCPDirectTool) {
-        toast.fromError("Please select an MCP tool to call");
+        toast.fromError(i18n.t("playground.chatUi.pleaseSelectMCPTool", { defaultValue: "Please select an MCP tool to call" }));
         return;
       }
       // For toolsets, find the tool in the servers that back this toolset
@@ -780,13 +781,13 @@ const ChatUI: React.FC<ChatUIProps> = ({
       }
       const mcpTool = searchPool.find((t: any) => t.name === selectedMCPDirectTool);
       if (!mcpTool) {
-        toast.fromError("Please wait for tool schema to load");
+        toast.fromError(i18n.t("playground.chatUi.waitForToolSchema", { defaultValue: "Please wait for tool schema to load" }));
         return;
       }
       try {
         mcpToolArguments = (await mcpToolArgsFormRef.current?.getSubmitValues()) ?? {};
       } catch (err) {
-        toast.fromError(err instanceof Error ? err.message : "Please fill in all required parameters");
+        toast.fromError(err instanceof Error ? err.message: i18n.t("playground.chatUi.fillRequiredParameters", { defaultValue: "Please fill in all required parameters" }));
         return;
       }
     }
@@ -805,7 +806,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
     ];
 
     if (modelRequiredEndpoints.includes(endpointType as EndpointType) && !selectedModel) {
-      toast.fromError("Please select a model before sending a request");
+      toast.fromError(i18n.t("playground.chatUi.pleaseSelectModel", { defaultValue: "Please select a model before sending a request" }));
       return;
     }
 
@@ -816,7 +817,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
     const effectiveApiKey = simplified ? accessToken : apiKeySource === "session" ? accessToken : apiKey;
 
     if (!effectiveApiKey) {
-      toast.fromError("Please provide a Virtual Key or select Current UI Session");
+      toast.fromError(i18n.t("playground.chatUi.pleaseProvideVirtualKey", { defaultValue: "Please provide a Virtual Key or select Current UI Session" }));
       return;
     }
 
@@ -1253,7 +1254,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
         <div className="flex h-full min-h-0 min-w-0 w-full flex-col lg:flex-row">
           {!simplified && (
             <div className="max-h-[42%] w-full shrink-0 overflow-y-auto border-b border-border bg-muted p-4 lg:max-h-none lg:w-72 lg:border-r lg:border-b-0 xl:w-80">
-              <h2 className="mb-6 mt-2 text-xl font-semibold">Configurations</h2>
+              <h2 className="mb-6 mt-2 text-xl font-semibold">{i18n.t("playground.chatUi.configurations", { defaultValue: "Configurations" })}</h2>
               <div className="space-y-4">
                 <div>
                   <label className="mb-2 flex items-center text-sm font-medium text-foreground">
@@ -1266,12 +1267,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                       setApiKeySource(value as "session" | "custom");
                     }}
                   >
-                    <SelectTrigger className="w-full" size="sm" aria-label="Virtual Key Source">
-                      <SelectValue>{apiKeySource === "custom" ? "Virtual Key" : "Current UI Session"}</SelectValue>
+                    <SelectTrigger className="w-full" size="sm" aria-label={i18n.t("playground.chatUi.virtualKeySource", { defaultValue: "Virtual Key Source" })}>
+                      <SelectValue>{apiKeySource === "custom" ? i18n.t("playground.chatUi.virtualKeyLabel", { defaultValue: "Virtual Key" }) : i18n.t("playground.chatUi.currentUiSession", { defaultValue: "Current UI Session" })}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="session">Current UI Session</SelectItem>
-                      <SelectItem value="custom">Virtual Key</SelectItem>
+                      <SelectItem value="session">{i18n.t("playground.chatUi.currentUiSession", { defaultValue: "Current UI Session" })}</SelectItem>
+                      <SelectItem value="custom">{i18n.t("playground.chatUi.virtualKeyLabel", { defaultValue: "Virtual Key" })}</SelectItem>
                     </SelectContent>
                   </ShadcnSelect>
                   {apiKeySource === "custom" && (
@@ -1279,7 +1280,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                       <Key className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
                       <Input
                         className="h-8 pl-8"
-                        placeholder="Enter custom Virtual Key"
+                        placeholder={i18n.t("playground.chatUi.enterCustomVirtualKey", { defaultValue: "Enter custom Virtual Key" })}
                         type="password"
                         onChange={(event) => setApiKey(event.target.value)}
                         value={apiKey}
@@ -1305,7 +1306,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         }}
                       >
                         <Link2 className="size-3" />
-                        Fill
+                        {i18n.t("playground.chatUi.fill", { defaultValue: "Fill" })}
                       </Button>
                     )}
                     {customProxyBaseUrl && (
@@ -1320,7 +1321,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         }}
                       >
                         <Eraser className="size-3" />
-                        Clear
+                        {i18n.t("common.clear", { defaultValue: "Clear" })}
                       </Button>
                     )}
                   </div>
@@ -1357,14 +1358,14 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <div className="mb-4">
                       <label className="mb-2 flex items-center text-sm font-medium text-foreground">
                         <Volume2 className="mr-2 size-4" aria-hidden="true" />
-                        Voice
+                        {i18n.t("playground.chatUi.voiceLabel", { defaultValue: "Voice" })}
                       </label>
                       <ShadcnSelect
                         items={OPEN_AI_VOICE_SELECT_OPTIONS}
                         value={selectedVoice}
                         onValueChange={handleVoiceChange}
                       >
-                        <SelectTrigger className="w-full" size="sm" aria-label="Voice">
+                        <SelectTrigger className="w-full" size="sm" aria-label={i18n.t("playground.chatUi.voiceLabel", { defaultValue: "Voice" })}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -1401,7 +1402,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                                 variant="ghost"
                                 size="icon-xs"
                                 className="text-muted-foreground hover:text-foreground"
-                                aria-label="Model Settings"
+                                aria-label={i18n.t("playground.chatUi.modelSettings", { defaultValue: "Model Settings" })}
                                 data-testid="model-settings-button"
                               />
                             }
@@ -1409,7 +1410,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                             <Settings className="size-3.5" />
                           </PopoverTrigger>
                           <PopoverContent side="right" className="w-auto p-0">
-                            <div className="border-b border-border px-4 py-2 text-sm font-medium">Model Settings</div>
+                            <div className="border-b border-border px-4 py-2 text-sm font-medium">{i18n.t("playground.chatUi.modelSettings", { defaultValue: "Model Settings" })}</div>
                             <AdditionalModelSettings
                               showAdvancedParams={isChatModel()}
                               temperature={temperature}
@@ -1435,26 +1436,26 @@ const ChatUI: React.FC<ChatUIProps> = ({
                                 size="icon-xs"
                                 className="cursor-not-allowed text-muted-foreground"
                                 disabled
-                                aria-label="Model Settings unavailable"
+                                aria-label={i18n.t("playground.chatUi.modelSettingsUnavailable", { defaultValue: "Model Settings unavailable" })}
                               />
                             }
                           >
                             <Settings className="size-3.5" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            Advanced parameters are only supported for chat models currently
+                            {i18n.t("playground.chatUi.advancedParamsTooltip", { defaultValue: "Advanced parameters are only supported for chat models currently" })}
                           </TooltipContent>
                         </Tooltip>
                       )}
                     </div>
                     <SearchSelect
                       value={selectedModel}
-                      placeholder={isLoadingModels ? "Loading models..." : "Select a Model"}
+                      placeholder={isLoadingModels ? "Loading models..." : i18n.t("playground.chatUi.selectModelLabel", { defaultValue: "Select a Model" })}
                       emptyText={modelEmptyText}
                       disabled={isLoadingModels}
                       onValueChange={onModelChange}
                       options={[
-                        { value: "custom", label: "Enter custom model" },
+                        { value: "custom", label: i18n.t("playground.chatUi.enterCustomModel", { defaultValue: "Enter custom model" }) },
                         ...modelsForEndpoint.map((model) => ({
                           value: model.model_group,
                           label: model.model_group,
@@ -1465,7 +1466,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     {showCustomModelInput && (
                       <Input
                         className="mt-2 h-8"
-                        placeholder="Enter custom model name"
+                        placeholder={i18n.t("playground.chatUi.enterCustomModelName", { defaultValue: "Enter custom model name" })}
                         onChange={(event) => debouncedSetSelectedModel(event.target.value)}
                       />
                     )}
@@ -1479,7 +1480,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     </label>
                     <SearchSelect
                       value={selectedAgent}
-                      placeholder="Select an Agent"
+                      placeholder={i18n.t("playground.chatUi.selectAgentPlaceholder", { defaultValue: "Select an Agent" })}
                       onValueChange={(value) => setSelectedAgent(value)}
                       options={agentInfo.map((agent) => ({
                         value: agent.agent_name,
@@ -1529,7 +1530,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <button
                             type="button"
                             className="inline-flex"
-                            aria-label="About MCP servers and toolsets"
+                            aria-label={i18n.t("playground.chatUi.aboutMcpServersAndToolsets", { defaultValue: "About MCP servers and toolsets" })}
                             onClick={() => setIsToolsetsInfoModalVisible(true)}
                           />
                         }
@@ -1550,7 +1551,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           ? selectedMCPServers[0]
                           : undefined
                       }
-                      placeholder="Select MCP server"
+                      placeholder={i18n.t("playground.chatUi.selectMCPServerPlaceholder", { defaultValue: "Select MCP server" })}
                       emptyText={isLoadingMCPServers ? "Loading..." : "No MCP servers"}
                       disabled={!MCP_SUPPORTED_ENDPOINTS.has(endpointType as EndpointType) || isLoadingMCPServers}
                       onValueChange={(value) => handleMcpServersChange(value ? [value] : [])}
@@ -1561,7 +1562,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <MultiSelect
                       value={selectedMCPServers}
                       onValueChange={handleMcpServersChange}
-                      placeholder="Select MCP servers"
+                      placeholder={i18n.t("playground.chatUi.selectMCPServersPlaceholder", { defaultValue: "Select MCP servers" })}
                       emptyText={isLoadingMCPServers ? "Loading..." : "No MCP servers"}
                       disabled={!MCP_SUPPORTED_ENDPOINTS.has(endpointType as EndpointType)}
                       loading={isLoadingMCPServers}
@@ -1594,10 +1595,10 @@ const ChatUI: React.FC<ChatUIProps> = ({
                       }
                       return (
                         <div className="mt-3">
-                          <p className="mb-1 block text-xs text-muted-foreground">Select Tool</p>
+                          <p className="mb-1 block text-xs text-muted-foreground">{i18n.t("playground.chatUi.selectToolLabel", { defaultValue: "Select Tool" })}</p>
                           <SearchSelect
                             value={selectedMCPDirectTool}
-                            placeholder="Select a tool to call"
+                            placeholder={i18n.t("playground.chatUi.selectToolPlaceholder", { defaultValue: "Select a tool to call" })}
                             onValueChange={(value) => setSelectedMCPDirectTool(value || undefined)}
                             options={toolOptions}
                             className="rounded-md"
@@ -1629,7 +1630,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                                     [serverId]: selectedTools,
                                   }));
                                 }}
-                                placeholder="All tools (default)"
+                                placeholder={i18n.t("playground.chatUi.allToolsDefault", { defaultValue: "All tools (default)" })}
                                 options={tools.map((tool: { name: string }) => ({
                                   value: tool.name,
                                   label: tool.name,
@@ -1668,7 +1669,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                                     className="text-xs text-muted-foreground underline hover:text-info"
                                     onClick={() => setByokModalServer(server)}
                                   >
-                                    Reconnect
+                                    {i18n.t("playground.chatUi.reconnect", { defaultValue: "Reconnect" })}
                                   </button>
                                 </div>
                               ) : (
@@ -1678,7 +1679,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                                   className="rounded-lg bg-info px-3 py-1 text-xs font-medium text-info-foreground hover:bg-info/80"
                                   onClick={() => setByokModalServer(server)}
                                 >
-                                  Connect
+                                  {i18n.t("playground.chatUi.connectButton", { defaultValue: "Connect" })}
                                 </Button>
                               )}
                             </div>
@@ -1692,7 +1693,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
                     <Database className="mr-1 size-4" aria-hidden="true" /> Vector Store
                     <Tooltip>
-                      <TooltipTrigger aria-label="About vector stores">
+                      <TooltipTrigger aria-label={i18n.t("playground.chatUi.aboutVectorStores", { defaultValue: "About vector stores" })}>
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
@@ -1716,7 +1717,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
                     <Shield className="mr-1 size-4" aria-hidden="true" /> Guardrails
                     <Tooltip>
-                      <TooltipTrigger aria-label="About guardrails">
+                      <TooltipTrigger aria-label={i18n.t("playground.chatUi.aboutGuardrails", { defaultValue: "About guardrails" })}>
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
@@ -1741,7 +1742,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
                       <Shield className="mr-1 size-4" aria-hidden="true" /> Policies
                       <Tooltip>
-                        <TooltipTrigger aria-label="About policies">
+                        <TooltipTrigger aria-label={i18n.t("playground.chatUi.aboutPolicies", { defaultValue: "About policies" })}>
                           <Info className="size-3.5 text-muted-foreground" />
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs">
@@ -1794,12 +1795,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button type="button" variant="outline" size="sm" onClick={clearChatHistory}>
                       <Eraser className="size-3.5" />
-                      Clear Chat
+                      {i18n.t("playground.chatUi.clearChat", { defaultValue: "Clear Chat" })}
                     </Button>
                     {!simplified && (
                       <Button type="button" variant="outline" size="sm" onClick={() => setIsGetCodeModalVisible(true)}>
                         <Code2 className="size-3.5" />
-                        Get Code
+                        {i18n.t("playground.chatUi.getCode", { defaultValue: "Get Code" })}
                       </Button>
                     )}
                   </div>
@@ -1812,7 +1813,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     {chatHistory.length === 0 && (
                       <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
                         <Bot className="mb-4 size-12" aria-hidden="true" />
-                        <p className="text-sm">Start a conversation, generate an image, or handle audio</p>
+                        <p className="text-sm">{i18n.t("playground.chatUi.emptyStateHint", { defaultValue: "Start a conversation, generate an image, or handle audio" })}</p>
                       </div>
                     )}
 
@@ -1840,7 +1841,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                               <div className="mr-1 flex h-6 w-6 items-center justify-center rounded-full bg-muted">
                                 <Bot className="size-3 text-muted-foreground" aria-hidden="true" />
                               </div>
-                              <strong className="text-sm capitalize">Assistant</strong>
+                              <strong className="text-sm capitalize">{i18n.t("playground.chatUi.assistant", { defaultValue: "Assistant" })}</strong>
                             </div>
                             <MCPEventsDisplay events={mcpEvents} />
                           </div>
@@ -1849,7 +1850,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
                     {isLoading && (
                       <div className="my-4 flex items-center justify-center">
-                        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-label="Loading" />
+                        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-label={i18n.t("viewLogs.index.loading", { defaultValue: "Loading" })} />
                       </div>
                     )}
                     {chatHistory.length > 0 && <div aria-hidden className="h-[calc(100%-3rem)]" />}
@@ -1881,7 +1882,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           }}
                         >
                           <ImageIcon className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
-                          <p className="text-sm">Click or drag images to upload</p>
+                          <p className="text-sm">{i18n.t("playground.chatUi.dragImagesToUpload", { defaultValue: "Click or drag images to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
                             Support for PNG, JPG, JPEG, GIF, WebP. Multiple images supported.
                           </p>
@@ -1928,7 +1929,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           ))}
                           <label className="flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-border hover:border-ring">
                             <ImageIcon className="size-6 text-muted-foreground" aria-hidden="true" />
-                            <p className="mt-1 text-xs text-muted-foreground">Add more</p>
+                            <p className="mt-1 text-xs text-muted-foreground">{i18n.t("playground.chatUi.addMore", { defaultValue: "Add more" })}</p>
                             <input
                               type="file"
                               accept={IMAGE_EDIT_ACCEPT}
@@ -1960,7 +1961,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           }}
                         >
                           <Volume2 className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
-                          <p className="text-sm">Click or drag audio file to upload</p>
+                          <p className="text-sm">{i18n.t("playground.chatUi.dragAudioToUpload", { defaultValue: "Click or drag audio file to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
                             Support for MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM formats. Max file size: 25 MB.
                           </p>
@@ -1988,7 +1989,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                             onClick={handleRemoveAudio}
                           >
                             <Trash2 className="size-3" />
-                            Remove
+                            {i18n.t("playground.chatUi.removeButton", { defaultValue: "Remove" })}
                           </Button>
                         </div>
                       )}
@@ -2023,7 +2024,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           ) : (
                             <>
                               <Code2 className="size-4 text-info" aria-hidden="true" />
-                              <span className="text-sm font-medium text-info">Code Interpreter Active</span>
+                              <span className="text-sm font-medium text-info">{i18n.t("playground.chatUi.codeInterpreterActive", { defaultValue: "Code Interpreter Active" })}</span>
                             </>
                           )}
                         </div>
@@ -2032,7 +2033,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           className="text-xs text-info hover:text-info/80"
                           onClick={() => codeInterpreter.setEnabled(false)}
                         >
-                          Disable
+                          {i18n.t("playground.chatUi.disableButton", { defaultValue: "Disable" })}
                         </button>
                       </div>
                       {!isLoading && (
@@ -2096,7 +2097,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                             onToggle={() => {
                               codeInterpreter.toggle();
                               if (!codeInterpreter.enabled) {
-                                toast.success("Code Interpreter enabled!");
+                                toast.success(i18n.t("playground.chatUi.codeInterpreterEnabledNotice", { defaultValue: "Code Interpreter enabled!" }));
                               }
                             }}
                           />
@@ -2145,17 +2146,17 @@ const ChatUI: React.FC<ChatUIProps> = ({
       <Dialog open={isGetCodeModalVisible} onOpenChange={setIsGetCodeModalVisible}>
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Generated Code</DialogTitle>
+            <DialogTitle>{i18n.t("playground.chatUi.generatedCodeTitle", { defaultValue: "Generated Code" })}</DialogTitle>
           </DialogHeader>
           <div className="my-2 flex items-end justify-between gap-3">
             <div>
-              <p className="mb-1 text-sm font-medium text-foreground">SDK Type</p>
+              <p className="mb-1 text-sm font-medium text-foreground">{i18n.t("playground.chatUi.sdkTypeLabel", { defaultValue: "SDK Type" })}</p>
               <ShadcnSelect
                 items={SDK_ITEMS}
                 value={selectedSdk}
                 onValueChange={(value) => setSelectedSdk(value as "openai" | "azure")}
               >
-                <SelectTrigger className="w-[150px]" size="sm" aria-label="SDK Type">
+                <SelectTrigger className="w-[150px]" size="sm" aria-label={i18n.t("playground.chatUi.sdkTypeLabel", { defaultValue: "SDK Type" })}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -2173,12 +2174,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
               size="sm"
               onClick={() => {
                 void navigator.clipboard.writeText(generatedCode).then(
-                  () => toast.success("Copied to clipboard!"),
-                  () => toast.error("Unable to copy to clipboard"),
+                  () => toast.success(i18n.t("claudeCodePluginsPage.pluginTable.copiedToClipboard", { defaultValue: "Copied to clipboard!" })),
+                  () => toast.error(i18n.t("playground.chatUi.unableToCopyToClipboard", { defaultValue: "Unable to copy to clipboard" })),
                 );
               }}
             >
-              Copy to Clipboard
+              {i18n.t("playground.chatUi.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
             </Button>
           </div>
           <SyntaxHighlighter
@@ -2212,7 +2213,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
       <Dialog open={isToolsetsInfoModalVisible} onOpenChange={setIsToolsetsInfoModalVisible}>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>How Toolsets Work</DialogTitle>
+            <DialogTitle>{i18n.t("playground.chatUi.toolsetsInfoTitle", { defaultValue: "How Toolsets Work" })}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <p className="text-foreground">
@@ -2220,15 +2221,15 @@ const ChatUI: React.FC<ChatUIProps> = ({
               exposing all tools from a server, a toolset gives an agent exactly the tools it needs.
             </p>
             <div>
-              <h4 className="mb-2 font-semibold text-foreground">How to use a toolset:</h4>
+              <h4 className="mb-2 font-semibold text-foreground">{i18n.t("playground.chatUi.toolsetsHowToUseTitle", { defaultValue: "How to use a toolset:" })}</h4>
               <ol className="list-inside list-decimal space-y-2 text-foreground">
                 <li>
                   Select a <span className="font-semibold text-violet-600">Toolset</span> (purple badge) from the MCP
                   Servers dropdown.
                 </li>
-                <li>The tool picker will show only the tools included in that toolset.</li>
-                <li>Select a tool and fill in its parameters, then send.</li>
-                <li>The tool call is routed to the correct underlying MCP server automatically.</li>
+                <li>{i18n.t("playground.chatUi.toolsetsStep2", { defaultValue: "The tool picker will show only the tools included in that toolset." })}</li>
+                <li>{i18n.t("playground.chatUi.toolsetsStep3", { defaultValue: "Select a tool and fill in its parameters, then send." })}</li>
+                <li>{i18n.t("playground.chatUi.toolsetsStep4", { defaultValue: "The tool call is routed to the correct underlying MCP server automatically." })}</li>
               </ol>
             </div>
             <div className="rounded-sm border border-purple-200 bg-purple-50 p-3 dark:border-purple-800 dark:bg-purple-950">
@@ -2239,7 +2240,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
               </p>
             </div>
             <div>
-              <h4 className="mb-1 font-semibold text-foreground">Creating toolsets:</h4>
+              <h4 className="mb-1 font-semibold text-foreground">{i18n.t("playground.chatUi.toolsetsCreatingTitle", { defaultValue: "Creating toolsets:" })}</h4>
               <p className="text-sm text-muted-foreground">
                 Admins can create and manage toolsets from the <strong>MCP</strong> page → <strong>Toolsets</strong>{" "}
                 tab. Toolsets can then be assigned to keys and teams to scope their tool access.
@@ -2248,7 +2249,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsToolsetsInfoModalVisible(false)}>
-              Close
+              {i18n.t("common.close", { defaultValue: "Close" })}
             </Button>
           </DialogFooter>
         </DialogContent>

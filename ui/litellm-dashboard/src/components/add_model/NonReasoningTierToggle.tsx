@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 
 import { Separator } from "@/components/ui/separator";
@@ -33,9 +34,9 @@ const NonReasoningTierToggle: React.FC<{
           checked={value.enable_non_reasoning_tier === true}
           disabled={!available}
           onCheckedChange={handleToggle}
-          aria-label="Add a non-reasoning tier"
+          aria-label={i18n.t("addModel.nonReasoningTier.addLabel", { defaultValue: "Add a non-reasoning tier" })}
         />
-        <strong className="font-semibold">Add a non-reasoning tier</strong>
+        <strong className="font-semibold">{i18n.t("addModel.nonReasoningTier.addLabel", { defaultValue: "Add a non-reasoning tier" })}</strong>
       </div>
       <span className="block text-xs text-muted-foreground">
         Adds NON_REASONING below Simple, for operational agent traffic that relays or reformats information rather than

@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { BarChart3, Bot, Building2, Globe, LineChart, ShoppingCart, Tags, User, Users } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
@@ -111,7 +112,7 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
   canViewTagUsage = false,
   isOrgAdmin = false,
   title = "Usage",
-  description = "Select the usage data you want to view",
+  description = i18n.t("usagePage.usageViewSelect.description", { defaultValue: "Select the usage data you want to view" }),
   "data-id": dataId,
 }) => {
   const isAdmin = all_admin_roles.includes(userRole ?? "");

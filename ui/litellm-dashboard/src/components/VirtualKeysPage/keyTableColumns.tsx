@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { Info } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -67,7 +68,7 @@ const getKeyStatus = (key: KeyResponse): KeyStatus => {
   }
   return {
     tone: "success",
-    label: "Active",
+    label: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }),
     tooltip: "This key is not blocked and has not expired.",
   };
 };
@@ -239,7 +240,7 @@ export const getKeyTableColumns = ({
     header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" variant="header-cycle" />,
     size: 120,
     enableSorting: true,
-    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
   },
   {
     id: "last_active",
@@ -262,7 +263,7 @@ export const getKeyTableColumns = ({
     header: "Expires",
     size: 120,
     enableSorting: false,
-    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Never" />,
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
   },
   {
     id: "spend",
@@ -309,7 +310,7 @@ export const getKeyTableColumns = ({
     header: "Budget Reset",
     size: 130,
     enableSorting: false,
-    cell: (info) => <DateCell value={info.getValue() as string | null} fallback="Never" />,
+    cell: (info) => <DateCell value={info.getValue() as string | null} fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
   },
   {
     id: "models",

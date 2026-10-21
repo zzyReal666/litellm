@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -59,8 +60,8 @@ export const getAgentsTableColumns = ({
   {
     id: "agent_name",
     accessorKey: "agent_name",
-    meta: { title: "Agent Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Agent Name" />,
+    meta: { title: i18n.t("aiHub.agentHubTableColumns.colAgentName", { defaultValue: "Agent Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("aiHub.agentHubTableColumns.colAgentName", { defaultValue: "Agent Name" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -90,8 +91,8 @@ export const getAgentsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend (CNY)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Spend (CNY)" />,
+    meta: { title: i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" })} />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
@@ -138,9 +139,9 @@ export const getAgentsTableColumns = ({
       const hasKeys = (row.original.keys?.length ?? 0) > 0;
       if (row.original.jwt_auth_configured) return <StatusBadge tone="success" label="JWT configured" />;
       return hasKeys ? (
-        <StatusBadge tone="success" label="Active" />
+        <StatusBadge tone="success" label={i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" })} />
       ) : (
-        <StatusBadge tone="warning" label="Needs Setup" />
+        <StatusBadge tone="warning" label={i18n.t("agentsPage.agentCard.statusNeedsSetup", { defaultValue: "Needs Setup" })} />
       );
     },
   },

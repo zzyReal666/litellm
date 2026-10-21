@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
 import { TFunction } from "i18next";
 import { LayersIcon } from "lucide-react";
@@ -130,7 +131,7 @@ export const getProjectsTableColumns = ({
         label={
           row.original.blocked
             ? t("projects.projectsPage.statusBlocked", { defaultValue: "Blocked" })
-            : t("common.active", { defaultValue: "Active" })
+            : t("common.active", { defaultValue: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })
         }
       />
     ),

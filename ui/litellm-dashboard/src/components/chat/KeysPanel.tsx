@@ -272,7 +272,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     <TableCell>
                       {!record.expires ? (
                         <span className="text-muted-foreground text-[13px]">
-                          {t("common.neverExpires", { defaultValue: "Never" })}
+                          {t("common.neverExpires", { defaultValue: t("common.never", { defaultValue: "Never" }) })}
                         </span>
                       ) : (
                         <Badge variant={expired ? "destructive" : "outline"}>
@@ -374,7 +374,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                     {t("chat.keysPanel.currentExpiry", { defaultValue: "Current: " })}
                     {rotateTarget?.expires
                       ? formatExpiresUtc(rotateTarget.expires)
-                      : t("common.neverExpires", { defaultValue: "Never" })}
+                      : t("common.neverExpires", { defaultValue: t("common.never", { defaultValue: "Never" }) })}
                     {keyIsExpired && t("chat.keysPanel.expiredSuffix", { defaultValue: " (expired)" })}
                   </p>
                   {newExpiryTime && (

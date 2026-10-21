@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { useProviderFields } from "@/app/(dashboard)/hooks/providers/useProviderFields";
 import { PasswordInput } from "@/components/shared/PasswordInput";
 import { Input } from "@/components/ui/input";
@@ -228,7 +229,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
         <>
           <Button type="button" variant="outline" className="w-fit" onClick={() => credentialsFileRef.current?.click()}>
             <UploadIcon />
-            Click to Upload
+            {i18n.t("addModel.providerSpecificFields.clickToUpload", { defaultValue: "Click to Upload" })}
           </Button>
           <input
             ref={credentialsFileRef}
@@ -291,10 +292,10 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
 
   return (
     <>
-      {isLoading && allFields.length === 0 && <p className="text-sm mb-2">Loading provider fields...</p>}
+      {isLoading && allFields.length === 0 && <p className="text-sm mb-2">{i18n.t("addModel.providerSpecificFields.loadingFields", { defaultValue: "Loading provider fields..." })}</p>}
       {loadError && allFields.length === 0 && (
         <p className="text-sm mb-2 text-destructive">
-          {loadError instanceof Error ? loadError.message : "Failed to load provider credential fields"}
+          {loadError instanceof Error ? loadError.message: i18n.t("addModel.providerSpecificFields.loadFailed", { defaultValue: "Failed to load provider credential fields" })}
         </p>
       )}
       {allFields.map((field) => (
@@ -305,7 +306,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
             required={field.required}
             rules={{
               validate: {
-                ...(field.required ? { required: requiredRule("Required") } : {}),
+                ...(field.required ? { required: requiredRule(i18n.t("addModel.providerSpecificFields.required", { defaultValue: "Required" })) } : {}),
                 ...(fieldValidators?.[field.key] ? { provider: fieldValidators[field.key] } : {}),
               },
             }}
@@ -316,7 +317,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
 
           {/* Special case for Vertex Credentials help text */}
           {field.key === "vertex_credentials" && (
-            <p className="text-sm mb-3 mt-1">Give a gcp service account(.json file)</p>
+            <p className="text-sm mb-3 mt-1">{i18n.t("addModel.providerSpecificFields.vertexCredentialsHelp", { defaultValue: "Give a gcp service account(.json file)" })}</p>
           )}
 
           {/* Special case for Azure Base Model help text */}
@@ -330,7 +331,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
                   rel="noopener noreferrer"
                   className="text-primary underline-offset-4 hover:underline"
                 >
-                  here
+                  {i18n.t("addModel.providerSpecificFields.baseModelHelpLink", { defaultValue: "here" })}
                 </a>
               </p>
             </div>

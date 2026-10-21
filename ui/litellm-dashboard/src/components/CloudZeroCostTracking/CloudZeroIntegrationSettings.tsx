@@ -164,7 +164,7 @@ export function CloudZeroIntegrationSettings({ settings, onSettingsUpdated }: Cl
             <CardTitle className="flex items-center gap-2 text-lg">
               {t("cloudZero.cloudZeroIntegrationSettings.cardTitle", { defaultValue: "CloudZero Configuration" })}
               <Badge variant="secondary" className="capitalize">
-                {settings.status || t("common.active", { defaultValue: "Active" })}
+                {settings.status || t("common.active", { defaultValue: t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}
               </Badge>
             </CardTitle>
             <CardAction className="flex gap-2">

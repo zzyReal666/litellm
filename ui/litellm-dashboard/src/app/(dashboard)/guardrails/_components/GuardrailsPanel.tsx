@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,6 +35,7 @@ interface GuardrailsResponse {
 }
 
 const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole }) => {
+  const { t } = useTranslation();
   const [guardrailsList, setGuardrailsList] = useState<Guardrail[]>([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isCustomCodeModalVisible, setIsCustomCodeModalVisible] = useState(false);
@@ -113,7 +115,7 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
       await fetchGuardrails();
     } catch (error) {
       console.error("Error deleting guardrail:", error);
-      toast.fromError("Failed to delete guardrail");
+      toast.fromError(t("guardrails.deleteFailed", { defaultValue: "Failed to delete guardrail" }));
     } finally {
       setIsDeleting(false);
       setIsDeleteModalOpen(false);
@@ -138,18 +140,18 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
           {isAdmin && (
             <>
               <TabsTrigger value="garden" className="flex-none">
-                Guardrail Garden
+                {t("guardrails.guardrailGardenTab", { defaultValue: "Guardrail Garden" })}
               </TabsTrigger>
               <TabsTrigger value="guardrails" className="flex-none">
-                Guardrails
+                {t("guardrails.guardrailsTab", { defaultValue: "Guardrails" })}
               </TabsTrigger>
               <TabsTrigger value="playground" className="flex-none" disabled={!accessToken}>
-                Test Playground
+                {t("guardrails.testPlaygroundTab", { defaultValue: "Test Playground" })}
               </TabsTrigger>
             </>
           )}
           <TabsTrigger value="submitted" className="flex-none">
-            Submitted Guardrails
+            {t("guardrails.submittedGuardrailsTab", { defaultValue: "Submitted Guardrails" })}
           </TabsTrigger>
         </TabsList>
 
@@ -164,17 +166,17 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
                 <DropdownMenu>
                   <DropdownMenuTrigger disabled={!accessToken} className={cn(buttonVariants({ variant: "default" }))}>
                     <Plus />
-                    Add New Guardrail
+                    {t("guardrails.addNewGuardrail", { defaultValue: "+ Add New Guardrail" })}
                     <ChevronDown />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-56">
                     <DropdownMenuItem onClick={handleAddGuardrail}>
                       <Plus />
-                      Add Provider Guardrail
+                      {t("guardrails.addProviderGuardrail", { defaultValue: "Add Provider Guardrail" })}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleAddCustomCodeGuardrail}>
                       <Code />
-                      Create Custom Code Guardrail
+                      {t("guardrails.createCustomCodeGuardrail", { defaultValue: "Create Custom Code Guardrail" })}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -212,17 +214,17 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
 
               <DeleteResourceModal
                 isOpen={isDeleteModalOpen}
-                title="Delete Guardrail"
+                title={t("guardrails.deleteGuardrailTitle", { defaultValue: "Delete Guardrail" })}
                 message={`Are you sure you want to delete guardrail: ${guardrailToDelete?.guardrail_name}? This action cannot be undone.`}
-                resourceInformationTitle="Guardrail Information"
+                resourceInformationTitle={t("guardrails.guardrailInfoTitle", { defaultValue: "Guardrail Information" })}
                 resourceInformation={[
-                  { label: "Name", value: guardrailToDelete?.guardrail_name },
-                  { label: "ID", value: guardrailToDelete?.guardrail_id, code: true },
-                  { label: "Provider", value: providerDisplayName },
-                  { label: "Mode", value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode) },
+                  { label: t("common.name", { defaultValue: "Name" }), value: guardrailToDelete?.guardrail_name },
+                  { label: t("guardrails.labelId", { defaultValue: "ID" }), value: guardrailToDelete?.guardrail_id, code: true },
+                  { label: t("guardrails.guardrailInfo.provider", { defaultValue: "Provider" }), value: providerDisplayName },
+                  { label: t("guardrails.labelMode", { defaultValue: "Mode" }), value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode) },
                   {
-                    label: "Default On",
-                    value: guardrailToDelete?.litellm_params.default_on ? "Yes" : "No",
+                    label: t("guardrails.labelDefaultOn", { defaultValue: "Default On" }),
+                    value: guardrailToDelete?.litellm_params.default_on ? t("common.yes", { defaultValue: "Yes" }) : t("common.no", { defaultValue: "No" }),
                   },
                 ]}
                 onCancel={handleDeleteCancel}

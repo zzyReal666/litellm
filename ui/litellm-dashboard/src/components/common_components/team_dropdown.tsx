@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useEffect, useMemo, useState } from "react";
 import { PaginatedSearchSelect } from "@/components/shared/PaginatedSearchSelect";
 import { useInfiniteTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
@@ -95,9 +96,9 @@ const TeamDropdown: React.FC<TeamDropdownProps> = ({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search or select a team"
-        emptyText="No teams found"
-        loadingText="Loading teams…"
+        placeholder={i18n.t("commonComponents.teamDropdown.placeholder", { defaultValue: "Search or select a team" })}
+        emptyText={i18n.t("commonComponents.teamDropdown.notFound", { defaultValue: "No teams found" })}
+        loadingText={i18n.t("commonComponents.teamDropdown.loading", { defaultValue: "Loading teams…" })}
         disabled={disabled}
         inputId={id}
       />

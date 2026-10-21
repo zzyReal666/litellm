@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -108,14 +109,14 @@ const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTy
     <FieldGroup className="mb-4">
       <AgentFormField
         name="agent_name"
-        label={labelWithHint("Agent Name", "Unique identifier for the agent")}
-        rules={{ required: "Please enter a unique agent name" }}
+        label={labelWithHint(i18n.t("agentsPage.dynamicAgentFormFields.agentNameLabel", { defaultValue: i18n.t("aiHub.agentHubTableColumns.colAgentName", { defaultValue: "Agent Name" }) }), i18n.t("agentsPage.dynamicAgentFormFields.agentNameTooltip", { defaultValue: "Unique identifier for the agent" }))}
+        rules={{ required: i18n.t("agentsPage.dynamicAgentFormFields.agentNameRequired", { defaultValue: "Please enter a unique agent name" }) }}
       >
         {({ value, onChange, ref, ...control }) => (
           <Input
             {...control}
             ref={ref}
-            placeholder="e.g., my-langgraph-agent"
+            placeholder={i18n.t("agentsPage.dynamicAgentFormFields.agentNamePlaceholder", { defaultValue: "e.g., my-langgraph-agent" })}
             value={typeof value === "string" ? value : ""}
             onChange={onChange}
           />
@@ -124,14 +125,14 @@ const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTy
 
       <AgentFormField
         name="description"
-        label={labelWithHint("Description", "Brief description of what this agent does")}
+        label={labelWithHint(i18n.t("common.description", { defaultValue: "Description" }), i18n.t("agentsPage.dynamicAgentFormFields.descriptionTooltip", { defaultValue: "Brief description of what this agent does" }))}
       >
         {({ value, onChange, ref, ...control }) => (
           <Textarea
             {...control}
             ref={ref}
             rows={2}
-            placeholder="Describe what this agent does..."
+            placeholder={i18n.t("agentsPage.dynamicAgentFormFields.descriptionPlaceholder", { defaultValue: "Describe what this agent does..." })}
             value={typeof value === "string" ? value : ""}
             onChange={onChange}
           />

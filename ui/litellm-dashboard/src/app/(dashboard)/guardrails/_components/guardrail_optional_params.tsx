@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { PasswordInput } from "@/components/shared/PasswordInput";
@@ -42,7 +43,7 @@ interface DictFieldProps {
 }
 
 const BOOLEAN_ITEMS = [
-  { label: "True", value: true },
+  { label: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }), value: true },
   { label: "False", value: false },
 ];
 
@@ -71,7 +72,7 @@ const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={true}>True</SelectItem>
+        <SelectItem value={true}>{i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}</SelectItem>
         <SelectItem value={false}>False</SelectItem>
       </SelectContent>
     </Select>

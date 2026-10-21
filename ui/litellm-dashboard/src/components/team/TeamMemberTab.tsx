@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { useResetTeamMemberBudget } from "@/app/(dashboard)/hooks/teams/useResetTeamMemberBudget";
 import { useResetTeamMemberSpend } from "@/app/(dashboard)/hooks/teams/useResetTeamMemberSpend";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
@@ -146,7 +147,7 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Model Scope
+          {i18n.t("teamPage.teamMemberTab.modelScopeTitle", { defaultValue: "Model Scope" })}
           <SimpleTooltip content="Models this member can access. Empty means they inherit all team models.">
             <CircleHelp className="size-4" aria-label="Model scope information" />
           </SimpleTooltip>
@@ -156,7 +157,7 @@ export default function TeamMemberTab({
       render: (record: Member) => {
         const models = getUserAllowedModels(record.user_id);
         if (!models) {
-          return <span className="text-muted-foreground">(all team models)</span>;
+          return <span className="text-muted-foreground">{i18n.t("teamPage.teamMemberTab.allTeamModels", { defaultValue: "(all team models)" })}</span>;
         }
         const displayed = models.slice(0, 2);
         const remaining = models.length - displayed.length;
@@ -180,7 +181,7 @@ export default function TeamMemberTab({
       title: (
         <span className="flex items-center gap-1">
           Current Cycle Spend (CNY)
-          <SimpleTooltip content="Spend for the current budget cycle. Resets to ¥0 when the member's budget window rolls over. This is the value checked against the member's budget.">
+          <SimpleTooltip content={i18n.t("teamPage.teamMemberTab.currentCycleSpendTooltip", { defaultValue: "Spend for the current budget cycle. Resets to ¥0 when the member's budget window rolls over. This is the value checked against the member's budget." })}>
             <CircleHelp className="size-4" aria-label="Current cycle spend information" />
           </SimpleTooltip>
         </span>
@@ -220,7 +221,7 @@ export default function TeamMemberTab({
         const source = getUserBudgetSource(record.user_id);
         return (
           <span className="flex items-center justify-end gap-2">
-            <MoneyCell value={getUserBudget(record.user_id)} decimals={2} emptyText="Unlimited" showZero />
+            <MoneyCell value={getUserBudget(record.user_id)} decimals={2} emptyText={i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })} showZero />
             {source !== "none" && (
               <Badge variant={source === "custom" ? "outline" : "secondary"} data-testid="member-budget-source">
                 {BUDGET_SOURCE_LABELS[source]}
@@ -242,7 +243,7 @@ export default function TeamMemberTab({
       },
     },
     {
-      title: "Budget Reset",
+      title: i18n.t("teamPage.teamMemberTab.budgetResetTitle", { defaultValue: "Budget Reset" }),
       key: "budget_reset",
       sortValue: (record: Member) => getUserBudgetReset(record.user_id),
       render: (record: Member) => <DateCell value={getUserBudgetReset(record.user_id)} precision="date" />,
@@ -250,7 +251,7 @@ export default function TeamMemberTab({
     {
       title: (
         <span className="flex items-center gap-1">
-          Team Member Rate Limits
+          {i18n.t("teamPage.teamMemberTab.rateLimitsTitle", { defaultValue: "Team Member Rate Limits" })}
           <SimpleTooltip content="Rate limits for this member's usage within this team.">
             <CircleHelp className="size-4" aria-label="Team member rate limits information" />
           </SimpleTooltip>

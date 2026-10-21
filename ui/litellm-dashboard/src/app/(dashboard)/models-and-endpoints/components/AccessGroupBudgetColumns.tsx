@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Trash2, Wallet } from "lucide-react";
 
@@ -26,9 +28,9 @@ const budgetDecimals = (maxBudget: number | null | undefined): number =>
 export const isBudgetAddressable = (accessGroup: string): boolean => !accessGroup.includes("/");
 
 const writeBlockedReason = (accessGroup: ModelAccessGroup, canWrite: boolean): string | undefined => {
-  if (!canWrite) return "Only a proxy admin can change an access group budget";
+  if (!canWrite) return i18n.t("pages.accessGroupBudgets.onlyAdminCanChange", { defaultValue: "Only a proxy admin can change an access group budget" });
   if (!isBudgetAddressable(accessGroup.access_group)) {
-    return "A budget cannot be set on a group whose name contains a slash";
+    return i18n.t("pages.accessGroupBudgets.slashGroupNoBudget", { defaultValue: "A budget cannot be set on a group whose name contains a slash" });
   }
   return undefined;
 };
@@ -41,6 +43,7 @@ interface AccessGroupRowActionsProps {
 }
 
 function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudget }: AccessGroupRowActionsProps) {
+  const { t } = useTranslation();
   const hasBudget = accessGroup.budget != null;
   const blocked = writeBlockedReason(accessGroup, canWrite);
 
@@ -61,17 +64,17 @@ function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudg
           onClick={() => onSetBudget(accessGroup)}
         >
           <Wallet />
-          {hasBudget ? "Edit budget" : "Set budget"}
+          {hasBudget ? t("budgets.budgetPanel.editBudgetTooltip", { defaultValue: "Edit budget" }) : t("pages.accessGroupBudgets.setBudget", { defaultValue: "Set budget" })}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
           disabled={blocked !== undefined || !hasBudget}
           data-testid="access-group-action-clear-budget"
-          title={blocked ?? (hasBudget ? undefined : "This access group has no budget to clear")}
+          title={blocked ?? (hasBudget ? undefined: t("pages.accessGroupBudgets.noBudgetToClear", { defaultValue: "This access group has no budget to clear" }))}
           onClick={() => onClearBudget(accessGroup)}
         >
           <Trash2 />
-          Clear budget
+          {t("pages.accessGroupBudgets.clearBudget", { defaultValue: "Clear budget" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -92,8 +95,8 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "access_group",
     accessorKey: "access_group",
-    meta: { title: "Access Group" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Access Group" />,
+    meta: { title: i18n.t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("pages.accessGroupBudgets.accessGroup", { defaultValue: "Access Group" })} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -104,8 +107,8 @@ export const getAccessGroupBudgetColumns = ({
   },
   {
     id: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: { title: i18n.t("pages.accessGroupBudgets.models", { defaultValue: "Models" }), skeleton: "chips" },
+    header: i18n.t("pages.accessGroupBudgets.models", { defaultValue: "Models" }),
     size: 280,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.model_names} />,
@@ -113,8 +116,8 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "deployment_count",
     accessorKey: "deployment_count",
-    meta: { title: "Deployments", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Deployments" />,
+    meta: { title: i18n.t("pages.accessGroupBudgets.deployments", { defaultValue: "Deployments" }), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("pages.accessGroupBudgets.deployments", { defaultValue: "Deployments" })} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => row.original.deployment_count,
@@ -122,8 +125,8 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Shared Spend" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Shared Spend" />,
+    meta: { title: i18n.t("pages.accessGroupBudgets.sharedSpend", { defaultValue: "Shared Spend" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("pages.accessGroupBudgets.sharedSpend", { defaultValue: "Shared Spend" })} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => (
@@ -136,8 +139,8 @@ export const getAccessGroupBudgetColumns = ({
   },
   {
     id: "budget_duration",
-    meta: { title: "Resets" },
-    header: "Resets",
+    meta: { title: i18n.t("pages.accessGroupBudgets.resets", { defaultValue: "Resets" }) },
+    header: i18n.t("pages.accessGroupBudgets.resets", { defaultValue: "Resets" }),
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -149,7 +152,7 @@ export const getAccessGroupBudgetColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

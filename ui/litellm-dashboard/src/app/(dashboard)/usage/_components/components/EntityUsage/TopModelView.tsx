@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
@@ -27,8 +29,8 @@ type ViewMode = "chart" | "table";
 
 const LIMIT_OPTIONS = TOP_MODEL_LIMITS.map((limit) => ({ value: String(limit), label: String(limit) }));
 const VIEW_OPTIONS = [
-  { value: "table", label: "Table View" },
-  { value: "chart", label: "Chart View" },
+  { value: "table", label: i18n.t("usagePage.topModelView.tableView", { defaultValue: "Table View" }) },
+  { value: "chart", label: i18n.t("usagePage.topModelView.chartView", { defaultValue: "Chart View" }) },
 ] as const satisfies readonly { value: ViewMode; label: string }[];
 
 const BAR_COLOR = "#2b3fd6";
@@ -50,35 +52,36 @@ function ModelName({ name }: { name: string | undefined }) {
 }
 
 export default function TopModelView({ topModels, topModelsLimit, setTopModelsLimit }: TopModelViewProps) {
+  const { t } = useTranslation();
   const [modelViewMode, setModelViewMode] = useState<ViewMode>("table");
 
   const columns = [
     {
-      header: "Model",
+      header: t("usagePage.topModelView.colModel", { defaultValue: "Model" }),
       accessorKey: "key",
       meta: QUIET_HEADER,
       cell: (info: any) => <ModelName name={info.getValue()} />,
     },
     {
-      header: "Spend (CNY)",
+      header: t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }),
       accessorKey: "spend",
       meta: { numeric: true, ...QUIET_HEADER },
       cell: (info: any) => <MoneyCell value={info.getValue()} decimals={2} />,
     },
     {
-      header: "Successful",
+      header: t("usagePage.topModelView.colSuccessful", { defaultValue: "Successful" }),
       accessorKey: "successful_requests",
       meta: { numeric: true, ...QUIET_HEADER },
       cell: (info: any) => <span className="text-success">{info.getValue()?.toLocaleString() || 0}</span>,
     },
     {
-      header: "Failed",
+      header: t("usagePage.topModelView.colFailed", { defaultValue: "Failed" }),
       accessorKey: "failed_requests",
       meta: { numeric: true, ...QUIET_HEADER },
       cell: (info: any) => <span className="text-destructive">{info.getValue()?.toLocaleString() || 0}</span>,
     },
     {
-      header: "Tokens",
+      header: t("usagePage.topModelView.colTokens", { defaultValue: "Tokens" }),
       accessorKey: "tokens",
       meta: { numeric: true, ...QUIET_HEADER },
       cell: (info: any) => info.getValue()?.toLocaleString() || 0,
@@ -90,13 +93,13 @@ export default function TopModelView({ topModels, topModelsLimit, setTopModelsLi
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <Segmented
-          label="Number of models to show"
+          label={t("usagePage.topModelView.numberOfModelsAria", { defaultValue: "Number of models to show" })}
           value={String(topModelsLimit)}
           options={LIMIT_OPTIONS}
           onChange={(limit) => setTopModelsLimit(Number(limit))}
         />
         <Segmented
-          label="Top model view mode"
+          label={t("usagePage.topModelView.viewModeAria", { defaultValue: "Top model view mode" })}
           value={modelViewMode}
           options={VIEW_OPTIONS}
           onChange={setModelViewMode}

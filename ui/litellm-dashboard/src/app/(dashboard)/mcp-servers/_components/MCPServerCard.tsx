@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { type FC, type KeyboardEvent, type MouseEvent } from "react";
 import { Check, CircleAlert, Ellipsis, Trash2, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -162,7 +164,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     type="button"
                     onClick={stop}
                     onKeyDown={stop}
-                    aria-label="Server actions"
+                    aria-label={i18n.t("mcpTools.mcpServerCard.serverActionsAriaLabel", { defaultValue: "Server actions" })}
                     className="-mr-1 -mt-1 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
                     <Ellipsis className="size-5" />
@@ -179,7 +181,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     }}
                   >
                     <Zap />
-                    Test Connection
+                    {i18n.t("mcpTools.mcpServerCard.testConnection", { defaultValue: "Test Connection" })}
                   </DropdownMenuItem>
                 )}
                 {onRecheckHealth && onDelete && <DropdownMenuSeparator />}
@@ -192,7 +194,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     }}
                   >
                     <Trash2 />
-                    Delete
+                    {i18n.t("common.delete", { defaultValue: "Delete" })}
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
@@ -242,7 +244,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 render={
                   <Badge variant="outline">
                     <CircleAlert />
-                    OAuth flow not set
+                    {i18n.t("mcpTools.mcpServerCard.oauthFlowNotSet", { defaultValue: "OAuth flow not set" })}
                   </Badge>
                 }
               />
@@ -300,7 +302,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     }
                   />
                   <TooltipContent>
-                    <div className="mb-1 font-semibold">Missing user fields:</div>
+                    <div className="mb-1 font-semibold">{i18n.t("mcpTools.mcpServerCard.missingUserFieldsTitle", { defaultValue: "Missing user fields:" })}</div>
                     <ul className="ml-3">
                       {missing.map((m) => (
                         <li key={m}>• {m}</li>
@@ -317,7 +319,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                       onOpenFillFields();
                     }}
                   >
-                    Set
+                    {i18n.t("mcpTools.mcpServerCard.setButton", { defaultValue: "Set" })}
                   </Button>
                 )}
               </div>
@@ -352,7 +354,7 @@ const HealthChip: FC<HealthChipProps> = ({
     return (
       <Badge variant="outline" className="text-muted-foreground">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted-foreground" />
-        Checking
+        {i18n.t("mcpTools.mcpServerCard.checking", { defaultValue: "Checking" })}
       </Badge>
     );
   }
@@ -384,12 +386,12 @@ const HealthChip: FC<HealthChipProps> = ({
         {lastCheck && <div className="mb-1 text-xs">Last check: {new Date(lastCheck).toLocaleString()}</div>}
         {error && (
           <div className="text-xs">
-            <div className="mb-1 font-medium">Error</div>
+            <div className="mb-1 font-medium">{i18n.t("common.error", { defaultValue: "Error" })}</div>
             <div className="wrap-break-word">{error}</div>
           </div>
         )}
-        {!hasHealthData && <div className="text-xs">No health data</div>}
-        {onRecheck && <div className="mt-1 text-xs">Click to recheck</div>}
+        {!hasHealthData && <div className="text-xs">{i18n.t("mcpTools.mcpServerCard.noHealthData", { defaultValue: "No health data" })}</div>}
+        {onRecheck && <div className="mt-1 text-xs">{i18n.t("mcpTools.mcpServerCard.clickToRecheck", { defaultValue: "Click to recheck" })}</div>}
       </TooltipContent>
     </Tooltip>
   );
@@ -411,7 +413,7 @@ const UserFieldsRow: FC<{ onUpdate?: () => void }> = ({ onUpdate }) => (
             onUpdate();
           }}
         >
-          Update
+          {i18n.t("common.update", { defaultValue: "Update" })}
         </Button>
       )}
     </div>
@@ -424,10 +426,11 @@ interface ByokRowProps {
 }
 
 const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
+  const { t } = useTranslation();
   if (connected) {
     return (
       <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="text-muted-foreground">BYOK credential</span>
+        <span className="text-muted-foreground">{t("mcpTools.mcpServerCard.byokCredential", { defaultValue: "BYOK credential" })}</span>
         <div className="flex items-center gap-2">
           <Badge variant="outline">
             <Check /> Connected
@@ -441,7 +444,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
                 onConnect();
               }}
             >
-              Update
+              {t("common.update", { defaultValue: "Update" })}
             </Button>
           )}
         </div>
@@ -450,7 +453,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
   }
   return (
     <div className="flex items-center justify-between gap-2 text-xs">
-      <span className="text-muted-foreground">BYOK credential</span>
+      <span className="text-muted-foreground">{t("mcpTools.mcpServerCard.byokCredential", { defaultValue: "BYOK credential" })}</span>
       {onConnect ? (
         <Button
           size="sm"
@@ -459,7 +462,7 @@ const ByokRow: FC<ByokRowProps> = ({ connected, onConnect }) => {
             onConnect();
           }}
         >
-          Connect
+          {t("mcpTools.mcpServerCard.connectButton", { defaultValue: "Connect" })}
         </Button>
       ) : (
         <span className="text-muted-foreground">—</span>

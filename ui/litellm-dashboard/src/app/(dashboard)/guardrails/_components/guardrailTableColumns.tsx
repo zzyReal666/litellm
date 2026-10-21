@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -18,7 +20,7 @@ import { cn } from "@/lib/cva.config";
 import { formatGuardrailMode, getGuardrailLogoAndName } from "./guardrail_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
 
-const CONFIG_DELETE_HINT = "Config guardrails are defined in the config file and cannot be deleted from the dashboard.";
+const CONFIG_DELETE_HINT = i18n.t("guardrails.guardrailTable.configDeleteHint", { defaultValue: "Config guardrails are defined in the config file and cannot be deleted from the dashboard." });
 
 function GuardrailProviderCell({ provider }: { provider: string }) {
   const { logo, displayName } = getGuardrailLogoAndName(provider);
@@ -36,12 +38,13 @@ interface GuardrailRowActionsProps {
 }
 
 function GuardrailRowActions({ guardrail, onDeleteClick }: GuardrailRowActionsProps) {
+  const { t } = useTranslation();
   const isConfigGuardrail = guardrail.guardrail_definition_location === GuardrailDefinitionLocation.CONFIG;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open guardrail actions"
+        aria-label={t("guardrails.guardrailTable.openActions", { defaultValue: "Open guardrail actions" })}
         data-testid={`guardrail-actions-${guardrail.guardrail_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -53,10 +56,10 @@ function GuardrailRowActions({ guardrail, onDeleteClick }: GuardrailRowActionsPr
           disabled={isConfigGuardrail}
           data-testid="guardrail-action-delete"
           title={isConfigGuardrail ? CONFIG_DELETE_HINT : undefined}
-          onClick={() => onDeleteClick(guardrail.guardrail_id, guardrail.guardrail_name || "Unnamed Guardrail")}
+          onClick={() => onDeleteClick(guardrail.guardrail_id, guardrail.guardrail_name || t("guardrails.guardrailTable.unnamedGuardrail", { defaultValue: "Unnamed Guardrail" }))}
         >
           <Trash2 />
-          Delete
+          {t("common.delete", { defaultValue: "Delete" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -75,8 +78,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "guardrail_id",
     accessorKey: "guardrail_id",
-    meta: { title: "Guardrail ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Guardrail ID" />,
+    meta: { title: i18n.t("guardrails.guardrailTable.colGuardrailId", { defaultValue: "Guardrail ID" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrails.guardrailTable.colGuardrailId", { defaultValue: "Guardrail ID" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -90,8 +93,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "guardrail_name",
     accessorKey: "guardrail_name",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: i18n.t("guardrails.guardrailTable.colName", { defaultValue: "Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrails.guardrailTable.colName", { defaultValue: "Name" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -105,16 +108,16 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "provider",
-    meta: { title: "Provider" },
-    header: "Provider",
+    meta: { title: i18n.t("guardrails.guardrailTable.colProvider", { defaultValue: "Provider" }) },
+    header: i18n.t("guardrails.guardrailTable.colProvider", { defaultValue: "Provider" }),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailProviderCell provider={row.original.litellm_params.guardrail} />,
   },
   {
     id: "mode",
-    meta: { title: "Mode" },
-    header: "Mode",
+    meta: { title: i18n.t("guardrails.guardrailTable.colMode", { defaultValue: "Mode" }) },
+    header: i18n.t("guardrails.guardrailTable.colMode", { defaultValue: "Mode" }),
     size: 130,
     enableSorting: false,
     cell: ({ row }) => {
@@ -128,22 +131,22 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "default_on",
-    meta: { title: "Default On" },
-    header: "Default On",
+    meta: { title: i18n.t("guardrails.guardrailTable.defaultOn", { defaultValue: "Default On" }) },
+    header: i18n.t("guardrails.guardrailTable.defaultOn", { defaultValue: "Default On" }),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {
       const isDefaultOn = !!row.original.litellm_params?.default_on;
       return (
-        <StatusBadge tone={isDefaultOn ? "success" : "neutral"} label={isDefaultOn ? "Default On" : "Default Off"} />
+        <StatusBadge tone={isDefaultOn ? "success" : "neutral"} label={isDefaultOn ? i18n.t("guardrails.guardrailTable.defaultOn", { defaultValue: "Default On" }) : i18n.t("guardrails.guardrailTable.defaultOff", { defaultValue: "Default Off" })} />
       );
     },
   },
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: i18n.t("guardrails.guardrailTable.colCreatedAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrails.guardrailTable.colCreatedAt", { defaultValue: "Created At" })} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -151,8 +154,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: { title: i18n.t("guardrails.guardrailTable.colUpdatedAt", { defaultValue: "Updated At" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrails.guardrailTable.colUpdatedAt", { defaultValue: "Updated At" })} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.updated_at} />,
@@ -160,7 +163,7 @@ export const getGuardrailTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

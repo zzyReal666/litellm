@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useState, useEffect } from "react";
 import { z } from "zod";
 import { Policy, PolicyCreateRequest, PolicyUpdateRequest } from "@/components/policies/types";
@@ -41,8 +42,8 @@ type ModelConditionType = "model" | "regex";
 const policyShape = {
   policy_name: z
     .string()
-    .min(1, "Please enter a policy name")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Policy name can only contain letters, numbers, hyphens, and underscores"),
+    .min(1, i18n.t("policies.addPolicyForm.policyNameRequired", { defaultValue: "Please enter a policy name" }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t("policies.addPolicyForm.policyNamePattern", { defaultValue: "Policy name can only contain letters, numbers, hyphens, and underscores" })),
   description: z.string(),
   inherit: z.string().nullable(),
   guardrails_add: z.array(z.string()),
@@ -157,13 +158,13 @@ const ModePicker: React.FC<ModePickerProps> = ({ selected, onSelect }) => (
           <path d="M8 7h8M8 12h8M8 17h5" />
         </svg>
       </div>
-      <span className="mb-1 block text-[15px] font-semibold text-foreground">Simple Mode</span>
-      <span className="block text-[13px] text-muted-foreground">Pick guardrails from a list. All run in parallel.</span>
+      <span className="mb-1 block text-[15px] font-semibold text-foreground">{i18n.t("policies.addPolicyForm.simpleModeTitle", { defaultValue: "Simple Mode" })}</span>
+      <span className="block text-[13px] text-muted-foreground">{i18n.t("policies.addPolicyForm.simpleModeSubtitle", { defaultValue: "Pick guardrails from a list. All run in parallel." })}</span>
     </div>
 
     <div onClick={() => onSelect("flow_builder")} className={modeCardClass(selected === "flow_builder")}>
       <Badge variant="secondary" className="absolute top-3 right-3 text-[10px] font-semibold">
-        NEW
+        {i18n.t("policies.addPolicyForm.newBadge", { defaultValue: "NEW" })}
       </Badge>
       <div className={modeIconClass(selected === "flow_builder")}>
         <svg
@@ -179,8 +180,8 @@ const ModePicker: React.FC<ModePickerProps> = ({ selected, onSelect }) => (
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
         </svg>
       </div>
-      <span className="mb-1 block text-[15px] font-semibold text-foreground">Flow Builder</span>
-      <span className="block text-[13px] text-muted-foreground">Define steps, conditions, and error responses.</span>
+      <span className="mb-1 block text-[15px] font-semibold text-foreground">{i18n.t("policies.addPolicyForm.flowBuilderTitle", { defaultValue: "Flow Builder" })}</span>
+      <span className="block text-[13px] text-muted-foreground">{i18n.t("policies.addPolicyForm.flowBuilderSubtitle", { defaultValue: "Define steps, conditions, and error responses." })}</span>
     </div>
   </div>
 );
@@ -301,10 +302,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
       if (isEditing && editingPolicy) {
         await updatePolicy(accessToken, editingPolicy.policy_id, data as PolicyUpdateRequest);
-        toast.success("Policy updated successfully");
+        toast.success(i18n.t("policies.addPolicyForm.policyUpdatedSuccess", { defaultValue: "Policy updated successfully" }));
       } else {
         await createPolicy(accessToken, data as PolicyCreateRequest);
-        toast.success("Policy created successfully");
+        toast.success(i18n.t("policies.addPolicyForm.policyCreatedSuccess", { defaultValue: "Policy created successfully" }));
       }
 
       form.reset(EMPTY_VALUES);
@@ -336,7 +337,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
       <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[620px]">
           <DialogHeader>
-            <DialogTitle>Create New Policy</DialogTitle>
+            <DialogTitle>{i18n.t("policies.addPolicyForm.createNewPolicyTitle", { defaultValue: "Create New Policy" })}</DialogTitle>
           </DialogHeader>
           <ModePicker selected={selectedMode} onSelect={setSelectedMode} />
 
@@ -348,10 +349,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
           <div className="mt-6 flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={handleClose}>
-              Cancel
+              {i18n.t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button type="button" onClick={handleModeConfirm}>
-              {selectedMode === "flow_builder" ? "Continue to Builder" : "Create Policy"}
+              {selectedMode === "flow_builder" ? i18n.t("policies.addPolicyForm.continueToBuilder", { defaultValue: "Continue to Builder" }) : i18n.t("policies.addPolicyForm.createPolicyButton", { defaultValue: "Create Policy" })}
             </Button>
           </div>
         </DialogContent>
@@ -364,36 +365,36 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Policy" : "Create New Policy"}</DialogTitle>
+          <DialogTitle>{isEditing ? i18n.t("policies.addPolicyForm.editPolicyTitle", { defaultValue: "Edit Policy" }) : i18n.t("policies.addPolicyForm.createNewPolicyTitle", { defaultValue: "Create New Policy" })}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
             <FieldGroup>
-              <FormField control={form.control} name="policy_name" label="Policy Name">
+              <FormField control={form.control} name="policy_name" label={i18n.t("policies.addPolicyForm.policyNameLabel", { defaultValue: "Policy Name" })}>
                 {({ ref, ...control }) => (
                   <Input
                     {...control}
                     ref={ref}
-                    placeholder="e.g., global-baseline, healthcare-compliance"
+                    placeholder={i18n.t("policies.addPolicyForm.policyNamePlaceholder", { defaultValue: "e.g., global-baseline, healthcare-compliance" })}
                     disabled={isEditing}
                   />
                 )}
               </FormField>
 
-              <FormField control={form.control} name="description" label="Description">
+              <FormField control={form.control} name="description" label={i18n.t("common.description", { defaultValue: "Description" })}>
                 {({ ref, ...control }) => (
-                  <Textarea {...control} ref={ref} rows={2} placeholder="Describe what this policy does..." />
+                  <Textarea {...control} ref={ref} rows={2} placeholder={i18n.t("policies.addPolicyForm.descriptionPlaceholder", { defaultValue: "Describe what this policy does..." })} />
                 )}
               </FormField>
 
-              <SectionHeading label="Inheritance" />
+              <SectionHeading label={i18n.t("policies.addPolicyForm.inheritanceDivider", { defaultValue: "Inheritance" })} />
 
               <FormField
                 control={form.control}
                 name="inherit"
                 label={labelWithHint(
-                  "Inherit From",
-                  "Inherit guardrails from another policy. The child policy will include all guardrails from the parent.",
+                  i18n.t("policies.addPolicyForm.inheritFromLabel", { defaultValue: "Inherit From" }),
+                  i18n.t("policies.addPolicyForm.inheritFromTooltip", { defaultValue: "Inherit guardrails from another policy. The child policy will include all guardrails from the parent." }),
                 )}
               >
                 {({ id, value, onChange }) => (
@@ -405,20 +406,20 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ inherit: selected });
                     }}
-                    placeholder="Select a parent policy (optional)"
+                    placeholder={i18n.t("policies.addPolicyForm.inheritFromPlaceholder", { defaultValue: "Select a parent policy (optional)" })}
                     className="h-9"
                   />
                 )}
               </FormField>
 
-              <SectionHeading label="Guardrails" />
+              <SectionHeading label={i18n.t("policies.addPolicyForm.guardrailsDivider", { defaultValue: "Guardrails" })} />
 
               <FormField
                 control={form.control}
                 name="guardrails_add"
                 label={labelWithHint(
-                  "Guardrails to Add",
-                  "These guardrails will be added to requests matching this policy",
+                  i18n.t("policies.addPolicyForm.guardrailsAddLabel", { defaultValue: "Guardrails to Add" }),
+                  i18n.t("policies.addPolicyForm.guardrailsAddTooltip", { defaultValue: "These guardrails will be added to requests matching this policy" }),
                 )}
               >
                 {({ value, onChange }) => (
@@ -429,7 +430,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ guardrails_add: selected });
                     }}
-                    placeholder="Select guardrails to add"
+                    placeholder={i18n.t("policies.addPolicyForm.guardrailsAddPlaceholder", { defaultValue: "Select guardrails to add" })}
                   />
                 )}
               </FormField>
@@ -438,8 +439,8 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 control={form.control}
                 name="guardrails_remove"
                 label={labelWithHint(
-                  "Guardrails to Remove",
-                  "These guardrails will be removed from inherited guardrails",
+                  i18n.t("policies.addPolicyForm.guardrailsRemoveLabel", { defaultValue: "Guardrails to Remove" }),
+                  i18n.t("policies.addPolicyForm.guardrailsRemoveTooltip", { defaultValue: "These guardrails will be removed from inherited guardrails" }),
                 )}
               >
                 {({ value, onChange }) => (
@@ -450,7 +451,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       onChange(selected);
                       refreshResolvedGuardrails({ guardrails_remove: selected });
                     }}
-                    placeholder="Select guardrails to remove (from inherited)"
+                    placeholder={i18n.t("policies.addPolicyForm.guardrailsRemovePlaceholder", { defaultValue: "Select guardrails to remove (from inherited)" })}
                   />
                 )}
               </FormField>
@@ -458,10 +459,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               {resolvedGuardrails.length > 0 && (
                 <Alert variant="info">
                   <Info />
-                  <AlertTitle>Resolved Guardrails</AlertTitle>
+                  <AlertTitle>{i18n.t("policies.addPolicyForm.resolvedGuardrailsTitle", { defaultValue: "Resolved Guardrails" })}</AlertTitle>
                   <AlertDescription>
                     <span className="mb-2 block text-muted-foreground">
-                      These are the final guardrails that will be applied (including inheritance):
+                      {i18n.t("policies.addPolicyForm.resolvedGuardrailsDesc", { defaultValue: "These are the final guardrails that will be applied (including inheritance):" })}
                     </span>
                     <div className="flex flex-wrap gap-1">
                       {resolvedGuardrails.map((g) => (
@@ -472,11 +473,11 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 </Alert>
               )}
 
-              <SectionHeading label="Conditions (Optional)" />
+              <SectionHeading label={i18n.t("policies.addPolicyForm.conditionsDivider", { defaultValue: "Conditions (Optional)" })} />
 
               <Alert variant="info">
                 <Info />
-                <AlertTitle>Model Scope</AlertTitle>
+                <AlertTitle>{i18n.t("policies.addPolicyForm.modelScopeAlertTitle", { defaultValue: "Model Scope" })}</AlertTitle>
                 <AlertDescription>
                   By default, this policy will run on all models. You can optionally restrict it to specific models
                   below.
@@ -484,7 +485,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               </Alert>
 
               <div role="group" className="flex w-full flex-col gap-3">
-                <span className="text-sm leading-snug font-medium text-foreground">Model Condition Type</span>
+                <span className="text-sm leading-snug font-medium text-foreground">{i18n.t("policies.addPolicyForm.modelConditionTypeLabel", { defaultValue: "Model Condition Type" })}</span>
                 <RadioGroup
                   value={modelConditionType}
                   onValueChange={(value) => {
@@ -495,11 +496,11 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 >
                   <label className="flex cursor-pointer items-center gap-2 text-sm">
                     <RadioGroupItem value="model" />
-                    Select Model
+                    {i18n.t("policies.addPolicyForm.modelConditionSelectModel", { defaultValue: "Select Model" })}
                   </label>
                   <label className="flex cursor-pointer items-center gap-2 text-sm">
                     <RadioGroupItem value="regex" />
-                    Custom Regex Pattern
+                    {i18n.t("policies.addPolicyForm.modelConditionRegex", { defaultValue: "Custom Regex Pattern" })}
                   </label>
                 </RadioGroup>
               </div>
@@ -508,10 +509,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 control={form.control}
                 name="model_condition"
                 label={labelWithHint(
-                  modelConditionType === "model" ? "Model (Optional)" : "Regex Pattern (Optional)",
+                  modelConditionType === "model" ? i18n.t("policies.addPolicyForm.modelConditionLabelModel", { defaultValue: "Model (Optional)" }) : i18n.t("policies.addPolicyForm.modelConditionLabelRegex", { defaultValue: "Regex Pattern (Optional)" }),
                   modelConditionType === "model"
-                    ? "Select a specific model to apply this policy to. Leave empty to apply to all models."
-                    : "Enter a regex pattern to match models (e.g., gpt-4.* or bedrock/.*). Leave empty to apply to all models.",
+                    ? i18n.t("policies.addPolicyForm.modelConditionTooltipModel", { defaultValue: "Select a specific model to apply this policy to. Leave empty to apply to all models." })
+                    : i18n.t("policies.addPolicyForm.modelConditionTooltipRegex", { defaultValue: "Enter a regex pattern to match models (e.g., gpt-4.* or bedrock/.*). Leave empty to apply to all models." }),
                 )}
               >
                 {({ ref, id, value, onChange, ...control }) =>
@@ -521,7 +522,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       options={availableModels.map((model) => ({ label: model, value: model }))}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Leave empty to apply to all models"
+                      placeholder={i18n.t("policies.addPolicyForm.modelConditionPlaceholderModel", { defaultValue: "Leave empty to apply to all models" })}
                       className="h-9"
                     />
                   ) : (
@@ -531,7 +532,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                       ref={ref}
                       value={value ?? ""}
                       onChange={onChange}
-                      placeholder="Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)"
+                      placeholder={i18n.t("policies.addPolicyForm.modelConditionPlaceholderRegex", { defaultValue: "Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)" })}
                     />
                   )
                 }
@@ -540,7 +541,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={handleClose}>
-                Cancel
+                {i18n.t("common.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button
                 type="button"
@@ -549,7 +550,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 aria-busy={isSubmitting}
               >
                 {isSubmitting && <UiLoadingSpinner className="size-4" />}
-                {isEditing ? "Update Policy" : "Create Policy"}
+                {isEditing ? i18n.t("policies.addPolicyForm.updatePolicyButton", { defaultValue: "Update Policy" }) : i18n.t("policies.addPolicyForm.createPolicyButton", { defaultValue: "Create Policy" })}
               </Button>
             </div>
           </form>

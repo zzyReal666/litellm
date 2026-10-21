@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { SortingState, Table } from "@tanstack/react-table";
 import { Inbox, SearchX } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -21,13 +22,14 @@ interface TagTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "created_at", desc: true }];
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No tags yet</div>
-      <div className="text-sm text-muted-foreground">Create a tag to start routing and restricting model usage.</div>
+      <div className="text-sm font-medium text-foreground">{t("tagManagement.index.emptyTitle", { defaultValue: "No tags yet" })}</div>
+      <div className="text-sm text-muted-foreground">{t("tagManagement.index.emptyDescription", { defaultValue: "Create a tag to start routing and restricting model usage." })}</div>
     </div>
   );
 }
@@ -66,6 +68,7 @@ function TagFilters({ table }: { table: Table<Tag> }) {
 }
 
 const TagTable: React.FC<TagTableProps> = ({ data, onEdit, onDelete, onSelectTag, isLoading = false }) => {
+  const { t } = useTranslation();
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING);
 
   const columns = useMemo(() => getTagTableColumns({ onSelectTag, onEdit, onDelete }), [onSelectTag, onEdit, onDelete]);
@@ -81,7 +84,7 @@ const TagTable: React.FC<TagTableProps> = ({ data, onEdit, onDelete, onSelectTag
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading tags…"
+      loadingMessage={t("tagManagement.tagTable.loading", { defaultValue: "Loading tags…" })}
       filterMode="client"
       toolbar={(table) => <TagFilters table={table} />}
       noDataMessage={data.length === 0 ? <EmptyState /> : <NoMatchingTags />}

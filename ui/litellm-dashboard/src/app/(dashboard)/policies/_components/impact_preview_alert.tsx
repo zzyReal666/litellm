@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Badge } from "@/components/ui/badge";
@@ -34,17 +35,18 @@ const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) =
 );
 
 const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, isDefault = false }) => {
+  const { t } = useTranslation();
   const isGlobal = impactResult.affected_keys_count === -1;
   const qualifier = isDefault ? "up to " : "";
 
   return (
     <Alert className="mb-4">
       {isGlobal ? <AlertTriangle /> : <Info />}
-      <AlertTitle>Impact Preview</AlertTitle>
+      <AlertTitle>{t("policies.impactPreviewAlert.message", { defaultValue: "Impact Preview" })}</AlertTitle>
       <AlertDescription>
         {isGlobal ? (
           <span>
-            Global scope — this will affect <strong>all keys and teams</strong>.
+            {t("policies.impactPreviewAlert.globalScopeDesc", { defaultValue: "Global scope — this will affect <strong>all keys and teams</strong>." })}
           </span>
         ) : (
           <div>

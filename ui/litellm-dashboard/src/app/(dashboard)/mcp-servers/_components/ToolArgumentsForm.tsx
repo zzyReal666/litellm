@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { useForm, type Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -36,12 +37,12 @@ const argumentLabel = (field: ToolArgumentField): React.ReactNode => (
 );
 
 const BOOLEAN_ITEMS = [
-  { value: true, labelKey: "mcpTools.mCPToolArgumentsForm.booleanTrue", label: "True" },
+  { value: true, labelKey: "mcpTools.mCPToolArgumentsForm.booleanTrue", label: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }) },
   { value: false, labelKey: "mcpTools.mCPToolArgumentsForm.booleanFalse", label: "False" },
 ];
 
 const booleanTitle = (value: unknown, t: TFunction): string | undefined => {
-  if (value === true) return t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" });
+  if (value === true) return i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" });
   if (value === false) return t("mcpTools.mCPToolArgumentsForm.booleanFalse", { defaultValue: "False" });
   return undefined;
 };
@@ -151,7 +152,7 @@ const ToolArgumentControl: React.FC<{
         <SelectContent>
           {!field.required && <SelectItem value={null}>{selectLabel}</SelectItem>}
           <SelectItem value={true}>
-            {t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
+            {i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
           </SelectItem>
           <SelectItem value={false}>
             {t("mcpTools.mCPToolArgumentsForm.booleanFalse", { defaultValue: "False" })}

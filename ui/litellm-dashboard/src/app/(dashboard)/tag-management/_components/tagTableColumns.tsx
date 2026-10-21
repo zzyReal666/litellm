@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
@@ -115,8 +116,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Tag Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tag Name" />,
+    meta: { title: i18n.t("tagManagement.createTagModal.tagNameLabel", { defaultValue: "Tag Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("tagManagement.createTagModal.tagNameLabel", { defaultValue: "Tag Name" })} />,
     size: 260,
     enableSorting: true,
     filterFn: "includesString",
@@ -141,8 +142,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   },
   {
     id: "models",
-    meta: { title: "Allowed Models", skeleton: "chips" },
-    header: "Allowed Models",
+    meta: { title: i18n.t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }), skeleton: "chips" },
+    header: i18n.t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }),
     size: 240,
     enableSorting: false,
     cell: ({ row }) => <TagModelsCell tag={row.original} />,

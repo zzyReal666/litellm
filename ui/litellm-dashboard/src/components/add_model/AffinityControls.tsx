@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 
 import { Input } from "@/components/ui/input";
@@ -38,7 +39,7 @@ export const AffinityControls: React.FC<{
       </span>
       <div style={{ maxWidth: 320 }}>
         <label className="block text-sm font-medium mb-1" htmlFor="session-affinity-ttl">
-          How long a pin survives idle (seconds)
+          {i18n.t("addModel.affinityControls.ttlLabel", { defaultValue: "How long a pin survives idle (seconds)" })}
         </label>
         <Input
           id="session-affinity-ttl"

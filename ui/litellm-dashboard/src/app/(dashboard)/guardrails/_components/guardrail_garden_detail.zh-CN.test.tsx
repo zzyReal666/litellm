@@ -53,7 +53,7 @@ describe("GuardrailDetailView 中文界面", () => {
     for (const label of ["提供商", "子类别", "费用", "外部依赖", "延迟"]) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
-    expect(screen.getByText("$0 / 次请求")).toBeInTheDocument();
+    expect(screen.getByText("¥0 / 次请求")).toBeInTheDocument();
     expect(screen.getByText("无")).toBeInTheDocument();
     expect(screen.getAllByText("内容类别").length).toBeGreaterThan(0);
     expect(screen.getByText("主题拦截器")).toBeInTheDocument();

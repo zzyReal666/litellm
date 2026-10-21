@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { OnChangeFn, PaginationState } from "@tanstack/react-table";
 import { KeyRound } from "lucide-react";
 import { useMemo } from "react";
@@ -20,13 +22,14 @@ interface ProjectKeysTableProps {
 }
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <KeyRound className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No keys found</div>
-      <div className="text-sm text-muted-foreground">Keys created in this project will show up here.</div>
+      <div className="text-sm font-medium text-foreground">{t("projects.projectKeysTable.noKeysFound", { defaultValue: "No keys found" })}</div>
+      <div className="text-sm text-muted-foreground">{t("projects.projectKeysTable.emptyHint", { defaultValue: "Keys created in this project will show up here." })}</div>
     </div>
   );
 }
@@ -53,7 +56,7 @@ export function ProjectKeysTable({
       pageSizeOptions={PROJECT_KEYS_PAGE_SIZE_OPTIONS}
       isLoading={isLoading}
       isError={isError}
-      loadingMessage="Loading keys…"
+      loadingMessage={i18n.t("projects.projectKeysTable.loading", { defaultValue: "Loading keys…" })}
       noDataMessage={<EmptyState />}
       size="compact"
     />

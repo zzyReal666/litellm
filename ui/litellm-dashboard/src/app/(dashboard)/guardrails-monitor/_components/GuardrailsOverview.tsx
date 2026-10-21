@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import type { ColumnDef, OnChangeFn, SortingState } from "@tanstack/react-table";
 import { CircleDollarSign, Download, HeartPulse, Settings, TrendingUp, TriangleAlert } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -81,7 +82,7 @@ function TotalCostMath({
   untracked: UsageUnits;
 }) {
   return (
-    <CalcPopover title="How this cost is calculated" formula="guardrail + guardrail + … = guardrail cost">
+    <CalcPopover title={i18n.t("guardrailsMonitor.guardrailsOverview.howThisCostIsCalculated", { defaultValue: "How this cost is calculated" })} formula={i18n.t("guardrailsMonitor.guardrailsOverview.costMathFormula", { defaultValue: "guardrail + guardrail + … = guardrail cost" })}>
       <MathTable
         rows={rows
           .filter((row) => row.cost != null)
@@ -158,7 +159,7 @@ export function GuardrailsOverview({
 
   const columns: ColumnDef<GuardrailUsageOverviewRow>[] = [
     {
-      header: "Status",
+      header: i18n.t("guardrailsMonitor.guardrailsOverview.colStatus", { defaultValue: "Status" }),
       accessorKey: "status",
       enableSorting: false,
       cell: ({ row }) => (
@@ -177,7 +178,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: "Guardrail",
+      header: i18n.t("guardrailsMonitor.guardrailsOverview.colGuardrail", { defaultValue: "Guardrail" }),
       accessorKey: "name",
       enableSorting: false,
       cell: ({ row }) => (
@@ -191,7 +192,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: "Provider",
+      header: i18n.t("guardrailsMonitor.guardrailsOverview.colProvider", { defaultValue: "Provider" }),
       accessorKey: "provider",
       enableSorting: false,
       cell: ({ row }) => (
@@ -205,14 +206,14 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Requests" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrailsMonitor.guardrailsOverview.colRequests", { defaultValue: "Requests" })} />,
       accessorKey: "requestsEvaluated",
       meta: { numeric: true },
       sortDescFirst: false,
       cell: ({ row }) => row.original.requestsEvaluated.toLocaleString(),
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Fail Rate" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrailsMonitor.guardrailsOverview.colFailRate", { defaultValue: "Fail Rate" })} />,
       accessorKey: "failRate",
       meta: { numeric: true },
       sortDescFirst: false,
@@ -233,7 +234,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Avg. latency added" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrailsMonitor.guardrailsOverview.avgLatency", { defaultValue: "Avg. latency added" })} />,
       accessorKey: "avgLatency",
       meta: { numeric: true },
       sortDescFirst: false,
@@ -254,14 +255,14 @@ export function GuardrailsOverview({
       ),
     },
     {
-      header: "Usage Units",
+      header: i18n.t("guardrailsMonitor.guardrailsOverview.colUsageUnits", { defaultValue: "Usage Units" }),
       accessorKey: "usageUnits",
       enableSorting: false,
       meta: { numeric: true },
       cell: ({ row }) => <UsageUnitsCell units={row.original.usageUnits} />,
     },
     {
-      header: ({ column }) => <DataTableSortHeader column={column} title="Cost" />,
+      header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("guardrails.guardrailGardenDetail.propertyCost", { defaultValue: "Cost" })} />,
       accessorKey: "cost",
       meta: { numeric: true },
       sortDescFirst: false,
@@ -285,48 +286,48 @@ export function GuardrailsOverview({
       <PageHeader>
         <PageHeaderTitle>
           <HeartPulse />
-          Guardrails Monitor
+          {i18n.t("guardrailsMonitor.guardrailsOverview.title", { defaultValue: "Guardrails Monitor" })}
         </PageHeaderTitle>
-        <PageHeaderDescription>Monitor guardrail performance across all requests</PageHeaderDescription>
+        <PageHeaderDescription>{i18n.t("guardrailsMonitor.guardrailsOverview.subtitle", { defaultValue: "Monitor guardrail performance across all requests" })}</PageHeaderDescription>
         <PageHeaderControls className="justify-end">
           {dateRangeControl}
-          <Button variant="outline" title="Coming soon">
+          <Button variant="outline" title={i18n.t("common.comingSoon", { defaultValue: "Coming soon" })}>
             <Download className="size-4" />
-            Export Data
+            {i18n.t("cloudzeroExportModal.exportDataTitle", { defaultValue: "Export Data" })}
           </Button>
         </PageHeaderControls>
       </PageHeader>
 
       <div className="mt-6 mb-6 grid grid-cols-[repeat(auto-fit,minmax(7rem,1fr))] gap-4">
-        <MetricCard label="Total Evaluations" value={metrics.totalRequests.toLocaleString()} />
+        <MetricCard label={i18n.t("guardrailsMonitor.guardrailsOverview.totalEvaluations", { defaultValue: "Total Evaluations" })} value={metrics.totalRequests.toLocaleString()} />
         <MetricCard
-          label="Blocked Requests"
+          label={i18n.t("guardrailsMonitor.guardrailsOverview.blockedRequests", { defaultValue: "Blocked Requests" })}
           value={metrics.totalBlocked.toLocaleString()}
           valueColor="text-destructive"
           icon={<TriangleAlert className="size-4 text-destructive" />}
         />
         <MetricCard
-          label="Pass Rate"
+          label={i18n.t("guardrailsMonitor.guardrailsOverview.passRate", { defaultValue: "Pass Rate" })}
           value={`${metrics.passRate}%`}
           valueColor="text-success"
           icon={<TrendingUp className="size-4 text-success" />}
         />
         <MetricCard
-          label="Avg. latency added"
+          label={i18n.t("guardrailsMonitor.guardrailsOverview.avgLatency", { defaultValue: "Avg. latency added" })}
           value={`${metrics.avgLatency}ms`}
           valueColor={
             metrics.avgLatency > 150 ? "text-destructive" : metrics.avgLatency > 50 ? "text-warning" : "text-success"
           }
         />
         <MetricCard
-          label="Guardrail Cost"
+          label={i18n.t("guardrailsMonitor.guardrailsOverview.guardrailCost", { defaultValue: "Guardrail Cost" })}
           value={formatCost(metrics.totalCost)}
           valueColor={metrics.totalCost != null ? "text-foreground" : "text-muted-foreground"}
           icon={<CircleDollarSign className="size-4" />}
           subtitle={unpricedSummary(metrics.untracked) ?? undefined}
           hint={<TotalCostMath rows={activeData} total={metrics.totalCost} untracked={metrics.untracked} />}
         />
-        <MetricCard label="Active Guardrails" value={metrics.count} />
+        <MetricCard label={i18n.t("guardrailsMonitor.guardrailsOverview.activeGuardrails", { defaultValue: "Active Guardrails" })} value={metrics.count} />
       </div>
 
       <div className="mb-6">
@@ -337,11 +338,11 @@ export function GuardrailsOverview({
         {(isLoading || error) && (
           <div className="mb-2 flex items-center gap-2">
             {isLoading && (
-              <span role="status" aria-busy="true" aria-label="Loading" className="inline-flex">
+              <span role="status" aria-busy="true" aria-label={i18n.t("viewLogs.index.loading", { defaultValue: "Loading" })} className="inline-flex">
                 <UiLoadingSpinner className="size-4 text-primary" />
               </span>
             )}
-            {error && <span className="text-sm text-destructive">Failed to load data. Try again.</span>}
+            {error && <span className="text-sm text-destructive">{i18n.t("guardrailsMonitor.guardrailsOverview.loadError", { defaultValue: "Failed to load data. Try again." })}</span>}
           </div>
         )}
         <DataTable
@@ -349,7 +350,7 @@ export function GuardrailsOverview({
           data={sorted}
           getRowId={(row) => row.id}
           isLoading={isLoading}
-          noDataMessage="No data for this period"
+          noDataMessage={i18n.t("guardrailsMonitor.guardrailsOverview.noDataForPeriod", { defaultValue: "No data for this period" })}
           onRowClick={(row) => onSelectGuardrail(row.id)}
           rowClassName={() => "cursor-pointer"}
           sortingMode="server"
@@ -360,9 +361,9 @@ export function GuardrailsOverview({
           toolbar={() => (
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h5 className="mb-0 text-base font-semibold text-foreground">Guardrail Performance</h5>
+                <h5 className="mb-0 text-base font-semibold text-foreground">{i18n.t("guardrailsMonitor.guardrailsOverview.performanceTitle", { defaultValue: "Guardrail Performance" })}</h5>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Click a guardrail to view details, logs, and configuration
+                  {i18n.t("guardrailsMonitor.guardrailsOverview.performanceSubtitle", { defaultValue: "Click a guardrail to view details, logs, and configuration" })}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -370,7 +371,7 @@ export function GuardrailsOverview({
                   variant="outline"
                   size="icon"
                   onClick={() => setEvaluationModalOpen(true)}
-                  title="Evaluation settings"
+                  title={i18n.t("guardrailsMonitor.guardrailsOverview.evaluationSettings", { defaultValue: "Evaluation settings" })}
                 >
                   <Settings className="size-4" />
                 </Button>

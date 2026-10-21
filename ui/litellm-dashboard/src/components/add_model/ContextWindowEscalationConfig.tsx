@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
@@ -26,9 +27,9 @@ const ContextWindowEscalationConfig: React.FC<{
         <Switch
           checked={enabled}
           onCheckedChange={(next) => onChange({ ...value, enable_context_window_escalation: next })}
-          aria-label="Escalate oversized prompts to a tier that fits"
+          aria-label={i18n.t("addModel.contextWindowEscalation.enableLabel", { defaultValue: "Escalate oversized prompts to a tier that fits" })}
         />
-        <strong className="font-semibold">Escalate oversized prompts to a tier that fits</strong>
+        <strong className="font-semibold">{i18n.t("addModel.contextWindowEscalation.enableLabel", { defaultValue: "Escalate oversized prompts to a tier that fits" })}</strong>
       </div>
       <span className="block text-xs mb-3 text-muted-foreground">
         When a prompt provably cannot fit the decided tier&apos;s context windows, route it to the lowest tier whose
@@ -38,7 +39,7 @@ const ContextWindowEscalationConfig: React.FC<{
       {enabled && (
         <div style={{ maxWidth: 320 }}>
           <label className="block text-sm font-medium mb-1" htmlFor="context-window-escalation-buffer">
-            Window fit buffer
+            {i18n.t("addModel.contextWindowEscalation.bufferLabel", { defaultValue: "Window fit buffer" })}
           </label>
           <Input
             id="context-window-escalation-buffer"

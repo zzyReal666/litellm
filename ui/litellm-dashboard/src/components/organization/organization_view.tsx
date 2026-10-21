@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { organizationKeys, useOrganization } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { useQueryClient } from "@tanstack/react-query";
@@ -156,7 +157,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
 
   const orgExtraColumns: MemberTableColumn[] = [
     {
-      title: t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }),
+      title: t("organization.organizationView.spendColumnTitle", { defaultValue: i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }) }),
       key: "spend",
       numeric: true,
       sortValue: (record: Member) => orgMemberFor(record)?.spend ?? null,
@@ -451,7 +452,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                       {t("organization.organizationView.displayReset", {
                         duration:
                           orgData.litellm_budget_table.budget_duration ||
-                          t("common.neverResets", { defaultValue: "Never" }),
+                          t("common.neverResets", { defaultValue: i18n.t("common.never", { defaultValue: "Never" }) }),
                         defaultValue: "Reset: {{duration}}",
                       })}
                     </div>

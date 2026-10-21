@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useEffect, useState } from "react";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { getAutoRouterAssembledPromptCall } from "@/components/networking";
@@ -158,7 +159,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
       )}
       <div className="flex items-center gap-2">
         <Button type="button" size="sm" variant="outline" onClick={openEditor}>
-          {isOverridden ? "Edit custom prompt" : "Customize prompt"}
+          {isOverridden ? i18n.t("addModel.openingPromptEditor.editCustomPrompt", { defaultValue: "Edit custom prompt" }) : i18n.t("addModel.openingPromptEditor.customizePrompt", { defaultValue: "Customize prompt" })}
         </Button>
         {isOverridden && (
           <Button
@@ -173,7 +174,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
               })
             }
           >
-            Reset to default
+            {i18n.t("guardrailsMonitor.evaluationSettingsModal.resetToDefault", { defaultValue: "Reset to default" })}
           </Button>
         )}
       </div>
@@ -182,13 +183,13 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Classifier prompt</DialogTitle>
+            <DialogTitle>{i18n.t("addModel.openingPromptEditor.title", { defaultValue: "Classifier prompt" })}</DialogTitle>
           </DialogHeader>
 
           {tierSource.kind === "builtIn" && (
             <div>
               <label className="text-sm font-medium" htmlFor="base-classification-rubric">
-                Base rubric
+                {i18n.t("addModel.openingPromptEditor.baseRubricLabel", { defaultValue: "Base rubric" })}
               </label>
               <Select
                 items={Object.entries(CLASSIFICATION_RUBRIC_DESCRIPTIONS).map(([rubric, description]) => ({
@@ -199,7 +200,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
                 onValueChange={(rubric: ClassificationRubric | null) => rubric && setRubricDraft(rubric)}
                 disabled={Boolean(tierSource.rubricRestriction)}
               >
-                <SelectTrigger id="base-classification-rubric" aria-label="Base rubric" className="mt-1 w-full">
+                <SelectTrigger id="base-classification-rubric" aria-label={i18n.t("addModel.openingPromptEditor.baseRubricLabel", { defaultValue: "Base rubric" })} className="mt-1 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent
@@ -225,10 +226,10 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
           <div className="mt-3 space-y-4">
             <div>
               <label className="text-sm font-medium" htmlFor="classification-instructions">
-                Classification instructions
+                {i18n.t("addModel.openingPromptEditor.instructionsLabel", { defaultValue: "Classification instructions" })}
               </label>
               <p className="mt-1 text-xs text-muted-foreground">
-                Explain what the classifier should judge. Tier definitions are managed separately below.
+                {i18n.t("addModel.openingPromptEditor.instructionsHint", { defaultValue: "Explain what the classifier should judge. Tier definitions are managed separately below." })}
               </p>
               <Textarea
                 id="classification-instructions"
@@ -236,14 +237,14 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
                 onChange={(e) => setInstructionDraft(e.target.value)}
                 rows={5}
                 placeholder={copy.placeholder}
-                aria-label="Classification instructions"
+                aria-label={i18n.t("addModel.openingPromptEditor.instructionsLabel", { defaultValue: "Classification instructions" })}
                 className="mt-2 font-mono text-xs"
               />
             </div>
 
             <div>
               <label className="text-sm font-medium" htmlFor="calibration-examples">
-                Calibration examples
+                {i18n.t("addModel.openingPromptEditor.examplesLabel", { defaultValue: "Calibration examples" })}
               </label>
               <p className="mt-1 text-xs text-muted-foreground">
                 Show representative requests and the tier they should receive. The router adds these after its tier
@@ -255,25 +256,25 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
                 onChange={(e) => setExampleDraft(e.target.value)}
                 rows={6}
                 placeholder={'- "what is the capital of France?" -> SIMPLE'}
-                aria-label="Calibration examples"
+                aria-label={i18n.t("addModel.openingPromptEditor.examplesLabel", { defaultValue: "Calibration examples" })}
                 className="mt-2 font-mono text-xs"
               />
             </div>
           </div>
 
           <div className="mt-3">
-            <p className="text-xs font-medium">What this router sends</p>
+            <p className="text-xs font-medium">{i18n.t("addModel.openingPromptEditor.previewHeading", { defaultValue: "What this router sends" })}</p>
             {preview.status === "loading" && (
-              <p className="mt-1 text-xs text-muted-foreground">Loading the assembled prompt…</p>
+              <p className="mt-1 text-xs text-muted-foreground">{i18n.t("addModel.openingPromptEditor.previewLoading", { defaultValue: "Loading the assembled prompt…" })}</p>
             )}
             {preview.status === "error" && (
               <p className="mt-1 text-xs text-muted-foreground">
-                Could not load the assembled prompt. Your text is still saved as written.
+                {i18n.t("addModel.openingPromptEditor.previewError", { defaultValue: "Could not load the assembled prompt. Your text is still saved as written." })}
               </p>
             )}
             {preview.status === "ready" && (
               <pre
-                aria-label="Assembled classifier prompt"
+                aria-label={i18n.t("addModel.openingPromptEditor.previewAriaLabel", { defaultValue: "Assembled classifier prompt" })}
                 className="mt-1 overflow-x-auto rounded-md bg-muted p-3 font-mono text-xs whitespace-pre-wrap text-muted-foreground"
               >
                 {preview.text}
@@ -283,10 +284,10 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
 
           <DialogFooter className="mt-4">
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              {i18n.t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button type="button" onClick={handleSave}>
-              Save prompt
+              {i18n.t("addModel.openingPromptEditor.savePrompt", { defaultValue: "Save prompt" })}
             </Button>
           </DialogFooter>
         </DialogContent>

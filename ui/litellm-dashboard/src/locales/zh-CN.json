@@ -5729,7 +5729,9 @@
         "approle_mount_path": "挂载路径",
         "client_cert": "客户端证书",
         "client_key": "客户端密钥",
-        "vault_cert_role": "证书角色"
+        "vault_cert_role": "证书角色",
+        "vault_login_namespace": "登录命名空间",
+        "vault_secret_namespace": "密钥命名空间"
       }
     },
     "hashicorpVaultEmptyPlaceholder": {
@@ -11354,7 +11356,8 @@
       "stillLoading": "数据仍在加载中，随着该时间范围内其余数据到达，行与合计会一并更新。",
       "uncachedInputTokensInfo": "本时间范围内你发送的、既未从缓存读取也未写入缓存的输入 Token",
       "cacheHitRateInfo": "从缓存读取的输入 Token 占比",
-      "potentialSavingsInfo": "如果这些未缓存输入改用提示词缓存，大致能省下多少。估算方式为未缓存输入 Token 数乘以已缓存流量每个缓存 Token 的净收益（实际缓存节省，已扣除写入溢价，÷ 缓存读取与写入 Token 数）。当缓存整体上尚未带来节省时留空。"
+      "potentialSavingsInfo": "如果这些未缓存输入改用提示词缓存，大致能省下多少。估算方式为未缓存输入 Token 数乘以已缓存流量每个缓存 Token 的净收益（实际缓存节省，已扣除写入溢价，÷ 缓存读取与写入 Token 数）。当缓存整体上尚未带来节省时留空。",
+      "keyUsageFailed": "无法加载该时间段的密钥用量。"
     },
     "costOptimizationView": {
       "experimentalNotice": "这是一个实验性面板",

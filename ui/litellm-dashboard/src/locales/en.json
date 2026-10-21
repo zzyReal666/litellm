@@ -5729,7 +5729,9 @@
         "approle_mount_path": "Mount Path",
         "client_cert": "Client Certificate",
         "client_key": "Client Key",
-        "vault_cert_role": "Certificate Role"
+        "vault_cert_role": "Certificate Role",
+        "vault_login_namespace": "Login Namespace",
+        "vault_secret_namespace": "Secret Namespace"
       }
     },
     "hashicorpVaultEmptyPlaceholder": {
@@ -11354,7 +11356,8 @@
       "stillLoading": "Data is still loading; rows and totals will update as the rest of the range arrives.",
       "uncachedInputTokensInfo": "Input tokens you sent in this range that weren't served from or written to the cache",
       "cacheHitRateInfo": "Share of your input tokens that were served from the cache",
-      "potentialSavingsInfo": "About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall."
+      "potentialSavingsInfo": "About how much you'd save if this uncached input used prompt caching. Estimated as uncached input tokens times what your cached traffic already nets per cached token (realized cache savings, after write premiums, ÷ cache read and write tokens). Blank when caching is not currently saving anything overall.",
+      "keyUsageFailed": "Could not load key usage for this range."
     },
     "costOptimizationView": {
       "experimentalNotice": "This is an experimental dashboard",

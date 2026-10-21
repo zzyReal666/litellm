@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import {
   NUMERIC_CELL_CLASS,
@@ -34,8 +35,8 @@ export function SimpleTable<T>({
   data,
   columns,
   isLoading = false,
-  loadingMessage = "Loading...",
-  emptyMessage = "No data",
+  loadingMessage = i18n.t("common.loading", { defaultValue: "Loading..." }),
+  emptyMessage = i18n.t("common.noData", { defaultValue: "No data" }),
   getRowKey,
 }: SimpleTableProps<T>) {
   return (

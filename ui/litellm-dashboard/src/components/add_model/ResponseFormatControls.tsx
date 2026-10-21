@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Switch } from "@/components/ui/switch";
 import React from "react";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
@@ -11,12 +12,12 @@ const ResponseFormatControls: React.FC<{
       <Switch
         checked={value.return_raw_model_name ?? false}
         onCheckedChange={(returnRawModelName) => onChange({ ...value, return_raw_model_name: returnRawModelName })}
-        aria-label="Return raw model name"
+        aria-label={i18n.t("addModel.responseFormat.returnRawModelNameLabel", { defaultValue: "Return raw model name" })}
       />
-      <strong className="font-semibold">Return raw model name</strong>
+      <strong className="font-semibold">{i18n.t("addModel.responseFormat.returnRawModelNameLabel", { defaultValue: "Return raw model name" })}</strong>
     </div>
     <span className="block text-xs text-muted-foreground">
-      Return the resolved underlying model name in responses instead of the autorouter alias.
+      {i18n.t("addModel.responseFormat.returnRawModelNameHint", { defaultValue: "Return the resolved underlying model name in responses instead of the autorouter alias." })}
     </span>
     <div className="mt-4 flex items-center gap-2 mb-2">
       <Switch

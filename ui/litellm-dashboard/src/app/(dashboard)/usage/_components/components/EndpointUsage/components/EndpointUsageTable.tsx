@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Route } from "lucide-react";
@@ -24,6 +25,7 @@ interface EndpointRow {
 }
 
 const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData }) => {
+  const { t } = useTranslation();
   const calculateSuccessRate = (successful: number, total: number): number => {
     if (total === 0) return 0;
     return (successful / total) * 100;
@@ -42,12 +44,12 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
 
   const columns: ColumnDef<EndpointRow>[] = [
     {
-      header: "Endpoint",
+      header: t("usagePage.endpointUsageTable.colEndpoint", { defaultValue: "Endpoint" }),
       accessorKey: "endpoint",
       cell: ({ row }) => <span className="font-mono text-xs text-foreground">{row.original.endpoint}</span>,
     },
     {
-      header: "Successful / Failed",
+      header: t("usagePage.endpointUsageTable.colSuccessfulFailed", { defaultValue: "Successful / Failed" }),
       id: "requests",
       cell: ({ row }) => {
         const record = row.original;
@@ -59,7 +61,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
         return (
           <div className="flex items-center gap-3">
             <div className="relative min-w-16 flex-1">
-              <Meter value={successPercentage} max={totalPercentage || 100} aria-label="Successful requests">
+              <Meter value={successPercentage} max={totalPercentage || 100} aria-label={t("usagePage.endpointUsageTable.successfulRequestsAria", { defaultValue: "Successful requests" })}>
                 <MeterTrack className={failurePercentage > 0 ? "h-1 bg-destructive/70" : "h-1"}>
                   <MeterIndicator className="bg-[#2b3fd6]" />
                 </MeterTrack>
@@ -77,13 +79,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Request",
+      header: t("usagePage.endpointUsageTable.colTotalRequests", { defaultValue: "Total Request" }),
       accessorKey: "api_requests",
       meta: { numeric: true },
       cell: ({ row }) => <span className="tabular-nums">{row.original.api_requests.toLocaleString()}</span>,
     },
     {
-      header: "Success Rate",
+      header: t("usagePage.endpointUsageTable.colSuccessRate", { defaultValue: "Success Rate" }),
       accessorKey: "successRate",
       meta: { numeric: true },
       cell: ({ row }) => {
@@ -102,13 +104,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Tokens",
+      header: t("usagePage.endpointUsageTable.colTotalTokens", { defaultValue: "Total Tokens" }),
       accessorKey: "total_tokens",
       meta: { numeric: true },
       cell: ({ row }) => <span className="tabular-nums">{row.original.total_tokens.toLocaleString()}</span>,
     },
     {
-      header: "Spend",
+      header: t("usagePage.endpointUsageTable.colSpend", { defaultValue: "Spend" }),
       accessorKey: "spend",
       meta: { numeric: true },
       cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
@@ -118,7 +120,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
   return (
     <Panel
       icon={Route}
-      title="Endpoints"
+      title={t("usagePage.endpointUsageTable.colEndpoint", { defaultValue: "Endpoints" })}
       action={
         <span className="text-xs text-muted-foreground tabular-nums">
           {dataSource.length.toLocaleString()} {dataSource.length === 1 ? "endpoint" : "endpoints"}
@@ -129,7 +131,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
         columns={columns}
         data={dataSource}
         getRowId={(row) => row.key}
-        noDataMessage="No endpoint usage data"
+        noDataMessage={t("usagePage.endpointUsageTable.noData", { defaultValue: "No endpoint usage data" })}
         size="compact"
       />
     </Panel>

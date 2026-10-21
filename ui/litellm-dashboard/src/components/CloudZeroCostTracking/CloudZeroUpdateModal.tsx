@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { z } from "zod";
 
@@ -25,11 +27,12 @@ interface CloudZeroUpdateModalProps {
 
 const updateSchema = z.object({
   api_key: z.string(),
-  connection_id: z.string().min(1, "Please enter your CloudZero connection ID"),
+  connection_id: z.string().min(1, i18n.t("cloudZero.cloudZeroUpdateModal.connectionIdRequired", { defaultValue: "Please enter your CloudZero connection ID" })),
   timezone: z.string(),
 });
 
 export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }: CloudZeroUpdateModalProps) {
+  const { t } = useTranslation();
   const { accessToken } = useAuthorized();
   const form = useZodForm(updateSchema, { defaultValues: EMPTY_CLOUDZERO_FORM_VALUES });
   const updateMutation = useCloudZeroUpdateSettings(accessToken || "");
@@ -49,12 +52,12 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
   const handleSubmit = (values: CloudZeroFormValues) => {
     updateMutation.mutate(buildCloudZeroPayload(values), {
       onSuccess: () => {
-        toast.success("CloudZero integration updated successfully");
+        toast.success(t("cloudZero.cloudZeroUpdateModal.updateSuccess", { defaultValue: "CloudZero integration updated successfully" }));
         form.reset(EMPTY_CLOUDZERO_FORM_VALUES);
         onOk();
       },
       onError: (error: Error) => {
-        toast.error(error.message || "Failed to update CloudZero integration");
+        toast.error(error.message || t("cloudZero.cloudZeroUpdateModal.updateFailed", { defaultValue: "Failed to update CloudZero integration" }));
       },
     });
   };
@@ -68,7 +71,7 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
     <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit CloudZero Integration</DialogTitle>
+          <DialogTitle>{t("cloudZero.cloudZeroUpdateModal.title", { defaultValue: "Edit CloudZero Integration" })}</DialogTitle>
         </DialogHeader>
         <TooltipProvider>
           <form onSubmit={(event) => event.preventDefault()} noValidate>
@@ -76,19 +79,19 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
               <FormField
                 control={form.control}
                 name="api_key"
-                label={labelWithHint("CloudZero API Key", "Leave empty to keep the existing API key")}
+                label={labelWithHint(t("cloudZero.cloudZeroUpdateModal.apiKeyLabel", { defaultValue: "CloudZero API Key" }), t("cloudZero.cloudZeroUpdateModal.apiKeyTooltip", { defaultValue: "Leave empty to keep the existing API key" }))}
               >
                 {({ ref, ...field }) => (
-                  <CloudZeroApiKeyInput {...field} ref={ref} placeholder="Leave empty to keep existing" />
+                  <CloudZeroApiKeyInput {...field} ref={ref} placeholder={t("cloudZero.cloudZeroUpdateModal.apiKeyPlaceholder", { defaultValue: "Leave empty to keep existing" })} />
                 )}
               </FormField>
-              <FormField control={form.control} name="connection_id" label="Connection ID">
-                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="Enter your CloudZero connection ID" />}
+              <FormField control={form.control} name="connection_id" label={t("cloudzeroExportModal.connectionIdLabel", { defaultValue: "Connection ID" })}>
+                {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={t("cloudZero.cloudZeroUpdateModal.connectionIdPlaceholder", { defaultValue: "Enter your CloudZero connection ID" })} />}
               </FormField>
               <FormField
                 control={form.control}
                 name="timezone"
-                label={labelWithHint("Timezone", "Timezone for date handling (defaults to UTC if not provided)")}
+                label={labelWithHint(t("cloudZero.cloudZeroUpdateModal.timezoneLabel", { defaultValue: "Timezone" }), t("cloudZero.cloudZeroUpdateModal.timezoneTooltip", { defaultValue: "Timezone for date handling (defaults to UTC if not provided)" }))}
               >
                 {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="UTC" />}
               </FormField>
@@ -97,14 +100,14 @@ export default function CloudZeroUpdateModal({ open, onOk, onCancel, settings }:
         </TooltipProvider>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={updateMutation.isPending}>
-            Cancel
+            {t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
           <Button
             onClick={() => void form.handleSubmit(handleSubmit)()}
             disabled={updateMutation.isPending}
             aria-busy={updateMutation.isPending}
           >
-            {updateMutation.isPending ? "Updating..." : "Update"}
+            {updateMutation.isPending ? t("cloudZero.cloudZeroUpdateModal.updating", { defaultValue: "Updating..." }) : t("common.update", { defaultValue: "Update" })}
           </Button>
         </DialogFooter>
       </DialogContent>

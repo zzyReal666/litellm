@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import {
   getFrameworks,
   type ComplianceCategory,
@@ -544,7 +545,7 @@ export default function ComplianceUI({
           result === "blocked"
             ? t("playground.complianceUi.quickTestBlocked", {
                 triggeredBy:
-                  triggeredBy ?? t("playground.complianceUi.contentFilter", { defaultValue: "content filter" }),
+                  triggeredBy ?? i18n.t("playground.complianceUi.contentFilter", { defaultValue: "content filter" }),
                 defaultValue: `Blocked — ${triggeredBy ?? "content filter"}`,
               })
             : t("playground.complianceUi.quickTestAllowedClean", {

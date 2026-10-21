@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import { Search, Settings } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -34,12 +36,12 @@ const MODEL_TABLE_BODY_HEIGHT = 600;
 const ALL_PROXY_MODELS_LABEL = "All Proxy Models";
 
 const FILTER_LABELS: Record<string, string> = {
-  [MODEL_NAME_COLUMN_ID]: "Public Model Name",
-  [ACCESS_GROUPS_COLUMN_ID]: "Model Access Group",
+  [MODEL_NAME_COLUMN_ID]: i18n.t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" }),
+  [ACCESS_GROUPS_COLUMN_ID]: i18n.t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" }),
 };
 
 const VIEW_MODE_LABELS: Record<ModelViewMode, string> = {
-  current_team: "Current Team Models",
+  current_team: i18n.t("pages.allModelsTab.currentTeamModels", { defaultValue: "Current Team Models" }),
   all: ALL_PROXY_MODELS_LABEL,
 };
 
@@ -84,14 +86,15 @@ interface AllModelsTableProps {
 }
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-11 items-center justify-center rounded-xl bg-muted">
         <Search className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-base font-semibold text-foreground">No models found</div>
+      <div className="text-base font-semibold text-foreground">{t("modelDashboard.allModelsTable.noModels", { defaultValue: "No models found" })}</div>
       <div className="max-w-80 text-sm text-muted-foreground">
-        No models match your search or filters. Try resetting them.
+        {t("pages.allModelsTab.emptyStateDescription", { defaultValue: "No models match your search or filters. Try resetting them." })}
       </div>
     </div>
   );
@@ -161,7 +164,7 @@ export function AllModelsTable({
   const modelGroupOptions = useMemo(
     () => [
       { label: ALL_PROXY_MODELS_LABEL, value: ALL_MODEL_GROUPS_VALUE },
-      { label: "Wildcard Models (*)", value: WILDCARD_MODEL_GROUP_VALUE },
+      { label: i18n.t("pages.allModelsTab.wildcardModels", { defaultValue: "Wildcard Models (*)" }), value: WILDCARD_MODEL_GROUP_VALUE },
       ...availableModelGroups.map((group) => ({ label: group, value: group })),
     ],
     [availableModelGroups],
@@ -169,7 +172,7 @@ export function AllModelsTable({
 
   const accessGroupOptions = useMemo(
     () => [
-      { label: "All Model Access Groups", value: ALL_MODEL_GROUPS_VALUE },
+      { label: i18n.t("pages.allModelsTab.allModelAccessGroups", { defaultValue: "All Model Access Groups" }), value: ALL_MODEL_GROUPS_VALUE },
       ...availableModelAccessGroups.map((accessGroup) => ({ label: accessGroup, value: accessGroup })),
     ],
     [availableModelAccessGroups],
@@ -178,7 +181,7 @@ export function AllModelsTable({
   const formatFilterValue = (columnId: string, value: unknown): string => {
     const raw = String(value);
     if (columnId === MODEL_NAME_COLUMN_ID && raw === WILDCARD_MODEL_GROUP_VALUE) {
-      return "Wildcard Models (*)";
+      return i18n.t("pages.allModelsTab.wildcardModels", { defaultValue: "Wildcard Models (*)" });
     }
     return raw;
   };
@@ -207,7 +210,7 @@ export function AllModelsTable({
       enableColumnResizing
       maxBodyHeight={MODEL_TABLE_BODY_HEIGHT}
       isLoading={isLoading}
-      loadingMessage="Loading models…"
+      loadingMessage={i18n.t("pages.allModelsTab.loadingModels", { defaultValue: "Loading models…" })}
       noDataMessage={<EmptyState />}
       size="compact"
       toolbar={(table) => (
@@ -216,7 +219,7 @@ export function AllModelsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search model names…"
+            searchPlaceholder={i18n.t("pages.allModelsTab.searchPlaceholderEllipsis", { defaultValue: "Search model names…" })}
             onOpenFilters={() => setFiltersOpen(true)}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
@@ -226,7 +229,7 @@ export function AllModelsTable({
             <Select value={selectedTeamValue} onValueChange={(value) => onTeamChange(String(value))}>
               <SelectTrigger
                 size="sm"
-                aria-label="Current team"
+                aria-label={i18n.t("pages.allModelsTab.currentTeamAria", { defaultValue: "Current team" })}
                 data-testid="models-team-select"
                 className="gap-2 bg-secondary"
               >
@@ -236,7 +239,7 @@ export function AllModelsTable({
                     selectedTeamValue === PERSONAL_TEAM_VALUE ? "bg-info" : "bg-success",
                   )}
                 />
-                <span className="text-muted-foreground">Team</span>
+                <span className="text-muted-foreground">{i18n.t("pages.allModelsTab.teamLabel", { defaultValue: "Team" })}</span>
                 <span className="truncate font-semibold">{selectedTeamLabel}</span>
               </SelectTrigger>
               <SelectContent>
@@ -256,8 +259,8 @@ export function AllModelsTable({
             </Select>
 
             <Select value={viewMode} onValueChange={(value) => onViewModeChange(value as ModelViewMode)}>
-              <SelectTrigger size="sm" aria-label="View" data-testid="models-view-select" className="gap-2">
-                <span className="text-muted-foreground">View</span>
+              <SelectTrigger size="sm" aria-label={i18n.t("common.view", { defaultValue: "View" })} data-testid="models-view-select" className="gap-2">
+                <span className="text-muted-foreground">{i18n.t("common.view", { defaultValue: "View" })}</span>
                 <span className="truncate">{VIEW_MODE_LABELS[viewMode]}</span>
               </SelectTrigger>
               <SelectContent>
@@ -271,8 +274,8 @@ export function AllModelsTable({
             <Button
               variant="outline"
               size="icon-sm"
-              aria-label="Model Settings"
-              title="Model Settings"
+              aria-label={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
+              title={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
               data-testid="models-settings-trigger"
               onClick={onOpenModelSettings}
             >
@@ -283,33 +286,33 @@ export function AllModelsTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
-            description="Narrow down models + endpoints"
-            resetLabel="Reset Filters"
+            title={i18n.t("pages.allModelsTab.filters", { defaultValue: "Filters" })}
+            description={i18n.t("pages.modelsAndEndpoints.filtersDrawerDescription", { defaultValue: "Narrow down models + endpoints" })}
+            resetLabel={i18n.t("pages.allModelsTab.resetFilters", { defaultValue: "Reset Filters" })}
             onReset={onResetFilters}
           >
             {({ get, set }) => (
               <>
-                <DataTableFilterField label="Public Model Name">
+                <DataTableFilterField label={i18n.t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" })}>
                   <SearchSelect
                     options={modelGroupOptions}
                     value={(get(MODEL_NAME_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(MODEL_NAME_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder="Filter by Public Model Name"
-                    emptyText="No models found"
+                    placeholder={i18n.t("pages.allModelsTab.filterByPublicModelName", { defaultValue: "Filter by Public Model Name" })}
+                    emptyText={i18n.t("modelDashboard.allModelsTable.noModels", { defaultValue: "No models found" })}
                   />
                 </DataTableFilterField>
-                <DataTableFilterField label="Model Access Group">
+                <DataTableFilterField label={i18n.t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" })}>
                   <SearchSelect
                     options={accessGroupOptions}
                     value={(get(ACCESS_GROUPS_COLUMN_ID) as string) ?? ALL_MODEL_GROUPS_VALUE}
                     onValueChange={(value) =>
                       set(ACCESS_GROUPS_COLUMN_ID, value === ALL_MODEL_GROUPS_VALUE ? undefined : value ?? undefined)
                     }
-                    placeholder="Filter by Model Access Group"
-                    emptyText="No model access groups found"
+                    placeholder={i18n.t("pages.allModelsTab.filterByModelAccessGroup", { defaultValue: "Filter by Model Access Group" })}
+                    emptyText={i18n.t("pages.allModelsTab.noModelAccessGroups", { defaultValue: "No model access groups found" })}
                   />
                 </DataTableFilterField>
               </>

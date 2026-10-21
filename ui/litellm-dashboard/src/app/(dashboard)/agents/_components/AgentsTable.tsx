@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { SortingState } from "@tanstack/react-table";
 import { Bot, CircleCheck, Search as SearchIcon, X } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -89,7 +90,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage={t("agentsPage.agentsTable.loading", { defaultValue: "Loading agents…" })}
+      loadingMessage={i18n.t("agentsPage.agentsTable.loading", { defaultValue: "Loading agents…" })}
       noDataMessage={<EmptyState isFiltered={agents.length > 0} />}
       size="compact"
       toolbar={() => (
@@ -109,7 +110,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   size="icon-xs"
-                  aria-label={t("agentsPage.agentsTable.clearSearch", { defaultValue: "Clear search" })}
+                  aria-label={i18n.t("agentsPage.agentsTable.clearSearch", { defaultValue: "Clear search" })}
                   onClick={() => setSearchTerm("")}
                 >
                   <X />
@@ -126,7 +127,7 @@ const AgentsTable: React.FC<AgentsTableProps> = ({
                       className={healthCheckEnabled ? "size-4 text-success" : "size-4 text-muted-foreground"}
                     />
                     <span className="text-sm text-muted-foreground">
-                      {t("agents.healthCheck", { defaultValue: "Health Check" })}
+                      {i18n.t("agents.healthCheck", { defaultValue: "Health Check" })}
                     </span>
                     <Switch
                       size="sm"

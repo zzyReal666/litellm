@@ -9,6 +9,7 @@
  * Output is the same `string[]` of allowed tool names that the backend accepts.
  */
 
+import i18n from "@/lib/i18n";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -46,7 +47,7 @@ const RISK_LABEL = {
   low: { key: "mcpTools.mcpCrudPermissionPanel.safe", label: "Safe" },
   medium: { key: "mcpTools.mcpCrudPermissionPanel.mediumRisk", label: "Medium Risk" },
   high: { key: "mcpTools.mcpCrudPermissionPanel.highRisk", label: "High Risk" },
-  unknown: { key: "mcpTools.mcpCrudPermissionPanel.unclassified", label: "Unclassified" },
+  unknown: { key: "mcpTools.mcpCrudPermissionPanel.unclassified", label: i18n.t("mcpTools.mcpCrudPermissionPanel.unclassified", { defaultValue: "Unclassified" }) },
 } as const;
 
 const GROUP_LABEL = {
@@ -215,10 +216,10 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                 <div className="flex items-center gap-2 ml-4">
                   <p className="text-xs text-muted-foreground">
                     {fullyAllowed
-                      ? t("mcpTools.mcpCrudPermissionPanel.allOn", { defaultValue: "All on" })
+                      ? i18n.t("mcpTools.mcpCrudPermissionPanel.allOn", { defaultValue: "All on" })
                       : partial
-                        ? t("mcpTools.mcpCrudPermissionPanel.partial", { defaultValue: "Partial" })
-                        : t("mcpTools.mcpCrudPermissionPanel.allOff", { defaultValue: "All off" })}
+                        ? i18n.t("mcpTools.mcpCrudPermissionPanel.partial", { defaultValue: "Partial" })
+                        : i18n.t("mcpTools.mcpCrudPermissionPanel.allOff", { defaultValue: "All off" })}
                   </p>
                   {/* Checkbox supports `indeterminate`; Switch does not. */}
                   <Checkbox
@@ -281,8 +282,8 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                           }`}
                         >
                           {allowed
-                            ? t("mcpTools.mcpCrudPermissionPanel.stateOn", { defaultValue: "on" })
-                            : t("mcpTools.mcpCrudPermissionPanel.stateOff", { defaultValue: "off" })}
+                            ? i18n.t("mcpTools.mcpCrudPermissionPanel.stateOn", { defaultValue: "on" })
+                            : i18n.t("mcpTools.mcpCrudPermissionPanel.stateOff", { defaultValue: "off" })}
                         </span>
                       </div>
                     );

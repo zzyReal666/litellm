@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { AutoRouterAvailabilityContext, useAutoRouterAvailability } from "./AutoRouterAvailability";
 import { decisionDeploymentName } from "./jev_classifier_config";
 import DecisionModelSelect from "./DecisionModelSelect";
@@ -108,9 +109,9 @@ const presetDisabledHint = (availability: PresetAvailability): string | null => 
     case "available":
       return null;
     case "loading":
-      return "Checking model availability...";
+      return i18n.t("addModel.addAutoRouterTab.checkingAvailability", { defaultValue: "Checking model availability..." });
     case "unverifiable":
-      return "Cannot verify these models are available";
+      return i18n.t("addModel.addAutoRouterTab.cannotVerifyAvailability", { defaultValue: "Cannot verify these models are available" });
     case "missing_models":
       return `Missing: ${availability.models.join(", ")}`;
   }
@@ -157,11 +158,11 @@ export const getSubmitBlockedReason = (
 
 const autoRouterSchema = (requiresTeamScope: boolean) =>
   z.object({
-    auto_router_name: z.string().min(1, "Auto router name is required"),
+    auto_router_name: z.string().min(1, i18n.t("addModel.addAutoRouterTab.autoRouterNameRequired", { defaultValue: i18n.t("editAutoRouter.editAutoRouterModal.ruleAutoRouterName", { defaultValue: i18n.t("editAutoRouter.editAutoRouterModal.ruleAutoRouterName", { defaultValue: "Auto router name is required" }) }) })),
     team_id: z
       .string()
       .nullable()
-      .refine((teamId) => !requiresTeamScope || Boolean(teamId), "Please select a team to continue"),
+      .refine((teamId) => !requiresTeamScope || Boolean(teamId), i18n.t("addModel.addModelForm.selectTeamRequired", { defaultValue: "Please select a team to continue" })),
     model_access_group: z.array(z.string()).optional(),
   });
 
@@ -456,7 +457,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
       : (["auto_router_name"] as const);
 
     if (!(await form.trigger(validatedFields))) {
-      toast.fromError("Please fill in all required fields");
+      toast.fromError(i18n.t("addModel.addAutoRouterTab.fillRequiredFieldsError", { defaultValue: "Please fill in all required fields" }));
       return;
     }
 
@@ -500,7 +501,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
     if (!name) {
       setShowValidationErrors(true);
       void form.trigger("auto_router_name");
-      toast.fromError("Please enter an Auto Router Name");
+      toast.fromError(i18n.t("addModel.addAutoRouterTab.enterRouterNameError", { defaultValue: "Please enter an Auto Router Name" }));
       return;
     }
 
@@ -530,7 +531,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
     const targets = buildAutoRouterTestTargets(testTargetParams);
 
     if (targets.length === 0) {
-      toast.fromError("Please select at least one model for a complexity tier");
+      toast.fromError(i18n.t("addModel.addAutoRouterTab.selectTierModelError", { defaultValue: "Please select at least one model for a complexity tier" }));
       return;
     }
 
@@ -556,7 +557,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
               const disabledHint = presetDisabledHint(presetState);
               const hintClass = isPresetHintAlarming(presetState) ? "text-destructive" : "text-muted-foreground";
               const matchedHint =
-                presetState.kind === "available" && presetState.viaDeployments ? "Matches your deployments" : null;
+                presetState.kind === "available" && presetState.viaDeployments ? i18n.t("addModel.addAutoRouterTab.matchesDeployments", { defaultValue: "Matches your deployments" }) : null;
 
               return (
                 <SelectItem
@@ -588,12 +589,12 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
           </SelectContent>
         </Select>
         <p className="text-xs text-muted-foreground">Replaces classifier and model choices</p>
-        {presetsPending && <div className="text-xs mt-1 text-muted-foreground">Loading templates...</div>}
+        {presetsPending && <div className="text-xs mt-1 text-muted-foreground">{i18n.t("addModel.addAutoRouterTab.loadingTemplates", { defaultValue: "Loading templates..." })}</div>}
         {presetsUnavailable && (
           <div className="text-xs mt-1 text-destructive">
             Could not load templates, so only Start from scratch is shown.{" "}
             <button type="button" className="underline" onClick={() => void refetchPresets()}>
-              Retry
+              {i18n.t("common.retry", { defaultValue: "Retry" })}
             </button>
           </div>
         )}
@@ -639,10 +640,10 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                 <FormField
                   control={form.control}
                   name="auto_router_name"
-                  label={labelWithHint("Auto Router Name", "Unique name for this auto router configuration")}
+                  label={labelWithHint(i18n.t("addModel.addAutoRouterTab.autoRouterNameLabel", { defaultValue: "Auto Router Name" }), i18n.t("addModel.addAutoRouterTab.autoRouterNameTooltip", { defaultValue: "Unique name for this auto router configuration" }))}
                 >
                   {({ ref, ...field }) => (
-                    <Input {...field} ref={ref} placeholder="e.g., smart_router, auto_router_1" />
+                    <Input {...field} ref={ref} placeholder={i18n.t("addModel.addAutoRouterTab.autoRouterNamePlaceholder", { defaultValue: "e.g., smart_router, auto_router_1" })} />
                   )}
                 </FormField>
               </div>
@@ -653,8 +654,8 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                       control={form.control}
                       name="model_access_group"
                       label={labelWithHint(
-                        "Model Access Group",
-                        "Use model access groups to control who can access this auto router",
+                        i18n.t("addModel.addAutoRouterTab.modelAccessGroupLabel", { defaultValue: "Model Access Group" }),
+                        i18n.t("addModel.addAutoRouterTab.modelAccessGroupTooltip", { defaultValue: "Use model access groups to control who can access this auto router" }),
                       )}
                     >
                       {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
@@ -676,8 +677,8 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                   control={form.control}
                   name="team_id"
                   label={labelWithHint(
-                    "Select Team",
-                    "Select the team this auto router belongs to. Only keys for this team will be able to call it.",
+                    i18n.t("addModel.addModelForm.selectTeamLabel", { defaultValue: "Select Team" }),
+                    i18n.t("addModel.addAutoRouterTab.selectTeamTooltip", { defaultValue: "Select the team this auto router belongs to. Only keys for this team will be able to call it." }),
                   )}
                 >
                   {({ id, value, onChange }) => (
@@ -719,7 +720,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                     <p className="text-sm text-destructive">
                       Could not load available models.{" "}
                       <button type="button" className="underline" onClick={() => void refetchModels()}>
-                        Retry
+                        {i18n.t("common.retry", { defaultValue: "Retry" })}
                       </button>
                     </p>
                   )}
@@ -733,11 +734,11 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                             href="https://github.com/BerriAI/litellm/issues"
                             className="text-sm text-primary underline-offset-4 hover:underline"
                           >
-                            Need Help?
+                            {i18n.t("addModel.addAutoRouterTab.needHelp", { defaultValue: "Need Help?" })}
                           </a>
                         }
                       />
-                      <TooltipContent>Get help on our github</TooltipContent>
+                      <TooltipContent>{i18n.t("addModel.addAutoRouterTab.needHelpTooltip", { defaultValue: "Get help on our github" })}</TooltipContent>
                     </Tooltip>
                     <div className="flex flex-wrap gap-2">
                       <BlockedReasonTooltip reason={submitBlockedReason}>
@@ -748,7 +749,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                           disabled={submitBlockedReason !== null || isSubmitting}
                           onClick={() => setIsRoutingTestVisible(true)}
                         >
-                          Test Routing
+                          {i18n.t("addModel.addAutoRouterTab.testRouting", { defaultValue: "Test Routing" })}
                         </Button>
                       </BlockedReasonTooltip>
                       <Button
@@ -759,7 +760,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                         disabled={isTestingConnection}
                       >
                         {isTestingConnection && <UiLoadingSpinner className="size-4" />}
-                        Test Connection
+                        {i18n.t("addModel.addAutoRouterTab.testConnectionButton", { defaultValue: "Test Connection" })}
                       </Button>
                       <BlockedReasonTooltip reason={saveBlockedReason}>
                         <Button
@@ -769,7 +770,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                             void handleAutoRouterSubmit();
                           }}
                         >
-                          Add Auto Router
+                          {i18n.t("addModel.addAutoRouterTab.addAutoRouterButton", { defaultValue: "Add Auto Router" })}
                         </Button>
                       </BlockedReasonTooltip>
                     </div>
@@ -783,7 +784,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
         <Dialog open={isRoutingTestVisible} onOpenChange={(open) => !open && setIsRoutingTestVisible(false)}>
           <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[760px]">
             <DialogHeader>
-              <DialogTitle>Test Routing</DialogTitle>
+              <DialogTitle>{i18n.t("addModel.addAutoRouterTab.testRouting", { defaultValue: "Test Routing" })}</DialogTitle>
             </DialogHeader>
             {isRoutingTestVisible && (
               <AutoRouterRoutingTest
@@ -800,7 +801,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
             <DialogFooter>
               {" "}
               <Button variant="outline" onClick={() => setIsRoutingTestVisible(false)}>
-                Close
+                {i18n.t("common.close", { defaultValue: "Close" })}
               </Button>
             </DialogFooter>
           </DialogContent>

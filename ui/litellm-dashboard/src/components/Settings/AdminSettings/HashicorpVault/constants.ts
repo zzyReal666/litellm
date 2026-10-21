@@ -30,6 +30,8 @@ export const FIELD_LABEL_KEYS: Record<string, string> = {
   client_cert: "settingsPages.hashicorpVault.fieldLabels.client_cert",
   client_key: "settingsPages.hashicorpVault.fieldLabels.client_key",
   vault_cert_role: "settingsPages.hashicorpVault.fieldLabels.vault_cert_role",
+  vault_login_namespace: "settingsPages.hashicorpVault.fieldLabels.vault_login_namespace",
+  vault_secret_namespace: "settingsPages.hashicorpVault.fieldLabels.vault_secret_namespace",
 };
 
 export const fieldLabel = (name: string, t: TFunction): string =>

@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
 import { all_admin_roles } from "@/utils/roles";
@@ -74,7 +75,7 @@ const userEditSchema = (unlimitedBudget: boolean) =>
     max_budget: z
       .union([z.string(), z.number()])
       .nullish()
-      .refine((value) => unlimitedBudget || !isBlank(value), "Please enter a budget or select Unlimited Budget"),
+      .refine((value) => unlimitedBudget || !isBlank(value), i18n.t("userEditView.budgetValidationMessage", { defaultValue: "Please enter a budget or select Unlimited Budget" })),
   });
 
 type UserEditFormInput = z.input<ReturnType<typeof userEditSchema>>;
@@ -207,8 +208,8 @@ export function UserEditView({
   };
 
   const modelOptions = [
-    { label: "All Proxy Models", value: "all-proxy-models" },
-    { label: "No Default Models", value: "no-default-models" },
+    { label: i18n.t("userEditView.allProxyModels", { defaultValue: "All Proxy Models" }), value: "all-proxy-models" },
+    { label: i18n.t("userEditView.noDefaultModels", { defaultValue: "No Default Models" }), value: "no-default-models" },
     ...userModels.map((model) => ({ label: getModelDisplayName(model), value: model })),
   ];
 
@@ -223,18 +224,18 @@ export function UserEditView({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <FieldGroup>
           {!isBulkEdit && (
-            <FormField control={form.control} name="user_id" label="User ID">
+            <FormField control={form.control} name="user_id" label={i18n.t("userEditView.userIdLabel", { defaultValue: "User ID" })}>
               {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} disabled />}
             </FormField>
           )}
 
           {!isBulkEdit && (
-            <FormField control={form.control} name="user_email" label="Email">
+            <FormField control={form.control} name="user_email" label={i18n.t("userEditView.emailLabel", { defaultValue: "Email" })}>
               {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
             </FormField>
           )}
 
-          <FormField control={form.control} name="user_alias" label="User Alias">
+          <FormField control={form.control} name="user_alias" label={i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}>
             {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
           </FormField>
 
@@ -280,7 +281,7 @@ export function UserEditView({
                 options={modelOptions}
                 value={value}
                 onValueChange={onChange}
-                placeholder="Select models"
+                placeholder={i18n.t("userEditView.selectModelsPlaceholder", { defaultValue: "Select models" })}
                 disabled={!all_admin_roles.includes(userRole || "")}
               />
             )}
@@ -294,7 +295,7 @@ export function UserEditView({
                 Max Budget (CNY)
                 <label className="ml-3 inline-flex items-center gap-2 font-normal">
                   <Checkbox checked={unlimitedBudget} onCheckedChange={handleUnlimitedBudgetChange} />
-                  Unlimited Budget
+                  {i18n.t("userEditView.unlimitedBudget", { defaultValue: "Unlimited Budget" })}
                 </label>
               </>
             }
@@ -308,13 +309,13 @@ export function UserEditView({
                 value={value ?? ""}
                 onChange={(event) => onChange(event.target.value)}
                 onWheel={(event) => event.currentTarget.blur()}
-                placeholder="Enter a numerical value"
+                placeholder={i18n.t("shared.numericalInput.placeholder", { defaultValue: "Enter a numerical value" })}
                 disabled={unlimitedBudget}
               />
             )}
           </FormField>
 
-          <FormField control={form.control} name="budget_duration" label="Reset Budget">
+          <FormField control={form.control} name="budget_duration" label={i18n.t("userEditView.resetBudgetLabel", { defaultValue: "Reset Budget" })}>
             {({ id, value, onChange }) => <BudgetDurationDropdown id={id} value={value} onChange={onChange} />}
           </FormField>
 
@@ -378,13 +379,13 @@ export function UserEditView({
               onChange={setModelMaxBudget}
               availableModels={userModels}
               usage={userData.user_info?.model_max_budget_usage}
-              hint="Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds."
+              hint={i18n.t("userEditView.modelMaxBudgetHint", { defaultValue: "Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds." })}
             />
           )}
 
-          <FormField control={form.control} name="metadata" label="Metadata">
+          <FormField control={form.control} name="metadata" label={i18n.t("userEditView.metadataLabel", { defaultValue: "Metadata" })}>
             {({ ref, value, ...control }) => (
-              <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder="Enter metadata as JSON" />
+              <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder={i18n.t("userEditView.metadataPlaceholder", { defaultValue: "Enter metadata as JSON" })} />
             )}
           </FormField>
 
@@ -403,7 +404,7 @@ export function UserEditView({
                     onChange={onChange}
                     value={value}
                     accessToken={accessToken || ""}
-                    placeholder="Select MCP servers or access groups (optional)"
+                    placeholder={i18n.t("oldTeams.form.allowedMcpServersPlaceholder", { defaultValue: "Select MCP servers or access groups (optional)" })}
                   />
                 )}
               </FormField>
@@ -422,9 +423,9 @@ export function UserEditView({
 
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="secondary" type="button" onClick={onCancel}>
-            Cancel
+            {i18n.t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit">{i18n.t("userEditView.saveChangesButton", { defaultValue: "Save Changes" })}</Button>
         </div>
       </form>
     </TooltipProvider>

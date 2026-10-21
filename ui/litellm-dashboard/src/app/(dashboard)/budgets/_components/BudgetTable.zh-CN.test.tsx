@@ -149,7 +149,7 @@ describe("BudgetTable in Chinese", () => {
     expect(screen.getByText("缩小预算范围")).toBeInTheDocument();
     const drawer = within(screen.getByTestId("filter-drawer-body"));
     expect(drawer.getByText("重置")).toBeInTheDocument();
-    expect(drawer.getByText("最大预算（美元）")).toBeInTheDocument();
+    expect(drawer.getByText("最大预算（元）")).toBeInTheDocument();
     expect(drawer.getByText("仅显示无限制")).toBeInTheDocument();
     expect(drawer.getByPlaceholderText("最小值")).toBeInTheDocument();
     expect(drawer.getByPlaceholderText("最大值")).toBeInTheDocument();
@@ -175,7 +175,7 @@ describe("BudgetTable in Chinese", () => {
       />,
     );
 
-    expect(screen.getByTestId("filter-chip-max_budget")).toHaveTextContent("最大预算:$10 至 $500");
+    expect(screen.getByTestId("filter-chip-max_budget")).toHaveTextContent("最大预算:¥10 至 ¥500");
     expect(screen.getByTestId("filter-chip-created_at")).toHaveTextContent("创建时间:2026-01-05 至 任意");
   });
 });

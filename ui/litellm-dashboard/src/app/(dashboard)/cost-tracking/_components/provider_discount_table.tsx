@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useState } from "react";
 import { Check, SquarePen, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
       data={data}
       columns={[
         {
-          header: "Provider",
+          header: i18n.t("costTracking.addProviderForm.providerLabel", { defaultValue: "Provider" }),
           cell: (row) => {
             const { displayName } = getProviderLogoAndName(row.provider);
             return (
@@ -79,7 +80,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
           },
         },
         {
-          header: "Discount Percentage",
+          header: i18n.t("costTracking.providerDiscountTable.colDiscountPercentage", { defaultValue: "Discount Percentage" }),
           numeric: true,
           cell: (row) => {
             const { displayName } = getProviderLogoAndName(row.provider);
@@ -135,7 +136,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
           width: "250px",
         },
         {
-          header: "Actions",
+          header: i18n.t("common.actions", { defaultValue: "Actions" }),
           cell: (row) => {
             const { displayName } = getProviderLogoAndName(row.provider);
             return (
@@ -154,7 +155,7 @@ const ProviderDiscountTable: React.FC<ProviderDiscountTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider discounts configured"
+      emptyMessage={i18n.t("costTracking.costTrackingSettings.noDiscountsConfigured", { defaultValue: "No provider discounts configured" })}
     />
   );
 };

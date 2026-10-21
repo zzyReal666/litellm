@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { CircleAlert, Info } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -51,6 +52,7 @@ const emptyValues = (required: readonly MCPUserEnvVarSpec[]): Record<string, str
   Object.fromEntries(required.map((spec) => [spec.name, ""]));
 
 const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, onCancel, onClear, onSubmit }) => {
+  const { t } = useTranslation();
   const form = useZodForm(buildSchema(required), { defaultValues: emptyValues(required) });
 
   return (
@@ -65,7 +67,7 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
             label={
               <span className="flex items-center gap-2">
                 <span className="font-mono text-sm font-semibold">{spec.name}</span>
-                {spec.is_set && <Badge variant="secondary">Set</Badge>}
+                {spec.is_set && <Badge variant="secondary">{t("mcpTools.userEnvVarsModal.setTag", { defaultValue: "Set" })}</Badge>}
               </span>
             }
           >
@@ -74,7 +76,7 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
                 {...field}
                 disabled={isSaving}
                 placeholder={
-                  spec.is_set ? "Enter a new value to overwrite" : spec.description || `Enter your ${spec.name}`
+                  spec.is_set ? t("mcpTools.userEnvVarsModal.overwritePlaceholder", { defaultValue: "Enter a new value to overwrite" }) : spec.description || `Enter your ${spec.name}`
                 }
               />
             )}
@@ -88,11 +90,11 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
           </Button>
         )}
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSaving}>
-          Cancel
+          {t("teamSsoSettings.cancel", { defaultValue: "Cancel" })}
         </Button>
         <Button type="submit" disabled={isSaving}>
           {isSaving && <UiLoadingSpinner className="mr-2 size-4" />}
-          Save Credentials
+          {t("mcpTools.userEnvVarsModal.saveButton", { defaultValue: "Save Credentials" })}
         </Button>
       </div>
     </form>
@@ -107,6 +109,7 @@ const UserEnvVarsForm: React.FC<UserEnvVarsFormProps> = ({ required, isSaving, o
  * description as the placeholder.
  */
 const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, accessToken, onClose, onSaved }) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [confirmingClear, setConfirmingClear] = React.useState(false);
   const close = () => {
@@ -128,7 +131,7 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
     mutationFn: (values: Record<string, string>) => storeMCPUserEnvVars(accessToken!, server!.server_id, values),
     onSuccess: (saved) => {
       queryClient.setQueryData(queryKey, saved);
-      toast.success("Credentials saved");
+      toast.success(t("mcpTools.userEnvVarsModal.savedSuccess", { defaultValue: "Credentials saved" }));
       onSaved?.(saved);
       close();
     },
@@ -159,7 +162,7 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
     saveMutation.mutate(trimmed);
   };
 
-  const displayName = server?.server_name || server?.alias || server?.server_id || "MCP Server";
+  const displayName = server?.server_name || server?.alias || server?.server_id || t("playground.chatUi.mcpServerLabel", { defaultValue: "MCP Server" });
   const required = status?.required ?? [];
   const isSaving = saveMutation.isPending || clearMutation.isPending;
   const canClear = !!server && !!accessToken && required.some((spec) => spec.is_set);
@@ -173,8 +176,8 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[520px]">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <DialogTitle className="text-base font-semibold">Set your credentials</DialogTitle>
-            <StatusBadge tone="info" label="Per-user" />
+            <DialogTitle className="text-base font-semibold">{t("mcpTools.userEnvVarsModal.title", { defaultValue: "Set your credentials" })}</DialogTitle>
+            <StatusBadge tone="info" label={t("mcpTools.userEnvVarsModal.perUserTag", { defaultValue: "Per-user" })} />
           </div>
           <span className="text-xs text-muted-foreground">{displayName}</span>
         </DialogHeader>
@@ -187,12 +190,12 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
           ) : isError ? (
             <Alert variant="error">
               <CircleAlert />
-              <AlertTitle>Failed to load env vars</AlertTitle>
+              <AlertTitle>{t("mcpTools.userEnvVarsModal.loadError", { defaultValue: "Failed to load env vars" })}</AlertTitle>
             </Alert>
           ) : required.length === 0 ? (
             <Alert variant="info">
               <Info />
-              <AlertTitle>No per-user fields configured for this server.</AlertTitle>
+              <AlertTitle>{t("mcpTools.userEnvVarsModal.noFieldsConfigured", { defaultValue: "No per-user fields configured for this server." })}</AlertTitle>
             </Alert>
           ) : (
             <>
@@ -222,7 +225,7 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
             </AlertDialogHeader>
             <AlertDialogFooter>
               <Button variant="outline" onClick={() => setConfirmingClear(false)}>
-                Cancel
+                {t("teamSsoSettings.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button variant="destructive" onClick={confirmClear}>
                 Clear credentials

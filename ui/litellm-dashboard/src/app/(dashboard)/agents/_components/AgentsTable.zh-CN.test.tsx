@@ -36,7 +36,7 @@ describe("AgentsTable in zh-CN", () => {
     await i18n.changeLanguage("zh-CN");
     render(<AgentsTable agents={[]} {...baseProps} />);
 
-    for (const header of ["Agent 名称", "Agent ID", "花费（USD）", "模型", "创建时间", "状态"]) {
+    for (const header of ["Agent 名称", "Agent ID", "花费（元）", "模型", "创建时间", "状态"]) {
       expect(screen.getByText(header)).toBeInTheDocument();
     }
     expect(screen.getByText("健康检查")).toBeInTheDocument();

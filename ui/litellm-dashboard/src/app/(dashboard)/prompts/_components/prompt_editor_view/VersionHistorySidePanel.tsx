@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useEffect, useState } from "react";
 import { getPromptVersions, PromptSpec } from "@/components/networking";
 import { Badge } from "@/components/ui/badge";
@@ -154,7 +155,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
                     </div>
                     {isSelected && (
                       <Badge variant="secondary">
-                        {t("promptsPage.versionHistorySidePanel.active", { defaultValue: "Active" })}
+                        {t("promptsPage.versionHistorySidePanel.active", { defaultValue: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}
                       </Badge>
                     )}
                   </div>

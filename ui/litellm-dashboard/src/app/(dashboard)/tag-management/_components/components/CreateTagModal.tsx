@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ChevronRight, CircleHelp } from "lucide-react";
 import React from "react";
 import { z } from "zod";
@@ -37,7 +39,7 @@ interface ModelInfo {
 }
 
 const createTagShape = {
-  tag_name: z.string().min(1, "Please input a tag name"),
+  tag_name: z.string().min(1, i18n.t("tagManagement.createTagModal.tagNameRequired", { defaultValue: "Please input a tag name" })),
   description: z.string().optional(),
   allowed_llms: z.array(z.string()).optional(),
   max_budget: z.string().optional(),
@@ -56,6 +58,7 @@ interface CreateTagModalProps {
 }
 
 const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSubmit, availableModels }) => {
+  const { t } = useTranslation();
   const [budgetSectionOpen, setBudgetSectionOpen] = React.useState(false);
   const form = useZodForm(createTagSchema, { defaultValues: { tag_name: "" } });
 
@@ -80,16 +83,16 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
     <Dialog open={visible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Create New Tag</DialogTitle>
+          <DialogTitle>{t("tagManagement.createTagModal.title", { defaultValue: "Create New Tag" })}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleFinish)} noValidate>
           <TooltipProvider>
             <FieldGroup>
-              <FormField control={form.control} name="tag_name" label="Tag Name">
+              <FormField control={form.control} name="tag_name" label={t("tagManagement.createTagModal.tagNameLabel", { defaultValue: "Tag Name" })}>
                 {({ ref, ...field }) => <Input {...field} ref={ref} />}
               </FormField>
 
-              <FormField control={form.control} name="description" label="Description">
+              <FormField control={form.control} name="description" label={t("guardrails.keywordTable.colDescription", { defaultValue: "Description" })}>
                 {({ ref, value, ...field }) => <Textarea {...field} ref={ref} value={value ?? ""} rows={4} />}
               </FormField>
 
@@ -97,8 +100,8 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                 control={form.control}
                 name="allowed_llms"
                 label={labelWithHint(
-                  "Allowed Models",
-                  "Select which models are allowed to process requests from this tag",
+                  t("tagManagement.createTagModal.allowedModelsLabel", { defaultValue: t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }) }),
+                  t("tagManagement.createTagModal.allowedModelsTooltip", { defaultValue: "Select which models are allowed to process requests from this tag" }),
                 )}
               >
                 {({ value, onChange }) => (
@@ -106,7 +109,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                     options={modelOptions}
                     value={value}
                     onValueChange={onChange}
-                    placeholder="Select Models"
+                    placeholder={t("tagManagement.createTagModal.selectModelsPlaceholder", { defaultValue: "Select Models" })}
                   />
                 )}
               </FormField>
@@ -118,7 +121,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
               className="mt-4 mb-4 rounded-md border border-border"
             >
               <CollapsibleTrigger className="group flex w-full items-center justify-between px-4 py-3 text-base font-medium text-foreground">
-                Budget & Rate Limits (Optional)
+                {t("tagManagement.createTagModal.budgetRateLimitsOptional", { defaultValue: "Budget & Rate Limits (Optional)" })}
                 <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent className="px-4 pb-4">
@@ -128,7 +131,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                     name="max_budget"
                     label={labelWithHint(
                       "Max Budget (CNY)",
-                      "Maximum amount in CNY this tag can spend. When reached, requests with this tag will be blocked",
+                      t("tagManagement.createTagModal.maxBudgetTooltip", { defaultValue: "Maximum amount in CNY this tag can spend. When reached, requests with this tag will be blocked" }),
                     )}
                   >
                     {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -138,8 +141,8 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
                     control={form.control}
                     name="budget_duration"
                     label={labelWithHint(
-                      "Reset Budget",
-                      "How often the budget should reset. For example, setting 'daily' will reset the budget every 24 hours",
+                      t("tagManagement.createTagModal.resetBudgetLabel", { defaultValue: "Reset Budget" }),
+                      t("tagManagement.createTagModal.resetBudgetTooltip", { defaultValue: "How often the budget should reset. For example, setting 'daily' will reset the budget every 24 hours" }),
                     )}
                   >
                     {({ id, value, onChange }) => (
@@ -170,7 +173,7 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
             </Collapsible>
 
             <div className="mt-2.5 text-right">
-              <Button type="submit">Create Tag</Button>
+              <Button type="submit">{t("tagManagement.createTagModal.createTagButton", { defaultValue: "Create Tag" })}</Button>
             </div>
           </TooltipProvider>
         </form>

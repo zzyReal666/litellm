@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 import { Copy, Info, KeyRound, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -147,7 +148,7 @@ export const getUsersTableColumns = ({
         return (
           <StatusBadge
             tone="success"
-            label={t("viewUsers.columns.active", { defaultValue: "Active" })}
+            label={t("viewUsers.columns.active", { defaultValue: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}
             dataTestId={`user-status-${row.original.user_id}`}
           />
         );
@@ -188,11 +189,11 @@ export const getUsersTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: t("viewUsers.columns.spendUsd", { defaultValue: "Spend (CNY)" }), numeric: true },
+      meta: { title: t("viewUsers.columns.spendUsd", { defaultValue: i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }) }), numeric: true },
       header: ({ column }) => (
         <DataTableSortHeader
           column={column}
-          title={t("viewUsers.columns.spendUsd", { defaultValue: "Spend (CNY)" })}
+          title={t("viewUsers.columns.spendUsd", { defaultValue: i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }) })}
           variant="header-cycle"
         />
       ),

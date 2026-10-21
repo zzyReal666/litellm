@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useProjects } from "@/app/(dashboard)/hooks/projects/useProjects";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
@@ -545,10 +546,10 @@ export default function KeyInfoView({
           lastUpdated: lastConfiguredAt ? formatTimestamp(lastConfiguredAt) : "",
           lastActive: currentKeyData.last_active
             ? formatTimestamp(currentKeyData.last_active)
-            : t("common.never", { defaultValue: "Never" }),
+            : i18n.t("common.never", { defaultValue: "Never" }),
           expires: currentKeyData.expires
             ? formatTimestamp(currentKeyData.expires)
-            : t("common.neverExpires", { defaultValue: "Never" }),
+            : t("common.neverExpires", { defaultValue: i18n.t("common.never", { defaultValue: "Never" }) }),
         }}
         onBack={onClose}
         onRegenerate={() => setIsRegenerateModalOpen(true)}
@@ -1033,7 +1034,7 @@ export default function KeyInfoView({
                     <p className="text-sm">
                       {currentKeyData.expires
                         ? formatTimestamp(currentKeyData.expires)
-                        : t("common.neverExpires", { defaultValue: "Never" })}
+                        : t("common.neverExpires", { defaultValue: i18n.t("common.never", { defaultValue: "Never" }) })}
                     </p>
                   </div>
 
@@ -1089,7 +1090,7 @@ export default function KeyInfoView({
                     <p data-testid="budget-reset-value" className="text-sm">
                       {currentKeyData.budget_reset_at
                         ? `${currentKeyData.budget_duration ? t("templates.keyInfoView.budgetResetEvery", { duration: currentKeyData.budget_duration, defaultValue: `Every ${currentKeyData.budget_duration}, next ` }) : ""}${formatTimestamp(currentKeyData.budget_reset_at)}`
-                        : t("common.neverResets", { defaultValue: "Never" })}
+                        : t("common.neverResets", { defaultValue: i18n.t("common.never", { defaultValue: "Never" }) })}
                     </p>
                   </div>
 

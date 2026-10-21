@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { SortingState } from "@tanstack/react-table";
 import { Inbox } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -19,13 +21,14 @@ interface GuardrailTableProps {
 const DEFAULT_SORTING: SortingState = [{ id: "created_at", desc: true }];
 
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No guardrails yet</div>
-      <div className="text-sm text-muted-foreground">Add a guardrail to start filtering requests and responses.</div>
+      <div className="text-sm font-medium text-foreground">{t("guardrails.guardrailTable.emptyTitle", { defaultValue: "No guardrails yet" })}</div>
+      <div className="text-sm text-muted-foreground">{t("guardrails.guardrailTable.emptyDescription", { defaultValue: "Add a guardrail to start filtering requests and responses." })}</div>
     </div>
   );
 }
@@ -53,7 +56,7 @@ const GuardrailTable: React.FC<GuardrailTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading guardrails…"
+      loadingMessage={i18n.t("guardrails.guardrailTable.loading", { defaultValue: "Loading guardrails…" })}
       noDataMessage={<EmptyState />}
       size="compact"
     />

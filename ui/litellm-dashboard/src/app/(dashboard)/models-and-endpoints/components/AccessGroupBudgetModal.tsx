@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { CircleHelp } from "lucide-react";
 import React from "react";
 import { z } from "zod";
@@ -32,7 +33,7 @@ const budgetSchema = z
     budget_duration: z.string().optional(),
   })
   .refine(hasAnyBudgetValue, {
-    message: "Set at least one of max budget, soft budget or reset window",
+    message: i18n.t("pages.accessGroupBudgets.validationError", { defaultValue: "Set at least one of max budget, soft budget or reset window" }),
     path: ["max_budget"],
   });
 
@@ -72,7 +73,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 name="max_budget"
                 label={labelWithHint(
                   "Max Budget (CNY)",
-                  "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused",
+                  i18n.t("pages.accessGroupBudgets.maxBudgetHint", { defaultValue: "Total the whole group may spend. Once its shared spend reaches this, every key that draws from the group is refused" }),
                 )}
               >
                 {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -83,7 +84,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 name="soft_budget"
                 label={labelWithHint(
                   "Soft Budget (CNY)",
-                  "Fires an alert when the group's spend reaches this. Requests keep succeeding",
+                  i18n.t("pages.accessGroupBudgets.softBudgetHint", { defaultValue: "Fires an alert when the group's spend reaches this. Requests keep succeeding" }),
                 )}
               >
                 {({ ref, value, ...field }) => <NumericalInput {...field} value={value ?? ""} step={0.01} />}
@@ -93,8 +94,8 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
                 control={form.control}
                 name="budget_duration"
                 label={labelWithHint(
-                  "Reset Budget",
-                  "How often the group's spend resets. Leave empty for a budget that never resets",
+                  i18n.t("budgets.budgetModal.resetBudgetLabel", { defaultValue: "Reset Budget" }),
+                  i18n.t("pages.accessGroupBudgets.resetBudgetHint", { defaultValue: "How often the group's spend resets. Leave empty for a budget that never resets" }),
                 )}
               >
                 {({ id, value, onChange }) => (
@@ -108,15 +109,15 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
             </FieldGroup>
 
             <p className="mt-3 text-xs text-muted-foreground">
-              A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself.
+              {i18n.t("pages.accessGroupBudgets.blankFieldHint", { defaultValue: "A field left blank keeps whatever the budget already has. Use Clear budget to remove the budget itself." })}
             </p>
 
             <div className="mt-6 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
+                {i18n.t("common.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving ? "Saving..." : "Save Budget"}
+                {isSaving ? i18n.t("common.saving", { defaultValue: "Saving..." }) : i18n.t("pages.accessGroupBudgets.saveBudget", { defaultValue: "Save Budget" })}
               </Button>
             </div>
           </TooltipProvider>

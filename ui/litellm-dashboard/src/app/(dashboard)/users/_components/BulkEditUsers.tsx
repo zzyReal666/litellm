@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { useId, useState } from "react";
 import { userBulkUpdateUserCall, teamBulkMemberAddCall, Member } from "@/components/networking";
 import { UserEditView } from "./user_edit_view";
@@ -89,7 +90,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
   const handleSubmit = async (formValues: any) => {
     if (!accessToken) {
-      toast.fromError("Access token not found");
+      toast.fromError(i18n.t("bulkEditUsers.notifications.accessTokenNotFound", { defaultValue: "Access token not found" }));
       return;
     }
 
@@ -125,7 +126,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       const hasTeamAdditions = addToTeams && selectedTeams.length > 0;
 
       if (!hasUserUpdates && !hasTeamAdditions) {
-        toast.fromError("Please modify at least one field or select teams to add users to");
+        toast.fromError(i18n.t("bulkEditUsers.notifications.noFieldsModified", { defaultValue: "Please modify at least one field or select teams to add users to" }));
         return;
       }
 
@@ -212,7 +213,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       onCancel();
     } catch (error) {
       console.error("Bulk operation failed:", error);
-      toast.fromError("Failed to perform bulk operations");
+      toast.fromError(i18n.t("bulkEditUsers.notifications.bulkOpFailed", { defaultValue: "Failed to perform bulk operations" }));
     } finally {
       setLoading(false);
     }
@@ -223,7 +224,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>
-            {updateAllUsers ? "Bulk Edit All Users" : `Bulk Edit ${selectedUsers.length} User(s)`}
+            {updateAllUsers ? i18n.t("bulkEditUsers.titleAllUsers", { defaultValue: "Bulk Edit All Users" }) : `Bulk Edit ${selectedUsers.length} User(s)`}
           </DialogTitle>
         </DialogHeader>
         {allowAllUsers && (
@@ -233,10 +234,10 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                 id={updateAllUsersId}
                 checked={updateAllUsers}
                 onCheckedChange={(checked) => setUpdateAllUsers(checked === true)}
-                aria-label="Update ALL users in the system"
+                aria-label={i18n.t("bulkEditUsers.updateAllUsersLabel", { defaultValue: "Update ALL users in the system" })}
               />
               <label htmlFor={updateAllUsersId} className="cursor-pointer text-sm font-medium text-foreground">
-                Update ALL users in the system
+                {i18n.t("bulkEditUsers.updateAllUsersLabel", { defaultValue: "Update ALL users in the system" })}
               </label>
             </div>
             {updateAllUsers && (
@@ -256,10 +257,10 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[30%]">User ID</TableHead>
-                    <TableHead className="w-[25%]">Email</TableHead>
-                    <TableHead className="w-[25%]">Current Role</TableHead>
-                    <TableHead className={cn("w-[20%]", NUMERIC_CELL_CLASS)}>Budget</TableHead>
+                    <TableHead className="w-[30%]">{i18n.t("bulkEditUsers.columns.userId", { defaultValue: "User ID" })}</TableHead>
+                    <TableHead className="w-[25%]">{i18n.t("bulkEditUsers.columns.email", { defaultValue: "Email" })}</TableHead>
+                    <TableHead className="w-[25%]">{i18n.t("bulkEditUsers.columns.currentRole", { defaultValue: "Current Role" })}</TableHead>
+                    <TableHead className={cn("w-[20%]", NUMERIC_CELL_CLASS)}>{i18n.t("bulkEditUsers.columns.budget", { defaultValue: "Budget" })}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -268,12 +269,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                       <TableCell className="text-xs font-medium text-foreground">
                         {user.user_id.length > 20 ? `${user.user_id.slice(0, 20)}...` : user.user_id}
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">{user.user_email || "No email"}</TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{user.user_email || i18n.t("bulkEditUsers.noEmail", { defaultValue: "No email" })}</TableCell>
                       <TableCell className="text-xs text-foreground">
                         {possibleUIRoles?.[user.user_role]?.ui_label || user.user_role}
                       </TableCell>
                       <TableCell className={NUMERIC_CELL_CLASS}>
-                        <MoneyCell value={user.max_budget} decimals={2} emptyText="Unlimited" showZero />
+                        <MoneyCell value={user.max_budget} decimals={2} emptyText={i18n.t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })} showZero />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -287,7 +288,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         <div className="mb-4">
           <p className="text-sm text-foreground">
-            <strong>Instructions:</strong> Fill in the fields below with the values you want to apply to all selected
+            <strong>{i18n.t("bulkEditUsers.instructionsLabel", { defaultValue: "Instructions:" })}</strong> Fill in the fields below with the values you want to apply to all selected
             users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.
           </p>
         </div>
@@ -295,7 +296,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         {/* Team Management Section */}
         <Card size="sm" className="mb-4 bg-muted/50">
           <CardHeader>
-            <CardTitle>Team Management</CardTitle>
+            <CardTitle>{i18n.t("bulkEditUsers.teamManagement.sectionTitle", { defaultValue: "Team Management" })}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-2">
@@ -304,10 +305,10 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                   id={addToTeamsId}
                   checked={addToTeams}
                   onCheckedChange={(checked) => setAddToTeams(checked === true)}
-                  aria-label="Add selected users to teams"
+                  aria-label={i18n.t("bulkEditUsers.teamManagement.addToTeamsLabel", { defaultValue: "Add selected users to teams" })}
                 />
                 <label htmlFor={addToTeamsId} className="cursor-pointer text-sm text-foreground">
-                  Add selected users to teams
+                  {i18n.t("bulkEditUsers.teamManagement.addToTeamsLabel", { defaultValue: "Add selected users to teams" })}
                 </label>
               </div>
 
@@ -315,12 +316,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                 <>
                   <div>
                     <label htmlFor={selectedTeamsId} className="block text-sm font-medium text-foreground">
-                      Select Teams:
+                      {i18n.t("bulkEditUsers.teamManagement.selectTeamsLabel", { defaultValue: "Select Teams:" })}
                     </label>
                     <MultiSelect
                       id={selectedTeamsId}
                       className="mt-2"
-                      placeholder="Select teams to add users to"
+                      placeholder={i18n.t("bulkEditUsers.teamManagement.selectTeamsPlaceholder", { defaultValue: "Select teams to add users to" })}
                       value={selectedTeams}
                       onValueChange={setSelectedTeams}
                       options={
@@ -334,12 +335,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
                   <div>
                     <label htmlFor={teamBudgetId} className="block text-sm font-medium text-foreground">
-                      Team Budget (Optional):
+                      {i18n.t("bulkEditUsers.teamManagement.teamBudgetLabel", { defaultValue: "Team Budget (Optional):" })}
                     </label>
                     <NumericalInput
                       id={teamBudgetId}
                       className="mt-2"
-                      placeholder="Max budget per user in team"
+                      placeholder={i18n.t("bulkEditUsers.teamManagement.teamBudgetPlaceholder", { defaultValue: "Max budget per user in team" })}
                       value={teamBudget ?? ""}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         setTeamBudget(event.target.value === "" ? null : Number(event.target.value))
@@ -348,7 +349,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                       step={0.01}
                     />
                     <span className="text-xs text-muted-foreground">
-                      Leave empty for unlimited budget within team limits
+                      {i18n.t("bulkEditUsers.teamManagement.teamBudgetHint", { defaultValue: "Leave empty for unlimited budget within team limits" })}
                     </span>
                   </div>
 

@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import RoutingOptions from "./RoutingOptions";
 import ClassifierPrimarySettings from "./ClassifierPrimarySettings";
 import { AutoRouterAllowanceNote } from "./AutoRouterAvailability";
@@ -195,7 +196,7 @@ export const effectiveClassifierType = (
 
 const rowOrigin = (row: TierRow, editing: boolean): string => {
   if (!editing) return row.id;
-  return isBuiltInTierName(row.name) ? "built-in" : "custom";
+  return isBuiltInTierName(row.name) ? i18n.t("addModel.complexityRouterConfig.tierOriginBuiltIn", { defaultValue: "built-in" }) : i18n.t("addModel.complexityRouterConfig.tierOriginCustom", { defaultValue: "custom" });
 };
 
 const builtInTierInfo = (rowId: string): { label: string; description: string; examples: string } | undefined => {
@@ -219,23 +220,23 @@ const TierSetToolbar: React.FC<{
         <>
           <Button variant="outline" onClick={onAdd} disabled={rowCount >= MAX_TIER_COUNT}>
             <Plus />
-            Add tier
+            {i18n.t("addModel.complexityRouterConfig.addTier", { defaultValue: "Add tier" })}
           </Button>
           <SimpleTooltip content={rowsError || undefined}>
             <Button variant="outline" disabled={Boolean(rowsError)} onClick={() => onEditingChange?.(false)}>
-              Done
+              {i18n.t("common.done", { defaultValue: "Done" })}
             </Button>
           </SimpleTooltip>
           {isCustomSet && (
             <Button variant="outline" size="sm" onClick={onRestore}>
-              Restore defaults
+              {i18n.t("addModel.complexityRouterConfig.restoreDefaults", { defaultValue: "Restore defaults" })}
             </Button>
           )}
         </>
       ) : (
         onEditingChange && (
           <Button variant="outline" onClick={() => onEditingChange(true)}>
-            Edit tiers
+            {i18n.t("addModel.complexityRouterConfig.editTiers", { defaultValue: "Edit tiers" })}
           </Button>
         )
       )}
@@ -267,17 +268,17 @@ const FallbackTierField: React.FC<{
 }> = ({ rows, fallbackTierId, onValueChange }) => (
   <div className="mt-4">
     <div className="flex items-center gap-2 mb-2">
-      <strong className="text-base font-semibold">Fallback Tier</strong>
-      <SimpleTooltip content="Where requests route when the classifier errors, times out, or returns an unparseable reply. Required for an edited tier set: the heuristic scorer cannot produce your tiers">
+      <strong className="text-base font-semibold">{i18n.t("addModel.complexityRouterConfig.fallbackTierTitle", { defaultValue: "Fallback Tier" })}</strong>
+      <SimpleTooltip content={i18n.t("addModel.complexityRouterConfig.fallbackTierTooltip", { defaultValue: "Where requests route when the classifier errors, times out, or returns an unparseable reply. Required for an edited tier set: the heuristic scorer cannot produce your tiers" })}>
         <Info className="size-4 text-muted-foreground" />
       </SimpleTooltip>
     </div>
     <TierRowSelect
-      label="Fallback tier"
+      label={i18n.t("addModel.complexityRouterConfig.fallbackTierLabel", { defaultValue: "Fallback tier" })}
       options={rows.filter((row) => activeTierName(row)).map((row) => ({ value: row.id, label: activeTierName(row) }))}
       value={fallbackTierId || null}
       onValueChange={onValueChange}
-      placeholder="Pick the tier classifier failures route to"
+      placeholder={i18n.t("addModel.complexityRouterConfig.fallbackTierPlaceholder", { defaultValue: "Pick the tier classifier failures route to" })}
     />
   </div>
 );
@@ -298,7 +299,7 @@ const TierRowHeader: React.FC<{
       content={
         row.definition.trim() ||
         description ||
-        "A tier you defined. The classifier routes requests matching its definition here."
+        i18n.t("addModel.complexityRouterConfig.customTierTooltip", { defaultValue: "A tier you defined. The classifier routes requests matching its definition here." })
       }
     >
       <Info className="size-4 text-muted-foreground" />
@@ -316,7 +317,7 @@ const TierRowHeader: React.FC<{
         onClick={onRemove}
       >
         <Trash2 />
-        Remove
+        {i18n.t("common.remove", { defaultValue: "Remove" })}
       </Button>
     )}
   </div>
@@ -332,7 +333,7 @@ const TierRowEditFields: React.FC<{
     <Input
       value={row.name}
       onChange={(event) => onPatch({ name: event.target.value })}
-      placeholder="Tier name, e.g. SECURITY_REVIEW"
+      placeholder={i18n.t("addModel.complexityRouterConfig.tierNamePlaceholder", { defaultValue: "Tier name, e.g. SECURITY_REVIEW" })}
       aria-label={`Name for tier ${index + 1}`}
       maxLength={MAX_TIER_NAME_CHARS}
       className="mb-2"
@@ -342,8 +343,8 @@ const TierRowEditFields: React.FC<{
       onChange={(event) => onPatch({ definition: event.target.value.replace(/[\r\n]+/g, " ") })}
       placeholder={
         isBuiltInTierName(row.name)
-          ? "Leave blank to keep the built-in definition"
-          : "What belongs in this tier, e.g. requests asking for a security audit"
+          ? i18n.t("addModel.complexityRouterConfig.keepBuiltInDefinitionPlaceholder", { defaultValue: "Leave blank to keep the built-in definition" })
+          : i18n.t("addModel.complexityRouterConfig.tierDefinitionPlaceholder", { defaultValue: "What belongs in this tier, e.g. requests asking for a security audit" })
       }
       aria-label={`Definition for tier ${index + 1}`}
       maxLength={MAX_TIER_DEFINITION_CHARS}
@@ -352,7 +353,7 @@ const TierRowEditFields: React.FC<{
     />
     {definitionMissing && (
       <span className="mb-2 block text-xs text-destructive">
-        A definition is required: it is the rubric the classifier routes on for this tier
+        {i18n.t("addModel.complexityRouterConfig.tierDefinitionRequired", { defaultValue: "A definition is required: it is the rubric the classifier routes on for this tier" })}
       </span>
     )}
   </>
@@ -690,7 +691,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
         <div className="inline-flex items-center gap-2">
           <h4 className="m-0 text-xl font-semibold text-foreground">{forecast ? "Solver models" : tierHeading}</h4>
           {!forecast && (
-            <SimpleTooltip content="Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.">
+            <SimpleTooltip content={i18n.t("addModel.complexityRouterConfig.tierMappingTooltip", { defaultValue: "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models." })}>
               <Info className="size-4 text-muted-foreground" />
             </SimpleTooltip>
           )}
@@ -783,7 +784,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                         value={row.models}
                         onValueChange={(models: string[]) => setRowModels(row, models)}
                         placeholder={`Select model(s) for ${label.toLowerCase()} queries`}
-                        emptyText="No models found"
+                        emptyText={i18n.t("modelDashboard.table.noModels", { defaultValue: "No models found" })}
                         className={tierMissing ? "w-full border-destructive" : "w-full"}
                       />
                       <TierModelEffortRows

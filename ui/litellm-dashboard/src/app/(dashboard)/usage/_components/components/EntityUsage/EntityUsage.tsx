@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { StackedUsageChart, type StackedUsageScale } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -51,7 +52,7 @@ import { ProviderSpendBreakdown } from "./SpendByProvider";
 const BRAND = "#2b3fd6";
 const FLAT_COST_SERIES = "Flat cost";
 const FLAT_COST_COLOR = "#8b5cf6";
-const METRIC_TITLE: Record<UsageMetric, string> = { spend: "Spend", tokens: "Tokens", requests: "Requests" };
+const METRIC_TITLE: Record<UsageMetric, string> = { spend: i18n.t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }), tokens: i18n.t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }), requests: "Requests" };
 /** Summary tiles that carry a sparkline, keyed by tile title, valued by the dailyTotals field. */
 const TILE_TRENDS: Readonly<Record<string, string>> = {
   "Total Spend": "spend",
@@ -371,25 +372,25 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         cell: ({ row }) => <ShareBar value={row.original.metrics.spend} max={maxEntitySpend} />,
       },
       {
-        header: "Spend",
+        header: i18n.t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }),
         accessorKey: "metrics.spend",
         meta: { numeric: true, ...QUIET_HEADER },
         cell: ({ row }) => <MoneyCell value={row.original.metrics.spend} decimals={4} />,
       },
       {
-        header: "Successful",
+        header: i18n.t("usagePage.entityUsage.colSuccessful", { defaultValue: "Successful" }),
         accessorKey: "metrics.successful_requests",
         meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: i18n.t("usagePage.entityUsage.colFailed", { defaultValue: "Failed" }),
         accessorKey: "metrics.failed_requests",
         meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: i18n.t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }),
         accessorKey: "metrics.total_tokens",
         meta: { numeric: true, ...QUIET_HEADER },
         cell: ({ row }) => row.original.metrics.total_tokens.toLocaleString(),
@@ -451,7 +452,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const breakdownTiles = showFlatCost && showCostBreakdown ? buildCostBreakdownTiles(spendData.metadata) : [];
   const summaryTiles = buildSummaryTiles(spendData.metadata, showFlatCost);
 
-  const modelViewTitle = modelViewType === "groups" ? "Top Public Model Names" : "Top Litellm Models";
+  const modelViewTitle = modelViewType === "groups" ? i18n.t("usagePage.usagePageView.topPublicModelNames", { defaultValue: "Top Public Model Names" }) : i18n.t("usagePage.usagePageView.topLitellmModels", { defaultValue: "Top Litellm Models" });
   const chartFormat = (value: number) => formatMetricValue(value, breakdown.metric);
 
   const costPanel = loading ? (
@@ -555,7 +556,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       )}
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel icon={KeyRound} title="Top Virtual Keys">
+        <Panel icon={KeyRound} title={i18n.t("usagePage.entityUsage.topVirtualKeys", { defaultValue: "Top Virtual Keys" })}>
           <TopKeyView
             topKeys={getTopAPIKeys(spendData.results, topKeysLimit)}
             teams={null}
@@ -566,7 +567,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         </Panel>
         <Panel
           icon={Boxes}
-          title={entityType === "agent" ? "Top Agents" : modelViewTitle}
+          title={entityType === "agent" ? i18n.t("usagePage.entityUsage.topAgents", { defaultValue: "Top Agents" }) : modelViewTitle}
           action={<ModelViewToggle value={modelViewType} onChange={setModelViewType} />}
         >
           <TopModelView
@@ -578,7 +579,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       </div>
 
       {showAgentBreakdown && (
-        <Panel icon={Bot} title="Top Agents Driving Spend">
+        <Panel icon={Bot} title={i18n.t("usagePage.entityUsage.topAgentsDrivingSpend", { defaultValue: "Top Agents Driving Spend" })}>
           {agentLoading ? (
             <ChartLoader />
           ) : (
@@ -591,17 +592,17 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         </Panel>
       )}
 
-      <Panel icon={Server} title="Provider Usage">
+      <Panel icon={Server} title={i18n.t("usagePage.entityUsage.providerUsage", { defaultValue: "Provider Usage" })}>
         <ProviderSpendBreakdown rows={providerSpend} />
       </Panel>
     </div>
   );
 
   const tabs: readonly { key: string; label: string; content: ReactNode }[] = [
-    { key: "cost", label: "Cost", content: costPanel },
+    { key: "cost", label: i18n.t("usagePage.entityUsage.tabCost", { defaultValue: "Cost" }), content: costPanel },
     {
       key: "models",
-      label: entityType === "agent" ? "Request / Token Consumption" : "Model Activity",
+      label: entityType === "agent" ? i18n.t("usagePage.entityUsage.tabRequestTokenConsumption", { defaultValue: "Request / Token Consumption" }) : i18n.t("usagePage.entityUsage.tabModelActivity", { defaultValue: "Model Activity" }),
       content: (
         <>
           <div className="mb-3 flex justify-end">
@@ -619,14 +620,14 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       ? [
           {
             key: "agents",
-            label: "Agent Activity",
+            label: i18n.t("usagePage.entityUsage.tabAgentActivity", { defaultValue: "Agent Activity" }),
             content: <ActivityMetrics modelMetrics={agentMetrics} />,
           },
         ]
       : []),
     {
       key: "keys",
-      label: "Key Activity",
+      label: i18n.t("usagePage.entityUsage.tabKeyActivity", { defaultValue: "Key Activity" }),
       content: (
         <KeyActivityPanel
           summary={summaryMetrics}
@@ -639,7 +640,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         />
       ),
     },
-    { key: "endpoints", label: "Endpoint Activity", content: <EndpointUsage userSpendData={spendData} /> },
+    { key: "endpoints", label: i18n.t("usagePage.entityUsage.tabEndpointActivity", { defaultValue: "Endpoint Activity" }), content: <EndpointUsage userSpendData={spendData} /> },
   ];
 
   return (

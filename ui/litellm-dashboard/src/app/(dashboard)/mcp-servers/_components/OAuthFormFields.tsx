@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Info } from "lucide-react";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -40,8 +41,8 @@ interface OAuthFormFieldsProps {
 const fieldClassName = "rounded-lg border-border focus:border-info focus:ring-ring";
 
 const OAUTH_FLOW_ITEMS = [
-  { value: OAUTH_FLOW.M2M, label: "Machine-to-Machine (M2M)" },
-  { value: OAUTH_FLOW.INTERACTIVE, label: "Interactive (PKCE)" },
+  { value: OAUTH_FLOW.M2M, label: i18n.t("mcpTools.oAuthFormFields.m2mLabel", { defaultValue: "Machine-to-Machine (M2M)" }) },
+  { value: OAUTH_FLOW.INTERACTIVE, label: i18n.t("mcpTools.oAuthFormFields.interactiveLabel", { defaultValue: "Interactive (PKCE)" }) },
 ];
 
 const UPSTREAM_RESOURCE_TOOLTIP =
@@ -62,11 +63,11 @@ const FieldLabel: React.FC<{ label: string; tooltip: string }> = ({ label, toolt
 
 const UpstreamResourceField: React.FC = () => (
   <MountedFormField
-    label={<FieldLabel label="Resource Indicator (optional)" tooltip={UPSTREAM_RESOURCE_TOOLTIP} />}
+    label={<FieldLabel label={i18n.t("mcpTools.oAuthFormFields.upstreamResourceLabel", { defaultValue: "Resource Indicator (optional)" })} tooltip={UPSTREAM_RESOURCE_TOOLTIP} />}
     name={["credentials", "upstream_resource"]}
   >
     {(control) => (
-      <Input {...textControl(control)} placeholder="auto, or https://mcp.example.com/mcp" className={fieldClassName} />
+      <Input {...textControl(control)} placeholder={i18n.t("mcpTools.oAuthFormFields.upstreamResourcePlaceholder", { defaultValue: "auto, or https://mcp.example.com/mcp" })} className={fieldClassName} />
     )}
   </MountedFormField>
 );
@@ -87,8 +88,8 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
       <MountedFormField
         label={
           <FieldLabel
-            label="OAuth Flow Type"
-            tooltip="Choose how the proxy authenticates with this MCP server. M2M is for server-to-server communication using client credentials. Interactive (PKCE) is for user-facing flows that require browser-based authorization."
+            label={i18n.t("mcpTools.oAuthFormFields.flowTypeLabel", { defaultValue: "OAuth Flow Type" })}
+            tooltip={i18n.t("mcpTools.oAuthFormFields.flowTypeTooltip", { defaultValue: "Choose how the proxy authenticates with this MCP server. M2M is for server-to-server communication using client credentials. Interactive (PKCE) is for user-facing flows that require browser-based authorization." })}
           />
         }
         name="oauth_flow_type"
@@ -97,19 +98,19 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
         {(control) => (
           <Select {...selectControl<string>(control)} items={OAUTH_FLOW_ITEMS}>
             <SelectTrigger {...selectTriggerControl(control)} className="w-full rounded-lg">
-              <SelectValue placeholder="Select OAuth flow" />
+              <SelectValue placeholder={i18n.t("mcpTools.oAuthFormFields.flowTypePlaceholder", { defaultValue: "Select OAuth flow" })} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={OAUTH_FLOW.M2M}>
                 <div>
-                  <span className="font-medium">Machine-to-Machine (M2M)</span>
-                  <span className="ml-2 text-xs text-muted-foreground">server-to-server, no user interaction</span>
+                  <span className="font-medium">{i18n.t("mcpTools.oAuthFormFields.m2mLabel", { defaultValue: "Machine-to-Machine (M2M)" })}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">{i18n.t("mcpTools.oAuthFormFields.m2mDesc", { defaultValue: "server-to-server, no user interaction" })}</span>
                 </div>
               </SelectItem>
               <SelectItem value={OAUTH_FLOW.INTERACTIVE}>
                 <div>
-                  <span className="font-medium">Interactive (PKCE)</span>
-                  <span className="ml-2 text-xs text-muted-foreground">browser-based user authorization</span>
+                  <span className="font-medium">{i18n.t("mcpTools.oAuthFormFields.interactiveLabel", { defaultValue: "Interactive (PKCE)" })}</span>
+                  <span className="ml-2 text-xs text-muted-foreground">{i18n.t("mcpTools.oAuthFormFields.interactiveDesc", { defaultValue: "browser-based user authorization" })}</span>
                 </div>
               </SelectItem>
             </SelectContent>
@@ -120,10 +121,10 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
       {isM2M ? (
         <>
           <MountedFormField
-            label={<FieldLabel label="Client ID" tooltip="OAuth2 client ID for the client_credentials grant." />}
+            label={<FieldLabel label={i18n.t("mcpTools.oAuthFormFields.clientIdLabel", { defaultValue: "Client ID" })} tooltip={i18n.t("mcpTools.oAuthFormFields.clientIdM2MTooltip", { defaultValue: "OAuth2 client ID for the client_credentials grant." })} />}
             name={["credentials", "client_id"]}
             required={!isEditing}
-            rules={requiredWhenCreating("Client ID is required for M2M OAuth")}
+            rules={requiredWhenCreating(i18n.t("mcpTools.oAuthFormFields.clientIdM2MRequired", { defaultValue: "Client ID is required for M2M OAuth" }))}
           >
             {(control) => (
               <PasswordInput
@@ -135,11 +136,11 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           </MountedFormField>
           <MountedFormField
             label={
-              <FieldLabel label="Client Secret" tooltip="OAuth2 client secret for the client_credentials grant." />
+              <FieldLabel label={i18n.t("mcpTools.oAuthFormFields.clientSecretLabel", { defaultValue: "Client Secret" })} tooltip={i18n.t("mcpTools.oAuthFormFields.clientSecretM2MTooltip", { defaultValue: "OAuth2 client secret for the client_credentials grant." })} />
             }
             name={["credentials", "client_secret"]}
             required={!isEditing}
-            rules={requiredWhenCreating("Client Secret is required for M2M OAuth")}
+            rules={requiredWhenCreating(i18n.t("mcpTools.oAuthFormFields.clientSecretM2MRequired", { defaultValue: "Client Secret is required for M2M OAuth" }))}
           >
             {(control) => (
               <PasswordInput
@@ -150,10 +151,10 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
             )}
           </MountedFormField>
           <MountedFormField
-            label={<FieldLabel label="Token URL" tooltip="Token endpoint URL for the client_credentials grant." />}
+            label={<FieldLabel label={i18n.t("mcpTools.oAuthFormFields.tokenUrlLabel", { defaultValue: "Token URL" })} tooltip={i18n.t("mcpTools.oAuthFormFields.tokenUrlM2MTooltip", { defaultValue: "Token endpoint URL for the client_credentials grant." })} />}
             name="token_url"
             required={!isEditing}
-            rules={requiredWhenCreating("Token URL is required for M2M OAuth")}
+            rules={requiredWhenCreating(i18n.t("mcpTools.oAuthFormFields.tokenUrlM2MRequired", { defaultValue: "Token URL is required for M2M OAuth" }))}
           >
             {(control) => (
               <Input
@@ -167,13 +168,13 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Scopes (optional)"
-                tooltip="Optional scopes to request with the client_credentials grant."
+                label={i18n.t("mcpTools.oAuthFormFields.scopesOptionalLabel", { defaultValue: "Scopes (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.scopesM2MTooltip", { defaultValue: "Optional scopes to request with the client_credentials grant." })}
               />
             }
             name={["credentials", "scopes"]}
           >
-            {(control) => <MultiSelect {...tagsControl(control)} placeholder="Add scopes" className="rounded-lg" />}
+            {(control) => <MultiSelect {...tagsControl(control)} placeholder={i18n.t("mcpTools.oAuthFormFields.scopesPlaceholder", { defaultValue: "Add scopes" })} className="rounded-lg" />}
           </MountedFormField>
           <UpstreamResourceField />
           <UpstreamTokenHeaderField />
@@ -184,8 +185,8 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
             label={
               <span className="flex items-center justify-between w-full">
                 <FieldLabel
-                  label="Client ID (optional)"
-                  tooltip="Provide only if your MCP server cannot handle dynamic client registration."
+                  label={i18n.t("mcpTools.oAuthFormFields.clientIdOptionalLabel", { defaultValue: "Client ID (optional)" })}
+                  tooltip={i18n.t("mcpTools.oAuthFormFields.clientSecretInteractiveTooltip", { defaultValue: "Provide only if your MCP server cannot handle dynamic client registration." })}
                 />
                 {docsUrl && (
                   <a
@@ -213,8 +214,8 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Client Secret (optional)"
-                tooltip="Provide only if your MCP server cannot handle dynamic client registration."
+                label={i18n.t("mcpTools.oAuthFormFields.clientSecretOptionalLabel", { defaultValue: "Client Secret (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.clientSecretInteractiveTooltip", { defaultValue: "Provide only if your MCP server cannot handle dynamic client registration." })}
               />
             }
             name={["credentials", "client_secret"]}
@@ -230,21 +231,21 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Scopes (optional)"
-                tooltip="Optional scopes requested during token exchange. Separate multiple scopes with enter or commas."
+                label={i18n.t("mcpTools.oAuthFormFields.scopesOptionalLabel", { defaultValue: "Scopes (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.scopesInteractiveTooltip", { defaultValue: "Optional scopes requested during token exchange. Separate multiple scopes with enter or commas." })}
               />
             }
             name={["credentials", "scopes"]}
           >
-            {(control) => <MultiSelect {...tagsControl(control)} placeholder="Add scopes" className="rounded-lg" />}
+            {(control) => <MultiSelect {...tagsControl(control)} placeholder={i18n.t("mcpTools.oAuthFormFields.scopesPlaceholder", { defaultValue: "Add scopes" })} className="rounded-lg" />}
           </MountedFormField>
           <UpstreamResourceField />
           <UpstreamTokenHeaderField />
           <MountedFormField
             label={
               <FieldLabel
-                label="Issuer (optional)"
-                tooltip="OAuth 2.0 authorization server issuer (RFC 8414). Leave empty to discover endpoints from the upstream resource; set it to pin the trust anchor, which makes this issuer's document the only endpoint source (RFC 8414 §3.3), overriding the Authorization/Token/Registration URLs above and failing closed if its metadata cannot be fetched."
+                label={i18n.t("mcpTools.oAuthFormFields.issuerLabel", { defaultValue: "Issuer (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.issuerTooltip", { defaultValue: "OAuth 2.0 authorization server issuer (RFC 8414). Leave empty to discover endpoints from the upstream resource; set it to pin the trust anchor, which makes this issuer's document the only endpoint source (RFC 8414 §3.3), overriding the Authorization/Token/Registration URLs above and failing closed if its metadata cannot be fetched." })}
               />
             }
             name="issuer"
@@ -256,8 +257,8 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Authorization URL (optional)"
-                tooltip="Optional override for the authorization endpoint."
+                label={i18n.t("mcpTools.oAuthFormFields.authorizationUrlOptionalLabel", { defaultValue: "Authorization URL (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.authorizationUrlTooltip", { defaultValue: "Optional override for the authorization endpoint." })}
               />
             }
             name="authorization_url"
@@ -271,7 +272,7 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
             )}
           </MountedFormField>
           <MountedFormField
-            label={<FieldLabel label="Token URL (optional)" tooltip="Optional override for the token endpoint." />}
+            label={<FieldLabel label={i18n.t("mcpTools.oAuthFormFields.tokenUrlOptionalLabel", { defaultValue: "Token URL (optional)" })} tooltip={i18n.t("mcpTools.oAuthFormFields.tokenUrlInteractiveTooltip", { defaultValue: "Optional override for the token endpoint." })} />}
             name="token_url"
           >
             {(control) => (
@@ -286,8 +287,8 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Registration URL (optional)"
-                tooltip="Optional override for the dynamic client registration endpoint."
+                label={i18n.t("mcpTools.oAuthFormFields.registrationUrlOptionalLabel", { defaultValue: "Registration URL (optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.registrationUrlTooltip", { defaultValue: "Optional override for the dynamic client registration endpoint." })}
               />
             }
             name="registration_url"
@@ -303,12 +304,12 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Token Validation Rules (optional)"
+                label={i18n.t("mcpTools.oAuthFormFields.tokenValidationRulesLabel", { defaultValue: "Token Validation Rules (optional)" })}
                 tooltip='JSON object of key-value rules checked against the OAuth token response before storing. Supports dot-notation for nested fields (e.g. {"organization": "my-org", "team.id": "123"}). Tokens that fail validation are rejected with HTTP 403.'
               />
             }
             name="token_validation_json"
-            rules={{ validate: { json: parsesAsJson("Must be valid JSON") } }}
+            rules={{ validate: { json: parsesAsJson(i18n.t("mcpTools.oAuthFormFields.mustBeValidJson", { defaultValue: "Must be valid JSON" })) } }}
           >
             {(control) => (
               <Textarea
@@ -322,14 +323,14 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           <MountedFormField
             label={
               <FieldLabel
-                label="Token Storage TTL (seconds, optional)"
-                tooltip="How long to cache each user's OAuth access token in Redis before evicting it (never longer than the token's own expires_in). Leave blank to derive the TTL from the token's expires_in, or fall back to the 12-hour default."
+                label={i18n.t("mcpTools.oAuthFormFields.tokenStorageTtlLabel", { defaultValue: "Token Storage TTL (seconds, optional)" })}
+                tooltip={i18n.t("mcpTools.oAuthFormFields.tokenStorageTtlCacheTooltip", { defaultValue: "How long to cache each user's OAuth access token in Redis before evicting it (never longer than the token's own expires_in). Leave blank to derive the TTL from the token's expires_in, or fall back to the 12-hour default." })}
               />
             }
             name="token_storage_ttl_seconds"
           >
             {(control) => (
-              <Input {...numberControl(control)} min={1} placeholder="e.g. 3600" className="w-full rounded-lg" />
+              <Input {...numberControl(control)} min={1} placeholder={i18n.t("mcpTools.oAuthFormFields.tokenStorageTtlPlaceholder", { defaultValue: "e.g. 3600" })} className="w-full rounded-lg" />
             )}
           </MountedFormField>
           {oauthFlow && (
@@ -344,10 +345,10 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
                 disabled={oauthFlow.status === "authorizing" || oauthFlow.status === "exchanging"}
               >
                 {oauthFlow.status === "authorizing"
-                  ? "Waiting for authorization..."
+                  ? i18n.t("mcpTools.oAuthFormFields.waitingForAuthorization", { defaultValue: "Waiting for authorization..." })
                   : oauthFlow.status === "exchanging"
-                    ? "Exchanging authorization code..."
-                    : "Authorize & Fetch Token"}
+                    ? i18n.t("mcpTools.oAuthFormFields.exchangingCode", { defaultValue: "Exchanging authorization code..." })
+                    : i18n.t("mcpTools.oAuthFormFields.authorizeAndFetch", { defaultValue: "Authorize & Fetch Token" })}
               </Button>
               {oauthFlow.error && <p className="text-sm text-destructive">{oauthFlow.error}</p>}
               {oauthFlow.status === "success" && oauthFlow.tokenResponse?.access_token && (

@@ -455,7 +455,7 @@ describe("Cost Optimization tabs in Chinese", () => {
     expect(screen.getByText("影子评估")).toBeInTheDocument();
     expect(screen.getByText(/用密钥、团队或用户的真实流量对自动路由做盲评/)).toBeInTheDocument();
     expect(screen.getAllByText("运行中").length).toBeGreaterThan(0);
-    expect(screen.getByText(/已评判 42 轮 · 1 次出错 · 评估花费 \$3\.21，预算 \$20\.00/)).toBeInTheDocument();
+    expect(screen.getByText(/已评判 42 轮 · 1 次出错 · 评估花费 ¥3\.21，预算 ¥20\.00/)).toBeInTheDocument();
     expect(screen.getByText(/3 天后结束/)).toBeInTheDocument();
     expect(screen.getAllByText("路由胜出").length).toBeGreaterThan(0);
     expect(screen.getAllByText("平局").length).toBeGreaterThan(0);

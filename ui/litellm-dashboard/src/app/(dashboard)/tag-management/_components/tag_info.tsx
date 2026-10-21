@@ -82,7 +82,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
         <FormField
           control={form.control}
           name="name"
-          label={t("tagManagement.tagTable.colTagName", { defaultValue: "Tag Name" })}
+          label={t("tagManagement.tagTable.colTagName", { defaultValue: t("tagManagement.createTagModal.tagNameLabel", { defaultValue: "Tag Name" }) })}
         >
           {({ ref, ...field }) => <Input {...field} ref={ref} />}
         </FormField>
@@ -98,7 +98,7 @@ const TagEditForm: React.FC<TagEditFormProps> = ({ tag, seedBudgetFields, userMo
         <FormField
           control={form.control}
           name="models"
-          label={t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" })}
+          label={t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }) })}
           description={t("tagManagement.tagInfo.allowedModelsTooltip", {
             defaultValue: "Select which models are allowed to process this type of data",
           })}
@@ -332,7 +332,7 @@ const TagInfoView: React.FC<TagInfoViewProps> = ({ tagId, onClose, accessToken, 
                 </div>
                 <div>
                   <p className="font-medium">
-                    {t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" })}
+                    {t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }) })}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {!tagDetails.models || tagDetails.models.length === 0 ? (

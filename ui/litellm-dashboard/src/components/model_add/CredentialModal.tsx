@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 import { SearchSelect, type SearchSelectOption } from "@/components/shared/SearchSelect";
 import { SimpleTooltip } from "@/components/ui/tooltip";
@@ -152,7 +153,7 @@ export default function CredentialModal({
     <Dialog open={open} onOpenChange={(open) => !open && closeAndReset()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit Credential" : "Add New Credential"}</DialogTitle>
+          <DialogTitle>{isEdit ? i18n.t("modelAdd.editCredentialModal.title", { defaultValue: "Edit Credential" }) : i18n.t("modelAdd.addCredentialModal.title", { defaultValue: "Add New Credential" })}</DialogTitle>
         </DialogHeader>
         <FormProvider {...form}>
           <MountedFormProvider value={{ control: form.control, registry }}>
@@ -163,10 +164,10 @@ export default function CredentialModal({
               }}
             >
               <MountedFormField
-                label="Credential Name:"
+                label={i18n.t("modelAdd.addCredentialModal.credentialNameLabel", { defaultValue: "Credential Name:" })}
                 name="credential_name"
                 required
-                rules={{ validate: { required: requiredRule("Credential name is required") } }}
+                rules={{ validate: { required: requiredRule(i18n.t("modelAdd.addCredentialModal.credentialNameRequired", { defaultValue: "Credential name is required" })) } }}
                 className="mb-4"
               >
                 {(control) => (
@@ -194,16 +195,16 @@ export default function CredentialModal({
               </MountedFormField>
 
               <MountedFormField
-                label={labelWithHint("Provider:", "Helper to auto-populate provider specific fields")}
+                label={labelWithHint(i18n.t("modelAdd.addCredentialModal.providerLabel", { defaultValue: "Provider:" }), i18n.t("modelAdd.addCredentialModal.providerTooltip", { defaultValue: "Helper to auto-populate provider specific fields" }))}
                 name="custom_llm_provider"
                 required
-                rules={{ validate: { required: requiredRule("Required") } }}
+                rules={{ validate: { required: requiredRule(i18n.t("common.required", { defaultValue: "Required" })) } }}
                 className="mb-4"
               >
                 {(control) => (
                   <SearchSelect
                     inputId={control.id}
-                    placeholder="Select a provider"
+                    placeholder={i18n.t("addModel.addModelForm.providerSelectPlaceholder", { defaultValue: "Select a provider" })}
                     options={providerOptions}
                     value={typeof control.value === "string" ? control.value : null}
                     disabled={providerLocked}
@@ -257,17 +258,17 @@ export default function CredentialModal({
               )}
 
               <div className="flex justify-between items-center">
-                <SimpleTooltip content="Get help on our github">
+                <SimpleTooltip content={i18n.t("modelAdd.addCredentialModal.needHelpTooltip", { defaultValue: "Get help on our github" })}>
                   <a href="https://github.com/BerriAI/litellm/issues" className="text-sm text-primary hover:underline">
-                    Need Help?
+                    {i18n.t("modelAdd.addCredentialModal.needHelp", { defaultValue: "Need Help?" })}
                   </a>
                 </SimpleTooltip>
 
                 <div>
                   <Button variant="outline" className="mr-2.5" onClick={closeAndReset}>
-                    Cancel
+                    {i18n.t("common.cancel", { defaultValue: "Cancel" })}
                   </Button>
-                  <Button type="submit">{isEdit ? "Update Credential" : "Add Credential"}</Button>
+                  <Button type="submit">{isEdit ? i18n.t("modelAdd.editCredentialModal.updateCredential", { defaultValue: "Update Credential" }) : i18n.t("modelAdd.addCredentialModal.addCredential", { defaultValue: "Add Credential" })}</Button>
                 </div>
               </div>
             </form>

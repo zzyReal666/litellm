@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 
 import { toast } from "@/lib/toast";
@@ -35,6 +36,7 @@ const toFormValues = (accessGroup: AccessGroupResponse): AccessGroupFormValues =
 });
 
 function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGroupEditModalProps, "visible">) {
+  const { t } = useTranslation();
   const form = useZodForm(accessGroupFormSchema, { defaultValues: toFormValues(accessGroup) });
   const editMutation = useEditAccessGroup();
   const [activeTab, setActiveTab] = useState(GENERAL_TAB);
@@ -59,7 +61,7 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
         { accessGroupId: accessGroup.access_group_id, params },
         {
           onSuccess: () => {
-            toast.success("Access group updated successfully");
+            toast.success(t("accessGroups.accessGroupEditModal.updateSuccess", { defaultValue: "Access group updated successfully" }));
             onSuccess?.();
             onCancel();
           },
@@ -75,10 +77,10 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
 
       <div className="mt-6 flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel} disabled={editMutation.isPending}>
-          Cancel
+          {t("common.cancel", { defaultValue: "Cancel" })}
         </Button>
         <Button type="button" onClick={() => void handleOk()} disabled={editMutation.isPending}>
-          Save Changes
+          {t("accessGroups.accessGroupEditModal.okText", { defaultValue: "Save Changes" })}
         </Button>
       </div>
     </form>
@@ -86,11 +88,12 @@ function AccessGroupEditForm({ accessGroup, onCancel, onSuccess }: Omit<AccessGr
 }
 
 export function AccessGroupEditModal({ visible, accessGroup, onCancel, onSuccess }: AccessGroupEditModalProps) {
+  const { t } = useTranslation();
   return (
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Edit Access Group</DialogTitle>
+          <DialogTitle>{t("accessGroups.accessGroupEditModal.title", { defaultValue: "Edit Access Group" })}</DialogTitle>
         </DialogHeader>
         <AccessGroupEditForm
           key={accessGroup.access_group_id}

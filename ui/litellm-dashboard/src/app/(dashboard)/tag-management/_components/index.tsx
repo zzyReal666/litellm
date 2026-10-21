@@ -232,7 +232,7 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
             })}
             resourceInformation={[
               {
-                label: t("tagManagement.tagTable.colTagName", { defaultValue: "Tag Name" }),
+                label: t("tagManagement.tagTable.colTagName", { defaultValue: t("tagManagement.createTagModal.tagNameLabel", { defaultValue: "Tag Name" }) }),
                 value: tagToDelete,
                 code: true,
               },

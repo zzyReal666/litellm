@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React, { forwardRef, useImperativeHandle, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
@@ -21,7 +22,7 @@ const stringSchemaMessages = (t: TFunction): Readonly<Record<string, string>> =>
 });
 
 const BOOLEAN_ITEMS = [
-  { value: true, label: "True", labelKey: "mcpTools.mCPToolArgumentsForm.booleanTrue" },
+  { value: true, label: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }), labelKey: "mcpTools.mCPToolArgumentsForm.booleanTrue" },
   { value: false, label: "False", labelKey: "mcpTools.mCPToolArgumentsForm.booleanFalse" },
 ];
 
@@ -451,7 +452,7 @@ const MCPToolArgumentsForm = forwardRef<MCPToolArgumentsFormRef, MCPToolArgument
                           <SelectContent>
                             {!required && <SelectItem value={null}>{selectLabel}</SelectItem>}
                             <SelectItem value={true}>
-                              {t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
+                              {i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
                             </SelectItem>
                             <SelectItem value={false}>
                               {t("mcpTools.mCPToolArgumentsForm.booleanFalse", { defaultValue: "False" })}

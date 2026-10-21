@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { MessageSquare, Sparkles, X } from "lucide-react";
@@ -106,6 +107,7 @@ const MarkdownContent: React.FC<{ content: string }> = ({ content }) => (
 );
 
 const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, accessToken }) => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -207,7 +209,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
       if (error?.name === "AbortError" || abortController.signal.aborted) {
         return;
       }
-      const errorMsg = error?.message || "Failed to get response. Please try again.";
+      const errorMsg = error?.message || t("usagePage.usageAiChatPanel.fallbackError", { defaultValue: "Failed to get response. Please try again." });
       setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${errorMsg}` }]);
       setStreamingContent("");
     } finally {
@@ -250,9 +252,9 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         <div className="min-w-0">
           <h3 className="flex items-center gap-2 text-sm leading-5 font-medium text-foreground">
             <Sparkles aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
-            Ask AI
+            {t("usagePage.usageAiChatPanel.title", { defaultValue: "Ask AI" })}
           </h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">Ask about your spend, models, keys, and trends</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{t("usagePage.usageAiChatPanel.subtitle", { defaultValue: "Ask about your spend, models, keys, and trends" })}</p>
         </div>
         <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={handleClose}>
           <X />
@@ -268,13 +270,13 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         >
           <ComboboxInput
             className="w-full"
-            placeholder="Select a model (optional, defaults to gpt-4o-mini)"
-            aria-label="Select a model (optional, defaults to gpt-4o-mini)"
+            placeholder={t("usagePage.usageAiChatPanel.modelPlaceholder", { defaultValue: "Select a model (optional, defaults to gpt-4o-mini)" })}
+            aria-label={t("usagePage.usageAiChatPanel.modelPlaceholder", { defaultValue: "Select a model (optional, defaults to gpt-4o-mini)" })}
             aria-busy={isLoadingModels}
             showClear={selectedModel !== undefined}
           />
           <ComboboxContent>
-            <ComboboxEmpty>{isLoadingModels ? "Loading models…" : "No models found"}</ComboboxEmpty>
+            <ComboboxEmpty>{isLoadingModels ? t("usagePage.usageAiChatPanel.loadingModels", { defaultValue: "Loading models…" }) : t("usagePage.usageAiChatPanel.noModelsFound", { defaultValue: "No models found" })}</ComboboxEmpty>
             <ComboboxList>
               {(model: string) => (
                 <ComboboxItem key={model} value={model}>
@@ -291,7 +293,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         {messages.length === 0 && !streamingContent && !isLoading && (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <MessageSquare aria-hidden="true" className="mb-2 size-6" strokeWidth={1.5} />
-            <p className="text-sm font-medium text-foreground">Ask a question about your usage</p>
+            <p className="text-sm font-medium text-foreground">{t("usagePage.usageAiChatPanel.emptyStateTitle", { defaultValue: "Ask a question about your usage" })}</p>
             <p className="text-xs mt-1">e.g. &quot;Which model costs me the most?&quot;</p>
           </div>
         )}
@@ -336,7 +338,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
         {isLoading && !streamingContent && (
           <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
             <UiLoadingSpinner className="size-3.5" />
-            <span className="italic">{statusMessage || "Thinking..."}</span>
+            <span className="italic">{statusMessage || t("usagePage.usageAiChatPanel.thinking", { defaultValue: "Thinking..." })}</span>
           </div>
         )}
 
@@ -357,14 +359,14 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about your usage..."
+            placeholder={t("usagePage.usageAiChatPanel.inputPlaceholder", { defaultValue: "Ask about your usage..." })}
             rows={1}
             className="flex-1 min-h-9 max-h-24"
             disabled={isLoading}
           />
           <Button onClick={handleSend} disabled={!inputText.trim() || isLoading}>
             {isLoading && <UiLoadingSpinner className="size-4" />}
-            Send
+            {t("usagePage.usageAiChatPanel.sendButton", { defaultValue: "Send" })}
           </Button>
         </div>
         <div className="flex justify-between items-center mt-2">
@@ -373,9 +375,9 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             disabled={messages.length === 0}
           >
-            Clear chat
+            {t("usagePage.usageAiChatPanel.clearChat", { defaultValue: "Clear chat" })}
           </button>
-          <span className="text-xs text-muted-foreground">Enter to send</span>
+          <span className="text-xs text-muted-foreground">{t("usagePage.usageAiChatPanel.enterToSend", { defaultValue: "Enter to send" })}</span>
         </div>
       </div>
     </div>

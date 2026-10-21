@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -75,7 +76,7 @@ export function AutoRoutersPanel({
     <div className="w-full space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Auto routers</h2>
+          <h2 className="text-base font-semibold text-foreground">{i18n.t("pages.modelsAndEndpoints.autoRoutersTitle", { defaultValue: "Auto routers" })}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Auto routers sit above your deployments and pick a model per request. They are called like any other model,
             so clients keep using a single model name.
@@ -84,7 +85,7 @@ export function AutoRoutersPanel({
         {canCreate && (
           <Button onClick={() => setIsCreating(true)} className="shrink-0">
             <Plus />
-            Add Auto Router
+            {i18n.t("pages.modelsAndEndpoints.addAutoRouter", { defaultValue: "Add Auto Router" })}
           </Button>
         )}
       </div>
@@ -105,7 +106,7 @@ export function AutoRoutersPanel({
           className="max-h-[90vh] overflow-y-auto sm:max-w-4xl"
         >
           <DialogHeader>
-            <DialogTitle>Add Auto Router</DialogTitle>
+            <DialogTitle>{i18n.t("pages.modelsAndEndpoints.addAutoRouter", { defaultValue: "Add Auto Router" })}</DialogTitle>
             <DialogDescription>
               Choose a classifier to route each request to a model. Called like any other model, so clients keep using a
               single model name.
@@ -125,13 +126,13 @@ export function AutoRoutersPanel({
       {deletingRouter && (
         <DeleteResourceModal
           isOpen
-          title="Delete Auto Router"
+          title={i18n.t("pages.modelsAndEndpoints.deleteAutoRouter", { defaultValue: "Delete Auto Router" })}
           message={`Are you sure you want to delete "${deletingRouter.name}"? Any client still calling this model name will start failing.`}
-          resourceInformationTitle="Auto router"
+          resourceInformationTitle={i18n.t("pages.modelsAndEndpoints.autoRouterTitle", { defaultValue: "Auto router" })}
           resourceInformation={[
-            { label: "Name", value: deletingRouter.name },
-            { label: "Type", value: deletingRouter.typeLabel },
-            { label: "ID", value: deletingRouter.id },
+            { label: i18n.t("common.name", { defaultValue: "Name" }), value: deletingRouter.name },
+            { label: i18n.t("common.type", { defaultValue: "Type" }), value: deletingRouter.typeLabel },
+            { label: i18n.t("pages.modelsAndEndpoints.idLabel", { defaultValue: "ID" }), value: deletingRouter.id },
           ]}
           onCancel={() => setDeletingRouter(null)}
           onOk={handleConfirmDelete}

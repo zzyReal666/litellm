@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import React, { useRef, useState } from "react";
 import { Upload as UploadIcon, X } from "lucide-react";
 import { z } from "zod";
@@ -36,8 +38,8 @@ const PROMPT_INTEGRATION_OPTIONS = [{ label: "dotprompt", value: "dotprompt" }];
 const addPromptSchema = z.object({
   prompt_id: z
     .string()
-    .min(1, "Please enter a prompt ID")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Prompt ID can only contain letters, numbers, underscores, and hyphens"),
+    .min(1, i18n.t("promptsPage.addPromptForm.promptIdRequired", { defaultValue: "Please enter a prompt ID" }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t("promptsPage.addPromptForm.promptIdPattern", { defaultValue: "Prompt ID can only contain letters, numbers, underscores, and hyphens" })),
   prompt_integration: z.string(),
 });
 
@@ -46,6 +48,7 @@ type AddPromptFormValues = z.infer<typeof addPromptSchema>;
 const EMPTY_VALUES: AddPromptFormValues = { prompt_id: "", prompt_integration: "dotprompt" };
 
 const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessToken, onSuccess }) => {
+  const { t } = useTranslation();
   const form = useZodForm(addPromptSchema, { defaultValues: EMPTY_VALUES });
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -70,7 +73,7 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
     const picked = event.target.files?.[0];
     if (!picked) return;
     if (!picked.name.endsWith(".prompt")) {
-      toast.fromError("Please upload a .prompt file");
+      toast.fromError(t("promptsPage.addPromptForm.uploadPromptFileRequired", { defaultValue: "Please upload a .prompt file" }));
       clearSelectedFile();
       return;
     }
@@ -104,21 +107,21 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
       };
     } catch (conversionError) {
       console.error("Error converting prompt file:", conversionError);
-      toast.fromError("Failed to convert prompt file to JSON");
+      toast.fromError(t("promptsPage.addPromptForm.conversionFailed", { defaultValue: "Failed to convert prompt file to JSON" }));
       return null;
     }
   };
 
   const handleSubmit = async (values: AddPromptFormValues) => {
     if (!accessToken) {
-      toast.fromError("Access token is required");
+      toast.fromError(t("promptsPage.addPromptForm.accessTokenRequired", { defaultValue: "Access token is required" }));
       return;
     }
 
     const isDotprompt = promptIntegration === "dotprompt";
 
     if (isDotprompt && !selectedFile) {
-      toast.fromError("Please upload a .prompt file");
+      toast.fromError(t("promptsPage.addPromptForm.uploadPromptFileRequired", { defaultValue: "Please upload a .prompt file" }));
       return;
     }
 
@@ -134,12 +137,12 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
 
     try {
       await createPromptCall(accessToken, promptData);
-      toast.success("Prompt created successfully!");
+      toast.success(t("promptsPage.addPromptForm.createSuccess", { defaultValue: "Prompt created successfully!" }));
       handleCancel();
       onSuccess();
     } catch (createError) {
       console.error("Error creating prompt:", createError);
-      toast.fromError("Failed to create prompt");
+      toast.fromError(t("promptsPage.addPromptForm.createFailed", { defaultValue: "Failed to create prompt" }));
     } finally {
       setLoading(false);
     }
@@ -149,17 +152,17 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
     <Dialog open={visible} onOpenChange={(open) => !open && handleCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Add New Prompt</DialogTitle>
+          <DialogTitle>{t("promptsPage.addPromptForm.title", { defaultValue: "Add New Prompt" })}</DialogTitle>
         </DialogHeader>
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <FieldGroup>
-            <FormField control={form.control} name="prompt_id" label="Prompt ID">
+            <FormField control={form.control} name="prompt_id" label={t("promptsPage.addPromptForm.promptIdLabel", { defaultValue: "Prompt ID" })}>
               {({ ref, ...field }) => (
-                <Input {...field} ref={ref} placeholder="Enter unique prompt ID (e.g., my_prompt_id)" />
+                <Input {...field} ref={ref} placeholder={t("promptsPage.addPromptForm.promptIdPlaceholder", { defaultValue: "Enter unique prompt ID (e.g., my_prompt_id)" })} />
               )}
             </FormField>
 
-            <FormField control={form.control} name="prompt_integration" label="Prompt Integration">
+            <FormField control={form.control} name="prompt_integration" label={t("promptsPage.addPromptForm.integrationLabel", { defaultValue: "Prompt Integration" })}>
               {({ id, value, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                 <Select items={PROMPT_INTEGRATION_OPTIONS} value={value} onValueChange={handleIntegrationChange}>
                   <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}>
@@ -180,18 +183,18 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
               <>
                 <FieldSeparator />
                 <Field>
-                  <FieldTitle>Prompt File</FieldTitle>
+                  <FieldTitle>{t("promptsPage.addPromptForm.fileLabel", { defaultValue: "Prompt File" })}</FieldTitle>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept=".prompt"
-                    aria-label="Prompt file"
+                    aria-label={t("promptsPage.addPromptForm.promptFileAriaLabel", { defaultValue: "Prompt file" })}
                     className="sr-only"
                     onChange={handleFileChange}
                   />
                   <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
                     <UploadIcon />
-                    Select .prompt File
+                    {t("promptsPage.addPromptForm.selectFile", { defaultValue: "Select .prompt File" })}
                   </Button>
                   {selectedFile && (
                     <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
@@ -206,7 +209,7 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
                       </button>
                     </div>
                   )}
-                  <FieldDescription>Upload a .prompt file that follows the Dotprompt specification</FieldDescription>
+                  <FieldDescription>{t("promptsPage.addPromptForm.fileExtra", { defaultValue: "Upload a .prompt file that follows the Dotprompt specification" })}</FieldDescription>
                 </Field>
               </>
             )}
@@ -214,11 +217,11 @@ const AddPromptForm: React.FC<AddPromptFormProps> = ({ visible, onClose, accessT
         </form>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
+            {t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
           <Button type="button" disabled={loading} onClick={() => void form.handleSubmit(handleSubmit)()}>
             {loading && <UiLoadingSpinner className="size-4" />}
-            Create Prompt
+            {t("promptsPage.addPromptForm.createPrompt", { defaultValue: "Create Prompt" })}
           </Button>
         </DialogFooter>
       </DialogContent>

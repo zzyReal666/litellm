@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { BotIcon, InfoIcon, LayersIcon, ServerIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
@@ -15,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 
 export const accessGroupFormSchema = z.object({
-  name: z.string().min(1, "Please enter the access group name"),
+  name: z.string().min(1, i18n.t("accessGroups.accessGroupBaseForm.nameRequired", { defaultValue: "Please enter the access group name" })),
   description: z.string(),
   modelIds: z.array(z.string()),
   mcpServerIds: z.array(z.string()),
@@ -59,66 +60,66 @@ export function AccessGroupBaseForm({
       <TabsList className="w-full">
         <TabsTrigger value={GENERAL_TAB}>
           <InfoIcon size={16} />
-          General Info
+          {i18n.t("accessGroups.accessGroupBaseForm.tabGeneralInfo", { defaultValue: "General Info" })}
         </TabsTrigger>
         <TabsTrigger value={MODELS_TAB}>
           <LayersIcon size={16} />
-          Models
+          {i18n.t("accessGroups.accessGroupBaseForm.tabModels", { defaultValue: "Models" })}
         </TabsTrigger>
         <TabsTrigger value={MCP_SERVERS_TAB}>
           <ServerIcon size={16} />
-          MCP Servers
+          {i18n.t("accessGroups.accessGroupBaseForm.tabMcpServers", { defaultValue: "MCP Servers" })}
         </TabsTrigger>
         <TabsTrigger value={AGENTS_TAB}>
           <BotIcon size={16} />
-          Agents
+          {i18n.t("accessGroups.accessGroupBaseForm.tabAgents", { defaultValue: "Agents" })}
         </TabsTrigger>
       </TabsList>
 
       <TabsContent value={GENERAL_TAB} className="pt-4">
         <FieldGroup>
-          <FormField control={form.control} name="name" label="Group Name">
+          <FormField control={form.control} name="name" label={i18n.t("accessGroups.accessGroupBaseForm.labelGroupName", { defaultValue: "Group Name" })}>
             {({ ref, ...field }) => (
-              <Input {...field} ref={ref} placeholder="e.g. Engineering Team" disabled={isNameDisabled} />
+              <Input {...field} ref={ref} placeholder={i18n.t("accessGroups.accessGroupBaseForm.namePlaceholder", { defaultValue: "e.g. Engineering Team" })} disabled={isNameDisabled} />
             )}
           </FormField>
-          <FormField control={form.control} name="description" label="Description">
+          <FormField control={form.control} name="description" label={i18n.t("common.description", { defaultValue: "Description" })}>
             {({ ref, ...field }) => (
-              <Textarea {...field} ref={ref} rows={4} placeholder="Describe the purpose of this access group..." />
+              <Textarea {...field} ref={ref} rows={4} placeholder={i18n.t("accessGroups.accessGroupBaseForm.descriptionPlaceholder", { defaultValue: "Describe the purpose of this access group..." })} />
             )}
           </FormField>
         </FieldGroup>
       </TabsContent>
 
       <TabsContent value={MODELS_TAB} className="pt-4">
-        <FormField control={form.control} name="modelIds" label="Allowed Models">
+        <FormField control={form.control} name="modelIds" label={i18n.t("accessGroups.accessGroupBaseForm.labelAllowedModels", { defaultValue: i18n.t("tagManagement.tagInfo.allowedModelsLabel", { defaultValue: "Allowed Models" }) })}>
           {(field) => <ModelSelect context="global" value={field.value} onChange={field.onChange} />}
         </FormField>
       </TabsContent>
 
       <TabsContent value={MCP_SERVERS_TAB} className="pt-4">
-        <FormField control={form.control} name="mcpServerIds" label="Allowed MCP Servers">
+        <FormField control={form.control} name="mcpServerIds" label={i18n.t("accessGroups.accessGroupBaseForm.labelAllowedMcpServers", { defaultValue: "Allowed MCP Servers" })}>
           {({ id, value, onChange }) => (
             <MultiSelect
               id={id}
               value={value}
               onValueChange={onChange}
               options={mcpServerOptions}
-              placeholder="Select MCP servers"
+              placeholder={i18n.t("accessGroups.accessGroupBaseForm.mcpServersPlaceholder", { defaultValue: "Select MCP servers" })}
             />
           )}
         </FormField>
       </TabsContent>
 
       <TabsContent value={AGENTS_TAB} className="pt-4">
-        <FormField control={form.control} name="agentIds" label="Allowed Agents">
+        <FormField control={form.control} name="agentIds" label={i18n.t("accessGroups.accessGroupBaseForm.labelAllowedAgents", { defaultValue: "Allowed Agents" })}>
           {({ id, value, onChange }) => (
             <MultiSelect
               id={id}
               value={value}
               onValueChange={onChange}
               options={agentOptions}
-              placeholder="Select agents"
+              placeholder={i18n.t("accessGroups.accessGroupBaseForm.agentsPlaceholder", { defaultValue: "Select agents" })}
             />
           )}
         </FormField>

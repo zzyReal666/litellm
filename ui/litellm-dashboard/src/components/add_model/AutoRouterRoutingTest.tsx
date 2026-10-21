@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +57,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
       <Textarea
         value={prompt}
         onChange={(event) => setPrompt(event.target.value)}
-        placeholder="Paste a prompt an end user would send"
+        placeholder={i18n.t("addModel.autoRouterRoutingTest.promptPlaceholder", { defaultValue: "Paste a prompt an end user would send" })}
         rows={4}
         data-testid="auto-router-routing-test-prompt"
       />
@@ -67,7 +68,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
           disabled={prompt.trim().length === 0 || state.status === "running" || Boolean(configError)}
           data-testid="auto-router-routing-test-send"
         >
-          {state.status === "running" ? "Routing..." : "Send Test Prompt"}
+          {state.status === "running" ? i18n.t("addModel.autoRouterRoutingTest.routing", { defaultValue: "Routing..." }) : i18n.t("addModel.autoRouterRoutingTest.sendPrompt", { defaultValue: "Send Test Prompt" })}
         </Button>
       </div>
 
@@ -78,7 +79,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
           className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive"
           data-testid="auto-router-routing-test-error"
         >
-          <p className="font-medium">Could not route this prompt</p>
+          <p className="font-medium">{i18n.t("addModel.autoRouterRoutingTest.routeFailed", { defaultValue: "Could not route this prompt" })}</p>
           <p>{state.error}</p>
         </div>
       )}
@@ -86,7 +87,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
       {state.status === "done" && (
         <div data-testid="auto-router-routing-test-result">
           <div className="flex items-center gap-2 py-2 text-sm">
-            <span className="text-muted-foreground">Routed to</span>
+            <span className="text-muted-foreground">{i18n.t("addModel.autoRouterRoutingTest.routedTo", { defaultValue: "Routed to" })}</span>
             <Badge variant="secondary" data-testid="auto-router-routing-test-routed-model">
               {state.result.routed_model}
             </Badge>
@@ -96,7 +97,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
                 data-testid="auto-router-routing-test-unconfigured"
               >
                 <TriangleAlert className="size-3.5" />
-                This proxy has no model group by that name
+                {i18n.t("addModel.autoRouterRoutingTest.unconfiguredModel", { defaultValue: "This proxy has no model group by that name" })}
               </span>
             )}
           </div>

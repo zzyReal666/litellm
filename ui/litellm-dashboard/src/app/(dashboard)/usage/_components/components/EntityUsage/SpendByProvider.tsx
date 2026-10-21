@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
@@ -30,7 +32,7 @@ const QUIET_HEADER = { headerClassName: "font-normal" };
 
 const columns: ColumnDef<ProviderSpendData>[] = [
   {
-    header: "Provider",
+    header: i18n.t("usagePage.spendByProvider.colProvider", { defaultValue: "Provider" }),
     accessorKey: "provider",
     meta: QUIET_HEADER,
     cell: ({ row }) => (
@@ -45,25 +47,25 @@ const columns: ColumnDef<ProviderSpendData>[] = [
     ),
   },
   {
-    header: "Spend",
+    header: i18n.t("usagePage.spendByProvider.colSpend", { defaultValue: "Spend" }),
     accessorKey: "spend",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
   },
   {
-    header: "Successful",
+    header: i18n.t("usagePage.spendByProvider.colSuccessful", { defaultValue: "Successful" }),
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: "Failed",
+    header: i18n.t("usagePage.spendByProvider.colFailed", { defaultValue: "Failed" }),
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: "Tokens",
+    header: i18n.t("usagePage.spendByProvider.colTokens", { defaultValue: "Tokens" }),
     accessorKey: "tokens",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => row.original.tokens.toLocaleString(),
@@ -76,6 +78,7 @@ const columns: ColumnDef<ProviderSpendData>[] = [
  * usage views.
  */
 export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendData[] }) {
+  const { t } = useTranslation();
   const sorted = [...rows].sort((a, b) => b.spend - a.spend);
   const total = sorted.reduce((sum, row) => sum + row.spend, 0);
   const shareOf = (spend: number) => (total > 0 ? (spend / total) * 100 : 0);
@@ -117,7 +120,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
         columns={columns}
         data={sorted}
         getRowId={(row) => row.provider}
-        noDataMessage="No provider usage data"
+        noDataMessage={t("usagePage.spendByProvider.noData", { defaultValue: "No provider usage data" })}
         size="compact"
       />
     </div>
@@ -153,6 +156,7 @@ function ToggleField({
 }
 
 const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChanging, providerSpend }) => {
+  const { t } = useTranslation();
   const [includeZeroSpend, setIncludeZeroSpend] = useState(false);
   const [includeUnknown, setIncludeUnknown] = useState(false);
 
@@ -176,16 +180,16 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
   return (
     <Panel
       icon={Server}
-      title="Spend by Provider"
+      title={t("usagePage.spendByProvider.title", { defaultValue: "Spend by Provider" })}
       className="h-full"
       action={
         <div className="flex flex-wrap items-center gap-3">
-          <ToggleField label="Show Zero Spend" checked={includeZeroSpend} onCheckedChange={setIncludeZeroSpend} />
+          <ToggleField label={t("usagePage.spendByProvider.showZeroSpend", { defaultValue: "Show Zero Spend" })} checked={includeZeroSpend} onCheckedChange={setIncludeZeroSpend} />
           <ToggleField
-            label="Show Unknown"
+            label={t("usagePage.spendByProvider.showUnknown", { defaultValue: "Show Unknown" })}
             checked={includeUnknown}
             onCheckedChange={setIncludeUnknown}
-            hint="Requests that failed to route to a provider"
+            hint={t("usagePage.spendByProvider.unknownTooltip", { defaultValue: "Requests that failed to route to a provider" })}
           />
         </div>
       }

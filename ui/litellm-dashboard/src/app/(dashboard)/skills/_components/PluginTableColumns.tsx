@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -31,12 +33,13 @@ const CATEGORY_BADGE_CLASS: Record<ReturnType<typeof getCategoryBadgeColor>, str
 };
 
 function PluginCategoryBadge({ category }: { category?: string }) {
+  const { t } = useTranslation();
   return (
     <Badge
       variant="outline"
       className={cn("whitespace-nowrap font-normal", CATEGORY_BADGE_CLASS[getCategoryBadgeColor(category)])}
     >
-      {category || "Uncategorized"}
+      {category || t("claudeCodePluginsPage.pluginTable.uncategorized", { defaultValue: "Uncategorized" })}
     </Badge>
   );
 }
@@ -48,10 +51,11 @@ interface PluginRowActionsProps {
 }
 
 function PluginRowActions({ plugin, isAdmin, onDeleteClick }: PluginRowActionsProps) {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open skill actions"
+        aria-label={t("aiHub.skillHubTableColumns.openSkillActions", { defaultValue: "Open skill actions" })}
         data-testid={`plugin-actions-${plugin.name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -60,10 +64,10 @@ function PluginRowActions({ plugin, isAdmin, onDeleteClick }: PluginRowActionsPr
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem
           data-testid="plugin-action-copy"
-          onClick={() => void copyToClipboard(plugin.id, "Skill ID copied")}
+          onClick={() => void copyToClipboard(plugin.id, t("claudeCodePluginsPage.pluginTable.skillIdCopied", { defaultValue: "Skill ID copied" }))}
         >
           <Copy />
-          Copy skill ID
+          {t("claudeCodePluginsPage.pluginTable.copySkillId", { defaultValue: "Copy skill ID" })}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -74,7 +78,7 @@ function PluginRowActions({ plugin, isAdmin, onDeleteClick }: PluginRowActionsPr
               onClick={() => onDeleteClick(plugin.name, plugin.name)}
             >
               <Trash2 />
-              Delete
+              {t("common.delete", { defaultValue: "Delete" })}
             </DropdownMenuItem>
           </>
         )}
@@ -97,8 +101,8 @@ export const getPluginTableColumns = ({
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Skill Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Skill Name" />,
+    meta: { title: i18n.t("claudeCodePluginsPage.pluginTable.colSkillName", { defaultValue: "Skill Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("claudeCodePluginsPage.pluginTable.colSkillName", { defaultValue: "Skill Name" })} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -113,24 +117,24 @@ export const getPluginTableColumns = ({
   {
     id: "version",
     accessorKey: "version",
-    meta: { title: "Version" },
-    header: "Version",
+    meta: { title: i18n.t("claudeCodePluginsPage.pluginTable.colVersion", { defaultValue: "Version" }) },
+    header: i18n.t("claudeCodePluginsPage.pluginTable.colVersion", { defaultValue: "Version" }),
     size: 100,
     enableSorting: false,
-    cell: ({ row }) => <span className="text-sm text-muted-foreground">{row.original.version || "N/A"}</span>,
+    cell: ({ row }) => <span className="text-sm text-muted-foreground">{row.original.version || i18n.t("claudeCodePluginsPage.pluginTable.versionNA", { defaultValue: "N/A" })}</span>,
   },
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: { title: i18n.t("guardrails.keywordTable.colDescription", { defaultValue: "Description" }) },
+    header: i18n.t("guardrails.keywordTable.colDescription", { defaultValue: "Description" }),
     size: 300,
     enableSorting: false,
     cell: ({ row }) => {
       const description = row.original.description;
       return (
         <span className="block max-w-72 truncate text-sm text-muted-foreground" title={description ?? undefined}>
-          {description || "No description"}
+          {description || i18n.t("claudeCodePluginsPage.pluginTable.noDescription", { defaultValue: "No description" })}
         </span>
       );
     },
@@ -138,8 +142,8 @@ export const getPluginTableColumns = ({
   {
     id: "category",
     accessorKey: "category",
-    meta: { title: "Category", skeleton: "badge" },
-    header: "Category",
+    meta: { title: i18n.t("claudeCodePluginsPage.pluginTable.colCategory", { defaultValue: "Category" }), skeleton: "badge" },
+    header: i18n.t("claudeCodePluginsPage.pluginTable.colCategory", { defaultValue: "Category" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <PluginCategoryBadge category={row.original.category ?? undefined} />,
@@ -147,20 +151,20 @@ export const getPluginTableColumns = ({
   {
     id: "enabled",
     accessorKey: "enabled",
-    meta: { title: "Public", skeleton: "badge" },
-    header: "Public",
+    meta: { title: i18n.t("claudeCodePluginsPage.pluginTable.colPublic", { defaultValue: "Public" }), skeleton: "badge" },
+    header: i18n.t("claudeCodePluginsPage.pluginTable.colPublic", { defaultValue: "Public" }),
     size: 100,
     enableSorting: false,
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.enabled ? "success" : "neutral"} label={row.original.enabled ? "Yes" : "No"} />
+      <StatusBadge tone={row.original.enabled ? "success" : "neutral"} label={row.original.enabled ? i18n.t("common.yes", { defaultValue: "Yes" }) : i18n.t("common.no", { defaultValue: "No" })} />
     ),
   },
   {
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: i18n.t("common.createdAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("common.createdAt", { defaultValue: "Created At" })} />,
     size: 160,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -168,7 +172,7 @@ export const getPluginTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

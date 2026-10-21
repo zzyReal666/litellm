@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -80,6 +81,7 @@ const renderPanel = (key: string) => {
 };
 
 export default function ModelsAndEndpointsPage() {
+  const { t } = useTranslation();
   const { accessToken, userRole, userId: userID, premiumUser, isViewOnly } = useAuthorized();
   const { data: teams } = useTeams();
   const { data: uiSettings } = useUISettings();
@@ -123,7 +125,7 @@ export default function ModelsAndEndpointsPage() {
     [canCreate, canViewAutoRouters, isAdmin, isViewOnly],
   );
 
-  const allModelsLabel = isAdmin ? "Deployed Models" : "Your Models";
+  const allModelsLabel = isAdmin ? "Deployed Models" : t("pages.modelsAndEndpoints.tabYourModels", { defaultValue: "Your Models" });
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
     if (!slug) return allModelsLabel;
     if (slug === "auto-routers" || slug === "access-group-budgets") {
@@ -166,9 +168,9 @@ export default function ModelsAndEndpointsPage() {
       <div className="mt-2 flex w-full flex-col gap-2 p-8">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Model Management</h2>
+            <h2 className="text-lg font-semibold">{t("pages.modelsAndEndpoints.modelManagement", { defaultValue: "Model Management" })}</h2>
             {isAdmin ? (
-              <p className="text-sm text-muted-foreground">Add and manage models for the proxy</p>
+              <p className="text-sm text-muted-foreground">{t("pages.modelsAndEndpoints.addAndManageModels", { defaultValue: "Add and manage models for the proxy" })}</p>
             ) : (
               <p className="text-sm text-muted-foreground">
                 View your models and manage routers for teams that allow it.
@@ -209,7 +211,7 @@ export default function ModelsAndEndpointsPage() {
                 {lastRefreshed && (
                   <span className="text-xs text-muted-foreground">Last Refreshed: {lastRefreshed}</span>
                 )}
-                <Button variant="ghost" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh models">
+                <Button variant="ghost" size="icon-sm" onClick={handleRefreshClick} aria-label={t("pages.modelsAndEndpoints.refreshModels", { defaultValue: "Refresh models" })}>
                   <RefreshCw />
                 </Button>
               </div>

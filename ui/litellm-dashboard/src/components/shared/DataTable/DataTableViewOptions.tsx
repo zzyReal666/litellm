@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { Menu } from "@base-ui/react/menu";
 import type { Table } from "@tanstack/react-table";
 import { Check, Columns3 } from "lucide-react";
@@ -16,7 +17,7 @@ interface DataTableViewOptionsProps<TData> {
 
 export function DataTableViewOptions<TData>({
   table,
-  label = "View",
+  label = i18n.t("commonComponents.dataTable.viewLabel", { defaultValue: "View" }),
   iconOnly = false,
   className,
 }: DataTableViewOptionsProps<TData>) {

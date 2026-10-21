@@ -6,6 +6,7 @@
  * Works at 1m+ spend logs, by querying an aggregate table instead.
  */
 
+import { useTranslation } from "react-i18next";
 import { Download, Search, Sparkles, X } from "lucide-react";
 import type { DateRangePickerValue } from "@/components/shared/date_picker_types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -72,6 +73,7 @@ interface UsagePageProps {
 }
 
 const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
+  const { t } = useTranslation();
   const { accessToken, userRole, userId: userID, premiumUser } = useAuthorized();
   const [gatewayActivityData, setGatewayActivityData] = useState<FetchedGatewayActivity | null>(null);
 
@@ -353,26 +355,26 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                       Overview
                     </TabsTrigger>
                     <TabsTrigger value="models" className="flex-none px-3">
-                      Model Activity
+                      {t("usagePage.usagePageView.tabModelActivity", { defaultValue: "Model Activity" })}
                     </TabsTrigger>
                     <TabsTrigger value="keys" className="flex-none px-3">
-                      Key Activity
+                      {t("usagePage.usagePageView.tabKeyActivity", { defaultValue: "Key Activity" })}
                     </TabsTrigger>
                     <TabsTrigger value="mcp" className="flex-none px-3">
-                      MCP Server Activity
+                      {t("usagePage.usagePageView.tabMcpServerActivity", { defaultValue: "MCP Server Activity" })}
                     </TabsTrigger>
                     <TabsTrigger value="endpoints" className="flex-none px-3">
-                      Endpoint Activity
+                      {t("usagePage.usagePageView.tabEndpointActivity", { defaultValue: "Endpoint Activity" })}
                     </TabsTrigger>
                   </TabsList>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" onClick={() => setIsAiChatOpen(true)}>
                       <Sparkles />
-                      Ask AI
+                      {t("usagePage.usagePageView.askAiButton", { defaultValue: "Ask AI" })}
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => setIsGlobalExportModalOpen(true)}>
                       <Download />
-                      Export Data
+                      {t("usagePage.usagePageView.exportDataButton", { defaultValue: "Export Data" })}
                     </Button>
                   </div>
                 </div>
@@ -395,7 +397,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                       gatewayActivity && gatewayActivity.by_route.length > 0 ? (
                         <Panel
                           testId="gateway-requests-by-endpoint"
-                          title="Gateway Requests by Endpoint"
+                          title={t("usagePage.usagePageView.gatewayRequestsByEndpoint", { defaultValue: "Gateway Requests by Endpoint" })}
                           subtitle="Successful and failed requests per route"
                           bodyClassName="px-2 pt-4"
                         >
@@ -550,7 +552,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
             <>
               {showCredentialBanner && (
                 <Alert variant="info" className="mb-5">
-                  <AlertTitle>Reusable credentials are automatically tracked as tags</AlertTitle>
+                  <AlertTitle>{t("usagePage.usagePageView.credentialBannerMessage", { defaultValue: "Reusable credentials are automatically tracked as tags" })}</AlertTitle>
                   <AlertDescription className="text-inherit">
                     When a reusable credential is used, it will appear as a tag prefixed with{" "}
                     <code className="rounded bg-black/5 px-1 py-0.5 font-mono text-xs">Credential: </code>
@@ -560,7 +562,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                     <Button
                       variant="ghost"
                       size="icon-xs"
-                      aria-label="Close"
+                      aria-label={t("common.close", { defaultValue: "Close" })}
                       onClick={() => setShowCredentialBanner(false)}
                     >
                       <X />
@@ -637,7 +639,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
         }
         dateRange={dateValue}
         selectedFilters={[]}
-        customTitle="Export Usage Data"
+        customTitle={t("usagePage.usagePageView.exportUsageDataTitle", { defaultValue: "Export Usage Data" })}
       />
 
       {/* AI Chat Panel */}

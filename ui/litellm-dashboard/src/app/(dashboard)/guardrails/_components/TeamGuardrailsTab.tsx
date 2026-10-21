@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import type { TFunction } from "i18next";
 import { Trans, useTranslation } from "react-i18next";
@@ -211,7 +212,7 @@ const getStatusConfig = (
   t: TFunction,
 ): Record<GuardrailStatus, { label: string; bg: string; text: string; dot: string }> => ({
   active: {
-    label: t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: "Active" }),
+    label: t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) }),
     bg: "bg-success/10",
     text: "text-success",
     dot: "bg-success",
@@ -1132,7 +1133,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             color="text-warning"
           />
           <StatCard
-            label={t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: "Active" })}
+            label={t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}
             value={activeCount}
             color="text-success"
           />
@@ -1167,7 +1168,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             <option value="pending">
               {t("guardrails.teamGuardrailsTab.statusPendingReview", { defaultValue: "Pending Review" })}
             </option>
-            <option value="active">{t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: "Active" })}</option>
+            <option value="active">{t("guardrails.teamGuardrailsTab.statusActive", { defaultValue: t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}</option>
             <option value="rejected">
               {t("guardrails.teamGuardrailsTab.statusRejected", { defaultValue: "Rejected" })}
             </option>

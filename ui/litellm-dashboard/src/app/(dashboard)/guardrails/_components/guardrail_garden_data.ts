@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Providers, providerLogoMap } from "@/components/provider_info_helpers";
 import { guardrailLogoMap } from "./guardrail_info_helpers";
 
@@ -24,7 +25,7 @@ const litellmContentFilterLogo = guardrailLogoMap["LiteLLM Content Filter"];
 export const LITELLM_CONTENT_FILTER_CARDS: GuardrailCardInfo[] = [
   {
     id: "cf_denied_financial",
-    name: "Denied Financial Advice",
+    name: i18n.t("guardrails.guardrailGardenCards.cfDeniedFinancial.name", { defaultValue: "Denied Financial Advice" }),
     description:
       "Detects requests for personalized financial advice, investment recommendations, or financial planning.",
     category: "litellm",

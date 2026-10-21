@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useId } from "react";
 import {
@@ -128,12 +130,13 @@ const SKIP_MESSAGE_ITEMS = [
 ];
 
 export const SkipMessageSelect: React.FC<{ control: GuardrailFieldControlProps }> = ({ control }) => {
+  const { t } = useTranslation();
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
 
   return (
     <Select items={SKIP_MESSAGE_ITEMS} value={asText(value) || null} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder={t("guardrails.guardrailProviderFields.selectPlaceholder", { defaultValue: "Select an option" })} />
       </SelectTrigger>
       <SelectContent>
         {SKIP_MESSAGE_ITEMS.map((item) => (
@@ -162,7 +165,7 @@ export const LoggingOnlyScopeSelect: React.FC<{
   return (
     <Select items={items} value={asText(value) || "default"} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder={i18n.t("guardrails.guardrailProviderFields.selectPlaceholder", { defaultValue: "Select an option" })} />
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (

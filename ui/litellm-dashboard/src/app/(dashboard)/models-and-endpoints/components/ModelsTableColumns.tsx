@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { CredentialIdentity } from "@/components/shared/CredentialIdentity";
 import { Copy, Info, Loader2, Pencil, RefreshCw, Trash2 } from "lucide-react";
@@ -56,6 +58,7 @@ const formatShortDate = (value: string | null | undefined): string | null => {
 };
 
 function ModelInformationCell({ model, displayName }: { model: ModelData; displayName: string }) {
+  const { t } = useTranslation();
   const litellmModelName = model.litellm_model_name || "-";
 
   return (
@@ -85,26 +88,26 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             {model.provider ? <ProviderLogo provider={model.provider} className="size-4 shrink-0" /> : null}
-            <span className="truncate text-xs text-muted-foreground">{model.provider || "Unknown provider"}</span>
+            <span className="truncate text-xs text-muted-foreground">{model.provider || t("molecules.modelsColumns.unknownProvider", { defaultValue: "Unknown provider" })}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">Public Model Name</span>
+            <span className="text-xs text-muted-foreground">{t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" })}</span>
             <span className="truncate text-sm font-medium text-foreground" title={displayName}>
               {displayName}
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">LiteLLM Model Name</span>
+            <span className="text-xs text-muted-foreground">{t("molecules.modelsColumns.litellmModelName", { defaultValue: "LiteLLM Model Name" })}</span>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate font-mono text-sm text-foreground" title={litellmModelName}>
                 {litellmModelName}
               </span>
               <button
                 type="button"
-                aria-label="Copy LiteLLM model name"
+                aria-label={t("pages.modelsAndEndpoints.copyLitellmModelName", { defaultValue: "Copy LiteLLM model name" })}
                 data-testid={`copy-litellm-model-name-${model.model_info.id}`}
                 className="shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
-                onClick={() => void copyToClipboard(litellmModelName, "LiteLLM model name copied")}
+                onClick={() => void copyToClipboard(litellmModelName, t("pages.modelsAndEndpoints.litellmModelNameCopied", { defaultValue: "LiteLLM model name copied" }))}
               >
                 <Copy className="size-3.5" />
               </button>
@@ -117,15 +120,16 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
 }
 
 function CredentialsHeader() {
+  const { t } = useTranslation();
   return (
     <span className="flex items-center gap-1">
-      Credentials
+      {t("molecules.modelsColumns.credentials", { defaultValue: "Credentials" })}
       <HoverCard>
         <HoverCardTrigger
           render={
             <button
               type="button"
-              aria-label="About credential types"
+              aria-label={t("pages.modelsAndEndpoints.aboutCredentialTypes", { defaultValue: "About credential types" })}
               data-testid="credentials-header-info"
               className="cursor-pointer text-muted-foreground hover:text-foreground"
             />
@@ -135,23 +139,23 @@ function CredentialsHeader() {
         </HoverCardTrigger>
         <HoverCardContent align="start" className="w-80">
           <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium text-foreground">Credential types</span>
+            <span className="text-sm font-medium text-foreground">{t("molecules.modelsColumns.credentialTypes", { defaultValue: "Credential types" })}</span>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-info">
                 <RefreshCw className="size-3.5" />
-                Reusable
+                {t("molecules.modelsColumns.reusable", { defaultValue: "Reusable" })}
               </span>
               <span className="text-xs text-muted-foreground">
-                Credentials saved in LiteLLM that can be added to models repeatedly.
+                {t("molecules.modelsColumns.reusableDescription", { defaultValue: "Credentials saved in LiteLLM that can be added to models repeatedly." })}
               </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                 <Pencil className="size-3.5" />
-                Manual
+                {t("molecules.modelsColumns.manual", { defaultValue: "Manual" })}
               </span>
               <span className="text-xs text-muted-foreground">
-                Credentials added directly during model creation or defined in the config file.
+                {t("molecules.modelsColumns.manualDescription", { defaultValue: "Credentials added directly during model creation or defined in the config file." })}
               </span>
             </div>
           </div>
@@ -162,11 +166,12 @@ function CredentialsHeader() {
 }
 
 function CredentialsCell({ credentialName, label }: { credentialName: string | undefined; label: string | undefined }) {
+  const { t } = useTranslation();
   if (!credentialName) {
     return (
       <Badge variant="outline" className="gap-1 font-normal text-muted-foreground">
         <Pencil className="size-3" />
-        Manual
+        {t("molecules.modelsColumns.manual", { defaultValue: "Manual" })}
       </Badge>
     );
   }
@@ -182,10 +187,11 @@ function CredentialsCell({ credentialName, label }: { credentialName: string | u
 }
 
 function CreatedByCell({ model }: { model: ModelData }) {
+  const { t } = useTranslation();
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
-  const primary = isConfigModel ? "Defined in config" : model.model_info.created_by || "Unknown";
-  const secondaryForDbModel = createdAt ?? "Unknown date";
+  const primary = isConfigModel ? t("molecules.modelsColumns.definedInConfig", { defaultValue: "Defined in config" }) : model.model_info.created_by || t("common.unknown", { defaultValue: "Unknown" });
+  const secondaryForDbModel = createdAt ?? t("molecules.modelsColumns.unknownDate", { defaultValue: "Unknown date" });
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
@@ -207,6 +213,7 @@ function CostRow({ label, value }: { label: string; value: string }) {
 }
 
 function CostsCell({ model }: { model: ModelData }) {
+  const { t } = useTranslation();
   const { input_cost: inputCost, output_cost: outputCost, output_cost_per_second: perSecond } = model;
   const hasPerSecond = perSecond != null;
   const showInput = inputCost != null && (!hasPerSecond || Number(inputCost) > 0);
@@ -218,12 +225,12 @@ function CostsCell({ model }: { model: ModelData }) {
 
   return (
     <CellTooltip
-      content={hasPerSecond ? "Cost per 1M tokens; /s is cost per second of output" : "Cost per 1M tokens"}
+      content={hasPerSecond ? "Cost per 1M tokens; /s is cost per second of output" : t("molecules.modelsColumns.costPerMTokens", { defaultValue: "Cost per 1M tokens" })}
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
-          {showInput && <CostRow label="IN" value={`¥${inputCost}`} />}
-          {showOutput && <CostRow label="OUT" value={`¥${outputCost}`} />}
-          {hasPerSecond && <CostRow label="OUT" value={formatPerSecondCost(perSecond)} />}
+          {showInput && <CostRow label={t("pages.modelsAndEndpoints.costInShort", { defaultValue: "IN" })} value={`¥${inputCost}`} />}
+          {showOutput && <CostRow label={t("pages.modelsAndEndpoints.costOutShort", { defaultValue: "OUT" })} value={`¥${outputCost}`} />}
+          {hasPerSecond && <CostRow label={t("pages.modelsAndEndpoints.costOutShort", { defaultValue: "OUT" })} value={formatPerSecondCost(perSecond)} />}
         </div>
       }
     />
@@ -290,17 +297,17 @@ function ModelRowActions({
 
   const resolvePauseTooltip = (): string => {
     if (isConfigModel) {
-      return "Config models cannot be paused from the dashboard. Pause is DB-backed.";
+      return i18n.t("molecules.modelsColumns.configNoPause", { defaultValue: "Config models cannot be paused from the dashboard. Pause is DB-backed." });
     }
     if (!isAdmin) {
-      return "Only proxy admins can pause or resume a model.";
+      return i18n.t("molecules.modelsColumns.nonAdminNoPause", { defaultValue: "Only proxy admins can pause or resume a model." });
     }
-    return isBlocked ? "Resume model — restore normal routing." : "Pause model — stop routing requests until resumed.";
+    return isBlocked ? i18n.t("molecules.modelsColumns.resumeTooltip", { defaultValue: "Resume model — restore normal routing." }) : i18n.t("molecules.modelsColumns.pauseTooltip", { defaultValue: "Pause model — stop routing requests until resumed." });
   };
 
   const deleteTooltip = isConfigModel
-    ? "Config model cannot be deleted on the dashboard. Please delete it from the config file."
-    : "Delete model";
+    ? i18n.t("molecules.modelsColumns.configNoDelete", { defaultValue: "Config model cannot be deleted on the dashboard. Please delete it from the config file." })
+    : i18n.t("molecules.modelsColumns.deleteModel", { defaultValue: "Delete model" });
 
   return (
     <div className="flex items-center justify-end gap-1.5">
@@ -319,7 +326,7 @@ function ModelRowActions({
                   size="sm"
                   checked={!isBlocked}
                   disabled={!isPauseToggleable}
-                  aria-label={isBlocked ? "Resume model" : "Pause model"}
+                  aria-label={isBlocked ? i18n.t("molecules.modelsColumns.resumeModel", { defaultValue: "Resume model" }) : i18n.t("molecules.modelsColumns.pauseModel", { defaultValue: "Pause model" })}
                   data-testid={`model-pause-toggle-${modelId}`}
                   onCheckedChange={(nextChecked) => {
                     if (isPauseToggleable && onTogglePauseClick && modelId) {
@@ -339,7 +346,7 @@ function ModelRowActions({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Delete model"
+              aria-label={i18n.t("molecules.modelsColumns.deleteModel", { defaultValue: "Delete model" })}
               data-testid={`model-delete-${modelId}`}
               disabled={isConfigModel || !canEditModel}
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -384,8 +391,8 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.id,
-    meta: { title: "Model ID" },
-    header: "Model ID",
+    meta: { title: i18n.t("molecules.modelsColumns.modelId", { defaultValue: "Model ID" }) },
+    header: i18n.t("molecules.modelsColumns.modelId", { defaultValue: "Model ID" }),
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -400,8 +407,8 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_NAME_COLUMN_ID,
     accessorFn: (row) => row.model_name ?? "",
-    meta: { title: "Model Information", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model Information" />,
+    meta: { title: i18n.t("molecules.modelsColumns.modelInformation", { defaultValue: "Model Information" }), skeleton: "twoLine" },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("molecules.modelsColumns.modelInformation", { defaultValue: "Model Information" })} />,
     enableSorting: true,
     size: 280,
     minSize: 160,
@@ -412,7 +419,7 @@ export const getModelsTableColumns = ({
   {
     id: CREDENTIALS_COLUMN_ID,
     accessorFn: (row) => row.litellm_params?.litellm_credential_name ?? "",
-    meta: { title: "Credentials" },
+    meta: { title: i18n.t("molecules.modelsColumns.credentials", { defaultValue: "Credentials" }) },
     header: () => <CredentialsHeader />,
     enableSorting: false,
     size: 180,
@@ -430,8 +437,8 @@ export const getModelsTableColumns = ({
   {
     id: CREATED_BY_COLUMN_ID,
     accessorFn: (row) => row.model_info.created_by ?? "",
-    meta: { title: "Created By", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created By" />,
+    meta: { title: i18n.t("molecules.modelsColumns.createdBy", { defaultValue: "Created By" }), skeleton: "twoLine" },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("molecules.modelsColumns.createdBy", { defaultValue: "Created By" })} />,
     enableSorting: true,
     size: 180,
     minSize: 110,
@@ -440,8 +447,8 @@ export const getModelsTableColumns = ({
   {
     id: UPDATED_AT_COLUMN_ID,
     accessorFn: (row) => row.model_info.updated_at ?? "",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: { title: i18n.t("common.updatedAt", { defaultValue: "Updated At" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("common.updatedAt", { defaultValue: "Updated At" })} />,
     enableSorting: true,
     size: 140,
     minSize: 100,
@@ -450,8 +457,8 @@ export const getModelsTableColumns = ({
   {
     id: COSTS_COLUMN_ID,
     accessorFn: (row) => row.input_cost,
-    meta: { title: "Costs", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Costs" />,
+    meta: { title: i18n.t("molecules.modelsColumns.costs", { defaultValue: "Costs" }), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("molecules.modelsColumns.costs", { defaultValue: "Costs" })} />,
     enableSorting: true,
     size: 130,
     minSize: 90,
@@ -460,8 +467,8 @@ export const getModelsTableColumns = ({
   {
     id: TEAM_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.team_id ?? "",
-    meta: { title: "Team ID" },
-    header: "Team ID",
+    meta: { title: i18n.t("molecules.modelsColumns.teamId", { defaultValue: "Team ID" }) },
+    header: i18n.t("molecules.modelsColumns.teamId", { defaultValue: "Team ID" }),
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -476,8 +483,8 @@ export const getModelsTableColumns = ({
   {
     id: ACCESS_GROUPS_COLUMN_ID,
     accessorFn: (row) => row.model_info.access_groups ?? [],
-    meta: { title: "Model Access Group", skeleton: "chips" },
-    header: "Model Access Group",
+    meta: { title: i18n.t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" }), skeleton: "chips" },
+    header: i18n.t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" }),
     enableSorting: false,
     size: 200,
     minSize: 120,
@@ -486,22 +493,22 @@ export const getModelsTableColumns = ({
   {
     id: STATUS_COLUMN_ID,
     accessorFn: (row) => row.model_info.db_model,
-    meta: { title: "Source", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Source" />,
+    meta: { title: i18n.t("molecules.modelsColumns.source", { defaultValue: "Source" }), skeleton: "badge" },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("molecules.modelsColumns.source", { defaultValue: "Source" })} />,
     enableSorting: true,
     size: 140,
     minSize: 100,
     cell: ({ row }) =>
       row.original.model_info.db_model ? (
-        <StatusBadge tone="info" label="DB Model" />
+        <StatusBadge tone="info" label={i18n.t("molecules.modelsColumns.dbModel", { defaultValue: "DB Model" })} />
       ) : (
-        <StatusBadge tone="neutral" label="Config Model" />
+        <StatusBadge tone="neutral" label={i18n.t("molecules.modelsColumns.configModel", { defaultValue: "Config Model" })} />
       ),
   },
   {
     id: "actions",
-    meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
-    header: "Actions",
+    meta: { title: i18n.t("common.actions", { defaultValue: "Actions" }), className: "text-right", headerClassName: "text-right" },
+    header: i18n.t("common.actions", { defaultValue: "Actions" }),
     enableSorting: false,
     enableHiding: false,
     enableResizing: false,

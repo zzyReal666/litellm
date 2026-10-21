@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { useCredentials } from "@/app/(dashboard)/hooks/credentials/useCredentials";
@@ -228,7 +229,7 @@ const AllModelsTab = ({
 
   const teamOptions = useMemo(
     () => [
-      { value: PERSONAL_TEAM_VALUE, label: "Personal" },
+      { value: PERSONAL_TEAM_VALUE, label: i18n.t("pages.allModelsTab.personal", { defaultValue: "Personal" }) },
       ...(teams ?? [])
         .filter((team) => team.team_id)
         .map((team) => ({ value: team.team_id, label: team.team_alias ? team.team_alias : team.team_id })),
@@ -251,7 +252,7 @@ const AllModelsTab = ({
     try {
       setDeleteLoading(true);
       await modelDeleteCall(accessToken, deleteModalModelId);
-      toast.success("Model deleted successfully");
+      toast.success(i18n.t("pages.allModelsTab.modelDeletedSuccess", { defaultValue: "Model deleted successfully" }));
       queryClient.invalidateQueries({ queryKey: ["models", "list"] });
       refetchModels();
     } catch (error) {
@@ -269,7 +270,7 @@ const AllModelsTab = ({
       try {
         setPausingModelId(modelId);
         await modelPatchUpdateCall(accessToken, { blocked }, modelId);
-        toast.success(blocked ? "Model paused" : "Model resumed");
+        toast.success(blocked ? i18n.t("pages.allModelsTab.modelPaused", { defaultValue: "Model paused" }) : i18n.t("pages.allModelsTab.modelResumed", { defaultValue: "Model resumed" }));
         // invalidateQueries already schedules a refetch for active observers
         // on this key — no need to also call refetchModels() (would double-fetch).
         queryClient.invalidateQueries({ queryKey: ["models", "list"] });
@@ -342,7 +343,7 @@ const AllModelsTab = ({
               <span>
                 To access these models, create a Virtual Key without selecting a team on the{" "}
                 <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  Virtual Keys page
+                  {i18n.t("pages.allModelsTab.virtualKeysPageLink", { defaultValue: "Virtual Keys page" })}
                 </a>
                 .
               </span>
@@ -350,7 +351,7 @@ const AllModelsTab = ({
               <span>
                 To access these models, create a Virtual Key and select Team as &quot;{teamAccessLabel}&quot; on the{" "}
                 <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  Virtual Keys page
+                  {i18n.t("pages.allModelsTab.virtualKeysPageLink", { defaultValue: "Virtual Keys page" })}
                 </a>
                 .
               </span>
@@ -361,28 +362,28 @@ const AllModelsTab = ({
 
       <DeleteResourceModal
         isOpen={!!deleteModalModelId}
-        title="Delete Model"
-        alertMessage="This action cannot be undone."
-        message="Are you sure you want to delete this model?"
-        resourceInformationTitle="Model Information"
+        title={i18n.t("pages.allModelsTab.deleteModelTitle", { defaultValue: "Delete Model" })}
+        alertMessage={i18n.t("pages.allModelsTab.deleteAlertMessage", { defaultValue: "This action cannot be undone." })}
+        message={i18n.t("pages.allModelsTab.deleteMessage", { defaultValue: "Are you sure you want to delete this model?" })}
+        resourceInformationTitle={i18n.t("pages.allModelsTab.modelInformation", { defaultValue: "Model Information" })}
         resourceInformation={
           modelToDelete
             ? [
                 {
-                  label: "Model Name",
-                  value: modelToDelete.model_name || "Not Set",
+                  label: i18n.t("pages.allModelsTab.modelName", { defaultValue: "Model Name" }),
+                  value: modelToDelete.model_name || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
                 {
-                  label: "LiteLLM Model Name",
-                  value: modelToDelete.litellm_model_name || "Not Set",
+                  label: i18n.t("pages.allModelsTab.litellmModelName", { defaultValue: "LiteLLM Model Name" }),
+                  value: modelToDelete.litellm_model_name || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
                 {
-                  label: "Provider",
-                  value: modelToDelete.provider || "Not Set",
+                  label: i18n.t("pages.allModelsTab.provider", { defaultValue: "Provider" }),
+                  value: modelToDelete.provider || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
                 {
-                  label: "Created By",
-                  value: modelToDelete.model_info?.created_by || "Not Set",
+                  label: i18n.t("pages.allModelsTab.createdBy", { defaultValue: "Created By" }),
+                  value: modelToDelete.model_info?.created_by || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
               ]
             : []

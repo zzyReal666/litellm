@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+
 export interface GuardrailPreset {
   provider: string;
   categoryName?: string;
@@ -14,7 +16,7 @@ export const GUARDRAIL_PRESETS: Record<string, GuardrailPreset> = {
   cf_denied_financial: {
     provider: "LitellmContentFilter",
     categoryName: "denied_financial_advice",
-    guardrailNameSuggestion: "Denied Financial Advice",
+    guardrailNameSuggestion: i18n.t("guardrails.guardrailGardenCards.cfDeniedFinancial.name", { defaultValue: "Denied Financial Advice" }),
     mode: "pre_call",
     defaultOn: false,
   },

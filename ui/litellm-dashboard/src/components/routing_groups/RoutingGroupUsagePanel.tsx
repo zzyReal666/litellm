@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { Code2 } from "lucide-react";
 import React from "react";
 
@@ -64,11 +65,12 @@ const SNIPPET_TABS = [
 ] as const;
 
 export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePanelProps) {
+  const { t } = useTranslation();
   return (
     <div className="border-y bg-muted/40 px-4 py-4">
       <div className="mb-2 flex items-center gap-2">
         <Code2 className="size-4 text-primary" />
-        <span className="text-sm font-medium text-foreground">How routing works for this group</span>
+        <span className="text-sm font-medium text-foreground">{t("routingGroups.routingGroupsTable.howRoutingWorksTitle", { defaultValue: "How routing works for this group" })}</span>
       </div>
       <p className="mb-3 text-sm text-muted-foreground">
         {group.routing_strategy === "priority" ? (

@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { Edit, ExternalLink, Info, KeyRound, PlugZap, Trash2 } from "lucide-react";
 import type { TFunction } from "i18next";
 import { useState } from "react";
@@ -24,10 +25,10 @@ import { fieldLabel, SENSITIVE_FIELDS } from "./constants";
 function detectAuthMethod(values: Record<string, unknown>, t: TFunction): string {
   if (values.approle_role_id || values.approle_secret_id) return "AppRole";
   if (values.client_cert && values.client_key) {
-    return t("settingsPages.hashicorpVault.authMethodTlsCertificate", { defaultValue: "TLS Certificate" });
+    return i18n.t("settingsPages.hashicorpVault.authMethodTlsCertificate", { defaultValue: "TLS Certificate" });
   }
   if (values.vault_token) return "Token";
-  return t("common.none", { defaultValue: "None" });
+  return i18n.t("common.none", { defaultValue: "None" });
 }
 
 function DetailRow({ children, label }: { children: React.ReactNode; label: string }) {
@@ -269,7 +270,7 @@ export default function HashicorpVault() {
           fieldLabel: clearingField ? fieldLabel(clearingField, t) : "",
         })}
         message={t("settingsPages.hashicorpVault.clearMessage", { defaultValue: "This will remove the stored value." })}
-        resourceInformationTitle={t("settingsPages.hashicorpVault.clearResourceTitle", { defaultValue: "Field" })}
+        resourceInformationTitle={t("settingsPages.hashicorpVault.clearResourceTitle", { defaultValue: t("settingsPages.hashicorpVault.clearFieldLabel", { defaultValue: t("settingsPages.hashicorpVault.clearFieldLabel", { defaultValue: "Field" }) }) })}
         resourceInformation={[
           {
             label: t("settingsPages.hashicorpVault.clearFieldLabel", { defaultValue: "Field" }),

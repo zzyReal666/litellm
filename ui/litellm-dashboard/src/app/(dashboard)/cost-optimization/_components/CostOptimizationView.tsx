@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import React from "react";
 import { Info, PiggyBank } from "lucide-react";
@@ -21,6 +22,7 @@ interface CostOptimizationViewProps {
 }
 
 const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken, userId, userRole }) => {
+  const { t } = useTranslation();
   const activity = useDailyActivityRange(accessToken, userId, userRole);
   const canViewProxyWideCostData = useCan("viewProxyWideCostData");
   const [visitedTabs, setVisitedTabs] = React.useState<readonly string[]>(["usage"]);
@@ -39,7 +41,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
         <PageHeader>
           <PageHeaderTitle>
             <PiggyBank />
-            Cost Optimization
+            {t("costOptimization.costOptimizationView.title", { defaultValue: "Cost Optimization" })}
           </PageHeaderTitle>
           <PageHeaderDescription>
             Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers
@@ -47,12 +49,12 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
           </PageHeaderDescription>
           <PageHeaderControls>
             <PageTabsList>
-              <PageTabsTrigger value="usage">Overall</PageTabsTrigger>
+              <PageTabsTrigger value="usage">{t("costOptimization.costOptimizationView.tabOverall", { defaultValue: "Overall" })}</PageTabsTrigger>
               {canViewProxyWideCostData && (
                 <>
-                  <PageTabsTrigger value="compression">Prompt Compression</PageTabsTrigger>
-                  <PageTabsTrigger value="caching">Prompt Caching</PageTabsTrigger>
-                  <PageTabsTrigger value="autorouter-usage">Auto-Router</PageTabsTrigger>
+                  <PageTabsTrigger value="compression">{t("costOptimization.costOptimizationView.tabPromptCompression", { defaultValue: "Prompt Compression" })}</PageTabsTrigger>
+                  <PageTabsTrigger value="caching">{t("templates.keyInfoView.promptCaching", { defaultValue: "Prompt Caching" })}</PageTabsTrigger>
+                  <PageTabsTrigger value="autorouter-usage">{t("costOptimization.costOptimizationView.tabAutoRouter", { defaultValue: "Auto-Router" })}</PageTabsTrigger>
                 </>
               )}
             </PageTabsList>
@@ -64,7 +66,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
           className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-lg border border-border bg-muted/50 px-4 py-4"
         >
           <Info className="mt-0.5 size-5 text-primary" aria-hidden="true" />
-          <p className="font-medium text-foreground">This is an experimental dashboard</p>
+          <p className="font-medium text-foreground">{t("costOptimization.costOptimizationView.experimentalNotice", { defaultValue: "This is an experimental dashboard" })}</p>
           <p className="col-start-2 text-sm text-muted-foreground">
             Have feedback? Join the discussion{" "}
             <a

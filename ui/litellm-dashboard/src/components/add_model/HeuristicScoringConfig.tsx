@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 import { useComplexityScorerDefaults } from "@/app/(dashboard)/hooks/autoRouter/useComplexityScorerDefaults";
@@ -78,9 +80,9 @@ const warn = (group: KnobGroup, values: Record<string, number>): string | null =
     group === "tier_boundaries" &&
     (values.simple_medium > values.medium_complex || values.medium_complex > values.complex_reasoning)
   )
-    return "These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere.";
+    return i18n.t("addModel.heuristicScoring.decreasingBoundariesWarning", { defaultValue: "These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere." });
   if (group === "token_thresholds" && values.simple >= values.complex)
-    return "The short threshold is not below the long one, so no prompt length scores neutral on length.";
+    return i18n.t("addModel.heuristicScoring.thresholdOrderWarning", { defaultValue: "The short threshold is not below the long one, so no prompt length scores neutral on length." });
   return null;
 };
 
@@ -90,6 +92,7 @@ interface HeuristicScoringConfigProps {
 }
 
 const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, onChange }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState<{ id: string; raw: string } | null>(null);
   const { data: defaults, isPending, isError, refetch } = useComplexityScorerDefaults();
@@ -148,7 +151,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
         <ChevronDown
           className={`size-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
-        <span className="text-sm font-medium">Advanced scoring</span>
+        <span className="text-sm font-medium">{t("addModel.heuristicScoring.title", { defaultValue: "Advanced scoring" })}</span>
         {overrides > 0 && (
           <Badge variant="secondary" data-testid="advanced-scoring-override-count">
             {overrides} {overrides === 1 ? "override" : "overrides"}
@@ -164,7 +167,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
           </p>
 
           {isPending ? (
-            <p className="text-xs text-muted-foreground">Loading the shipped defaults...</p>
+            <p className="text-xs text-muted-foreground">{t("addModel.heuristicScoring.loadingDefaults", { defaultValue: "Loading the shipped defaults..." })}</p>
           ) : (
             <>
               {isError && (
@@ -174,7 +177,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                     still works, and an untouched knob keeps following the defaults.
                   </p>
                   <Button type="button" variant="link" size="xs" onClick={() => void refetch()}>
-                    Retry
+                    {t("common.retry", { defaultValue: "Retry" })}
                   </Button>
                 </div>
               )}
@@ -220,7 +223,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                             });
                           }}
                         >
-                          {spec.withSlider ? "Restore default weights" : "Reset to defaults"}
+                          {spec.withSlider ? t("addModel.heuristicScoring.restoreDefaultWeights", { defaultValue: "Restore default weights" }) : t("addModel.heuristicScoring.resetToDefaults", { defaultValue: "Reset to defaults" })}
                         </Button>
                       )}
                     </div>
@@ -298,7 +301,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
 
               <section className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Reasoning override floor</span>
+                  <span className="text-sm font-medium">{t("addModel.heuristicScoring.overrideFloorTitle", { defaultValue: "Reasoning override floor" })}</span>
                   {value.reasoning_override_min_score !== undefined && (
                     <Button
                       type="button"
@@ -306,7 +309,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                       size="xs"
                       onClick={() => onChange({ ...value, reasoning_override_min_score: undefined })}
                     >
-                      Reset to defaults
+                      {t("addModel.heuristicScoring.resetToDefaults", { defaultValue: "Reset to defaults" })}
                     </Button>
                   )}
                 </div>
@@ -314,13 +317,13 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                   Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted
                   score reaches this floor.{" "}
                   {trackedFloor === undefined
-                    ? "Left untouched, it tracks the Simple to Medium boundary."
+                    ? t("addModel.heuristicScoring.tracksBoundary", { defaultValue: "Left untouched, it tracks the Simple to Medium boundary." })
                     : `Left untouched, it tracks the Simple to Medium boundary, currently ${trackedFloor.toFixed(2)}.`}{" "}
-                  Set it to 0 to promote on the markers alone.
+                  {t("addModel.heuristicScoring.promoteOnMarkers", { defaultValue: "Set it to 0 to promote on the markers alone." })}
                 </p>
                 <div className="flex items-center gap-3">
                   <Label htmlFor={OVERRIDE_FLOOR_ID} className="w-44 text-xs font-normal">
-                    Minimum score
+                    {t("addModel.heuristicScoring.minScoreLabel", { defaultValue: "Minimum score" })}
                   </Label>
                   <Input
                     id={OVERRIDE_FLOOR_ID}

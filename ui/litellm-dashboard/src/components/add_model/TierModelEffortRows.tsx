@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
@@ -58,6 +59,7 @@ export const tierEffortRows = ({
     .filter(({ model, options }) => options.length > 0 || canEditFastMode(model, fastModeByModel, paramsByModel));
 
 const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
+  const { t } = useTranslation();
   const { tierLabel, paramsByModel, onEffortChange, fastModeByModel, onFastModeChange } = props;
   const rows = tierEffortRows(props);
   if (rows.length === 0) return null;
@@ -65,7 +67,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
     <div className="mt-2 space-y-1">
       {rows.some(({ options }) => options.length > 0) && (
         <div className="flex items-center gap-1">
-          <span className="text-xs font-medium text-muted-foreground">Reasoning effort</span>
+          <span className="text-xs font-medium text-muted-foreground">{t("addModel.tierModelEffort.reasoningEffortLabel", { defaultValue: "Reasoning effort" })}</span>
           <SimpleTooltip
             content={`Sent as reasoning_effort on requests this tier routes to the model, overriding the caller's value. Default leaves the request untouched.`}
           >
@@ -82,7 +84,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
             {options.length > 0 && (
               <Select
                 items={[
-                  { value: PROVIDER_DEFAULT, label: "Default" },
+                  { value: PROVIDER_DEFAULT, label: t("common.default", { defaultValue: "Default" }) },
                   ...options.map((option) => ({ value: option, label: option })),
                 ]}
                 value={effort ?? PROVIDER_DEFAULT}
@@ -98,7 +100,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={PROVIDER_DEFAULT}>Default</SelectItem>
+                  <SelectItem value={PROVIDER_DEFAULT}>{t("common.default", { defaultValue: "Default" })}</SelectItem>
                   {options.map((option) => (
                     <SelectItem key={option} value={option}>
                       {option}

@@ -1,9 +1,10 @@
 import { type FC } from "react";
+import { useTranslation } from "react-i18next";
 import { TriangleAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { SelectItem } from "@/components/ui/select";
 import { SimpleTooltip } from "@/components/ui/tooltip";
-import { TRANSPORT, TRANSPORT_ITEMS } from "@/components/mcp_tools/types";
+import { TRANSPORT, TRANSPORT_ITEMS, localizeSelectItems } from "@/components/mcp_tools/types";
 import { $api } from "@/lib/http/api";
 
 export const STDIO_DISABLED_MESSAGE =
@@ -12,9 +13,11 @@ export const STDIO_DISABLED_MESSAGE =
 export const useMcpStdioEnabled = (): boolean =>
   $api.useQuery("get", "/.well-known/litellm-ui-config").data?.mcp_stdio_enabled !== false;
 
-export const TransportSelectItems: FC<{ stdioEnabled: boolean }> = ({ stdioEnabled }) => (
+export const TransportSelectItems: FC<{ stdioEnabled: boolean }> = ({ stdioEnabled }) => {
+  const { t } = useTranslation();
+  return (
   <>
-    {TRANSPORT_ITEMS.map((item) => {
+    {localizeSelectItems(TRANSPORT_ITEMS, t).map((item) => {
       const disabled = item.value === TRANSPORT.STDIO && !stdioEnabled;
       return (
         <SelectItem key={item.value} value={item.value} disabled={disabled}>
@@ -24,7 +27,8 @@ export const TransportSelectItems: FC<{ stdioEnabled: boolean }> = ({ stdioEnabl
       );
     })}
   </>
-);
+  );
+};
 
 export const StdioDisabledBanner: FC = () => (
   <Alert variant="warning" className="mb-4 rounded-lg">

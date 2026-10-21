@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { isAdminRole } from "@/utils/roles";
 import { useQuery } from "@tanstack/react-query";
 import { CircleHelp } from "lucide-react";
@@ -63,12 +64,12 @@ export const SearchProviderLabel: React.FC<SearchProviderLabelProps> = ({ provid
 const createSearchToolShape = {
   search_tool_name: z
     .string()
-    .min(1, "Please enter a search tool name")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Name can only contain letters, numbers, hyphens, and underscores"),
+    .min(1, i18n.t("searchTools.createSearchTools.searchToolNameRequired", { defaultValue: "Please enter a search tool name" }))
+    .regex(/^[a-zA-Z0-9_-]+$/, i18n.t("searchTools.createSearchTools.searchToolNamePattern", { defaultValue: "Name can only contain letters, numbers, hyphens, and underscores" })),
   search_provider: z
     .string()
     .nullable()
-    .pipe(z.string({ error: "Please select a search provider" }).min(1, "Please select a search provider")),
+    .pipe(z.string({ error: i18n.t("searchTools.createSearchTools.searchProviderRequired", { defaultValue: "Please select a search provider" }) }).min(1, "Please select a search provider")),
   api_key: z.string().optional(),
   description: z.string().optional(),
 };
@@ -143,7 +144,7 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
       if (accessToken != null) {
         const response = await createSearchTool(accessToken, payload);
 
-        toast.success("Search tool created successfully");
+        toast.success(i18n.t("searchTools.createSearchTools.createSuccess", { defaultValue: "Search tool created successfully" }));
         form.reset(EMPTY_VALUES);
         setModalVisible(false);
         onCreateSuccess(response);
@@ -163,7 +164,7 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
   const handleTestConnection = async () => {
     const isValid = await form.trigger(["search_provider", "api_key"]);
     if (!isValid) {
-      toast.error("Please fill in Search Provider and API Key before testing");
+      toast.error(i18n.t("searchTools.createSearchTools.testFillRequired", { defaultValue: "Please fill in Search Provider and API Key before testing" }));
       return;
     }
 
@@ -182,7 +183,7 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
         <DialogHeader>
           <div className="flex items-center space-x-3 pb-4 border-b border-border">
             <span className="text-2xl">🔍</span>
-            <DialogTitle className="text-xl font-semibold text-foreground">Add New Search Tool</DialogTitle>
+            <DialogTitle className="text-xl font-semibold text-foreground">{i18n.t("searchTools.createSearchTools.modalTitle", { defaultValue: "Add New Search Tool" })}</DialogTitle>
           </div>
         </DialogHeader>
         <div className="mt-6">
@@ -193,15 +194,15 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                   control={form.control}
                   name="search_tool_name"
                   label={labelWithHint(
-                    "Search Tool Name",
-                    "A unique name to identify this search tool configuration (e.g., 'perplexity-search', 'tavily-news-search').",
+                    i18n.t("searchTools.createSearchTools.searchToolNameLabel", { defaultValue: "Search Tool Name" }),
+                    i18n.t("searchTools.createSearchTools.searchToolNameTooltip", { defaultValue: "A unique name to identify this search tool configuration (e.g., 'perplexity-search', 'tavily-news-search')." }),
                   )}
                 >
                   {({ ref, ...field }) => (
                     <Input
                       {...field}
                       ref={ref}
-                      placeholder="e.g., perplexity-search, my-tavily-tool"
+                      placeholder={i18n.t("searchTools.createSearchTools.searchToolNamePlaceholder", { defaultValue: "e.g., perplexity-search, my-tavily-tool" })}
                       className="rounded-lg"
                     />
                   )}
@@ -211,8 +212,8 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                   control={form.control}
                   name="search_provider"
                   label={labelWithHint(
-                    "Search Provider",
-                    "Select the search provider you want to use. Each provider has different capabilities and pricing.",
+                    i18n.t("searchTools.createSearchTools.searchProviderLabel", { defaultValue: "Search Provider" }),
+                    i18n.t("searchTools.createSearchTools.searchProviderTooltip", { defaultValue: "Select the search provider you want to use. Each provider has different capabilities and pricing." }),
                   )}
                 >
                   {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
@@ -226,13 +227,13 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                         id={id}
                         aria-invalid={ariaInvalid}
                         aria-describedby={ariaDescribedBy}
-                        placeholder="Select a search provider"
+                        placeholder={i18n.t("searchTools.createSearchTools.searchProviderPlaceholder", { defaultValue: "Select a search provider" })}
                         className="h-10 w-full rounded-lg"
                         disabled={isLoadingProviders}
                         showClear={value != null && value !== ""}
                       />
                       <ComboboxContent>
-                        <ComboboxEmpty>No matching search providers</ComboboxEmpty>
+                        <ComboboxEmpty>{i18n.t("searchTools.createSearchTools.noMatchingProviders", { defaultValue: "No matching search providers" })}</ComboboxEmpty>
                         <ComboboxList>
                           {(providerName: string) => (
                             <ComboboxItem key={providerName} value={providerName}>
@@ -252,8 +253,8 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                   control={form.control}
                   name="api_key"
                   label={labelWithHint(
-                    "API Key",
-                    "The API key for authenticating with the search provider. This will be securely stored.",
+                    i18n.t("searchTools.createSearchTools.apiKeyLabel", { defaultValue: "API Key" }),
+                    i18n.t("searchTools.createSearchTools.apiKeyTooltip", { defaultValue: "The API key for authenticating with the search provider. This will be securely stored." }),
                   )}
                 >
                   {({ ref, value, ...field }) => (
@@ -261,20 +262,20 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                       {...field}
                       ref={ref}
                       value={value ?? ""}
-                      placeholder="Enter your API key"
+                      placeholder={i18n.t("searchTools.createSearchTools.apiKeyPlaceholder", { defaultValue: "Enter your API key" })}
                       groupClassName="h-10 rounded-lg"
                     />
                   )}
                 </FormField>
 
-                <FormField control={form.control} name="description" label="Description (Optional)">
+                <FormField control={form.control} name="description" label={i18n.t("searchTools.createSearchTools.descriptionLabel", { defaultValue: "Description (Optional)" })}>
                   {({ ref, value, ...field }) => (
                     <Textarea
                       {...field}
                       ref={ref}
                       value={value ?? ""}
                       rows={3}
-                      placeholder="Brief description of this search tool's purpose"
+                      placeholder={i18n.t("searchTools.createSearchTools.descriptionPlaceholder", { defaultValue: "Brief description of this search tool's purpose" })}
                       className="rounded-lg"
                     />
                   )}
@@ -291,20 +292,20 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Need Help?
+                        {i18n.t("searchTools.createSearchTools.needHelp", { defaultValue: "Need Help?" })}
                       </a>
                     }
                   />
-                  <TooltipContent>Get help on our github</TooltipContent>
+                  <TooltipContent>{i18n.t("searchTools.createSearchTools.needHelpTooltip", { defaultValue: "Get help on our github" })}</TooltipContent>
                 </Tooltip>
                 <div className="flex gap-2">
                   <Button type="submit" variant="outline" onClick={handleTestConnection} disabled={isTestingConnection}>
                     {isTestingConnection && <UiLoadingSpinner className="size-4" />}
-                    Test Connection
+                    {i18n.t("searchTools.createSearchTools.testConnectionBtn", { defaultValue: "Test Connection" })}
                   </Button>
                   <Button type="submit" variant="outline" disabled={isLoading}>
                     {isLoading && <UiLoadingSpinner className="size-4" />}
-                    Add Search Tool
+                    {i18n.t("searchTools.createSearchTools.addSearchToolBtn", { defaultValue: "Add Search Tool" })}
                   </Button>
                 </div>
               </div>
@@ -323,7 +324,7 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
         >
           <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
             <DialogHeader>
-              <DialogTitle>Connection Test Results</DialogTitle>
+              <DialogTitle>{i18n.t("searchTools.createSearchTools.connectionTestResultsTitle", { defaultValue: "Connection Test Results" })}</DialogTitle>
             </DialogHeader>
             {isTestModalVisible && accessToken && (
               <SearchConnectionTest
@@ -346,7 +347,7 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
                   setIsTestingConnection(false);
                 }}
               >
-                Close
+                {i18n.t("common.close", { defaultValue: "Close" })}
               </Button>
             </DialogFooter>
           </DialogContent>

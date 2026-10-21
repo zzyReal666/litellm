@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import {
   guardrail_provider_map,
@@ -57,7 +58,7 @@ interface ProviderParamsResponse {
 }
 
 const BOOLEAN_ITEMS = [
-  { label: i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: "True" }), value: true },
+  { label: i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }) }), value: true },
   { label: i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" }), value: false },
 ];
 
@@ -120,6 +121,7 @@ interface ProviderFieldInputProps {
 }
 
 const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fieldKey, control }) => {
+  const { t } = useTranslation();
   const { id, value, onChange, onBlur, ref, name, ...aria } = control;
 
   if (descriptor.type === "select" && descriptor.options) {
@@ -167,7 +169,7 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={true}>
-            {i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: "True" })}
+            {i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }) })}
           </SelectItem>
           <SelectItem value={false}>
             {i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" })}

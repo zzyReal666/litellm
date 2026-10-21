@@ -1,5 +1,7 @@
 "use client";
 
+import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { Wrench, Copy, Check, Pencil } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -93,6 +95,7 @@ interface UserBubbleProps {
 }
 
 function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
+  const { t } = useTranslation();
   const [hovered, setHovered] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(message.content);
@@ -138,7 +141,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
         <div className="w-[72%] bg-background border-2 border-primary rounded-xl overflow-hidden shadow-[0_0_0_3px_rgba(var(--primary)/0.1)]">
           <Textarea
             ref={textareaRef}
-            aria-label="Edit message"
+            aria-label={t("chat.chatMessages.editMessage", { defaultValue: "Edit message" })}
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -153,10 +156,10 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 setEditing(false);
               }}
             >
-              Cancel
+              {t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button size="sm" onClick={handleSave} disabled={!editValue.trim()}>
-              Save & Send
+              {t("chat.chatMessages.saveAndSend", { defaultValue: "Save & Send" })}
             </Button>
           </div>
         </div>
@@ -179,7 +182,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    aria-label="Edit message"
+                    aria-label={t("chat.chatMessages.editMessage", { defaultValue: "Edit message" })}
                     onClick={() => {
                       setEditValue(message.content);
                       setEditing(true);
@@ -191,7 +194,7 @@ function UserBubble({ message, onEdit, isStreaming }: UserBubbleProps) {
                 }
               />
               <TooltipContent>
-                <p>Edit message</p>
+                <p>{t("chat.chatMessages.editMessage", { defaultValue: "Edit message" })}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -247,8 +250,8 @@ function AssistantBubble({
 
   let mainContent = message.content;
   let stoppedSuffix = false;
-  if (mainContent.endsWith("[stopped]")) {
-    mainContent = mainContent.slice(0, -"[stopped]".length);
+  if (mainContent.endsWith(i18n.t("chat.chatMessages.streamStopped", { defaultValue: "[stopped]" }))) {
+    mainContent = mainContent.slice(0, -i18n.t("chat.chatMessages.streamStopped", { defaultValue: "[stopped]" }).length);
     stoppedSuffix = true;
   }
 
@@ -288,6 +291,7 @@ function AssistantBubble({
 }
 
 function CopyButton({ text }: { text: string }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -318,7 +322,7 @@ function CopyButton({ text }: { text: string }) {
             }
           />
           <TooltipContent>
-            <p>{copied ? "Copied!" : "Copy"}</p>
+            <p>{copied ? "Copied!" : t("common.copy", { defaultValue: "Copy" })}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -327,6 +331,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function ThinkingPlaceholder() {
+  const { t } = useTranslation();
   return (
     <>
       <style>{`
@@ -339,7 +344,7 @@ function ThinkingPlaceholder() {
         }
       `}</style>
       <div className="inline-flex items-center gap-1.5 px-2.5 mb-2 bg-muted/50 border rounded-lg text-xs text-muted-foreground">
-        <span className="chat-thinking-text py-1">Thinking...</span>
+        <span className="chat-thinking-text py-1">{t("chat.chatMessages.thinking", { defaultValue: "Thinking..." })}</span>
       </div>
     </>
   );
@@ -375,6 +380,7 @@ interface ToolCardProps {
 }
 
 function ToolCard({ message }: ToolCardProps) {
+  const { t } = useTranslation();
   const redactedArgs = message.toolArgs ? redactSensitiveValues(message.toolArgs) : undefined;
   const [open, setOpen] = useState(false);
 
@@ -383,13 +389,13 @@ function ToolCard({ message }: ToolCardProps) {
       <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger className="flex items-center gap-1.5 text-[13px] px-3 py-2 border rounded-lg bg-muted/50 hover:bg-muted transition-colors w-full text-left">
           <Wrench className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="font-medium text-foreground">{message.toolName ?? "Tool call"}</span>
+          <span className="font-medium text-foreground">{message.toolName ?? t("chat.chatMessages.toolCall", { defaultValue: "Tool call" })}</span>
         </CollapsibleTrigger>
         <CollapsibleContent className="border border-t-0 rounded-b-lg px-3 py-2 bg-muted/30">
           {redactedArgs !== undefined && (
             <div className={message.toolResult ? "mb-3" : ""}>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                Arguments
+                {t("chat.chatMessages.arguments", { defaultValue: "Arguments" })}
               </div>
               <pre className="m-0 p-2 bg-muted rounded-md text-xs font-mono whitespace-pre-wrap break-words text-foreground">
                 {JSON.stringify(redactedArgs, null, 2)}
@@ -399,7 +405,7 @@ function ToolCard({ message }: ToolCardProps) {
           {message.toolResult && (
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                Result
+                {t("chat.chatMessages.result", { defaultValue: "Result" })}
               </div>
               <div className="text-[13px] text-foreground whitespace-pre-wrap break-words font-mono">
                 {message.toolResult}

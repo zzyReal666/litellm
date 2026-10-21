@@ -98,9 +98,9 @@ describe("UserInfoView 中文界面", () => {
   it("把概览页的卡片与页签渲染成中文", async () => {
     render(<UserInfoView {...defaultProps} />);
 
-    expect(await screen.findByText("$98.85")).toBeInTheDocument();
+    expect(await screen.findByText("¥98.85")).toBeInTheDocument();
     expect(screen.getByText("花费")).toBeInTheDocument();
-    expect(screen.getByText(/共 \$3,000,000\.00/)).toBeInTheDocument();
+    expect(screen.getByText(/共 ¥3,000,000\.00/)).toBeInTheDocument();
     expect(screen.getByText("团队")).toBeInTheDocument();
     expect(screen.getAllByText("个人模型").length).toBeGreaterThan(0);
     expect(screen.getByRole("tab", { name: "概览" })).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe("UserInfoView 中文界面", () => {
   it("把详情页的字段标签渲染成中文", async () => {
     render(<UserInfoView {...defaultProps} />);
 
-    await screen.findByText("$98.85");
+    await screen.findByText("¥98.85");
 
     expect(screen.getByText("用户设置")).toBeInTheDocument();
     expect(screen.getByText("用户 ID")).toBeInTheDocument();
@@ -128,7 +128,7 @@ describe("UserInfoView 中文界面", () => {
   it("把页头操作渲染成中文", async () => {
     render(<UserInfoView {...defaultProps} />);
 
-    await screen.findByText("$98.85");
+    await screen.findByText("¥98.85");
 
     expect(screen.getByRole("button", { name: /重置密码/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /删除用户/ })).toBeInTheDocument();

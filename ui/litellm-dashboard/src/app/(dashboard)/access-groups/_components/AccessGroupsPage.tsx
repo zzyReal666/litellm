@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Page, PageContent } from "@/components/shared/Page";
 import { AccessGroupResponse, useAccessGroups } from "@/app/(dashboard)/hooks/accessGroups/useAccessGroups";
 import { useDeleteAccessGroup } from "@/app/(dashboard)/hooks/accessGroups/useDeleteAccessGroup";
@@ -32,6 +33,7 @@ function mapResponseToAccessGroup(r: AccessGroupResponse): AccessGroup {
 }
 
 export function AccessGroupsPage() {
+  const { t } = useTranslation();
   const { userRole } = useAuthorized();
   // Admin Viewer follows the read-parity rule: see access groups, no writes.
   const canModify = isProxyAdminRole(userRole ?? "");
@@ -64,14 +66,14 @@ export function AccessGroupsPage() {
       <PageHeader>
         <PageHeaderTitle>
           <Boxes />
-          Access Groups
+          {t("accessGroups.accessGroupsPage.title", { defaultValue: "Access Groups" })}
         </PageHeaderTitle>
-        <PageHeaderDescription>Manage resource permissions for your organization</PageHeaderDescription>
+        <PageHeaderDescription>{t("accessGroups.accessGroupsPage.subtitle", { defaultValue: "Manage resource permissions for your organization" })}</PageHeaderDescription>
         {canModify && (
           <PageHeaderControls>
             <Button onClick={() => setIsCreateModalVisible(true)}>
               <Plus className="size-4" />
-              Create Access Group
+              {t("accessGroups.accessGroupsPage.createButton", { defaultValue: "Create Access Group" })}
             </Button>
           </PageHeaderControls>
         )}
@@ -84,13 +86,13 @@ export function AccessGroupsPage() {
               <SearchIcon className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search groups by name, ID, or description..."
+              placeholder={t("accessGroups.accessGroupsPage.searchPlaceholder", { defaultValue: "Search groups by name, ID, or description..." })}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
             {searchText && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchText("")}>
+                <InputGroupButton size="icon-xs" aria-label={t("accessGroups.accessGroupsPage.clearSearch", { defaultValue: "Clear search" })} onClick={() => setSearchText("")}>
                   <X />
                 </InputGroupButton>
               </InputGroupAddon>
@@ -112,13 +114,13 @@ export function AccessGroupsPage() {
 
       <DeleteResourceModal
         isOpen={!!groupToDelete}
-        title="Delete Access Group"
-        message="Are you sure you want to delete this access group? This action cannot be undone."
-        resourceInformationTitle="Access Group Information"
+        title={t("accessGroups.accessGroupsPage.deleteTitle", { defaultValue: "Delete Access Group" })}
+        message={t("accessGroups.accessGroupsPage.deleteMessage", { defaultValue: "Are you sure you want to delete this access group? This action cannot be undone." })}
+        resourceInformationTitle={t("accessGroups.accessGroupsPage.resourceInfoTitle", { defaultValue: "Access Group Information" })}
         resourceInformation={[
-          { label: "ID", value: groupToDelete?.id, code: true },
-          { label: "Name", value: groupToDelete?.name },
-          { label: "Description", value: groupToDelete?.description || "—" },
+          { label: t("accessGroups.accessGroupsPage.labelId", { defaultValue: "ID" }), value: groupToDelete?.id, code: true },
+          { label: t("common.name", { defaultValue: "Name" }), value: groupToDelete?.name },
+          { label: t("common.description", { defaultValue: "Description" }), value: groupToDelete?.description || "—" },
         ]}
         onCancel={() => setGroupToDelete(null)}
         onOk={() => {

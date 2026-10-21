@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
@@ -22,7 +23,7 @@ const columns: ColumnDef<TopModelData>[] = [
     cell: ({ row }) => row.original.model || "-",
   },
   {
-    header: "Spend (CNY)",
+    header: i18n.t("organization.organizationView.spendColumnTitle", { defaultValue: "Spend (CNY)" }),
     accessorKey: "spend",
     meta: { numeric: true },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
