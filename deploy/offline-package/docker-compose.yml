@@ -2,7 +2,7 @@ name: litellm
 
 services:
   litellm:
-    image: litellm-zhcn:v1.106.0-zh.2
+    image: litellm-zhcn:v1.106.0-zh.3
     restart: unless-stopped
     cap_add: [ALL]
     ports:
