@@ -56,3 +56,15 @@ litellm/rust_bridge/_native*.so
 *.log
 .env
 .env.local
+
+# local build artifacts (offline image build)
+.venv-local
+.venv
+ui/litellm-dashboard/node_modules
+ui/litellm-dashboard/.next
+ui/litellm-dashboard/out
+.worktrees
+.build-logs
+*.tar
+*.tar.gz
+!vendor/liteadmin-ef501e94.tar.gz
