@@ -137,6 +137,9 @@ for _ in $(seq 1 60); do
 done
 [[ "${code}" == "200" ]] || die "就绪检查超时（HTTP ${code}），查看日志: ${INSTALL_DIR}/scripts/logs.sh"
 
+log "==> 配置 coordination Redis（保证预算花费计数准确）"
+bash "${INSTALL_DIR}/scripts/enable-coordination-redis.sh" || warn "coordination Redis 未配置，预算计数可能不准确"
+
 if [[ "${SEED_MODELS}" -eq 1 ]]; then
   if [[ -n "${DEEPSEEK_API_KEY_INPUT}" ]]; then
     log "==> 初始化 DeepSeek 模型"

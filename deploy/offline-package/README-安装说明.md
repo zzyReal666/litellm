@@ -83,3 +83,13 @@ sudo ./uninstall.sh --remove-images  同时删除全部镜像
 | deepseek-v4-flash-vision-exp | 2.0e-06 | 8.0e-06 | 4.0e-08 |
 
 空闲时段半价，时间段按北京时间：工作日 18:00 到次日 09:00、12:00 到 14:00，周六周日全天。配置文件里的 `hours_utc` 使用 UTC 时间，`weekday_timezone` 为 `Asia/Shanghai`。
+
+## 预算计数与 coordination Redis
+
+安装脚本启动服务后会执行 `scripts/enable-coordination-redis.sh`，把 Litellm 的花费计数器接到内置 Redis 上。这一步不能省：没有 Redis 时，预算计数器重新播种会叠加数据库金额，鉴权侧花费会翻倍，用户额度还没用完就可能收到 429。脚本是幂等的，重复执行会直接跳过。手工执行方式：
+
+```bash
+sudo /opt/litellm/scripts/enable-coordination-redis.sh
+```
+
+从旧版本升级（数据库保留）时，配置保存在数据库里会自动沿用，脚本检测到已生效会跳过。如果换用全新的数据库，需要重新执行一次。
