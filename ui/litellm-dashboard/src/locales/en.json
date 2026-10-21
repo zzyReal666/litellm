@@ -77,7 +77,7 @@
       "agentPlatformDesc": "Open-source agent infra — sandboxes, durable sessions, and workers on AWS Fargate.",
       "markAsRead": "Mark as read"
     },
-    "logoAlt": "LiteLLM Brand",
+    "logoAlt": "LiteLLM",
     "productDocsAriaLabel": "Product documentation"
   },
   "user": {
@@ -8857,7 +8857,7 @@
       "tabSkillHub": "Skill Hub",
       "selectModelsPublic": "Select Models to Make Public",
       "selectAgentsPublic": "Select Agents to Make Public",
-      "selectMcpPublic": "Select MCP Servers to Make Public",
+      "selectMcpPublic": "Manage MCP Hub Visibility",
       "selectSkillsPublic": "Select Skills to Make Public",
       "showingModels": "Showing {{filtered}} of {{total}} models",
       "showingAgents_one": "Showing {{count}} agent",
