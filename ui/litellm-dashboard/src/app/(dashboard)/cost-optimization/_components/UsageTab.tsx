@@ -203,9 +203,10 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
           <CardHeader>
             <CardTitle>{t("costOptimization.usageTab.spendByTool", { defaultValue: "Spend by tool" })}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it
-              does not count. A request that invoked multiple tools counts its full spend toward each, so this
-              attributes rather than partitions spend.
+              {t("costOptimization.usageTab.spendByToolDescription", {
+                defaultValue:
+                  "Spend on requests that invoked each tool (MCP and client-side tools); declaring a tool without invoking it does not count. A request that invoked multiple tools counts its full spend toward each, so this attributes rather than partitions spend.",
+              })}
             </p>
           </CardHeader>
           <CardContent>

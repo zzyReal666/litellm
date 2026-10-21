@@ -26,6 +26,10 @@ vi.mock("./agent_form_fields", () => ({
   unmountedA2AFieldNames: () => [],
 }));
 
+vi.mock("@/app/(dashboard)/hooks/accessGroups/useAccessGroups", () => ({
+  useAccessGroups: () => ({ data: [], isLoading: false }),
+}));
+
 vi.mock("@/app/(dashboard)/hooks/mcpServers/useMCPServers", () => ({
   useMCPServers: () => ({ data: [{ server_id: "srv-1", server_name: "github" }] }),
 }));

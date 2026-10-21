@@ -693,19 +693,19 @@ export default function UserInfoView({
                 </div>
 
                 <div>
-                  <p className="font-medium">Budget Reset</p>
+                  <p className="font-medium">{i18n.t("viewUsers.userInfoView.budgetResetLabel", { defaultValue: "Budget Reset" })}</p>
                   <p>{getBudgetDurationLabel(userData.budget_duration ?? null)}</p>
                 </div>
 
                 <div>
-                  <p className="font-medium">Metadata</p>
+                  <p className="font-medium">{i18n.t("viewUsers.userInfoView.metadataLabel", { defaultValue: "Metadata" })}</p>
                   <pre className="bg-muted p-2 rounded-sm text-xs overflow-auto mt-1">
                     {JSON.stringify(userData.metadata || {}, null, 2)}
                   </pre>
                 </div>
 
                 <div>
-                  <p className="font-medium mb-2">MCP Permissions</p>
+                  <p className="font-medium mb-2">{i18n.t("viewUsers.userInfoView.mcpPermissionsLabel", { defaultValue: "MCP Permissions" })}</p>
                   <MCPServerPermissions
                     mcpServers={userData.object_permission?.mcp_servers || []}
                     mcpAccessGroups={userData.object_permission?.mcp_access_groups || []}
