@@ -105,7 +105,10 @@ vi.mock("@/components/shared/charts", () => ({
   chartColorValue: (color: string) => color,
 }));
 
-vi.mock("./useAutoRouterBenchmarks", () => ({ useAutoRouterBenchmarks: vi.fn() }));
+vi.mock("./useAutoRouterBenchmarks", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./useAutoRouterBenchmarks")>();
+  return { ...actual, useAutoRouterBenchmarks: vi.fn() };
+});
 vi.mock("./useShadowEval", () => ({
   useShadowEvalJobs: vi.fn(),
   useShadowEvalJob: vi.fn(),

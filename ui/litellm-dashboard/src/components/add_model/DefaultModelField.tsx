@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { Info } from "lucide-react";
 import { SearchSelect } from "@/components/shared/SearchSelect";
@@ -29,9 +30,9 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
   };
 
   return (
-    <div className="mt-4 mb-2" role="group" aria-label="Default model configuration">
+    <div className="mt-4 mb-2" role="group" aria-label={i18n.t("addModel.addAutoRouterTab.defaultModelConfigAria", { defaultValue: "Default model configuration" })}>
       <div className="flex items-center gap-2 mb-2">
-        <strong className="text-base font-semibold">Default Model</strong>
+        <strong className="text-base font-semibold">{i18n.t("addModel.addAutoRouterTab.defaultModelLabel", { defaultValue: "Default Model" })}</strong>
         <SimpleTooltip content="Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.">
           <Info className="size-4 text-muted-foreground" />
         </SimpleTooltip>
@@ -42,7 +43,7 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
         onValueChange={handleDefaultModelChange}
         placeholder={defaultModelPlaceholder}
         emptyText="No models found"
-        aria-label="Default model"
+        aria-label={i18n.t("addModel.addAutoRouterTab.defaultModelLabel", { defaultValue: "Default Model" })}
       />
       <span className="block mt-1 text-xs text-muted-foreground">
         {isForecastClassifier(value.classifier_type)

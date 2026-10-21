@@ -49,6 +49,7 @@ import {
   setTierModelParam,
   tierEffortOptionsForModels,
   tierRowLabel,
+  translatedDefaultTierLabel,
 } from "./complexity_router_tiers";
 import TierModelEffortRows from "./TierModelEffortRows";
 import { KeywordTierRule } from "./KeywordTierRules";
@@ -294,7 +295,12 @@ const TierRowHeader: React.FC<{
   onRemove: () => void;
 }> = ({ row, index, rowCount, label, description, editing, isCustomSet, onRemove }) => (
   <div className="flex items-center gap-2 mb-2">
-    <strong className="text-base font-semibold">{label} Tier</strong>
+    <strong className="text-base font-semibold">
+      {i18n.t("addModel.complexityRouterConfig.tierLabel", {
+        label: translatedDefaultTierLabel(row.id, label, i18n.t),
+        defaultValue: "{{label}} Tier",
+      })}
+    </strong>
     <SimpleTooltip
       content={
         row.definition.trim() ||
@@ -305,14 +311,22 @@ const TierRowHeader: React.FC<{
       <Info className="size-4 text-muted-foreground" />
     </SimpleTooltip>
     <span className="text-xs text-muted-foreground">
-      Tier {index + 1} of {rowCount} &middot; {rowOrigin(row, isCustomSet)}
+      {i18n.t("addModel.complexityRouterConfig.tierPosition", {
+        index: index + 1,
+        count: rowCount,
+        origin: rowOrigin(row, isCustomSet),
+        defaultValue: "Tier {{index}} of {{count}} · {{origin}}",
+      })}
     </span>
     {editing && (
       <Button
         variant="ghost"
         size="sm"
         className="text-destructive hover:text-destructive/80"
-        aria-label={`Remove the ${activeTierName(row) || `tier ${index + 1}`} tier`}
+        aria-label={i18n.t("addModel.complexityRouterConfig.removeTierAriaLabel", {
+          tier: activeTierName(row) || i18n.t("addModel.complexityRouterConfig.tierFallbackName", { index: index + 1, defaultValue: "tier {{index}}" }),
+          defaultValue: "Remove the {{tier}} tier",
+        })}
         disabled={rowCount <= MIN_TIER_COUNT}
         onClick={onRemove}
       >
@@ -572,6 +586,9 @@ const CreationClassifierSettings = ({
   const jevCreation = isJevCreation(value, creationFlow);
   return (
     <>
+      <h3 className="mb-2 text-base font-semibold">
+        {i18n.t("addModel.complexityRouterConfig.title", { defaultValue: "Complexity Tier Configuration" })}
+      </h3>
       <ClassifierPrimarySettings
         section={creationFlow ? "frequency" : "all"}
         value={value}
@@ -746,7 +763,12 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                         onRemove={() => removeTierRow(row.id)}
                       />
                       {tierInfo && !customTierSet && (
-                        <span className="block mb-2 text-xs text-muted-foreground">Examples: {tierInfo.examples}</span>
+                        <span className="block mb-2 text-xs text-muted-foreground">
+                          {i18n.t("addModel.complexityRouterConfig.examplesLabel", {
+                            examples: tierInfo.examples,
+                            defaultValue: "Examples: {{examples}}",
+                          })}
+                        </span>
                       )}
                       {editingTiers && (
                         <TierRowEditFields

@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -121,7 +122,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "classifier",
-            label: <strong className="text-foreground font-semibold">Classification Method</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("addModel.complexityRouterConfig.classificationMethodSection", { defaultValue: "Advanced: Classification Method" })}</strong>,
             children: <ClassificationMethodConfig {...classificationProps} section="classifier" />,
           },
         ]

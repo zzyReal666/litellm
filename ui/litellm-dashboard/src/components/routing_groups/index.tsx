@@ -88,8 +88,14 @@ const RoutingGroups: React.FC = () => {
       await saveMutation.mutateAsync(next);
       toast.success(
         drawerMode === "create"
-          ? `Created routing group "${incoming.group_name}"`
-          : `Updated routing group "${incoming.group_name}"`,
+          ? t("routingGroups.index.createSucceeded", {
+              groupName: incoming.group_name,
+              defaultValue: 'Created routing group "{{groupName}}"',
+            })
+          : t("routingGroups.index.updateSucceeded", {
+              groupName: incoming.group_name,
+              defaultValue: 'Updated routing group "{{groupName}}"',
+            }),
       );
       setDrawerOpen(false);
     } catch (err) {
@@ -102,7 +108,12 @@ const RoutingGroups: React.FC = () => {
     const next = groups.filter((g) => g.group_name !== deletingGroup.group_name);
     try {
       await saveMutation.mutateAsync(next);
-      toast.success(`Deleted routing group "${deletingGroup.group_name}"`);
+      toast.success(
+        t("routingGroups.index.deleteSucceeded", {
+          groupName: deletingGroup.group_name,
+          defaultValue: 'Deleted routing group "{{groupName}}"',
+        }),
+      );
       setDeletingGroup(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message: t("routingGroups.index.deleteFailed", { defaultValue: "Failed to delete routing group" }));

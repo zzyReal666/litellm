@@ -167,7 +167,7 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
   <>
     {label}
     <Tooltip>
-      <TooltipTrigger render={<CircleHelp className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
+      <TooltipTrigger render={<CircleHelp aria-label="question-circle" className="size-3.5 shrink-0 cursor-help text-muted-foreground" />} />
       <TooltipContent>{hint}</TooltipContent>
     </Tooltip>
   </>
@@ -536,7 +536,10 @@ interface ProviderFieldProps {
 
 const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo }) => {
   const { t } = useTranslation();
-  const label = labelWithHint(field.label, field.tooltip);
+  const label = labelWithHint(
+    field.labelKey ? t(field.labelKey, { defaultValue: field.label }) : field.label,
+    field.tooltipKey ? t(field.tooltipKey, { defaultValue: field.tooltip }) : field.tooltip,
+  );
 
   if (field.type === "select") {
     const selectOptions =
@@ -565,7 +568,7 @@ const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo
               id={id}
               aria-invalid={ariaInvalid}
               aria-describedby={ariaDescribedBy}
-              placeholder={field.placeholder}
+              placeholder={field.placeholderKey ? t(field.placeholderKey, { defaultValue: field.placeholder }) : field.placeholder}
               className="w-full"
             />
             <ComboboxContent>
@@ -588,9 +591,9 @@ const ProviderField: React.FC<ProviderFieldProps> = ({ field, control, modelInfo
     <FormField control={control} name={field.name} label={label}>
       {({ ref, value, ...controlProps }) =>
         field.type === "password" ? (
-          <PasswordInput {...controlProps} ref={ref} value={value ?? ""} placeholder={field.placeholder} />
+          <PasswordInput {...controlProps} ref={ref} value={value ?? ""} placeholder={field.placeholderKey ? t(field.placeholderKey, { defaultValue: field.placeholder }) : field.placeholder} />
         ) : (
-          <Input {...controlProps} ref={ref} value={value ?? ""} type="text" placeholder={field.placeholder} />
+          <Input {...controlProps} ref={ref} value={value ?? ""} type="text" placeholder={field.placeholderKey ? t(field.placeholderKey, { defaultValue: field.placeholder }) : field.placeholder} />
         )
       }
     </FormField>

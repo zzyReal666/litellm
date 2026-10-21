@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import React from "react";
 import { Info, PiggyBank } from "lucide-react";
@@ -44,8 +44,10 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
             {t("costOptimization.costOptimizationView.title", { defaultValue: "Cost Optimization" })}
           </PageHeaderTitle>
           <PageHeaderDescription>
-            Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers
-            live under Models + Endpoints, on the Auto-Routers tab
+            {t("costOptimization.costOptimizationView.subtitle", {
+              defaultValue:
+                "Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab",
+            })}
           </PageHeaderDescription>
           <PageHeaderControls>
             <PageTabsList>
@@ -68,15 +70,20 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
           <Info className="mt-0.5 size-5 text-primary" aria-hidden="true" />
           <p className="font-medium text-foreground">{t("costOptimization.costOptimizationView.experimentalNotice", { defaultValue: "This is an experimental dashboard" })}</p>
           <p className="col-start-2 text-sm text-muted-foreground">
-            Have feedback? Join the discussion{" "}
-            <a
-              href="https://github.com/BerriAI/litellm/discussions/32168"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary underline underline-offset-2"
-            >
-              here
-            </a>
+            <Trans
+              i18nKey="costOptimization.costOptimizationView.feedbackPrompt"
+              defaults="Have feedback? Join the discussion <a>here</a>"
+              components={{
+                a: (
+                  <a
+                    href="https://github.com/BerriAI/litellm/discussions/32168"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline underline-offset-2"
+                  />
+                ),
+              }}
+            />
           </p>
         </div>
 

@@ -11,6 +11,10 @@ vi.mock("@/app/(dashboard)/hooks/useAuthorized", () => ({ default: useAuthorized
 vi.mock("@/app/(dashboard)/hooks/useCan", () => ({ default: () => true }));
 vi.mock("@/components/networking", () => ({
   organizationListCall: vi.fn(async () => []),
+  dailyActivityAggregatedCall: vi.fn(async () => ({
+    results: [],
+    metadata: { total_pages: 1, has_more: false, page: 1 },
+  })),
   userDailyActivityCall: vi.fn(async () => ({ results: [], metadata: { total_pages: 1, has_more: false, page: 1 } })),
   userDailyActivityAggregatedCall: vi.fn(async () => ({
     results: [],
