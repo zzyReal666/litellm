@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import { z } from "zod";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
+import { z } from "zod/v4";
 import NumericalInput from "../shared/numerical_input";
 import BudgetDurationDropdown from "../common_components/budget_duration_dropdown";
 import { FieldGroup } from "@/components/ui/field";
@@ -11,21 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
-import { UtcDateTimeInput } from "@/components/shared/form/UtcDateTimeInput";
 import { useZodForm } from "@/lib/forms/useZodForm";
 import {
   buildMemberFormData,
   buildMemberFormValues,
   emptyMemberFormValues,
-  TEMP_BUDGET_PAIR_MESSAGE,
-  tempBudgetPairError,
   type MemberAdditionalField,
   type MemberFieldsConfig,
   type MemberFormValues,
 } from "./memberFormValues";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
-dayjs.extend(utc);
 
 interface BaseMember {
   user_email?: string;
@@ -46,24 +41,23 @@ interface MemberModalProps<T extends BaseMember> {
   config: ModalConfig;
 }
 
-const ROLE_REQUIRED_MESSAGE = "Please select a role!";
-
 const isEmailish = (value: string): boolean => value === "" || z.email().safeParse(value).success;
 
 const memberFieldSchema = z.union([z.string(), z.number(), z.null(), z.array(z.string())]).optional();
 
-const buildMemberSchema = (config: ModalConfig): z.ZodType<MemberFormValues, MemberFormValues> => {
+const buildMemberSchema = (config: ModalConfig, t: TFunction): z.ZodType<MemberFormValues, MemberFormValues> => {
+  const roleRequiredMessage = t("teamPage.editMembership.roleRequired", { defaultValue: "Please select a role!" });
   const shape = {
-    user_email: z.string().refine(isEmailish, "Please enter a valid email!").nullish(),
+    user_email: z
+      .string()
+      .refine(isEmailish, t("teamPage.editMembership.emailInvalid", { defaultValue: "Please enter a valid email!" }))
+      .nullish(),
     user_id: z.string().nullish(),
-    role: z.string({ error: ROLE_REQUIRED_MESSAGE }).min(1, ROLE_REQUIRED_MESSAGE),
+    role: z.string({ error: roleRequiredMessage }).min(1, roleRequiredMessage),
     ...Object.fromEntries((config.additionalFields ?? []).map((field) => [field.name, memberFieldSchema])),
   };
 
-  return z.object(shape).superRefine((values, ctx) => {
-    const path = tempBudgetPairError(values);
-    if (path !== null) ctx.addIssue({ code: "custom", path: [path], message: TEMP_BUDGET_PAIR_MESSAGE });
-  });
+  return z.object(shape);
 };
 
 const MemberModal = <T extends BaseMember>({
@@ -74,7 +68,8 @@ const MemberModal = <T extends BaseMember>({
   mode,
   config,
 }: MemberModalProps<T>) => {
-  const schema = useMemo(() => buildMemberSchema(config), [config]);
+  const { t } = useTranslation();
+  const schema = useMemo(() => buildMemberSchema(config, t), [config, t]);
   const form = useZodForm(schema, { defaultValues: emptyMemberFormValues(config) });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -129,7 +124,10 @@ const MemberModal = <T extends BaseMember>({
                 step={field.step || 1}
                 min={field.min || 0}
                 style={{ width: "100%" }}
-                placeholder={field.placeholder || "Enter a numerical value"}
+                placeholder={
+                  field.placeholder ||
+                  t("teamPage.editMembership.numericalPlaceholder", { defaultValue: "Enter a numerical value" })
+                }
                 value={value ?? ""}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
               />
@@ -159,7 +157,10 @@ const MemberModal = <T extends BaseMember>({
                 options={field.options ?? []}
                 value={Array.isArray(value) ? value : []}
                 onValueChange={onChange}
-                placeholder={field.placeholder || "Select options"}
+                placeholder={
+                  field.placeholder ||
+                  t("teamPage.editMembership.selectOptionsPlaceholder", { defaultValue: "Select options" })
+                }
               />
             );
           case "budget-duration":
@@ -168,16 +169,6 @@ const MemberModal = <T extends BaseMember>({
                 id={id}
                 value={typeof value === "string" ? value : null}
                 onChange={(next) => onChange(mode === "add" ? next ?? undefined : next)}
-              />
-            );
-          case "utc-datetime":
-            return (
-              <UtcDateTimeInput
-                {...rest}
-                id={id}
-                ref={ref}
-                value={typeof value === "string" && value !== "" ? dayjs.utc(value) : null}
-                onChange={(next) => onChange(next === null ? null : next.toISOString())}
               />
             );
           default:
@@ -191,17 +182,26 @@ const MemberModal = <T extends BaseMember>({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[1000px]">
         <DialogHeader>
-          <DialogTitle>{config.title || (mode === "add" ? "Add Member" : "Edit Member")}</DialogTitle>
+          <DialogTitle>
+            {config.title ||
+              (mode === "add"
+                ? t("teamPage.editMembership.addMemberTitle", { defaultValue: "Add Member" })
+                : t("teamPage.editMembership.editMemberTitle", { defaultValue: "Edit Member" }))}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
             {config.showEmail && (
-              <FormField control={form.control} name="user_email" label="Email">
+              <FormField
+                control={form.control}
+                name="user_email"
+                label={t("teamPage.editMembership.emailLabel", { defaultValue: "Email" })}
+              >
                 {({ ref, value, onChange, ...rest }) => (
                   <Input
                     {...rest}
                     ref={ref}
-                    placeholder="user@example.com"
+                    placeholder={t("teamPage.editMembership.emailPlaceholder", { defaultValue: "user@example.com" })}
                     value={typeof value === "string" ? value : ""}
                     onChange={(event) => onChange(event.target.value)}
                   />
@@ -210,16 +210,22 @@ const MemberModal = <T extends BaseMember>({
             )}
 
             {config.showEmail && config.showUserId && (
-              <div className="text-center text-sm text-muted-foreground">OR</div>
+              <div className="text-center text-sm text-muted-foreground">
+                {t("teamPage.editMembership.orDivider", { defaultValue: "OR" })}
+              </div>
             )}
 
             {config.showUserId && (
-              <FormField control={form.control} name="user_id" label="User ID">
+              <FormField
+                control={form.control}
+                name="user_id"
+                label={t("teamPage.editMembership.userIdLabel", { defaultValue: "User ID" })}
+              >
                 {({ ref, value, onChange, ...rest }) => (
                   <Input
                     {...rest}
                     ref={ref}
-                    placeholder="user_123"
+                    placeholder={t("teamPage.editMembership.userIdPlaceholder", { defaultValue: "user_123" })}
                     value={typeof value === "string" ? value : ""}
                     onChange={(event) => onChange(event.target.value)}
                   />
@@ -232,9 +238,14 @@ const MemberModal = <T extends BaseMember>({
               name="role"
               label={
                 <span className="flex items-center gap-2">
-                  <span>Role</span>
+                  <span>{t("teamPage.editMembership.roleLabel", { defaultValue: "Role" })}</span>
                   {mode === "edit" && initialData && (
-                    <span className="text-sm text-muted-foreground">(Current: {getRoleLabel(initialData.role)})</span>
+                    <span className="text-sm text-muted-foreground">
+                      {t("teamPage.editMembership.roleCurrent", {
+                        role: getRoleLabel(initialData.role),
+                        defaultValue: "(Current: {{role}})",
+                      })}
+                    </span>
                   )}
                 </span>
               }
@@ -264,17 +275,17 @@ const MemberModal = <T extends BaseMember>({
 
           <div className="mt-6 text-right">
             <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting} className="mr-2">
-              Cancel
+              {t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button type="submit" variant="outline" disabled={isSubmitting}>
               {isSubmitting && <UiLoadingSpinner className="size-4" />}
               {mode === "add"
                 ? isSubmitting
-                  ? "Adding..."
-                  : "Add Member"
+                  ? t("teamPage.editMembership.addingButton", { defaultValue: "Adding..." })
+                  : t("teamPage.editMembership.addMemberButton", { defaultValue: "Add Member" })
                 : isSubmitting
-                  ? "Saving..."
-                  : "Save Changes"}
+                  ? t("teamPage.editMembership.savingButton", { defaultValue: "Saving..." })
+                  : t("teamPage.editMembership.saveChangesButton", { defaultValue: "Save Changes" })}
             </Button>
           </div>
         </form>

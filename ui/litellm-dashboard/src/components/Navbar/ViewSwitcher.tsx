@@ -7,24 +7,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronsUpDown, LayoutGrid } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { usePluginMode } from "@/contexts/PluginModeContext";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
 import { uiHref } from "@/utils/uiHref";
-import moyaiHead from "../../../public/assets/moyai/moyai-head.svg";
 
 const GATEWAY = "ai-gateway";
 const CHAT = "chat";
-const MOYAI = "moyai";
-
-function isRoute(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function activeLabelFor(isChatRoute: boolean, isMoyaiRoute: boolean, pluginLabel: string | undefined): string {
-  if (isChatRoute) return "Chat";
-  if (isMoyaiRoute) return "Moyai";
-  return pluginLabel ?? "AI Gateway";
-}
 
 interface ViewSwitcherItem {
   key: string;
@@ -34,28 +23,31 @@ interface ViewSwitcherItem {
 }
 
 export default function ViewSwitcher() {
+  const { t } = useTranslation();
   const { mode, setMode, plugins } = usePluginMode();
   const { data: uiSettings } = useUISettings();
   const pathname = usePathname();
 
   const chatEnabled = Boolean(uiSettings?.values?.enable_chat_ui);
-  const moyaiUrl = (uiSettings?.values?.moyai_url as string | undefined) ?? null;
 
+  const chatHref = uiHref(CHAT);
   const normalizedPathname = (pathname ?? "").replace(/\/+$/, "");
-  const isChatRoute = chatEnabled && isRoute(normalizedPathname, uiHref(CHAT));
-  const isMoyaiRoute = isRoute(normalizedPathname, uiHref(MOYAI));
-  const isStandaloneRoute = isChatRoute || isMoyaiRoute;
+  const isChatRoute = chatEnabled && (normalizedPathname === chatHref || normalizedPathname.startsWith(`${chatHref}/`));
 
-  const activeLabel = activeLabelFor(isChatRoute, isMoyaiRoute, plugins.find((p) => p.name === mode)?.display_name);
+  const activeLabel = isChatRoute
+    ? t("navbar.modeChat", { defaultValue: "Chat" })
+    : plugins.find((p) => p.name === mode)?.display_name ?? t("navbar.aiGateway", { defaultValue: "AI Gateway" });
 
   const modeEntries = [
-    { key: GATEWAY, label: "AI Gateway" },
+    { key: GATEWAY, label: t("navbar.aiGateway", { defaultValue: "AI Gateway" }) },
     ...plugins.map((p) => ({ key: p.name, label: p.display_name })),
   ];
 
   const selectMode = (key: string) => {
     setMode(key);
-    if (isStandaloneRoute) {
+    // The chat route lives outside the dashboard SPA shell that reacts to `mode`,
+    // so switching modes from there needs a real navigation, not just state.
+    if (isChatRoute) {
       window.location.assign(uiHref(""));
     }
   };
@@ -65,7 +57,7 @@ export default function ViewSwitcher() {
         key: CHAT,
         label: (
           <div className="flex items-center justify-between gap-6 py-0.5">
-            <span className="font-medium">Chat</span>
+            <span className="font-medium">{t("navbar.modeChat", { defaultValue: "Chat" })}</span>
             {isChatRoute && <Check className="size-4 text-info" />}
           </div>
         ),
@@ -76,9 +68,9 @@ export default function ViewSwitcher() {
         disabled: true,
         label: (
           <div className="flex max-w-[220px] flex-col py-0.5">
-            <span className="font-medium">Chat</span>
+            <span className="font-medium">{t("navbar.modeChat", { defaultValue: "Chat" })}</span>
             <span className="whitespace-normal text-xs leading-snug text-muted-foreground">
-              Admins can enable in Settings
+              {t("navbar.adminsCanEnableInSettings", { defaultValue: "Admins can enable in Settings" })}
             </span>
           </div>
         ),
@@ -90,27 +82,11 @@ export default function ViewSwitcher() {
       label: (
         <div className="flex items-center justify-between gap-6 py-0.5">
           <span className="font-medium">{e.label}</span>
-          {!isStandaloneRoute && e.key === mode && <Check className="size-4 text-info" />}
+          {!isChatRoute && e.key === mode && <Check className="size-4 text-info" />}
         </div>
       ),
       onClick: () => selectMode(e.key),
     })),
-    {
-      key: MOYAI,
-      label: (
-        <div className="flex items-center justify-between gap-6 py-0.5">
-          <span className="flex items-center gap-2">
-            <img src={moyaiHead.src} alt="" className="h-4 w-auto" />
-            <span className="flex flex-col">
-              <span className="font-medium">Moyai</span>
-              <span className="text-xs leading-snug text-muted-foreground">Cloud Coding Agent</span>
-            </span>
-          </span>
-          {isMoyaiRoute && <Check className="size-4 text-info" />}
-        </div>
-      ),
-      onClick: () => window.location.assign(moyaiUrl ?? uiHref(MOYAI)),
-    },
     chatItem,
   ];
 
