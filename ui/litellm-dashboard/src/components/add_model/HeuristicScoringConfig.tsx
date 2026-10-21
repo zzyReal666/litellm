@@ -37,7 +37,7 @@ const OVERRIDE_FLOOR_ID = "reasoning-override-min-score";
 const GROUPS: GroupSpec[] = [
   {
     group: "tier_boundaries",
-    title: "Tier boundaries",
+    title: i18n.t("modelsEndpoints.HeuristicScoringConfig.tierBoundaries", { defaultValue: "Tier boundaries" }),
     blurb:
       "The weighted score each tier starts at. Scores run from -1 to 1, and short or conversational prompts score below 0, so a negative boundary is a valid way to lift trivial traffic into a higher tier.",
     min: -1,
@@ -52,7 +52,7 @@ const GROUPS: GroupSpec[] = [
   },
   {
     group: "token_thresholds",
-    title: "Token thresholds",
+    title: i18n.t("modelsEndpoints.HeuristicScoringConfig.tokenThresholds", { defaultValue: "Token thresholds" }),
     blurb:
       "Estimated prompt length, in tokens, that pushes the token count dimension to its floor or ceiling. Lengths between the two score neutral.",
     min: 0,
@@ -62,7 +62,7 @@ const GROUPS: GroupSpec[] = [
   },
   {
     group: "dimension_weights",
-    title: "Dimension weights",
+    title: i18n.t("modelsEndpoints.HeuristicScoringConfig.dimensionWeights", { defaultValue: "Dimension weights" }),
     blurb:
       "Changing a weight rebalances the other built-in and custom weights to total 1.00. Save stores those values. Untouched routers keep their existing weights.",
     min: 0,
@@ -162,8 +162,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
       <CollapsibleContent>
         <div className="mt-3 space-y-6 pl-6">
           <p className="text-xs text-muted-foreground">
-            Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any
-            recalibration of them rather than staying pinned to the numbers shown here.
+            {i18n.t("addModel.heuristicScoring.intro", { defaultValue: "Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any recalibration of them rather than staying pinned to the numbers shown here." })}
           </p>
 
           {isPending ? (
@@ -173,8 +172,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
               {isError && (
                 <div className="flex items-start gap-2" role="alert">
                   <p className="text-xs font-medium text-destructive">
-                    Could not load the shipped defaults, so only values this router already overrides are shown. Saving
-                    still works, and an untouched knob keeps following the defaults.
+                    {i18n.t("addModel.heuristicScoring.defaultsLoadFailed", { defaultValue: "Could not load the shipped defaults, so only values this router already overrides are shown. Saving still works, and an untouched knob keeps following the defaults." })}
                   </p>
                   <Button type="button" variant="link" size="xs" onClick={() => void refetch()}>
                     {t("common.retry", { defaultValue: "Retry" })}
@@ -314,11 +312,13 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted
-                  score reaches this floor.{" "}
+                  {i18n.t("modelsEndpoints.HeuristicScoringConfig.markerPromotionPrefix", {
+                    defaultValue:
+                      "Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted score reaches this floor.",
+                  })}{" "}
                   {trackedFloor === undefined
                     ? t("addModel.heuristicScoring.tracksBoundary", { defaultValue: "Left untouched, it tracks the Simple to Medium boundary." })
-                    : `Left untouched, it tracks the Simple to Medium boundary, currently ${trackedFloor.toFixed(2)}.`}{" "}
+                    : i18n.t("modelsEndpoints.HeuristicScoringConfig.leftUntouchedItTracksTheSimple", {p1: trackedFloor.toFixed(2), defaultValue: "Left untouched, it tracks the Simple to Medium boundary, currently {{p1}}."})}{" "}
                   {t("addModel.heuristicScoring.promoteOnMarkers", { defaultValue: "Set it to 0 to promote on the markers alone." })}
                 </p>
                 <div className="flex items-center gap-3">

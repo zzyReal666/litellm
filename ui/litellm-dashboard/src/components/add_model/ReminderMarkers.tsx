@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 import { getReminderMarkersError, type ReminderMarkerPair } from "./build_complexity_router_config";
+import i18n from "@/lib/i18n";
 
 const ReminderMarkers: React.FC<{
   value: ComplexityRouterConfigValue;
@@ -36,7 +37,7 @@ const ReminderMarkers: React.FC<{
           <div className="flex items-end gap-2" key={index}>
             <div className="flex-1">
               <label className="mb-1 block text-sm font-medium" htmlFor={`reminder-marker-${index}-open`}>
-                Opening tag
+                {i18n.t("modelsEndpoints.ReminderMarkers.openingTag", { defaultValue: "Opening tag" })}
               </label>
               <Input
                 id={`reminder-marker-${index}-open`}
@@ -47,7 +48,7 @@ const ReminderMarkers: React.FC<{
             </div>
             <div className="flex-1">
               <label className="mb-1 block text-sm font-medium" htmlFor={`reminder-marker-${index}-close`}>
-                Closing tag
+                {i18n.t("modelsEndpoints.ReminderMarkers.closingTag", { defaultValue: "Closing tag" })}
               </label>
               <Input
                 id={`reminder-marker-${index}-close`}
@@ -59,7 +60,7 @@ const ReminderMarkers: React.FC<{
             <Button
               variant="ghost"
               size="icon"
-              aria-label={`Remove tag pair ${index + 1}`}
+              aria-label={i18n.t("modelsEndpoints.ReminderMarkers.removeTagPair", { index: index + 1, defaultValue: "Remove tag pair {{index}}" })}
               onClick={() => remove(index)}
             >
               <Trash2 />
@@ -73,7 +74,7 @@ const ReminderMarkers: React.FC<{
         onClick={() => onChange({ ...value, reminder_markers: [...markers, { open: "", close: "" }] })}
       >
         <Plus />
-        Add tag pair
+        {i18n.t("modelsEndpoints.ReminderMarkers.addTagPair", { defaultValue: "Add tag pair" })}
       </Button>
       {showValidationErrors && error && <p className="mt-2 text-xs text-destructive">{error}</p>}
     </div>

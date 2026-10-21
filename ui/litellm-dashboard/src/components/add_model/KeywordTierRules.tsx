@@ -9,6 +9,7 @@ import React from "react";
 
 import { emptyKeywordTierRuleIndexes } from "./complexity_router_keywords";
 import { tierOptions, translatedDefaultTierLabel } from "./complexity_router_tiers";
+import i18n from "@/lib/i18n";
 
 export type ComplexityTier = "NON_REASONING" | "SIMPLE" | "MEDIUM" | "COMPLEX" | "REASONING";
 
@@ -109,7 +110,7 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
                       options={rule.keywords.map((keyword) => ({ label: keyword, value: keyword }))}
                       value={rule.keywords}
                       onValueChange={replaceKeywords(rule)}
-                      placeholder="e.g., invoice, refund, billing"
+                      placeholder={i18n.t("modelsEndpoints.KeywordTierRules.eGInvoiceRefundBilling", { defaultValue: "e.g., invoice, refund, billing" })}
                       emptyText={t("addModel.keywordTierRules.emptyText", { defaultValue: "Type to add a keyword" })}
                       allowCustomValues
                       className={emptyRuleIndexes.has(index) ? "w-full border-destructive" : "w-full"}

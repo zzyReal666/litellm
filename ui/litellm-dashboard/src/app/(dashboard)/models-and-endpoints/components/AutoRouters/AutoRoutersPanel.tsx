@@ -62,11 +62,21 @@ export function AutoRoutersPanel({
     setIsDeleting(true);
     try {
       await modelDeleteCall(accessToken, deletingRouter.id);
-      toast.success(`Deleted auto router: ${deletingRouter.name}`);
+      toast.success(
+        i18n.t("modelsEndpoints.AutoRoutersPanel.deletedAutoRouter", {
+          name: deletingRouter.name,
+          defaultValue: "Deleted auto router: {{name}}",
+        }),
+      );
       setDeletingRouter(null);
       await invalidateAutoRouters();
     } catch (error) {
-      toast.fromError(`Failed to delete auto router: ${error}`);
+      toast.fromError(
+          i18n.t("modelsEndpoints.AutoRoutersPanel.failedToDeleteAutoRouter", {
+            error,
+            defaultValue: "Failed to delete auto router: {{error}}",
+          }),
+        );
     } finally {
       setIsDeleting(false);
     }
@@ -108,8 +118,7 @@ export function AutoRoutersPanel({
           <DialogHeader>
             <DialogTitle>{i18n.t("pages.modelsAndEndpoints.addAutoRouter", { defaultValue: "Add Auto Router" })}</DialogTitle>
             <DialogDescription>
-              Choose a classifier to route each request to a model. Called like any other model, so clients keep using a
-              single model name.
+              {i18n.t("modelsEndpoints.AutoRoutersPanel.chooseAClassifierToRouteEach", { defaultValue: "Choose a classifier to route each request to a model. Called like any other model, so clients keep using a single model name." })}
             </DialogDescription>
           </DialogHeader>
           <AddAutoRouterTab
@@ -127,7 +136,7 @@ export function AutoRoutersPanel({
         <DeleteResourceModal
           isOpen
           title={i18n.t("pages.modelsAndEndpoints.deleteAutoRouter", { defaultValue: "Delete Auto Router" })}
-          message={`Are you sure you want to delete "${deletingRouter.name}"? Any client still calling this model name will start failing.`}
+          message={i18n.t("modelsEndpoints.AutoRoutersPanel.areYouSureYouWantTo", {p1: deletingRouter.name, defaultValue: "Are you sure you want to delete \"{{p1}}\"? Any client still calling this model name will start failing."})}
           resourceInformationTitle={i18n.t("pages.modelsAndEndpoints.autoRouterTitle", { defaultValue: "Auto router" })}
           resourceInformation={[
             { label: i18n.t("common.name", { defaultValue: "Name" }), value: deletingRouter.name },

@@ -19,6 +19,7 @@ import {
 } from "@/app/(dashboard)/hooks/modelAccessGroups/useSetModelAccessGroupBudget";
 import AccessGroupBudgetModal from "@/app/(dashboard)/models-and-endpoints/components/AccessGroupBudgetModal";
 import { getAccessGroupBudgetColumns } from "@/app/(dashboard)/models-and-endpoints/components/AccessGroupBudgetColumns";
+import i18n from "@/lib/i18n";
 
 const DEFAULT_SORTING: SortingState = [{ id: "access_group", desc: false }];
 
@@ -68,7 +69,7 @@ export default function AccessGroupBudgetsPanel() {
           toast.success(
             t("pages.accessGroupBudgets.budgetSaved", {
               accessGroup,
-              defaultValue: `Budget saved for "${accessGroup}"`,
+              defaultValue: i18n.t("modelsEndpoints.AccessGroupBudgetsPanel.budgetSavedFor", {p1: accessGroup, defaultValue: "Budget saved for \"{{p1}}\""}),
             }),
           );
           setEditing(null);
@@ -85,7 +86,7 @@ export default function AccessGroupBudgetsPanel() {
         toast.success(
           t("pages.accessGroupBudgets.budgetCleared", {
             accessGroup,
-            defaultValue: `Budget cleared for "${accessGroup}"`,
+            defaultValue: i18n.t("modelsEndpoints.AccessGroupBudgetsPanel.budgetClearedFor", {p1: accessGroup, defaultValue: "Budget cleared for \"{{p1}}\""}),
           }),
         );
         setClearing(null);

@@ -50,8 +50,7 @@ const AutoRouterRoutingTest: React.FC<AutoRouterRoutingTestProps> = ({
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Send a prompt through this router&apos;s classifier to see which model it would pick, and why. The prompt is
-        only classified: nothing is sent to the model it routes to.
+        {i18n.t("modelsEndpoints.AutoRouterRoutingTest.sendAPromptThroughThisRouter", { defaultValue: "Send a prompt through this router's classifier to see which model it would pick, and why. The prompt is only classified: nothing is sent to the model it routes to." })}
       </p>
 
       <Textarea

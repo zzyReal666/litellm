@@ -3,6 +3,7 @@ import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { apiClient } from "@/components/networking";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import type { components } from "@/lib/http/schema";
+import i18n from "@/lib/i18n";
 
 type Availability = components["schemas"]["AutoRouterAvailabilityResponse"];
 type Request = components["schemas"]["AutoRouterAvailabilityRequest"];
@@ -97,7 +98,7 @@ export const AutoRouterContactLink = ({ features, message }: { features?: string
         rel="noopener noreferrer"
         className="font-medium text-blue-600 hover:underline dark:text-blue-400"
       >
-        Talk to our team
+        {i18n.t("modelsEndpoints.AutoRouterAvailability.talkToOurTeam", { defaultValue: "Talk to our team" })}
       </a>
     </span>
   );
@@ -131,13 +132,12 @@ export const AutoRouterLimits = () => {
   return (
     <Popover>
       <PopoverTrigger className="shrink-0 whitespace-nowrap text-xs font-normal text-muted-foreground underline underline-offset-4 hover:text-foreground">
-        View limits
+        {i18n.t("modelsEndpoints.AutoRouterAvailability.viewLimits", { defaultValue: "View limits" })}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-96 max-w-[calc(100vw-2rem)] gap-3">
-        <PopoverTitle>Routing and customization limits</PopoverTitle>
+        <PopoverTitle>{i18n.t("modelsEndpoints.AutoRouterAvailability.routingAndCustomizationLimits", { defaultValue: "Routing and customization limits" })}</PopoverTitle>
         <p className="text-xs leading-5 text-muted-foreground">
-          Rule-based, Complexity, and OSS are unlimited with built-in settings. Choose or change tier models freely.
-          Customization allowances are shared across this proxy.
+          {i18n.t("modelsEndpoints.AutoRouterAvailability.ruleBasedComplexityAndOssAre", { defaultValue: "Rule-based, Complexity, and OSS are unlimited with built-in settings. Choose or change tier models freely. Customization allowances are shared across this proxy." })}
         </p>
         <dl className="space-y-2 text-xs">
           {limits.map(([key, label]) => (
@@ -150,15 +150,12 @@ export const AutoRouterLimits = () => {
           ))}
         </dl>
         <p className="text-xs leading-5 text-muted-foreground">
-          Custom tier definitions and written classifier instructions share one allowance. Built-in prompts and
-          display-name changes do not use it.
+          {i18n.t("modelsEndpoints.AutoRouterAvailability.customTierDefinitionsAndWrittenClassifier", { defaultValue: "Custom tier definitions and written classifier instructions share one allowance. Built-in prompts and display-name changes do not use it." })}
         </p>
         <p className="text-xs leading-5 text-muted-foreground">
-          Changing scoring rules, such as weights, thresholds, keywords, or custom dimensions, uses the Rule-based
-          tuning allowance. It also applies to Heuristic first and Hybrid. Recorded settings on existing routers are
-          preserved; new routers start from built-in rules.
+          {i18n.t("modelsEndpoints.AutoRouterAvailability.changingScoringRulesSuchAsWeights", { defaultValue: "Changing scoring rules, such as weights, thresholds, keywords, or custom dimensions, uses the Rule-based tuning allowance. It also applies to Heuristic first and Hybrid. Recorded settings on existing routers are preserved; new routers start from built-in rules." })}
         </p>
-        <AutoRouterContactLink message="Need a higher limit?" />
+        <AutoRouterContactLink message={i18n.t("modelsEndpoints.AutoRouterAvailability.needAHigherLimit", { defaultValue: "Need a higher limit?" })} />
       </PopoverContent>
     </Popover>
   );

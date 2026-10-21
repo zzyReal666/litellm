@@ -2,6 +2,7 @@ import { modelCreateCall } from "../networking";
 import { toast } from "@/lib/toast";
 import type { ComplexityRouterConfigPayload } from "./build_complexity_router_config";
 import type { AutoRouterCompressionLitellmParams } from "./buildAutoRouterCompression";
+import i18n from "@/lib/i18n";
 
 export interface AddAutoRouterValues extends AutoRouterCompressionLitellmParams {
   auto_router_name: string;
@@ -44,7 +45,12 @@ export const handleAddAutoRouterSubmit = async (
 
     await modelCreateCall(accessToken, autoRouterConfig);
 
-    toast.success(`Successfully created Auto Router: ${values.auto_router_name}`);
+    toast.success(
+      i18n.t("modelsEndpoints.handle_add_auto_router_submit.createdAutoRouter", {
+        name: values.auto_router_name,
+        defaultValue: "Successfully created Auto Router: {{name}}",
+      }),
+    );
 
     resetForm();
 

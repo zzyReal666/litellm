@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 import { getClassifierPluginTimeoutError } from "./build_complexity_router_config";
+import i18n from "@/lib/i18n";
 
 const CLASSIFIER_PLUGIN_TIMEOUT_ID = "classifier-plugin-timeout-ms";
 
@@ -21,10 +22,10 @@ const ClassifierPluginTimeoutField: React.FC<ClassifierPluginTimeoutFieldProps> 
   return (
     <div className="mt-4 space-y-2">
       <p className="text-sm text-muted-foreground">
-        This router uses a custom classifier plugin set in config.yaml. Pick a classifier below to replace it.
+        {i18n.t("modelsEndpoints.ClassifierPluginTimeoutField.thisRouterUsesACustomClassifier", { defaultValue: "This router uses a custom classifier plugin set in config.yaml. Pick a classifier below to replace it." })}
       </p>
       <Label htmlFor={CLASSIFIER_PLUGIN_TIMEOUT_ID} className="block font-semibold">
-        Classifier plugin timeout (ms)
+        {i18n.t("modelsEndpoints.ClassifierPluginTimeoutField.classifierPluginTimeoutMs", { defaultValue: "Classifier plugin timeout (ms)" })}
       </Label>
       <Input
         id={CLASSIFIER_PLUGIN_TIMEOUT_ID}
@@ -40,7 +41,7 @@ const ClassifierPluginTimeoutField: React.FC<ClassifierPluginTimeoutFieldProps> 
         aria-invalid={Boolean(showValidationErrors && error)}
       />
       <p className="text-sm text-muted-foreground">
-        Time budget for the plugin call. On expiry the fallback path decides the tier.
+        {i18n.t("modelsEndpoints.ClassifierPluginTimeoutField.timeBudgetForThePluginCall", { defaultValue: "Time budget for the plugin call. On expiry the fallback path decides the tier." })}
       </p>
       {showValidationErrors && error && (
         <p className="text-sm text-destructive" role="alert">

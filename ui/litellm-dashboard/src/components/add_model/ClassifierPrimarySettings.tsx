@@ -12,6 +12,7 @@ import {
   type ClassificationFrequency,
 } from "./ComplexityRouterConfig";
 import { restrictedBy } from "./TierRestrictions";
+import i18n from "@/lib/i18n";
 
 export default function ClassifierPrimarySettings({
   value,
@@ -48,12 +49,12 @@ export default function ClassifierPrimarySettings({
     >
       {section !== "judge" && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-frequency`}>How often to classify</Label>
+          <Label htmlFor={`${id}-frequency`}>{i18n.t("addModel.classificationMethod.frequencyLabel", { defaultValue: "How often to classify" })}</Label>
           <Select
             items={[
-              { value: "every_request", label: "Every request" },
-              { value: "user_turn", label: "Every new user message" },
-              { value: "session", label: "Once per session" },
+              { value: "every_request", label: i18n.t("addModel.classificationMethod.frequencyEveryRequest", { defaultValue: "Every request" }) },
+              { value: "user_turn", label: i18n.t("addModel.classificationMethod.frequencyUserTurn", { defaultValue: "Every new user message" }) },
+              { value: "session", label: i18n.t("addModel.classificationMethod.frequencySession", { defaultValue: "Once per session" }) },
             ]}
             value={frequency}
             onValueChange={(frequency) => {
@@ -64,10 +65,10 @@ export default function ClassifierPrimarySettings({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="every_request">Every request</SelectItem>
-              <SelectItem value="user_turn">Every new user message</SelectItem>
+              <SelectItem value="every_request">{i18n.t("addModel.classificationMethod.frequencyEveryRequest", { defaultValue: "Every request" })}</SelectItem>
+              <SelectItem value="user_turn">{i18n.t("addModel.classificationMethod.frequencyUserTurn", { defaultValue: "Every new user message" })}</SelectItem>
               <SelectItem value="session" disabled={Boolean(restriction)}>
-                Once per session
+                {i18n.t("addModel.classificationMethod.frequencySession", { defaultValue: "Once per session" })}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -76,13 +77,13 @@ export default function ClassifierPrimarySettings({
       )}
       {section !== "frequency" && usesJudge && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-judge`}>Judge model</Label>
+          <Label htmlFor={`${id}-judge`}>{i18n.t("costOptimization.shadowEvalStartForm.judgeModel", { defaultValue: "Judge model" })}</Label>
           <SearchSelect
             inputId={`${id}-judge`}
-            aria-label="Judge model"
+            aria-label={i18n.t("costOptimization.shadowEvalStartForm.judgeModel", { defaultValue: "Judge model" })}
             options={modelOptions}
             value={value.classifier_llm_config?.model ?? ""}
-            placeholder="Select the judge model"
+            placeholder={i18n.t("modelsEndpoints.ClassifierPrimarySettings.selectTheJudgeModel", { defaultValue: "Select the judge model" })}
             allowClear={false}
             className={missingJudge ? "border-destructive" : undefined}
             onValueChange={(model) => {

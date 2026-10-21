@@ -173,14 +173,14 @@ export const InactiveHeuristicV2Threshold: React.FC<Pick<ClassificationMethodCon
   const error = getHeuristicV2SuccessThresholdError(threshold);
   if (effectiveClassifierType(value) === "llm" && !error) return null;
   return (
-    <section aria-label="Inactive Heuristic v2 threshold" className="mb-4 space-y-2 rounded-md border p-3">
+    <section aria-label={i18n.t("modelsEndpoints.ClassificationMethodConfig.inactiveHeuristicV2Threshold", { defaultValue: "Inactive Heuristic v2 threshold" })} className="mb-4 space-y-2 rounded-md border p-3">
       <p className="text-sm font-medium">
         Heuristic v2 success threshold (inactive):{" "}
-        <output aria-label="Retained Heuristic v2 threshold">
+        <output aria-label={i18n.t("modelsEndpoints.ClassificationMethodConfig.retainedHeuristicV2Threshold", { defaultValue: "Retained Heuristic v2 threshold" })}>
           {Number.isFinite(threshold) ? threshold : "Invalid value"}
         </output>
       </p>
-      <p className="text-sm text-muted-foreground">Only used when Heuristic v2 is selected</p>
+      <p className="text-sm text-muted-foreground">{i18n.t("modelsEndpoints.ClassificationMethodConfig.onlyUsedWhenHeuristicV2Is", { defaultValue: "Only used when Heuristic v2 is selected" })}</p>
       {error && (
         <p className="text-sm text-destructive" role="alert">
           {error}
@@ -192,7 +192,7 @@ export const InactiveHeuristicV2Threshold: React.FC<Pick<ClassificationMethodCon
         size="sm"
         onClick={() => onChange({ ...value, heuristic_v2_success_threshold: undefined })}
       >
-        Clear Heuristic v2 threshold
+        {i18n.t("modelsEndpoints.ClassificationMethodConfig.clearHeuristicV2Threshold", { defaultValue: "Clear Heuristic v2 threshold" })}
       </Button>
     </section>
   );
@@ -383,10 +383,10 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       )}
       {showLocalChecks && (
         <div className="space-y-2">
-          <Label htmlFor="auto-router-local-checks">Local checks before the judge</Label>
+          <Label htmlFor="auto-router-local-checks">{i18n.t("modelsEndpoints.ClassificationMethodConfig.localChecksBeforeTheJudge", { defaultValue: "Local checks before the judge" })}</Label>
           <Select
             items={[
-              { value: "llm", label: "Always use the judge" },
+              { value: "llm", label: i18n.t("modelsEndpoints.ClassificationMethodConfig.alwaysUseTheJudge", { defaultValue: "Always use the judge" }) },
               { value: "heuristic_first", label: i18n.t("addModel.classificationMethod.heuristicFirstLabel", { defaultValue: "Heuristic first" }) },
               { value: "hybrid", label: i18n.t("addModel.classificationMethod.hybridLabel", { defaultValue: "Hybrid" }) },
             ]}
@@ -399,7 +399,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="llm">Always use the judge</SelectItem>
+              <SelectItem value="llm">{i18n.t("modelsEndpoints.ClassificationMethodConfig.alwaysUseTheJudge2", { defaultValue: "Always use the judge" })}</SelectItem>
               <SelectItem value="heuristic_first" disabled={Boolean(value.custom_tier_set)}>
                 {i18n.t("addModel.classificationMethod.heuristicFirstLabel", { defaultValue: "Heuristic first" })}
               </SelectItem>
@@ -413,10 +413,10 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
 
       {showSelection && isHeuristicChain(classifierType) && (
         <div className="mt-4 space-y-2">
-          <Label htmlFor="auto-router-local-heuristic">Heuristic before the judge</Label>
+          <Label htmlFor="auto-router-local-heuristic">{i18n.t("modelsEndpoints.ClassificationMethodConfig.heuristicBeforeTheJudge", { defaultValue: "Heuristic before the judge" })}</Label>
           <ClassifierMenu
             id="auto-router-local-heuristic"
-            label="Heuristic before the judge"
+            label={i18n.t("modelsEndpoints.ClassificationMethodConfig.heuristicBeforeTheJudge2", { defaultValue: "Heuristic before the judge" })}
             selectedLabel={value.local_heuristic === "heuristic_v2" ? i18n.t("addModel.classificationMethod.heuristicV2Label", { defaultValue: "Heuristic v2" }) : "Heuristic v1 (rule-based)"}
             feature={value.local_heuristic === "heuristic_v2" ? "heuristic_v2" : undefined}
             value={value.local_heuristic ?? "heuristic"}
@@ -426,13 +426,13 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
           >
             <ClassifierOption
               value="heuristic"
-              label="Heuristic v1 (rule-based)"
-              description="Score requests using configurable weights and keywords"
+              label={i18n.t("modelsEndpoints.ClassificationMethodConfig.heuristicV1RuleBased", { defaultValue: "Heuristic v1 (rule-based)" })}
+              description={i18n.t("modelsEndpoints.ClassificationMethodConfig.scoreRequestsUsingConfigurableWeightsAnd", { defaultValue: "Score requests using configurable weights and keywords" })}
             />
             <ClassifierOption
               value="heuristic_v2"
               label={i18n.t("addModel.classificationMethod.heuristicV2Label", { defaultValue: "Heuristic v2" })}
-              description="Choose a tier using calibrated success probabilities"
+              description={i18n.t("modelsEndpoints.ClassificationMethodConfig.chooseATierUsingCalibratedSuccess", { defaultValue: "Choose a tier using calibrated success probabilities" })}
               feature="heuristic_v2"
             />
           </ClassifierMenu>
@@ -446,13 +446,13 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       {showHeuristic && heuristic === "heuristic_v2" && (
         <div className="mt-4 space-y-2">
           <Label htmlFor={HEURISTIC_V2_SUCCESS_THRESHOLD_ID} className="block font-semibold">
-            Success threshold
+            {i18n.t("modelsEndpoints.ClassificationMethodConfig.successThreshold", { defaultValue: "Success threshold" })}
           </Label>
           <Input
             id={HEURISTIC_V2_SUCCESS_THRESHOLD_ID}
             type="text"
             inputMode="decimal"
-            placeholder="Artifact default"
+            placeholder={i18n.t("modelsEndpoints.ClassificationMethodConfig.artifactDefault", { defaultValue: "Artifact default" })}
             value={successThresholdDraft ?? value.heuristic_v2_success_threshold?.toString() ?? ""}
             onChange={(event) => handleSuccessThresholdChange(event.target.value)}
             onBlur={() => {
@@ -462,8 +462,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             aria-describedby={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-help${successThresholdError ? ` ${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-error` : ""}`}
           />
           <p id={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-help`} className="text-sm text-muted-foreground">
-            Minimum predicted success probability, from 0 to 1. Higher values favor more capable tiers. Leave blank to
-            use the artifact default
+            {i18n.t("modelsEndpoints.ClassificationMethodConfig.minimumPredictedSuccessProbabilityFrom0", { defaultValue: "Minimum predicted success probability, from 0 to 1. Higher values favor more capable tiers. Leave blank to use the artifact default" })}
           </p>
           {successThresholdError && (
             <p id={`${HEURISTIC_V2_SUCCESS_THRESHOLD_ID}-error`} className="text-sm text-destructive" role="alert">
@@ -583,7 +582,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             </div>
             <AutoRouterAllowanceNote
               feature="tier_or_classifier_prompt"
-              label="Custom instructions and examples share the custom-tier allowance"
+              label={i18n.t("modelsEndpoints.ClassificationMethodConfig.customInstructionsAndExamplesShareThe", { defaultValue: "Custom instructions and examples share the custom-tier allowance" })}
             />
             {!value.custom_tier_set && usesCustomPrompt ? (
               <ClassifierPromptEditor
@@ -677,9 +676,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               className="w-full"
             />
             <span className="text-xs text-muted-foreground">
-              Number of prior user turns sent to the classifier provider, excluding tool output and harness reminders.
-              LLM and decision model classifiers default to 3 turns. Set to 0 to omit conversation history. The current
-              message and selected system text are still sent.
+              {i18n.t("modelsEndpoints.ClassificationMethodConfig.numberOfPriorUserTurnsSent", { defaultValue: "Number of prior user turns sent to the classifier provider, excluding tool output and harness reminders. LLM and decision model classifiers default to 3 turns. Set to 0 to omit conversation history. The current message and selected system text are still sent." })}
             </span>
           </div>
           <div>
@@ -707,8 +704,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               className="w-full"
             />
             <span className="text-xs text-muted-foreground">
-              Total characters of prior conversation sent to the classifier. Turns are taken newest first and quoted
-              whole while they fit, so a short conversation is never cut.
+              {i18n.t("addModel.classificationMethod.contextBudgetHint", { defaultValue: "Total characters of prior conversation sent to the classifier. Turns are taken newest first and quoted whole while they fit, so a short conversation is never cut." })}
             </span>
             {contextBudgetQuotesNothing && (
               <span className="block text-xs text-destructive">
@@ -732,10 +728,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               </SimpleTooltip>
             </div>
             <span className="text-xs text-muted-foreground">
-              Let the classifier read the assistant&apos;s replies, so difficulty the model stated rather than the user
-              stays visible: a plan the assistant calls complex, approved with &quot;yes&quot;, is classified on the
-              work being approved. Context Window Size then counts the last N turns across both roles rather than the
-              last N user turns.
+              {i18n.t("modelsEndpoints.ClassificationMethodConfig.letTheClassifierReadTheAssistant", { defaultValue: "Let the classifier read the assistant's replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns." })}
             </span>
           </div>
         </div>
@@ -750,8 +743,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             </SimpleTooltip>
           </div>
           <span className="block mb-2 text-xs text-muted-foreground">
-            Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension.
-            (e.g., udp, kafka, terraform).
+            {i18n.t("addModel.classificationMethod.customTechnicalKeywordsHint", { defaultValue: "Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension. (e.g., udp, kafka, terraform)." })}
           </span>
           <MultiSelect
             options={(customTechnicalKeywords ?? []).map((keyword) => ({ label: keyword, value: keyword }))}
@@ -774,11 +766,11 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       {showHeuristic && heuristic === "heuristic" && (
         <>
           {heuristicScoringRole(value) === "decides" && (
-            <AutoRouterAllowanceNote feature="heuristic_tuning" label="Custom scoring rules" />
+            <AutoRouterAllowanceNote feature="heuristic_tuning" label={i18n.t("modelsEndpoints.ClassificationMethodConfig.customScoringRules", { defaultValue: "Custom scoring rules" })} />
           )}
           <HeuristicScoringConfig value={value} onChange={onChange} />
           <section className="mt-4 space-y-3">
-            <h4 className="font-semibold">Heuristic Keyword Overrides</h4>
+            <h4 className="font-semibold">{i18n.t("modelsEndpoints.ClassificationMethodConfig.heuristicKeywordOverrides", { defaultValue: "Heuristic Keyword Overrides" })}</h4>
             <HeuristicKeywordOverrides value={value} onChange={onChange} />
           </section>
         </>

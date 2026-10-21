@@ -297,14 +297,14 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         <div className="col-span-5" />
                         <div className="col-span-5">
                           <p className="text-sm mb-5 mt-1">
-                            <strong>Optional</strong> - LiteLLM endpoint to use when health checking this model{" "}
+                            <strong>{i18n.t("defaultUserSettings.teamEntry.maxBudgetPlaceholder", { defaultValue: "Optional" })}</strong> - LiteLLM endpoint to use when health checking this model{" "}
                             <a
                               href="https://docs.litellm.ai/docs/proxy/health#health"
                               target="_blank"
                               rel="noreferrer"
                               className="text-primary hover:underline"
                             >
-                              Learn more
+                              {i18n.t("common.learnMore", { defaultValue: "Learn more" })}
                             </a>
                           </p>
                         </div>
@@ -346,14 +346,14 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                           {canCreateFederatedCredential && (
                             <div className="mb-4 flex flex-col items-start gap-2">
                               <span className="text-sm text-muted-foreground">
-                                Workload identity federation is saved as a credential, then attached to this model.
+                                {i18n.t("modelsEndpoints.AddModelForm.workloadIdentityFederationIsSavedAs", { defaultValue: "Workload identity federation is saved as a credential, then attached to this model." })}
                               </span>
                               <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => setIsFederatedCredentialModalOpen(true)}
                               >
-                                Use workload identity federation
+                                {i18n.t("modelsEndpoints.AddModelForm.useWorkloadIdentityFederation", { defaultValue: "Use workload identity federation" })}
                               </Button>
                             </div>
                           )}

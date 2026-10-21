@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import NumericalInput from "../shared/numerical_input";
+import i18n from "@/lib/i18n";
 
 export const CACHE_CONTROL_LABEL = "Cache Control Injection Points";
 
@@ -32,13 +33,13 @@ export interface CacheControlInjectionPoint {
 export const NEW_CACHE_CONTROL_POINT: CacheControlInjectionPoint = { location: "message" };
 
 const LOCATION_ITEMS = [
-  { value: "message", labelKey: "addModel.cacheControlSettings.messageType", label: "Message" },
+  { value: "message", labelKey: "addModel.cacheControlSettings.messageType", label: i18n.t("viewLogs.errorViewer.message", { defaultValue: "Message" }) },
 ] as const;
 
 const ROLE_ITEMS = [
-  { value: "user", labelKey: "addModel.cacheControlSettings.roleUser", label: "User" },
-  { value: "system", labelKey: "addModel.cacheControlSettings.roleSystem", label: "System" },
-  { value: "assistant", labelKey: "addModel.cacheControlSettings.roleAssistant", label: "Assistant" },
+  { value: "user", labelKey: "addModel.cacheControlSettings.roleUser", label: i18n.t("defaultUserSettings.displayValues.userRoleOption", { defaultValue: "User" }) },
+  { value: "system", labelKey: "addModel.cacheControlSettings.roleSystem", label: i18n.t("promptsPage.promptMessagesCard.roleSystem", { defaultValue: "System" }) },
+  { value: "assistant", labelKey: "addModel.cacheControlSettings.roleAssistant", label: i18n.t("playground.messageDisplay.assistantFallback", { defaultValue: "Assistant" }) },
 ] as const;
 
 const LabelWithHint: React.FC<{ label: string; hint: string }> = ({ label, hint }) => {

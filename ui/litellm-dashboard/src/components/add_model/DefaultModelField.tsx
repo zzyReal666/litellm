@@ -14,7 +14,11 @@ interface DefaultModelFieldProps {
 }
 
 const defaultModelPlaceholderFor = (derivedDefaultModel: string | undefined, isCustomSet: boolean): string => {
-  if (derivedDefaultModel) return `Derived from tiers: ${derivedDefaultModel}`;
+  if (derivedDefaultModel)
+    return i18n.t("modelsEndpoints.DefaultModelField.derivedFromTiers", {
+      model: derivedDefaultModel,
+      defaultValue: "Derived from tiers: {{model}}",
+    });
   return isCustomSet ? "Add a model to your fallback tier" : "Add a model to the Simple or Medium tier";
 };
 
@@ -33,7 +37,7 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
     <div className="mt-4 mb-2" role="group" aria-label={i18n.t("addModel.addAutoRouterTab.defaultModelConfigAria", { defaultValue: "Default model configuration" })}>
       <div className="flex items-center gap-2 mb-2">
         <strong className="text-base font-semibold">{i18n.t("addModel.addAutoRouterTab.defaultModelLabel", { defaultValue: "Default Model" })}</strong>
-        <SimpleTooltip content="Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.">
+        <SimpleTooltip content={i18n.t("addModel.complexityRouterConfig.defaultModelTooltip", { defaultValue: "Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change." })}>
           <Info className="size-4 text-muted-foreground" />
         </SimpleTooltip>
       </div>
@@ -42,7 +46,7 @@ const DefaultModelField = ({ value, onChange, modelOptions }: DefaultModelFieldP
         value={value.default_model ?? ""}
         onValueChange={handleDefaultModelChange}
         placeholder={defaultModelPlaceholder}
-        emptyText="No models found"
+        emptyText={i18n.t("viewLogs.filterOptions.noModelsFoundLabel", { defaultValue: "No models found" })}
         aria-label={i18n.t("addModel.addAutoRouterTab.defaultModelLabel", { defaultValue: "Default Model" })}
       />
       <span className="block mt-1 text-xs text-muted-foreground">

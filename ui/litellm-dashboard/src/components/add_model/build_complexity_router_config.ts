@@ -52,6 +52,7 @@ import {
   usesLlmClassifier,
   usesClassifierContext,
 } from "./ComplexityRouterConfig";
+import i18n from "@/lib/i18n";
 
 export type ClassifierVisionConfig = { enabled?: boolean; max_images?: number };
 export type ClassifierLLMConfigWire = ClassifierLLMConfig & { vision?: ClassifierVisionConfig };
@@ -338,12 +339,18 @@ export const getTierLabelsError = (tierLabels: ComplexityTierLabels | undefined)
     return label !== "" && label !== tier && (TIER_KEYS as string[]).includes(label);
   });
   if (shadowing.length > 0) {
-    return `A tier's display name can't be another tier's name: ${shadowing.join(", ")}`;
+    return i18n.t("modelsEndpoints.build_complexity_router_config.shadowingTierName", {
+      names: shadowing.join(", "),
+      defaultValue: "A tier's display name can't be another tier's name: {{names}}",
+    });
   }
   const labels = TIER_KEYS.map((tier) => effectiveTierLabel(tier, tierLabels).toLowerCase());
   const duplicates = Array.from(new Set(labels.filter((label, index) => labels.indexOf(label) !== index)));
   if (duplicates.length > 0) {
-    return `Tier display names must be unique. Repeated: ${duplicates.join(", ")}`;
+    return i18n.t("modelsEndpoints.build_complexity_router_config.duplicateTierNames", {
+      names: duplicates.join(", "),
+      defaultValue: "Tier display names must be unique. Repeated: {{names}}",
+    });
   }
   return null;
 };
@@ -354,14 +361,17 @@ export const getTierLabelsError = (tierLabels: ComplexityTierLabels | undefined)
 export const getMissingTiersError = (rows: readonly TierRow[]): string | null => {
   const missing = rows.filter((row) => row.models.length === 0).map(activeTierName);
   if (missing.length === 0) return null;
-  return `Select a model for the following tier(s): ${missing.join(", ")}`;
+  return i18n.t("modelsEndpoints.build_complexity_router_config.missingTierModels", {
+      names: missing.join(", "),
+      defaultValue: "Select a model for the following tier(s): {{names}}",
+    });
 };
 
 export const getPlanModeTierError = (planModeMinTier: string | undefined, rows: readonly TierRow[]): string | null => {
   if (!planModeMinTier) return null;
   const floor = tierRowById(rows, planModeMinTier);
   if (floor && floor.models.length > 0) return null;
-  return `The plan-mode minimum tier (${floor ? activeTierName(floor) : planModeMinTier}) has no models. Add one or turn the override off.`;
+  return i18n.t("modelsEndpoints.buildcomplexityrouterconfig.thePlanModeMinimumTierHas", {p1: floor ? activeTierName(floor) : planModeMinTier, defaultValue: "The plan-mode minimum tier ({{p1}}) has no models. Add one or turn the override off."});
 };
 
 // The orphan check compares exactly, not casefold: _validate_keyword_rule_tiers is exact
@@ -373,11 +383,17 @@ export const getKeywordTierRulesError = (
 ): string | null => {
   const emptyRows = emptyKeywordTierRuleIndexes(keywordTierRules);
   if (emptyRows.length > 0)
-    return `Add at least one keyword to keyword rule(s): ${emptyRows.map((index) => index + 1).join(", ")}`;
+    return i18n.t("modelsEndpoints.build_complexity_router_config.emptyKeywordRules", {
+      indexes: emptyRows.map((index) => index + 1).join(", "),
+      defaultValue: "Add at least one keyword to keyword rule(s): {{indexes}}",
+    });
   const names = rows.map(activeTierName);
   const orphaned = keywordTierRules.flatMap((rule, index) => (names.includes(rule.tier) ? [] : [index + 1]));
   if (orphaned.length === 0) return null;
-  return `Keyword rule(s) ${orphaned.join(", ")} route to a tier this router no longer has`;
+  return i18n.t("modelsEndpoints.build_complexity_router_config.orphanedKeywordRules", {
+      indexes: orphaned.join(", "),
+      defaultValue: "Keyword rule(s) {{indexes}} route to a tier this router no longer has",
+    });
 };
 
 export const getHeuristicV2SuccessThresholdError = (threshold: number | undefined): string | null => {
@@ -390,8 +406,8 @@ export const getReminderMarkersError = (pairs: ReminderMarkerPair[] | undefined)
   for (const [index, pair] of (pairs ?? []).entries()) {
     const open = pair.open.trim().toLowerCase();
     const close = pair.close.trim().toLowerCase();
-    if (!open || !close) return `Tag pair ${index + 1} needs both an opening and a closing tag`;
-    if (open === close) return `Tag pair ${index + 1} must use different opening and closing tags`;
+    if (!open || !close) return i18n.t("modelsEndpoints.buildcomplexityrouterconfig.tagPairNeedsBothAnOpening", {p1: index + 1, defaultValue: "Tag pair {{p1}} needs both an opening and a closing tag"});
+    if (open === close) return i18n.t("modelsEndpoints.buildcomplexityrouterconfig.tagPairMustUseDifferentOpening", {p1: index + 1, defaultValue: "Tag pair {{p1}} must use different opening and closing tags"});
   }
   return null;
 };

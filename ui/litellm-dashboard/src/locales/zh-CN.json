@@ -11696,5 +11696,322 @@
   "noRedisWarning": {
     "title": "未配置 Redis，强烈建议配置",
     "body": "该代理运行了多个工作进程（或无法确认工作进程数量）。没有 Redis 时，限流、预算、路由状态与缓存失效都只在单个工作进程内生效，所以限额会按每个工作进程各自计算，花费可能超出上限。<0>查看没有 Redis 时会失效的全部功能</0>。设置 <1>LITELLM_DISABLE_NO_REDIS_WARNING=true</1> 仍可隐藏此提示。"
+  },
+  "modelsEndpoints": {
+    "page": {
+      "viewYourModelsAndManageRouters": "查看你的模型，并为允许的团队管理路由器"
+    },
+    "AccessGroupBudgetsPanel": {
+      "budgetSavedFor": "已保存「{{p1}}」的预算",
+      "budgetClearedFor": "已清除「{{p1}}」的预算"
+    },
+    "AutoRoutersPanel": {
+      "chooseAClassifierToRouteEach": "选择一个分类器，把每个请求路由到某个模型。调用方式与其他模型相同，客户端始终使用同一个模型名称",
+      "areYouSureYouWantTo": "确定要删除「{{p1}}」吗？仍在调用该模型名称的客户端将开始失败",
+      "deletedAutoRouter": "已删除自动路由器：{{name}}",
+      "failedToDeleteAutoRouter": "删除自动路由器失败：{{error}}"
+    },
+    "HeuristicScoringConfig": {
+      "tierBoundaries": "层级边界",
+      "tokenThresholds": "Token 阈值",
+      "dimensionWeights": "维度权重",
+      "leftUntouchedItTracksTheSimple": "不修改时会跟踪「简单」到「中等」的边界，当前为 {{p1}}",
+      "markerPromotionPrefix": "出现两个及以上推理标记时，请求会被提升到推理层级，但前提是其加权得分达到此下限"
+    },
+    "addautoroutertab": {
+      "startFromScratch": "从头开始",
+      "useATemplate": "使用模板",
+      "useATemplate2": "使用模板",
+      "replacesClassifierAndModelChoices": "替换分类器和模型选择",
+      "startFromScratch2": "从头开始",
+      "startFromScratch3": "从头开始",
+      "clearsTierModelsSwitchesToHeuristics": "清除层级模型，切换到启发式，并重置路由设置",
+      "replacesClassifierAndModelChoices2": "替换分类器和模型选择"
+    },
+    "TierModelEffortRows": {
+      "reasoningEffortForInTheTier": "{{p2}}层级中 {{p1}}的推理力度",
+      "fastModeHasHigherPricingAnd": "快速模式价格更高，且需要符合条件的提供商账号。关闭后会移除该层级",
+      "fastModeForInTheTier": "{{p2}}层级中 {{p1}}的快速模式",
+      "fastMode": "快速模式",
+      "fastModePricingHint": "快速模式价格更高，且需要符合条件的提供商账号。关闭后会移除该层级的快速模式覆盖，改为继承请求或提供商的默认值"
+    },
+    "ReminderMarkers": {
+      "openingTag": "开始标签",
+      "closingTag": "结束标签",
+      "addTagPair": "添加标签对",
+      "removeTagPair": "移除第 {{index}} 组标签"
+    },
+    "ClassifierTypeRadios": {
+      "ossClassifier": "OSS 分类器"
+    },
+    "ForecastClassifierConfig": {
+      "selectModels": "选择 {{p1}} 模型",
+      "invalidForecastsAndClassifierFailuresRoute": "无效预测和分类器失败会路由到能力更强的求解器",
+      "selectTheJudgeModel": "选择评判模型",
+      "solveProbabilityThreshold": "求解成功概率阈值",
+      "maximumQualityGap": "最大质量差距",
+      "classifierOptions": "分类器选项",
+      "capabilityBoundaryStep": "能力边界步长",
+      "classifierOutputTokenLimit": "分类器输出 Token 上限",
+      "forecastResponseFormat": "预测响应格式",
+      "forecastResponseFormat2": "预测响应格式",
+      "strictJsonSchema": "严格 JSON schema",
+      "jsonObjectForJudgesWithoutStrict": "JSON 对象（适用于不支持严格 schema 的评判模型）",
+      "useFittedCalibration": "使用拟合校准",
+      "optionalCoefficientsFittedForYourJudge": "为你的评判模型、求解器和框架拟合的可选系数。关闭则使用原始预测值",
+      "calibrationVersion": "校准版本",
+      "efficient": "高效",
+      "theClassifierUsesItsBundledPrompt": "分类器使用其内置提示词，并始终回退到能力更强的求解器",
+      "selectPlaceholder": "选择 {{label}}"
+    },
+    "ContextWindowEscalationConfig": {
+      "whenAPromptProvablyCannotFit": "当提示词确定无法放入所选层级的上下文窗口时，把它路由到窗口能容纳它的最低层级，而不是让提供商拒绝。默认关闭。关闭时请求仅按复杂度分发",
+      "fractionOfAModelAposS": "计入的提示词必须落在模型窗口中的比例，取值大于 0、最大为 1。留空则跟随后端默认值 0.95"
+    },
+    "PlanModeOverrideControls": {
+      "additionalPlanModeSentinels": "额外的计划模式哨兵",
+      "eGEnterPlanMode": "例如：enter plan mode",
+      "typeToAddASentinel": "输入以添加哨兵",
+      "caseSensitiveLiteralStringsAddedTo": "区分大小写的字面量字符串，会追加到内置的 Claude Code 和 Copilot 计划模式标记中"
+    },
+    "ClassifierPluginTimeoutField": {
+      "thisRouterUsesACustomClassifier": "此路由器使用了在 config.yaml 中设置的自定义分类器插件。请在下方选择一个分类器来替换它",
+      "classifierPluginTimeoutMs": "分类器插件超时（毫秒）",
+      "timeBudgetForThePluginCall": "插件调用的时间预算。超时后由回退路径决定层级"
+    },
+    "CacheAwareRoutingConfig": {
+      "cacheAwareRouting": "缓存感知路由",
+      "considerPromptCacheSavings": "考虑提示词缓存带来的节省",
+      "disabledByDefaultReuseAModel": "默认关闭。当预估总成本更低且满足所选层级或更高层级时，复用已有热提示词缓存的模型。支持带显式提示词缓存的 Anthropic Messages 原生调用；不支持的请求保持原有路由",
+      "expectedOutputTokens": "预期输出 Token 数",
+      "usedToEstimateCostNotTo": "仅用于估算成本，不限制响应长度。留空使用默认值 1024",
+      "predictionTimeoutMs": "预测超时（毫秒）",
+      "keepTheOriginalRouteIfThe": "如果比较耗时过长则保持原有路由。留空使用默认值 2000 毫秒"
+    },
+    "buildcomplexityrouterconfig": {
+      "thePlanModeMinimumTierHas": "计划模式最低层级（{{p1}}）没有模型。请添加模型或关闭该覆盖",
+      "tagPairNeedsBothAnOpening": "第 {{p1}} 组标签需要同时有开始标签和结束标签",
+      "tagPairMustUseDifferentOpening": "第 {{p1}} 组标签的开始和结束标签必须不同"
+    },
+    "TierConfigIntro": {
+      "chooseOneOrMoreModelsFor": "为每个层级选择一个或多个模型。请求会使用其所属层级中的模型"
+    },
+    "AutoRouterAvailability": {
+      "talkToOurTeam": "联系我们团队",
+      "viewLimits": "查看额度",
+      "routingAndCustomizationLimits": "路由与自定义额度限制",
+      "ruleBasedComplexityAndOssAre": "基于规则、复杂度和 OSS 在采用内置设置时不受限，可自由选择或更改层级模型。自定义额度在整个代理范围内共享",
+      "customTierDefinitionsAndWrittenClassifier": "自定义层级定义和手写的分类器指令共享同一份额度。内置提示词和显示名称修改不占用该额度",
+      "changingScoringRulesSuchAsWeights": "修改评分规则（如权重、阈值、关键词或自定义维度）会占用「基于规则」调优额度，同时适用于「启发式优先」和「混合」。已有路由器的记录设置会保留，新路由器从内置规则开始",
+      "needAHigherLimit": "需要更高的上限？"
+    },
+    "tierrows": {
+      "aTierSetNeedsToTiers": "层级集合需要 {{p1}} 到 {{p2}} 个层级"
+    },
+    "DecisionModelNote": {
+      "decisionModelNotice": "决策模型提示",
+      "decisionModel": "决策模型",
+      "howToCallDecisionModels": "如何调用决策模型"
+    },
+    "AddModelForm": {
+      "promise": "Promise",
+      "workloadIdentityFederationIsSavedAs": "工作负载身份联合会保存为凭证，然后附加到此模型",
+      "useWorkloadIdentityFederation": "使用工作负载身份联合"
+    },
+    "CustomDimensionRows": {
+      "binary": "二进制",
+      "matchCount": "匹配次数"
+    },
+    "AutoRouterRoutingTest": {
+      "sendAPromptThroughThisRouter": "把提示词送入此路由器的分类器，查看它会选择哪个模型以及原因。提示词只做分类，不会发送给路由到的模型"
+    },
+    "ComplexityRouterConfig": {
+      "legacyUncalibrated": "旧版（未校准）",
+      "business": "业务",
+      "customTiersAndWrittenPromptsShare": "自定义层级和手写提示词共享此额度",
+      "addOrRemoveTiersToDefine": "添加或删除层级以定义自己的层级集合。每个自定义层级都需要一段供分类器路由的定义，编辑后的层级集合需要使用 LLM 或 OSS 分类方法",
+      "operationalRelayWorkPassingInformationAlong": "操作中转类工作：只转发信息，不对其做判断",
+      "advancedClassifierSettings": "高级分类器设置",
+      "displayNameDefault": "显示名称（默认：{{p1}}）",
+      "displayNameForTheTier": "{{p1}}层级的显示名称",
+      "clearDisplayNameForTheTier": "清除 {{p1}}层级的显示名称",
+      "selectModelSForQueries": "为 {{p1}} 查询选择模型",
+      "nameForTier": "第 {{index}} 个层级的名称",
+      "definitionForTier": "第 {{index}} 个层级的定义"
+    },
+    "ComplexityRouterAdvancedSections": {
+      "classifierTuning": "分类器调优",
+      "heuristicTuning": "启发式调优",
+      "adaptiveRouting": "自适应路由",
+      "affinity": "亲和性",
+      "cacheAwareRouting": "缓存感知路由",
+      "modalityRouting": "模态路由",
+      "planModeOverride": "计划模式覆盖",
+      "housekeepingRouting": "维护类路由",
+      "ignoreCustomTags": "忽略自定义标签",
+      "contextWindowEscalation": "上下文窗口升级",
+      "stalledTaskEscalation": "停滞任务升级",
+      "responseFormat": "响应格式",
+      "keywordSemanticMatching": "关键词/语义匹配",
+      "heuristicTuning2": "启发式调优",
+      "requestPreprocessing": "请求预处理",
+      "routingRulesAndRecovery": "路由规则与恢复",
+      "sessionsAndEfficiency": "会话与效率",
+      "compatibility": "兼容性"
+    },
+    "HeuristicKeywordOverrides": {
+      "eachListReplacesTheBuiltIn": "每个列表会替换启发式评分器中同名的内置关键词列表。留空则保留内置列表。若只想追加技术术语而不替换列表，请使用上方的自定义技术关键词",
+      "addPlaceholder": "添加 {{label}}"
+    },
+    "ClassifierPrimarySettings": {
+      "selectTheJudgeModel": "选择评判模型"
+    },
+    "AffinityControls": {
+      "pinOneModelDeploymentPerTier": "每个层级固定一个模型部署",
+      "pinOneModelDeploymentPerTier2": "每个层级固定一个模型部署",
+      "reusesTheModelChosenForEach": "复用它为该层级选定的模型及其部署（如果可用）。请求仍可在层级之间移动。关闭后每轮都会重新选择模型并对部署做负载均衡"
+    },
+    "litellmmodelname": {
+      "allModelsWildcard": "所有 {{p1}} 模型（通配）"
+    },
+    "DecisionModelSelect": {
+      "decisionModel": "决策模型",
+      "decisionModel2": "决策模型",
+      "selectTheDecisionModel": "选择决策模型"
+    },
+    "ClassificationMethodConfig": {
+      "inactiveHeuristicV2Threshold": "未启用的启发式 v2 阈值",
+      "retainedHeuristicV2Threshold": "保留的启发式 v2 阈值",
+      "onlyUsedWhenHeuristicV2Is": "仅在选中启发式 v2 时使用",
+      "clearHeuristicV2Threshold": "清除启发式 v2 阈值",
+      "localChecksBeforeTheJudge": "在评判之前做本地检查",
+      "alwaysUseTheJudge": "始终使用评判模型",
+      "alwaysUseTheJudge2": "始终使用评判模型",
+      "heuristicBeforeTheJudge": "先启发式后评判",
+      "heuristicBeforeTheJudge2": "先启发式后评判",
+      "heuristicV1RuleBased": "启发式 v1（基于规则）",
+      "scoreRequestsUsingConfigurableWeightsAnd": "使用可配置的权重和关键词为请求评分",
+      "chooseATierUsingCalibratedSuccess": "根据校准后的成功概率选择层级",
+      "successThreshold": "成功阈值",
+      "artifactDefault": "产物默认值",
+      "minimumPredictedSuccessProbabilityFrom0": "最低预测成功概率，取值 0 到 1。值越高越倾向能力更强的层级。留空使用产物默认值",
+      "customInstructionsAndExamplesShareThe": "自定义指令和示例共享自定义层级额度",
+      "numberOfPriorUserTurnsSent": "发送给分类器提供商的最近用户轮次数，不含工具输出和框架提醒。LLM 与决策模型分类器默认 3 轮。设为 0 则不带对话历史。当前消息和选中的系统文本仍会发送",
+      "letTheClassifierReadTheAssistant": "让分类器读取助手的回复，从而能看到模型表达的难度而不只是用户提出的难度：助手称为复杂的计划，用户回复「是」批准后，会按被批准的工作来分类。此时「上下文窗口大小」统计两个角色的最近 N 轮，而不是最近 N 个用户轮次",
+      "customScoringRules": "自定义评分规则",
+      "heuristicKeywordOverrides": "启发式关键词覆盖"
+    },
+    "JevClassifierConfig": {
+      "classifierTimeoutMs": "分类器超时（毫秒）",
+      "classifierInstructions": "分类器指令",
+      "customInstructionsShareTheCustomTier": "自定义指令共享自定义层级额度",
+      "leaveBlankToUseTheBuilt": "留空则使用内置指令",
+      "restoreBuiltInInstructions": "恢复内置指令",
+      "builtInDecisionModelClassificationIs": "内置决策模型分类无需许可证，使用随附的层级标准"
+    },
+    "conditionalpublicmodelname": {
+      "example": "示例：",
+      "ifYouNameYourPublicModel": "如果你把公开模型命名为",
+      "result": "结果："
+    },
+    "AutoRouterClassifierTabs": {
+      "talkToOurTeam": "联系我们团队",
+      "chooseYourClassifier": "选择分类器",
+      "chooseHowRequestsAreEvaluatedAnd": "选择如何评估请求并路由到各层级",
+      "aboutClassifiers": "关于分类器",
+      "heuristics": "启发式",
+      "classifyLocallyWithNoApiCall": "本地分类，不调用 API",
+      "useAJudgeModelToChoose": "使用评判模型选择求解器",
+      "decisionsModel": "决策模型",
+      "useADecisionModelToChoose": "使用决策模型选择层级",
+      "decisionModel": "决策模型",
+      "jev": "Jev",
+      "laya": "Laya",
+      "bespokeNimble": "Bespoke Nimble",
+      "databricks": "Databricks",
+      "jev2": "Jev",
+      "laya2": "Laya",
+      "bespokeNimble2": "Bespoke Nimble",
+      "databricks2": "Databricks",
+      "thisRouterUsesACustomClassifier": "此路由器使用了自定义分类器插件",
+      "ruleBased": "基于规则",
+      "scoreRequestsWithLocalRulesTo": "用本地规则为请求评分以选择层级，不调用 API",
+      "useCalibratedProbabilitiesToMatchRequests": "用校准后的概率把请求匹配到层级，不调用 API",
+      "routingApproach": "路由方式",
+      "routingApproach2": "路由方式",
+      "complexity": "复杂度",
+      "matchTaskDifficultyToATier": "把任务难度匹配到层级，然后使用该层级中的一个模型",
+      "capability": "能力",
+      "useTheEfficientModelWhenIt": "在高效模型可能成功时使用它，否则使用能力更强的模型",
+      "fuseV2": "Fuse v2",
+      "useTheEfficientModelWhenIts": "当高效模型的预测质量与能力更强的模型足够接近时使用它",
+      "restoreStandardTiersToUseHeuristics": "恢复标准层级后才能使用启发式、能力或 Fuse v2",
+      "complexityDescription": "把任务难度匹配到层级，然后使用该层级中的一个模型",
+      "talkAbout": "联系我们团队了解 {{label}}"
+    },
+    "OpeningPromptEditor": {
+      "customOpeningOnTheRubric": "{{p1}} 评分标准下的自定义开头"
+    },
+    "EscalationKeywords": {
+      "eGLitellmEscalate": "例如：LITELLM ESCALATE"
+    },
+    "KeywordTierRules": {
+      "eGInvoiceRefundBilling": "例如：发票、退款、账单"
+    },
+    "ResponseFormatControls": {
+      "capMaxTokensAtTheTier": "按层级模型限制 max_tokens",
+      "capMaxTokensAtTheTier2": "按层级模型的输出上限限制 max_tokens"
+    },
+    "autorouterstrategies": {
+      "complexity": "复杂度",
+      "adaptive": "自适应",
+      "quality": "质量"
+    },
+    "HousekeepingRoutingControls": {
+      "routeHousekeepingCallsToTheCheapest": "把维护类调用路由到最便宜的层级",
+      "routeHousekeepingCallsToTheCheapest2": "把维护类调用路由到最便宜的层级",
+      "conversationTitleStyleCallsSkipThe": "对话标题类的调用会跳过分类器，直接走最便宜的层级",
+      "additionalHousekeepingSentinels": "额外的维护哨兵",
+      "eGConversationTitle": "例如：conversation title",
+      "typeToAddASentinel": "输入以添加哨兵",
+      "caseSensitiveLiteralStringsAddedTo": "区分大小写的字面量字符串，会追加到内置的对话标题哨兵中"
+    },
+    "addmodelmodes": {
+      "imageEditImagesEdits": "图像编辑 - /images/edits"
+    },
+    "FuseProfilePresets": {
+      "keepSavedPreset": "保留已保存的 {{p1}} 预设",
+      "keepSavedPreset2": "保留已保存的预设",
+      "presetPreviewUnavailableTheSavedReference": "预设预览不可用。已保存的引用会保留",
+      "chooseProfilesThatMatchEveryDeployment": "选择与每个求解器分组中所有部署及其实际配置相匹配的配置档。配置档的选择与路由模型名称无关。预设描述求解器和运行时，不设置质量差距或校准。请针对你的工作负载、评判模型和具体版本单独验证这两项",
+      "loadingProfilePresetsCustomEditingIs": "正在加载配置档预设。可使用自定义编辑",
+      "profilePresetsCouldNotBeLoaded": "配置档预设加载失败。已保存的引用会保留，可使用自定义编辑"
+    },
+    "build_complexity_router_config": {
+      "shadowingTierName": "某个层级的显示名称不能与其他层级名称相同：{{names}}",
+      "duplicateTierNames": "层级显示名称必须唯一，重复项：{{names}}",
+      "missingTierModels": "请为以下层级选择模型：{{names}}",
+      "emptyKeywordRules": "请为以下关键词规则添加至少一个关键词：{{indexes}}",
+      "orphanedKeywordRules": "关键词规则 {{indexes}} 路由到的层级在此路由器中已不存在"
+    },
+    "AccessGroupBudgetColumns": {
+      "openBudgetActions": "打开 {{name}} 的预算操作"
+    },
+    "AccessGroupBudgetModal": {
+      "budgetScopeHint": "通过名称获得此访问组权限的每个密钥都从这一份预算中扣减。通过通配符或 <code>all-proxy-models</code> 访问到该组模型的密钥不计入其中"
+    },
+    "add_auto_router_tab": {
+      "missingModels": "缺少：{{models}}"
+    },
+    "DefaultModelField": {
+      "derivedFromTiers": "派生自层级：{{model}}"
+    },
+    "litellm_model_name": {
+      "pleaseEnterDeploymentName": "请输入部署名称",
+      "pleaseEnterAtLeastOneModel": "请至少输入一个模型"
+    },
+    "handle_add_auto_router_submit": {
+      "createdAutoRouter": "已成功创建自动路由器：{{name}}"
+    }
   }
 }

@@ -9,6 +9,7 @@ import {
 } from "@/lib/decisionModels";
 import { uiHref } from "@/utils/uiHref";
 import type { MountedFormValues } from "../common_components/MountedFormField";
+import i18n from "@/lib/i18n";
 
 interface DecisionModelNoteProps {
   catalog: DecisionCatalog;
@@ -31,15 +32,15 @@ export default function DecisionModelNote({ catalog, litellmProvider }: Decision
   }
 
   return (
-    <Alert variant="info" role="note" aria-label="Decision model notice" className="mb-4">
+    <Alert variant="info" role="note" aria-label={i18n.t("modelsEndpoints.DecisionModelNote.decisionModelNotice", { defaultValue: "Decision model notice" })} className="mb-4">
       <Info />
-      <AlertTitle>Decision model</AlertTitle>
+      <AlertTitle>{i18n.t("modelsEndpoints.DecisionModelNote.decisionModel", { defaultValue: "Decision model" })}</AlertTitle>
       <AlertDescription>
         <p>
           For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System
           One format).{" "}
           <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-            How to call decision models
+            {i18n.t("modelsEndpoints.DecisionModelNote.howToCallDecisionModels", { defaultValue: "How to call decision models" })}
           </a>
         </p>
         <p>

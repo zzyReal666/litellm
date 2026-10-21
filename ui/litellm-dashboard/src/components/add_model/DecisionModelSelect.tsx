@@ -7,6 +7,7 @@ import { defaultJevClassifierConfig } from "./jev_classifier_config";
 import type { ModelGroup } from "@/components/llm_calls/fetch_models";
 import type { AutoRouterDeployment } from "@/app/(dashboard)/hooks/models/useModels";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
+import i18n from "@/lib/i18n";
 
 export default function DecisionModelSelect({
   value,
@@ -38,13 +39,13 @@ export default function DecisionModelSelect({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>Decision model</Label>
+      <Label htmlFor={id}>{i18n.t("modelsEndpoints.DecisionModelSelect.decisionModel", { defaultValue: "Decision model" })}</Label>
       <SearchSelect
         inputId={id}
-        aria-label="Decision model"
+        aria-label={i18n.t("modelsEndpoints.DecisionModelSelect.decisionModel2", { defaultValue: "Decision model" })}
         options={decisionModels.map((model) => ({ value: model.model_group, label: model.model_group }))}
         value={value.jev_classifier_config?.deployment_name ?? ""}
-        placeholder="Select the decision model"
+        placeholder={i18n.t("modelsEndpoints.DecisionModelSelect.selectTheDecisionModel", { defaultValue: "Select the decision model" })}
         allowClear={false}
         onValueChange={(deploymentName) => {
           if (!deploymentName) return;

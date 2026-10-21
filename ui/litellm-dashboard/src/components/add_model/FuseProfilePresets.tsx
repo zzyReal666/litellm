@@ -10,6 +10,7 @@ import {
   type FuseProfileField,
   type FuseSettings,
 } from "./forecast_classifier_config";
+import i18n from "@/lib/i18n";
 
 const catalogQueryOptions = {
   staleTime: Infinity,
@@ -105,7 +106,7 @@ function FuseProfilePresetField({
         value={custom ? "custom" : presetId}
         allowClear={false}
         options={[
-          { value: "custom", label: "Custom" },
+          { value: "custom", label: i18n.t("guardrails.patternTable.typeCustom", { defaultValue: "Custom" }) },
           ...(presets ?? []).map((entry) => ({ value: entry.id, label: entry.label, sublabel: entry.id })),
         ]}
         onValueChange={chooseProfile}
@@ -124,10 +125,10 @@ function FuseProfilePresetField({
           type="button"
           variant="outline"
           size="sm"
-          aria-label={`Keep saved ${label.toLowerCase()} preset`}
+          aria-label={i18n.t("modelsEndpoints.FuseProfilePresets.keepSavedPreset", {p1: label.toLowerCase(), defaultValue: "Keep saved {{p1}} preset"})}
           onClick={keepSavedPreset}
         >
-          Keep saved preset
+          {i18n.t("modelsEndpoints.FuseProfilePresets.keepSavedPreset2", { defaultValue: "Keep saved preset" })}
         </Button>
       )}
       {presetId && (
@@ -148,7 +149,7 @@ function FuseProfilePresetField({
               </div>
             </>
           ) : (
-            <p>Preset preview unavailable. The saved reference is preserved</p>
+            <p>{i18n.t("modelsEndpoints.FuseProfilePresets.presetPreviewUnavailableTheSavedReference", { defaultValue: "Preset preview unavailable. The saved reference is preserved" })}</p>
           )}
         </div>
       )}
@@ -176,18 +177,16 @@ export default function FuseProfilePresets({
   return (
     <div className="space-y-4 min-w-0">
       <p className="text-xs text-muted-foreground">
-        Choose profiles that match every deployment in each solver group and its actual settings. Profile selection is
-        independent of routing model names. Presets describe the solvers and runtime; they do not set a quality gap or
-        calibration. Validate those separately for your workload, judge, and exact profile versions.
+        {i18n.t("modelsEndpoints.FuseProfilePresets.chooseProfilesThatMatchEveryDeployment", { defaultValue: "Choose profiles that match every deployment in each solver group and its actual settings. Profile selection is independent of routing model names. Presets describe the solvers and runtime; they do not set a quality gap or calibration. Validate those separately for your workload, judge, and exact profile versions." })}
       </p>
       {isPending && (
         <p role="status" className="text-xs text-muted-foreground">
-          Loading profile presets. Custom editing is available
+          {i18n.t("modelsEndpoints.FuseProfilePresets.loadingProfilePresetsCustomEditingIs", { defaultValue: "Loading profile presets. Custom editing is available" })}
         </p>
       )}
       {isError && (
         <p role="status" className="text-xs text-muted-foreground">
-          Profile presets could not be loaded. Saved references are preserved and Custom editing is available
+          {i18n.t("modelsEndpoints.FuseProfilePresets.profilePresetsCouldNotBeLoaded", { defaultValue: "Profile presets could not be loaded. Saved references are preserved and Custom editing is available" })}
         </p>
       )}
       {fuseProfileFields.map((field) => (

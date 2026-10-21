@@ -113,7 +113,10 @@ const presetDisabledHint = (availability: PresetAvailability): string | null => 
     case "unverifiable":
       return i18n.t("addModel.addAutoRouterTab.cannotVerifyAvailability", { defaultValue: "Cannot verify these models are available" });
     case "missing_models":
-      return `Missing: ${availability.models.join(", ")}`;
+      return i18n.t("modelsEndpoints.add_auto_router_tab.missingModels", {
+        models: availability.models.join(", "),
+        defaultValue: "Missing: {{models}}",
+      });
   }
 };
 
@@ -334,7 +337,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
   const templateItems = React.useMemo(
     () => [
       ...sortedPresetOptions.map(({ preset }) => ({ value: preset.key, label: preset.label })),
-      { value: "custom", label: "Start from scratch" },
+      { value: "custom", label: i18n.t("modelsEndpoints.addautoroutertab.startFromScratch", { defaultValue: "Start from scratch" }) },
     ],
     [sortedPresetOptions],
   );
@@ -549,8 +552,8 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
           value={selectedPreset ?? null}
           onValueChange={(presetKey: string | null) => handlePresetChange(presetKey ?? undefined)}
         >
-          <SelectTrigger aria-label="Use a template" data-testid="template-selector" className="w-full">
-            <SelectValue placeholder="Use a template" />
+          <SelectTrigger aria-label={i18n.t("modelsEndpoints.addautoroutertab.useATemplate", { defaultValue: "Use a template" })} data-testid="template-selector" className="w-full">
+            <SelectValue placeholder={i18n.t("modelsEndpoints.addautoroutertab.useATemplate2", { defaultValue: "Use a template" })} />
           </SelectTrigger>
           <SelectContent className="[&_[data-slot=select-item]>div]:min-w-0 [&_[data-slot=select-item]>div]:shrink [&_[data-slot=select-item]>div]:whitespace-normal [&_[data-slot=select-item]>div]:break-words">
             {sortedPresetOptions.map(({ preset, availability: presetState }) => {
@@ -570,7 +573,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                   <div>
                     <div className="font-medium">{preset.label}</div>
                     <div className="text-xs text-muted-foreground">{preset.description}</div>
-                    <div className="text-xs text-muted-foreground">Replaces classifier and model choices</div>
+                    <div className="text-xs text-muted-foreground">{i18n.t("modelsEndpoints.addautoroutertab.replacesClassifierAndModelChoices", { defaultValue: "Replaces classifier and model choices" })}</div>
                     {disabledHint && <div className={`text-xs mt-1 ${hintClass}`}>{disabledHint}</div>}
                     {matchedHint && <div className="text-xs mt-1 text-success">{matchedHint}</div>}
                   </div>
@@ -578,17 +581,17 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
               );
             })}
             <SelectSeparator className="mx-0" />
-            <SelectItem value="custom" label="Start from scratch">
+            <SelectItem value="custom" label={i18n.t("modelsEndpoints.addautoroutertab.startFromScratch2", { defaultValue: "Start from scratch" })}>
               <div>
-                <div className="font-medium">Start from scratch</div>
+                <div className="font-medium">{i18n.t("modelsEndpoints.addautoroutertab.startFromScratch3", { defaultValue: "Start from scratch" })}</div>
                 <div className="text-xs text-muted-foreground">
-                  Clears tier models, switches to Heuristics, and resets routing settings
+                  {i18n.t("modelsEndpoints.addautoroutertab.clearsTierModelsSwitchesToHeuristics", { defaultValue: "Clears tier models, switches to Heuristics, and resets routing settings" })}
                 </div>
               </div>
             </SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-muted-foreground">Replaces classifier and model choices</p>
+        <p className="text-xs text-muted-foreground">{i18n.t("modelsEndpoints.addautoroutertab.replacesClassifierAndModelChoices2", { defaultValue: "Replaces classifier and model choices" })}</p>
         {presetsPending && <div className="text-xs mt-1 text-muted-foreground">{i18n.t("addModel.addAutoRouterTab.loadingTemplates", { defaultValue: "Loading templates..." })}</div>}
         {presetsUnavailable && (
           <div className="text-xs mt-1 text-destructive">

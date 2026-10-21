@@ -105,27 +105,27 @@ export const NEW_CLASSIFIER_CLASSIFICATION_RUBRIC: ClassificationRubric = "agent
 export const CLASSIFICATION_RUBRIC_DESCRIPTIONS: Record<ClassificationRubric, { label: string; description: string }> =
   {
     legacy: {
-      label: "Legacy (uncalibrated)",
+      label: i18n.t("modelsEndpoints.ComplexityRouterConfig.legacyUncalibrated", { defaultValue: "Legacy (uncalibrated)" }),
       description:
         "The rubric as it shipped before calibration examples, with no worked examples at all. Routers created " +
         "before this setting existed use it, so their tier decisions and spend are unchanged. It over-routes " +
         "ordinary engineering to the most expensive tier.",
     },
     agentic: {
-      label: "Agentic",
+      label: i18n.t("nav.agentic", { defaultValue: "Agentic" }),
       description:
         "Anchors routine installs, builds, multi-file edits, and standard debugging at " +
         "Medium, so ordinary engineering does not route to your most expensive tier. Suits agent, terminal, and " +
         "coding-assistant traffic, and mixed traffic.",
     },
     chat: {
-      label: "Chat",
+      label: i18n.t("navbar.modeChat", { defaultValue: "Chat" }),
       description:
         "Drops the engineering examples, for a router serving only conversational traffic that never sees those " +
         "requests.",
     },
     business: {
-      label: "Business",
+      label: i18n.t("modelsEndpoints.ComplexityRouterConfig.business", { defaultValue: "Business" }),
       description:
         "Business and sales examples plus business-oriented tier definitions: routine drafting and summarizing " +
         "stay at Medium, data-determined analysis is Complex, and only decisions under conflicting tradeoffs " +
@@ -245,13 +245,12 @@ const TierSetToolbar: React.FC<{
     {editing && (
       <AutoRouterAllowanceNote
         feature="tier_or_classifier_prompt"
-        label="Custom tiers and written prompts share this allowance"
+        label={i18n.t("modelsEndpoints.ComplexityRouterConfig.customTiersAndWrittenPromptsShare", { defaultValue: "Custom tiers and written prompts share this allowance" })}
       />
     )}
     {editing && (
       <span className="block mt-1 text-xs text-muted-foreground">
-        Add or remove tiers to define your own set. Every custom tier needs a definition the classifier routes on, and
-        an edited set requires the LLM or OSS classification method
+        {i18n.t("modelsEndpoints.ComplexityRouterConfig.addOrRemoveTiersToDefine", { defaultValue: "Add or remove tiers to define your own set. Every custom tier needs a definition the classifier routes on, and an edited set requires the LLM or OSS classification method" })}
       </span>
     )}
     {editing && keywordRulesError && (
@@ -348,7 +347,7 @@ const TierRowEditFields: React.FC<{
       value={row.name}
       onChange={(event) => onPatch({ name: event.target.value })}
       placeholder={i18n.t("addModel.complexityRouterConfig.tierNamePlaceholder", { defaultValue: "Tier name, e.g. SECURITY_REVIEW" })}
-      aria-label={`Name for tier ${index + 1}`}
+      aria-label={i18n.t("modelsEndpoints.ComplexityRouterConfig.nameForTier", { index: index + 1, defaultValue: "Name for tier {{index}}" })}
       maxLength={MAX_TIER_NAME_CHARS}
       className="mb-2"
     />
@@ -360,7 +359,7 @@ const TierRowEditFields: React.FC<{
           ? i18n.t("addModel.complexityRouterConfig.keepBuiltInDefinitionPlaceholder", { defaultValue: "Leave blank to keep the built-in definition" })
           : i18n.t("addModel.complexityRouterConfig.tierDefinitionPlaceholder", { defaultValue: "What belongs in this tier, e.g. requests asking for a security audit" })
       }
-      aria-label={`Definition for tier ${index + 1}`}
+      aria-label={i18n.t("modelsEndpoints.ComplexityRouterConfig.definitionForTier", { index: index + 1, defaultValue: "Definition for tier {{index}}" })}
       maxLength={MAX_TIER_DEFINITION_CHARS}
       rows={2}
       className={definitionMissing ? "mb-2 border-destructive" : "mb-2"}
@@ -524,27 +523,27 @@ export const TIER_DESCRIPTIONS: Record<
 > = {
   NON_REASONING: {
     label: "Non-reasoning",
-    description: "Operational relay work: passing information along with no judgment about it",
+    description: i18n.t("modelsEndpoints.ComplexityRouterConfig.operationalRelayWorkPassingInformationAlong", { defaultValue: "Operational relay work: passing information along with no judgment about it" }),
     examples: '"Reformat this tool output", "Acknowledge the write succeeded"',
   },
   SIMPLE: {
     label: "Simple",
-    description: "Basic questions, greetings, simple factual queries",
+    description: i18n.t("addModel.complexityRouterConfig.simpleTierDescription", { defaultValue: "Basic questions, greetings, simple factual queries" }),
     examples: '"Hello!", "What is Python?", "Thanks!"',
   },
   MEDIUM: {
     label: "Medium",
-    description: "Standard queries requiring some reasoning or explanation",
+    description: i18n.t("addModel.complexityRouterConfig.mediumTierDescription", { defaultValue: "Standard queries requiring some reasoning or explanation" }),
     examples: '"Explain how REST APIs work", "Debug this error"',
   },
   COMPLEX: {
     label: "Complex",
-    description: "Technical, multi-part requests requiring deep knowledge",
+    description: i18n.t("addModel.complexityRouterConfig.complexTierDescription", { defaultValue: "Technical, multi-part requests requiring deep knowledge" }),
     examples: '"Design a microservices architecture", "Implement a rate limiter"',
   },
   REASONING: {
     label: "Reasoning",
-    description: "Chain-of-thought, analysis, explicit reasoning requests",
+    description: i18n.t("addModel.complexityRouterConfig.reasoningTierDescription", { defaultValue: "Chain-of-thought, analysis, explicit reasoning requests" }),
     examples: '"Think step by step...", "Analyze the pros and cons..."',
   },
 };
@@ -598,7 +597,7 @@ const CreationClassifierSettings = ({
       />
       {jevCreation && (
         <div className="mb-6">
-          <RoutingOptions label="Advanced classifier settings" showValidationErrors={showValidationErrors}>
+          <RoutingOptions label={i18n.t("modelsEndpoints.ComplexityRouterConfig.advancedClassifierSettings", { defaultValue: "Advanced classifier settings" })} showValidationErrors={showValidationErrors}>
             <div className="px-4 pb-4">
               <ClassificationMethodConfig
                 advancedOnly
@@ -742,6 +741,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             <CardContent>
               {tierRows.map((row, index) => {
                 const tierInfo = builtInTierInfo(row.id);
+                const tierDisplayLabel = tierInfo ? translatedDefaultTierLabel(row.id, tierInfo.label, i18n.t) : "";
                 const label = tierRowLabel(row, value.tier_labels);
                 const tierMissing = showValidationErrors && row.models.length === 0;
                 const needsDefinition =
@@ -785,14 +785,14 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                             onChange={(event) =>
                               handleTierLabelChange(row.id as keyof ComplexityTiers, event.target.value)
                             }
-                            placeholder={`Display name (default: ${tierInfo.label})`}
-                            aria-label={`Display name for the ${tierInfo.label} tier`}
+                            placeholder={i18n.t("modelsEndpoints.ComplexityRouterConfig.displayNameDefault", {p1: tierDisplayLabel, defaultValue: "Display name (default: {{p1}})"})}
+                            aria-label={i18n.t("modelsEndpoints.ComplexityRouterConfig.displayNameForTheTier", {p1: tierDisplayLabel, defaultValue: "Display name for the {{p1}} tier"})}
                           />
                           {value.tier_labels?.[row.id as keyof ComplexityTiers] && (
                             <InputGroupAddon align="inline-end">
                               <InputGroupButton
                                 size="icon-xs"
-                                aria-label={`Clear display name for the ${tierInfo.label} tier`}
+                                aria-label={i18n.t("modelsEndpoints.ComplexityRouterConfig.clearDisplayNameForTheTier", {p1: tierDisplayLabel, defaultValue: "Clear display name for the {{p1}} tier"})}
                                 onClick={() => handleTierLabelChange(row.id as keyof ComplexityTiers, "")}
                               >
                                 <X />
@@ -805,7 +805,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                         options={modelOptions}
                         value={row.models}
                         onValueChange={(models: string[]) => setRowModels(row, models)}
-                        placeholder={`Select model(s) for ${label.toLowerCase()} queries`}
+                        placeholder={i18n.t("modelsEndpoints.ComplexityRouterConfig.selectModelSForQueries", {p1: label.toLowerCase(), defaultValue: "Select model(s) for {{p1}} queries"})}
                         emptyText={i18n.t("modelDashboard.table.noModels", { defaultValue: "No models found" })}
                         className={tierMissing ? "w-full border-destructive" : "w-full"}
                       />
@@ -824,8 +824,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                       />
                       {row.models.length > 1 && (
                         <span className="text-xs text-muted-foreground">
-                          Multiple models selected: the router randomly picks among them per request (or
-                          Thompson-samples within the pool when adaptive routing is on).
+                          {i18n.t("addModel.complexityRouterConfig.multipleModelsHint", { defaultValue: "Multiple models selected: the router randomly picks among them per request (or Thompson-samples within the pool when adaptive routing is on)." })}
                         </span>
                       )}
                       {tierMissing && <span className="text-xs text-destructive">The {label} tier is required</span>}

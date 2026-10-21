@@ -9,6 +9,7 @@ import { SimpleTooltip } from "@/components/ui/tooltip";
 import { validatorRules } from "../common_components/formRules";
 import { MountedFormField, type MountedFormValues } from "../common_components/MountedFormField";
 import { Providers } from "../provider_info_helpers";
+import i18n from "@/lib/i18n";
 
 interface ModelMapping {
   public_name: string;

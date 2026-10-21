@@ -36,6 +36,7 @@ import {
   PTU_END_FIELD,
 } from "../../utils/ptuValidation";
 import { usePtuCostAttributionEnabled } from "@/app/(dashboard)/hooks/uiSettings/usePtuCostAttributionEnabled";
+import i18n from "@/lib/i18n";
 
 interface AdvancedSettingsProps {
   showAdvancedSettings: boolean;
@@ -57,8 +58,8 @@ const USAGE_COST_FIELDS = [
 const REVALIDATED_WHEN_PTU_COUNT_CHANGES = [PTU_RATE_FIELD, PTU_START_FIELD, ...USAGE_COST_FIELDS];
 
 const PRICING_MODEL_ITEMS = [
-  { value: "per_token", labelKey: "addModel.advancedSettings.perMillionTokens", label: "Per Million Tokens" },
-  { value: "per_second", labelKey: "addModel.advancedSettings.perSecond", label: "Per Second" },
+  { value: "per_token", labelKey: "addModel.advancedSettings.perMillionTokens", label: i18n.t("addModel.advancedSettings.perMillionTokens", { defaultValue: "Per Million Tokens" }) },
+  { value: "per_second", labelKey: "addModel.advancedSettings.perSecond", label: i18n.t("addModel.advancedSettings.perSecond", { defaultValue: "Per Second" }) },
 ] as const;
 
 const validateNumber = (t: TFunction) => (_: unknown, value: unknown) => {
@@ -260,7 +261,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                       value={(control.value as string | undefined) ?? ""}
                       onChange={control.onChange}
                       onBlur={control.onBlur}
-                      placeholder="e.g. 15"
+                      placeholder={i18n.t("modelInfoEditForm.placeholderPtuCount", { defaultValue: "e.g. 15" })}
                     />
                   )}
                 </MountedFormField>
@@ -292,7 +293,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                       value={(control.value as string | undefined) ?? ""}
                       onChange={control.onChange}
                       onBlur={control.onBlur}
-                      placeholder="e.g. 2.00"
+                      placeholder={i18n.t("modelInfoEditForm.placeholderPtuRate", { defaultValue: "e.g. 2.00" })}
                     />
                   )}
                 </MountedFormField>

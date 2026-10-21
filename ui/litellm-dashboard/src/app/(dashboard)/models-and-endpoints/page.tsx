@@ -27,6 +27,7 @@ import AccessGroupBudgetsPanel from "@/app/(dashboard)/models-and-endpoints/pane
 import PriceDataPanel from "@/app/(dashboard)/models-and-endpoints/panels/PriceDataPanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import i18n from "@/lib/i18n";
 
 type ModelTabSlug =
   | "add"
@@ -173,7 +174,7 @@ export default function ModelsAndEndpointsPage() {
               <p className="text-sm text-muted-foreground">{t("pages.modelsAndEndpoints.addAndManageModels", { defaultValue: "Add and manage models for the proxy" })}</p>
             ) : (
               <p className="text-sm text-muted-foreground">
-                View your models and manage routers for teams that allow it.
+                {i18n.t("modelsEndpoints.page.viewYourModelsAndManageRouters", { defaultValue: "View your models and manage routers for teams that allow it." })}
               </p>
             )}
           </div>

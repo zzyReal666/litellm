@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "react-i18next";
 import i18n from "@/lib/i18n";
 import { CircleHelp } from "lucide-react";
 import React from "react";
@@ -62,8 +63,11 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
-          Every key granted this access group by name draws from this one budget. A key that reaches the group&apos;s
-          models through a wildcard or <code>all-proxy-models</code> is not charged against it.
+          <Trans
+            i18nKey="modelsEndpoints.AccessGroupBudgetModal.budgetScopeHint"
+            defaults="Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it."
+            components={{ code: <code /> }}
+          />
         </p>
         <form onSubmit={form.handleSubmit((values) => onSubmit(buildAccessGroupBudgetBody(values)))} noValidate>
           <TooltipProvider>

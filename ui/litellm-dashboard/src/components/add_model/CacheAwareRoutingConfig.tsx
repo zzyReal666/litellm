@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { classificationFrequency, type ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
+import i18n from "@/lib/i18n";
 
 const blockedReason = (value: ComplexityRouterConfigValue): string | null => {
   if (value.custom_tier_set) return "Use the built-in tiers to enable cache-aware routing.";
@@ -43,14 +44,12 @@ const CacheAwareRoutingConfig = ({
           checked={enabled}
           disabled={!enabled && reason !== null}
           onCheckedChange={(next) => onChange({ ...value, cache_aware_routing: next })}
-          aria-label="Cache-aware routing"
+          aria-label={i18n.t("modelsEndpoints.CacheAwareRoutingConfig.cacheAwareRouting", { defaultValue: "Cache-aware routing" })}
         />
-        <span className="text-sm font-medium">Consider prompt-cache savings</span>
+        <span className="text-sm font-medium">{i18n.t("modelsEndpoints.CacheAwareRoutingConfig.considerPromptCacheSavings", { defaultValue: "Consider prompt-cache savings" })}</span>
       </div>
       <p className="text-xs text-muted-foreground">
-        Disabled by default. Reuse a model with a warm prompt cache when its estimated total cost is lower and it meets
-        the selected tier or higher. Supports native Anthropic Messages with explicit prompt caching; unsupported
-        requests keep their usual route.
+        {i18n.t("modelsEndpoints.CacheAwareRoutingConfig.disabledByDefaultReuseAModel", { defaultValue: "Disabled by default. Reuse a model with a warm prompt cache when its estimated total cost is lower and it meets the selected tier or higher. Supports native Anthropic Messages with explicit prompt caching; unsupported requests keep their usual route." })}
       </p>
       {reason && (
         <p className="text-xs text-muted-foreground" role="status">
@@ -62,7 +61,7 @@ const CacheAwareRoutingConfig = ({
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="cache-aware-output-tokens">
-              Expected output tokens
+              {i18n.t("modelsEndpoints.CacheAwareRoutingConfig.expectedOutputTokens", { defaultValue: "Expected output tokens" })}
             </label>
             <Input
               id="cache-aware-output-tokens"
@@ -80,12 +79,12 @@ const CacheAwareRoutingConfig = ({
               aria-describedby="cache-aware-output-help"
             />
             <p id="cache-aware-output-help" className="mt-1 text-xs text-muted-foreground">
-              Used to estimate cost, not to limit the response. Leave blank to use the default of 1024.
+              {i18n.t("modelsEndpoints.CacheAwareRoutingConfig.usedToEstimateCostNotTo", { defaultValue: "Used to estimate cost, not to limit the response. Leave blank to use the default of 1024." })}
             </p>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="cache-aware-timeout">
-              Prediction timeout (ms)
+              {i18n.t("modelsEndpoints.CacheAwareRoutingConfig.predictionTimeoutMs", { defaultValue: "Prediction timeout (ms)" })}
             </label>
             <Input
               id="cache-aware-timeout"
@@ -103,7 +102,7 @@ const CacheAwareRoutingConfig = ({
               aria-describedby="cache-aware-timeout-help"
             />
             <p id="cache-aware-timeout-help" className="mt-1 text-xs text-muted-foreground">
-              Keep the original route if the comparison takes too long. Leave blank to use the default of 2000 ms.
+              {i18n.t("modelsEndpoints.CacheAwareRoutingConfig.keepTheOriginalRouteIfThe", { defaultValue: "Keep the original route if the comparison takes too long. Leave blank to use the default of 2000 ms." })}
             </p>
           </div>
         </div>

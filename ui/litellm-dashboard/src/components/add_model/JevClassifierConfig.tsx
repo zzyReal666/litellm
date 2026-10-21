@@ -8,6 +8,7 @@ import ClassifierCircuitBreakerConfig from "./ClassifierCircuitBreakerConfig";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { defaultJevClassifierConfig, fixedClassifierModels } from "./jev_classifier_config";
+import i18n from "@/lib/i18n";
 
 const providerDescriptions = {
   jev: "Uses TypeSafe System One Choice evaluation with your configured tiers",
@@ -39,7 +40,7 @@ export default function JevClassifierConfig({
         <>
           <p className="text-sm text-muted-foreground">{providerDescriptions[config.provider ?? "jev"]}</p>
           <div className="space-y-2">
-            <Label htmlFor={`${id}-model`}>Classifier Model</Label>
+            <Label htmlFor={`${id}-model`}>{i18n.t("addModel.classificationMethod.classifierModelLabel", { defaultValue: "Classifier Model" })}</Label>
             {models ? (
               <Select value={config.model} onValueChange={(model) => model && update({ model })}>
                 <SelectTrigger id={`${id}-model`} className="w-full">
@@ -71,7 +72,7 @@ export default function JevClassifierConfig({
       {section !== "model" && (
         <>
           <div className="space-y-2">
-            <Label htmlFor={`${id}-timeout`}>Classifier Timeout (ms)</Label>
+            <Label htmlFor={`${id}-timeout`}>{i18n.t("modelsEndpoints.JevClassifierConfig.classifierTimeoutMs", { defaultValue: "Classifier Timeout (ms)" })}</Label>
             <Input
               id={`${id}-timeout`}
               type="number"
@@ -91,24 +92,24 @@ export default function JevClassifierConfig({
             }
           />
           <div className="space-y-2">
-            <Label htmlFor={`${id}-instructions`}>Classifier Instructions</Label>
+            <Label htmlFor={`${id}-instructions`}>{i18n.t("modelsEndpoints.JevClassifierConfig.classifierInstructions", { defaultValue: "Classifier Instructions" })}</Label>
             <AutoRouterAllowanceNote
               feature="tier_or_classifier_prompt"
-              label="Custom instructions share the custom-tier allowance"
+              label={i18n.t("modelsEndpoints.JevClassifierConfig.customInstructionsShareTheCustomTier", { defaultValue: "Custom instructions share the custom-tier allowance" })}
             />
             <Textarea
               id={`${id}-instructions`}
               value={config.instructions ?? ""}
-              placeholder="Leave blank to use the built-in instructions"
+              placeholder={i18n.t("modelsEndpoints.JevClassifierConfig.leaveBlankToUseTheBuilt", { defaultValue: "Leave blank to use the built-in instructions" })}
               onChange={(event) => update({ instructions: event.target.value || undefined })}
             />
             {config.instructions && (
               <Button variant="outline" type="button" onClick={() => update({ instructions: undefined })}>
-                Restore built-in instructions
+                {i18n.t("modelsEndpoints.JevClassifierConfig.restoreBuiltInInstructions", { defaultValue: "Restore built-in instructions" })}
               </Button>
             )}
             <p className="text-xs text-muted-foreground">
-              Built-in decision model classification is available without a license and uses the shipped tier criteria
+              {i18n.t("modelsEndpoints.JevClassifierConfig.builtInDecisionModelClassificationIs", { defaultValue: "Built-in decision model classification is available without a license and uses the shipped tier criteria" })}
             </p>
           </div>
         </>

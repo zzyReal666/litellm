@@ -30,6 +30,7 @@ import TierModelEffortRows from "./TierModelEffortRows";
 import { activeTierRows } from "./tier_rows";
 import { setTierModels } from "./tier_set_actions";
 import { tierRowLabel, setTierModelParam, setTierModelReasoningEffort } from "./complexity_router_tiers";
+import i18n from "@/lib/i18n";
 
 interface Props {
   value: ComplexityRouterConfigValue;
@@ -110,7 +111,10 @@ export const ForecastSolverModels = ({
                 inputId={`${id}-${tier}`}
                 value={models[0] ?? ""}
                 aria-label={label}
-                placeholder={`Select ${label.toLowerCase()}`}
+                placeholder={i18n.t("modelsEndpoints.ForecastClassifierConfig.selectPlaceholder", {
+                  label: label.toLowerCase(),
+                  defaultValue: "Select {{label}}",
+                })}
                 onValueChange={(model) => setModels(model ? [model] : [])}
               />
             ) : (
@@ -119,7 +123,7 @@ export const ForecastSolverModels = ({
                 id={`${id}-${tier}`}
                 value={models}
                 onValueChange={setModels}
-                placeholder={`Select ${label.toLowerCase()} models`}
+                placeholder={i18n.t("modelsEndpoints.ForecastClassifierConfig.selectModels", {p1: label.toLowerCase(), defaultValue: "Select {{p1}} models"})}
               />
             )}
             <TierModelEffortRows
@@ -151,7 +155,7 @@ export const ForecastSolverModels = ({
       })}
       {!additionalPoolsOnly && (
         <p className="text-sm text-muted-foreground">
-          Invalid forecasts and classifier failures route to the capable solver
+          {i18n.t("modelsEndpoints.ForecastClassifierConfig.invalidForecastsAndClassifierFailuresRoute", { defaultValue: "Invalid forecasts and classifier failures route to the capable solver" })}
         </p>
       )}
     </div>
@@ -216,13 +220,13 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
       {section === "all" && (
         <>
           <div className="space-y-1">
-            <Label htmlFor={`${id}-judge`}>Judge model</Label>
+            <Label htmlFor={`${id}-judge`}>{i18n.t("costOptimization.shadowEvalStartForm.judgeModel", { defaultValue: "Judge model" })}</Label>
             <SearchSelect
               inputId={`${id}-judge`}
-              aria-label="Judge model"
+              aria-label={i18n.t("costOptimization.shadowEvalStartForm.judgeModel", { defaultValue: "Judge model" })}
               options={modelOptions}
               value={llm.model}
-              placeholder="Select the judge model"
+              placeholder={i18n.t("modelsEndpoints.ForecastClassifierConfig.selectTheJudgeModel", { defaultValue: "Select the judge model" })}
               onValueChange={(model) => {
                 if (model === llm.model) return;
                 onChange({
@@ -239,7 +243,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
           {isCapability ? (
             <>
               <NumberField
-                label="Solve probability threshold"
+                label={i18n.t("modelsEndpoints.ForecastClassifierConfig.solveProbabilityThreshold", { defaultValue: "Solve probability threshold" })}
                 value={capability.base_threshold}
                 min={0}
                 max={1}
@@ -251,7 +255,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
             <>
               <FuseProfilePresets value={fuse} onChange={updateFuse} />
               <NumberField
-                label="Maximum quality gap"
+                label={i18n.t("modelsEndpoints.ForecastClassifierConfig.maximumQualityGap", { defaultValue: "Maximum quality gap" })}
                 value={fuse.max_quality_gap}
                 min={0}
                 max={1}
@@ -270,7 +274,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
           {section === "all" && (
             <CollapsibleTrigger className="group flex w-full items-center gap-2 px-4 py-3 text-left font-medium">
               <ChevronRight className="size-4 transition-transform group-data-panel-open:rotate-90" />
-              Classifier options
+              {i18n.t("modelsEndpoints.ForecastClassifierConfig.classifierOptions", { defaultValue: "Classifier options" })}
             </CollapsibleTrigger>
           )}
           <CollapsibleContent className="space-y-4 px-4 pb-4">
@@ -283,7 +287,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
               }
             />
             <NumberField
-              label="Timeout (ms)"
+              label={i18n.t("addModel.classificationMethod.timeoutLabel", { defaultValue: "Timeout (ms)" })}
               min={1}
               step={1}
               value={llm.timeout_ms}
@@ -300,7 +304,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
             />
             {isCapability && (
               <NumberField
-                label="Capability boundary step"
+                label={i18n.t("modelsEndpoints.ForecastClassifierConfig.capabilityBoundaryStep", { defaultValue: "Capability boundary step" })}
                 value={capability.threshold_step ?? 0}
                 min={0}
                 max={0.5}
@@ -309,22 +313,22 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
               />
             )}
             <NumberField
-              label="Classifier output token limit"
+              label={i18n.t("modelsEndpoints.ForecastClassifierConfig.classifierOutputTokenLimit", { defaultValue: "Classifier output token limit" })}
               min={1}
               step={1}
               value={config.max_output_tokens ?? (isCapability ? 4096 : 1024)}
               onChange={(max_output_tokens) => updateTransport({ max_output_tokens })}
             />
             <div className="space-y-1">
-              <Label htmlFor={`${id}-format`}>Forecast response format</Label>
+              <Label htmlFor={`${id}-format`}>{i18n.t("modelsEndpoints.ForecastClassifierConfig.forecastResponseFormat", { defaultValue: "Forecast response format" })}</Label>
               <SearchSelect
                 inputId={`${id}-format`}
-                aria-label="Forecast response format"
+                aria-label={i18n.t("modelsEndpoints.ForecastClassifierConfig.forecastResponseFormat2", { defaultValue: "Forecast response format" })}
                 value={config.response_format ?? "json_schema"}
                 allowClear={false}
                 options={[
-                  { value: "json_schema", label: "Strict JSON schema" },
-                  { value: "json_object", label: "JSON object (for judges without strict schema support)" },
+                  { value: "json_schema", label: i18n.t("modelsEndpoints.ForecastClassifierConfig.strictJsonSchema", { defaultValue: "Strict JSON schema" }) },
+                  { value: "json_object", label: i18n.t("modelsEndpoints.ForecastClassifierConfig.jsonObjectForJudgesWithoutStrict", { defaultValue: "JSON object (for judges without strict schema support)" }) },
                 ]}
                 onValueChange={(response_format) => {
                   if (response_format === "json_schema" || response_format === "json_object")
@@ -355,14 +359,14 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
                         })
                   }
                 />
-                Use fitted calibration
+                {i18n.t("modelsEndpoints.ForecastClassifierConfig.useFittedCalibration", { defaultValue: "Use fitted calibration" })}
               </Label>
               <p className="text-xs text-muted-foreground">
-                Optional coefficients fitted for your judge, solvers, and harness. Leave off to use raw forecasts
+                {i18n.t("modelsEndpoints.ForecastClassifierConfig.optionalCoefficientsFittedForYourJudge", { defaultValue: "Optional coefficients fitted for your judge, solvers, and harness. Leave off to use raw forecasts" })}
               </p>
               {config.calibration && (
                 <div className="space-y-1">
-                  <Label htmlFor={`${id}-version`}>Calibration version</Label>
+                  <Label htmlFor={`${id}-version`}>{i18n.t("modelsEndpoints.ForecastClassifierConfig.calibrationVersion", { defaultValue: "Calibration version" })}</Label>
                   <Input
                     id={`${id}-version`}
                     value={config.calibration.version}
@@ -373,7 +377,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
               )}
               {isCapability && capability.calibration && (
                 <CalibrationFields
-                  label="Efficient"
+                  label={i18n.t("modelsEndpoints.ForecastClassifierConfig.efficient", { defaultValue: "Efficient" })}
                   bounded
                   value={capability.calibration}
                   onChange={(next) =>
@@ -403,16 +407,16 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
       {section === "all" && (
         <>
           <div className="space-y-1">
-            <Label htmlFor={`${id}-frequency`}>How often to classify</Label>
+            <Label htmlFor={`${id}-frequency`}>{i18n.t("addModel.classificationMethod.frequencyLabel", { defaultValue: "How often to classify" })}</Label>
             <SearchSelect
               inputId={`${id}-frequency`}
-              aria-label="How often to classify"
+              aria-label={i18n.t("addModel.classificationMethod.frequencyLabel", { defaultValue: "How often to classify" })}
               value={classificationFrequency(value)}
               allowClear={false}
               options={[
-                { value: "every_request", label: "Every request" },
-                { value: "user_turn", label: "Every new user message" },
-                { value: "session", label: "Once per session" },
+                { value: "every_request", label: i18n.t("addModel.classificationMethod.frequencyEveryRequest", { defaultValue: "Every request" }) },
+                { value: "user_turn", label: i18n.t("addModel.classificationMethod.frequencyUserTurn", { defaultValue: "Every new user message" }) },
+                { value: "session", label: i18n.t("addModel.classificationMethod.frequencySession", { defaultValue: "Once per session" }) },
               ]}
               onValueChange={(frequency) => {
                 if (frequency) onChange(withClassificationFrequency(value, frequency as ClassificationFrequency));
@@ -422,7 +426,7 @@ const ForecastClassifierConfig = ({ value, onChange, modelOptions, effortOptions
         </>
       )}
       <p className="text-xs text-muted-foreground">
-        The classifier uses its bundled prompt and always falls back to the capable solver
+        {i18n.t("modelsEndpoints.ForecastClassifierConfig.theClassifierUsesItsBundledPrompt", { defaultValue: "The classifier uses its bundled prompt and always falls back to the capable solver" })}
       </p>
       {section !== "advanced" && error && (
         <p role="alert" className="text-sm text-destructive">

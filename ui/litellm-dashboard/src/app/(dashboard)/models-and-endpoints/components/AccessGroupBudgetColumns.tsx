@@ -50,7 +50,10 @@ function AccessGroupRowActions({ accessGroup, canWrite, onSetBudget, onClearBudg
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open budget actions for ${accessGroup.access_group}`}
+        aria-label={i18n.t("modelsEndpoints.AccessGroupBudgetColumns.openBudgetActions", {
+          name: accessGroup.access_group,
+          defaultValue: "Open budget actions for {{name}}",
+        })}
         data-testid={`access-group-actions-${accessGroup.access_group}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >

@@ -29,13 +29,12 @@ export const AffinityControls: React.FC<{
         <Switch
           checked={value.deployment_affinity ?? DEFAULT_DEPLOYMENT_AFFINITY}
           onCheckedChange={(deploymentAffinity) => onChange({ ...value, deployment_affinity: deploymentAffinity })}
-          aria-label="Pin one model deployment per tier"
+          aria-label={i18n.t("modelsEndpoints.AffinityControls.pinOneModelDeploymentPerTier", { defaultValue: "Pin one model deployment per tier" })}
         />
-        <strong className="font-semibold">Pin one model deployment per tier</strong>
+        <strong className="font-semibold">{i18n.t("modelsEndpoints.AffinityControls.pinOneModelDeploymentPerTier2", { defaultValue: "Pin one model deployment per tier" })}</strong>
       </div>
       <span className="block text-xs mb-3 text-muted-foreground">
-        Reuses the model chosen for each tier and its deployment when available. Requests can still move between tiers.
-        Turn off to select models and load-balance deployments every turn.
+        {i18n.t("modelsEndpoints.AffinityControls.reusesTheModelChosenForEach", { defaultValue: "Reuses the model chosen for each tier and its deployment when available. Requests can still move between tiers. Turn off to select models and load-balance deployments every turn." })}
       </span>
       <div style={{ maxWidth: 320 }}>
         <label className="block text-sm font-medium mb-1" htmlFor="session-affinity-ttl">

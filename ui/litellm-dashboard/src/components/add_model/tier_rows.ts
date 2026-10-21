@@ -2,6 +2,7 @@ import { isForecastClassifier } from "./forecast_classifier_config";
 import type { ClassifierType, ComplexityTiers } from "./ComplexityRouterConfig";
 import type { ComplexityTier } from "./KeywordTierRules";
 import type { TierModelParams, TierModelParamsByTier } from "./complexity_router_tiers";
+import i18n from "@/lib/i18n";
 
 export const TIER_ORDER: ComplexityTier[] = ["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"];
 
@@ -177,7 +178,7 @@ export const CUSTOM_TIER_OMITTED_KEYS: readonly string[] = Object.values(CUSTOM_
 export const getCustomTierRowsError = (customTierSet: CustomTierSet): string | null => {
   const rows = customTierSet.tiers;
   if (rows.length < MIN_TIER_COUNT || rows.length > MAX_TIER_COUNT)
-    return `A tier set needs ${MIN_TIER_COUNT} to ${MAX_TIER_COUNT} tiers`;
+    return i18n.t("modelsEndpoints.tierrows.aTierSetNeedsToTiers", {p1: MIN_TIER_COUNT, p2: MAX_TIER_COUNT, defaultValue: "A tier set needs {{p1}} to {{p2}} tiers"});
   if (rows.some((row) => !activeTierName(row))) return "Name every tier";
   const folded = rows.map((row) => row.name.trim().toLowerCase());
   if (new Set(folded).size !== folded.length) return "Tier names must be unique, ignoring case";

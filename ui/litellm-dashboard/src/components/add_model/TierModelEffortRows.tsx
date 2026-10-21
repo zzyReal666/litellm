@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Info } from "lucide-react";
 import React from "react";
 import { ReasoningEffort, TierModelParams } from "./complexity_router_tiers";
+import i18n from "@/lib/i18n";
 
 const PROVIDER_DEFAULT = "__provider_default__";
 
@@ -95,7 +96,7 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
                 <SelectTrigger
                   size="sm"
                   className="w-36"
-                  aria-label={`Reasoning effort for ${model} in the ${tierLabel} tier`}
+                  aria-label={i18n.t("modelsEndpoints.TierModelEffortRows.reasoningEffortForInTheTier", {p1: model, p2: tierLabel, defaultValue: "Reasoning effort for {{p1}} in the {{p2}} tier"})}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -110,17 +111,20 @@ const TierModelEffortRows: React.FC<TierModelEffortRowsProps> = (props) => {
               </Select>
             )}
             {canEditFastMode(model, fastModeByModel, paramsByModel) && (
-              <SimpleTooltip content="Fast mode has higher pricing and requires an eligible provider account. Off removes this tier's speed override and inherits the request or provider default">
+              <SimpleTooltip content={i18n.t("modelsEndpoints.TierModelEffortRows.fastModePricingHint", {
+                  defaultValue:
+                    "Fast mode has higher pricing and requires an eligible provider account. Off removes this tier's speed override and inherits the request or provider default",
+                })}>
                 <label
                   className="flex items-center gap-2 text-xs"
-                  aria-label={`Fast mode for ${model} in the ${tierLabel} tier`}
+                  aria-label={i18n.t("modelsEndpoints.TierModelEffortRows.fastModeForInTheTier", {p1: model, p2: tierLabel, defaultValue: "Fast mode for {{p1}} in the {{p2}} tier"})}
                 >
                   <Switch
                     size="sm"
                     checked={paramsByModel?.[model]?.speed === "fast"}
                     onCheckedChange={(enabled) => onFastModeChange(model, enabled)}
                   />
-                  Fast mode
+                  {i18n.t("modelsEndpoints.TierModelEffortRows.fastMode", { defaultValue: "Fast mode" })}
                 </label>
               </SimpleTooltip>
             )}

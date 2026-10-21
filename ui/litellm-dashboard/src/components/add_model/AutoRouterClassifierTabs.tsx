@@ -33,6 +33,7 @@ import {
   isAllowanceExhausted,
   AUTO_ROUTER_CONTACT_URL,
 } from "./AutoRouterAvailability";
+import i18n from "@/lib/i18n";
 
 export function ClassifierOption({
   value,
@@ -62,7 +63,7 @@ export function ClassifierOption({
             {feature ? (
               <AutoRouterAllowanceLabel feature={feature} />
             ) : (
-              unlimited && <span className="shrink-0 text-xs leading-5 text-muted-foreground">Unlimited</span>
+              unlimited && <span className="shrink-0 text-xs leading-5 text-muted-foreground">{i18n.t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })}</span>
             )}
           </span>
           <span className={`text-xs leading-5 text-muted-foreground ${exhausted ? "pr-28" : ""}`}>{description}</span>
@@ -71,10 +72,13 @@ export function ClassifierOption({
       {fresh && exhausted && (
         <DropdownMenuItem
           render={<a href={AUTO_ROUTER_CONTACT_URL} target="_blank" rel="noopener noreferrer" />}
-          aria-label={`Talk to our team about ${label}`}
+          aria-label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.talkAbout", {
+            label,
+            defaultValue: "Talk to our team about {{label}}",
+          })}
           className="absolute top-9 right-8 cursor-pointer px-0 py-0 text-xs leading-5 font-medium text-blue-600 focus:text-blue-600 hover:underline dark:text-blue-400 dark:focus:text-blue-400"
         >
-          Talk to our team
+          {i18n.t("modelsEndpoints.AutoRouterClassifierTabs.talkToOurTeam", { defaultValue: "Talk to our team" })}
         </DropdownMenuItem>
       )}
     </div>
@@ -109,7 +113,7 @@ export function ClassifierMenu({
         {feature ? (
           <AutoRouterAllowanceLabel feature={feature} />
         ) : (
-          <span className="text-xs text-muted-foreground">Unlimited</span>
+          <span className="text-xs text-muted-foreground">{i18n.t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })}</span>
         )}
         <ChevronDownIcon className="size-4 text-muted-foreground" />
       </DropdownMenuTrigger>
@@ -181,9 +185,9 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       <fieldset>
         <legend className="mb-4 flex w-full items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h4 className="m-0 text-xl font-semibold text-foreground">Choose your classifier</h4>
-            <SimpleTooltip content="Choose how requests are evaluated and routed to your tiers">
-              <button type="button" aria-label="About classifiers" className="text-muted-foreground">
+            <h4 className="m-0 text-xl font-semibold text-foreground">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.chooseYourClassifier", { defaultValue: "Choose your classifier" })}</h4>
+            <SimpleTooltip content={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.chooseHowRequestsAreEvaluatedAnd", { defaultValue: "Choose how requests are evaluated and routed to your tiers" })}>
+              <button type="button" aria-label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.aboutClassifiers", { defaultValue: "About classifiers" })} className="text-muted-foreground">
                 <Info className="size-4" />
               </button>
             </SimpleTooltip>
@@ -192,12 +196,12 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
         </legend>
         <RadioGroup value={family} onValueChange={changeFamily} className="grid gap-3 sm:grid-cols-3">
           {[
-            { value: "heuristics", label: "Heuristics", description: "Classify locally, with no API call" },
-            { value: "llm", label: "LLM", description: "Use a judge model to choose a solver" },
+            { value: "heuristics", label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.heuristics", { defaultValue: "Heuristics" }), description: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.classifyLocallyWithNoApiCall", { defaultValue: "Classify locally, with no API call" }) },
+            { value: "llm", label: "LLM", description: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.useAJudgeModelToChoose", { defaultValue: "Use a judge model to choose a solver" }) },
             {
               value: "jev",
-              label: "Decisions Model",
-              description: "Use a decision model to choose a tier",
+              label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.decisionsModel", { defaultValue: "Decisions Model" }),
+              description: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.useADecisionModelToChoose", { defaultValue: "Use a decision model to choose a tier" }),
             },
           ].map((option) => (
             <Label
@@ -226,13 +230,13 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       {family === "jev" &&
         (decisionModel ?? (
           <div className="space-y-2">
-            <Label htmlFor={`${id}-decision-model`}>Decision model</Label>
+            <Label htmlFor={`${id}-decision-model`}>{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.decisionModel", { defaultValue: "Decision model" })}</Label>
             <Select
               items={[
-                { value: "jev", label: "Jev" },
-                { value: "laya", label: "Laya" },
-                { value: "bespoke", label: "Bespoke Nimble" },
-                { value: "databricks", label: "Databricks" },
+                { value: "jev", label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.jev", { defaultValue: "Jev" }) },
+                { value: "laya", label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.laya", { defaultValue: "Laya" }) },
+                { value: "bespoke", label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.bespokeNimble", { defaultValue: "Bespoke Nimble" }) },
+                { value: "databricks", label: i18n.t("modelsEndpoints.AutoRouterClassifierTabs.databricks", { defaultValue: "Databricks" }) },
               ]}
               value={normalizeJevClassifierConfig(value.jev_classifier_config).provider}
               onValueChange={changeProvider}
@@ -241,23 +245,23 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="jev">Jev</SelectItem>
-                <SelectItem value="laya">Laya</SelectItem>
-                <SelectItem value="bespoke">Bespoke Nimble</SelectItem>
-                <SelectItem value="databricks">Databricks</SelectItem>
+                <SelectItem value="jev">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.jev2", { defaultValue: "Jev" })}</SelectItem>
+                <SelectItem value="laya">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.laya2", { defaultValue: "Laya" })}</SelectItem>
+                <SelectItem value="bespoke">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.bespokeNimble2", { defaultValue: "Bespoke Nimble" })}</SelectItem>
+                <SelectItem value="databricks">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.databricks2", { defaultValue: "Databricks" })}</SelectItem>
               </SelectContent>
             </Select>
           </div>
         ))}
       {family === "custom" && (
-        <p className="text-sm text-muted-foreground">This router uses a custom classifier plugin</p>
+        <p className="text-sm text-muted-foreground">{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.thisRouterUsesACustomClassifier", { defaultValue: "This router uses a custom classifier plugin" })}</p>
       )}
       {family === "heuristics" && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-heuristic`}>Heuristic</Label>
+          <Label htmlFor={`${id}-heuristic`}>{i18n.t("addModel.classificationMethod.heuristicLabel", { defaultValue: "Heuristic" })}</Label>
           <ClassifierMenu
             id={`${id}-heuristic`}
-            label="Heuristic"
+            label={i18n.t("addModel.classificationMethod.heuristicLabel", { defaultValue: "Heuristic" })}
             selectedLabel={classifierType === "heuristic_v2" ? "Heuristic v2" : "Rule-based"}
             feature={classifierType === "heuristic_v2" ? "heuristic_v2" : undefined}
             value={classifierType}
@@ -267,13 +271,13 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
           >
             <ClassifierOption
               value="heuristic"
-              label="Rule-based"
-              description="Score requests with local rules to choose a tier, with no API call"
+              label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.ruleBased", { defaultValue: "Rule-based" })}
+              description={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.scoreRequestsWithLocalRulesTo", { defaultValue: "Score requests with local rules to choose a tier, with no API call" })}
             />
             <ClassifierOption
               value="heuristic_v2"
-              label="Heuristic v2"
-              description="Use calibrated probabilities to match requests to a tier, with no API call"
+              label={i18n.t("viewLogs.routingDecisionCard.causeHeuristicV2", { defaultValue: "Heuristic v2" })}
+              description={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.useCalibratedProbabilitiesToMatchRequests", { defaultValue: "Use calibrated probabilities to match requests to a tier, with no API call" })}
               feature="heuristic_v2"
             />
           </ClassifierMenu>
@@ -287,10 +291,10 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       {family === "llm" && judgeModel}
       {family === "llm" && (
         <div className="space-y-2">
-          <Label htmlFor={`${id}-approach`}>Routing approach</Label>
+          <Label htmlFor={`${id}-approach`}>{i18n.t("modelsEndpoints.AutoRouterClassifierTabs.routingApproach", { defaultValue: "Routing approach" })}</Label>
           <ClassifierMenu
             id={`${id}-approach`}
-            label="Routing approach"
+            label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.routingApproach2", { defaultValue: "Routing approach" })}
             selectedLabel={approachLabels[classifierType] ?? "Complexity"}
             feature={isForecastClassifier(classifierType) ? classifierType : undefined}
             value={isForecastClassifier(classifierType) ? classifierType : "llm"}
@@ -303,22 +307,24 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
           >
             <ClassifierOption
               value="llm"
-              label="Complexity"
-              description="Match task difficulty to a tier, then use one of that tier's models"
+              label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.complexity", { defaultValue: "Complexity" })}
+              description={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.complexityDescription", {
+                defaultValue: "Match task difficulty to a tier, then use one of that tier's models",
+              })}
             />
             {family === "llm" && (
               <>
                 <ClassifierOption
                   value="capability"
-                  label="Capability"
-                  description="Use the efficient model when it is likely to succeed; otherwise use the capable model"
+                  label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.capability", { defaultValue: "Capability" })}
+                  description={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.useTheEfficientModelWhenIt", { defaultValue: "Use the efficient model when it is likely to succeed; otherwise use the capable model" })}
                   feature="capability"
                   disabled={hasCustomTiers}
                 />
                 <ClassifierOption
                   value="llm_v2"
-                  label="Fuse v2"
-                  description="Use the efficient model when its predicted quality is close enough to the capable model"
+                  label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.fuseV2", { defaultValue: "Fuse v2" })}
+                  description={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.useTheEfficientModelWhenIts", { defaultValue: "Use the efficient model when its predicted quality is close enough to the capable model" })}
                   feature="llm_v2"
                   disabled={hasCustomTiers}
                 />
@@ -332,7 +338,7 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       )}
       {hasCustomTiers && (
         <p className="text-xs text-muted-foreground">
-          Restore standard tiers to use Heuristics, Capability, or Fuse v2
+          {i18n.t("modelsEndpoints.AutoRouterClassifierTabs.restoreStandardTiersToUseHeuristics", { defaultValue: "Restore standard tiers to use Heuristics, Capability, or Fuse v2" })}
         </p>
       )}
       {availability.data?.error && !availability.isChecking && (
@@ -345,7 +351,7 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
         <p className="text-xs text-muted-foreground">
           Could not check availability.{" "}
           <button type="button" className="underline" onClick={() => availability.refetch?.()}>
-            Retry
+            {i18n.t("navbar.retry", { defaultValue: "Retry" })}
           </button>
         </p>
       )}

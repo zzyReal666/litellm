@@ -11696,5 +11696,322 @@
   "noRedisWarning": {
     "title": "No Redis configured. Redis is highly recommended",
     "body": "This proxy is running more than one worker (or the worker count could not be verified). Without Redis, rate limits, budgets, router state, and cache invalidation are per worker, so limits are enforced once per worker and spend can overshoot. <0>See everything that does not work without Redis</0>. Set <1>LITELLM_DISABLE_NO_REDIS_WARNING=true</1> to hide this banner anyway."
+  },
+  "modelsEndpoints": {
+    "page": {
+      "viewYourModelsAndManageRouters": "View your models and manage routers for teams that allow it."
+    },
+    "AccessGroupBudgetsPanel": {
+      "budgetSavedFor": "Budget saved for \"{{p1}}\"",
+      "budgetClearedFor": "Budget cleared for \"{{p1}}\""
+    },
+    "AutoRoutersPanel": {
+      "chooseAClassifierToRouteEach": "Choose a classifier to route each request to a model. Called like any other model, so clients keep using a single model name.",
+      "areYouSureYouWantTo": "Are you sure you want to delete \"{{p1}}\"? Any client still calling this model name will start failing.",
+      "deletedAutoRouter": "Deleted auto router: {{name}}",
+      "failedToDeleteAutoRouter": "Failed to delete auto router: {{error}}"
+    },
+    "HeuristicScoringConfig": {
+      "tierBoundaries": "Tier boundaries",
+      "tokenThresholds": "Token thresholds",
+      "dimensionWeights": "Dimension weights",
+      "leftUntouchedItTracksTheSimple": "Left untouched, it tracks the Simple to Medium boundary, currently {{p1}}.",
+      "markerPromotionPrefix": "Two or more reasoning markers promote a request to the reasoning tier, but only once its weighted score reaches this floor."
+    },
+    "addautoroutertab": {
+      "startFromScratch": "Start from scratch",
+      "useATemplate": "Use a template",
+      "useATemplate2": "Use a template",
+      "replacesClassifierAndModelChoices": "Replaces classifier and model choices",
+      "startFromScratch2": "Start from scratch",
+      "startFromScratch3": "Start from scratch",
+      "clearsTierModelsSwitchesToHeuristics": "Clears tier models, switches to Heuristics, and resets routing settings",
+      "replacesClassifierAndModelChoices2": "Replaces classifier and model choices"
+    },
+    "TierModelEffortRows": {
+      "reasoningEffortForInTheTier": "Reasoning effort for {{p1}} in the {{p2}} tier",
+      "fastModeHasHigherPricingAnd": "Fast mode has higher pricing and requires an eligible provider account. Off removes this tier",
+      "fastModeForInTheTier": "Fast mode for {{p1}} in the {{p2}} tier",
+      "fastMode": "Fast mode",
+      "fastModePricingHint": "Fast mode has higher pricing and requires an eligible provider account. Off removes this tier's speed override and inherits the request or provider default"
+    },
+    "ReminderMarkers": {
+      "openingTag": "Opening tag",
+      "closingTag": "Closing tag",
+      "addTagPair": "Add tag pair",
+      "removeTagPair": "Remove tag pair {{index}}"
+    },
+    "ClassifierTypeRadios": {
+      "ossClassifier": "OSS Classifier"
+    },
+    "ForecastClassifierConfig": {
+      "selectModels": "Select {{p1}} models",
+      "invalidForecastsAndClassifierFailuresRoute": "Invalid forecasts and classifier failures route to the capable solver",
+      "selectTheJudgeModel": "Select the judge model",
+      "solveProbabilityThreshold": "Solve probability threshold",
+      "maximumQualityGap": "Maximum quality gap",
+      "classifierOptions": "Classifier options",
+      "capabilityBoundaryStep": "Capability boundary step",
+      "classifierOutputTokenLimit": "Classifier output token limit",
+      "forecastResponseFormat": "Forecast response format",
+      "forecastResponseFormat2": "Forecast response format",
+      "strictJsonSchema": "Strict JSON schema",
+      "jsonObjectForJudgesWithoutStrict": "JSON object (for judges without strict schema support)",
+      "useFittedCalibration": "Use fitted calibration",
+      "optionalCoefficientsFittedForYourJudge": "Optional coefficients fitted for your judge, solvers, and harness. Leave off to use raw forecasts",
+      "calibrationVersion": "Calibration version",
+      "efficient": "Efficient",
+      "theClassifierUsesItsBundledPrompt": "The classifier uses its bundled prompt and always falls back to the capable solver",
+      "selectPlaceholder": "Select {{label}}"
+    },
+    "ContextWindowEscalationConfig": {
+      "whenAPromptProvablyCannotFit": "When a prompt provably cannot fit the decided tier's context windows, route it to the lowest tier whose window holds it instead of letting the provider reject it. Disabled by default. Off means requests dispatch on complexity alone.",
+      "fractionOfAModelAposS": "Fraction of a model's window the counted prompt must fit within, above 0 up to 1. Empty tracks the backend default of 0.95."
+    },
+    "PlanModeOverrideControls": {
+      "additionalPlanModeSentinels": "Additional plan-mode sentinels",
+      "eGEnterPlanMode": "e.g., enter plan mode",
+      "typeToAddASentinel": "Type to add a sentinel",
+      "caseSensitiveLiteralStringsAddedTo": "Case-sensitive literal strings added to the built-in Claude Code and Copilot plan-mode markers."
+    },
+    "ClassifierPluginTimeoutField": {
+      "thisRouterUsesACustomClassifier": "This router uses a custom classifier plugin set in config.yaml. Pick a classifier below to replace it.",
+      "classifierPluginTimeoutMs": "Classifier plugin timeout (ms)",
+      "timeBudgetForThePluginCall": "Time budget for the plugin call. On expiry the fallback path decides the tier."
+    },
+    "CacheAwareRoutingConfig": {
+      "cacheAwareRouting": "Cache-aware routing",
+      "considerPromptCacheSavings": "Consider prompt-cache savings",
+      "disabledByDefaultReuseAModel": "Disabled by default. Reuse a model with a warm prompt cache when its estimated total cost is lower and it meets the selected tier or higher. Supports native Anthropic Messages with explicit prompt caching; unsupported requests keep their usual route.",
+      "expectedOutputTokens": "Expected output tokens",
+      "usedToEstimateCostNotTo": "Used to estimate cost, not to limit the response. Leave blank to use the default of 1024.",
+      "predictionTimeoutMs": "Prediction timeout (ms)",
+      "keepTheOriginalRouteIfThe": "Keep the original route if the comparison takes too long. Leave blank to use the default of 2000 ms."
+    },
+    "buildcomplexityrouterconfig": {
+      "thePlanModeMinimumTierHas": "The plan-mode minimum tier ({{p1}}) has no models. Add one or turn the override off.",
+      "tagPairNeedsBothAnOpening": "Tag pair {{p1}} needs both an opening and a closing tag",
+      "tagPairMustUseDifferentOpening": "Tag pair {{p1}} must use different opening and closing tags"
+    },
+    "TierConfigIntro": {
+      "chooseOneOrMoreModelsFor": "Choose one or more models for each tier. Requests use the models in their assigned tier"
+    },
+    "AutoRouterAvailability": {
+      "talkToOurTeam": "Talk to our team",
+      "viewLimits": "View limits",
+      "routingAndCustomizationLimits": "Routing and customization limits",
+      "ruleBasedComplexityAndOssAre": "Rule-based, Complexity, and OSS are unlimited with built-in settings. Choose or change tier models freely. Customization allowances are shared across this proxy.",
+      "customTierDefinitionsAndWrittenClassifier": "Custom tier definitions and written classifier instructions share one allowance. Built-in prompts and display-name changes do not use it.",
+      "changingScoringRulesSuchAsWeights": "Changing scoring rules, such as weights, thresholds, keywords, or custom dimensions, uses the Rule-based tuning allowance. It also applies to Heuristic first and Hybrid. Recorded settings on existing routers are preserved; new routers start from built-in rules.",
+      "needAHigherLimit": "Need a higher limit?"
+    },
+    "tierrows": {
+      "aTierSetNeedsToTiers": "A tier set needs {{p1}} to {{p2}} tiers"
+    },
+    "DecisionModelNote": {
+      "decisionModelNotice": "Decision model notice",
+      "decisionModel": "Decision model",
+      "howToCallDecisionModels": "How to call decision models"
+    },
+    "AddModelForm": {
+      "promise": "Promise",
+      "workloadIdentityFederationIsSavedAs": "Workload identity federation is saved as a credential, then attached to this model.",
+      "useWorkloadIdentityFederation": "Use workload identity federation"
+    },
+    "CustomDimensionRows": {
+      "binary": "Binary",
+      "matchCount": "Match count"
+    },
+    "AutoRouterRoutingTest": {
+      "sendAPromptThroughThisRouter": "Send a prompt through this router's classifier to see which model it would pick, and why. The prompt is only classified: nothing is sent to the model it routes to."
+    },
+    "ComplexityRouterConfig": {
+      "legacyUncalibrated": "Legacy (uncalibrated)",
+      "business": "Business",
+      "customTiersAndWrittenPromptsShare": "Custom tiers and written prompts share this allowance",
+      "addOrRemoveTiersToDefine": "Add or remove tiers to define your own set. Every custom tier needs a definition the classifier routes on, and an edited set requires the LLM or OSS classification method",
+      "operationalRelayWorkPassingInformationAlong": "Operational relay work: passing information along with no judgment about it",
+      "advancedClassifierSettings": "Advanced classifier settings",
+      "displayNameDefault": "Display name (default: {{p1}})",
+      "displayNameForTheTier": "Display name for the {{p1}} tier",
+      "clearDisplayNameForTheTier": "Clear display name for the {{p1}} tier",
+      "selectModelSForQueries": "Select model(s) for {{p1}} queries",
+      "nameForTier": "Name for tier {{index}}",
+      "definitionForTier": "Definition for tier {{index}}"
+    },
+    "ComplexityRouterAdvancedSections": {
+      "classifierTuning": "Classifier tuning",
+      "heuristicTuning": "Heuristic tuning",
+      "adaptiveRouting": "Adaptive Routing",
+      "affinity": "Affinity",
+      "cacheAwareRouting": "Cache-aware routing",
+      "modalityRouting": "Modality Routing",
+      "planModeOverride": "Plan-Mode Override",
+      "housekeepingRouting": "Housekeeping Routing",
+      "ignoreCustomTags": "Ignore Custom Tags",
+      "contextWindowEscalation": "Context Window Escalation",
+      "stalledTaskEscalation": "Stalled Task Escalation",
+      "responseFormat": "Response Format",
+      "keywordSemanticMatching": "Keyword/Semantic Matching",
+      "heuristicTuning2": "Heuristic tuning",
+      "requestPreprocessing": "Request preprocessing",
+      "routingRulesAndRecovery": "Routing rules and recovery",
+      "sessionsAndEfficiency": "Sessions and efficiency",
+      "compatibility": "Compatibility"
+    },
+    "HeuristicKeywordOverrides": {
+      "eachListReplacesTheBuiltIn": "Each list replaces the built-in keyword list of the same name for the heuristic scorer. Leave a list empty to keep the built-in one. To add technical terms without replacing the list, use custom technical keywords above.",
+      "addPlaceholder": "Add {{label}}"
+    },
+    "ClassifierPrimarySettings": {
+      "selectTheJudgeModel": "Select the judge model"
+    },
+    "AffinityControls": {
+      "pinOneModelDeploymentPerTier": "Pin one model deployment per tier",
+      "pinOneModelDeploymentPerTier2": "Pin one model deployment per tier",
+      "reusesTheModelChosenForEach": "Reuses the model chosen for each tier and its deployment when available. Requests can still move between tiers. Turn off to select models and load-balance deployments every turn."
+    },
+    "litellmmodelname": {
+      "allModelsWildcard": "All {{p1}} Models (Wildcard)"
+    },
+    "DecisionModelSelect": {
+      "decisionModel": "Decision model",
+      "decisionModel2": "Decision model",
+      "selectTheDecisionModel": "Select the decision model"
+    },
+    "ClassificationMethodConfig": {
+      "inactiveHeuristicV2Threshold": "Inactive Heuristic v2 threshold",
+      "retainedHeuristicV2Threshold": "Retained Heuristic v2 threshold",
+      "onlyUsedWhenHeuristicV2Is": "Only used when Heuristic v2 is selected",
+      "clearHeuristicV2Threshold": "Clear Heuristic v2 threshold",
+      "localChecksBeforeTheJudge": "Local checks before the judge",
+      "alwaysUseTheJudge": "Always use the judge",
+      "alwaysUseTheJudge2": "Always use the judge",
+      "heuristicBeforeTheJudge": "Heuristic before the judge",
+      "heuristicBeforeTheJudge2": "Heuristic before the judge",
+      "heuristicV1RuleBased": "Heuristic v1 (rule-based)",
+      "scoreRequestsUsingConfigurableWeightsAnd": "Score requests using configurable weights and keywords",
+      "chooseATierUsingCalibratedSuccess": "Choose a tier using calibrated success probabilities",
+      "successThreshold": "Success threshold",
+      "artifactDefault": "Artifact default",
+      "minimumPredictedSuccessProbabilityFrom0": "Minimum predicted success probability, from 0 to 1. Higher values favor more capable tiers. Leave blank to use the artifact default",
+      "customInstructionsAndExamplesShareThe": "Custom instructions and examples share the custom-tier allowance",
+      "numberOfPriorUserTurnsSent": "Number of prior user turns sent to the classifier provider, excluding tool output and harness reminders. LLM and decision model classifiers default to 3 turns. Set to 0 to omit conversation history. The current message and selected system text are still sent.",
+      "letTheClassifierReadTheAssistant": "Let the classifier read the assistant's replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns.",
+      "customScoringRules": "Custom scoring rules",
+      "heuristicKeywordOverrides": "Heuristic Keyword Overrides"
+    },
+    "JevClassifierConfig": {
+      "classifierTimeoutMs": "Classifier Timeout (ms)",
+      "classifierInstructions": "Classifier Instructions",
+      "customInstructionsShareTheCustomTier": "Custom instructions share the custom-tier allowance",
+      "leaveBlankToUseTheBuilt": "Leave blank to use the built-in instructions",
+      "restoreBuiltInInstructions": "Restore built-in instructions",
+      "builtInDecisionModelClassificationIs": "Built-in decision model classification is available without a license and uses the shipped tier criteria"
+    },
+    "conditionalpublicmodelname": {
+      "example": "Example:",
+      "ifYouNameYourPublicModel": "If you name your public model",
+      "result": "Result:"
+    },
+    "AutoRouterClassifierTabs": {
+      "talkToOurTeam": "Talk to our team",
+      "chooseYourClassifier": "Choose your classifier",
+      "chooseHowRequestsAreEvaluatedAnd": "Choose how requests are evaluated and routed to your tiers",
+      "aboutClassifiers": "About classifiers",
+      "heuristics": "Heuristics",
+      "classifyLocallyWithNoApiCall": "Classify locally, with no API call",
+      "useAJudgeModelToChoose": "Use a judge model to choose a solver",
+      "decisionsModel": "Decisions Model",
+      "useADecisionModelToChoose": "Use a decision model to choose a tier",
+      "decisionModel": "Decision model",
+      "jev": "Jev",
+      "laya": "Laya",
+      "bespokeNimble": "Bespoke Nimble",
+      "databricks": "Databricks",
+      "jev2": "Jev",
+      "laya2": "Laya",
+      "bespokeNimble2": "Bespoke Nimble",
+      "databricks2": "Databricks",
+      "thisRouterUsesACustomClassifier": "This router uses a custom classifier plugin",
+      "ruleBased": "Rule-based",
+      "scoreRequestsWithLocalRulesTo": "Score requests with local rules to choose a tier, with no API call",
+      "useCalibratedProbabilitiesToMatchRequests": "Use calibrated probabilities to match requests to a tier, with no API call",
+      "routingApproach": "Routing approach",
+      "routingApproach2": "Routing approach",
+      "complexity": "Complexity",
+      "matchTaskDifficultyToATier": "Match task difficulty to a tier, then use one of that tier",
+      "capability": "Capability",
+      "useTheEfficientModelWhenIt": "Use the efficient model when it is likely to succeed; otherwise use the capable model",
+      "fuseV2": "Fuse v2",
+      "useTheEfficientModelWhenIts": "Use the efficient model when its predicted quality is close enough to the capable model",
+      "restoreStandardTiersToUseHeuristics": "Restore standard tiers to use Heuristics, Capability, or Fuse v2",
+      "complexityDescription": "Match task difficulty to a tier, then use one of that tier's models",
+      "talkAbout": "Talk to our team about {{label}}"
+    },
+    "OpeningPromptEditor": {
+      "customOpeningOnTheRubric": "Custom opening on the {{p1}} rubric"
+    },
+    "EscalationKeywords": {
+      "eGLitellmEscalate": "e.g., LITELLM ESCALATE"
+    },
+    "KeywordTierRules": {
+      "eGInvoiceRefundBilling": "e.g., invoice, refund, billing"
+    },
+    "ResponseFormatControls": {
+      "capMaxTokensAtTheTier": "Cap max_tokens at the tier model",
+      "capMaxTokensAtTheTier2": "Cap max_tokens at the tier model's output ceiling"
+    },
+    "autorouterstrategies": {
+      "complexity": "Complexity",
+      "adaptive": "Adaptive",
+      "quality": "Quality"
+    },
+    "HousekeepingRoutingControls": {
+      "routeHousekeepingCallsToTheCheapest": "Route housekeeping calls to the cheapest tier",
+      "routeHousekeepingCallsToTheCheapest2": "Route housekeeping calls to the cheapest tier",
+      "conversationTitleStyleCallsSkipThe": "Conversation-title style calls skip the classifier and go to the cheapest tier.",
+      "additionalHousekeepingSentinels": "Additional housekeeping sentinels",
+      "eGConversationTitle": "e.g., conversation title",
+      "typeToAddASentinel": "Type to add a sentinel",
+      "caseSensitiveLiteralStringsAddedTo": "Case-sensitive literal strings added to the built-in conversation-title sentinels."
+    },
+    "addmodelmodes": {
+      "imageEditImagesEdits": "Image Edit - /images/edits"
+    },
+    "FuseProfilePresets": {
+      "keepSavedPreset": "Keep saved {{p1}} preset",
+      "keepSavedPreset2": "Keep saved preset",
+      "presetPreviewUnavailableTheSavedReference": "Preset preview unavailable. The saved reference is preserved",
+      "chooseProfilesThatMatchEveryDeployment": "Choose profiles that match every deployment in each solver group and its actual settings. Profile selection is independent of routing model names. Presets describe the solvers and runtime; they do not set a quality gap or calibration. Validate those separately for your workload, judge, and exact profile versions.",
+      "loadingProfilePresetsCustomEditingIs": "Loading profile presets. Custom editing is available",
+      "profilePresetsCouldNotBeLoaded": "Profile presets could not be loaded. Saved references are preserved and Custom editing is available"
+    },
+    "build_complexity_router_config": {
+      "shadowingTierName": "A tier's display name can't be another tier's name: {{names}}",
+      "duplicateTierNames": "Tier display names must be unique. Repeated: {{names}}",
+      "missingTierModels": "Select a model for the following tier(s): {{names}}",
+      "emptyKeywordRules": "Add at least one keyword to keyword rule(s): {{indexes}}",
+      "orphanedKeywordRules": "Keyword rule(s) {{indexes}} route to a tier this router no longer has"
+    },
+    "AccessGroupBudgetColumns": {
+      "openBudgetActions": "Open budget actions for {{name}}"
+    },
+    "AccessGroupBudgetModal": {
+      "budgetScopeHint": "Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it."
+    },
+    "add_auto_router_tab": {
+      "missingModels": "Missing: {{models}}"
+    },
+    "DefaultModelField": {
+      "derivedFromTiers": "Derived from tiers: {{model}}"
+    },
+    "litellm_model_name": {
+      "pleaseEnterDeploymentName": "Please enter a deployment name.",
+      "pleaseEnterAtLeastOneModel": "Please enter at least one model."
+    },
+    "handle_add_auto_router_submit": {
+      "createdAutoRouter": "Successfully created Auto Router: {{name}}"
+    }
   }
 }

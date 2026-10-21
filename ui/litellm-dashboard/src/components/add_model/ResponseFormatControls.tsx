@@ -23,9 +23,9 @@ const ResponseFormatControls: React.FC<{
       <Switch
         checked={value.max_tokens_from_tier_model ?? true}
         onCheckedChange={(enabled) => onChange({ ...value, max_tokens_from_tier_model: enabled })}
-        aria-label="Cap max_tokens at the tier model's output ceiling"
+        aria-label={i18n.t("modelsEndpoints.ResponseFormatControls.capMaxTokensAtTheTier2", { defaultValue: "Cap max_tokens at the tier model's output ceiling" })}
       />
-      <strong className="font-semibold">Cap max_tokens at the tier model&apos;s output ceiling</strong>
+      <strong className="font-semibold">{i18n.t("modelsEndpoints.ResponseFormatControls.capMaxTokensAtTheTier2", { defaultValue: "Cap max_tokens at the tier model's output ceiling" })}</strong>
     </div>
     <span className="block text-xs text-muted-foreground">
       Replace the caller&apos;s max_tokens with the routed tier model&apos;s output ceiling so one client value fits

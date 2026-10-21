@@ -32,9 +32,7 @@ const ContextWindowEscalationConfig: React.FC<{
         <strong className="font-semibold">{i18n.t("addModel.contextWindowEscalation.enableLabel", { defaultValue: "Escalate oversized prompts to a tier that fits" })}</strong>
       </div>
       <span className="block text-xs mb-3 text-muted-foreground">
-        When a prompt provably cannot fit the decided tier&apos;s context windows, route it to the lowest tier whose
-        window holds it instead of letting the provider reject it. Disabled by default. Off means requests dispatch on
-        complexity alone.
+        {i18n.t("modelsEndpoints.ContextWindowEscalationConfig.whenAPromptProvablyCannotFit", { defaultValue: "When a prompt provably cannot fit the decided tier's context windows, route it to the lowest tier whose window holds it instead of letting the provider reject it. Disabled by default. Off means requests dispatch on complexity alone." })}
       </span>
       {enabled && (
         <div style={{ maxWidth: 320 }}>
@@ -50,8 +48,7 @@ const ContextWindowEscalationConfig: React.FC<{
             onBlur={(event) => commitBuffer(event.target.value)}
           />
           <span className="block text-xs mt-1 text-muted-foreground">
-            Fraction of a model&apos;s window the counted prompt must fit within, above 0 up to 1. Empty tracks the
-            backend default of 0.95.
+            {i18n.t("modelsEndpoints.ContextWindowEscalationConfig.fractionOfAModelAposS", { defaultValue: "Fraction of a model's window the counted prompt must fit within, above 0 up to 1. Empty tracks the backend default of 0.95." })}
           </span>
         </div>
       )}

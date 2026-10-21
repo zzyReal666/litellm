@@ -110,7 +110,13 @@ const LiteLLMModelNameField: React.FC<LiteLLMModelNameFieldProps> = ({
         rules={{
           validate: {
             required: requiredRule(
-              `Please enter ${selectedProvider === Providers.Azure ? "a deployment name" : "at least one model"}.`,
+              selectedProvider === Providers.Azure
+                ? i18n.t("modelsEndpoints.litellm_model_name.pleaseEnterDeploymentName", {
+                    defaultValue: "Please enter a deployment name.",
+                  })
+                : i18n.t("modelsEndpoints.litellm_model_name.pleaseEnterAtLeastOneModel", {
+                    defaultValue: "Please enter at least one model.",
+                  }),
             ),
           },
         }}
@@ -148,7 +154,7 @@ const LiteLLMModelNameField: React.FC<LiteLLMModelNameFieldProps> = ({
                   value: "custom",
                 },
                 {
-                  label: `All ${selectedProvider ?? "provider"} Models (Wildcard)`,
+                  label: i18n.t("modelsEndpoints.litellmmodelname.allModelsWildcard", {p1: selectedProvider ?? "provider", defaultValue: "All {{p1}} Models (Wildcard)"}),
                   value: "all-wildcard",
                 },
                 ...providerModels.map((model) => ({

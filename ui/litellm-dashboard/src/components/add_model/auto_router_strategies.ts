@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+
 /**
  * Single owner of "which auto-router strategy is this deployment, and what can we do with it".
  *
@@ -44,7 +46,7 @@ const startsWith = (params: AutoRouterParams, prefix: string): boolean => params
 export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   {
     kind: "complexity",
-    label: "Complexity",
+    label: i18n.t("modelsEndpoints.autorouterstrategies.complexity", { defaultValue: "Complexity" }),
     configKey: "complexity_router_config",
     defaultModelKey: "complexity_router_default_model",
     hasEditor: true,
@@ -54,7 +56,7 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "adaptive",
-    label: "Adaptive",
+    label: i18n.t("modelsEndpoints.autorouterstrategies.adaptive", { defaultValue: "Adaptive" }),
     configKey: "adaptive_router_config",
     defaultModelKey: "adaptive_router_default_model",
     hasEditor: false,
@@ -62,7 +64,7 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "quality",
-    label: "Quality",
+    label: i18n.t("modelsEndpoints.autorouterstrategies.quality", { defaultValue: "Quality" }),
     configKey: "quality_router_config",
     defaultModelKey: "quality_router_default_model",
     hasEditor: false,
@@ -70,7 +72,7 @@ export const AUTO_ROUTER_STRATEGIES: readonly AutoRouterStrategy[] = [
   },
   {
     kind: "semantic",
-    label: "Semantic",
+    label: i18n.t("cacheSettings.redisTypeSelector.semanticType", { defaultValue: "Semantic" }),
     configKey: "auto_router_config",
     defaultModelKey: "auto_router_default_model",
     hasEditor: true,

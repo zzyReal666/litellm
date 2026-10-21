@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import React from "react";
+import i18n from "@/lib/i18n";
 
 export const DEFAULT_ESCALATION_KEYWORDS = ["LITELLM ESCALATE"];
 
@@ -38,7 +39,7 @@ const EscalationKeywords: React.FC<EscalationKeywordsProps> = ({ keywords, onCha
         options={keywords.map((keyword) => ({ label: keyword, value: keyword }))}
         value={keywords}
         onValueChange={onChange}
-        placeholder="e.g., LITELLM ESCALATE"
+        placeholder={i18n.t("modelsEndpoints.EscalationKeywords.eGLitellmEscalate", { defaultValue: "e.g., LITELLM ESCALATE" })}
         emptyText={t("addModel.escalationKeywords.emptyText", { defaultValue: "Type to add a phrase" })}
         allowCustomValues
         className="w-full"

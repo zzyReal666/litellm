@@ -154,7 +154,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
     <div>
       {rubricSummary && (
         <p className="mb-1 text-xs text-muted-foreground">
-          {isOverridden ? `Custom opening on the ${rubricSummary.label} rubric` : `${rubricSummary.label} rubric`}
+          {isOverridden ? i18n.t("modelsEndpoints.OpeningPromptEditor.customOpeningOnTheRubric", {p1: rubricSummary.label, defaultValue: "Custom opening on the {{p1}} rubric"}) : `${rubricSummary.label} rubric`}
         </p>
       )}
       <div className="flex items-center gap-2">
@@ -247,8 +247,7 @@ const OpeningPromptEditor: React.FC<OpeningPromptEditorProps> = ({
                 {i18n.t("addModel.openingPromptEditor.examplesLabel", { defaultValue: "Calibration examples" })}
               </label>
               <p className="mt-1 text-xs text-muted-foreground">
-                Show representative requests and the tier they should receive. The router adds these after its tier
-                definitions.
+                {i18n.t("addModel.openingPromptEditor.examplesHint", { defaultValue: "Show representative requests and the tier they should receive. The router adds these after its tier definitions." })}
               </p>
               <Textarea
                 id="calibration-examples"

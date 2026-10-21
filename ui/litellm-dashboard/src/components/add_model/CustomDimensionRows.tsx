@@ -8,10 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import type { CustomDimensionRow } from "./custom_dimensions";
+import i18n from "@/lib/i18n";
 
 const SCORING_MODES = [
-  { value: "binary", labelKey: "addModel.customDimensionRows.binaryLabel", label: "Binary" },
-  { value: "match_count", labelKey: "addModel.customDimensionRows.matchCountLabel", label: "Match count" },
+  { value: "binary", labelKey: "addModel.customDimensionRows.binaryLabel", label: i18n.t("modelsEndpoints.CustomDimensionRows.binary", { defaultValue: "Binary" }) },
+  { value: "match_count", labelKey: "addModel.customDimensionRows.matchCountLabel", label: i18n.t("modelsEndpoints.CustomDimensionRows.matchCount", { defaultValue: "Match count" }) },
 ] as const;
 
 interface Props {

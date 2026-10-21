@@ -105,7 +105,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "classifier",
-            label: <strong className="text-foreground font-semibold">Classifier tuning</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.classifierTuning", { defaultValue: "Classifier tuning" })}</strong>,
             children: (
               <ForecastClassifierConfig
                 section="advanced"
@@ -131,14 +131,14 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "heuristic",
-            label: <strong className="text-foreground font-semibold">Heuristic tuning</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.heuristicTuning", { defaultValue: "Heuristic tuning" })}</strong>,
             children: <ClassificationMethodConfig {...classificationProps} section="heuristic" />,
           },
         ]
       : []),
     {
       key: "adaptive",
-      label: <strong className="text-foreground font-semibold">Adaptive Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.adaptiveRouting", { defaultValue: "Adaptive Routing" })}</strong>,
       children: (
         <Restricted by={restrictedBy(value, "adaptive")}>
           <AdaptiveRoutingConfig value={value} onChange={onChange} />
@@ -147,44 +147,44 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
     },
     {
       key: "affinity",
-      label: <strong className="text-foreground font-semibold">Affinity</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.affinity", { defaultValue: "Affinity" })}</strong>,
       children: <AffinityControls value={value} onChange={onChange} />,
     },
     {
       key: "cache-aware",
-      label: <strong className="text-foreground font-semibold">Cache-aware routing</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.cacheAwareRouting", { defaultValue: "Cache-aware routing" })}</strong>,
       children: <CacheAwareRoutingConfig value={value} onChange={onChange} />,
     },
     {
       key: "modality",
-      label: <strong className="text-foreground font-semibold">Modality Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.modalityRouting", { defaultValue: "Modality Routing" })}</strong>,
       children: <ModalityRoutingControls value={value} onChange={onChange} />,
     },
     {
       key: "plan-mode",
-      label: <strong className="text-foreground font-semibold">Plan-Mode Override</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.planModeOverride", { defaultValue: "Plan-Mode Override" })}</strong>,
       children: (
         <PlanModeOverrideControls value={value} onChange={onChange} planModeTierOptions={planModeTierOptions} />
       ),
     },
     {
       key: "housekeeping",
-      label: <strong className="text-foreground font-semibold">Housekeeping Routing</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.housekeepingRouting", { defaultValue: "Housekeeping Routing" })}</strong>,
       children: <HousekeepingRoutingControls value={value} onChange={onChange} />,
     },
     {
       key: "reminder-markers",
-      label: <strong className="text-foreground font-semibold">Ignore Custom Tags</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.ignoreCustomTags", { defaultValue: "Ignore Custom Tags" })}</strong>,
       children: <ReminderMarkers value={value} onChange={onChange} showValidationErrors={showValidationErrors} />,
     },
     {
       key: "context-window",
-      label: <strong className="text-foreground font-semibold">Context Window Escalation</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.contextWindowEscalation", { defaultValue: "Context Window Escalation" })}</strong>,
       children: <ContextWindowEscalationConfig value={value} onChange={onChange} />,
     },
     {
       key: "stall-escalation",
-      label: <strong className="text-foreground font-semibold">Stalled Task Escalation</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.stalledTaskEscalation", { defaultValue: "Stalled Task Escalation" })}</strong>,
       children: (
         <Restricted by={restrictedBy(value, "stallEscalation")}>
           <StallEscalationConfig value={value} onChange={onChange} />
@@ -193,14 +193,14 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
     },
     {
       key: "response",
-      label: <strong className="text-foreground font-semibold">Response Format</strong>,
+      label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.responseFormat", { defaultValue: "Response Format" })}</strong>,
       children: <ResponseFormatControls value={value} onChange={onChange} />,
     },
     ...(onEscalationKeywordsChange
       ? [
           {
             key: "escalation",
-            label: <strong className="text-foreground font-semibold">Escalation Keywords</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("addModel.escalationKeywords.title", { defaultValue: "Escalation Keywords" })}</strong>,
             children: (
               <Restricted by={restrictedBy(value, "escalation")}>
                 <EscalationKeywords keywords={escalationKeywords} onChange={onEscalationKeywordsChange} />
@@ -213,7 +213,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "compression",
-            label: <strong className="text-foreground font-semibold">Compression</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("costOptimization.savingsDrivers.compression", { defaultValue: "Compression" })}</strong>,
             children: <CompressionControls value={autoRouterCompression} onChange={onAutoRouterCompressionChange} />,
           },
         ]
@@ -222,7 +222,7 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
       ? [
           {
             key: "keyword-semantic",
-            label: <strong className="text-foreground font-semibold">Keyword/Semantic Matching</strong>,
+            label: <strong className="text-foreground font-semibold">{i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.keywordSemanticMatching", { defaultValue: "Keyword/Semantic Matching" })}</strong>,
             children: (
               <>
                 {onKeywordTierRulesChange && (
@@ -254,11 +254,11 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
   ];
 
   const groups = [
-    { label: "Heuristic tuning", keys: ["heuristic"] },
+    { label: i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.heuristicTuning2", { defaultValue: "Heuristic tuning" }), keys: ["heuristic"] },
     { label: usesLlmClassifier(classifierType) ? "LLM tuning" : "Classifier tuning", keys: ["classifier"] },
-    { label: "Request preprocessing", keys: ["reminder-markers"] },
+    { label: i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.requestPreprocessing", { defaultValue: "Request preprocessing" }), keys: ["reminder-markers"] },
     {
-      label: "Routing rules and recovery",
+      label: i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.routingRulesAndRecovery", { defaultValue: "Routing rules and recovery" }),
       keys: [
         "modality",
         "plan-mode",
@@ -269,8 +269,8 @@ const ComplexityRouterAdvancedSections: React.FC<ComplexityRouterAdvancedSection
         "keyword-semantic",
       ],
     },
-    { label: "Sessions and efficiency", keys: ["affinity", "adaptive", "cache-aware", "compression"] },
-    { label: "Compatibility", keys: ["response"] },
+    { label: i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.sessionsAndEfficiency", { defaultValue: "Sessions and efficiency" }), keys: ["affinity", "adaptive", "cache-aware", "compression"] },
+    { label: i18n.t("modelsEndpoints.ComplexityRouterAdvancedSections.compatibility", { defaultValue: "Compatibility" }), keys: ["response"] },
   ].filter(
     (group) =>
       !(hideClassifier && group.keys.includes("classifier")) && sections.some(({ key }) => group.keys.includes(key)),
