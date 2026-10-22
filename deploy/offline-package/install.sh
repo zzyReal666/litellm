@@ -60,8 +60,20 @@ command -v docker >/dev/null 2>&1 || die "未安装 Docker"
 if [[ "${PKG_DIR}" != "${INSTALL_DIR}" ]]; then
   log "==> 安装到 ${INSTALL_DIR}"
   mkdir -p "${INSTALL_DIR}"
-  for item in docker-compose.yml prometheus.yml config scripts bin images assets .env.example install.sh uninstall.sh README-安装说明.md; do
+  for item in docker-compose.yml prometheus.yml scripts bin images .env.example install.sh uninstall.sh README-安装说明.md; do
     [[ -e "${PKG_DIR}/${item}" ]] && cp -a "${PKG_DIR}/${item}" "${INSTALL_DIR}/"
+  done
+  # 升级时保留已有的 config.yaml（密码策略、登录开关等定制）
+  mkdir -p "${INSTALL_DIR}/config"
+  if [[ ! -f "${INSTALL_DIR}/config/config.yaml" ]]; then
+    cp -a "${PKG_DIR}/config/config.yaml" "${INSTALL_DIR}/config/config.yaml"
+  fi
+  # 升级时保留用户已替换的 Logo，只补齐缺失文件
+  mkdir -p "${INSTALL_DIR}/assets"
+  for asset in logo.png favicon.png; do
+    if [[ ! -f "${INSTALL_DIR}/assets/${asset}" ]] && [[ -f "${PKG_DIR}/assets/${asset}" ]]; then
+      cp -a "${PKG_DIR}/assets/${asset}" "${INSTALL_DIR}/assets/${asset}"
+    fi
   done
 fi
 
