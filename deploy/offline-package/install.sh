@@ -60,7 +60,7 @@ command -v docker >/dev/null 2>&1 || die "未安装 Docker"
 if [[ "${PKG_DIR}" != "${INSTALL_DIR}" ]]; then
   log "==> 安装到 ${INSTALL_DIR}"
   mkdir -p "${INSTALL_DIR}"
-  for item in docker-compose.yml prometheus.yml config scripts bin images .env.example install.sh uninstall.sh README-安装说明.md; do
+  for item in docker-compose.yml prometheus.yml config scripts bin images assets .env.example install.sh uninstall.sh README-安装说明.md; do
     [[ -e "${PKG_DIR}/${item}" ]] && cp -a "${PKG_DIR}/${item}" "${INSTALL_DIR}/"
   done
 fi

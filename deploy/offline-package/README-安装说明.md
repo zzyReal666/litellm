@@ -93,3 +93,14 @@ sudo /opt/litellm/scripts/enable-coordination-redis.sh
 ```
 
 从旧版本升级（数据库保留）时，配置保存在数据库里会自动沿用，脚本检测到已生效会跳过。如果换用全新的数据库，需要重新执行一次。
+
+## 自定义 Logo
+
+管理界面的 Logo 和浏览器标签图标使用 `assets/` 目录下的文件，打包时已内置：
+
+```text
+assets/logo.png      界面左上角 Logo（600x202）
+assets/favicon.png   浏览器标签图标（128x128）
+```
+
+替换方式：把新图片覆盖这两个文件，然后执行 `bash /opt/litellm/scripts/restart.sh litellm` 重建容器即可生效。图片路径通过 docker-compose 的环境变量 `UI_LOGO_PATH` 和 `LITELLM_FAVICON_URL` 指定，目录以只读方式挂载到容器 `/app/assets`。
