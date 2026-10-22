@@ -289,7 +289,6 @@ describe("Sidebar (leftnav)", () => {
       "Budgets",
       "API Reference",
       "AI Hub",
-      "Learning Resources",
       "Experimental",
       "Settings",
     ];

@@ -124,9 +124,7 @@ export const AgentIdentityFields = ({ accessToken }: { accessToken: string | nul
               description={
                 <>
                   Find this under{" "}
-                  <a className="underline" href="https://entra.microsoft.com/" target="_blank" rel="noreferrer">
-                    Entra App registrations
-                  </a>
+                  
                   , select your agent application, then Overview. No client secret is required here.
                 </>
               }
@@ -171,14 +169,7 @@ export const AgentIdentityFields = ({ accessToken }: { accessToken: string | nul
               description={
                 <>
                   Open{" "}
-                  <a
-                    className="underline"
-                    href="https://entra.microsoft.com/#view/Microsoft_AAD_IAM/StartboardApplicationsMenuBlade/~/AppAppsPreview"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Entra Enterprise applications
-                  </a>
+                  
                   , select this application, and copy its Object ID. The App registrations Object ID is a different
                   value.
                 </>

@@ -41,7 +41,7 @@ describe("TagFilteringToggle", () => {
     expect(screen.getByText("Enable tag-based routing to route requests based on tags")).toBeInTheDocument();
   });
 
-  it("should render a Learn more link when metadata provides one", () => {
+  it("does not render a Learn more link even when metadata provides one", () => {
     const metadata = {
       enable_tag_filtering: {
         ...baseMetadata.enable_tag_filtering,
@@ -49,9 +49,7 @@ describe("TagFilteringToggle", () => {
       },
     };
     render(<TagFilteringToggle enabled={false} routerFieldsMetadata={metadata} onToggle={vi.fn()} />);
-    const link = screen.getByRole("link", { name: /learn more/i });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "https://docs.example.com/tag-filtering");
+    expect(screen.queryByRole("link", { name: /learn more/i })).not.toBeInTheDocument();
   });
 
   it("should not render a Learn more link when metadata has no link", () => {

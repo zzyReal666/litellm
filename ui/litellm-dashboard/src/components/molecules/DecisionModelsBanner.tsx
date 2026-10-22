@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowRight, Sparkles, X } from "lucide-react";
 
-import { DECISIONS_DOCS_URL, DECISIONS_PROVIDERS_DOCS_URL, SYSTEM_ONE_PLAYGROUND_ROUTE } from "@/lib/decisionModels";
+import { SYSTEM_ONE_PLAYGROUND_ROUTE } from "@/lib/decisionModels";
 import { uiHref } from "@/utils/uiHref";
 
 import { Button } from "@/components/ui/button";
@@ -29,21 +29,9 @@ const DecisionModelsBanner: React.FC = () => {
         <h4 className="m-0 text-sm font-semibold text-foreground">Decision models are now supported</h4>
         <p className="m-0 mt-0.5 text-xs text-muted-foreground">
           Call them at <code>/v1/decisions</code> or <code>/v1/systemone</code>, or try them in the Decisions
-          playground.{" "}
-          <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-            How to call them
-          </a>
+          playground.
         </p>
       </div>
-      <Button
-        variant="outline"
-        className="shrink-0"
-        nativeButton={false}
-        role="link"
-        render={<a href={DECISIONS_PROVIDERS_DOCS_URL} target="_blank" rel="noopener noreferrer" />}
-      >
-        Supported providers
-      </Button>
       <Button
         className="shrink-0"
         nativeButton={false}

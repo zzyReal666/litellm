@@ -1150,14 +1150,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                   <>
                     <p className="text-sm text-muted-foreground mb-2">
                       For MCP servers hosted on AWS Bedrock AgentCore.{" "}
-                      <a
-                        href="https://docs.litellm.ai/docs/mcp_aws_sigv4"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-info hover:text-info/80"
-                      >
-                        View docs &rarr;
-                      </a>
+                      
                     </p>
                     <MountedFormField
                       label={

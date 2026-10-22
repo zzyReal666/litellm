@@ -69,18 +69,6 @@ export function ClassifierOption({
           <span className={`text-xs leading-5 text-muted-foreground ${exhausted ? "pr-28" : ""}`}>{description}</span>
         </span>
       </DropdownMenuRadioItem>
-      {fresh && exhausted && (
-        <DropdownMenuItem
-          render={<a href={AUTO_ROUTER_CONTACT_URL} target="_blank" rel="noopener noreferrer" />}
-          aria-label={i18n.t("modelsEndpoints.AutoRouterClassifierTabs.talkAbout", {
-            label,
-            defaultValue: "Talk to our team about {{label}}",
-          })}
-          className="absolute top-9 right-8 cursor-pointer px-0 py-0 text-xs leading-5 font-medium text-blue-600 focus:text-blue-600 hover:underline dark:text-blue-400 dark:focus:text-blue-400"
-        >
-          {i18n.t("modelsEndpoints.AutoRouterClassifierTabs.talkToOurTeam", { defaultValue: "Talk to our team" })}
-        </DropdownMenuItem>
-      )}
     </div>
   );
 }

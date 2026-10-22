@@ -298,14 +298,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         <div className="col-span-5">
                           <p className="text-sm mb-5 mt-1">
                             <strong>{i18n.t("defaultUserSettings.teamEntry.maxBudgetPlaceholder", { defaultValue: "Optional" })}</strong> - LiteLLM endpoint to use when health checking this model{" "}
-                            <a
-                              href="https://docs.litellm.ai/docs/proxy/health#health"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-primary hover:underline"
-                            >
-                              {i18n.t("common.learnMore", { defaultValue: "Learn more" })}
-                            </a>
+                            
                           </p>
                         </div>
                       </div>
@@ -458,12 +451,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                   )}
                   <div className="flex justify-between items-center mb-4">
                     <SimpleTooltip content={i18n.t("addModel.addModelForm.needHelpTooltip", { defaultValue: "Get help on our github" })}>
-                      <a
-                        href="https://github.com/BerriAI/litellm/issues"
-                        className="text-sm text-primary hover:underline"
-                      >
-                        {i18n.t("addModel.addModelForm.needHelp", { defaultValue: "Need Help?" })}
-                      </a>
+                      
                     </SimpleTooltip>
                     <div className="space-x-2">
                       <Button

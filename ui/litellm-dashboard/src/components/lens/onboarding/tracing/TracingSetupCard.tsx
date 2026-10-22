@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, Check, Copy, KeyRound, Loader2, Send } from "lucide-react";
+import { ArrowRight, Check, Copy, KeyRound, Loader2, Send } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { components } from "@/lib/http/schema";
@@ -22,8 +22,6 @@ import { FRAMEWORKS, frameworkSnippet, type FrameworkGuide } from "./tracingSetu
 import type { TraceSummary } from "../../traces/types";
 
 const COPIED_RESET_MS = 1500;
-const DOCS_URL = "https://docs.litellm.ai/docs/proxy/lens";
-const DEPLOYMENT_URL = `${DOCS_URL}/deployment`;
 const EXAMPLE_MODEL = "openai/gpt-6.1-sol";
 const SAMPLE_TRACE_POLL_MS = 1000;
 export const TRACING_KEY_REQUEST = { name: "Agent tracing" } as const;
@@ -474,24 +472,6 @@ function EnableTracing({
           The deployment connects the services and supplies trace storage.
         </p>
       )}
-      <div className="flex flex-wrap gap-3">
-        <a
-          className="inline-flex items-center gap-1 text-sm underline underline-offset-4"
-          href={`${DEPLOYMENT_URL}#using-helm`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Helm setup <ArrowUpRight aria-hidden="true" className="size-3.5" />
-        </a>
-        <a
-          className="inline-flex items-center gap-1 text-sm underline underline-offset-4"
-          href={`${DEPLOYMENT_URL}#using-docker`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Docker setup <ArrowUpRight aria-hidden="true" className="size-3.5" />
-        </a>
-      </div>
       <Button variant="outline" onClick={onCheck} disabled={checking}>
         {checking && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
         {checking ? "Checking…" : "Check setup"}
@@ -658,11 +638,7 @@ function ConnectAgent({
         {guide.plugin && (
           <Step title="Enable the plugin">
             <p className="text-sm leading-6 text-muted-foreground">
-              Install and enable the{" "}
-              <a className="underline underline-offset-4" href={guide.plugin.url} target="_blank" rel="noreferrer">
-                {guide.plugin.label}
-              </a>
-              . {guide.plugin.instruction}
+              Install and enable the {guide.plugin.label}. {guide.plugin.instruction}
             </p>
           </Step>
         )}
@@ -703,14 +679,6 @@ function ConnectAgent({
               />
             </div>
           )}
-          <a
-            href={`${DOCS_URL}/first-trace?framework=${guide.id}`}
-            className="mt-3 inline-flex items-center gap-1 text-sm underline underline-offset-4"
-            target="_blank"
-            rel="noreferrer"
-          >
-            View in docs <ArrowUpRight aria-hidden="true" className="size-3.5" />
-          </a>
         </Step>
       </div>
       <CodingAgentSetup proxyUrl={proxyUrl} traceUrl={traceUrl} guide={guide} model={model} />
@@ -814,14 +782,7 @@ export function TracingSetupCard(props: TracingSetupProps) {
           )}
           {enabled ? "Tracing enabled" : "Setup required"}
         </span>
-        <a
-          className="ml-auto inline-flex shrink-0 items-center gap-1 text-sm underline underline-offset-4"
-          href={DOCS_URL}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Docs <ArrowUpRight aria-hidden="true" className="size-3.5" />
-        </a>
+        
       </div>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
         {enabled

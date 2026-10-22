@@ -46,12 +46,7 @@ const PassThroughSecuritySection: React.FC<PassThroughSecuritySectionProps> = ({
                 defaults="Setting authentication for pass-through endpoints is a LiteLLM Enterprise feature. Get a trial key <pricingLink>here</pricingLink>."
                 components={{
                   pricingLink: (
-                    <a
-                      href="https://www.litellm.ai/#pricing"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline"
-                    />
+                    <span />
                   ),
                 }}
               />

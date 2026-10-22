@@ -325,14 +325,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
             <div className="grid grid-cols-24">
               <p className="col-start-11 col-span-10 text-sm mb-2">
                 The actual model your azure deployment uses. Used for accurate cost tracking. Select name from{" "}
-                <a
-                  href="https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline-offset-4 hover:underline"
-                >
-                  {i18n.t("addModel.providerSpecificFields.baseModelHelpLink", { defaultValue: "here" })}
-                </a>
+                
               </p>
             </div>
           )}

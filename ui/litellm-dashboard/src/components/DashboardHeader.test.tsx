@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { DashboardHeader } from "./DashboardHeader";
-import { NAV_PRODUCT_LINK_CLASS } from "@/components/Navbar/navProductLinkClass";
 import { CommandPaletteProvider } from "@/components/CommandPalette/CommandPaletteProvider";
 
 const { mockUsePluginMode, mockUseUISettings, state } = vi.hoisted(() => {
@@ -88,16 +87,6 @@ describe("DashboardHeader breadcrumb", () => {
     expect(screen.queryByText("Observability")).not.toBeInTheDocument();
   });
 
-  it("styles Docs with the shared product-link class instead of a muted toolbar button", () => {
-    renderDashboardHeader();
-
-    const docs = screen.getByRole("link", { name: "Docs" });
-    for (const cls of NAV_PRODUCT_LINK_CLASS.trim().split(/\s+/)) {
-      expect(docs).toHaveClass(cls);
-    }
-    expect(docs).not.toHaveClass("text-muted-foreground");
-  });
-
   it("renders the tools divider centered rather than stretched to the top of the row", () => {
     const { container } = renderDashboardHeader();
 
@@ -107,13 +96,10 @@ describe("DashboardHeader breadcrumb", () => {
     expect(separators[0].className).toContain("data-vertical:self-center");
   });
 
-  it("places LiteAdmin in the header tools ahead of Docs", () => {
+  it("places LiteAdmin in the header tools", () => {
     renderDashboardHeader();
 
-    const liteAdmin = within(screen.getByRole("banner")).getByRole("button", { name: "LiteAdmin" });
-    expect(liteAdmin.compareDocumentPosition(screen.getByRole("link", { name: "Docs" }))).toBe(
-      Node.DOCUMENT_POSITION_FOLLOWING,
-    );
+    expect(within(screen.getByRole("banner")).getByRole("button", { name: "LiteAdmin" })).toBeInTheDocument();
   });
 
   it("keeps the gateway selector and tools available from the compact header menu", async () => {
@@ -121,7 +107,6 @@ describe("DashboardHeader breadcrumb", () => {
     fireEvent.click(screen.getByRole("button", { name: "More options" }));
     const tools = await screen.findByRole("dialog", { name: "Gateway tools" });
     expect(within(tools).getByRole("button", { name: "AI Gateway" })).toBeInTheDocument();
-    expect(within(tools).getByRole("link", { name: "Docs" })).toBeInTheDocument();
     expect(within(tools).getByRole("button", { name: "LiteAdmin" })).toBeInTheDocument();
   });
 

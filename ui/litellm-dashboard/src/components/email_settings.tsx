@@ -93,14 +93,7 @@ const EmailSettings: React.FC<EmailSettingsProps> = ({ accessToken, premiumUser,
         <CardHeader>
           <CardTitle className="text-base">Email Server Settings</CardTitle>
           <p className="text-sm">
-            <a
-              href="https://docs.litellm.ai/docs/proxy/email"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary underline underline-offset-4"
-            >
-              LiteLLM Docs: email alerts
-            </a>
+            
           </p>
         </CardHeader>
 
@@ -116,14 +109,7 @@ const EmailSettings: React.FC<EmailSettingsProps> = ({ accessToken, premiumUser,
                   return (
                     <div key={key} className="space-y-1">
                       {isLocked ? (
-                        <a
-                          href="https://forms.gle/W3U4PZpJGFHWtHyA9"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-sm text-primary underline underline-offset-4"
-                        >
-                          ✨ {key}
-                        </a>
+                        <p className="text-sm">✨ {key}</p>
                       ) : (
                         <p className="text-sm">{key}</p>
                       )}

@@ -53,14 +53,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
               <AlertDescription>
                 <div className="flex justify-between items-center">
                   <span>SSO is under the Enterprise Tier.</span>
-                  <a
-                    className={cn(buttonVariants({ size: "sm" }))}
-                    href="https://forms.gle/W3U4PZpJGFHWtHyA9"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Get Free Trial
-                  </a>
+                  
                 </div>
               </AlertDescription>
             </Alert>

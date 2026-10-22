@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowUpRight, Github, Play, Plug, Star } from "lucide-react";
+import { ArrowRight, Plug } from "lucide-react";
 import moyaiHead from "../../../public/assets/moyai/moyai-head.svg";
 import anthropicLogo from "../../../public/assets/moyai/logos/anthropic.svg";
 import bedrockLogo from "../../../public/assets/moyai/logos/bedrock.svg";
@@ -20,9 +20,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import styles from "./MoyaiLanding.module.css";
 
 export const MOYAI_GITHUB_URL = "https://github.com/BerriAI/moyai";
-export const MOYAI_WALKTHROUGH_URL = `${MOYAI_GITHUB_URL}#see-it-in-action`;
-export const MOYAI_LAUNCH_POST_URL = "https://docs.litellm.ai/blog/moyai-open-source";
-const MOYAI_DEMO_GIF_URL = "https://github.com/user-attachments/assets/2de74e6a-c37c-48d6-8a99-de2166c88626";
 
 interface LogoItem {
   name: string;
@@ -168,71 +165,6 @@ function LogoWall({ title, items, footnote }: { title: string; items: LogoItem[]
   );
 }
 
-function GithubCta({ label = "Star Moyai on GitHub" }: { label?: string }) {
-  return (
-    <a
-      href={MOYAI_GITHUB_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${styles.cta} group inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-base font-semibold text-[#05070d] transition-transform hover:scale-[1.03]`}
-    >
-      <Github className="size-5" />
-      <span>{label}</span>
-      <Star className="size-4 fill-[#ffb98a] text-[#ffb98a] transition-transform group-hover:rotate-[72deg]" />
-    </a>
-  );
-}
-
-function SecondaryCta({ href, icon, children }: { href: string; icon: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-5 py-3 text-sm font-medium text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur transition-colors hover:bg-white/[0.12]"
-    >
-      {icon}
-      {children}
-    </a>
-  );
-}
-
-function DemoPreview() {
-  const [failed, setFailed] = useState(false);
-  return (
-    <a
-      href={MOYAI_WALKTHROUGH_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative block overflow-hidden rounded-2xl bg-[#0b1020] shadow-[0_0_0_1px_rgba(159,171,255,0.22),0_30px_120px_-20px_rgba(120,170,255,0.45)]"
-    >
-      <div className="flex items-center gap-1.5 border-b border-white/10 bg-white/[0.04] px-4 py-2.5">
-        <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="size-2.5 rounded-full bg-[#febc2e]" />
-        <span className="size-2.5 rounded-full bg-[#28c840]" />
-        <span className="ml-3 truncate text-xs text-[#a6a4c6]">github.com/BerriAI/moyai</span>
-      </div>
-      {failed ? (
-        <div className="flex aspect-[1196/720] flex-col items-center justify-center gap-3 text-[#c2c6d0]">
-          <Play className="size-10" />
-          <span>Watch the demo on GitHub</span>
-        </div>
-      ) : (
-        <img
-          src={MOYAI_DEMO_GIF_URL}
-          alt="Moyai demo: picking a harness and model, then running a task"
-          className="block aspect-[1196/720] w-full bg-white object-cover"
-          loading="lazy"
-          onError={() => setFailed(true)}
-        />
-      )}
-      <span className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-[#05070d]/80 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)] transition-opacity group-hover:opacity-100">
-        Full walkthrough on GitHub <ArrowUpRight className="size-3.5" />
-      </span>
-    </a>
-  );
-}
-
 function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) => Promise<void> | void }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
@@ -355,15 +287,6 @@ export default function MoyaiLanding({
             The open source cloud coding agent
           </p>
           <div
-            className={`${styles.rise} mt-7 flex flex-wrap items-center justify-center gap-3`}
-            style={{ animationDelay: "0.26s" }}
-          >
-            <GithubCta />
-            <SecondaryCta href={MOYAI_WALKTHROUGH_URL} icon={<Play className="size-4" />}>
-              Watch the demo
-            </SecondaryCta>
-          </div>
-          <div
             className={`${styles.rise} mt-6 text-[15px] text-[rgba(226,234,255,0.82)]`}
             style={{ animationDelay: "0.34s" }}
           >
@@ -419,7 +342,6 @@ export default function MoyaiLanding({
           Give it a task from Slack or the browser. It edits code, runs your tests in its own cloud workspace, and opens
           a pull request while your laptop is closed.
         </p>
-        <DemoPreview />
 
         <div className="mt-16 grid gap-4 md:grid-cols-2">
           <LogoWall
@@ -450,12 +372,6 @@ export default function MoyaiLanding({
           <code className="relative z-raised mx-auto mb-8 block w-fit max-w-full overflow-x-auto rounded-xl bg-black/50 px-5 py-3 text-left font-mono text-sm text-[#cfe3ff] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]">
             git clone {MOYAI_GITHUB_URL}.git
           </code>
-          <div className="relative z-raised flex flex-wrap items-center justify-center gap-3">
-            <GithubCta label="Get Moyai on GitHub" />
-            <SecondaryCta href={MOYAI_LAUNCH_POST_URL} icon={<ArrowUpRight className="size-4" />}>
-              Read the launch post
-            </SecondaryCta>
-          </div>
         </div>
       </div>
     </div>

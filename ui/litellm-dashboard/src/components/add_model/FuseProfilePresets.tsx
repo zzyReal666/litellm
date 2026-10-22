@@ -140,13 +140,6 @@ function FuseProfilePresetField({
             <>
               <p>Catalog version: {catalogVersion}</p>
               {preset.model && <p>Model: {preset.model}</p>}
-              <div className="flex flex-wrap gap-x-3 gap-y-1">
-                {preset.sources.map((source, index) => (
-                  <a key={source} href={source} target="_blank" rel="noopener noreferrer" className="underline">
-                    Source {index + 1}
-                  </a>
-                ))}
-              </div>
             </>
           ) : (
             <p>{i18n.t("modelsEndpoints.FuseProfilePresets.presetPreviewUnavailableTheSavedReference", { defaultValue: "Preset preview unavailable. The saved reference is preserved" })}</p>

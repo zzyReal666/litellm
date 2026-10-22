@@ -23,15 +23,7 @@ function TracingSection({ enabled, onOpenTraces }: { enabled: boolean; onOpenTra
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <a
-            href={TRACING_DOCS}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Docs
-            <ArrowUpRight aria-hidden="true" className="size-3" />
-          </a>
+          
           <Button variant="outline" size="sm" onClick={onOpenTraces}>
             {enabled ? "Connect an agent" : "Enable tracing"}
           </Button>

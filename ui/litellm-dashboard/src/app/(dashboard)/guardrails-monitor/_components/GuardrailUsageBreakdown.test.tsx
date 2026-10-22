@@ -111,11 +111,7 @@ describe("GuardrailUsageBreakdown", () => {
       ["Total", "¥0.1800"],
     ]);
     expect(within(dialog).getByText(/7 units with no known price are left out of the cost/)).toBeInTheDocument();
-    const issueLink = within(dialog).getByRole("link", { name: "Request pricing on GitHub" });
-    expect(issueLink).toHaveAttribute("target", "_blank");
-    const issueUrl = new URL(issueLink.getAttribute("href") ?? "");
-    expect(issueUrl.searchParams.get("title")).toBe("[Feature]: add Bedrock guardrail pricing to the cost map");
-    expect(issueUrl.searchParams.get("the-feature")).toContain("someFutureCounter");
+    expect(within(dialog).queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("does not ask for pricing when every unit was priced", async () => {

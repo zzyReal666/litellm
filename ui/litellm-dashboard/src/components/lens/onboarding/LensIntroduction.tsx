@@ -165,14 +165,7 @@ export function LensIntroduction({ onStart }: { onStart: () => void }) {
         <Button className="rounded-lg px-4" onClick={onStart}>
           Set up Lens
         </Button>
-        <a
-          href="https://docs.litellm.ai/docs/proxy/lens"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1 px-3 text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
-        >
-          Docs <ArrowUpRight aria-hidden="true" className="size-4" />
-        </a>
+        
       </div>
       <GatewayFlow />
       <div

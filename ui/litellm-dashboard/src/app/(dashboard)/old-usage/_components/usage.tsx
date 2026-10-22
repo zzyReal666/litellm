@@ -544,13 +544,6 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
               <br></br>
               {t("usage.dbLimitGuide", { defaultValue: "Please follow our guide to view usage when SpendLogs has more than 1M rows." })}
             </p>
-            <Button
-              render={
-                <a href="https://docs.litellm.ai/docs/proxy/cost_tracking" target="_blank" rel="noreferrer">
-                  {t("usage.viewUsageGuide", { defaultValue: "View Usage Guide" })}
-                </a>
-              }
-            />
           </CardContent>
         </Card>
       </div>
@@ -797,14 +790,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
         <TabsContent value="customer-usage" keepMounted>
           <p className="mb-2 text-[12px] text-muted-foreground italic">
             Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls{" "}
-            <a
-              className="text-primary"
-              href="https://docs.litellm.ai/docs/proxy/users"
-              target="_blank"
-              rel="noreferrer"
-            >
-              docs here
-            </a>
+            
           </p>
           <div className="grid grid-cols-2">
             <div>
@@ -929,14 +915,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 <CardContent className="flex flex-col gap-2">
                   <p className="text-sm text-muted-foreground">
                     Get Started by Tracking cost per tag{" "}
-                    <a
-                      className="text-primary"
-                      href="https://docs.litellm.ai/docs/proxy/cost_tracking"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      here
-                    </a>
+                    
                   </p>
                   <BarChart className="h-72" data={topTagsData} index="name" categories={["spend"]} colors={["cyan"]} />
                 </CardContent>

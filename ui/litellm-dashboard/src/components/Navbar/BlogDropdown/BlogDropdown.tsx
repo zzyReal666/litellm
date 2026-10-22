@@ -83,9 +83,7 @@ export const BlogDropdown: React.FC = () => {
         ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <a href="https://docs.litellm.ai/blog" target="_blank" rel="noopener noreferrer">
-            {t("navbar.viewAllPosts", { defaultValue: "View all posts" })}
-          </a>
+          
         </DropdownMenuItem>
       </>
     );

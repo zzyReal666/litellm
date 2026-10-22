@@ -239,14 +239,8 @@ describe("TracingSetupCard", () => {
     const { card } = await renderCard({ detail: "Agent tracing is not enabled", onCheck });
     expect(await screen.findByText("Install Lens")).toBeVisible();
     expect(card).toHaveTextContent("Use Lens v1.2.3 to match this LiteLLM deployment");
-    expect(screen.getByRole("link", { name: "Helm setup" })).toHaveAttribute(
-      "href",
-      "https://docs.litellm.ai/docs/proxy/lens/deployment#using-helm",
-    );
-    expect(screen.getByRole("link", { name: "Docker setup" })).toHaveAttribute(
-      "href",
-      "https://docs.litellm.ai/docs/proxy/lens/deployment#using-docker",
-    );
+    expect(screen.queryByRole("link", { name: "Helm setup" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Docker setup" })).not.toBeInTheDocument();
     expect(screen.queryByRole("combobox", { name: "Your agent framework" })).not.toBeInTheDocument();
     const readyService = {
       configured: true,

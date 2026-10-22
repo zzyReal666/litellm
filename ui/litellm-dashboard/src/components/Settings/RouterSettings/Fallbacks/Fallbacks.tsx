@@ -103,19 +103,12 @@ async function testFallbackModelResponse(selectedModel: string, accessToken: str
       mock_testing_fallbacks: true,
     });
 
-    const curlLink = (
-      <a
-        href="#"
-        onClick={() => window.open("https://docs.litellm.ai/docs/proxy/reliability", "_blank")}
-        style={{ textDecoration: "underline", color: "blue" }}
-      />
-    );
     toast.success(
       <Trans
         i18nKey="settingsPages.fallbacks.testSuccess"
-        defaults="Test model=<testModel>{{selectedModel}}</testModel>, received model=<receivedModel>{{responseModel}}</receivedModel>. See <curlLink>curl</curlLink>"
+        defaults="Test model=<testModel>{{selectedModel}}</testModel>, received model=<receivedModel>{{responseModel}}</receivedModel>."
         values={{ selectedModel, responseModel: response.model }}
-        components={{ testModel: <strong />, receivedModel: <strong />, curlLink }}
+        components={{ testModel: <strong />, receivedModel: <strong /> }}
       />,
     );
   } catch (error) {

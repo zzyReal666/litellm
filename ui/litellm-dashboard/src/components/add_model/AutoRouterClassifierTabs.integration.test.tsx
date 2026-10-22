@@ -227,34 +227,24 @@ describe("Auto-router classifier selection", () => {
 });
 
 describe("Gated routing contact action", () => {
-  it("offers a pricing discussion in View limits", async () => {
+  it("does not offer a pricing discussion in View limits", async () => {
     renderWithProviders(<Form remaining={0} />);
-    expect(screen.queryByRole("link", { name: "Talk to our team" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "View limits" }));
-    const link = within(screen.getByRole("dialog")).getByRole("link", { name: "Talk to our team" });
-    await waitFor(() => expect(link).toBeVisible());
-    expect(link).toHaveAttribute("href", "https://calendly.com/tin-berri/litellm-auto-router-pricing-discussion");
-    expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    await waitFor(() => expect(screen.getByRole("dialog")).toBeVisible());
+    expect(within(screen.getByRole("dialog")).queryByRole("link", { name: "Talk to our team" })).not.toBeInTheDocument();
   });
 
   it.each([
     ["heuristic", "Heuristic", "Heuristic v2"],
     ["llm", "Routing approach", "Capability"],
   ] as const)(
-    "keeps the contact action available beside the disabled %s choice",
+    "does not show a contact action beside the disabled %s choice",
     async (classifier_type, field, option) => {
       renderWithProviders(<Form initialValue={{ ...initial, classifier_type }} remaining={0} />);
-      expect(screen.queryByText(/Need more/)).not.toBeInTheDocument();
       fireEvent.click(screen.getByRole("button", { name: field }));
       const disabled = screen.getByRole("menuitemradio", { name: new RegExp(`^${option}`) });
       expect(disabled).toHaveAttribute("aria-disabled", "true");
-      const link = screen.getByRole("menuitem", { name: `Talk to our team about ${option}` });
-      await waitFor(() => expect(link).toBeVisible());
-      expect(link).toHaveAttribute("href", "https://calendly.com/tin-berri/litellm-auto-router-pricing-discussion");
-      expect(link).toHaveAttribute("target", "_blank");
-      fireEvent.click(link);
-      expect(screen.getByRole("status", { name: "Classifier type" })).toHaveTextContent(classifier_type);
+      expect(screen.queryByRole("menuitem", { name: /Talk to our team/ })).not.toBeInTheDocument();
     },
   );
 
@@ -278,7 +268,7 @@ describe("Gated routing contact action", () => {
     expect(screen.queryByRole("menuitem", { name: /Talk to our team/ })).not.toBeInTheDocument();
   });
 
-  it("includes the sales action beside customization limits and blocked changes", () => {
+  it("does not show a sales action beside customization limits", () => {
     const allowance = { key: "tier_or_classifier_prompt", limit: 1, remaining: 0, available: true };
     const state = {
       isPending: false,
@@ -292,7 +282,7 @@ describe("Gated routing contact action", () => {
         </AutoRouterClassifierTabs>
       </AutoRouterAvailabilityContext.Provider>,
     );
-    expect(screen.getByText(/Custom tiers: 0 of 1 available/)).toHaveTextContent("Talk to our team");
-    expect(within(screen.getByRole("alert")).getByRole("link", { name: "Talk to our team" })).toBeVisible();
+    expect(screen.getByText(/Custom tiers: 0 of 1 available/)).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Talk to our team" })).not.toBeInTheDocument();
   });
 });

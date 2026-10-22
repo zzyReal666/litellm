@@ -96,9 +96,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           {value.premium_field && !premiumUser ? (
             <TableCell>
               <Button className="flex items-center justify-center">
-                <a href="https://forms.gle/W3U4PZpJGFHWtHyA9" target="_blank">
-                  ✨ Enterprise Feature
-                </a>
+                
               </Button>
             </TableCell>
           ) : (

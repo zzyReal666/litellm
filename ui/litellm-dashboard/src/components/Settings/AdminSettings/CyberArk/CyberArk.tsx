@@ -203,15 +203,7 @@ export default function CyberArk() {
                 })}
               </AlertTitle>
               <AlertDescription>
-                <a
-                  href="https://docs.litellm.ai/docs/secret_managers/cyberark"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1"
-                >
-                  {t("settingsPages.cyberArk.viewDocumentation", { defaultValue: "View documentation" })}
-                  <ExternalLink className="size-3" />
-                </a>
+                
               </AlertDescription>
             </Alert>
           )}

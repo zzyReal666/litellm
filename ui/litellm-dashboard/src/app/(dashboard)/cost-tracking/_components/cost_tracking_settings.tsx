@@ -20,26 +20,12 @@ import AddProviderForm from "./add_provider_form";
 import ProviderMarginTable from "./provider_margin_table";
 import AddMarginForm from "./add_margin_form";
 import PricingCalculator from "./pricing_calculator/index";
-import { DocsMenu } from "@/components/DocsMenu";
 import HowItWorks from "./how_it_works";
 import { useDiscountConfig } from "./use_discount_config";
 import { useMarginConfig } from "./use_margin_config";
 import { useBlockUnpricedConfig } from "./use_block_unpriced_config";
 import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_models";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
-const DOCS_LINKS = [
-  {
-    label: "Custom pricing for models",
-    labelKey: "costTracking.costTrackingSettings.docsLinkCustomPricing",
-    href: "https://docs.litellm.ai/docs/proxy/custom_pricing",
-  },
-  {
-    label: "Spend tracking",
-    labelKey: "costTracking.costTrackingSettings.docsLinkSpendTracking",
-    href: "https://docs.litellm.ai/docs/proxy/cost_tracking",
-  },
-];
 
 const REMOVAL_COPY = {
   discount: {
@@ -217,12 +203,6 @@ const CostTrackingSettings: React.FC<CostTrackingSettingsProps> = ({ userID, use
             <p className="text-xl font-medium text-foreground">
               {t("costTracking.costTrackingSettings.pageTitle", { defaultValue: "Cost Tracking Settings" })}
             </p>
-            <DocsMenu
-              items={DOCS_LINKS.map((item) => ({
-                label: t(item.labelKey, { defaultValue: item.label }),
-                href: item.href,
-              }))}
-            />
           </div>
           <p className="text-muted-foreground mt-1">
             {t("costTracking.costTrackingSettings.pageSubtitle", {

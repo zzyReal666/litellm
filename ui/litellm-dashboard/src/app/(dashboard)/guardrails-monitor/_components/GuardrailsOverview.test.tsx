@@ -234,10 +234,7 @@ describe("GuardrailsOverview", () => {
       ["Total", "¥0.1500"],
     ]);
     expect(within(dialog).getByText(/250 units with no known price are left out of the cost/)).toBeInTheDocument();
-    const issueLink = within(dialog).getByRole("link", { name: "Request pricing on GitHub" });
-    const issueUrl = new URL(issueLink.getAttribute("href") ?? "");
-    expect(issueUrl.searchParams.get("template")).toBe("feature_request.yml");
-    expect(issueUrl.searchParams.get("the-feature")).toContain("sensitiveInformationPolicyUnits");
+    expect(within(dialog).queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("shows a dash for guardrail cost when nothing in the window was priced", async () => {

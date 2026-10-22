@@ -39,9 +39,7 @@ export default function DecisionModelNote({ catalog, litellmProvider }: Decision
         <p>
           For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System
           One format).{" "}
-          <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-            {i18n.t("modelsEndpoints.DecisionModelNote.howToCallDecisionModels", { defaultValue: "How to call decision models" })}
-          </a>
+          
         </p>
         <p>
           After you add it,{" "}

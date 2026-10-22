@@ -116,11 +116,7 @@ export default function PluginSettings() {
           <code className={INLINE_CODE_CLASS}>{plugin.name}</code>
         </TableCell>
         <TableCell>{plugin.display_name}</TableCell>
-        <TableCell>
-          <a href={plugin.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            {plugin.url}
-          </a>
-        </TableCell>
+        <TableCell>{plugin.url}</TableCell>
         <TableCell>
           {plugin.plugin_key ? (
             <code className={INLINE_CODE_CLASS}>{"•".repeat(8)}</code>

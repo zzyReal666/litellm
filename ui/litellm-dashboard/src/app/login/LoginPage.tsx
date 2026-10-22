@@ -268,7 +268,7 @@ function LoginPageContent() {
                         defaults="Need to set UI credentials or SSO? <docsLink>Check the documentation</docsLink>."
                         components={{
                           docsLink: (
-                            <a href="https://docs.litellm.ai/docs/proxy/ui" target="_blank" rel="noopener noreferrer" />
+                            <span />
                           ),
                         }}
                       />

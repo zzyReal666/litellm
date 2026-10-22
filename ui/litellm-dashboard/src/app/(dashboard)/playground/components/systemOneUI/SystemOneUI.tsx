@@ -245,15 +245,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               <div className="flex items-center gap-1">
                 <PresetPicker activePreset={activePreset} onPick={handlePresetPick} />
                 <SimpleTooltip content="How to call /v1/decisions and /v1/systemone">
-                  <a
-                    href={DECISIONS_DOCS_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="How to call /v1/decisions and /v1/systemone"
-                    className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "shrink-0")}
-                  >
-                    <BookOpen />
-                  </a>
+                  
                 </SimpleTooltip>
               </div>
             </div>

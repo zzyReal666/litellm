@@ -16,21 +16,10 @@ describe("DecisionModelsBanner", () => {
     expect(link).toHaveAttribute("href", "/ui/playground?tab=system-one");
   });
 
-  it("links to the docs on how to call decision models", () => {
+  it("does not render external documentation links", () => {
     render(<DecisionModelsBanner />);
-    expect(screen.getByRole("link", { name: "How to call them" })).toHaveAttribute(
-      "href",
-      "https://docs.litellm.ai/docs/decisions",
-    );
-  });
-
-  it("links Supported providers to the provider table in the docs", () => {
-    render(<DecisionModelsBanner />);
-    expect(screen.getByRole("link", { name: "Supported providers" })).toHaveAttribute(
-      "href",
-      "https://docs.litellm.ai/docs/decisions#supported-providers",
-    );
-    expect(screen.getByRole("paragraph")).not.toHaveTextContent("Add Model");
+    expect(screen.queryByRole("link", { name: "How to call them" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Supported providers" })).not.toBeInTheDocument();
     expect(screen.getByRole("paragraph")).toHaveTextContent("Call them at /v1/decisions or /v1/systemone");
   });
 

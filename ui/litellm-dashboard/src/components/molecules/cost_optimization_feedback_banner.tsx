@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { ExternalLink, MessageSquare, X } from "lucide-react";
+import { MessageSquare, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "hideCostOptimizationFeedbackBanner";
-const DISCUSSION_URL = "https://github.com/BerriAI/litellm/discussions/32172";
 
 const CostOptimizationFeedbackBanner: React.FC = () => {
   const [dismissed, setDismissed] = useState(() => {
@@ -30,14 +29,6 @@ const CostOptimizationFeedbackBanner: React.FC = () => {
           know what you&apos;d like to see.
         </p>
       </div>
-      <Button
-        className="shrink-0"
-        nativeButton={false}
-        render={<a href={DISCUSSION_URL} target="_blank" rel="noopener noreferrer" />}
-      >
-        Share Feedback
-        <ExternalLink />
-      </Button>
       <Button
         type="button"
         variant="ghost"

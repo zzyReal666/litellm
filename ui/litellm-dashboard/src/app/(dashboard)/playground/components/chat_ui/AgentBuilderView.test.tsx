@@ -309,9 +309,6 @@ describe("AgentBuilderView", () => {
     await waitForRoster();
 
     expect(screen.getByText(/Agent Builder is experimental/)).toBeInTheDocument();
-    expect(within(screen.getByText(/Agent Builder is experimental/)).getByRole("link")).toHaveAttribute(
-      "href",
-      "mailto:product@berri.ai",
-    );
+    expect(screen.queryByRole("link", { name: /product@berri.ai/ })).not.toBeInTheDocument();
   });
 });

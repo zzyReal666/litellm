@@ -92,16 +92,7 @@ const CodeInterpreterTool: React.FC<CodeInterpreterToolProps> = ({
                   defaultValue: "Code Interpreter is currently only supported for OpenAI models.",
                 })}{" "}
               </span>
-              <a
-                href={GITHUB_FEATURE_REQUEST_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-info hover:text-info/80 underline"
-              >
-                {t("playground.codeInterpreterTool.requestSupportLink", {
-                  defaultValue: "Request support for other providers",
-                })}
-              </a>
+              
             </div>
           </div>
         </div>

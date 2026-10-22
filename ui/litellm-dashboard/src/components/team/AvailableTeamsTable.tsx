@@ -33,12 +33,7 @@ function EmptyState() {
           defaults="See how to set available teams <lnk>here</lnk>"
           components={{
             lnk: (
-              <a
-                href="https://docs.litellm.ai/docs/proxy/self_serve#all-settings-for-self-serve--sso-flow"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline-offset-4 hover:underline"
-              />
+              <span />
             ),
           }}
         />

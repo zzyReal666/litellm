@@ -134,12 +134,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
               defaults="Headroom is a native LiteLLM guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>"
               components={{
                 a: (
-                  <a
-                    href="https://docs.litellm.ai/docs/proxy/headroom"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-info underline"
-                  />
+                  <span />
                 ),
               }}
             />
@@ -241,12 +236,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                     defaults="Applying compression to all requests is available to all users. Enabling it selectively per key or team is a LiteLLM Enterprise feature. Get a trial key <a>here</a>"
                     components={{
                       a: (
-                        <a
-                          href="https://www.litellm.ai/#pricing"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        />
+                        <span />
                       ),
                     }}
                   />

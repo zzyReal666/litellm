@@ -331,9 +331,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
                         Deploy the litellm-pgvector server from:{" "}
-                        <a href="https://github.com/BerriAI/litellm-pgvector" target="_blank" rel="noopener noreferrer">
-                          https://github.com/BerriAI/litellm-pgvector
-                        </a>
+                        
                       </li>
                       <li>{i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorStep2", { defaultValue: "Configure your PostgreSQL database with pgvector extension" })}</li>
                       <li>{i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorStep3", { defaultValue: "Start the server and note the API base URL and API key" })}</li>
@@ -391,13 +389,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
                         Set up your Vertex AI RAG Engine corpus following the guide:{" "}
-                        <a
-                          href="https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {i18n.t("vectorStoreManagement.vectorStoreForm.vertexRagStep1Link", { defaultValue: "Vertex AI RAG Engine Overview" })}
-                        </a>
+                        
                       </li>
                       <li>{i18n.t("vectorStoreManagement.vectorStoreForm.vertexRagStep2", { defaultValue: "Create a corpus in your Google Cloud project" })}</li>
                       <li>
@@ -424,14 +416,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                       <li>
                         Enable the Discovery Engine API on your Google Cloud project and create a data store following
                         the guide:{" "}
-                        <a
-                          href="https://cloud.google.com/generative-ai-app-builder/docs/create-data-store-es"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ textDecoration: "underline" }}
-                        >
-                          {i18n.t("vectorStoreManagement.vectorStoreForm.vertexSearchStep1Link", { defaultValue: "Create a Vertex AI Search data store" })}
-                        </a>
+                        
                       </li>
                       <li>{i18n.t("vectorStoreManagement.vectorStoreForm.vertexSearchStep2", { defaultValue: "Pick a supported location: global, us, or eu" })}</li>
                       <li>

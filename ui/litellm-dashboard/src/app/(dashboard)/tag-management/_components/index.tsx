@@ -184,11 +184,7 @@ const TagManagement: React.FC<TagProps> = ({ accessToken, userID, userRole }) =>
                 defaults="You can use tags to restrict the usage of certain LLMs based on tags passed in the request. Read more about tag routing <docsLink>here</docsLink>."
                 components={{
                   docsLink: (
-                    <a
-                      href="https://docs.litellm.ai/docs/proxy/tag_routing"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    />
+                    <span />
                   ),
                 }}
               />

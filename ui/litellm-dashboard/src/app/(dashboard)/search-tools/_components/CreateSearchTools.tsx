@@ -283,21 +283,6 @@ const CreateSearchTool: React.FC<CreateSearchToolProps> = ({
               </FieldGroup>
 
               <div className="flex justify-between items-center pt-6 border-t border-border">
-                <Tooltip>
-                  <TooltipTrigger
-                    render={
-                      <a
-                        className="text-sm text-info hover:underline"
-                        href="https://github.com/BerriAI/litellm/issues"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {i18n.t("searchTools.createSearchTools.needHelp", { defaultValue: "Need Help?" })}
-                      </a>
-                    }
-                  />
-                  <TooltipContent>{i18n.t("searchTools.createSearchTools.needHelpTooltip", { defaultValue: "Get help on our github" })}</TooltipContent>
-                </Tooltip>
                 <div className="flex gap-2">
                   <Button type="submit" variant="outline" onClick={handleTestConnection} disabled={isTestingConnection}>
                     {isTestingConnection && <UiLoadingSpinner className="size-4" />}

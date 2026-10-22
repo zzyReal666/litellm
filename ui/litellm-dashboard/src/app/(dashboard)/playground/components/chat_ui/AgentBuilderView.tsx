@@ -505,12 +505,7 @@ export default function AgentBuilderView({
         <div className="flex items-center gap-2 border-t border-warning/20 bg-warning/10 px-4 py-2 text-xs text-warning">
           <FlaskConical className="size-4 shrink-0 text-warning" />
           <span>
-            Agent Builder is experimental and may change or be removed without notice. We’d love your feedback—email us
-            at{" "}
-            <a href="mailto:product@berri.ai" className="font-medium text-warning underline hover:text-warning/80">
-              product@berri.ai
-            </a>
-            .
+            Agent Builder is experimental and may change or be removed without notice.
           </span>
         </div>
       </div>

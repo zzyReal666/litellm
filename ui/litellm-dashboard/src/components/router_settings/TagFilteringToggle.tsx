@@ -25,19 +25,6 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
             {t("routerSettings.fields.enable_tag_filtering.description", {
               defaultValue: routerFieldsMetadata["enable_tag_filtering"]?.field_description || "",
             })}
-            {routerFieldsMetadata["enable_tag_filtering"]?.link && (
-              <>
-                {" "}
-                <a
-                  href={routerFieldsMetadata["enable_tag_filtering"].link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-info hover:text-info/80 underline"
-                >
-                  {t("routerSettings.tagFilteringToggle.learnMore", { defaultValue: "Learn more" })}
-                </a>
-              </>
-            )}
           </p>
         </div>
         <Switch id={toggleId} checked={enabled} onCheckedChange={onToggle} className="ml-4" />

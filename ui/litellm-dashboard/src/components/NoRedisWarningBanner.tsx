@@ -34,7 +34,7 @@ export const NoRedisWarningBanner: React.FC<NoRedisWarningBannerProps> = ({ acce
             i18nKey="noRedisWarning.body"
             defaults="This proxy is running more than one worker (or the worker count could not be verified). Without Redis, rate limits, budgets, router state, and cache invalidation are per worker, so limits are enforced once per worker and spend can overshoot. <0>See everything that does not work without Redis</0>. Set <1>LITELLM_DISABLE_NO_REDIS_WARNING=true</1> to hide this banner anyway."
             components={[
-              <a className="underline" href={REDIS_DOCS_URL} target="_blank" rel="noreferrer" key="docs" />,
+              <span />,
               <code className="font-mono" key="env" />,
             ]}
           />

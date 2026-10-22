@@ -610,9 +610,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
               <p className="my-2">
                 Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get
                 Slack webhook urls from{" "}
-                <a href="https://api.slack.com/messaging/webhooks" target="_blank" style={{ color: "blue" }}>
-                  here
-                </a>
+                
               </p>
               <Table>
                 <TableHeader>
@@ -637,9 +635,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                             />
                           ) : (
                             <Button className="flex items-center justify-center">
-                              <a href="https://forms.gle/W3U4PZpJGFHWtHyA9" target="_blank">
-                                ✨ Enterprise Feature
-                              </a>
+                              
                             </Button>
                           )
                         ) : (
@@ -707,15 +703,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
           <DialogHeader>
             <DialogTitle>Add Logging Callback</DialogTitle>
           </DialogHeader>
-          <a
-            href="https://docs.litellm.ai/docs/proxy/logging"
-            className="mb-8 mt-4"
-            target="_blank"
-            style={{ color: "blue" }}
-          >
-            {" "}
-            LiteLLM Docs: Logging
-          </a>
+          
 
           <FormProvider {...addForm}>
             <form onSubmit={addForm.handleSubmit(addNewCallbackCall)}>

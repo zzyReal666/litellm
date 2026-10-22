@@ -38,14 +38,7 @@ export const NotificationsBell: React.FC = () => {
         })}
       </PopoverDescription>
       <div className="flex flex-wrap items-center gap-2">
-        <a
-          className={cn(buttonVariants({ size: "sm" }))}
-          href={AUTO_ROUTER_DOCS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {t("navbar.notificationsBell.readTheDocs", { defaultValue: "Read the docs" })}
-        </a>
+        
         {hasUnread ? (
           <Button variant="link" size="sm" className="px-1!" onClick={markDismissed}>
             {t("navbar.notificationsBell.markAsRead", { defaultValue: "Mark as read" })}

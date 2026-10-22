@@ -111,15 +111,7 @@ const S3VectorsConfig: React.FC<S3VectorsConfigProps> = ({ accessToken, provider
               </li>
               <li>
                 {t("vectorStoreManagement.s3VectorsConfig.alertItem4Prefix", { defaultValue: "Learn more:" })}{" "}
-                <a
-                  href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vector-buckets.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t("vectorStoreManagement.s3VectorsConfig.alertItem4Link", {
-                    defaultValue: "AWS S3 Vectors Documentation",
-                  })}
-                </a>
+                
               </li>
             </ul>
           </div>

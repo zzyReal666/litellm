@@ -32,14 +32,7 @@ const AwsSigV4Fields: React.FC = () => {
         {t("mcpTools.mcpServerEdit.awsSigv4Desc", {
           defaultValue: "For MCP servers hosted on AWS Bedrock AgentCore.",
         })}{" "}
-        <a
-          href="https://docs.litellm.ai/docs/mcp_aws_sigv4"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-info hover:text-info/80"
-        >
-          {t("mcpTools.mcpServerEdit.awsSigv4ViewDocs", { defaultValue: "View docs" })} &rarr;
-        </a>
+        
       </p>
       <MountedFormField
         label={

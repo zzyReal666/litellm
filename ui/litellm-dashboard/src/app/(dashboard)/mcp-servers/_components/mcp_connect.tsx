@@ -334,15 +334,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
             <div>
               <span>
                 {t("mcpTools.mcpConnect.getApiKeyText", { defaultValue: "Get your API key from the" })}{" "}
-                <a
-                  href="https://platform.openai.com/api-keys"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-info hover:text-info/80 inline-flex items-center gap-1"
-                >
-                  {t("mcpTools.mcpConnect.openaiPlatformLink", { defaultValue: "OpenAI platform" })}{" "}
-                  <ExternalLinkIcon size={12} />
-                </a>
+                
               </span>
             </div>
             <CodeBlock
@@ -548,13 +540,6 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
               variant="link"
               className="p-0 h-auto text-info hover:text-info/80"
               nativeButton={false}
-              render={
-                <a
-                  href="https://modelcontextprotocol.io/docs/concepts/transports"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
             >
               <ExternalLinkIcon size={14} />
               {t("mcpTools.mcpConnect.learnMoreTransports", { defaultValue: "Learn more about MCP transports" })}

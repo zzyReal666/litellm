@@ -32,9 +32,7 @@ export function PremiumLoggingSettings({
           <p className="text-sm text-muted-foreground">
             Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for
             all free users. Get a trial key{" "}
-            <a href="https://www.litellm.ai/#pricing" target="_blank" rel="noopener noreferrer" className="underline">
-              here
-            </a>
+            
             .
           </p>
         </div>

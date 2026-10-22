@@ -205,15 +205,7 @@ export default function HashicorpVault() {
                 </AlertTitle>
                 <AlertDescription>
                   <code className="block font-mono">vault kv put secret/SECRET_NAME key=secret_value</code>
-                  <a
-                    href="https://docs.litellm.ai/docs/secret_managers/hashicorp_vault"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1"
-                  >
-                    {t("settingsPages.hashicorpVault.viewDocumentation", { defaultValue: "View documentation" })}
-                    <ExternalLink className="size-3" />
-                  </a>
+                  
                 </AlertDescription>
               </Alert>
             )}

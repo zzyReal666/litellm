@@ -790,12 +790,7 @@ function DetailPanel({
                 defaults="This guardrail runs on a separate instance. It receives the user request and forwards the result to the next step in the pipeline. See <docsLink>LiteLLM Generic Guardrail API docs</docsLink> for configuration details."
                 components={{
                   docsLink: (
-                    <a
-                      href="https://docs.litellm.ai/docs/adding_provider/generic_guardrail_api"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-info hover:underline"
-                    />
+                    <span />
                   ),
                 }}
               />

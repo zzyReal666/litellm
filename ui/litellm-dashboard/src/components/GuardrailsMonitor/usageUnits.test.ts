@@ -4,7 +4,6 @@ import {
   counterMathRow,
   formatCost,
   formatUnitPrice,
-  pricingIssueUrl,
   totalUnits,
   unitPrice,
   unitsMathRows,
@@ -135,22 +134,5 @@ describe("unitsMathRows", () => {
       { label: "Content Policy", parts: ["2"], note: null },
       { label: "Word Policy", parts: ["1,200"], note: null },
     ]);
-  });
-});
-
-describe("pricingIssueUrl", () => {
-  it("prefills the feature request with the provider and the unpriced counters", () => {
-    const url = new URL(pricingIssueUrl({ text_records: 5, someFutureCounter: 7 }, "azure/prompt_shield"));
-
-    expect(url.origin + url.pathname).toBe("https://github.com/BerriAI/litellm/issues/new");
-    expect(url.searchParams.get("template")).toBe("feature_request.yml");
-    expect(url.searchParams.get("title")).toBe("[Feature]: add azure/prompt_shield guardrail pricing to the cost map");
-    expect(url.searchParams.get("the-feature")).toContain("text_records, someFutureCounter");
-  });
-
-  it("stays generic when no provider is known", () => {
-    const url = new URL(pricingIssueUrl({ text_records: 5 }));
-
-    expect(url.searchParams.get("title")).toBe("[Feature]: add guardrail pricing to the cost map");
   });
 });

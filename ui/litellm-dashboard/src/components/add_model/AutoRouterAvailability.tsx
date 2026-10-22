@@ -92,14 +92,7 @@ export const AutoRouterContactLink = ({ features, message }: { features?: string
   return (
     <span className="inline-flex flex-wrap items-baseline gap-x-1 text-xs leading-5 text-muted-foreground">
       {message}
-      <a
-        href={AUTO_ROUTER_CONTACT_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-medium text-blue-600 hover:underline dark:text-blue-400"
-      >
-        {i18n.t("modelsEndpoints.AutoRouterAvailability.talkToOurTeam", { defaultValue: "Talk to our team" })}
-      </a>
+      
     </span>
   );
 };

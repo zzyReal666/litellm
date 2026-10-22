@@ -20,8 +20,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const RELEASE_NOTES_URL = "https://docs.litellm.ai/release_notes";
-
 function hueFromString(seed: string): number {
   let h = 0;
   for (let i = 0; i < seed.length; i += 1) {
@@ -196,7 +194,6 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
           {version && (
             <Badge
               variant="outline"
-              render={<a href={RELEASE_NOTES_URL} target="_blank" rel="noopener noreferrer" />}
               className="px-1.5 py-0 font-mono text-[10px] font-medium text-muted-foreground"
             >
               v{version}

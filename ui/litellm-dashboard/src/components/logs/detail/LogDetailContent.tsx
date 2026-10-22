@@ -391,12 +391,10 @@ function getUncachedInputTextTokens(metadata: Record<string, any>): number | und
 
 const RESPONSE_CACHE_TOOLTIP =
   "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.";
-const RESPONSE_CACHE_DOCS_URL = "https://docs.litellm.ai/docs/proxy/caching";
 const CACHE_KEY_TOOLTIP =
   "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.";
-const PROMPT_CACHE_DOCS_URL = "https://docs.litellm.ai/docs/completion/prompt_caching";
 
-function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: string; docsUrl: string }) {
+function MetricLabel({ label, tooltip }: { label: string; tooltip: string }) {
   return (
     <span className="inline-flex items-center gap-1">
       {label}
@@ -407,12 +405,7 @@ function MetricLabel({ label, tooltip, docsUrl }: { label: string; tooltip: stri
           >
             <Info className="size-3.5" />
           </TooltipTrigger>
-          <TooltipContent>
-            {tooltip}{" "}
-            <a href={docsUrl} target="_blank" rel="noreferrer" className="underline">
-              Docs
-            </a>
-          </TooltipContent>
+          <TooltipContent>{tooltip}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </span>
@@ -526,7 +519,6 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
                   <MetricLabel
                     label="Response Cache"
                     tooltip={RESPONSE_CACHE_TOOLTIP}
-                    docsUrl={RESPONSE_CACHE_DOCS_URL}
                   />
                 }
               >
@@ -537,7 +529,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
             )}
             {responseCacheKey && (
               <DescriptionItem
-                label={<MetricLabel label="Cache Key" tooltip={CACHE_KEY_TOOLTIP} docsUrl={RESPONSE_CACHE_DOCS_URL} />}
+                label={<MetricLabel label="Cache Key" tooltip={CACHE_KEY_TOOLTIP} />}
               >
                 <TruncatedValue value={responseCacheKey} />
               </DescriptionItem>
@@ -548,7 +540,6 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
                   <MetricLabel
                     label="Prompt Cache Read Tokens"
                     tooltip={PROMPT_CACHE_READ_TOOLTIP}
-                    docsUrl={PROMPT_CACHE_DOCS_URL}
                   />
                 }
               >
@@ -561,7 +552,6 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
                   <MetricLabel
                     label="Prompt Cache Creation Tokens"
                     tooltip={PROMPT_CACHE_CREATION_TOOLTIP}
-                    docsUrl={PROMPT_CACHE_DOCS_URL}
                   />
                 }
               >

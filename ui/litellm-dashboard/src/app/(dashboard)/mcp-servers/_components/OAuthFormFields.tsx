@@ -77,7 +77,6 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
   isEditing = false,
   oauthFlow,
   initialFlowType,
-  docsUrl,
 }) => {
   const placeholderSuffix = isEditing ? " (leave blank to keep existing)" : "";
   const requiredWhenCreating = (message: string) =>
@@ -188,17 +187,6 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
                   label={i18n.t("mcpTools.oAuthFormFields.clientIdOptionalLabel", { defaultValue: "Client ID (optional)" })}
                   tooltip={i18n.t("mcpTools.oAuthFormFields.clientSecretInteractiveTooltip", { defaultValue: "Provide only if your MCP server cannot handle dynamic client registration." })}
                 />
-                {docsUrl && (
-                  <a
-                    href={docsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-info hover:text-info/80 ml-2 font-normal"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Create OAuth App →
-                  </a>
-                )}
               </span>
             }
             name={["credentials", "client_id"]}

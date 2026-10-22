@@ -795,9 +795,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                   <p className="mb-2 text-sm text-muted-foreground">
                     Decision models answer on <code>/v1/decisions</code> and <code>/v1/systemone</code>, not{" "}
                     <code>/chat/completions</code>.{" "}
-                    <a href={DECISIONS_DOCS_URL} target="_blank" rel="noopener noreferrer" className="underline">
-                      How to call decision models
-                    </a>
+                    
                     {canOpenPlayground && (
                       <>
                         {" · "}

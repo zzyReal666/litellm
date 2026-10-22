@@ -96,14 +96,7 @@ const AboutPoliciesAlert = () => {
           })}
         </li>
       </ul>
-      <a
-        href="https://docs.litellm.ai/docs/proxy/guardrails/guardrail_policies"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-1 inline-block text-primary underline underline-offset-4"
-      >
-        {t("policies.policiesView.learnMoreDocsArrow", { defaultValue: "Learn more in the documentation ->" })}
-      </a>
+      
     </DismissibleAlert>
   );
 };
@@ -660,16 +653,7 @@ const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) 
                 />
               </li>
             </ul>
-            <a
-              href="https://docs.litellm.ai/docs/proxy/guardrails/guardrail_policies#attachments"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-1 inline-block text-primary underline underline-offset-4"
-            >
-              {t("policies.policiesView.learnMoreAttachmentsArrow", {
-                defaultValue: "Learn more about attachments ->",
-              })}
-            </a>
+            
           </DismissibleAlert>
 
           <DismissibleAlert

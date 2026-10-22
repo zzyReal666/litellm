@@ -1,27 +1,11 @@
 "use client";
 
-import { ArrowUpRight, SearchX, TriangleAlert } from "lucide-react";
+import { SearchX, TriangleAlert } from "lucide-react";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { StateMessage } from "@/components/shared/StateMessage";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 import { ApiError } from "@/lib/http/client";
-
-const DOCS_URL = "https://docs.litellm.ai/docs/proxy/lens";
-
-function DocsLink() {
-  return (
-    <a
-      href={DOCS_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={buttonVariants({ variant: "ghost", size: "sm" })}
-    >
-      Lens docs
-      <ArrowUpRight aria-hidden="true" className="size-3.5" />
-    </a>
-  );
-}
 
 function loadFailureMessage(queryError: unknown, unavailable: boolean): string {
   if (unavailable)
@@ -43,7 +27,6 @@ export function InvestigationsLoadFailed({ queryError, refresh }: { queryError: 
       <Button size="sm" onClick={() => (unavailable ? window.location.reload() : refresh())}>
         {unavailable ? "Reload page" : "Try again"}
       </Button>
-      <DocsLink />
     </StateMessage>
   );
 }

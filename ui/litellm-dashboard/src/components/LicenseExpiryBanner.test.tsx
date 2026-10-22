@@ -49,7 +49,8 @@ describe("LicenseExpiryBannerView", () => {
     expect(screen.getByText(/expires in 20 days/)).toBeInTheDocument();
     expect(screen.getByText(/Renew before it lapses to keep enterprise features/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /close/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "sales@berri.ai" })).toHaveAttribute("href", "mailto:sales@berri.ai");
+    expect(screen.getByText(/sales@berri\.ai/)).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("shows a non-dismissible critical alert within 7 days", () => {

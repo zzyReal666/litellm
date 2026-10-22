@@ -168,15 +168,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
               <LensModeSwitch activity={activity} workers={workers} />
             </div>
             <div className="col-start-2 row-start-1 flex items-center justify-end gap-4 @min-[42rem]/lens-frame:col-start-3">
-              <a
-                href="https://docs.litellm.ai/docs/proxy/lens"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-0.5 text-xs text-muted-foreground hover:text-foreground"
-              >
-                Docs
-                <ArrowUpRight aria-hidden="true" className="size-3" />
-              </a>
+              
               <DemoToggle demo={demo} onChange={toggleDemo} />
             </div>
           </header>

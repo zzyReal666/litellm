@@ -11,8 +11,6 @@ import { formatExpiryDate, getDaysUntilExpiration, getLicenseExpiryTier } from "
 const DISMISS_KEY_PREFIX = "litellm:licenseExpiryBannerDismissed:";
 const SALES_EMAIL = "sales@berri.ai";
 
-const salesLink = <a href={`mailto:${SALES_EMAIL}`}>{SALES_EMAIL}</a>;
-
 interface LicenseExpiryBannerProps {
   accessToken: string | null;
 }
@@ -33,12 +31,12 @@ const describeCountdown = (days: number): string => {
 
 const expiryDescription = (tier: "warning" | "critical" | "expired"): React.ReactNode => {
   if (tier === "expired") {
-    return <>Enterprise features are now disabled. Reach out to {salesLink} to restore access</>;
+    return <>Enterprise features are now disabled. Reach out to {SALES_EMAIL} to restore access</>;
   }
   if (tier === "critical") {
-    return <>Renew now to avoid losing enterprise features. Reach out to {salesLink}</>;
+    return <>Renew now to avoid losing enterprise features. Reach out to {SALES_EMAIL}</>;
   }
-  return <>Renew before it lapses to keep enterprise features. Reach out to {salesLink}</>;
+  return <>Renew before it lapses to keep enterprise features. Reach out to {SALES_EMAIL}</>;
 };
 
 export const LicenseExpiryBannerView: React.FC<LicenseExpiryBannerViewProps> = ({ licenseInfo }) => {

@@ -6,7 +6,7 @@ import type { TFunction } from "i18next";
 import { toast } from "@/lib/toast";
 import { fetchClient } from "@/lib/http/api";
 import { ApiError } from "@/lib/http/client";
-import { ArrowLeft, ArrowRight, Check, Key, Link2, Lock, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Key, Lock, X } from "lucide-react";
 import { MCPServer } from "./types";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { PasswordInput } from "@/components/shared/PasswordInput";
@@ -223,17 +223,6 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                   onChange={(e) => setApiKey(e.target.value)}
                   groupClassName="rounded-lg"
                 />
-                {server.byok_api_key_help_url && (
-                  <a
-                    href={server.byok_api_key_help_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-info hover:text-info/80 text-sm mt-2 flex items-center gap-1"
-                  >
-                    {t("mcpTools.byokCredentialModal.whereIsMyApiKey", { defaultValue: "Where do I find my API key?" })}{" "}
-                    <Link2 className="size-3.5" />
-                  </a>
-                )}
               </div>
 
               {/* Save toggle */}

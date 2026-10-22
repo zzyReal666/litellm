@@ -81,12 +81,7 @@ const PassThroughGuardrailsSection: React.FC<PassThroughGuardrailsSectionProps> 
               defaults="Field-Level Targeting <learnMoreLink>(Learn More)</learnMoreLink>"
               components={{
                 learnMoreLink: (
-                  <a
-                    href="https://docs.litellm.ai/docs/proxy/pass_through_guardrails#field-level-targeting"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-info underline hover:text-info/80"
-                  />
+                  <span />
                 ),
               }}
             />

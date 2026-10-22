@@ -79,20 +79,10 @@ const IndexesTab: React.FC<IndexesTabProps> = ({ accessToken, vectorStores, onVi
           components={{
             code: <code />,
             docsLink: (
-              <a
-                href="https://docs.litellm.ai/docs/providers/azure_ai/azure_ai_vector_stores_passthrough"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-info hover:underline"
-              />
+              <span />
             ),
             issueLink: (
-              <a
-                href="https://github.com/BerriAI/litellm/issues"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-info hover:underline"
-              />
+              <span />
             ),
           }}
         />

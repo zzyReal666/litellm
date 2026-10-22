@@ -527,13 +527,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         icon={Layers}
         title={`Spend Per ${capitalizedEntityLabel}`}
         action={
-          <a
-            href="https://docs.litellm.ai/docs/proxy/enterprise#spend-tracking"
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-          >
-            Track cost per {entityType}
-            <ExternalLink aria-hidden="true" className="size-3" />
-          </a>
+          null
         }
       >
         <DataTable

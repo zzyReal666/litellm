@@ -75,12 +75,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
               defaults="Have feedback? Join the discussion <a>here</a>"
               components={{
                 a: (
-                  <a
-                    href="https://github.com/BerriAI/litellm/discussions/32168"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline underline-offset-2"
-                  />
+                  <span />
                 ),
               }}
             />

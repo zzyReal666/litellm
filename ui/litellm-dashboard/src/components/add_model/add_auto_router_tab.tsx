@@ -730,19 +730,6 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                   {configurationForm}
 
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <Tooltip>
-                      <TooltipTrigger
-                        render={
-                          <a
-                            href="https://github.com/BerriAI/litellm/issues"
-                            className="text-sm text-primary underline-offset-4 hover:underline"
-                          >
-                            {i18n.t("addModel.addAutoRouterTab.needHelp", { defaultValue: "Need Help?" })}
-                          </a>
-                        }
-                      />
-                      <TooltipContent>{i18n.t("addModel.addAutoRouterTab.needHelpTooltip", { defaultValue: "Get help on our github" })}</TooltipContent>
-                    </Tooltip>
                     <div className="flex flex-wrap gap-2">
                       <BlockedReasonTooltip reason={submitBlockedReason}>
                         <Button
