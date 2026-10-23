@@ -1825,7 +1825,22 @@
       "modeTagScopedLabel": "Mode (tag-scoped, read-only)",
       "modeTagScopedAria": "Mode (tag-scoped)",
       "noMatchingModes": "No matching modes",
-      "loggingOnlyContinueLabel": "Continue observing the response after a flagged request"
+      "loggingOnlyContinueLabel": "Continue observing the response after a flagged request",
+      "primFlagDesc": "Let through, record a non-blocking violation",
+      "primCategoryReturnValues": "Return Values",
+      "primCategoryHttpRequests": "HTTP Requests (async)",
+      "primCategoryRegex": "Regex Functions",
+      "primCategoryJson": "JSON Functions",
+      "primCategoryUrl": "URL Functions",
+      "primCategoryCodeDetection": "Code Detection",
+      "primCategoryTextUtilities": "Text Utilities",
+      "modeLoggingOnly": "logging_only",
+      "templateEmpty": "Empty Template",
+      "templateBlockSsn": "Block SSN",
+      "templateRedactEmails": "Redact Emails",
+      "templateBlockSql": "Block SQL Injection",
+      "templateValidateJson": "Validate JSON",
+      "templateExternalApi": "External API Check (async)"
     },
     "editGuardrailForm": {
       "modalTitle": "Edit Guardrail",

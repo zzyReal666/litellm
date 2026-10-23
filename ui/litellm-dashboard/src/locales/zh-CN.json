@@ -1825,7 +1825,22 @@
       "modeTagScopedLabel": "模式（标签限定，只读）",
       "modeTagScopedAria": "模式（标签限定）",
       "noMatchingModes": "没有匹配的模式",
-      "loggingOnlyContinueLabel": "在请求被标记后继续观察响应"
+      "loggingOnlyContinueLabel": "在请求被标记后继续观察响应",
+      "primFlagDesc": "放行，记录一次非阻塞违规",
+      "primCategoryReturnValues": "返回值",
+      "primCategoryHttpRequests": "HTTP 请求（异步）",
+      "primCategoryRegex": "正则函数",
+      "primCategoryJson": "JSON 函数",
+      "primCategoryUrl": "URL 函数",
+      "primCategoryCodeDetection": "代码检测",
+      "primCategoryTextUtilities": "文本工具",
+      "modeLoggingOnly": "logging_only",
+      "templateEmpty": "空模板",
+      "templateBlockSsn": "拦截 SSN",
+      "templateRedactEmails": "脱敏邮箱",
+      "templateBlockSql": "拦截 SQL 注入",
+      "templateValidateJson": "校验 JSON",
+      "templateExternalApi": "外部 API 校验（异步）"
     },
     "editGuardrailForm": {
       "modalTitle": "编辑护栏",
