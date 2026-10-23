@@ -5800,7 +5800,21 @@
       "out": "输出：{{count}}",
       "reasoning": "推理：{{count}}",
       "total": "总计：{{count}}",
-      "toolName": "工具：{{name}}"
+      "toolName": "工具：{{name}}",
+      "responseCache": "响应缓存",
+      "responseCacheTooltip": "此响应是从 LiteLLM 的响应缓存中重放的。请求从未到达提供商，因此没有读取或写入提供商自己的提示缓存。",
+      "hit": "命中",
+      "cacheRead": "缓存读取",
+      "cacheWrite": "缓存写入",
+      "promptCacheReadTooltip": "从 LLM 提供商的提示缓存中读取的输入 token（例如 Anthropic / OpenAI），按折扣费率计费，由提供商上报。",
+      "promptCacheCreationTooltip": "写入 LLM 提供商提示缓存的输入 token，供后续请求复用。",
+      "ttftLabel": "TTFT",
+      "totalLatencyLabel": "总延迟",
+      "inLabel": "输入",
+      "outLabel": "输出",
+      "reasoningLabel": "推理",
+      "totalLabel": "总计",
+      "tool": "工具"
     },
     "searchResultsDisplay": {
       "hideSources": "隐藏来源",

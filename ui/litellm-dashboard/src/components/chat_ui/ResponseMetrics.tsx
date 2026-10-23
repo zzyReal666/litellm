@@ -12,10 +12,13 @@ import {
   Wrench,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import i18n from "@/lib/i18n";
 import { PROMPT_CACHE_CREATION_TOOLTIP, PROMPT_CACHE_READ_TOOLTIP } from "@/utils/promptCacheUsage";
 
-const RESPONSE_CACHE_TOOLTIP =
-  "This response was replayed from LiteLLM's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.";
+const RESPONSE_CACHE_TOOLTIP = i18n.t("playground.responseMetrics.responseCacheTooltip", {
+  defaultValue:
+    "This response was replayed from LiteLLM's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
+});
 
 export interface TokenUsage {
   completionTokens?: number;
@@ -59,10 +62,10 @@ function MetricItem({ label, tooltip, icon, value }: MetricItemProps) {
 function ResponseCacheIndicator() {
   return (
     <MetricItem
-      label="Response Cache"
+      label={i18n.t("playground.responseMetrics.responseCache", { defaultValue: "Response Cache" })}
       tooltip={RESPONSE_CACHE_TOOLTIP}
       icon={<History className="size-3" aria-hidden="true" />}
-      value="Hit"
+      value={i18n.t("playground.responseMetrics.hit", { defaultValue: "Hit" })}
     />
   );
 }
@@ -79,7 +82,7 @@ function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
     <>
       {readTokens > 0 && (
         <MetricItem
-          label="Cache Read"
+          label={i18n.t("playground.responseMetrics.cacheRead", { defaultValue: "Cache Read" })}
           tooltip={PROMPT_CACHE_READ_TOOLTIP}
           icon={<Database className="size-3" aria-hidden="true" />}
           value={String(readTokens)}
@@ -88,7 +91,7 @@ function PromptCacheChips({ usage }: { usage?: TokenUsage }) {
 
       {creationTokens > 0 && (
         <MetricItem
-          label="Cache Write"
+          label={i18n.t("playground.responseMetrics.cacheWrite", { defaultValue: "Cache Write" })}
           tooltip={PROMPT_CACHE_CREATION_TOOLTIP}
           icon={<DatabaseBackup className="size-3" aria-hidden="true" />}
           value={String(creationTokens)}
@@ -105,8 +108,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
     <div className="response-metrics mt-2 flex flex-wrap gap-3 border-t border-border pt-2 text-xs text-muted-foreground">
       {timeToFirstToken !== undefined && (
         <MetricItem
-          label="TTFT"
-          tooltip="Time to first token"
+          label={i18n.t("playground.responseMetrics.ttftLabel", { defaultValue: "TTFT" })}
+          tooltip={i18n.t("playground.responseMetrics.timeToFirstToken", { defaultValue: "Time to first token" })}
           icon={<Clock className="size-3" aria-hidden="true" />}
           value={`${(timeToFirstToken / 1000).toFixed(2)}s`}
         />
@@ -114,8 +117,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {totalLatency !== undefined && (
         <MetricItem
-          label="Total Latency"
-          tooltip="Total latency"
+          label={i18n.t("playground.responseMetrics.totalLatencyLabel", { defaultValue: "Total Latency" })}
+          tooltip={i18n.t("playground.responseMetrics.totalLatency", { defaultValue: "Total latency" })}
           icon={<Clock className="size-3" aria-hidden="true" />}
           value={`${(totalLatency / 1000).toFixed(2)}s`}
         />
@@ -123,8 +126,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.promptTokens !== undefined && (
         <MetricItem
-          label="In"
-          tooltip="Prompt tokens"
+          label={i18n.t("playground.responseMetrics.inLabel", { defaultValue: "In" })}
+          tooltip={i18n.t("playground.responseMetrics.promptTokens", { defaultValue: "Prompt tokens" })}
           icon={<ArrowDownToLine className="size-3" aria-hidden="true" />}
           value={String(usage.promptTokens)}
         />
@@ -134,8 +137,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.completionTokens !== undefined && (
         <MetricItem
-          label="Out"
-          tooltip="Completion tokens"
+          label={i18n.t("playground.responseMetrics.outLabel", { defaultValue: "Out" })}
+          tooltip={i18n.t("playground.responseMetrics.completionTokens", { defaultValue: "Completion tokens" })}
           icon={<ArrowUpFromLine className="size-3" aria-hidden="true" />}
           value={String(usage.completionTokens)}
         />
@@ -143,8 +146,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.reasoningTokens !== undefined && (
         <MetricItem
-          label="Reasoning"
-          tooltip="Reasoning tokens"
+          label={i18n.t("playground.responseMetrics.reasoningLabel", { defaultValue: "Reasoning" })}
+          tooltip={i18n.t("playground.responseMetrics.reasoningTokens", { defaultValue: "Reasoning tokens" })}
           icon={<Lightbulb className="size-3" aria-hidden="true" />}
           value={String(usage.reasoningTokens)}
         />
@@ -152,8 +155,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {usage?.totalTokens !== undefined && (
         <MetricItem
-          label="Total"
-          tooltip="Total tokens"
+          label={i18n.t("playground.responseMetrics.totalLabel", { defaultValue: "Total" })}
+          tooltip={i18n.t("playground.responseMetrics.totalTokens", { defaultValue: "Total tokens" })}
           icon={<Hash className="size-3" aria-hidden="true" />}
           value={String(usage.totalTokens)}
         />
@@ -161,8 +164,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {typeof usage?.cost === "number" && Number.isFinite(usage.cost) && (
         <MetricItem
-          label="Cost"
-          tooltip="Cost"
+          label={i18n.t("playground.responseMetrics.cost", { defaultValue: "Cost" })}
+          tooltip={i18n.t("playground.responseMetrics.cost", { defaultValue: "Cost" })}
           icon={<DollarSign className="size-3" aria-hidden="true" />}
           value={`¥${usage.cost.toFixed(6)}`}
         />
@@ -170,8 +173,8 @@ const ResponseMetrics: React.FC<ResponseMetricsProps> = ({ timeToFirstToken, tot
 
       {toolName && (
         <MetricItem
-          label="Tool"
-          tooltip="Tool used"
+          label={i18n.t("playground.responseMetrics.tool", { defaultValue: "Tool" })}
+          tooltip={i18n.t("playground.responseMetrics.toolUsed", { defaultValue: "Tool used" })}
           icon={<Wrench className="size-3" aria-hidden="true" />}
           value={toolName}
         />

@@ -5800,7 +5800,21 @@
       "out": "Out: {{count}}",
       "reasoning": "Reasoning: {{count}}",
       "total": "Total: {{count}}",
-      "toolName": "Tool: {{name}}"
+      "toolName": "Tool: {{name}}",
+      "responseCache": "Response Cache",
+      "responseCacheTooltip": "This response was replayed from LiteLLM's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
+      "hit": "Hit",
+      "cacheRead": "Cache Read",
+      "cacheWrite": "Cache Write",
+      "promptCacheReadTooltip": "Input tokens read from the LLM provider's prompt cache (e.g. Anthropic / OpenAI), billed at a discounted rate. Reported by the provider.",
+      "promptCacheCreationTooltip": "Input tokens written to the LLM provider's prompt cache for reuse by later requests.",
+      "ttftLabel": "TTFT",
+      "totalLatencyLabel": "Total Latency",
+      "inLabel": "In",
+      "outLabel": "Out",
+      "reasoningLabel": "Reasoning",
+      "totalLabel": "Total",
+      "tool": "Tool"
     },
     "searchResultsDisplay": {
       "hideSources": "Hide sources",
