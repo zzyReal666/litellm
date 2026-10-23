@@ -1,6 +1,7 @@
 "use client";
 
 import CopyButton from "@/components/shared/CopyButton";
+import i18n from "@/lib/i18n";
 
 import { useTracesApi } from "../../api";
 import type { GroupRowData } from "../../tree";
@@ -35,7 +36,7 @@ export function GroupPane({
   const sample = (firstFailure ?? row.members[0]).span_id;
   const handoff = useTracesApi(accessToken).handoff(trace.summary.trace_id, sample, trace.summary.trace_ref);
   return (
-    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label="Group details">
+    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label={i18n.t("lens.groupPane.groupDetails", { defaultValue: "Group details" })}>
       <PaneHeader
         type={row.type}
         model={row.members[0]?.model ?? null}
@@ -47,22 +48,22 @@ export function GroupPane({
         }
         facts={[]}
         actions={
-          <CopyButton variant="action" value={handoff.text} label="Copy group sample" copiedLabel={handoff.copied} />
+          <CopyButton variant="action" value={handoff.text} label={i18n.t("lens.groupPane.copyGroupSample", { defaultValue: "Copy group sample" })} copiedLabel={handoff.copied} />
         }
         onClose={onClose}
       />
       <div className="min-h-0 flex-1 overflow-auto border-t px-4 py-4">
         <div className="grid grid-cols-2 gap-2 @[520px]/trace:grid-cols-3">
-          <Metric label="Invocations" value={row.members.length.toLocaleString()} />
-          <Metric label="Failed" value={row.failedCount.toLocaleString()} />
-          <Metric label="p50 latency" value={fmtMs(row.p50Duration)} />
-          <Metric label="Tokens" value={fmtTok(tokens)} />
-          <Metric label="Agent" value={row.agent || "—"} />
-          <Metric label="Type" value={row.type} />
+          <Metric label={i18n.t("lens.groupPane.invocations", { defaultValue: "Invocations" })} value={row.members.length.toLocaleString()} />
+          <Metric label={i18n.t("lens.groupPane.failed", { defaultValue: "Failed" })} value={row.failedCount.toLocaleString()} />
+          <Metric label={i18n.t("lens.groupPane.p50Latency", { defaultValue: "p50 latency" })} value={fmtMs(row.p50Duration)} />
+          <Metric label={i18n.t("lens.groupPane.tokens", { defaultValue: "Tokens" })} value={fmtTok(tokens)} />
+          <Metric label={i18n.t("lens.groupPane.agent", { defaultValue: "Agent" })} value={row.agent || "—"} />
+          <Metric label={i18n.t("lens.groupPane.type", { defaultValue: "Type" })} value={row.type} />
         </div>
         {firstFailure?.error && (
           <section className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 px-3.5 py-3">
-            <div className="text-sm font-semibold text-destructive">Failure pattern</div>
+            <div className="text-sm font-semibold text-destructive">{i18n.t("lens.groupPane.failurePattern", { defaultValue: "Failure pattern" })}</div>
             <p className="mt-2 font-mono text-xs leading-relaxed text-foreground">
               {errorHeadline(firstFailure.error)}
             </p>

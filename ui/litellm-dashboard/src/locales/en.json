@@ -12804,6 +12804,17 @@
       "expectedFor": "Expected for {{label}}",
       "skipped": "Skipped",
       "tracePrefix": "trace {{id}}"
+    },
+    "groupPane": {
+      "groupDetails": "Group details",
+      "copyGroupSample": "Copy group sample",
+      "invocations": "Invocations",
+      "failed": "Failed",
+      "p50Latency": "p50 latency",
+      "tokens": "Tokens",
+      "agent": "Agent",
+      "type": "Type",
+      "failurePattern": "Failure pattern"
     }
   },
   "mcpServerCredentials": {

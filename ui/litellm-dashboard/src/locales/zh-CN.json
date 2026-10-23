@@ -12804,6 +12804,17 @@
       "expectedFor": "{{label}} 的预期",
       "skipped": "已跳过",
       "tracePrefix": "链路 {{id}}"
+    },
+    "groupPane": {
+      "groupDetails": "分组详情",
+      "copyGroupSample": "复制分组样本",
+      "invocations": "调用次数",
+      "failed": "失败",
+      "p50Latency": "p50 延迟",
+      "tokens": "令牌数",
+      "agent": "Agent",
+      "type": "类型",
+      "failurePattern": "失败模式"
     }
   },
   "mcpServerCredentials": {
