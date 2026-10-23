@@ -23,8 +23,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "team_alias",
     accessorKey: "team_alias",
-    meta: { title: "Team Name" },
-    header: "Team Name",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colTeamName", { defaultValue: "Team Name" }) },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colTeamName", { defaultValue: "Team Name" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -42,8 +42,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "team_id",
     accessorKey: "team_id",
-    meta: { title: "Team ID" },
-    header: "Team ID",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colTeamId", { defaultValue: "Team ID" }) },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colTeamId", { defaultValue: "Team ID" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.team_id} variant="plain" />,
@@ -51,8 +51,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colCreated", { defaultValue: "Created" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("deletedTeams.deletedTeamsTable.colCreated", { defaultValue: "Created" })} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -69,17 +69,17 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "max_budget",
     accessorKey: "max_budget",
-    meta: { title: "Budget (CNY)", numeric: true },
-    header: "Budget (CNY)",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colBudget", { defaultValue: "Budget (CNY)" }), numeric: true },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colBudget", { defaultValue: "Budget (CNY)" }),
     size: 110,
     enableSorting: false,
-    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={0} emptyText="Unlimited" showZero />,
+    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={0} emptyText={i18n.t("deletedTeams.deletedTeamsTable.unlimited", { defaultValue: "Unlimited" })} showZero />,
   },
   {
     id: "models",
     accessorKey: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colModels", { defaultValue: "Models" }), skeleton: "chips" },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colModels", { defaultValue: "Models" }),
     size: 200,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.models} />,
@@ -87,8 +87,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "organization_id",
     accessorKey: "organization_id",
-    meta: { title: "Organization" },
-    header: "Organization",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colOrganization", { defaultValue: "Organization" }) },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colOrganization", { defaultValue: "Organization" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -99,8 +99,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "deleted_at",
     accessorKey: "deleted_at",
-    meta: { title: "Deleted At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Deleted At" />,
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colDeletedAt", { defaultValue: "Deleted At" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("deletedTeams.deletedTeamsTable.colDeletedAt", { defaultValue: "Deleted At" })} />,
     size: 120,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.deleted_at} precision="date" />,
@@ -108,8 +108,8 @@ export const getDeletedTeamsTableColumns = (): ColumnDef<DeletedTeam>[] => [
   {
     id: "deleted_by",
     accessorKey: "deleted_by",
-    meta: { title: "Deleted By" },
-    header: "Deleted By",
+    meta: { title: i18n.t("deletedTeams.deletedTeamsTable.colDeletedBy", { defaultValue: "Deleted By" }) },
+    header: i18n.t("deletedTeams.deletedTeamsTable.colDeletedBy", { defaultValue: "Deleted By" }),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {

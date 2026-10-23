@@ -11075,7 +11075,8 @@
       "showingTeams_one": "显示 {{count}} 个团队",
       "showingTeams_other": "显示 {{count}} 个团队",
       "loadingTeams": "🚅 正在加载团队...",
-      "noDeletedTeams": "未找到已删除团队"
+      "noDeletedTeams": "未找到已删除团队",
+      "unlimited": "无限制"
     }
   },
   "memoryView": {

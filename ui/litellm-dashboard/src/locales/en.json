@@ -11075,7 +11075,8 @@
       "showingTeams_one": "Showing {{count}} team",
       "showingTeams_other": "Showing {{count}} teams",
       "loadingTeams": "🚅 Loading teams...",
-      "noDeletedTeams": "No deleted teams found"
+      "noDeletedTeams": "No deleted teams found",
+      "unlimited": "Unlimited"
     }
   },
   "memoryView": {
