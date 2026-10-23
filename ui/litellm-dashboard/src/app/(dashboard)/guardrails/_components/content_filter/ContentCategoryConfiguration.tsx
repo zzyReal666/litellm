@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/combobox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ACTION_ITEMS, SEVERITY_ITEMS } from "./action_options";
+import i18n from "@/lib/i18n";
 
 interface ContentCategory {
   name: string;
@@ -174,7 +175,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
 
   const columns: ColumnDef<SelectedCategory>[] = [
     {
-      header: "Category",
+      header: i18n.t("guardrails.contentCategoryConfiguration.colCategory", { defaultValue: "Category" }),
       accessorKey: "display_name",
       cell: ({ row }) => {
         const category = availableCategories.find((c) => c.name === row.original.category);
@@ -187,7 +188,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       },
     },
     {
-      header: "Action",
+      header: i18n.t("guardrails.contentCategoryConfiguration.colAction", { defaultValue: "Action" }),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -196,7 +197,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           value={row.original.action}
           onValueChange={(value: string | null) => value && onCategoryUpdate(row.original.id, "action", value)}
         >
-          <SelectTrigger size="sm" className="w-full" aria-label="Action">
+          <SelectTrigger size="sm" className="w-full" aria-label={i18n.t("guardrails.contentCategoryConfiguration.colAction", { defaultValue: "Action" })}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -210,7 +211,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       ),
     },
     {
-      header: "Severity Threshold",
+      header: i18n.t("guardrails.contentCategoryConfiguration.colSeverityThreshold", { defaultValue: "Severity Threshold" }),
       accessorKey: "severity_threshold",
       size: 180,
       cell: ({ row }) => (
@@ -221,7 +222,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             value && onCategoryUpdate(row.original.id, "severity_threshold", value)
           }
         >
-          <SelectTrigger size="sm" className="w-full" aria-label="Severity Threshold">
+          <SelectTrigger size="sm" className="w-full" aria-label={i18n.t("guardrails.contentCategoryConfiguration.colSeverityThreshold", { defaultValue: "Severity Threshold" })}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -241,7 +242,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       cell: ({ row }) => (
         <Button variant="outline" size="sm" onClick={() => onCategoryRemove(row.original.id)}>
           <Trash2 />
-          Remove
+          {i18n.t("common.remove", { defaultValue: "Remove" })}
         </Button>
       ),
     },
@@ -256,9 +257,9 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
     <Card>
       <CardHeader>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <CardTitle>Blocked topics</CardTitle>
+          <CardTitle>{i18n.t("guardrails.contentCategoryConfiguration.title", { defaultValue: "Blocked topics" })}</CardTitle>
           <p className="text-xs font-normal text-muted-foreground">
-            Select topics to block using keyword and semantic analysis
+            {i18n.t("guardrails.contentCategoryConfiguration.subtitle", { defaultValue: "Select topics to block using keyword and semantic analysis" })}
           </p>
         </div>
       </CardHeader>
@@ -270,9 +271,9 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             onValueChange={(category: ContentCategory | null) => setSelectedCategoryName(category?.name ?? "")}
             itemToStringLabel={(category: ContentCategory) => category.display_name}
           >
-            <ComboboxInput className="w-full" placeholder="Select a content category" />
+            <ComboboxInput className="w-full" placeholder={i18n.t("guardrails.contentCategoryConfiguration.selectPlaceholder", { defaultValue: "Select a content category" })} />
             <ComboboxContent>
-              <ComboboxEmpty>No matching categories</ComboboxEmpty>
+              <ComboboxEmpty>{i18n.t("guardrails.contentCategoryConfiguration.noMatchingCategories", { defaultValue: "No matching categories" })}</ComboboxEmpty>
               <ComboboxList>
                 {(cat: ContentCategory) => (
                   <ComboboxItem key={cat.name} value={cat}>
@@ -287,7 +288,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           </Combobox>
           <Button onClick={handleAddCategory} disabled={!selectedCategoryName}>
             <Plus />
-            Add
+            {i18n.t("common.add", { defaultValue: "Add" })}
           </Button>
         </div>
 
@@ -295,7 +296,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
         {selectedCategoryName && (
           <div className="mb-4 rounded-md border border-border bg-muted/40 p-3">
             <div className="mb-2 text-sm font-medium">
-              Preview: {availableCategories.find((c) => c.name === selectedCategoryName)?.display_name}
+              {i18n.t("guardrails.contentCategoryConfiguration.previewLabel", { defaultValue: "Preview" })}: {availableCategories.find((c) => c.name === selectedCategoryName)?.display_name}
               {categoryFileTypes[selectedCategoryName] && (
                 <span className="ml-2 text-xs font-normal text-muted-foreground">
                   ({categoryFileTypes[selectedCategoryName]?.toUpperCase()})
@@ -303,13 +304,13 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
               )}
             </div>
             {loadingPreviewYaml ? (
-              <div className="p-4 text-center text-muted-foreground">Loading content...</div>
+              <div className="p-4 text-center text-muted-foreground">{i18n.t("guardrails.contentCategoryConfiguration.loadingContent", { defaultValue: "Loading content..." })}</div>
             ) : previewYaml ? (
               <pre className="m-0 max-h-[300px] max-w-full overflow-auto rounded-md border border-border bg-background p-3 text-xs leading-relaxed break-words whitespace-pre-wrap">
                 <code>{previewYaml}</code>
               </pre>
             ) : (
-              <div className="p-2 text-center text-xs text-muted-foreground">Unable to load category content</div>
+              <div className="p-2 text-center text-xs text-muted-foreground">{i18n.t("guardrails.contentCategoryConfiguration.unableToLoadContent", { defaultValue: "Unable to load category content" })}</div>
             )}
           </div>
         )}
@@ -339,18 +340,18 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
                       <ChevronRight className={`size-4 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                       <FileText className="size-4" />
                       <span>
-                        View {fileType.toUpperCase()} for {category.display_name}
+                        {i18n.t("guardrails.contentCategoryConfiguration.viewFileFor", { fileType: fileType.toUpperCase(), name: category.display_name, defaultValue: `View ${fileType.toUpperCase()} for ${category.display_name}` })}
                       </span>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       {loadingYaml[category.category] ? (
-                        <div className="p-4 text-center text-muted-foreground">Loading content...</div>
+                        <div className="p-4 text-center text-muted-foreground">{i18n.t("guardrails.contentCategoryConfiguration.loadingContent", { defaultValue: "Loading content..." })}</div>
                       ) : categoryYaml[category.category] ? (
                         <pre className="m-0 max-h-[400px] overflow-auto rounded-md bg-muted p-4 text-xs leading-relaxed">
                           <code>{categoryYaml[category.category]}</code>
                         </pre>
                       ) : (
-                        <div className="p-4 text-center text-muted-foreground">Content will load when expanded</div>
+                        <div className="p-4 text-center text-muted-foreground">{i18n.t("guardrails.contentCategoryConfiguration.contentWillLoad", { defaultValue: "Content will load when expanded" })}</div>
                       )}
                     </CollapsibleContent>
                   </Collapsible>
@@ -360,7 +361,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           </>
         ) : (
           <div className="rounded-md border border-dashed border-border p-6 text-center text-muted-foreground">
-            No blocked topics selected. Add topics to detect and block harmful content.
+            {i18n.t("guardrails.contentCategoryConfiguration.noTopicsSelected", { defaultValue: "No blocked topics selected. Add topics to detect and block harmful content." })}
           </div>
         )}
       </CardContent>

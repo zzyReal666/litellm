@@ -1730,7 +1730,8 @@
       "viewFileFor": "查看 {{fileType}} 文件：{{name}}",
       "contentWillLoad": "展开后将加载内容",
       "noTopicsSelected": "未选择封锁主题。添加主题以检测和拦截有害内容。",
-      "previewLabel": "预览"
+      "previewLabel": "预览",
+      "noMatchingCategories": "没有匹配的分类"
     },
     "contentFilterConfiguration": {
       "description": "配置模式、关键词和内容分类，以检测和过滤请求及响应中的敏感信息。",

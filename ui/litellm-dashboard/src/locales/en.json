@@ -1730,7 +1730,8 @@
       "viewFileFor": "View {{fileType}} for {{name}}",
       "contentWillLoad": "Content will load when expanded",
       "noTopicsSelected": "No blocked topics selected. Add topics to detect and block harmful content.",
-      "previewLabel": "Preview"
+      "previewLabel": "Preview",
+      "noMatchingCategories": "No matching categories"
     },
     "contentFilterConfiguration": {
       "description": "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses.",
