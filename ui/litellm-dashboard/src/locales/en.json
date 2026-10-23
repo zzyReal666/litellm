@@ -3425,7 +3425,11 @@
     "deleteCallbackMessage": "Are you sure you want to delete this callback? This action cannot be undone.",
     "callbackInformationTitle": "Callback Information",
     "callbackNameLabel": "Callback Name",
-    "callbackModeLabel": "Mode"
+    "callbackModeLabel": "Mode",
+    "tabMsTeamsAlerts": "MS Teams Alerts",
+    "webhookUrlSlackCompatible": "Webhook URL (Slack-compatible)",
+    "saveChanges": "Save Changes",
+    "alertsDescription": "Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get Slack webhook urls from"
   },
   "skillHubTableColumns": {
     "skillName": "Skill Name",

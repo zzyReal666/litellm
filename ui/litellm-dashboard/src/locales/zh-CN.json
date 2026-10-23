@@ -3425,7 +3425,11 @@
     "deleteCallbackMessage": "确定要删除此回调吗？此操作无法撤销。",
     "callbackInformationTitle": "回调信息",
     "callbackNameLabel": "回调名称",
-    "callbackModeLabel": "模式"
+    "callbackModeLabel": "模式",
+    "tabMsTeamsAlerts": "MS Teams 告警",
+    "webhookUrlSlackCompatible": "Webhook URL（兼容 Slack）",
+    "saveChanges": "保存更改",
+    "alertsDescription": "告警会发送到任意兼容 Slack 的 incoming webhook URL（Slack、Rocket.Chat、Mattermost 等）。获取 Slack webhook 地址："
   },
   "skillHubTableColumns": {
     "skillName": "技能名称",

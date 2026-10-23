@@ -22,6 +22,8 @@ import EmailSettings from "./email_settings";
 import MSTeamsSettings from "./MSTeamsSettings";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { toast } from "@/lib/toast";
+import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 
 import AlertingSettings from "./alerting/alerting_settings";
 import CloudZeroCostTracking from "./CloudZeroCostTracking/CloudZeroCostTracking";
@@ -184,10 +186,10 @@ export const CallbackSelector: React.FC<CallbackSelectorProps> = ({
     <Controller
       control={control}
       name="callback"
-      rules={disabled ? undefined : { required: "Please select a callback" }}
+      rules={disabled ? undefined : { required: i18n.t("settings.callbackRequired", { defaultValue: "Please select a callback" }) }}
       render={({ field, fieldState }) => (
         <Field>
-          <FieldLabel htmlFor={inputId}>Callback</FieldLabel>
+          <FieldLabel htmlFor={inputId}>{i18n.t("settings.callbackLabel", { defaultValue: "Callback" })}</FieldLabel>
           <Combobox
             items={callbackConfigs}
             value={selectedConfig}
@@ -204,14 +206,14 @@ export const CallbackSelector: React.FC<CallbackSelectorProps> = ({
           >
             <ComboboxInput
               id={inputId}
-              placeholder="Choose a logging callback..."
+              placeholder={i18n.t("settings.callbackPlaceholder", { defaultValue: "Choose a logging callback..." })}
               className="w-full"
               disabled={disabled}
               onBlur={field.onBlur}
               aria-invalid={fieldState.error !== undefined || undefined}
             />
             <ComboboxContent>
-              <ComboboxEmpty>No results</ComboboxEmpty>
+              <ComboboxEmpty>{i18n.t("commonComponents.dataTable.noResults", { defaultValue: "No results" })}</ComboboxEmpty>
               <ComboboxList>
                 {(callbackConfig: CallbackConfigOption) => (
                   <ComboboxItem key={callbackConfig.id} value={callbackConfig}>
@@ -572,12 +574,12 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <div className="grid grid-cols-1 gap-2 p-8 w-full mt-2">
         <Tabs defaultValue="logging-callbacks">
           <TabsList variant="line">
-            <TabsTrigger value="logging-callbacks">Logging Callbacks</TabsTrigger>
-            <TabsTrigger value="cloudzero-cost-tracking">CloudZero Cost Tracking</TabsTrigger>
-            <TabsTrigger value="alerting-types">Alerting Types</TabsTrigger>
-            <TabsTrigger value="alerting-settings">Alerting Settings</TabsTrigger>
-            <TabsTrigger value="email-alerts">Email Alerts</TabsTrigger>
-            <TabsTrigger value="ms-teams-alerts">MS Teams Alerts</TabsTrigger>
+            <TabsTrigger value="logging-callbacks">{i18n.t("settings.tabLoggingCallbacks", { defaultValue: "Logging Callbacks" })}</TabsTrigger>
+            <TabsTrigger value="cloudzero-cost-tracking">{i18n.t("settings.tabCloudZero", { defaultValue: "CloudZero Cost Tracking" })}</TabsTrigger>
+            <TabsTrigger value="alerting-types">{i18n.t("settings.tabAlertingTypes", { defaultValue: "Alerting Types" })}</TabsTrigger>
+            <TabsTrigger value="alerting-settings">{i18n.t("settings.tabAlertingSettings", { defaultValue: "Alerting Settings" })}</TabsTrigger>
+            <TabsTrigger value="email-alerts">{i18n.t("settings.tabEmailAlerts", { defaultValue: "Email Alerts" })}</TabsTrigger>
+            <TabsTrigger value="ms-teams-alerts">{i18n.t("settings.tabMsTeamsAlerts", { defaultValue: "MS Teams Alerts" })}</TabsTrigger>
           </TabsList>
           <TabsContent value="logging-callbacks" keepMounted>
             <LoggingCallbacksTable
@@ -593,7 +595,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
               onTest={async (cb) => {
                 try {
                   await serviceHealthCheck(accessToken, cb.name);
-                  toast.success("Health check triggered");
+                  toast.success(i18n.t("settings.healthCheckTriggered", { defaultValue: "Health check triggered" }));
                 } catch (error) {
                   toast.fromError(parseErrorMessage(error));
                 }
@@ -608,16 +610,17 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
           <TabsContent value="alerting-types" keepMounted>
             <Card className="p-6">
               <p className="my-2">
-                Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get
-                Slack webhook urls from{" "}
-                
+                {i18n.t("settings.alertsDescription", {
+                  defaultValue:
+                    "Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get Slack webhook urls from",
+                })}
               </p>
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead></TableHead>
                     <TableHead></TableHead>
-                    <TableHead>Webhook URL (Slack-compatible)</TableHead>
+                    <TableHead>{i18n.t("settings.webhookUrlSlackCompatible", { defaultValue: "Webhook URL (Slack-compatible)" })}</TableHead>
                   </TableRow>
                 </TableHeader>
 
@@ -666,7 +669,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                 </TableBody>
               </Table>
               <Button size="xs" className="mt-2" onClick={handleSaveAlerts}>
-                Save Changes
+                {i18n.t("settings.saveChanges", { defaultValue: "Save Changes" })}
               </Button>
 
               <Button
@@ -674,7 +677,9 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                   try {
                     await serviceHealthCheck(accessToken, "slack");
                     toast.success(
-                      "Alert test triggered. Test request to slack made - check logs/alerts on slack to verify",
+                      i18n.t("settings.alertTestTriggered", {
+                        defaultValue: "Alert test triggered. Test request to slack made - check logs/alerts on slack to verify",
+                      }),
                     );
                   } catch (error) {
                     toast.fromError(parseErrorMessage(error));
@@ -682,7 +687,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
                 }}
                 className="mx-2"
               >
-                Test Alerts
+                {i18n.t("settings.testAlerts", { defaultValue: "Test Alerts" })}
               </Button>
             </Card>
           </TabsContent>
@@ -701,7 +706,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <Dialog open={showAddCallbacksModal} onOpenChange={(open) => !open && closeAddCallbackModal()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Add Logging Callback</DialogTitle>
+            <DialogTitle>{i18n.t("settings.addCallbackModalTitle", { defaultValue: "Add Logging Callback" })}</DialogTitle>
           </DialogHeader>
           
 
@@ -721,10 +726,12 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
 
               <div className="flex justify-end space-x-3 pt-6 mt-6 border-t border-border">
                 <Button type="button" variant="outline" onClick={cancelAddCallback} disabled={isAddingCallback}>
-                  Cancel
+                  {i18n.t("common.cancel", { defaultValue: "Cancel" })}
                 </Button>
                 <Button type="submit" disabled={isAddingCallback}>
-                  {isAddingCallback ? "Adding..." : "Add Callback"}
+                  {isAddingCallback
+                    ? i18n.t("settings.adding", { defaultValue: "Adding..." })
+                    : i18n.t("settings.addCallback", { defaultValue: "Add Callback" })}
                 </Button>
               </div>
             </form>
@@ -735,7 +742,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       <Dialog open={showEditCallback} onOpenChange={(open) => !open && closeEditCallbackModal()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Edit Callback Settings</DialogTitle>
+            <DialogTitle>{i18n.t("settings.editCallbackModalTitle", { defaultValue: "Edit Callback Settings" })}</DialogTitle>
           </DialogHeader>
           <FormProvider {...editForm}>
             <form onSubmit={editForm.handleSubmit(updateCallbackCall)}>
@@ -762,10 +769,12 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
 
               <div className="flex justify-end space-x-3 pt-6 mt-6 border-t border-border">
                 <Button type="button" variant="outline" onClick={closeEditCallbackModal} disabled={isUpdatingCallback}>
-                  Cancel
+                  {i18n.t("common.cancel", { defaultValue: "Cancel" })}
                 </Button>
                 <Button type="submit" disabled={isUpdatingCallback}>
-                  {isUpdatingCallback ? "Saving..." : "Save Changes"}
+                  {isUpdatingCallback
+                    ? i18n.t("common.saving", { defaultValue: "Saving..." })
+                    : i18n.t("settings.saveChanges", { defaultValue: "Save Changes" })}
                 </Button>
               </div>
             </form>
@@ -775,12 +784,14 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
 
       <DeleteResourceModal
         isOpen={showDeleteConfirmModal}
-        title="Delete Callback"
-        message="Are you sure you want to delete this callback? This action cannot be undone."
-        resourceInformationTitle="Callback Information"
+        title={i18n.t("settings.deleteCallbackTitle", { defaultValue: "Delete Callback" })}
+        message={i18n.t("settings.deleteCallbackMessage", {
+          defaultValue: "Are you sure you want to delete this callback? This action cannot be undone.",
+        })}
+        resourceInformationTitle={i18n.t("settings.callbackInformationTitle", { defaultValue: "Callback Information" })}
         resourceInformation={[
-          { label: "Callback Name", value: callbackToDelete?.name },
-          { label: "Mode", value: callbackToDelete?.mode || "success" },
+          { label: i18n.t("settings.callbackNameLabel", { defaultValue: "Callback Name" }), value: callbackToDelete?.name },
+          { label: i18n.t("settings.callbackModeLabel", { defaultValue: "Mode" }), value: callbackToDelete?.mode || "success" },
         ]}
         onCancel={() => {
           setShowDeleteConfirmModal(false);
