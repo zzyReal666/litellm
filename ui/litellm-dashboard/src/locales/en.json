@@ -12815,6 +12815,33 @@
       "agent": "Agent",
       "type": "Type",
       "failurePattern": "Failure pattern"
+    },
+    "investigationSetup": {
+      "titleNew": "New investigation",
+      "titleEdit": "Edit investigation",
+      "titleDuplicate": "Duplicate investigation",
+      "saveChanges": "Save changes",
+      "runAndMonitor": "Run and monitor",
+      "runInvestigation": "Run investigation",
+      "allActivity": "All activity",
+      "conditionsCount": " · {{count}} conditions",
+      "couldNotSave": "Could not save investigation",
+      "backToInvestigations": "Back to investigations",
+      "matchingActivityHint": "Matching activity on the right updates as you change the setup.",
+      "offlineWarning": "The worker or trace storage is unavailable. Your draft is safe; you can start when it reconnects.",
+      "setupAria": "Investigation setup",
+      "activityStep": "Activity",
+      "activityDesc": "Which traces or requests to review",
+      "investigationName": "Investigation name",
+      "namePlaceholder": "e.g. Support quality",
+      "continue": "Continue",
+      "criteriaStep": "Criteria",
+      "criteriaDesc": "What the agent should do and what to watch for",
+      "runStep": "Run",
+      "runDesc": "Schedule, analysis model, and budget",
+      "runDetails": "Run details",
+      "checks_one": "{{count}} check",
+      "checks_other": "{{count}} checks"
     }
   },
   "mcpServerCredentials": {

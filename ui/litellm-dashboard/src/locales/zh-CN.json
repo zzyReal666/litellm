@@ -12815,6 +12815,33 @@
       "agent": "Agent",
       "type": "类型",
       "failurePattern": "失败模式"
+    },
+    "investigationSetup": {
+      "titleNew": "新建调查",
+      "titleEdit": "编辑调查",
+      "titleDuplicate": "复制调查",
+      "saveChanges": "保存更改",
+      "runAndMonitor": "运行并监控",
+      "runInvestigation": "运行调查",
+      "allActivity": "所有活动",
+      "conditionsCount": " · {{count}} 个条件",
+      "couldNotSave": "无法保存调查",
+      "backToInvestigations": "返回调查列表",
+      "matchingActivityHint": "右侧的匹配活动会随设置变化而更新。",
+      "offlineWarning": "worker 或链路存储不可用。你的草稿是安全的；待其重新连接后即可开始。",
+      "setupAria": "调查设置",
+      "activityStep": "活动",
+      "activityDesc": "要审查哪些链路或请求",
+      "investigationName": "调查名称",
+      "namePlaceholder": "例如：支持质量",
+      "continue": "继续",
+      "criteriaStep": "标准",
+      "criteriaDesc": "agent 应该做什么以及需要留意什么",
+      "runStep": "运行",
+      "runDesc": "计划、分析模型与预算",
+      "runDetails": "运行详情",
+      "checks_one": "{{count}} 项检查",
+      "checks_other": "{{count}} 项检查"
     }
   },
   "mcpServerCredentials": {

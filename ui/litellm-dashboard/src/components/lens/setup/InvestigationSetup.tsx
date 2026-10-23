@@ -30,29 +30,32 @@ import { FINDING_PANEL_WIDTH_KEY } from "../storage";
 import type { Execution } from "./useMatchingActivity";
 import { durationLabel } from "../model/format";
 import { type Settings } from "../model/types";
+import i18n from "@/lib/i18n";
 
 type SetupMode = "new" | "edit" | "duplicate";
 
 const TITLES: Record<SetupMode, string> = {
-  new: "New investigation",
-  edit: "Edit investigation",
-  duplicate: "Duplicate investigation",
+  new: i18n.t("lens.investigationSetup.titleNew", { defaultValue: "New investigation" }),
+  edit: i18n.t("lens.investigationSetup.titleEdit", { defaultValue: "Edit investigation" }),
+  duplicate: i18n.t("lens.investigationSetup.titleDuplicate", { defaultValue: "Duplicate investigation" }),
 };
 
 function saveLabelFor(mode: SetupMode, repeat: boolean): string {
-  if (mode === "edit") return "Save changes";
-  return repeat ? "Run and monitor" : "Run investigation";
+  if (mode === "edit") return i18n.t("lens.investigationSetup.saveChanges", { defaultValue: "Save changes" });
+  return repeat
+    ? i18n.t("lens.investigationSetup.runAndMonitor", { defaultValue: "Run and monitor" })
+    : i18n.t("lens.investigationSetup.runInvestigation", { defaultValue: "Run investigation" });
 }
 
 function activitySummary(selection: InvestigationInput["selection"]): string {
-  const who = selection.agent_name || selection.service || "All activity";
-  const conditions = selection.filters.length ? ` · ${selection.filters.length} conditions` : "";
+  const who = selection.agent_name || selection.service || i18n.t("lens.investigationSetup.allActivity", { defaultValue: "All activity" });
+  const conditions = selection.filters.length ? i18n.t("lens.investigationSetup.conditionsCount", { count: selection.filters.length, defaultValue: ` · ${selection.filters.length} conditions` }) : "";
   return `${who} · Last ${durationLabel(selection.lookback_hours ?? 24, "hours")}${conditions}`;
 }
 
 function criteriaSummary(values: Pick<InvestigationInput, "context" | "watching" | "questions">): string {
   const checks = values.watching.length + values.questions.filter((q) => q.instruction.trim()).length;
-  const checksLabel = `${checks} ${checks === 1 ? "check" : "checks"}`;
+  const checksLabel = i18n.t("lens.investigationSetup.checks", { count: checks, defaultValue: `${checks} ${checks === 1 ? "check" : "checks"}` });
   const headline = values.context.split("\n")[0]?.trim();
   return headline ? `${headline} · ${checksLabel}` : checksLabel;
 }
@@ -127,7 +130,7 @@ function SetupEditor({
     try {
       await onSave(investigationSettings(values, initial, model));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not save investigation");
+      setError(cause instanceof Error ? cause.message : i18n.t("lens.investigationSetup.couldNotSave", { defaultValue: "Could not save investigation" }));
     }
   });
   const gate = modelGate(analysis, model, mode === "edit" && model === initial?.model);
@@ -144,7 +147,7 @@ function SetupEditor({
             variant="ghost"
             size="icon-sm"
             className="-ml-2 shrink-0 text-muted-foreground"
-            aria-label="Back to investigations"
+            aria-label={i18n.t("lens.investigationSetup.backToInvestigations", { defaultValue: "Back to investigations" })}
             disabled={formState.isSubmitting}
             onClick={onClose}
           >
@@ -153,49 +156,54 @@ function SetupEditor({
           <div>
             <h2 className="text-lg font-semibold tracking-tight">{TITLES[mode]}</h2>
             <p className="text-xs text-muted-foreground">
-              Matching activity on the right updates as you change the setup.
+              {i18n.t("lens.investigationSetup.matchingActivityHint", { defaultValue: "Matching activity on the right updates as you change the setup." })}
             </p>
           </div>
         </div>
         <Button variant="outline" disabled={formState.isSubmitting} onClick={onClose}>
-          Cancel
+          {i18n.t("common.cancel", { defaultValue: "Cancel" })}
         </Button>
       </header>
       {offline && (
         <p role="status" className="text-sm text-warning">
-          The worker or trace storage is unavailable. Your draft is safe; you can start when it reconnects.
+          {i18n.t("lens.investigationSetup.offlineWarning", { defaultValue: "The worker or trace storage is unavailable. Your draft is safe; you can start when it reconnects." })}
         </p>
       )}
       <div className="grid min-w-0 gap-8 lg:grid-cols-2">
-        <SetupSteps aria-label="Investigation setup" current={step} onOpen={setStep}>
+        <SetupSteps aria-label={i18n.t("lens.investigationSetup.setupAria", { defaultValue: "Investigation setup" })} current={step} onOpen={setStep}>
           <SetupStep
             id="activity"
-            heading="Activity"
-            description="Which traces or requests to review"
+            heading={i18n.t("lens.investigationSetup.activityStep", { defaultValue: "Activity" })}
+            description={i18n.t("lens.investigationSetup.activityDesc", { defaultValue: "Which traces or requests to review" })}
             summary={activitySummary(selection)}
           >
             <label className="grid gap-2 text-sm font-medium">
-              Investigation name
-              <Input {...register("name")} placeholder="e.g. Support quality" />
+              {i18n.t("lens.investigationSetup.investigationName", { defaultValue: "Investigation name" })}
+              <Input {...register("name")} placeholder={i18n.t("lens.investigationSetup.namePlaceholder", { defaultValue: "e.g. Support quality" })} />
             </label>
             <ScopeFields {...activity.scope} />
             <SampleFields />
             <div className="flex justify-end pt-1">
-              <Button onClick={() => void next()}>Continue</Button>
+              <Button onClick={() => void next()}>{i18n.t("lens.investigationSetup.continue", { defaultValue: "Continue" })}</Button>
             </div>
           </SetupStep>
           <SetupStep
             id="criteria"
-            heading="Criteria"
-            description="What the agent should do and what to watch for"
+            heading={i18n.t("lens.investigationSetup.criteriaStep", { defaultValue: "Criteria" })}
+            description={i18n.t("lens.investigationSetup.criteriaDesc", { defaultValue: "What the agent should do and what to watch for" })}
             summary={criteriaSummary({ context, watching, questions })}
           >
             <ExpectationsFields />
             <div className="flex justify-end pt-1">
-              <Button onClick={() => void next()}>Continue</Button>
+              <Button onClick={() => void next()}>{i18n.t("lens.investigationSetup.continue", { defaultValue: "Continue" })}</Button>
             </div>
           </SetupStep>
-          <SetupStep id="run" heading="Run" description="Schedule, analysis model, and budget" summary="">
+          <SetupStep
+            id="run"
+            heading={i18n.t("lens.investigationSetup.runStep", { defaultValue: "Run" })}
+            description={i18n.t("lens.investigationSetup.runDesc", { defaultValue: "Schedule, analysis model, and budget" })}
+            summary=""
+          >
             <RunFields models={analysis} gate={gate} />
             {error && (
               <p role="alert" className="text-sm text-destructive">
@@ -204,7 +212,7 @@ function SetupEditor({
             )}
             <div className="flex justify-end pt-1">
               <Button disabled={!canSave} onClick={() => void save()}>
-                {formState.isSubmitting ? "Saving…" : saveLabel}
+                {formState.isSubmitting ? i18n.t("common.saving", { defaultValue: "Saving…" }) : saveLabel}
               </Button>
             </div>
           </SetupStep>
@@ -218,7 +226,7 @@ function SetupEditor({
           storageKey={FINDING_PANEL_WIDTH_KEY}
         >
           <MatchingActivityPreview {...activity.preview} className="min-w-0 lg:sticky lg:top-0" onOpen={setTrace} />
-          <Inspector.Panel label="Run details" testId="run-panel">
+          <Inspector.Panel label={i18n.t("lens.investigationSetup.runDetails", { defaultValue: "Run details" })} testId="run-panel">
             {(run: Execution) => (
               <TraceEvidence
                 traceId={run.trace_id}
