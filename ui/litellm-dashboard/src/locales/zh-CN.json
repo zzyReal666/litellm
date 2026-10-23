@@ -13195,6 +13195,15 @@
       "selectedActivityAppears": "当工作进程开始审查所选活动时，它会显示在这里。",
       "previousRuns": "上一批运行",
       "nextRuns": "下一批运行"
+    },
+    "criteriaTab": {
+      "usedForThisRun": "用于本次运行",
+      "editCriteria": "编辑标准",
+      "whatShouldAgentDo": "代理应该做什么？",
+      "purposeAndOutcome": "代理的目的与预期结果。",
+      "watchFor": "关注点",
+      "watchForHint": "需要调查的具体问题或模式。",
+      "changesApplyFuture": "更改将应用于未来的扫描。重新检查历史会消耗你的分析预算。"
     }
   },
   "mcpServerCredentials": {

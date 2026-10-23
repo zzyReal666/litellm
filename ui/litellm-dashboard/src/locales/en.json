@@ -13195,6 +13195,15 @@
       "selectedActivityAppears": "Selected activity appears here when the worker starts reviewing it.",
       "previousRuns": "Previous runs",
       "nextRuns": "Next runs"
+    },
+    "criteriaTab": {
+      "usedForThisRun": "Used for this run",
+      "editCriteria": "Edit criteria",
+      "whatShouldAgentDo": "What should the agent be doing?",
+      "purposeAndOutcome": "The purpose and expected outcome of the agent.",
+      "watchFor": "Watch for",
+      "watchForHint": "Specific problems or patterns to investigate.",
+      "changesApplyFuture": "Changes apply to future scans. Rechecking history uses your analysis budget."
     }
   },
   "mcpServerCredentials": {
