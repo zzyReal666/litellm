@@ -4267,7 +4267,12 @@
       "batchFailedTooltip": "{{failed}} of {{total}} batch requests failed",
       "batchSucceeded": "{{successful}}/{{total}} succeeded",
       "cacheHitCount": "{{count}} cache hit",
-      "sessionTotal": "session total"
+      "sessionTotal": "session total",
+      "copyCallIdAria": "Copy x-litellm-call-id",
+      "sessionLlmCount": "{{count}} LLM",
+      "sessionAgentCount": "{{count}} Agent",
+      "sessionMcpCount": "{{count}} MCP",
+      "batchRowTooltip": "Batch {{batchId}} (row: {{requestId}})"
     },
     "classifierAuditView": {
       "inputHint": "Provider request payload. A cached call or disabled message logging may have no capture.",

@@ -6,6 +6,7 @@ import { Copy } from "lucide-react";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, IdCell, MoneyCell, StatusBadge } from "@/components/shared/table_cells";
 import { copyToClipboard, getSpendString } from "@/utils/dataUtils";
+import i18n from "@/lib/i18n";
 
 import { getProviderLogoAndName } from "../../provider_info_helpers";
 import { getBatchIdFromRequestId, getBatchRequestCounts, isBatchCallType } from "../batchLogUtils";
@@ -39,7 +40,7 @@ function RequestIdWithCallIdTooltip({ requestId, callId }: { requestId: string; 
         <span>x-litellm-call-id: {callId}</span>
         <button
           type="button"
-          aria-label="Copy x-litellm-call-id"
+          aria-label={i18n.t("viewLogs.requestLogsTableColumns.copyCallIdAria", { defaultValue: "Copy x-litellm-call-id" })}
           className="shrink-0 cursor-pointer opacity-70 hover:opacity-100"
           onClick={(event) => {
             event.stopPropagation();
@@ -79,14 +80,14 @@ export const getRequestLogsTableColumns = ({
   {
     id: "startTime",
     accessorKey: "startTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Time" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colTime", { defaultValue: "Time" })} variant="dropdown-tristate" />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.startTime} />,
   },
   {
     id: "type",
-    header: "Type",
+    header: i18n.t("viewLogs.columns.colType", { defaultValue: "Type" }),
     size: 90,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -128,22 +129,22 @@ export const getRequestLogsTableColumns = ({
       );
 
       const tooltipParts = [
-        sessionLlmCount > 0 && `${sessionLlmCount} LLM`,
-        sessionAgentCount > 0 && `${sessionAgentCount} Agent`,
-        sessionMcpCount > 0 && `${sessionMcpCount} MCP`,
-        log.session_cache_hit_count != null && `${log.session_cache_hit_count} cache hit`,
+        sessionLlmCount > 0 && i18n.t("viewLogs.requestLogsTableColumns.sessionLlmCount", { count: sessionLlmCount, defaultValue: `${sessionLlmCount} LLM` }),
+        sessionAgentCount > 0 && i18n.t("viewLogs.requestLogsTableColumns.sessionAgentCount", { count: sessionAgentCount, defaultValue: `${sessionAgentCount} Agent` }),
+        sessionMcpCount > 0 && i18n.t("viewLogs.requestLogsTableColumns.sessionMcpCount", { count: sessionMcpCount, defaultValue: `${sessionMcpCount} MCP` }),
+        log.session_cache_hit_count != null && i18n.t("viewLogs.requestLogsTableColumns.cacheHitCount", { count: log.session_cache_hit_count, defaultValue: `${log.session_cache_hit_count} cache hit` }),
       ].filter(Boolean);
       return <CellTooltip content={tooltipParts.join(" • ")} trigger={sessionTypeBadge} />;
     },
   },
   {
     id: "status",
-    header: "Status",
+    header: i18n.t("viewLogs.columns.colStatus", { defaultValue: "Status" }),
     size: 100,
     enableSorting: false,
     meta: { skeleton: "badge" },
     cell: ({ row }) => {
-      const status = row.original.status || readMetaString(row.original.metadata, "status") || "Success";
+      const status = row.original.status || readMetaString(row.original.metadata, "status") || i18n.t("viewLogs.columns.statusSuccess", { defaultValue: "Success" });
       const isSuccess = status.toLowerCase() !== "failure";
       const batchCounts = isSuccess ? getBatchRequestCounts(row.original.metadata) : undefined;
       if (batchCounts && batchCounts.failed > 0) {
@@ -151,18 +152,18 @@ export const getRequestLogsTableColumns = ({
         return (
           <StatusBadge
             tone="warning"
-            label={`${batchCounts.successful}/${total} succeeded`}
-            tooltip={`${batchCounts.failed} of ${total} batch requests failed`}
+            label={i18n.t("viewLogs.requestLogsTableColumns.batchSucceeded", { successful: batchCounts.successful, total, defaultValue: `${batchCounts.successful}/${total} succeeded` })}
+            tooltip={i18n.t("viewLogs.requestLogsTableColumns.batchFailedTooltip", { failed: batchCounts.failed, total, defaultValue: `${batchCounts.failed} of ${total} batch requests failed` })}
           />
         );
       }
-      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? "Success" : "Failure"} />;
+      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? i18n.t("viewLogs.columns.statusSuccess", { defaultValue: "Success" }) : i18n.t("viewLogs.columns.statusFailure", { defaultValue: "Failure" })} />;
     },
   },
   {
     id: "session_id",
     accessorKey: "session_id",
-    header: "Session ID",
+    header: i18n.t("viewLogs.columns.colSessionId", { defaultValue: "Session ID" }),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.session_id} onClick={() => onSessionClick(row.original)} />,
@@ -170,7 +171,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_id",
     accessorKey: "request_id",
-    header: "Request ID",
+    header: i18n.t("viewLogs.columns.colRequestId", { defaultValue: "Request ID" }),
     enableSorting: false,
     cell: ({ row }) => {
       const log = row.original;
@@ -178,8 +179,8 @@ export const getRequestLogsTableColumns = ({
       if (batchId) {
         return (
           <div className="flex flex-col">
-            <IdCell value={batchId} variant="plain" copyable tooltip={`Batch ${batchId} (row: ${log.request_id})`} />
-            <span className="text-[10px] text-muted-foreground">batch cost</span>
+            <IdCell value={batchId} variant="plain" copyable tooltip={i18n.t("viewLogs.requestLogsTableColumns.batchRowTooltip", { batchId, requestId: log.request_id, defaultValue: `Batch ${batchId} (row: ${log.request_id})` })} />
+            <span className="text-[10px] text-muted-foreground">{i18n.t("viewLogs.requestLogsTableColumns.batchCost", { defaultValue: "batch cost" })}</span>
           </div>
         );
       }
@@ -196,7 +197,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Cost" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colCost", { defaultValue: "Cost" })} variant="dropdown-tristate" />,
     size: 110,
     enableSorting: true,
     meta: { numeric: true, skeleton: "twoLine" },
@@ -216,10 +217,10 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           {spend ? <CellTooltip content={`¥${String(spend)}`} trigger={money} /> : money}
-          {sessionTotalSpend != null && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {sessionTotalSpend != null && <span className="text-[10px] text-muted-foreground">{i18n.t("viewLogs.requestLogsTableColumns.sessionTotal", { defaultValue: "session total" })}</span>}
           {mcpCount > 0 && mcpSpend > 0 && (
             <span className="text-[10px] text-warning">
-              incl. {getSpendString(mcpSpend)} from {mcpCount} MCP
+              {i18n.t("viewLogs.columns.mcpCostNote", { spend: getSpendString(mcpSpend), count: mcpCount, defaultValue: `incl. ${getSpendString(mcpSpend)} from ${mcpCount} MCP` })}
             </span>
           )}
         </div>
@@ -229,7 +230,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_duration_ms",
     accessorKey: "request_duration_ms",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Duration (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colDuration", { defaultValue: "Duration (s)" })} variant="dropdown-tristate" />,
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -244,7 +245,7 @@ export const getRequestLogsTableColumns = ({
             content={`${ms}ms`}
             trigger={<span className="max-w-[15ch] truncate inline-block">{(ms / 1000).toFixed(2)}</span>}
           />
-          {sessionTotalMs != null && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {sessionTotalMs != null && <span className="text-[10px] text-muted-foreground">{i18n.t("viewLogs.requestLogsTableColumns.sessionTotal", { defaultValue: "session total" })}</span>}
         </div>
       );
     },
@@ -252,7 +253,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "ttft_ms",
     accessorKey: "completionStartTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="TTFT (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colTtft", { defaultValue: "TTFT (s)" })} variant="dropdown-tristate" />,
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -272,14 +273,14 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "team_alias",
-    header: "Team Name",
+    header: i18n.t("viewLogs.columns.colTeamName", { defaultValue: "Team Name" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_team_alias")} />,
   },
   {
     id: "key_hash",
-    header: "Key Hash",
+    header: i18n.t("viewLogs.columns.colKeyHash", { defaultValue: "Key Hash" }),
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -288,7 +289,7 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "key_alias",
-    header: "Key Alias",
+    header: i18n.t("viewLogs.columns.colKeyAlias", { defaultValue: "Key Alias" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_alias")} />,
@@ -296,7 +297,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "model",
     accessorKey: "model",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colModel", { defaultValue: "Model" })} variant="dropdown-tristate" />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -333,7 +334,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "total_tokens",
     accessorKey: "total_tokens",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tokens" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("viewLogs.columns.colTokens", { defaultValue: "Tokens" })} variant="dropdown-tristate" />,
     size: 140,
     enableSorting: true,
     meta: { numeric: true },
@@ -351,7 +352,7 @@ export const getRequestLogsTableColumns = ({
               ({String(prompt || "0")}+{String(completion || "0")})
             </span>
           </span>
-          {showSessionTotal && <span className="text-[10px] text-muted-foreground">session total</span>}
+          {showSessionTotal && <span className="text-[10px] text-muted-foreground">{i18n.t("viewLogs.requestLogsTableColumns.sessionTotal", { defaultValue: "session total" })}</span>}
         </div>
       );
     },
@@ -359,7 +360,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    header: "Internal User",
+    header: i18n.t("viewLogs.columns.colInternalUser", { defaultValue: "Internal User" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => (
@@ -372,7 +373,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "end_user",
     accessorKey: "end_user",
-    header: "End User",
+    header: i18n.t("viewLogs.columns.colEndUser", { defaultValue: "End User" }),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.end_user} />,
@@ -380,7 +381,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_tags",
     accessorKey: "request_tags",
-    header: "Tags",
+    header: i18n.t("viewLogs.columns.colTags", { defaultValue: "Tags" }),
     size: 150,
     enableSorting: false,
     meta: { skeleton: "chips" },

@@ -4267,7 +4267,12 @@
       "batchFailedTooltip": "{{total}} 个批量请求中有 {{failed}} 个失败",
       "batchSucceeded": "{{successful}}/{{total}} 成功",
       "cacheHitCount": "{{count}} 次缓存命中",
-      "sessionTotal": "会话总计"
+      "sessionTotal": "会话总计",
+      "copyCallIdAria": "复制 x-litellm-call-id",
+      "sessionLlmCount": "{{count}} 个 LLM",
+      "sessionAgentCount": "{{count}} 个 Agent",
+      "sessionMcpCount": "{{count}} 个 MCP",
+      "batchRowTooltip": "批次 {{batchId}}（行：{{requestId}}）"
     },
     "classifierAuditView": {
       "inputHint": "提供商请求负载。缓存调用或已关闭消息记录时可能没有抓取内容。",
