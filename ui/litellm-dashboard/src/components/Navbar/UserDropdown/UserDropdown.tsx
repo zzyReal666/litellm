@@ -22,6 +22,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CopyButton from "@/components/shared/CopyButton";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import React, { useEffect, useState } from "react";
 
 function hueFromString(seed: string): number {
@@ -100,16 +101,16 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
         {premiumUser ? (
           <Badge>
             <Crown className="size-3" />
-            Premium
+            {i18n.t("user.premium", { defaultValue: "Premium" })}
           </Badge>
         ) : (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger render={<Badge variant="outline" />}>
                 <Crown className="size-3" />
-                Standard
+                {i18n.t("user.standard", { defaultValue: "Standard" })}
               </TooltipTrigger>
-              <TooltipContent side="left">Upgrade to Premium for advanced features</TooltipContent>
+              <TooltipContent side="left">{i18n.t("user.upgradeTooltip", { defaultValue: "Upgrade to Premium for advanced features" })}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
@@ -118,25 +119,25 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <User className="size-4" />
-          <span className="text-muted-foreground">User ID</span>
+          <span className="text-muted-foreground">{i18n.t("user.userId", { defaultValue: "User ID" })}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="max-w-[150px] truncate" title={userId || "-"}>
             {userId || "-"}
           </span>
-          <CopyButton value={userId} label="Copy User ID" />
+          <CopyButton value={userId} label={i18n.t("user.copyUserId", { defaultValue: "Copy User ID" })} />
         </div>
       </div>
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-4" />
-          <span className="text-muted-foreground">Role</span>
+          <span className="text-muted-foreground">{i18n.t("user.role", { defaultValue: "Role" })}</span>
         </div>
         <span>{userRole}</span>
       </div>
       <Separator className="my-2" />
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide New Feature Indicators</span>
+        <span className="text-muted-foreground">{i18n.t("user.hideNewFeatureIndicators", { defaultValue: "Hide New Feature Indicators" })}</span>
         <Switch
           size="sm"
           checked={disableShowNewBadge}
@@ -150,11 +151,11 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableShowNewBadge");
             }
           }}
-          aria-label="Toggle hide new feature indicators"
+          aria-label={i18n.t("user.toggleHideNewFeatureIndicators", { defaultValue: "Toggle hide new feature indicators" })}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide All Prompts</span>
+        <span className="text-muted-foreground">{i18n.t("user.hideAllPrompts", { defaultValue: "Hide All Prompts" })}</span>
         <Switch
           size="sm"
           checked={disableShowPrompts}
@@ -167,11 +168,11 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableShowPrompts");
             }
           }}
-          aria-label="Toggle hide all prompts"
+          aria-label={i18n.t("user.toggleHideAllPrompts", { defaultValue: "Toggle hide all prompts" })}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide Blog Posts</span>
+        <span className="text-muted-foreground">{i18n.t("user.hideBlogPosts", { defaultValue: "Hide Blog Posts" })}</span>
         <Switch
           size="sm"
           checked={disableBlogPosts}
@@ -184,11 +185,11 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableBlogPosts");
             }
           }}
-          aria-label="Toggle hide blog posts"
+          aria-label={i18n.t("user.toggleHideBlogPosts", { defaultValue: "Toggle hide blog posts" })}
         />
       </div>
       <div className="flex w-full items-center justify-between gap-2">
-        <span className="text-muted-foreground">Hide Bouncing Icon</span>
+        <span className="text-muted-foreground">{i18n.t("user.hideBouncingIcon", { defaultValue: "Hide Bouncing Icon" })}</span>
         <Switch
           size="sm"
           checked={disableBouncingIcon}
@@ -201,17 +202,17 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
               emitLocalStorageChange("disableBouncingIcon");
             }
           }}
-          aria-label="Toggle hide bouncing icon"
+          aria-label={i18n.t("user.toggleHideBouncingIcon", { defaultValue: "Toggle hide bouncing icon" })}
         />
       </div>
       {premiumUser === true && canUseLiteAdmin && (
         <div className="flex w-full items-center justify-between gap-2">
-          <span className="text-muted-foreground">Hide LiteAdmin</span>
+          <span className="text-muted-foreground">{i18n.t("user.hideLiteAdmin", { defaultValue: "Hide LiteAdmin" })}</span>
           <Switch
             size="sm"
             checked={disableLiteAdmin}
             onCheckedChange={setDisableLiteAdmin}
-            aria-label="Toggle hide LiteAdmin"
+            aria-label={i18n.t("user.toggleHideLiteAdmin", { defaultValue: "Toggle hide LiteAdmin" })}
           />
         </div>
       )}

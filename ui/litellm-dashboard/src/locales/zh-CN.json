@@ -105,7 +105,9 @@
     "toggleHideAllPrompts": "切换隐藏所有提示",
     "toggleHideUsageIndicator": "切换隐藏用量指示器",
     "toggleHideBlogPosts": "切换隐藏博客文章",
-    "toggleHideBouncingIcon": "切换隐藏跳动图标"
+    "toggleHideBouncingIcon": "切换隐藏跳动图标",
+    "hideLiteAdmin": "隐藏 LiteAdmin",
+    "toggleHideLiteAdmin": "切换隐藏 LiteAdmin"
   },
   "login": {
     "subtitle": "访问您的 LiteLLM 管理界面。",

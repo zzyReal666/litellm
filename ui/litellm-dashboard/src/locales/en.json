@@ -105,7 +105,9 @@
     "toggleHideAllPrompts": "Toggle hide all prompts",
     "toggleHideUsageIndicator": "Toggle hide usage indicator",
     "toggleHideBlogPosts": "Toggle hide blog posts",
-    "toggleHideBouncingIcon": "Toggle hide bouncing icon"
+    "toggleHideBouncingIcon": "Toggle hide bouncing icon",
+    "hideLiteAdmin": "Hide LiteAdmin",
+    "toggleHideLiteAdmin": "Toggle hide LiteAdmin"
   },
   "login": {
     "title": "Login",
