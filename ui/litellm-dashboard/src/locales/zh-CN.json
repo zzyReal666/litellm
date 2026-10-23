@@ -12939,6 +12939,27 @@
       "rangeTo": "{{start}} 至 {{end}}",
       "analysisCost": "分析成本",
       "status": "状态"
+    },
+    "casePanel": {
+      "copyCaseId": "复制案例 ID",
+      "included": "已包含",
+      "caseSectionsAria": "案例分区",
+      "case": "案例",
+      "source": "来源",
+      "input": "输入",
+      "noConversationRecorded": "未记录对话",
+      "output": "输出",
+      "noReplyRecorded": "未记录回复",
+      "expected": "预期",
+      "expectedPlaceholder": "好的回复应该是什么样子",
+      "notSet": "未设置",
+      "fieldTrace": "链路",
+      "fieldSpan": "Span",
+      "fieldFinding": "发现",
+      "fieldInvestigation": "调查",
+      "copyFieldId": "复制 {{field}} ID",
+      "none": "无",
+      "openSourceTrace": "打开来源链路"
     }
   },
   "mcpServerCredentials": {

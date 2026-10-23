@@ -12939,6 +12939,27 @@
       "rangeTo": "{{start}} to {{end}}",
       "analysisCost": "Analysis cost",
       "status": "Status"
+    },
+    "casePanel": {
+      "copyCaseId": "Copy case ID",
+      "included": "Included",
+      "caseSectionsAria": "Case sections",
+      "case": "Case",
+      "source": "Source",
+      "input": "Input",
+      "noConversationRecorded": "No conversation recorded",
+      "output": "Output",
+      "noReplyRecorded": "No reply recorded",
+      "expected": "Expected",
+      "expectedPlaceholder": "What a good reply looks like",
+      "notSet": "Not set",
+      "fieldTrace": "Trace",
+      "fieldSpan": "Span",
+      "fieldFinding": "Finding",
+      "fieldInvestigation": "Investigation",
+      "copyFieldId": "Copy {{field}} ID",
+      "none": "None",
+      "openSourceTrace": "Open source trace"
     }
   },
   "mcpServerCredentials": {
