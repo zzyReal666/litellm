@@ -12084,6 +12084,19 @@
       "notRecorded": "未记录",
       "unavailable": "不可用",
       "page": "第 {{page}} 页"
+    },
+    "autoRouterSummaryTable": {
+      "title": "路由用量与节省",
+      "description": "所选 UTC 日期。成本包含 LLM 调用与分类。令牌数统计已路由的 LLM 输入与输出。",
+      "colAutoRouter": "自动路由",
+      "colTokensThroughRouter": "经路由的令牌数",
+      "colCostViaRouter": "经路由的成本",
+      "colCostPerMTokens": "每百万令牌成本",
+      "colSavedVsPremium": "相较高级模型节省",
+      "colPctSaved": "节省百分比",
+      "noAutoRouters": "此范围内没有自动路由",
+      "unavailable": "不可用",
+      "savingsFootnote": "节省金额是按每个路由的高级基线估算的。令牌总数与单位成本在启用令牌追踪之前记录的用量中不可用；单位成本还要求令牌数非零。"
     }
   },
   "budgetsPage": {

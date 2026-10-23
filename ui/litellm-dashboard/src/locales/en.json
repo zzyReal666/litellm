@@ -12084,6 +12084,19 @@
       "notRecorded": "Not recorded",
       "unavailable": "Unavailable",
       "page": "Page {{page}}"
+    },
+    "autoRouterSummaryTable": {
+      "title": "Router usage and savings",
+      "description": "Selected UTC days. Cost includes LLM calls and classification. Tokens count routed LLM input and output.",
+      "colAutoRouter": "Auto-router",
+      "colTokensThroughRouter": "Tokens through router",
+      "colCostViaRouter": "Cost via router",
+      "colCostPerMTokens": "Cost per 1M tokens",
+      "colSavedVsPremium": "Saved vs. premium model",
+      "colPctSaved": "% saved",
+      "noAutoRouters": "No auto-routers in this range",
+      "unavailable": "Unavailable",
+      "savingsFootnote": "Savings are estimated against each router's premium baseline. Token totals and unit costs are unavailable for usage recorded before token tracking; unit cost also requires nonzero tokens."
     }
   },
   "budgetsPage": {
