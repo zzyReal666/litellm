@@ -3300,7 +3300,9 @@
     "deleteModalMessage": "Are you sure you want to delete this organization? This action cannot be undone.",
     "deleteModalResourceTitle": "Organization Information",
     "deleteSuccess": "Organization deleted successfully",
-    "createSuccess": "Organization created successfully"
+    "createSuccess": "Organization created successfully",
+    "openOrganizationActions": "Open organization actions",
+    "colMembers": "Members"
   },
   "passThroughSettings": {
     "title": "Pass Through Endpoints",

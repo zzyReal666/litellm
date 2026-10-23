@@ -3300,7 +3300,9 @@
     "deleteModalMessage": "确定要删除此组织吗？此操作无法撤销。",
     "deleteModalResourceTitle": "组织信息",
     "deleteSuccess": "组织已成功删除",
-    "createSuccess": "组织已成功创建"
+    "createSuccess": "组织已成功创建",
+    "openOrganizationActions": "打开组织操作",
+    "colMembers": "成员"
   },
   "passThroughSettings": {
     "title": "透传端点",

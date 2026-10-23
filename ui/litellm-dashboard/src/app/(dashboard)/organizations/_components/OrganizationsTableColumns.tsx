@@ -29,8 +29,8 @@ function OrganizationLimitsCell({ organization }: { organization: Organization }
   const { tpm_limit, rpm_limit } = getOrganizationBudget(organization);
   return (
     <div className="flex flex-col text-xs text-muted-foreground">
-      <span>TPM: {tpm_limit ?? "Unlimited"}</span>
-      <span>RPM: {rpm_limit ?? "Unlimited"}</span>
+      <span>TPM: {tpm_limit ?? i18n.t("organizations.unlimited", { defaultValue: "Unlimited" })}</span>
+      <span>RPM: {rpm_limit ?? i18n.t("organizations.unlimited", { defaultValue: "Unlimited" })}</span>
     </div>
   );
 }
@@ -45,7 +45,7 @@ function OrganizationRowActions({ organization, onEditClick, onDeleteClick }: Or
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open organization actions"
+        aria-label={i18n.t("organizations.openOrganizationActions", { defaultValue: "Open organization actions" })}
         data-testid={`organization-actions-${organization.organization_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -57,7 +57,7 @@ function OrganizationRowActions({ organization, onEditClick, onDeleteClick }: Or
           onClick={() => onEditClick(organization.organization_id)}
         >
           <Pencil />
-          Edit
+          {i18n.t("common.edit", { defaultValue: "Edit" })}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
@@ -65,7 +65,7 @@ function OrganizationRowActions({ organization, onEditClick, onDeleteClick }: Or
           onClick={() => onDeleteClick(organization.organization_id)}
         >
           <Trash2 />
-          Delete
+          {i18n.t("common.delete", { defaultValue: "Delete" })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -88,8 +88,8 @@ export const getOrganizationsTableColumns = ({
   {
     id: "organization_id",
     accessorKey: "organization_id",
-    meta: { title: "Organization ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Organization ID" />,
+    meta: { title: i18n.t("organizations.colOrgId", { defaultValue: "Organization ID" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("organizations.colOrgId", { defaultValue: "Organization ID" })} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => (
@@ -104,8 +104,8 @@ export const getOrganizationsTableColumns = ({
   {
     id: "organization_alias",
     accessorKey: "organization_alias",
-    meta: { title: "Organization Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Organization Name" />,
+    meta: { title: i18n.t("organizations.colOrgName", { defaultValue: "Organization Name" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("organizations.colOrgName", { defaultValue: "Organization Name" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -121,8 +121,8 @@ export const getOrganizationsTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: i18n.t("oldTeams.columns.created", { defaultValue: "Created" }) },
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("oldTeams.columns.created", { defaultValue: "Created" })} />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -138,42 +138,42 @@ export const getOrganizationsTableColumns = ({
   },
   {
     id: "max_budget",
-    meta: { title: "Budget (CNY)", numeric: true },
-    header: "Budget (CNY)",
+    meta: { title: i18n.t("organizations.colBudget", { defaultValue: "Budget (CNY)" }), numeric: true },
+    header: i18n.t("organizations.colBudget", { defaultValue: "Budget (CNY)" }),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => (
-      <MoneyCell value={getOrganizationBudget(row.original).max_budget} decimals={2} emptyText="Unlimited" showZero />
+      <MoneyCell value={getOrganizationBudget(row.original).max_budget} decimals={2} emptyText={i18n.t("organizations.unlimited", { defaultValue: "Unlimited" })} showZero />
     ),
   },
   {
     id: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: { title: i18n.t("organizations.colModels", { defaultValue: "Models" }), skeleton: "chips" },
+    header: i18n.t("organizations.colModels", { defaultValue: "Models" }),
     size: 260,
     enableSorting: false,
     cell: ({ row }) => <ModelsCell models={row.original.models} />,
   },
   {
     id: "limits",
-    meta: { title: "TPM / RPM Limits" },
-    header: "TPM / RPM Limits",
+    meta: { title: i18n.t("organizations.colTpmRpmLimits", { defaultValue: "TPM / RPM Limits" }) },
+    header: i18n.t("organizations.colTpmRpmLimits", { defaultValue: "TPM / RPM Limits" }),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <OrganizationLimitsCell organization={row.original} />,
   },
   {
     id: "members",
-    meta: { title: "Members", numeric: true },
-    header: "Members",
+    meta: { title: i18n.t("organizations.colMembers", { defaultValue: "Members" }), numeric: true },
+    header: i18n.t("organizations.colMembers", { defaultValue: "Members" }),
     size: 100,
     enableSorting: false,
-    cell: ({ row }) => <span className="text-sm">{row.original.members?.length ?? 0} Members</span>,
+    cell: ({ row }) => <span className="text-sm">{i18n.t("organizations.memberCount", { count: row.original.members?.length ?? 0 })}</span>,
   },
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,
