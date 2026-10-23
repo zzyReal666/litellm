@@ -73,6 +73,8 @@ services:
     image: postgres:16.4
     restart: unless-stopped
     cap_add: [ALL]
+    security_opt:
+      - seccomp=unconfined
     container_name: litellm_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -93,6 +95,8 @@ services:
     image: redis:7.4.2-alpine
     restart: unless-stopped
     cap_add: [ALL]
+    security_opt:
+      - seccomp=unconfined
     container_name: litellm_redis
     user: redis
     environment:
@@ -122,6 +126,8 @@ services:
     image: prom/prometheus:v2.55.1
     restart: unless-stopped
     cap_add: [ALL]
+    security_opt:
+      - seccomp=unconfined
     ports:
       - "${PROMETHEUS_HOST_PORT:-9090}:9090"
     volumes:

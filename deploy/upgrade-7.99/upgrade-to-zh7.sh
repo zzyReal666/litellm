@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 7.99: litellm-zhcn:v1.100.0-zh.5 -> v1.106.0-zh.7（含 headroom 压缩服务）
-# 升级前备份与镜像均已预置在 /opt/litellm-upgrade。失败回滚用 rollback-to-zh5.sh。
+# 升级前镜像、配置备份、演练均预置在 /opt/litellm-upgrade。回滚用 rollback-to-zh5.sh。
 set -euo pipefail
 
 ROOT="/opt/litellm"
@@ -19,7 +19,7 @@ CHECK_ONLY=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --check) CHECK_ONLY=1 ;;
-    -h|--help) echo "用法: $0 [--check]"; echo "  --check  只做前置校验与演练，不改动部署"; exit 0 ;;
+    -h|--help) echo "用法: $0 [--check]"; echo "  --check  只做前置校验，不改动部署"; exit 0 ;;
     *) echo "未知参数: $1" >&2; exit 2 ;;
   esac
   shift
@@ -39,7 +39,6 @@ set +a
 
 COMPOSE="${ROOT}/bin/docker-compose"
 [[ -x "${COMPOSE}" ]] || die "找不到 ${COMPOSE}"
-
 compose() { "${COMPOSE}" -f "${ROOT}/docker-compose.yml" "$@"; }
 http_code() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$1" 2>/dev/null || true; }
 wait_http() {
@@ -59,12 +58,14 @@ if [[ -f "${KIT}/pkg.sha256" ]]; then
   ( cd "${KIT}/pkg" && sha256sum -c "${KIT}/pkg.sha256" ) || die "离线包校验和不匹配"
   log "离线包校验和通过"
 fi
-[[ -f "${BACKUP_ROOT}/LATEST.txt" ]] || die "缺少 ${BACKUP_ROOT}/LATEST.txt"
-BACKUP_DIR="$(sed -n 's/^BACKUP_DIR=//p' "${BACKUP_ROOT}/LATEST.txt" | head -1)"
-[[ -d "${BACKUP_DIR}" ]] || die "找不到数据库备份目录 ${BACKUP_DIR}"
-PG_DUMP_DIR="$(find "${BACKUP_ROOT}" -maxdepth 1 -type d -name 'pg-pre-zh7-*' | sort | tail -1)"
-[[ -n "${PG_DUMP_DIR}" && -f "${PG_DUMP_DIR}/toc.dat" ]] || die "数据库备份不完整（缺少 toc.dat）"
-log "数据库备份: ${PG_DUMP_DIR} ($(du -sh "${PG_DUMP_DIR}" | cut -f1))"
+
+[[ -f "${BACKUP_ROOT}/CFG_LATEST.txt" ]] || die "缺少配置备份清单 ${BACKUP_ROOT}/CFG_LATEST.txt"
+CFG_DIR="$(sed -n 's/^CFG_DUMP_DIR=//p' "${BACKUP_ROOT}/CFG_LATEST.txt" | head -1)"
+[[ -n "${CFG_DIR}" && -f "${CFG_DIR}/toc.dat" ]] || die "配置备份不完整"
+docker run --rm --security-opt seccomp=unconfined -v "${CFG_DIR}:/dump:ro" postgres:16.4 \
+  pg_restore -l /dump >/dev/null 2>&1 || die "配置备份不可读（pg_restore -l 失败）"
+[[ -f "${BACKUP_ROOT}/schema-pre-zh7.sql" ]] || die "缺少升级前结构快照"
+log "配置备份: $(basename "${CFG_DIR}") ($(du -sh "${CFG_DIR}" | cut -f1))"
 
 for img in "${NEW_IMAGE}" "${HEADROOM_IMAGE}" "${OLD_IMAGE}"; do
   docker image inspect "${img}" >/dev/null 2>&1 || die "镜像缺失 ${img}"
@@ -74,32 +75,19 @@ log "新镜像与回滚镜像均就绪"
 AVAIL_KB="$(df -Pk / | awk 'NR==2 {print $4}')"
 (( AVAIL_KB > 3 * 1024 * 1024 )) || die "根分区可用空间不足 3G（当前 $((AVAIL_KB / 1024))M）"
 
-if ! grep -q "^${OLD_IMAGE}$" <(docker ps --format '{{.Image}}'); then
-  log "警告: 当前运行的镜像不是 ${OLD_IMAGE}，继续前请确认"
-fi
-
-if [[ "${CHECK_ONLY}" == "1" ]]; then
-  TMP="$(mktemp -d)"
-  cp -a "${COMPOSE_SRC}" "${TMP}/docker-compose.yml"
-  cp -a "${ROOT}/.env" "${TMP}/.env"
-  mkdir -p "${TMP}/assets" "${TMP}/data/headroom" "${TMP}/config" "${TMP}/scripts"
-  cp -a "${ROOT}/config/." "${TMP}/config/"
-  tar xzf "${PKG}" -C "${TMP}" --strip-components=1 'litellm-offline-v1.106.0-zh.7/scripts' 'litellm-offline-v1.106.0-zh.7/assets'
-  ( cd "${TMP}" && "${COMPOSE}" -f "${TMP}/docker-compose.yml" config -q ) || die "compose 校验失败"
-  rm -rf "${TMP}"
-  log "compose 校验通过"
-  log "检查通过，未做任何改动。执行不带 --check 的命令开始升级"
-  exit 0
-fi
-
 log "== 2/8 记录升级现场 =="
 INFLIGHT="${KIT}/state/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "${INFLIGHT}"
 cp -a docker-compose.yml .env "${INFLIGHT}/"
 cp -a config "${INFLIGHT}/config"
 chmod 600 "${INFLIGHT}/.env"
-printf 'BACKUP_DIR=%s\nPG_DUMP_DIR=%s\nINFLIGHT=%s\n' "${BACKUP_DIR}" "${PG_DUMP_DIR}" "${INFLIGHT}" > "${KIT}/state/upgrade-inflight.txt"
+printf 'CFG_DIR=%s\nINFLIGHT=%s\n' "${CFG_DIR}" "${INFLIGHT}" > "${KIT}/state/upgrade-inflight.txt"
 log "现场文件: ${INFLIGHT}"
+
+if [[ "${CHECK_ONLY}" == "1" ]]; then
+  log "检查通过，未做任何改动。执行不带 --check 的命令开始升级"
+  exit 0
+fi
 
 log "== 3/8 更新 compose、脚本、静态资源 =="
 cp -a "${COMPOSE_SRC}" docker-compose.yml
@@ -127,7 +115,7 @@ compose config -q || die "compose 校验失败"
 fail_and_rollback() {
   local reason="$1"
   printf '\n升级失败: %s\n' "${reason}" >&2
-  printf '手动回滚命令: bash %s/scripts/rollback-to-zh5.sh\n' "${KIT}" >&2
+  printf '回滚命令: bash %s/scripts/rollback-to-zh5.sh\n' "${KIT}" >&2
   if [[ "${AUTO_ROLLBACK}" == "1" ]]; then
     log "AUTO_ROLLBACK=1，开始自动回滚"
     bash "${KIT}/scripts/rollback-to-zh5.sh" || printf '自动回滚也失败，请人工介入\n' >&2
@@ -163,15 +151,16 @@ KEY_COUNT="$(docker exec litellm_db psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB
 MIG_COUNT="$(docker exec litellm_db psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -At -c 'select count(*) from _prisma_migrations;')"
 log "模型=${MODEL_COUNT} 密钥=${KEY_COUNT} 迁移=${MIG_COUNT}"
 
-BASELINE_FILE="$(find "${BACKUP_ROOT}" -maxdepth 2 -name baseline.txt | sort | tail -1)"
+BASELINE_FILE="$(ls -t "${BACKUP_ROOT}"/files-*/baseline.txt 2>/dev/null | head -1)"
 if [[ -n "${BASELINE_FILE}" ]]; then
   BASE_MODELS="$(sed -n 's/^models=//p' "${BASELINE_FILE}")"
   BASE_KEYS="$(sed -n 's/^keys=//p' "${BASELINE_FILE}")"
-  [[ -z "${BASE_MODELS}" || "${MODEL_COUNT}" == "${BASE_MODELS}" ]] || log "警告: 模型数与基线 ${BASE_MODELS} 不一致"
-  [[ -z "${BASE_KEYS}" || "${KEY_COUNT}" == "${BASE_KEYS}" ]] || log "警告: 密钥数与基线 ${BASE_KEYS} 不一致"
+  [[ -z "${BASE_MODELS}" || "${MODEL_COUNT}" == "${BASE_MODELS}" ]] || fail_and_rollback "模型数与基线 ${BASE_MODELS} 不一致"
+  [[ -z "${BASE_KEYS}" || "${KEY_COUNT}" == "${BASE_KEYS}" ]] || fail_and_rollback "密钥数与基线 ${BASE_KEYS} 不一致"
 fi
 
 MODEL_NAME="$(docker exec litellm_db psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -At -c 'select model_name from "LiteLLM_ProxyModelTable" order by model_name limit 1;')"
+SMOKE_CODE="skipped"
 if [[ -n "${MODEL_NAME}" && -n "${LITELLM_MASTER_KEY:-}" ]]; then
   SMOKE_CODE="$(curl -s -o /tmp/upgrade-smoke.json -w '%{http_code}' --max-time 120 \
     -H "Authorization: Bearer ${LITELLM_MASTER_KEY}" -H 'Content-Type: application/json' \
@@ -193,8 +182,7 @@ upgraded_at=$(date +%FT%T)
 old_image=${OLD_IMAGE}
 new_image=${NEW_IMAGE}
 headroom_image=${HEADROOM_IMAGE}
-backup_dir=${BACKUP_DIR}
-pg_dump_dir=${PG_DUMP_DIR}
+cfg_backup=${CFG_DIR}
 inflight_dir=${INFLIGHT}
 downtime_seconds=$((UPEND - UPSTART))
 readiness=${READINESS}
@@ -203,7 +191,7 @@ models=${MODEL_COUNT}
 keys=${KEY_COUNT}
 migrations=${MIG_COUNT}
 guardrail_created=${GUARDRAIL_OK}
-smoke_http=${SMOKE_CODE:-skipped}
+smoke_http=${SMOKE_CODE}
 EOF
 
 printf '\n升级完成。摘要:\n'
