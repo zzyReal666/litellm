@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useNow } from "@/hooks/useNow";
 import { copyToClipboard } from "@/utils/dataUtils";
+import i18n from "@/lib/i18n";
 
 import { AddToDatasetButton } from "../datasets/AddToDatasetDialog";
 import { evidenceTarget, findingMarkdown } from "../model/findings";
@@ -57,21 +58,21 @@ function TopBar({ finding, onClose }: Pick<FindingDetailsProps, "finding" | "onC
           variant="outline"
           size="xs"
           className="enabled:active:scale-[0.96]"
-          onClick={() => void copyToClipboard(findingMarkdown(finding), "Copied for agent")}
+          onClick={() => void copyToClipboard(findingMarkdown(finding), i18n.t("lens.findingDetails.copiedForAgent", { defaultValue: "Copied for agent" }))}
         >
           <ClipboardCopy />
-          Copy for agent
+          {i18n.t("lens.findingDetails.copyForAgent", { defaultValue: "Copy for agent" })}
         </Button>
         {onClose && (
           <Button
             variant="ghost"
             size="xs"
             className="enabled:active:scale-[0.96]"
-            aria-label="Close finding (Esc)"
+            aria-label={i18n.t("lens.findingDetails.closeFinding", { defaultValue: "Close finding (Esc)" })}
             onClick={onClose}
           >
             <X />
-            Close
+            {i18n.t("lens.findingDetails.close", { defaultValue: "Close" })}
           </Button>
         )}
       </div>
@@ -107,17 +108,17 @@ function ProseSection({ title, children }: { title: string; children: string }) 
 
 const FIELD = /^(Input|Output|Status|Error)\s*:/gm;
 const FIELD_LABEL: Readonly<Record<string, string>> = {
-  "Input,Output": "Call and result",
-  Input: "Call input",
-  Output: "Returned output",
-  Status: "Span status",
-  Error: "Error",
+  "Input,Output": i18n.t("lens.findingDetails.callAndResult", { defaultValue: "Call and result" }),
+  Input: i18n.t("lens.findingDetails.callInput", { defaultValue: "Call input" }),
+  Output: i18n.t("lens.findingDetails.returnedOutput", { defaultValue: "Returned output" }),
+  Status: i18n.t("lens.findingDetails.spanStatus", { defaultValue: "Span status" }),
+  Error: i18n.t("lens.findingDetails.error", { defaultValue: "Error" }),
 };
 
 function quoteLabel(quote: Quote, isTrace: boolean): string {
-  if (quote.role === "counterexample") return "Counterexample";
+  if (quote.role === "counterexample") return i18n.t("lens.findingDetails.counterexample", { defaultValue: "Counterexample" });
   const fields = [...new Set(Array.from(quote.quote.matchAll(FIELD), (m) => m[1]))].join(",");
-  return FIELD_LABEL[fields] ?? (isTrace ? "Trace step" : "Logged request");
+  return FIELD_LABEL[fields] ?? (isTrace ? i18n.t("lens.findingDetails.traceStep", { defaultValue: "Trace step" }) : i18n.t("lens.findingDetails.loggedRequest", { defaultValue: "Logged request" }));
 }
 
 const MARK = {
@@ -132,13 +133,13 @@ function QuoteCard({ quote, onOpen }: { quote: Quote; onOpen: () => void }) {
       <div className="mb-1.5 flex items-center justify-between gap-2">
         <span className="min-w-0 truncate text-sm font-medium">{quoteLabel(quote, isTrace)}</span>
         <Button variant="outline" size="xs" className="enabled:active:scale-[0.96]" onClick={onOpen}>
-          {isTrace ? "View span" : "View request"}
+          {isTrace ? i18n.t("lens.findingDetails.viewSpan", { defaultValue: "View span" }) : i18n.t("lens.findingDetails.viewRequest", { defaultValue: "View request" })}
         </Button>
       </div>
       <button
         type="button"
         tabIndex={-1}
-        title="Open this evidence"
+        title={i18n.t("lens.findingDetails.openEvidence", { defaultValue: "Open this evidence" })}
         onClick={onOpen}
         className="block w-full overflow-x-auto rounded-md bg-muted/60 py-1.5 text-left font-mono text-xs leading-5 transition-[background-color] duration-150 hover:bg-muted"
       >
@@ -160,7 +161,7 @@ function EvidenceRail({ children }: { children: React.ReactNode }) {
           </div>
           <div aria-hidden="true" className="h-2 w-px bg-border" />
         </div>
-        <div className="min-w-0 flex-1 text-xs leading-5 font-medium text-muted-foreground">Evidence</div>
+        <div className="min-w-0 flex-1 text-xs leading-5 font-medium text-muted-foreground">{i18n.t("lens.findingDetails.evidence", { defaultValue: "Evidence" })}</div>
       </div>
       <div className="relative">
         <div aria-hidden="true" className="absolute inset-y-0 left-[5px] w-px bg-border" />
@@ -178,7 +179,7 @@ interface ExampleGroup {
 
 function Example({ group, onOpenEvidence }: { group: ExampleGroup; onOpenEvidence: (e: EvidenceRef) => void }) {
   const traceId = evidenceTarget(group.id)?.id;
-  const name = group.run?.name ?? (traceId ? `Trace ${traceId.slice(0, 8)}` : "Recorded run");
+  const name = group.run?.name ?? (traceId ? i18n.t("lens.findingDetails.tracePrefix", { id: traceId.slice(0, 8), defaultValue: `Trace ${traceId.slice(0, 8)}` }) : i18n.t("lens.findingDetails.recordedRun", { defaultValue: "Recorded run" }));
   return (
     <article aria-label={name} className="flex w-full flex-col items-start gap-3 rounded-xl bg-muted/50 p-3.5">
       <div className="flex w-full items-baseline justify-between gap-3">
@@ -192,9 +193,9 @@ function Example({ group, onOpenEvidence }: { group: ExampleGroup; onOpenEvidenc
       <div className="w-full">
         {group.quotes.length === 0 ? (
           <div className="flex items-center justify-between gap-3">
-            <p className="text-sm text-muted-foreground">No quote was retained for this trace.</p>
+            <p className="text-sm text-muted-foreground">{i18n.t("lens.findingDetails.noQuoteRetained", { defaultValue: "No quote was retained for this trace." })}</p>
             <Button variant="outline" size="xs" onClick={() => onOpenEvidence({ id: group.id, span: "" })}>
-              View trace
+              {i18n.t("lens.findingDetails.viewTrace", { defaultValue: "View trace" })}
             </Button>
           </div>
         ) : (
@@ -223,7 +224,7 @@ function Examples({
   onOpenEvidence: (e: EvidenceRef) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  if (groups.length === 0) return <p className="text-sm text-muted-foreground">No examples were recorded.</p>;
+  if (groups.length === 0) return <p className="text-sm text-muted-foreground">{i18n.t("lens.findingDetails.noExamplesRecorded", { defaultValue: "No examples were recorded." })}</p>;
   const shown = expanded ? groups : groups.slice(0, VISIBLE_EXAMPLES);
   const hidden = groups.length - shown.length;
   return (
@@ -238,7 +239,11 @@ function Examples({
           className="self-start text-muted-foreground"
           onClick={() => setExpanded(true)}
         >
-          Show {hidden} more {hidden === 1 ? "example" : "examples"}
+          {i18n.t("lens.findingDetails.showMoreExamples", {
+            count: hidden,
+            noun: hidden === 1 ? i18n.t("lens.findingDetails.exampleSingular", { defaultValue: "example" }) : i18n.t("lens.findingDetails.examplePlural", { defaultValue: "examples" }),
+            defaultValue: `Show ${hidden} more ${hidden === 1 ? "example" : "examples"}`,
+          })}
         </Button>
       )}
     </>
@@ -250,22 +255,24 @@ function ReviewForm({ finding, busy, onReview }: Pick<FindingDetailsProps, "find
   return (
     <section className="space-y-3 border-t pt-6">
       <label className="grid gap-2 text-sm font-medium">
-        What should Lens remember?
+        {i18n.t("lens.findingDetails.rememberLabel", { defaultValue: "What should Lens remember?" })}
         <Textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          placeholder="What should Lens know about this finding?"
+          placeholder={i18n.t("lens.findingDetails.explanationPlaceholder", { defaultValue: "What should Lens know about this finding?" })}
         />
       </label>
-      <p className="text-xs text-muted-foreground">Your explanation informs future scans of this Lens.</p>
+      <p className="text-xs text-muted-foreground">{i18n.t("lens.findingDetails.explanationHint", { defaultValue: "Your explanation informs future scans of this Lens." })}</p>
       <div className="flex flex-wrap gap-2">
         {finding.kind === "issue" && (
           <Button disabled={busy} onClick={() => onReview(finding.status === "resolved" ? "open" : "resolved", reason)}>
-            {finding.status === "resolved" ? "Reopen" : "Mark resolved"}
+            {finding.status === "resolved"
+              ? i18n.t("lens.findingDetails.reopen", { defaultValue: "Reopen" })
+              : i18n.t("lens.findingDetails.markResolved", { defaultValue: "Mark resolved" })}
           </Button>
         )}
         <Button disabled={busy} variant="outline" onClick={() => onReview("dismissed", reason)}>
-          This is expected
+          {i18n.t("lens.findingDetails.thisIsExpected", { defaultValue: "This is expected" })}
         </Button>
       </div>
     </section>
@@ -302,45 +309,53 @@ export function FindingDetails({
             {finding.kind === "issue" ? (
               <PriorityPill priority={finding.priority} />
             ) : (
-              <span className="inline-flex h-5 items-center rounded-full bg-muted px-2 font-medium">Pattern</span>
+              <span className="inline-flex h-5 items-center rounded-full bg-muted px-2 font-medium">{i18n.t("lens.findingDetails.pattern", { defaultValue: "Pattern" })}</span>
             )}
             {agents.length > 0 && <span className="font-medium text-foreground">{agents.join(", ")}</span>}
             <span className="tabular-nums">
-              {affected} affected {affected === 1 ? "trace" : "traces"}
+              {i18n.t("lens.findingDetails.affectedTraces", {
+                count: affected,
+                noun: affected === 1 ? i18n.t("lens.findingDetails.traceSingular", { defaultValue: "trace" }) : i18n.t("lens.findingDetails.tracePlural", { defaultValue: "traces" }),
+                defaultValue: `${affected} affected ${affected === 1 ? "trace" : "traces"}`,
+              })}
             </span>
             {runs > 0 && (
               <span className="tabular-nums">
-                Found across {runs} investigation {runs === 1 ? "run" : "runs"}
+                {i18n.t("lens.findingDetails.foundAcrossRuns", {
+                  count: runs,
+                  noun: runs === 1 ? i18n.t("lens.findingDetails.runSingular", { defaultValue: "run" }) : i18n.t("lens.findingDetails.runPlural", { defaultValue: "runs" }),
+                  defaultValue: `Found across ${runs} investigation ${runs === 1 ? "run" : "runs"}`,
+                })}
               </span>
             )}
           </div>
         </header>
-        <ProseSection title="Summary">{finding.description}</ProseSection>
-        {finding.suggestion && <ProseSection title="Suggested fix">{finding.suggestion}</ProseSection>}
+        <ProseSection title={i18n.t("lens.findingDetails.summary", { defaultValue: "Summary" })}>{finding.description}</ProseSection>
+        {finding.suggestion && <ProseSection title={i18n.t("lens.findingDetails.suggestedFix", { defaultValue: "Suggested fix" })}>{finding.suggestion}</ProseSection>}
         {finding.brief && (
-          <Disclosure title="Issue brief and test cases">
+          <Disclosure title={i18n.t("lens.findingDetails.issueBrief", { defaultValue: "Issue brief and test cases" })}>
             <IssueBrief title={finding.title} brief={finding.brief} />
           </Disclosure>
         )}
         {finding.limitation && (
-          <Disclosure title="Evidence limits">
+          <Disclosure title={i18n.t("lens.findingDetails.evidenceLimits", { defaultValue: "Evidence limits" })}>
             <p className="max-w-[70ch] text-sm leading-relaxed text-pretty text-muted-foreground">
               {finding.limitation}
             </p>
           </Disclosure>
         )}
         <section>
-          <h2 className={`mb-2 ${SECTION_LABEL}`}>Monitors</h2>
+          <h2 className={`mb-2 ${SECTION_LABEL}`}>{i18n.t("lens.findingDetails.monitors", { defaultValue: "Monitors" })}</h2>
           <FrequencyCard frequency={findingFrequency(finding.occurrences, sampledRuns)} />
         </section>
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
-            <h2 className={SECTION_LABEL}>Examples</h2>
+            <h2 className={SECTION_LABEL}>{i18n.t("lens.findingDetails.examples", { defaultValue: "Examples" })}</h2>
             {lensId && finding.evidence.length > 0 && (
               <AddToDatasetButton
                 sources={[{ kind: "finding", lens_id: lensId, finding_ids: [finding.id] }]}
                 agentName={agents[0]}
-                label="Add evidence to dataset"
+                label={i18n.t("lens.findingDetails.addEvidenceToDataset", { defaultValue: "Add evidence to dataset" })}
               />
             )}
           </div>
@@ -391,7 +406,7 @@ export function FindingPanelBody({
         <EvidenceView
           lensId={owned.lens.id}
           evidence={evidence}
-          backLabel="Back to finding"
+          backLabel={i18n.t("lens.findingDetails.backToFinding", { defaultValue: "Back to finding" })}
           onBack={() => setEvidence(null)}
         />
       )}
@@ -402,7 +417,7 @@ export function FindingPanelBody({
 /** The side panel for whichever finding the surrounding Inspector has open. */
 export function FindingPanel(props: FindingPanelProps) {
   return (
-    <Inspector.Panel label="Finding details" testId="finding-panel">
+    <Inspector.Panel label={i18n.t("lens.findingDetails.findingDetails", { defaultValue: "Finding details" })} testId="finding-panel">
       {(owned: OwnedFinding) => <FindingPanelBody {...props} owned={owned} />}
     </Inspector.Panel>
   );
