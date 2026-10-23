@@ -1821,7 +1821,11 @@
       "fieldToolCallsDesc": "LLM 工具调用",
       "fieldStructuredMessagesDesc": "完整消息",
       "fieldModelDesc": "模型名称（始终）",
-      "testInputPlaceholder": "{\"texts\": [\"测试消息\"], ...}"
+      "testInputPlaceholder": "{\"texts\": [\"测试消息\"], ...}",
+      "modeTagScopedLabel": "模式（标签限定，只读）",
+      "modeTagScopedAria": "模式（标签限定）",
+      "noMatchingModes": "没有匹配的模式",
+      "loggingOnlyContinueLabel": "在请求被标记后继续观察响应"
     },
     "editGuardrailForm": {
       "modalTitle": "编辑护栏",

@@ -1821,7 +1821,11 @@
       "fieldToolCallsDesc": "LLM tool calls",
       "fieldStructuredMessagesDesc": "Full messages",
       "fieldModelDesc": "Model name (always)",
-      "testInputPlaceholder": "{\"texts\": [\"test message\"], ...}"
+      "testInputPlaceholder": "{\"texts\": [\"test message\"], ...}",
+      "modeTagScopedLabel": "Mode (tag-scoped, read-only)",
+      "modeTagScopedAria": "Mode (tag-scoped)",
+      "noMatchingModes": "No matching modes",
+      "loggingOnlyContinueLabel": "Continue observing the response after a flagged request"
     },
     "editGuardrailForm": {
       "modalTitle": "Edit Guardrail",
