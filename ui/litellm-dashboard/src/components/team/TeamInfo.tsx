@@ -1537,13 +1537,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     />
                   </Field>
 
-                  <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
+                  <FormField control={form.control} name="max_budget" label={i18n.t("teamPage.teamInfo.maxBudgetLabel", { defaultValue: "Max Budget (CNY)" })}>
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="soft_budget" label="Soft Budget (CNY)">
+                  <FormField control={form.control} name="soft_budget" label={i18n.t("teamPage.teamInfo.softBudgetLabel", { defaultValue: "Soft Budget (CNY)" })}>
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} />
                     )}
@@ -1676,8 +1676,10 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                         <Field>
                           <FieldLabel>
                             {labelWithHint(
-                              "Budget Alert Thresholds",
-                              "Email each member when their spend reaches a percentage of their team member budget. The member is always notified; add comma-separated addresses to notify others as well. Requires email alerting to be configured on the proxy.",
+                              i18n.t("teamPage.teamInfo.budgetAlertThresholdsLabel", { defaultValue: "Budget Alert Thresholds" }),
+                              i18n.t("teamPage.teamInfo.budgetAlertThresholdsTooltip", {
+                                defaultValue: "Email each member when their spend reaches a percentage of their team member budget. The member is always notified; add comma-separated addresses to notify others as well. Requires email alerting to be configured on the proxy.",
+                              }),
                             )}
                           </FieldLabel>
                           {memberBudgetAlertRows.map((row, index) => (
@@ -1695,7 +1697,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                       onChange(event.target.value === "" ? null : Number(event.target.value))
                                     }
-                                    placeholder="% of budget"
+                                    placeholder={i18n.t("teamPage.teamInfo.budgetAlertPercentPlaceholder", { defaultValue: "% of budget" })}
                                     min={1}
                                     max={100}
                                     step={1}
@@ -1712,7 +1714,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                                     {...field}
                                     ref={ref}
                                     value={value ?? ""}
-                                    placeholder="Additional recipients, e.g. finance@example.com"
+                                    placeholder={i18n.t("teamPage.teamInfo.budgetAlertEmailsPlaceholder", { defaultValue: "Additional recipients, e.g. finance@example.com" })}
                                   />
                                 )}
                               </FormField>
@@ -1720,7 +1722,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                aria-label="Remove budget alert threshold"
+                                aria-label={i18n.t("teamPage.teamInfo.removeBudgetAlertThreshold", { defaultValue: "Remove budget alert threshold" })}
                                 className="mt-1 text-destructive"
                                 onClick={() => removeMemberBudgetAlertRow(index)}
                               >
@@ -1735,7 +1737,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                             onClick={() => appendMemberBudgetAlertRow({ threshold: null, emails: "" })}
                           >
                             <Plus className="size-4" />
-                            Add Budget Alert Threshold
+                            {i18n.t("teamPage.teamInfo.addBudgetAlertThreshold", { defaultValue: "Add Budget Alert Threshold" })}
                           </Button>
                         </Field>
                       </FieldGroup>
@@ -1759,7 +1761,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     onChange={setTeamModelMaxBudget}
                     availableModels={availableRateLimitModels}
                     usage={info.model_max_budget_usage}
-                    hint="Cap this team's spend on individual models, each with its own reset window. Every key on the team shares the cap unless the key sets its own budget for that model."
+                    hint={i18n.t("teamPage.teamInfo.modelMaxBudgetHint", { defaultValue: "Cap this team's spend on individual models, each with its own reset window. Every key on the team shares the cap unless the key sets its own budget for that model." })}
                   />
 
                   <FormField control={form.control} name="tpm_limit" label={i18n.t("teamPage.teamInfo.tpmLimitLabel", { defaultValue: "Tokens per minute Limit (TPM)" })}>
@@ -1774,8 +1776,10 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     control={form.control}
                     name="tpd_limit"
                     label={labelWithHint(
-                      "Tokens per day Limit (TPD)",
-                      "Daily token budget for batch submissions (/v1/batches). When set, batch input files are charged against this 24h window instead of the team's TPM/RPM limits. Online requests keep using TPM/RPM.",
+                      i18n.t("teamPage.teamInfo.tokensPerDayLabel", { defaultValue: "Tokens per day Limit (TPD)" }),
+                      i18n.t("teamPage.teamInfo.tokensPerDayTooltip", {
+                        defaultValue: "Daily token budget for batch submissions (/v1/batches). When set, batch input files are charged against this 24h window instead of the team's TPM/RPM limits. Online requests keep using TPM/RPM.",
+                      }),
                     )}
                   >
                     {({ ref, value, ...field }) => <NumericalInput {...field} ref={ref} value={value ?? ""} step={1} />}

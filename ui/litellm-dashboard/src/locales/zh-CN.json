@@ -9141,7 +9141,16 @@
       "removeModelLimitAria": "移除模型限制",
       "skillsLabel": "技能",
       "skillsPlaceholder": "选择技能（可选）",
-      "skillsTooltip": "已启用的技能对所有团队可见。在这里把未启用（私有）的 Claude Code 插件授予该团队。"
+      "skillsTooltip": "已启用的技能对所有团队可见。在这里把未启用（私有）的 Claude Code 插件授予该团队。",
+      "budgetAlertThresholdsLabel": "预算告警阈值",
+      "budgetAlertThresholdsTooltip": "当成员花费达到其团队成员预算的一定百分比时，向该成员发送邮件。该成员始终会被通知；可添加以逗号分隔的地址以同时通知其他人。需要在代理上配置邮件告警。",
+      "budgetAlertPercentPlaceholder": "预算的百分比",
+      "budgetAlertEmailsPlaceholder": "额外收件人，例如 finance@example.com",
+      "removeBudgetAlertThreshold": "移除预算告警阈值",
+      "addBudgetAlertThreshold": "添加预算告警阈值",
+      "modelMaxBudgetHint": "限制此团队在单个模型上的花费，每个模型有各自的重置窗口。团队中的每个密钥共享该上限，除非该密钥为相应模型设置了自己的预算。",
+      "tokensPerDayLabel": "每日令牌限制 (TPD)",
+      "tokensPerDayTooltip": "批量提交（/v1/batches）的每日令牌预算。设置后，批量输入文件将按此 24 小时窗口计费，而非团队的 TPM/RPM 限制。在线请求继续使用 TPM/RPM。"
     },
     "teamMemberTab": {
       "noLimits": "无限制",
