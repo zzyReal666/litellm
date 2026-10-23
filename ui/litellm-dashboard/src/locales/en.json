@@ -13001,7 +13001,21 @@
       "fieldInvestigation": "Investigation",
       "copyFieldId": "Copy {{field}} ID",
       "none": "None",
-      "openSourceTrace": "Open source trace"
+      "openSourceTrace": "Open source trace",
+      "caseNumber": "Case {{index}}",
+      "includeCase": "Include {{name}}",
+      "noInput": "No input",
+      "noReply": "No reply",
+      "toolCalls_one": "{{count}} tool call",
+      "toolCalls_other": "{{count}} tool calls",
+      "include": "Include",
+      "reply": "Reply",
+      "colToolCalls": "Tool calls",
+      "casesAria": "Cases",
+      "caseDetails": "Case details",
+      "case_one": "{{count}} case",
+      "case_other": "{{count}} cases",
+      "includedCount": "{{count}} included"
     },
     "spanHoverCard": {
       "typeAgent": "Agent",

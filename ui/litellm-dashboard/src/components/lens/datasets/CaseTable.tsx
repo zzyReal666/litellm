@@ -18,6 +18,7 @@ import { cn } from "@/lib/cva.config";
 
 import { useOpenSourceTrace } from "../route";
 import { FINDING_PANEL_WIDTH_KEY } from "../storage";
+import i18n from "@/lib/i18n";
 import { caseInput, caseReplyText, toolCallCount } from "./caseView";
 import type { DatasetCase } from "./types";
 
@@ -38,7 +39,8 @@ function useCaseTable(): CaseTableContextValue {
   return value;
 }
 
-export const caseLabel = (index: number): string => `Case ${index + 1}`;
+export const caseLabel = (index: number): string =>
+  i18n.t("lens.casePanel.caseNumber", { index: index + 1, defaultValue: `Case ${index + 1}` });
 
 type Cell = CellContext<DatasetCase, unknown>;
 
@@ -46,7 +48,7 @@ function IncludeCell({ row }: Cell) {
   const { editable, onToggle } = useCaseTable();
   return (
     <Checkbox
-      aria-label={`Include ${caseLabel(row.index).toLowerCase()}`}
+      aria-label={i18n.t("lens.casePanel.includeCase", { name: caseLabel(row.index).toLowerCase(), defaultValue: `Include ${caseLabel(row.index).toLowerCase()}` })}
       checked={row.original.included}
       disabled={!editable}
       onClick={(event) => event.stopPropagation()}
@@ -58,7 +60,7 @@ function IncludeCell({ row }: Cell) {
 
 function InputText({ item }: { item: DatasetCase }) {
   const input = caseInput(item);
-  if (!input) return <span className={MUTED_ITALIC}>No input</span>;
+  if (!input) return <span className={MUTED_ITALIC}>{i18n.t("lens.casePanel.noInput", { defaultValue: "No input" })}</span>;
   return (
     <>
       <span className="text-muted-foreground">{input.role}: </span>
@@ -69,7 +71,7 @@ function InputText({ item }: { item: DatasetCase }) {
 
 function ReplyText({ item }: { item: DatasetCase }) {
   const reply = caseReplyText(item);
-  return reply ? <span>{reply}</span> : <span className={MUTED_ITALIC}>No reply</span>;
+  return reply ? <span>{reply}</span> : <span className={MUTED_ITALIC}>{i18n.t("lens.casePanel.noReply", { defaultValue: "No reply" })}</span>;
 }
 
 function InputCell({ row: { original: item } }: Cell) {
@@ -97,7 +99,7 @@ function ExpectedCell({ row: { original: item } }: Cell) {
   return item.expected ? (
     <span className="block truncate text-foreground">{item.expected}</span>
   ) : (
-    <span className={MUTED_ITALIC}>Not set</span>
+    <span className={MUTED_ITALIC}>{i18n.t("lens.casePanel.notSet", { defaultValue: "Not set" })}</span>
   );
 }
 
@@ -108,8 +110,8 @@ function SourceCell({ row: { original: item } }: Cell) {
   return (
     <button
       type="button"
-      aria-label="Open source trace"
-      title="Open source trace"
+      aria-label={i18n.t("lens.casePanel.openSourceTrace", { defaultValue: "Open source trace" })}
+      title={i18n.t("lens.casePanel.openSourceTrace", { defaultValue: "Open source trace" })}
       onClick={(event) => {
         event.stopPropagation();
         openSourceTrace({ traceId, traceRef, spanId });
@@ -126,7 +128,7 @@ function ToolCallsCell({ row: { original: item } }: Cell) {
   if (count === 0) return null;
   return (
     <span
-      title={`${count} tool ${count === 1 ? "call" : "calls"}`}
+      title={i18n.t("lens.casePanel.toolCalls", { count })}
       className="inline-flex min-w-5 justify-center rounded-full bg-muted px-1.5 font-mono text-xs tabular-nums text-foreground"
     >
       {count}
@@ -138,15 +140,15 @@ const COLUMNS: ColumnDef<DatasetCase>[] = [
   {
     id: "include",
     size: 40,
-    header: "Include",
+    header: i18n.t("lens.casePanel.include", { defaultValue: "Include" }),
     cell: IncludeCell,
     meta: { headerClassName: "sr-only", className: "pr-0" },
   },
-  { id: "input", header: "Input", cell: InputCell },
-  { id: "reply", header: "Reply", cell: ReplyCell },
-  { id: "expected", size: 220, header: "Expected", cell: ExpectedCell },
-  { id: "source", size: 72, header: "Source", cell: SourceCell },
-  { id: "tools", size: 104, header: "Tool calls", cell: ToolCallsCell, meta: { numeric: true } },
+  { id: "input", header: i18n.t("lens.casePanel.input", { defaultValue: "Input" }), cell: InputCell },
+  { id: "reply", header: i18n.t("lens.casePanel.reply", { defaultValue: "Reply" }), cell: ReplyCell },
+  { id: "expected", size: 220, header: i18n.t("lens.casePanel.expected", { defaultValue: "Expected" }), cell: ExpectedCell },
+  { id: "source", size: 72, header: i18n.t("lens.casePanel.source", { defaultValue: "Source" }), cell: SourceCell },
+  { id: "tools", size: 104, header: i18n.t("lens.casePanel.colToolCalls", { defaultValue: "Tool calls" }), cell: ToolCallsCell, meta: { numeric: true } },
 ];
 
 export interface CaseTableProps {
@@ -184,7 +186,7 @@ export function CaseTable({ cases, editable, selectedId, onSelect, onToggle, chi
       <CaseTableContext.Provider value={{ editable, onToggle }}>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
           <InspectorTable.Root table={table}>
-            <InspectorTable.Grid aria-label="Cases" className="text-xs md:min-w-[860px]">
+            <InspectorTable.Grid aria-label={i18n.t("lens.casePanel.casesAria", { defaultValue: "Cases" })} className="text-xs md:min-w-[860px]">
               <InspectorTable.Header />
               <InspectorTable.Body<DatasetCase> rowHeight={() => (desktop ? CASE_HEIGHT : MOBILE_CASE_HEIGHT)}>
                 {(row) => (
@@ -200,11 +202,11 @@ export function CaseTable({ cases, editable, selectedId, onSelect, onToggle, chi
             </InspectorTable.Grid>
           </InspectorTable.Root>
           <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-            {cases.length} {cases.length === 1 ? "case" : "cases"} · {included} included
+            {i18n.t("lens.casePanel.case", { count: cases.length })} · {i18n.t("lens.casePanel.includedCount", { count: included })}
           </footer>
         </div>
       </CaseTableContext.Provider>
-      <Inspector.Panel<DatasetCase> label="Case details" testId="case-panel">
+      <Inspector.Panel<DatasetCase> label={i18n.t("lens.casePanel.caseDetails", { defaultValue: "Case details" })} testId="case-panel">
         {children}
       </Inspector.Panel>
     </Inspector.Root>

@@ -13001,7 +13001,21 @@
       "fieldInvestigation": "调查",
       "copyFieldId": "复制 {{field}} ID",
       "none": "无",
-      "openSourceTrace": "打开来源链路"
+      "openSourceTrace": "打开来源链路",
+      "caseNumber": "案例 {{index}}",
+      "includeCase": "包含 {{name}}",
+      "noInput": "无输入",
+      "noReply": "无回复",
+      "toolCalls_one": "{{count}} 次工具调用",
+      "toolCalls_other": "{{count}} 次工具调用",
+      "include": "包含",
+      "reply": "回复",
+      "colToolCalls": "工具调用",
+      "casesAria": "案例",
+      "caseDetails": "案例详情",
+      "case_one": "{{count}} 个案例",
+      "case_other": "{{count}} 个案例",
+      "includedCount": "已包含 {{count}} 个"
     },
     "spanHoverCard": {
       "typeAgent": "Agent",
