@@ -12,6 +12,7 @@ import {
 } from "@/components/shared/charts";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { resolveTeamAliasFromTeamID } from "@/utils/teamUtils";
+import i18n from "@/lib/i18n";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Panel, Stat } from "@/app/(dashboard)/usage/_components/components/overview/Primitives";
 import { ProviderLogo } from "@/components/molecules/models/ProviderLogo";
@@ -115,7 +116,7 @@ const ItemMark = ({ label, color }: { label: string; color: string }) => {
 };
 
 const TopKeysPanel = ({ children }: { children: ReactNode }) => (
-  <Panel icon={KeyRound} title="Top Virtual Keys by Spend">
+  <Panel icon={KeyRound} title={i18n.t("activityMetrics.topVirtualKeysBySpend", { defaultValue: "Top Virtual Keys by Spend" })}>
     {children}
   </Panel>
 );
@@ -179,7 +180,7 @@ const ModelTopKeys = ({
   if (current === null) {
     return (
       <TopKeysPanel>
-        <p className="py-2 text-xs text-muted-foreground">Loading top keys...</p>
+        <p className="py-2 text-xs text-muted-foreground">{i18n.t("activityMetrics.loadingTopKeys", { defaultValue: "Loading top keys..." })}</p>
       </TopKeysPanel>
     );
   }
@@ -188,7 +189,7 @@ const ModelTopKeys = ({
     return (
       <TopKeysPanel>
         <p className="py-2 text-xs text-muted-foreground">
-          Could not load top keys.{" "}
+          {i18n.t("activityMetrics.couldNotLoadTopKeys", { defaultValue: "Could not load top keys." })}{" "}
           <button
             type="button"
             className="font-medium text-foreground underline"
@@ -197,7 +198,7 @@ const ModelTopKeys = ({
               setRetryToken((token) => token + 1);
             }}
           >
-            Retry
+            {i18n.t("common.retry", { defaultValue: "Retry" })}
           </button>
         </p>
       </TopKeysPanel>
@@ -216,15 +217,19 @@ const ModelTopKeys = ({
             <li key={keyData.api_key} className="flex items-center justify-between gap-4 py-2.5">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-foreground">{keyLabel}</p>
-                {keyData.team_id && <p className="truncate text-xs text-muted-foreground">Team: {keyData.team_id}</p>}
+                {keyData.team_id && <p className="truncate text-xs text-muted-foreground">{i18n.t("activityMetrics.teamLabel", { teamId: keyData.team_id, defaultValue: `Team: ${keyData.team_id}` })}</p>}
                 {keyData.user && keyData.user !== keyLabel && (
-                  <p className="truncate text-xs text-muted-foreground">User: {keyData.user}</p>
+                  <p className="truncate text-xs text-muted-foreground">{i18n.t("activityMetrics.userLabel", { user: keyData.user, defaultValue: `User: ${keyData.user}` })}</p>
                 )}
               </div>
               <div className="shrink-0 text-right">
                 <p className="text-sm tabular-nums text-foreground">¥{formatNumberWithCommas(keyData.spend, 2)}</p>
                 <p className="text-xs tabular-nums text-muted-foreground">
-                  {keyData.requests.toLocaleString()} requests | {keyData.tokens.toLocaleString()} tokens
+                  {i18n.t("activityMetrics.requestsAndTokens", {
+                    requests: keyData.requests.toLocaleString(),
+                    tokens: keyData.tokens.toLocaleString(),
+                    defaultValue: `${keyData.requests.toLocaleString()} requests | ${keyData.tokens.toLocaleString()} tokens`,
+                  })}
                 </p>
               </div>
             </li>
@@ -250,33 +255,42 @@ export const ModelSection = ({
     <div className="grid gap-3">
       <StatStrip columns={5}>
         <StatCell>
-          <Stat label="Total Requests" value={<StatValue>{metrics.total_requests.toLocaleString()}</StatValue>} />
+          <Stat label={i18n.t("activityMetrics.totalRequests", { defaultValue: "Total Requests" })} value={<StatValue>{metrics.total_requests.toLocaleString()}</StatValue>} />
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Successful Requests"
+            label={i18n.t("activityMetrics.totalSuccessfulRequests", { defaultValue: "Total Successful Requests" })}
             value={<StatValue>{metrics.total_successful_requests.toLocaleString()}</StatValue>}
           />
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Tokens"
+            label={i18n.t("activityMetrics.totalTokens", { defaultValue: "Total Tokens" })}
             value={<StatValue>{metrics.total_tokens.toLocaleString()}</StatValue>}
-            hint={`${Math.round(metrics.total_tokens / metrics.total_successful_requests)} avg per successful request`}
+            hint={i18n.t("activityMetrics.avgPerSuccessfulRequestHint", {
+              count: Math.round(metrics.total_tokens / metrics.total_successful_requests),
+              defaultValue: `${Math.round(metrics.total_tokens / metrics.total_successful_requests)} avg per successful request`,
+            })}
           />
         </StatCell>
         <StatCell>
           <Stat
-            label="Total Spend"
+            label={i18n.t("activityMetrics.totalSpend", { defaultValue: "Total Spend" })}
             value={<StatValue>¥{formatNumberWithCommas(metrics.total_spend, 2)}</StatValue>}
-            hint={`¥${formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)} per successful request`}
+            hint={i18n.t("activityMetrics.spendPerSuccessfulRequest", {
+              spend: `¥${formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)}`,
+              defaultValue: `¥${formatNumberWithCommas(metrics.total_spend / metrics.total_successful_requests, 3)} per successful request`,
+            })}
           />
         </StatCell>
         <StatCell>
           <Stat
-            label="Avg Response Time"
+            label={i18n.t("activityMetrics.avgResponseTime", { defaultValue: "Avg Response Time" })}
             value={<StatValue>{formatResponseTime(modelAverageResponseTimeMs(metrics))}</StatValue>}
-            hint={`over ${(metrics.total_timed_requests ?? 0).toLocaleString()} timed successful requests`}
+            hint={i18n.t("activityMetrics.overTimedRequests", {
+              count: (metrics.total_timed_requests ?? 0).toLocaleString(),
+              defaultValue: `over ${(metrics.total_timed_requests ?? 0).toLocaleString()} timed successful requests`,
+            })}
           />
         </StatCell>
       </StatStrip>
@@ -285,7 +299,7 @@ export const ModelSection = ({
 
       {metrics.top_models && metrics.top_models.length > 0 && <KeyModelUsageView topModels={metrics.top_models} />}
 
-      <Panel icon={Coins} title="Spend per day" action={<SeriesKey categories={["metrics.spend"]} colors={[BRAND]} />}>
+      <Panel icon={Coins} title={i18n.t("activityMetrics.spendPerDay", { defaultValue: "Spend per day" })} action={<SeriesKey categories={["metrics.spend"]} colors={[BRAND]} />}>
         <BarChart
           className={CHART_CLASS}
           data={metrics.daily_data}
@@ -300,7 +314,7 @@ export const ModelSection = ({
       </Panel>
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel title="Total Tokens" action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}>
+        <Panel title={i18n.t("activityMetrics.totalTokens", { defaultValue: "Total Tokens" })} action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}>
           <AreaChart
             className={CHART_CLASS}
             data={metrics.daily_data}
@@ -313,7 +327,7 @@ export const ModelSection = ({
           />
         </Panel>
 
-        <Panel title="Requests per day" action={<SeriesKey categories={["metrics.api_requests"]} colors={[BRAND]} />}>
+        <Panel title={i18n.t("activityMetrics.requestsPerDay", { defaultValue: "Requests per day" })} action={<SeriesKey categories={["metrics.api_requests"]} colors={[BRAND]} />}>
           <BarChart
             className={CHART_CLASS}
             data={metrics.daily_data}
@@ -330,7 +344,7 @@ export const ModelSection = ({
         {(metrics.total_timed_requests ?? 0) > 0 && (
           <Panel
             icon={Timer}
-            title="Avg Response Time per day"
+            title={i18n.t("activityMetrics.avgResponseTimePerDay", { defaultValue: "Avg Response Time per day" })}
             action={<SeriesKey categories={["metrics.avg_response_time_ms"]} colors={[BRAND]} />}
           >
             <LineChart
@@ -348,7 +362,7 @@ export const ModelSection = ({
         )}
 
         <Panel
-          title="Success vs Failed Requests"
+          title={i18n.t("activityMetrics.successVsFailedRequests", { defaultValue: "Success vs Failed Requests" })}
           action={<SeriesKey categories={REQUEST_CATEGORIES} colors={["green", "red"]} />}
         >
           <AreaChart
@@ -366,12 +380,12 @@ export const ModelSection = ({
         {!hidePromptCachingMetrics && (
           <Panel
             icon={Database}
-            title="Prompt Caching Metrics"
+            title={i18n.t("activityMetrics.promptCachingMetrics", { defaultValue: "Prompt Caching Metrics" })}
             action={<SeriesKey categories={CACHE_CATEGORIES} colors={["cyan", "purple"]} />}
           >
             <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs tabular-nums text-muted-foreground">
-              <p>Cache Read: {metrics.total_cache_read_input_tokens?.toLocaleString() || 0} tokens</p>
-              <p>Cache Creation: {metrics.total_cache_creation_input_tokens?.toLocaleString() || 0} tokens</p>
+              <p>{i18n.t("activityMetrics.cacheRead", { count: metrics.total_cache_read_input_tokens?.toLocaleString() || 0, defaultValue: `Cache Read: ${metrics.total_cache_read_input_tokens?.toLocaleString() || 0} tokens` })}</p>
+              <p>{i18n.t("activityMetrics.cacheCreation", { count: metrics.total_cache_creation_input_tokens?.toLocaleString() || 0, defaultValue: `Cache Creation: ${metrics.total_cache_creation_input_tokens?.toLocaleString() || 0} tokens` })}</p>
             </div>
             <AreaChart
               className={cn(CHART_CLASS, "mt-3")}
@@ -436,7 +450,7 @@ export const ModelCollapsible = ({
 export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
   modelMetrics,
   summaryMetrics,
-  summaryTitle = "Overall Usage",
+  summaryTitle = i18n.t("activityMetrics.overallUsage", { defaultValue: "Overall Usage" }),
   hidePromptCachingMetrics = false,
   fetchTopApiKeys,
 }) => {
@@ -528,25 +542,25 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
         </h3>
         <StatStrip columns={4}>
           <StatCell>
-            <Stat label="Total Requests" value={<StatValue>{totalRequests.toLocaleString()}</StatValue>} />
+            <Stat label={i18n.t("activityMetrics.totalRequests", { defaultValue: "Total Requests" })} value={<StatValue>{totalRequests.toLocaleString()}</StatValue>} />
           </StatCell>
           <StatCell>
             <Stat
-              label="Total Successful Requests"
+              label={i18n.t("activityMetrics.totalSuccessfulRequests", { defaultValue: "Total Successful Requests" })}
               value={<StatValue>{totalSuccessfulRequests.toLocaleString()}</StatValue>}
             />
           </StatCell>
           <StatCell>
-            <Stat label="Total Tokens" value={<StatValue>{totalTokens.toLocaleString()}</StatValue>} />
+            <Stat label={i18n.t("activityMetrics.totalTokens", { defaultValue: "Total Tokens" })} value={<StatValue>{totalTokens.toLocaleString()}</StatValue>} />
           </StatCell>
           <StatCell>
-            <Stat label="Total Spend" value={<StatValue>¥{formatNumberWithCommas(totalSpend, 2)}</StatValue>} />
+            <Stat label={i18n.t("activityMetrics.totalSpend", { defaultValue: "Total Spend" })} value={<StatValue>¥{formatNumberWithCommas(totalSpend, 2)}</StatValue>} />
           </StatCell>
         </StatStrip>
 
         <div className="grid gap-3 lg:grid-cols-2">
           <Panel
-            title="Total Tokens Over Time"
+            title={i18n.t("activityMetrics.totalTokensOverTime", { defaultValue: "Total Tokens Over Time" })}
             action={<SeriesKey categories={TOKEN_CATEGORIES} colors={TOKEN_COLORS} />}
           >
             <AreaChart
@@ -562,7 +576,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
             />
           </Panel>
           <Panel
-            title="Total Requests Over Time"
+            title={i18n.t("activityMetrics.totalRequestsOverTime", { defaultValue: "Total Requests Over Time" })}
             action={<SeriesKey categories={REQUEST_CATEGORIES} colors={["emerald", "red"]} />}
           >
             <AreaChart
@@ -584,7 +598,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
         <div className="overflow-hidden rounded-xl border bg-card">
           {modelNames.map((modelName, index) => {
             const metrics = modelMetrics[modelName];
-            const label = metrics.label || "Unknown Item";
+            const label = metrics.label || i18n.t("activityMetrics.unknownItem", { defaultValue: "Unknown Item" });
             const provider = providerForModel(metrics.label || "");
             const avgResponse = modelAverageResponseTimeMs(metrics);
             const share = maxSpend > 0 ? (metrics.total_spend / maxSpend) * 100 : 0;
@@ -614,16 +628,16 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({
                     </div>
                     <div className="flex shrink-0 items-center gap-5 text-sm tabular-nums text-muted-foreground">
                       <span className="text-foreground">¥{formatNumberWithCommas(metrics.total_spend, 2)}</span>
-                      <span>{metrics.total_requests.toLocaleString()} requests</span>
+                      <span>{i18n.t("activityMetrics.requestsCount", { count: metrics.total_requests.toLocaleString(), defaultValue: `${metrics.total_requests.toLocaleString()} requests` })}</span>
                       {avgResponse != null && (
-                        <span className="hidden md:inline">{formatResponseTime(avgResponse)} avg response</span>
+                        <span className="hidden md:inline">{i18n.t("activityMetrics.avgResponse", { avg: formatResponseTime(avgResponse), defaultValue: `${formatResponseTime(avgResponse)} avg response` })}</span>
                       )}
                     </div>
                   </div>
                 }
               >
                 <ModelSection
-                  modelName={modelName || "Unknown Model"}
+                  modelName={modelName || i18n.t("activityMetrics.unknownModel", { defaultValue: "Unknown Model" })}
                   metrics={metrics}
                   hidePromptCachingMetrics={hidePromptCachingMetrics}
                   fetchTopApiKeys={fetchTopApiKeys}

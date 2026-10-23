@@ -1125,7 +1125,18 @@
     "totalRequestsOverTime": "Total Requests Over Time",
     "unknownItem": "Unknown Item",
     "unknownModel": "Unknown Model",
-    "requests": "requests"
+    "requests": "requests",
+    "loadingTopKeys": "Loading top keys...",
+    "couldNotLoadTopKeys": "Could not load top keys.",
+    "userLabel": "User: {{user}}",
+    "totalTokens": "Total Tokens",
+    "avgPerSuccessfulRequestHint": "{{count}} avg per successful request",
+    "spendPerSuccessfulRequest": "{{spend}} per successful request",
+    "avgResponseTime": "Avg Response Time",
+    "overTimedRequests": "over {{count}} timed successful requests",
+    "avgResponseTimePerDay": "Avg Response Time per day",
+    "requestsCount": "{{count}} requests",
+    "avgResponse": "{{avg}} avg response"
   },
   "addPassThrough": {
     "addButton": "+ Add Pass-Through Endpoint",

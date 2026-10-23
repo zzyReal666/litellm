@@ -1125,7 +1125,18 @@
     "totalRequestsOverTime": "请求总量随时间变化",
     "unknownItem": "未知项目",
     "unknownModel": "未知模型",
-    "requests": "次请求"
+    "requests": "次请求",
+    "loadingTopKeys": "正在加载热门密钥...",
+    "couldNotLoadTopKeys": "无法加载热门密钥。",
+    "userLabel": "用户：{{user}}",
+    "totalTokens": "总 Token 数",
+    "avgPerSuccessfulRequestHint": "每次成功请求平均 {{count}}",
+    "spendPerSuccessfulRequest": "每次成功请求 {{spend}}",
+    "avgResponseTime": "平均响应时间",
+    "overTimedRequests": "基于 {{count}} 次计时的成功请求",
+    "avgResponseTimePerDay": "每日平均响应时间",
+    "requestsCount": "{{count}} 次请求",
+    "avgResponse": "平均响应 {{avg}}"
   },
   "addPassThrough": {
     "addButton": "+ 添加透传端点",
