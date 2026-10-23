@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 
 import type { Trace } from "../../types";
 import { fmtMs } from "../../utils";
@@ -76,7 +77,7 @@ export function TraceThread({ trace, accessToken, onOpenStep, paging }: TraceThr
     else loadTracePage?.();
   };
   return (
-    <section aria-label="Trace thread" className="min-h-0 flex-1 overflow-y-auto">
+    <section aria-label={i18n.t("lens.traceThread.traceThreadAria", { defaultValue: "Trace thread" })} className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto min-w-0 max-w-3xl space-y-8 px-3 py-4 sm:px-6 sm:py-6">
         {rootErrors.map((span) => (
           <ErrorBlock key={span.span_id} span={span} />
@@ -118,28 +119,28 @@ function ThreadFooter({ turnCount, busy, stepsFailed, traceFailed, complete, onR
     <>
       {busy && (
         <p role="status" className="text-sm text-muted-foreground">
-          Loading thread…
+          {i18n.t("lens.traceThread.loadingThread", { defaultValue: "Loading thread…" })}
         </p>
       )}
       {stepsFailed && (
         <div role="alert" className="flex items-center justify-between gap-3 text-sm text-destructive">
-          Could not load some steps of this thread.
+          {i18n.t("lens.traceThread.couldNotLoadSteps", { defaultValue: "Could not load some steps of this thread." })}
           <Button variant="outline" size="sm" onClick={onRetry}>
-            Retry
+            {i18n.t("common.retry", { defaultValue: "Retry" })}
           </Button>
         </div>
       )}
       {traceFailed && (
         <p role="alert" className="text-sm text-destructive">
-          Could not load more of this trace. Use Retry or Refresh trace above.
+          {i18n.t("lens.traceThread.couldNotLoadMore", { defaultValue: "Could not load more of this trace. Use Retry or Refresh trace above." })}
         </p>
       )}
-      {complete && !turnCount && <p className="text-sm text-muted-foreground">No conversation content recorded.</p>}
+      {complete && !turnCount && <p className="text-sm text-muted-foreground">{i18n.t("lens.traceThread.noConversationContent", { defaultValue: "No conversation content recorded." })}</p>}
       <div className="flex items-center justify-between gap-3 border-t pt-4 text-xs text-muted-foreground">
-        <span>{complete ? "End of thread" : `${turnCount} ${turnCount === 1 ? "turn" : "turns"} loaded`}</span>
+        <span>{complete ? i18n.t("lens.traceThread.endOfThread", { defaultValue: "End of thread" }) : i18n.t("lens.traceThread.turnsLoaded", { count: turnCount })}</span>
         {onLoadMore && (
           <Button variant="outline" size="sm" onClick={onLoadMore}>
-            Load more
+            {i18n.t("lens.traceThread.loadMore", { defaultValue: "Load more" })}
           </Button>
         )}
       </div>
@@ -149,7 +150,7 @@ function ThreadFooter({ turnCount, busy, stepsFailed, traceFailed, complete, onR
 
 function ThreadTurnView({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: string) => void }) {
   return (
-    <article aria-label="Thread turn" className="min-w-0 space-y-3">
+    <article aria-label={i18n.t("lens.traceThread.threadTurnAria", { defaultValue: "Thread turn" })} className="min-w-0 space-y-3">
       {turn.context.length > 0 && <PromptContext count={turn.context.length} turn={turn} />}
       {turn.prompt.map((message, index) => (
         <ConversationMessage key={index} message={message} />
@@ -172,7 +173,7 @@ function PromptContext({ count, turn }: { count: number; turn: ThreadTurn }) {
   return (
     <details className="group flex justify-end text-xs text-muted-foreground">
       <summary className="ml-auto flex cursor-pointer list-none items-center gap-1.5 hover:text-foreground">
-        Prompt context
+        {i18n.t("lens.traceThread.promptContext", { defaultValue: "Prompt context" })}
         <MessageSquareText className="size-3.5" />
         <span className="tabular-nums">{count}</span>
         <ChevronRight className="size-3.5 transition-transform group-open:rotate-90" />
@@ -197,10 +198,10 @@ function WorkedBar({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: st
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-2.5 rounded-md py-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <span>{duration === null ? "Worked" : `Worked ${fmtMs(duration)}`}</span>
-        <Count icon={MessageSquareText} value={turn.llmCalls} label="model calls" />
-        <Count icon={Wrench} value={turn.toolCalls} label="tool calls" />
-        {turn.failed && <TriangleAlert aria-label="A step failed" className="size-3.5 text-destructive" />}
+        <span>{duration === null ? i18n.t("lens.traceThread.worked", { defaultValue: "Worked" }) : i18n.t("lens.traceThread.workedFor", { time: fmtMs(duration), defaultValue: `Worked ${fmtMs(duration)}` })}</span>
+        <Count icon={MessageSquareText} value={turn.llmCalls} label={i18n.t("lens.traceThread.modelCalls", { defaultValue: "model calls" })} />
+        <Count icon={Wrench} value={turn.toolCalls} label={i18n.t("lens.traceThread.toolCalls", { defaultValue: "tool calls" })} />
+        {turn.failed && <TriangleAlert aria-label={i18n.t("lens.traceThread.aStepFailed", { defaultValue: "A step failed" })} className="size-3.5 text-destructive" />}
         <ChevronRight className={cn("size-3.5 transition-transform", open && "rotate-90")} />
       </button>
       {open && (
@@ -227,7 +228,7 @@ function WorkItem({ work, onOpenStep }: { work: ThreadWork; onOpenStep: (id: str
   if (work.kind === "step") return <ConversationStep item={work.item} onOpenStep={onOpenStep} />;
   return (
     <details className="min-w-0 rounded-md border p-3">
-      <summary className="cursor-pointer text-sm font-medium">Subagent: {work.name}</summary>
+      <summary className="cursor-pointer text-sm font-medium">{i18n.t("lens.traceThread.subagent", { name: work.name, defaultValue: `Subagent: ${work.name}` })}</summary>
       <div className="mt-4 min-w-0 space-y-5 border-l pl-3">
         <ConversationSteps groups={work.groups} onOpenStep={onOpenStep} />
       </div>
@@ -243,15 +244,15 @@ function ReplyMeta({ turn, onOpenStep }: { turn: ThreadTurn; onOpenStep: (id: st
     <div className="flex items-center gap-3 px-1 text-xs text-muted-foreground tabular-nums">
       {item.model && <span className="truncate">{item.model}</span>}
       <span>{fmtMs(item.span.duration_ms)}</span>
-      {tokens > 0 && <span>{tokens.toLocaleString()} tok</span>}
+      {tokens > 0 && <span>{i18n.t("lens.traceThread.tokens", { count: tokens })}</span>}
       <Button
         variant="ghost"
         size="xs"
         className="ml-auto text-muted-foreground"
-        aria-label={`Inspect step ${item.span.name}`}
+        aria-label={i18n.t("lens.traceThread.inspectStepAria", { name: item.span.name, defaultValue: `Inspect step ${item.span.name}` })}
         onClick={() => onOpenStep(item.span.span_id)}
       >
-        Inspect
+        {i18n.t("lens.traceThread.inspect", { defaultValue: "Inspect" })}
       </Button>
     </div>
   );

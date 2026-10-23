@@ -13204,6 +13204,28 @@
       "watchFor": "关注点",
       "watchForHint": "需要调查的具体问题或模式。",
       "changesApplyFuture": "更改将应用于未来的扫描。重新检查历史会消耗你的分析预算。"
+    },
+    "traceThread": {
+      "traceThreadAria": "链路线程",
+      "loadingThread": "正在加载线程…",
+      "couldNotLoadSteps": "无法加载此线程的部分步骤。",
+      "couldNotLoadMore": "无法加载此链路的更多内容。请使用上方的重试或刷新链路。",
+      "noConversationContent": "未记录对话内容。",
+      "endOfThread": "线程结束",
+      "turnsLoaded_one": "已加载 {{count}} 个回合",
+      "turnsLoaded_other": "已加载 {{count}} 个回合",
+      "loadMore": "加载更多",
+      "threadTurnAria": "线程回合",
+      "promptContext": "提示上下文",
+      "worked": "已执行",
+      "workedFor": "执行耗时 {{time}}",
+      "modelCalls": "次模型调用",
+      "toolCalls": "次工具调用",
+      "aStepFailed": "某步骤失败",
+      "subagent": "子代理：{{name}}",
+      "tokens": "{{count}} 个令牌",
+      "inspectStepAria": "查看步骤 {{name}}",
+      "inspect": "查看"
     }
   },
   "mcpServerCredentials": {

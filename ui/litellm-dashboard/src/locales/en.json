@@ -13204,6 +13204,28 @@
       "watchFor": "Watch for",
       "watchForHint": "Specific problems or patterns to investigate.",
       "changesApplyFuture": "Changes apply to future scans. Rechecking history uses your analysis budget."
+    },
+    "traceThread": {
+      "traceThreadAria": "Trace thread",
+      "loadingThread": "Loading thread…",
+      "couldNotLoadSteps": "Could not load some steps of this thread.",
+      "couldNotLoadMore": "Could not load more of this trace. Use Retry or Refresh trace above.",
+      "noConversationContent": "No conversation content recorded.",
+      "endOfThread": "End of thread",
+      "turnsLoaded_one": "{{count}} turn loaded",
+      "turnsLoaded_other": "{{count}} turns loaded",
+      "loadMore": "Load more",
+      "threadTurnAria": "Thread turn",
+      "promptContext": "Prompt context",
+      "worked": "Worked",
+      "workedFor": "Worked {{time}}",
+      "modelCalls": "model calls",
+      "toolCalls": "tool calls",
+      "aStepFailed": "A step failed",
+      "subagent": "Subagent: {{name}}",
+      "tokens": "{{count}} tok",
+      "inspectStepAria": "Inspect step {{name}}",
+      "inspect": "Inspect"
     }
   },
   "mcpServerCredentials": {
