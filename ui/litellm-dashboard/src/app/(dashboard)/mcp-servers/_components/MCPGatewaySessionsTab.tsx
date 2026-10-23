@@ -23,10 +23,11 @@ import type {
   MCPGatewaySessionsTerminateResponse,
 } from "@/components/mcp_tools/types";
 import { createQueryKeys } from "@/app/(dashboard)/hooks/common/queryKeysFactory";
+import i18n from "@/lib/i18n";
 
 const mcpGatewaySessionKeys = createQueryKeys("mcpGatewaySessions");
 const REFETCH_INTERVAL_MS = 15000;
-const UNKNOWN_LABEL = "(unknown)";
+const UNKNOWN_LABEL = i18n.t("mcpGatewaySessions.unknown", { defaultValue: "(unknown)" });
 
 export function formatIdleSeconds(idleSeconds: number): string {
   const total = Math.max(0, Math.floor(idleSeconds));
@@ -42,13 +43,18 @@ function groupLabel(label: string | null): string {
 }
 
 export function describeSelector(selector: MCPGatewaySessionSelector): string {
-  if (selector.user_id !== undefined) return `every live session opened by user ${groupLabel(selector.user_id)}`;
-  return `session ${selector.session_id_prefix}`;
+  if (selector.user_id !== undefined) return i18n.t("mcpGatewaySessions.everyLiveSessionByUser", { user: groupLabel(selector.user_id), defaultValue: `every live session opened by user ${groupLabel(selector.user_id)}` });
+  return i18n.t("mcpGatewaySessions.sessionSelector", { session: selector.session_id_prefix, defaultValue: `session ${selector.session_id_prefix}` });
 }
 
 export function describeTerminateResult(result: MCPGatewaySessionsTerminateResponse): string {
-  const noun = result.terminated_sessions === 1 ? "session" : "sessions";
-  return `Disconnected ${result.terminated_sessions} ${noun} on worker pid ${result.worker_pid}.`;
+  const noun = i18n.t(result.terminated_sessions === 1 ? "mcpGatewaySessions.sessionSingular" : "mcpGatewaySessions.sessionPlural", { defaultValue: "sessions" });
+  return i18n.t("mcpGatewaySessions.disconnectedResult", {
+    count: result.terminated_sessions,
+    noun,
+    pid: result.worker_pid,
+    defaultValue: `Disconnected ${result.terminated_sessions} ${noun} on worker pid ${result.worker_pid}.`,
+  });
 }
 
 function StatCard({ label, value }: { label: string; value: number }) {
@@ -73,10 +79,10 @@ function DisconnectUserButton({
       variant="outline"
       size="sm"
       onClick={() => onDisconnectUser(userId)}
-      aria-label={`Disconnect all sessions for user ${groupLabel(userId)}`}
+      aria-label={i18n.t("mcpGatewaySessions.disconnectAllSessionsForUserAria", { user: groupLabel(userId), defaultValue: `Disconnect all sessions for user ${groupLabel(userId)}` })}
     >
       <Unplug className="size-4" />
-      Disconnect all
+      {i18n.t("mcpGatewaySessions.disconnectAll", { defaultValue: "Disconnect all" })}
     </Button>
   );
 }
@@ -99,8 +105,8 @@ function GroupCountTable({
         <TableHeader>
           <TableRow>
             <TableHead>{labelHeader}</TableHead>
-            <TableHead className="text-right">Sessions</TableHead>
-            {onDisconnectUser ? <TableHead className="text-right">Actions</TableHead> : null}
+            <TableHead className="text-right">{i18n.t("mcpGatewaySessions.sessions", { defaultValue: "Sessions" })}</TableHead>
+            {onDisconnectUser ? <TableHead className="text-right">{i18n.t("mcpGatewaySessions.actions", { defaultValue: "Actions" })}</TableHead> : null}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -139,14 +145,14 @@ function SessionsBody({
         className="flex items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-card p-12"
       >
         <UiLoadingSpinner className="size-6 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">Loading live connections...</p>
+        <p className="text-sm text-muted-foreground">{i18n.t("mcpGatewaySessions.loadingLiveConnections", { defaultValue: "Loading live connections..." })}</p>
       </div>
     );
   }
   if (error) {
     return (
       <Alert variant="destructive">
-        <AlertTitle>Could not load live connections</AlertTitle>
+        <AlertTitle>{i18n.t("mcpGatewaySessions.couldNotLoadLiveConnections", { defaultValue: "Could not load live connections" })}</AlertTitle>
         <AlertDescription>{error.message}</AlertDescription>
       </Alert>
     );
@@ -156,8 +162,10 @@ function SessionsBody({
     return (
       <div className="rounded-lg border border-dashed border-border bg-card p-12 text-center">
         <p className="text-sm text-muted-foreground">
-          No live MCP connections on this worker (pid {data.worker_pid}). Connect an AI client to the gateway to see it
-          here.
+          {i18n.t("mcpGatewaySessions.noLiveConnections", {
+            pid: data.worker_pid,
+            defaultValue: `No live MCP connections on this worker (pid ${data.worker_pid}). Connect an AI client to the gateway to see it here.`,
+          })}
         </p>
       </div>
     );
@@ -165,35 +173,35 @@ function SessionsBody({
   return (
     <>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <StatCard label="Live sessions" value={data.total_sessions} />
-        <StatCard label="AI clients" value={data.by_client.length} />
-        <StatCard label="Users" value={data.by_user.length} />
+        <StatCard label={i18n.t("mcpGatewaySessions.liveSessions", { defaultValue: "Live sessions" })} value={data.total_sessions} />
+        <StatCard label={i18n.t("mcpGatewaySessions.aiClients", { defaultValue: "AI clients" })} value={data.by_client.length} />
+        <StatCard label={i18n.t("mcpGatewaySessions.users", { defaultValue: "Users" })} value={data.by_user.length} />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <GroupCountTable title="Sessions by AI client" labelHeader="Client" groups={data.by_client} />
+        <GroupCountTable title={i18n.t("mcpGatewaySessions.sessionsByAiClient", { defaultValue: "Sessions by AI client" })} labelHeader={i18n.t("mcpGatewaySessions.client", { defaultValue: "Client" })} groups={data.by_client} />
         <GroupCountTable
-          title="Sessions by user"
-          labelHeader="User"
+          title={i18n.t("mcpGatewaySessions.sessionsByUser", { defaultValue: "Sessions by user" })}
+          labelHeader={i18n.t("mcpGatewaySessions.user", { defaultValue: "User" })}
           groups={data.by_user}
           onDisconnectUser={onDisconnect ? (userId) => onDisconnect({ user_id: userId }) : undefined}
         />
       </div>
-      <section aria-label="Live sessions" className="rounded-lg border border-border bg-card">
+      <section aria-label={i18n.t("mcpGatewaySessions.liveSessions", { defaultValue: "Live sessions" })} className="rounded-lg border border-border bg-card">
         <h3 className="border-b border-border px-4 py-2 text-sm font-semibold text-foreground">
-          Live sessions (worker pid {data.worker_pid})
+          {i18n.t("mcpGatewaySessions.liveSessions", { defaultValue: "Live sessions" })} (worker pid {data.worker_pid})
         </h3>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Session</TableHead>
-              <TableHead>Client</TableHead>
-              <TableHead>User</TableHead>
-              <TableHead>Key alias</TableHead>
-              <TableHead>Team</TableHead>
-              <TableHead>Client IP</TableHead>
-              <TableHead className="text-right">Idle</TableHead>
-              <TableHead className="text-right">In flight</TableHead>
-              {onDisconnect ? <TableHead className="text-right">Actions</TableHead> : null}
+              <TableHead>{i18n.t("mcpGatewaySessions.session", { defaultValue: "Session" })}</TableHead>
+              <TableHead>{i18n.t("mcpGatewaySessions.client", { defaultValue: "Client" })}</TableHead>
+              <TableHead>{i18n.t("mcpGatewaySessions.user", { defaultValue: "User" })}</TableHead>
+              <TableHead>{i18n.t("mcpGatewaySessions.keyAlias", { defaultValue: "Key alias" })}</TableHead>
+              <TableHead>{i18n.t("mcpGatewaySessions.team", { defaultValue: "Team" })}</TableHead>
+              <TableHead>{i18n.t("mcpGatewaySessions.clientIp", { defaultValue: "Client IP" })}</TableHead>
+              <TableHead className="text-right">{i18n.t("mcpGatewaySessions.idle", { defaultValue: "Idle" })}</TableHead>
+              <TableHead className="text-right">{i18n.t("mcpGatewaySessions.inFlight", { defaultValue: "In flight" })}</TableHead>
+              {onDisconnect ? <TableHead className="text-right">{i18n.t("mcpGatewaySessions.actions", { defaultValue: "Actions" })}</TableHead> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -235,10 +243,10 @@ function SessionsBody({
                       variant="outline"
                       size="sm"
                       onClick={() => onDisconnect({ session_id_prefix: session.session_id_prefix })}
-                      aria-label={`Disconnect session ${session.session_id_prefix}`}
+                      aria-label={i18n.t("mcpGatewaySessions.disconnectSessionAria", { session: session.session_id_prefix, defaultValue: `Disconnect session ${session.session_id_prefix}` })}
                     >
                       <Unplug className="size-4" />
-                      Disconnect
+                      {i18n.t("mcpGatewaySessions.disconnect", { defaultValue: "Disconnect" })}
                     </Button>
                   </TableCell>
                 ) : null}
@@ -280,11 +288,12 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
     <div className="mt-4 space-y-4" data-testid="mcp-gateway-sessions-tab">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Live Connections</h2>
+          <h2 className="text-base font-semibold text-foreground">{i18n.t("mcpGatewaySessions.liveConnections", { defaultValue: "Live Connections" })}</h2>
           <p className="text-sm text-muted-foreground">
-            Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent
-            the MCP initialize request and by the authenticated LiteLLM user. Stateless requests and SSE connections are
-            not counted.
+            {i18n.t("mcpGatewaySessions.liveConnectionsDescription", {
+              defaultValue:
+                "Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent the MCP initialize request and by the authenticated LiteLLM user. Stateless requests and SSE connections are not counted.",
+            })}
           </p>
         </div>
         <Button
@@ -292,25 +301,27 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
           size="sm"
           onClick={() => refetch()}
           disabled={isFetching}
-          aria-label="Refresh live connections"
+          aria-label={i18n.t("mcpGatewaySessions.refreshLiveConnections", { defaultValue: "Refresh live connections" })}
         >
           <RefreshCw className={`size-4 ${isFetching ? "animate-spin" : ""}`} />
-          Refresh
+          {i18n.t("mcpGatewaySessions.refresh", { defaultValue: "Refresh" })}
         </Button>
       </div>
 
       {terminate.isError ? (
         <Alert variant="destructive">
-          <AlertTitle>Could not disconnect</AlertTitle>
+          <AlertTitle>{i18n.t("mcpGatewaySessions.couldNotDisconnect", { defaultValue: "Could not disconnect" })}</AlertTitle>
           <AlertDescription>{terminate.error.message}</AlertDescription>
         </Alert>
       ) : null}
       {terminate.isSuccess ? (
         <Alert>
-          <AlertTitle>Disconnected</AlertTitle>
+          <AlertTitle>{i18n.t("mcpGatewaySessions.disconnected", { defaultValue: "Disconnected" })}</AlertTitle>
           <AlertDescription>
-            {describeTerminateResult(terminate.data)} Clients holding those sessions must send a new initialize request,
-            which re-runs authentication. Sessions on other proxy workers are not affected.
+            {describeTerminateResult(terminate.data)} {i18n.t("mcpGatewaySessions.clientsMustReinit", {
+              defaultValue:
+                "Clients holding those sessions must send a new initialize request, which re-runs authentication. Sessions on other proxy workers are not affected.",
+            })}
           </AlertDescription>
         </Alert>
       ) : null}
@@ -325,18 +336,25 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
       <AlertDialog open={pendingSelector !== null} onOpenChange={(open) => !open && setPendingSelector(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Disconnect MCP session</AlertDialogTitle>
+            <AlertDialogTitle>{i18n.t("mcpGatewaySessions.disconnectMcpSession", { defaultValue: "Disconnect MCP session" })}</AlertDialogTitle>
             <AlertDialogDescription>
-              {pendingSelector ? `This force-closes ${describeSelector(pendingSelector)} on this proxy worker. ` : ""}
-              In-flight requests fail and the client must initialize again before it can call tools.
+              {pendingSelector
+                ? i18n.t("mcpGatewaySessions.forceClosesSelector", {
+                    selector: describeSelector(pendingSelector),
+                    defaultValue: `This force-closes ${describeSelector(pendingSelector)} on this proxy worker. `,
+                  })
+                : ""}
+              {i18n.t("mcpGatewaySessions.inFlightRequestsFail", {
+                defaultValue: "In-flight requests fail and the client must initialize again before it can call tools.",
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setPendingSelector(null)}>
-              Cancel
+              {i18n.t("mcpGatewaySessions.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button variant="destructive" onClick={confirmDisconnect} disabled={terminate.isPending}>
-              Disconnect
+              {i18n.t("mcpGatewaySessions.disconnect", { defaultValue: "Disconnect" })}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
