@@ -10,23 +10,24 @@ import { SpanIcon } from "../../ui/SpanIcon";
 import type { GroupRowData } from "../../tree";
 import type { Span, SpanType } from "../../types";
 import { fmtMs, fmtTok } from "../../utils";
+import i18n from "@/lib/i18n";
 
 export const HOVER_OPEN_DELAY_MS = 300;
 const HOVER_CLOSE_DELAY_MS = 100;
 
 const TYPE_LABEL: Record<SpanType, string> = {
-  agent: "Agent",
-  llm: "LLM",
-  tool: "Tool",
-  chain: "Chain",
-  framework: "Framework",
-  retriever: "Retriever",
-  embedding: "Embedding",
-  reranker: "Reranker",
-  guardrail: "Guardrail",
-  evaluator: "Evaluator",
-  prompt: "Prompt",
-  decision: "Decision",
+  agent: i18n.t("lens.spanHoverCard.typeAgent", { defaultValue: "Agent" }),
+  llm: i18n.t("lens.spanHoverCard.typeLlm", { defaultValue: "LLM" }),
+  tool: i18n.t("lens.spanHoverCard.typeTool", { defaultValue: "Tool" }),
+  chain: i18n.t("lens.spanHoverCard.typeChain", { defaultValue: "Chain" }),
+  framework: i18n.t("lens.spanHoverCard.typeFramework", { defaultValue: "Framework" }),
+  retriever: i18n.t("lens.spanHoverCard.typeRetriever", { defaultValue: "Retriever" }),
+  embedding: i18n.t("lens.spanHoverCard.typeEmbedding", { defaultValue: "Embedding" }),
+  reranker: i18n.t("lens.spanHoverCard.typeReranker", { defaultValue: "Reranker" }),
+  guardrail: i18n.t("lens.spanHoverCard.typeGuardrail", { defaultValue: "Guardrail" }),
+  evaluator: i18n.t("lens.spanHoverCard.typeEvaluator", { defaultValue: "Evaluator" }),
+  prompt: i18n.t("lens.spanHoverCard.typePrompt", { defaultValue: "Prompt" }),
+  decision: i18n.t("lens.spanHoverCard.typeDecision", { defaultValue: "Decision" }),
 };
 
 const ABSOLUTE_TIME_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -119,7 +120,7 @@ function HoverCardBody({ facts, traceStartMs }: { facts: HoverFacts; traceStartM
             {!facts.failed && (
               <span
                 className="grid size-4 shrink-0 place-items-center rounded-full bg-trace-ok p-0.5"
-                aria-label="Success"
+                aria-label={i18n.t("lens.spanHoverCard.success", { defaultValue: "Success" })}
               >
                 <Check className="size-3 text-trace-ok-glyph" strokeWidth={2.5} />
               </span>
@@ -131,23 +132,23 @@ function HoverCardBody({ facts, traceStartMs }: { facts: HoverFacts; traceStartM
           </span>
         </div>
       </div>
-      <FactSection title="Time">
+      <FactSection title={i18n.t("lens.spanHoverCard.time", { defaultValue: "Time" })}>
         <dl className="flex flex-col gap-1.5">
-          <Fact label="Start" value={absoluteTime(traceStartMs, facts.startMs)} />
-          <Fact label="End" value={absoluteTime(traceStartMs, facts.startMs + facts.durationMs)} />
-          <Fact label="Duration" value={fmtMs(facts.durationMs)} />
+          <Fact label={i18n.t("lens.spanHoverCard.start", { defaultValue: "Start" })} value={absoluteTime(traceStartMs, facts.startMs)} />
+          <Fact label={i18n.t("lens.spanHoverCard.end", { defaultValue: "End" })} value={absoluteTime(traceStartMs, facts.startMs + facts.durationMs)} />
+          <Fact label={i18n.t("lens.spanHoverCard.duration", { defaultValue: "Duration" })} value={fmtMs(facts.durationMs)} />
         </dl>
       </FactSection>
       {(facts.tokens > 0 || facts.spend != null) && (
-        <FactSection title="Usage">
+        <FactSection title={i18n.t("lens.spanHoverCard.usage", { defaultValue: "Usage" })}>
           <dl className="flex flex-col gap-1.5">
-            {facts.tokens > 0 && <Fact label="Tokens" value={fmtTok(facts.tokens)} />}
-            {facts.spend != null && <Fact label="Cost" value={formatCost(facts.spend)} />}
+            {facts.tokens > 0 && <Fact label={i18n.t("lens.groupPane.tokens", { defaultValue: "Tokens" })} value={fmtTok(facts.tokens)} />}
+            {facts.spend != null && <Fact label={i18n.t("lens.spanHoverCard.cost", { defaultValue: "Cost" })} value={formatCost(facts.spend)} />}
           </dl>
         </FactSection>
       )}
       {facts.tags.length > 0 && (
-        <FactSection title="Tags">
+        <FactSection title={i18n.t("lens.spanHoverCard.tags", { defaultValue: "Tags" })}>
           <ul className="flex flex-wrap gap-1">
             {facts.tags.map((tag) => (
               <li key={tag} className="rounded-sm bg-trace-tag px-1 py-0.5 text-trace-duration">

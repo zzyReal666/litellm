@@ -12960,6 +12960,28 @@
       "copyFieldId": "Copy {{field}} ID",
       "none": "None",
       "openSourceTrace": "Open source trace"
+    },
+    "spanHoverCard": {
+      "typeAgent": "Agent",
+      "typeLlm": "LLM",
+      "typeTool": "Tool",
+      "typeChain": "Chain",
+      "typeFramework": "Framework",
+      "typeRetriever": "Retriever",
+      "typeEmbedding": "Embedding",
+      "typeReranker": "Reranker",
+      "typeGuardrail": "Guardrail",
+      "typeEvaluator": "Evaluator",
+      "typePrompt": "Prompt",
+      "typeDecision": "Decision",
+      "success": "Success",
+      "time": "Time",
+      "start": "Start",
+      "end": "End",
+      "duration": "Duration",
+      "usage": "Usage",
+      "cost": "Cost",
+      "tags": "Tags"
     }
   },
   "mcpServerCredentials": {

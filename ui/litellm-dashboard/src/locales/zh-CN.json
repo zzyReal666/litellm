@@ -12960,6 +12960,28 @@
       "copyFieldId": "复制 {{field}} ID",
       "none": "无",
       "openSourceTrace": "打开来源链路"
+    },
+    "spanHoverCard": {
+      "typeAgent": "Agent",
+      "typeLlm": "LLM",
+      "typeTool": "工具",
+      "typeChain": "链",
+      "typeFramework": "框架",
+      "typeRetriever": "检索器",
+      "typeEmbedding": "嵌入",
+      "typeReranker": "重排序器",
+      "typeGuardrail": "守卫",
+      "typeEvaluator": "评估器",
+      "typePrompt": "提示",
+      "typeDecision": "决策",
+      "success": "成功",
+      "time": "时间",
+      "start": "开始",
+      "end": "结束",
+      "duration": "耗时",
+      "usage": "用量",
+      "cost": "成本",
+      "tags": "标签"
     }
   },
   "mcpServerCredentials": {
