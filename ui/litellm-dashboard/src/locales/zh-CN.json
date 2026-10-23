@@ -11493,7 +11493,21 @@
       "loadingTools": "正在加载工具...",
       "unableToLoadTools": "无法加载工具",
       "noDescription": "无描述",
-      "noToolsAvailable": "暂无可用工具"
+      "noToolsAvailable": "暂无可用工具",
+      "viaAccessGroup": "通过访问组：{{name}}",
+      "viaToolset": "通过工具集：{{name}}",
+      "viaToolPermissions": "通过工具权限",
+      "unableToLoadMcpServers": "无法加载 MCP 服务器",
+      "serversIncompleteWarning": "此列表不完整；直接授予或通过访问组授予的服务器可能缺失。请在更改工具权限前重新加载。",
+      "accessGroupZeroServers": "访问组 \"{{group}}\" 有 0 个服务器",
+      "accessGroupZeroServersHint": "没有 MCP 服务器列出此组，因此它不授予任何内容。在 config.yaml 中定义的服务器通过其 access_groups 键加入某个组；在那里 mcp_access_groups 会被忽略。",
+      "unableToLoadToolsets": "无法加载工具集",
+      "toolsetsIncompleteWarning": "通过所选工具集访问的服务器未在下方列出。",
+      "loadingMcpServers": "正在加载 MCP 服务器...",
+      "allToolsAllowedNote": "允许所有工具，包括稍后添加到此服务器的工具。",
+      "alsoGrantedBy": "同时由 {{keys}} 授予，该名称还对应另一个服务器。在服务器不再共享该名称之前，这些工具会保持允许状态。",
+      "toolsetGrantedOne": "{{tool}} 由所选工具集授予，因此它在这里保持允许状态；请编辑工具集以撤销它。",
+      "toolsetGrantedMany": "{{tools}} 由所选工具集授予，因此它们在这里保持允许状态；请编辑工具集以撤销它们。"
     }
   },
   "organization": {

@@ -11493,7 +11493,21 @@
       "loadingTools": "Loading tools...",
       "unableToLoadTools": "Unable to load tools",
       "noDescription": "No description",
-      "noToolsAvailable": "No tools available"
+      "noToolsAvailable": "No tools available",
+      "viaAccessGroup": "Via access group: {{name}}",
+      "viaToolset": "Via toolset: {{name}}",
+      "viaToolPermissions": "Via tool permissions",
+      "unableToLoadMcpServers": "Unable to load MCP servers",
+      "serversIncompleteWarning": "This list is incomplete; servers granted directly or through an access group may be missing. Reload before changing tool permissions",
+      "accessGroupZeroServers": "Access group \"{{group}}\" has 0 servers",
+      "accessGroupZeroServersHint": "No MCP server lists this group, so it grants nothing. A server defined in config.yaml joins a group through its access_groups key; mcp_access_groups is ignored there",
+      "unableToLoadToolsets": "Unable to load toolsets",
+      "toolsetsIncompleteWarning": "Servers reached through the selected toolsets are not listed below",
+      "loadingMcpServers": "Loading MCP servers...",
+      "allToolsAllowedNote": "All tools allowed, including tools added to this server later",
+      "alsoGrantedBy": "Also granted by {{keys}}, which names another server too. Those tools stay allowed here until the servers no longer share that name",
+      "toolsetGrantedOne": "{{tool}} is granted by a selected toolset, so it stays allowed here; edit the toolset to revoke it",
+      "toolsetGrantedMany": "{{tools}} are granted by a selected toolset, so they stay allowed here; edit the toolset to revoke them"
     }
   },
   "organization": {

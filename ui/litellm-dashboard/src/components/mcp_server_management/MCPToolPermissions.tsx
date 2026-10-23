@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { listMCPTools } from "../networking";
 import { MCPTool } from "../mcp_tools/types";
+import i18n from "@/lib/i18n";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { useMCPServers } from "../../app/(dashboard)/hooks/mcpServers/useMCPServers";
@@ -41,11 +42,11 @@ const inheritedBadgeFor = (source: McpGrantSource): InheritedBadge | null => {
     case "direct":
       return null;
     case "accessGroup":
-      return { label: `Via access group: ${source.name}`, className: "text-green-700 bg-green-50 border-green-200" };
+      return { label: i18n.t("mcpServerManagement.mcpToolPermissions.viaAccessGroup", { name: source.name, defaultValue: `Via access group: ${source.name}` }), className: "text-green-700 bg-green-50 border-green-200" };
     case "toolset":
-      return { label: `Via toolset: ${source.name}`, className: "text-purple-700 bg-purple-50 border-purple-200" };
+      return { label: i18n.t("mcpServerManagement.mcpToolPermissions.viaToolset", { name: source.name, defaultValue: `Via toolset: ${source.name}` }), className: "text-purple-700 bg-purple-50 border-purple-200" };
     case "toolPermission":
-      return { label: "Via tool permissions", className: "text-amber-700 bg-amber-50 border-amber-200" };
+      return { label: i18n.t("mcpServerManagement.mcpToolPermissions.viaToolPermissions", { defaultValue: "Via tool permissions" }), className: "text-amber-700 bg-amber-50 border-amber-200" };
   }
 };
 
@@ -105,7 +106,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
       const response = await listMCPTools(token, serverId);
 
       if (response.error) {
-        setToolErrors((prev) => ({ ...prev, [serverId]: response.message || "Failed to fetch tools" }));
+        setToolErrors((prev) => ({ ...prev, [serverId]: response.message || i18n.t("mcpServerManagement.mcpToolPermissions.failedToFetchTools", { defaultValue: "Failed to fetch tools" }) }));
         setServerTools((prev) => ({ ...prev, [serverId]: [] }));
       } else {
         const fetchedTools: MCPTool[] = response.tools || [];
@@ -127,7 +128,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
       }
     } catch (err) {
       console.error(`Error fetching tools for server ${serverId}:`, err);
-      setToolErrors((prev) => ({ ...prev, [serverId]: "Failed to fetch tools" }));
+      setToolErrors((prev) => ({ ...prev, [serverId]: i18n.t("mcpServerManagement.mcpToolPermissions.failedToFetchTools", { defaultValue: "Failed to fetch tools" }) }));
       setServerTools((prev) => ({ ...prev, [serverId]: [] }));
     } finally {
       setLoadingTools((prev) => ({ ...prev, [serverId]: false }));
@@ -187,10 +188,9 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
     <div className="space-y-4">
       {serversFailed && (
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800 font-medium">Unable to load MCP servers</p>
+          <p className="text-sm text-yellow-800 font-medium">{i18n.t("mcpServerManagement.mcpToolPermissions.unableToLoadMcpServers", { defaultValue: "Unable to load MCP servers" })}</p>
           <p className="text-sm text-yellow-700 mt-1">
-            This list is incomplete; servers granted directly or through an access group may be missing. Reload before
-            changing tool permissions
+            {i18n.t("mcpServerManagement.mcpToolPermissions.serversIncompleteWarning", { defaultValue: "This list is incomplete; servers granted directly or through an access group may be missing. Reload before changing tool permissions" })}
           </p>
         </div>
       )}
@@ -199,19 +199,18 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
         accessGroupsLoaded &&
         emptyMcpAccessGroups(allServers, populatedAccessGroups, selectedAccessGroups).map((group) => (
           <div key={group} className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-sm text-yellow-800 font-medium">Access group &quot;{group}&quot; has 0 servers</p>
+            <p className="text-sm text-yellow-800 font-medium">{i18n.t("mcpServerManagement.mcpToolPermissions.accessGroupZeroServers", { group, defaultValue: `Access group "${group}" has 0 servers` })}</p>
             <p className="text-sm text-yellow-700 mt-1">
-              No MCP server lists this group, so it grants nothing. A server defined in config.yaml joins a group
-              through its <code>access_groups</code> key; <code>mcp_access_groups</code> is ignored there
+              {i18n.t("mcpServerManagement.mcpToolPermissions.accessGroupZeroServersHint", { defaultValue: "No MCP server lists this group, so it grants nothing. A server defined in config.yaml joins a group through its access_groups key; mcp_access_groups is ignored there" })}
             </p>
           </div>
         ))}
 
       {toolsetsFailed && selectedToolsets.length > 0 && (
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800 font-medium">Unable to load toolsets</p>
+          <p className="text-sm text-yellow-800 font-medium">{i18n.t("mcpServerManagement.mcpToolPermissions.unableToLoadToolsets", { defaultValue: "Unable to load toolsets" })}</p>
           <p className="text-sm text-yellow-700 mt-1">
-            Servers reached through the selected toolsets are not listed below
+            {i18n.t("mcpServerManagement.mcpToolPermissions.toolsetsIncompleteWarning", { defaultValue: "Servers reached through the selected toolsets are not listed below" })}
           </p>
         </div>
       )}
@@ -219,7 +218,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
       {serversLoading && (
         <div className="flex items-center justify-center py-6">
           <UiLoadingSpinner />
-          <p className="ml-3 text-sm text-muted-foreground">Loading MCP servers...</p>
+          <p className="ml-3 text-sm text-muted-foreground">{i18n.t("mcpServerManagement.mcpToolPermissions.loadingMcpServers", { defaultValue: "Loading MCP servers..." })}</p>
         </div>
       )}
 
@@ -256,19 +255,19 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
                 {server.description && <p className="text-sm text-muted-foreground">{server.description}</p>}
                 {grantsAll && (
                   <p className="text-sm text-muted-foreground mt-1">
-                    All tools allowed, including tools added to this server later
+                    {i18n.t("mcpServerManagement.mcpToolPermissions.allToolsAllowedNote", { defaultValue: "All tools allowed, including tools added to this server later" })}
                   </p>
                 )}
                 {entry.ambiguousKeys.length > 0 && (
                   <p className="text-sm text-amber-700 mt-1">
-                    {`Also granted by ${entry.ambiguousKeys.map((key) => `"${key}"`).join(", ")}, which names another server too. Those tools stay allowed here until the servers no longer share that name`}
+                    {i18n.t("mcpServerManagement.mcpToolPermissions.alsoGrantedBy", { keys: entry.ambiguousKeys.map((key) => `"${key}"`).join(", "), defaultValue: `Also granted by ${entry.ambiguousKeys.map((key) => `"${key}"`).join(", ")}, which names another server too. Those tools stay allowed here until the servers no longer share that name` })}
                   </p>
                 )}
                 {toolsetTools.length > 0 && (
                   <p className="text-sm text-purple-700 mt-1">
                     {toolsetTools.length === 1
-                      ? `${toolsetTools[0]} is granted by a selected toolset, so it stays allowed here; edit the toolset to revoke it`
-                      : `${toolsetTools.join(", ")} are granted by a selected toolset, so they stay allowed here; edit the toolset to revoke them`}
+                      ? i18n.t("mcpServerManagement.mcpToolPermissions.toolsetGrantedOne", { tool: toolsetTools[0], defaultValue: `${toolsetTools[0]} is granted by a selected toolset, so it stays allowed here; edit the toolset to revoke it` })
+                      : i18n.t("mcpServerManagement.mcpToolPermissions.toolsetGrantedMany", { tools: toolsetTools.join(", "), defaultValue: `${toolsetTools.join(", ")} are granted by a selected toolset, so they stay allowed here; edit the toolset to revoke them` })}
                   </p>
                 )}
               </div>
@@ -281,11 +280,11 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
                   >
                     <label className="flex items-center gap-2 text-sm">
                       <RadioGroupItem value="crud" />
-                      Risk Groups
+                      {i18n.t("mcpServerManagement.mcpToolPermissions.riskGroups", { defaultValue: "Risk Groups" })}
                     </label>
                     <label className="flex items-center gap-2 text-sm">
                       <RadioGroupItem value="flat" />
-                      Flat List
+                      {i18n.t("mcpServerManagement.mcpToolPermissions.flatList", { defaultValue: "Flat List" })}
                     </label>
                   </RadioGroup>
                 )}
@@ -297,7 +296,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
                       onClick={() => handleSelectAll(entry)}
                       disabled={isLoading}
                     >
-                      Select All
+                      {i18n.t("mcpServerManagement.mcpToolPermissions.selectAll", { defaultValue: "Select All" })}
                     </button>
                     <button
                       type="button"
@@ -305,7 +304,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
                       onClick={() => writeAllowedTools(entry, [])}
                       disabled={isLoading}
                     >
-                      Deselect All
+                      {i18n.t("mcpServerManagement.mcpToolPermissions.deselectAll", { defaultValue: "Deselect All" })}
                     </button>
                   </>
                 )}
@@ -318,14 +317,14 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
               {isLoading && (
                 <div className="flex items-center justify-center py-8">
                   <UiLoadingSpinner />
-                  <p className="ml-3 text-sm text-muted-foreground">Loading tools...</p>
+                  <p className="ml-3 text-sm text-muted-foreground">{i18n.t("mcpServerManagement.mcpToolPermissions.loadingTools", { defaultValue: "Loading tools..." })}</p>
                 </div>
               )}
 
               {/* Error */}
               {error && !isLoading && (
                 <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-center">
-                  <p className="text-sm text-destructive font-medium">Unable to load tools</p>
+                  <p className="text-sm text-destructive font-medium">{i18n.t("mcpServerManagement.mcpToolPermissions.unableToLoadTools", { defaultValue: "Unable to load tools" })}</p>
                   <p className="text-sm text-destructive mt-1">{error}</p>
                 </div>
               )}
@@ -366,7 +365,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <p className="text-sm font-medium text-foreground">{tool.name}</p>
-                            <p className="text-sm text-muted-foreground">- {tool.description || "No description"}</p>
+                            <p className="text-sm text-muted-foreground">- {tool.description || i18n.t("mcpServerManagement.mcpToolPermissions.noDescription", { defaultValue: "No description" })}</p>
                           </div>
                         </div>
                       </div>
@@ -378,7 +377,7 @@ const MCPToolPermissions: React.FC<MCPToolPermissionsProps> = ({
               {/* Empty State */}
               {!isLoading && !error && tools.length === 0 && (
                 <div className="text-center py-6">
-                  <p className="text-sm text-muted-foreground">No tools available</p>
+                  <p className="text-sm text-muted-foreground">{i18n.t("mcpServerManagement.mcpToolPermissions.noToolsAvailable", { defaultValue: "No tools available" })}</p>
                 </div>
               )}
             </div>
