@@ -7,6 +7,7 @@ import BedrockGuardrailDetails, {
 import ContentFilterDetails from "./ContentFilterDetails";
 import CompliancePanel from "./CompliancePanel";
 import { getSpendString } from "@/utils/dataUtils";
+import i18n from "@/lib/i18n";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -290,15 +291,15 @@ const MatchDetailsTable = ({ matchDetails }: { matchDetails: MatchDetail[] }) =>
 
   return (
     <div className="mt-3">
-      <h5 className="text-sm font-medium mb-2 text-foreground">Match Details ({matchDetails.length})</h5>
+      <h5 className="text-sm font-medium mb-2 text-foreground">{i18n.t("viewLogs.guardrailViewer.matchDetails", { count: matchDetails.length, defaultValue: `Match Details (${matchDetails.length})` })}</h5>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b text-left text-muted-foreground">
-              <th className="pb-2 pr-4 font-medium">Type</th>
-              <th className="pb-2 pr-4 font-medium">Method</th>
-              <th className="pb-2 pr-4 font-medium">Action</th>
-              <th className="pb-2 font-medium">Detail</th>
+              <th className="pb-2 pr-4 font-medium">{i18n.t("viewLogs.guardrailViewer.matchDetailsHeader.type", { defaultValue: "Type" })}</th>
+              <th className="pb-2 pr-4 font-medium">{i18n.t("viewLogs.guardrailViewer.matchDetailsHeader.method", { defaultValue: "Method" })}</th>
+              <th className="pb-2 pr-4 font-medium">{i18n.t("viewLogs.guardrailViewer.matchDetailsHeader.action", { defaultValue: "Action" })}</th>
+              <th className="pb-2 font-medium">{i18n.t("viewLogs.guardrailViewer.matchDetailsHeader.detail", { defaultValue: "Detail" })}</th>
             </tr>
           </thead>
           <tbody>
@@ -343,7 +344,7 @@ const GenericGuardrailResponse = ({ response }: { response: any }) => {
         >
           <div className="flex items-center">
             <ChevronIcon expanded={showRaw} />
-            <h5 className="font-medium text-sm ml-1">Raw Guardrail Response</h5>
+            <h5 className="font-medium text-sm ml-1">{i18n.t("viewLogs.guardrailViewer.rawGuardrailResponse", { defaultValue: "Raw Guardrail Response" })}</h5>
           </div>
         </div>
         {showRaw && (
@@ -456,7 +457,7 @@ const RequestLifecycle = ({ entries }: { entries: GuardrailInformation[] }) => {
 
   return (
     <div>
-      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Request Lifecycle</h4>
+      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">{i18n.t("viewLogs.guardrailViewer.requestLifecycle", { defaultValue: "Request Lifecycle" })}</h4>
       <div className="relative">
         {timeline.map((item, idx) => (
           <div key={idx} data-testid="lifecycle-row" className="flex items-start gap-3 relative">
@@ -642,28 +643,28 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
           {/* Classification details for llm-judge */}
           {entry.classification && (
             <div className="mb-3 bg-muted rounded-lg p-3 space-y-1">
-              <h5 className="text-sm font-medium text-foreground mb-2">Classification</h5>
+              <h5 className="text-sm font-medium text-foreground mb-2">{i18n.t("viewLogs.guardrailViewer.classification", { defaultValue: "Classification" })}</h5>
               {entry.classification.category && (
                 <div className="flex text-sm">
-                  <span className="font-medium w-1/3 text-muted-foreground">Category:</span>
+                  <span className="font-medium w-1/3 text-muted-foreground">{i18n.t("viewLogs.guardrailViewer.classificationCategory", { defaultValue: "Category:" })}</span>
                   <span>{entry.classification.category}</span>
                 </div>
               )}
               {entry.classification.article_reference && (
                 <div className="flex text-sm">
-                  <span className="font-medium w-1/3 text-muted-foreground">Reference:</span>
+                  <span className="font-medium w-1/3 text-muted-foreground">{i18n.t("viewLogs.guardrailViewer.classificationReference", { defaultValue: "Reference:" })}</span>
                   <span className="font-mono">{entry.classification.article_reference}</span>
                 </div>
               )}
               {entry.classification.confidence != null && (
                 <div className="flex text-sm">
-                  <span className="font-medium w-1/3 text-muted-foreground">Confidence:</span>
+                  <span className="font-medium w-1/3 text-muted-foreground">{i18n.t("viewLogs.guardrailViewer.classificationConfidence", { defaultValue: "Confidence:" })}</span>
                   <span>{(entry.classification.confidence * 100).toFixed(0)}%</span>
                 </div>
               )}
               {entry.classification.reason && (
                 <div className="flex text-sm">
-                  <span className="font-medium w-1/3 text-muted-foreground">Reason:</span>
+                  <span className="font-medium w-1/3 text-muted-foreground">{i18n.t("viewLogs.guardrailViewer.classificationReason", { defaultValue: "Reason:" })}</span>
                   <span>{entry.classification.reason}</span>
                 </div>
               )}
@@ -678,7 +679,7 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
           {/* Masked entity summary */}
           {totalMasked > 0 && (
             <div className="mt-3">
-              <h5 className="text-sm font-medium text-foreground mb-2">Masked Entities</h5>
+              <h5 className="text-sm font-medium text-foreground mb-2">{i18n.t("viewLogs.guardrailViewer.maskedEntities", { defaultValue: "Masked Entities" })}</h5>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(entry.masked_entity_count || {}).map(([entityType, count]) => (
                   <span key={entityType} className="px-2 py-1 bg-info/10 text-info rounded-sm text-xs font-medium">
@@ -763,10 +764,10 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
         <div className="flex items-center gap-4">
           <ShieldIcon />
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Guardrails &amp; Policy Compliance</h3>
+            <h3 className="text-lg font-semibold text-foreground">{i18n.t("viewLogs.guardrailViewer.headerTitle", { defaultValue: "Guardrails & Policy Compliance" })}</h3>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm text-muted-foreground">
-                {evaluatedCount} guardrail{evaluatedCount !== 1 ? "s" : ""} evaluated
+                {i18n.t("viewLogs.guardrailViewer.guardrailsEvaluated", { count: evaluatedCount })}
               </span>
               <span className="text-muted-foreground">|</span>
               <span
@@ -783,13 +784,13 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
                     />
                   </svg>
                 ) : null}
-                {passedCount} Passed
+                {i18n.t("viewLogs.guardrailViewer.passedCount", { count: passedCount, defaultValue: `${passedCount} Passed` })}
               </span>
               {flaggedCount > 0 && (
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.flagged}`}
                 >
-                  {flaggedCount} Flagged
+                  {i18n.t("viewLogs.guardrailViewer.flaggedCount", { count: flaggedCount, defaultValue: `${flaggedCount} Flagged` })}
                 </span>
               )}
               {notRunCount > 0 && (
