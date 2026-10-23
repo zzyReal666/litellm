@@ -8261,7 +8261,11 @@
       "tooltipKeyId": "Key ID:",
       "tooltipSpend": "Spend:",
       "tableView": "Table View",
-      "chartView": "Chart View"
+      "chartView": "Chart View",
+      "colUser": "User",
+      "topKeysLimitLabel": "Number of top keys to show",
+      "viewLabel": "View",
+      "keyNotInDatabaseTooltip": "This key is no longer in the database (deleted, or a CLI/SSO session key), so its details can't be opened"
     },
     "topModelView": {
       "colModel": "Model",

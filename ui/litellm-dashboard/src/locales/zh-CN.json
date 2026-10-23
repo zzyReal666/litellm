@@ -8261,7 +8261,11 @@
       "tooltipKeyId": "密钥 ID：",
       "tooltipSpend": "花费：",
       "tableView": "表格视图",
-      "chartView": "图表视图"
+      "chartView": "图表视图",
+      "colUser": "用户",
+      "topKeysLimitLabel": "显示的热门密钥数量",
+      "viewLabel": "视图",
+      "keyNotInDatabaseTooltip": "此密钥已不在数据库中（已删除，或是 CLI/SSO 会话密钥），因此无法打开其详情"
     },
     "topModelView": {
       "colModel": "模型",

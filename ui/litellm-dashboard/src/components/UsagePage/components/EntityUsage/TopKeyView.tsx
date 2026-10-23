@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -18,8 +19,8 @@ const LIMIT_OPTIONS = TOP_KEYS_LIMITS.map((limit) => ({ value: String(limit), la
 
 type ViewMode = "table" | "chart";
 const VIEW_OPTIONS = [
-  { value: "table", label: "Table View" },
-  { value: "chart", label: "Chart View" },
+  { value: "table", label: i18n.t("usagePage.topKeyView.tableView", { defaultValue: "Table View" }) },
+  { value: "chart", label: i18n.t("usagePage.topKeyView.chartView", { defaultValue: "Chart View" }) },
 ] as const satisfies readonly { value: ViewMode; label: string }[];
 
 const BAR_COLOR = "#2b3fd6";
@@ -34,8 +35,9 @@ export interface TopKeyItem {
   spend: number;
 }
 
-const KEY_NOT_IN_DATABASE_TOOLTIP =
-  "This key is no longer in the database (deleted, or a CLI/SSO session key), so its details can't be opened";
+const KEY_NOT_IN_DATABASE_TOOLTIP = i18n.t("usagePage.topKeyView.keyNotInDatabaseTooltip", {
+  defaultValue: "This key is no longer in the database (deleted, or a CLI/SSO session key), so its details can't be opened",
+});
 
 const canOpenKeyInfo = (item: TopKeyItem) => item.key_exists !== false;
 
@@ -111,7 +113,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   // Define columns for the table view
   const baseColumns = [
     {
-      header: "Key ID",
+      header: t("usagePage.topKeyView.colKeyId", { defaultValue: "Key ID" }),
       accessorKey: "api_key",
       meta: QUIET_HEADER,
       cell: (info: any) =>
@@ -122,7 +124,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
         ),
     },
     {
-      header: "Key Alias",
+      header: t("usagePage.topKeyView.colKeyAlias", { defaultValue: "Key Alias" }),
       accessorKey: "key_alias",
       meta: QUIET_HEADER,
       cell: (info: any) => info.getValue() || "-",
@@ -130,7 +132,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
     ...(topKeys.some((k) => k.user)
       ? [
           {
-            header: "User",
+            header: t("usagePage.topKeyView.colUser", { defaultValue: "User" }),
             accessorKey: "user",
             meta: QUIET_HEADER,
             cell: (info: any) => info.getValue() || "-",
@@ -140,7 +142,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   ];
 
   const tagsColumn = {
-    header: "Tags",
+    header: t("usagePage.topKeyView.colTags", { defaultValue: "Tags" }),
     accessorKey: "tags",
     meta: QUIET_HEADER,
     cell: (info: any) => {
@@ -165,10 +167,10 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                 content={
                   <div>
                     <div>
-                      <span className="text-muted-foreground">Tag Name:</span> {tag.tag}
+                      <span className="text-muted-foreground">{t("usagePage.topKeyView.tagName", { defaultValue: "Tag Name:" })}</span> {tag.tag}
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Spend:</span>{" "}
+                      <span className="text-muted-foreground">{t("usagePage.topKeyView.tagSpend", { defaultValue: "Spend:" })}</span>{" "}
                       {tag.usage > 0 && tag.usage < 0.01 ? "<¥0.01" : `¥${formatNumberWithCommas(tag.usage, 2)}`}
                     </div>
                   </div>
@@ -183,7 +185,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
               <button
                 onClick={() => toggleTagsExpansion(apiKey)}
                 className="ml-0.5 rounded-md p-1 transition-colors hover:bg-accent"
-                title={isExpanded ? "Show fewer tags" : "Show all tags"}
+                title={isExpanded ? t("usagePage.topKeyView.showFewerTags", { defaultValue: "Show fewer tags" }) : t("usagePage.topKeyView.showAllTags", { defaultValue: "Show all tags" })}
               >
                 {isExpanded ? (
                   <ChevronUpIcon className="h-3 w-3 text-muted-foreground" />
@@ -216,12 +218,12 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <Segmented
-          label="Number of top keys to show"
+          label={t("usagePage.topKeyView.topKeysLimitLabel", { defaultValue: "Number of top keys to show" })}
           value={String(topKeysLimit)}
           options={LIMIT_OPTIONS}
           onChange={(limit) => setTopKeysLimit(Number(limit))}
         />
-        <Segmented label="View" value={viewMode} options={VIEW_OPTIONS} onChange={setViewMode} />
+        <Segmented label={t("usagePage.topKeyView.viewLabel", { defaultValue: "View" })} value={viewMode} options={VIEW_OPTIONS} onChange={setViewMode} />
       </div>
 
       {viewMode === "chart" ? (
@@ -246,15 +248,15 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                 <div className="relative z-floating max-w-xs rounded-lg border bg-popover px-3 py-2 text-xs shadow-lg">
                   <div className="grid gap-1">
                     <div>
-                      <span className="text-muted-foreground">Key Alias: </span>
+                      <span className="text-muted-foreground">{t("usagePage.topKeyView.tooltipKeyAlias", { defaultValue: "Key Alias:" })} </span>
                       <span className="break-all font-mono text-foreground">{item?.key_alias}</span>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Key ID: </span>
+                      <span className="text-muted-foreground">{t("usagePage.topKeyView.tooltipKeyId", { defaultValue: "Key ID:" })} </span>
                       <span className="break-all font-mono text-foreground">{item?.api_key}</span>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Spend: </span>
+                      <span className="text-muted-foreground">{t("usagePage.topKeyView.tooltipSpend", { defaultValue: "Spend:" })} </span>
                       <span className="font-medium tabular-nums text-foreground">
                         ¥{formatNumberWithCommas(item?.spend, 2)}
                       </span>
@@ -279,7 +281,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
             <button
               onClick={handleClose}
               className="absolute top-4 right-4 text-muted-foreground hover:text-foreground focus:outline-hidden"
-              aria-label="Close"
+              aria-label={t("common.close", { defaultValue: "Close" })}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
