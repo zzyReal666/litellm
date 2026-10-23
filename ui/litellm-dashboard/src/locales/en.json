@@ -3320,7 +3320,15 @@
     "deleteModalTitle": "Delete Pass-Through Endpoint",
     "deleteModalMessage": "Are you sure you want to delete this pass-through endpoint? This action cannot be undone.",
     "deleteSuccess": "Endpoint deleted successfully.",
-    "deleteFailed": "Error deleting the endpoint: {{error}}"
+    "deleteFailed": "Error deleting the endpoint: {{error}}",
+    "configEndpointHint": "This endpoint is defined in the config file and cannot be edited or deleted on the dashboard.",
+    "showHeaders": "Show headers",
+    "hideHeaders": "Hide headers",
+    "allMethods": "ALL",
+    "openEndpointActions": "Open endpoint actions",
+    "colSource": "Source",
+    "sourceConfig": "Config",
+    "sourceDb": "DB"
   },
   "perUserUsage": {
     "title": "Per User Usage",

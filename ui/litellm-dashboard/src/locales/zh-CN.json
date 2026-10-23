@@ -3320,7 +3320,15 @@
     "deleteModalTitle": "删除透传端点",
     "deleteModalMessage": "确定要删除此透传端点吗？此操作无法撤销。",
     "deleteSuccess": "端点已成功删除。",
-    "deleteFailed": "删除端点时出错：{{error}}"
+    "deleteFailed": "删除端点时出错：{{error}}",
+    "configEndpointHint": "此端点定义在配置文件中，无法在管理面板上编辑或删除。",
+    "showHeaders": "显示请求头",
+    "hideHeaders": "隐藏请求头",
+    "allMethods": "全部",
+    "openEndpointActions": "打开端点操作",
+    "colSource": "来源",
+    "sourceConfig": "配置",
+    "sourceDb": "数据库"
   },
   "perUserUsage": {
     "title": "每用户用量",

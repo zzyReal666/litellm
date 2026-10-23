@@ -15,11 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 
 import type { passThroughItem } from "./PassThroughSettings";
 
-const CONFIG_ENDPOINT_HINT =
-  "This endpoint is defined in the config file and cannot be edited or deleted on the dashboard.";
+const CONFIG_ENDPOINT_HINT = i18n.t("passThroughSettings.configEndpointHint", {
+  defaultValue: "This endpoint is defined in the config file and cannot be edited or deleted on the dashboard.",
+});
 
 function HeaderWithTooltip({ title, tooltip }: { title: string; tooltip: string }) {
   return (
@@ -40,7 +42,7 @@ function HeadersCell({ value }: { value: object }) {
       <button
         type="button"
         onClick={() => setShowHeaders(!showHeaders)}
-        aria-label={showHeaders ? "Hide headers" : "Show headers"}
+        aria-label={showHeaders ? i18n.t("passThroughSettings.hideHeaders", { defaultValue: "Hide headers" }) : i18n.t("passThroughSettings.showHeaders", { defaultValue: "Show headers" })}
         className="rounded-sm p-1 hover:bg-muted"
       >
         {showHeaders ? (
@@ -55,7 +57,7 @@ function HeadersCell({ value }: { value: object }) {
 
 function MethodsCell({ methods }: { methods: string[] | undefined }) {
   if (!methods || methods.length === 0) {
-    return <Badge variant="secondary">ALL</Badge>;
+    return <Badge variant="secondary">{i18n.t("passThroughSettings.allMethods", { defaultValue: "ALL" })}</Badge>;
   }
   return (
     <div className="flex flex-wrap gap-1">
@@ -80,7 +82,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open endpoint actions"
+        aria-label={i18n.t("passThroughSettings.openEndpointActions", { defaultValue: "Open endpoint actions" })}
         data-testid={`endpoint-actions-${endpointId || endpoint.path}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -93,7 +95,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
           onClick={() => !isFromConfig && endpointId && onEndpointClick(endpointId)}
         >
           <Pencil />
-          Edit
+          {i18n.t("common.edit", { defaultValue: "Edit" })}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -103,7 +105,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
           onClick={() => !isFromConfig && endpointId && onDeleteClick(endpointId)}
         >
           <Trash2 />
-          Delete
+          {i18n.t("common.delete", { defaultValue: "Delete" })}
         </DropdownMenuItem>
         {isFromConfig && (
           <div data-testid="endpoint-config-hint" className="px-2 py-1.5 text-xs text-muted-foreground">
@@ -127,8 +129,8 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "id",
     accessorKey: "id",
-    meta: { title: "ID" },
-    header: "ID",
+    meta: { title: i18n.t("passThroughSettings.colId", { defaultValue: "ID" }) },
+    header: i18n.t("passThroughSettings.colId", { defaultValue: "ID" }),
     size: 190,
     enableSorting: false,
     cell: ({ row }) => {
@@ -147,20 +149,20 @@ export const getPassThroughEndpointsTableColumns = ({
   },
   {
     id: "source",
-    meta: { title: "Source", skeleton: "badge" },
-    header: "Source",
+    meta: { title: i18n.t("passThroughSettings.colSource", { defaultValue: "Source" }), skeleton: "badge" },
+    header: i18n.t("passThroughSettings.colSource", { defaultValue: "Source" }),
     size: 100,
     enableSorting: false,
     cell: ({ row }) => {
       const isFromConfig = row.original.is_from_config ?? false;
-      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? "Config" : "DB"} />;
+      return <StatusBadge tone={isFromConfig ? "neutral" : "info"} label={isFromConfig ? i18n.t("passThroughSettings.sourceConfig", { defaultValue: "Config" }) : i18n.t("passThroughSettings.sourceDb", { defaultValue: "DB" })} />;
     },
   },
   {
     id: "path",
     accessorKey: "path",
-    meta: { title: "Path" },
-    header: "Path",
+    meta: { title: i18n.t("passThroughSettings.colPath", { defaultValue: "Path" }) },
+    header: i18n.t("passThroughSettings.colPath", { defaultValue: "Path" }),
     size: 200,
     enableSorting: false,
     cell: ({ row }) => (
@@ -172,8 +174,8 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "target",
     accessorKey: "target",
-    meta: { title: "Target" },
-    header: "Target",
+    meta: { title: i18n.t("passThroughSettings.colTarget", { defaultValue: "Target" }) },
+    header: i18n.t("passThroughSettings.colTarget", { defaultValue: "Target" }),
     size: 240,
     enableSorting: false,
     cell: ({ row }) => (
@@ -184,8 +186,8 @@ export const getPassThroughEndpointsTableColumns = ({
   },
   {
     id: "methods",
-    meta: { title: "Methods", skeleton: "chips" },
-    header: () => <HeaderWithTooltip title="Methods" tooltip="HTTP methods supported by this endpoint" />,
+    meta: { title: i18n.t("passThroughSettings.colMethods", { defaultValue: "Methods" }), skeleton: "chips" },
+    header: () => <HeaderWithTooltip title={i18n.t("passThroughSettings.colMethods", { defaultValue: "Methods" })} tooltip={i18n.t("passThroughSettings.methodsTooltip", { defaultValue: "HTTP methods supported by this endpoint" })} />,
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <MethodsCell methods={row.original.methods} />,
@@ -193,18 +195,18 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "auth",
     accessorKey: "auth",
-    meta: { title: "Authentication", skeleton: "badge" },
-    header: () => <HeaderWithTooltip title="Authentication" tooltip="LiteLLM Virtual Key required to call endpoint" />,
+    meta: { title: i18n.t("passThroughSettings.colAuthentication", { defaultValue: "Authentication" }), skeleton: "badge" },
+    header: () => <HeaderWithTooltip title={i18n.t("passThroughSettings.colAuthentication", { defaultValue: "Authentication" })} tooltip={i18n.t("passThroughSettings.authTooltip", { defaultValue: "LiteLLM Virtual Key required to call endpoint" })} />,
     size: 140,
     enableSorting: false,
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.auth ? "success" : "neutral"} label={row.original.auth ? "Yes" : "No"} />
+      <StatusBadge tone={row.original.auth ? "success" : "neutral"} label={row.original.auth ? i18n.t("common.yes", { defaultValue: "Yes" }) : i18n.t("common.no", { defaultValue: "No" })} />
     ),
   },
   {
     id: "headers",
-    meta: { title: "Headers" },
-    header: "Headers",
+    meta: { title: i18n.t("passThroughSettings.colHeaders", { defaultValue: "Headers" }) },
+    header: i18n.t("passThroughSettings.colHeaders", { defaultValue: "Headers" }),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <HeadersCell value={row.original.headers || {}} />,
@@ -212,7 +214,7 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{i18n.t("common.actions", { defaultValue: "Actions" })}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,
