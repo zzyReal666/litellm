@@ -2757,6 +2757,35 @@
     },
     "guardrailMode": {
       "tagBased": "（基于标签）"
+    },
+    "decisionModel": {
+      "actionBlock": "拦截",
+      "actionLog": "仅记录",
+      "noDecisionModelsAria": "无决策模型",
+      "noDecisionModels": "暂无决策模型",
+      "noDecisionModelsDescription": "添加一个决策模型{{source}}以使用此守卫。模型设置为评估模式后会显示在这里。",
+      "addModel": "添加模型",
+      "introNote": "决策模型对每个请求（pre_call、during_call）或响应（post_call）回答是/否问题。当某个问题的概率达到其阈值时会拦截该调用，设置为“仅记录”时则只记录。",
+      "decisionModelLabel": "决策模型",
+      "decisionModelTooltip": "此代理上的 decisions-API 模型，例如 typesafe/jev-latest。它会对下面每个问题进行评分。",
+      "selectDecisionModel": "选择一个决策模型",
+      "selectDecisionModelPlaceholder": "选择一个决策模型",
+      "noMatchingModels": "没有匹配的模型",
+      "questions": "问题",
+      "questionsDescription": "决策模型针对文本回答的是/否问题。拦截会在分数达到阈值时停止调用，仅记录则只记录该结果。",
+      "removeQuestion": "移除问题 {{position}}",
+      "name": "名称",
+      "questionNameAria": "问题 {{position}} 名称",
+      "namePlaceholder": "名称（例如 invoice_policy）",
+      "nameAlreadyUsed": "另一个问题已使用此名称",
+      "question": "问题",
+      "questionAria": "问题 {{position}}",
+      "questionPlaceholder": "决策模型要回答的问题，例如：文本是否询问发票相关内容？",
+      "action": "操作",
+      "questionActionAria": "问题 {{position}} 的操作",
+      "threshold": "阈值",
+      "questionThresholdAria": "问题 {{position}} 的阈值",
+      "addQuestion": "添加问题"
     }
   },
   "keyValueInput": {

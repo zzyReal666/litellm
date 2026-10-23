@@ -2757,6 +2757,35 @@
     },
     "guardrailMode": {
       "tagBased": "(tag-based)"
+    },
+    "decisionModel": {
+      "actionBlock": "Block",
+      "actionLog": "Log only",
+      "noDecisionModelsAria": "No decision models",
+      "noDecisionModels": "No decision models yet",
+      "noDecisionModelsDescription": "Add a decision model{{source}} to use this guardrail. A model shows up here once its mode is evaluation.",
+      "addModel": "Add a model",
+      "introNote": "The Decision Model answers yes/no questions about each request (pre_call, during_call) or response (post_call). A question whose probability reaches its threshold blocks the call, or is recorded when set to Log only.",
+      "decisionModelLabel": "Decision Model",
+      "decisionModelTooltip": "A decisions-API model on this proxy, such as typesafe/jev-latest. It scores every question below.",
+      "selectDecisionModel": "Select a decision model",
+      "selectDecisionModelPlaceholder": "Select a decision model",
+      "noMatchingModels": "No matching models",
+      "questions": "Questions",
+      "questionsDescription": "Yes/no questions the decision model answers about the text. Block stops the call once a score reaches the threshold, and Log only records it.",
+      "removeQuestion": "Remove question {{position}}",
+      "name": "Name",
+      "questionNameAria": "Question {{position}} name",
+      "namePlaceholder": "Name (e.g. invoice_policy)",
+      "nameAlreadyUsed": "Another question already uses this name",
+      "question": "Question",
+      "questionAria": "Question {{position}}",
+      "questionPlaceholder": "The question the decision model answers, e.g. Does the text ask about invoices?",
+      "action": "Action",
+      "questionActionAria": "Question {{position}} action",
+      "threshold": "Threshold",
+      "questionThresholdAria": "Question {{position}} threshold",
+      "addQuestion": "Add question"
     }
   },
   "keyValueInput": {
