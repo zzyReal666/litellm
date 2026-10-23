@@ -77,6 +77,16 @@ sudo /opt/litellm/scripts/setup-compression.sh
 
 压缩省下的 token 会在管理界面「成本优化 → 总览」里作为 compression savings 展示。
 
+注意压缩只作用于对话历史：系统消息、最后一条用户消息、以及 assistant 消息按
+LiteLLM 的压缩策略受保护、保持原文，避免改写当前指令或模型自己的输出。所以单轮
+请求没有可压缩内容，不会产生节省；多轮会话和带工具结果的请求才是主要受益场景。
+验证时看这两处即可：
+
+```bash
+docker logs litellm-litellm-1 --tail 100 | grep "Headroom: compressed"
+# 或管理界面 成本优化 → 总览，看 compression_saved_tokens
+```
+
 ## 日常运维
 
 ```bash
