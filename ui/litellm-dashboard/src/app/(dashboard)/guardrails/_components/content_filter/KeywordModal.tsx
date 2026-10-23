@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ACTION_ITEMS } from "./action_options";
+import i18n from "@/lib/i18n";
 
 interface KeywordModalProps {
   visible: boolean;
@@ -33,31 +34,31 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add blocked keyword</DialogTitle>
+          <DialogTitle>{i18n.t("guardrails.keywordModal.title", { defaultValue: "Add blocked keyword" })}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Keyword</p>
+            <p className="font-semibold">{i18n.t("guardrails.keywordModal.keywordLabel", { defaultValue: "Keyword" })}</p>
             <Input
               className="mt-2"
-              placeholder="Enter sensitive keyword or phrase"
+              placeholder={i18n.t("guardrails.keywordModal.keywordPlaceholder", { defaultValue: "Enter sensitive keyword or phrase" })}
               value={keyword}
               onChange={(e) => onKeywordChange(e.target.value)}
             />
           </div>
 
           <div>
-            <p className="font-semibold">Action</p>
+            <p className="font-semibold">{i18n.t("guardrails.keywordModal.actionLabel", { defaultValue: "Action" })}</p>
             <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this keyword is detected
+              {i18n.t("guardrails.keywordModal.actionDesc", { defaultValue: "Choose what action the guardrail should take when this keyword is detected" })}
             </p>
             <Select
               items={ACTION_ITEMS}
               value={action}
               onValueChange={(value: string | null) => value && onActionChange(value as "BLOCK" | "MASK")}
             >
-              <SelectTrigger className="w-full" aria-label="Action">
+              <SelectTrigger className="w-full" aria-label={i18n.t("guardrails.keywordModal.actionLabel", { defaultValue: "Action" })}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -71,10 +72,10 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
           </div>
 
           <div>
-            <p className="font-semibold">Description (optional)</p>
+            <p className="font-semibold">{i18n.t("guardrails.keywordModal.descriptionLabel", { defaultValue: "Description (optional)" })}</p>
             <Textarea
               className="mt-2 field-sizing-fixed"
-              placeholder="Explain why this keyword is sensitive"
+              placeholder={i18n.t("guardrails.keywordModal.descriptionPlaceholder", { defaultValue: "Explain why this keyword is sensitive" })}
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
               rows={3}
@@ -84,9 +85,9 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
 
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {i18n.t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
-          <Button onClick={onAdd}>Add</Button>
+          <Button onClick={onAdd}>{i18n.t("common.add", { defaultValue: "Add" })}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
