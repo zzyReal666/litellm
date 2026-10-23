@@ -4585,7 +4585,16 @@
     "tabMau": "MAU",
     "dailyActiveUsers": "每日活跃用户 - 近 7 天",
     "weeklyActiveUsers": "每周活跃用户 - 近 7 周",
-    "monthlyActiveUsers": "每月活跃用户 - 近 7 个月"
+    "monthlyActiveUsers": "每月活跃用户 - 近 7 个月",
+    "activeUsersView": "活跃用户",
+    "perUserView": "按用户",
+    "noActiveUsers": "此时间段内没有活跃用户",
+    "noUserAgentsFound": "未找到用户代理",
+    "clearFilter": "清除用户代理筛选",
+    "perUserSubtitle": "按最终用户的用量",
+    "activeUsersPeriod": "活跃用户周期",
+    "activityView": "活动视图",
+    "noData": "暂无数据"
   },
   "mcpTools": {
     "mcpToolConfiguration": {

@@ -4585,7 +4585,16 @@
     "tabMau": "MAU",
     "dailyActiveUsers": "Daily Active Users - Last 7 Days",
     "weeklyActiveUsers": "Weekly Active Users - Last 7 Weeks",
-    "monthlyActiveUsers": "Monthly Active Users - Last 7 Months"
+    "monthlyActiveUsers": "Monthly Active Users - Last 7 Months",
+    "activeUsersView": "Active users",
+    "perUserView": "Per user",
+    "noActiveUsers": "No active users in this period",
+    "noUserAgentsFound": "No user agents found",
+    "clearFilter": "Clear user agent filter",
+    "perUserSubtitle": "Usage per end user",
+    "activeUsersPeriod": "Active users period",
+    "activityView": "Activity view",
+    "noData": "No Data"
   },
   "mcpTools": {
     "mcpToolConfiguration": {

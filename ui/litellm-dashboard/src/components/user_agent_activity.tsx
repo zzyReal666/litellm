@@ -17,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { BarChart, STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { ChartSkeleton, Panel, Segmented } from "@/app/(dashboard)/usage/_components/components/overview/Primitives";
 import { userAgentSummaryCall, tagDauCall, tagWauCall, tagMauCall, tagDistinctCall } from "./networking";
+import i18n from "@/lib/i18n";
 import PerUserUsage from "./per_user_usage";
 import type { DateRangePickerValue } from "@/components/shared/date_picker_types";
 
@@ -24,14 +25,14 @@ type ActivityView = "active-users" | "per-user";
 type ActivePeriod = "dau" | "wau" | "mau";
 
 const VIEW_OPTIONS = [
-  { value: "active-users", label: "Active users" },
-  { value: "per-user", label: "Per user" },
+  { value: "active-users", label: i18n.t("userAgentActivity.activeUsersView", { defaultValue: "Active users" }) },
+  { value: "per-user", label: i18n.t("userAgentActivity.perUserView", { defaultValue: "Per user" }) },
 ] as const satisfies readonly { value: ActivityView; label: string }[];
 
 const PERIOD_OPTIONS = [
-  { value: "dau", label: "DAU" },
-  { value: "wau", label: "WAU" },
-  { value: "mau", label: "MAU" },
+  { value: "dau", label: i18n.t("userAgentActivity.tabDau", { defaultValue: "DAU" }) },
+  { value: "wau", label: i18n.t("userAgentActivity.tabWau", { defaultValue: "WAU" }) },
+  { value: "mau", label: i18n.t("userAgentActivity.tabMau", { defaultValue: "MAU" }) },
 ] as const satisfies readonly { value: ActivePeriod; label: string }[];
 
 const SUMMARY_SLOTS = 4;
@@ -96,7 +97,7 @@ function ActiveUsersChart({ chart }: { chart: ActiveUserChart }) {
   if (chart.tags.length === 0) {
     return (
       <div className="flex h-72 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        No active users in this period
+        {i18n.t("userAgentActivity.noActiveUsers", { defaultValue: "No active users in this period" })}
       </div>
     );
   }
@@ -420,7 +421,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
   const activeUserCharts: readonly ActiveUserChart[] = [
     {
       value: "dau",
-      title: "Daily Active Users - Last 7 Days",
+      title: i18n.t("userAgentActivity.dailyActiveUsers", { defaultValue: "Daily Active Users - Last 7 Days" }),
       loading: dauLoading,
       data: dailyChartData,
       index: "date",
@@ -428,7 +429,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     },
     {
       value: "wau",
-      title: "Weekly Active Users - Last 7 Weeks",
+      title: i18n.t("userAgentActivity.weeklyActiveUsers", { defaultValue: "Weekly Active Users - Last 7 Weeks" }),
       loading: wauLoading,
       data: weeklyChartData,
       index: "week",
@@ -436,7 +437,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     },
     {
       value: "mau",
-      title: "Monthly Active Users - Last 7 Months",
+      title: i18n.t("userAgentActivity.monthlyActiveUsers", { defaultValue: "Monthly Active Users - Last 7 Months" }),
       loading: mauLoading,
       data: monthlyChartData,
       index: "month",
@@ -450,11 +451,11 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
     <div className="grid gap-3">
       <Panel
         icon={Bot}
-        title="Summary by User Agent"
-        subtitle="Performance metrics for different user agents"
+        title={i18n.t("userAgentActivity.summaryTitle", { defaultValue: "Summary by User Agent" })}
+        subtitle={i18n.t("userAgentActivity.summarySubtitle", { defaultValue: "Performance metrics for different user agents" })}
         action={
           <div className="flex w-full items-center gap-2 sm:w-96">
-            <label className="shrink-0 text-xs text-muted-foreground">Filter by User Agents</label>
+            <label className="shrink-0 text-xs text-muted-foreground">{i18n.t("userAgentActivity.filterLabel", { defaultValue: "Filter by User Agents" })}</label>
             <Combobox
               multiple
               items={availableTags}
@@ -471,11 +472,11 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
                     ))
                   }
                 </ComboboxValue>
-                <ComboboxChipsInput placeholder="All User Agents" aria-label="All User Agents" />
-                {selectedTags.length > 0 && <ComboboxClear aria-label="Clear user agent filter" />}
+                <ComboboxChipsInput placeholder={i18n.t("userAgentActivity.filterPlaceholder", { defaultValue: "All User Agents" })} aria-label={i18n.t("userAgentActivity.filterPlaceholder", { defaultValue: "All User Agents" })} />
+                {selectedTags.length > 0 && <ComboboxClear aria-label={i18n.t("userAgentActivity.clearFilter", { defaultValue: "Clear user agent filter" })} />}
               </ComboboxChips>
               <ComboboxContent anchor={anchor}>
-                <ComboboxEmpty>No user agents found</ComboboxEmpty>
+                <ComboboxEmpty>{i18n.t("userAgentActivity.noUserAgentsFound", { defaultValue: "No user agents found" })}</ComboboxEmpty>
                 <ComboboxList>
                   {(tag: string) => {
                     const userAgent = extractUserAgent(tag);
@@ -521,7 +522,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
             {Array.from({ length: Math.max(0, SUMMARY_SLOTS - summaryRows.length) }).map((_, index) => (
               <SummaryCell
                 key={`empty-${index}`}
-                name={<h4 className="truncate text-sm font-medium text-muted-foreground">No Data</h4>}
+                name={<h4 className="truncate text-sm font-medium text-muted-foreground">{i18n.t("userAgentActivity.noData", { defaultValue: "No Data" })}</h4>}
                 successRequests="-"
                 totalTokens="-"
                 totalCost="-"
@@ -534,14 +535,14 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({
       {/* DAU/WAU/MAU vs Per User Usage. Every view stays mounted so switching does not reset its state. */}
       <Panel
         icon={Users}
-        title={activityView === "active-users" ? "DAU, WAU & MAU per Agent" : "Per User Usage (Last 30 Days)"}
-        subtitle={activityView === "active-users" ? "Active users across different time periods" : "Usage per end user"}
+        title={activityView === "active-users" ? i18n.t("userAgentActivity.dauWauMauTitle", { defaultValue: "DAU, WAU & MAU per Agent" }) : i18n.t("userAgentActivity.tabPerUserUsage", { defaultValue: "Per User Usage (Last 30 Days)" })}
+        subtitle={activityView === "active-users" ? i18n.t("userAgentActivity.dauWauMauSubtitle", { defaultValue: "Active users across different time periods" }) : i18n.t("userAgentActivity.perUserSubtitle", { defaultValue: "Usage per end user" })}
         action={
           <>
             {activityView === "active-users" && (
-              <Segmented label="Active users period" value={period} options={PERIOD_OPTIONS} onChange={setPeriod} />
+              <Segmented label={i18n.t("userAgentActivity.activeUsersPeriod", { defaultValue: "Active users period" })} value={period} options={PERIOD_OPTIONS} onChange={setPeriod} />
             )}
-            <Segmented label="Activity view" value={activityView} options={VIEW_OPTIONS} onChange={setActivityView} />
+            <Segmented label={i18n.t("userAgentActivity.activityView", { defaultValue: "Activity view" })} value={activityView} options={VIEW_OPTIONS} onChange={setActivityView} />
           </>
         }
       >
@@ -577,9 +578,9 @@ function SummaryCell({
   totalCost: string;
 }) {
   const rows = [
-    { label: "Success Requests", value: successRequests },
-    { label: "Total Tokens", value: totalTokens },
-    { label: "Total Cost", value: totalCost },
+    { label: i18n.t("userAgentActivity.successRequests", { defaultValue: "Success Requests" }), value: successRequests },
+    { label: i18n.t("userAgentActivity.totalTokens", { defaultValue: "Total Tokens" }), value: totalTokens },
+    { label: i18n.t("userAgentActivity.totalCost", { defaultValue: "Total Cost" }), value: totalCost },
   ];
   return (
     <div className="min-w-0 border-b px-4 py-3.5 last:border-b-0 lg:border-b-0">
