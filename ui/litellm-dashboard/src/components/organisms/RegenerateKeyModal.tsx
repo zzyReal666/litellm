@@ -16,11 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useZodForm } from "@/lib/forms/useZodForm";
 import { calculateExpiryPreviewFromDuration, formatExpiresUtc, isKeyExpired } from "@/utils/keyExpiryUtils";
+import i18n from "@/lib/i18n";
 import { buildRegenerateKeyPayload, type RegenerateKeyFormValues } from "./regenerateKeyPayload";
 
 const DURATION_PATTERN = /^(\d+(s|m|h|d|w|mo))?$/;
-const DURATION_MESSAGE = "Must be a duration like 30s, 30m, 24h, 2d, 1w, or 1mo";
-const EXPIRED_DURATION_MESSAGE = "Expiration is required for expired keys";
+const DURATION_MESSAGE = i18n.t("organisms.regenerateKeyModal.durationRuleMessage", { defaultValue: "Must be a duration like 30s, 30m, 24h, 2d, 1w, or 1mo" });
+const EXPIRED_DURATION_MESSAGE = i18n.t("organisms.regenerateKeyModal.expirationRequired", { defaultValue: "Expiration is required for expired keys" });
 
 const EMPTY_VALUES: RegenerateKeyFormValues = {
   key_alias: undefined,
@@ -97,7 +98,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
     try {
       const response = await regenerateKeyCall(accessToken, selectedToken.token || selectedToken.token_id, formValues);
       setRegeneratedKey(response.key);
-      toast.success("Virtual Key regenerated successfully");
+      toast.success(i18n.t("organisms.regenerateKeyModal.regenerateSuccess", { defaultValue: "Virtual Key regenerated successfully" }));
 
       // Build the update payload. Spread the API response first so any new
       // fields it returns (new token, timestamps, etc.) are captured, then
@@ -151,22 +152,22 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
     <Dialog open={visible} onOpenChange={(open) => !open && handleClose()} disablePointerDismissal>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Regenerate Virtual Key</DialogTitle>
+          <DialogTitle>{i18n.t("organisms.regenerateKeyModal.title", { defaultValue: "Regenerate Virtual Key" })}</DialogTitle>
         </DialogHeader>
         {regeneratedKey ? (
           <div className="flex flex-col gap-4">
             <Alert variant="warning">
               <TriangleAlert />
-              <AlertTitle>Save it now, you will not see it again</AlertTitle>
+              <AlertTitle>{i18n.t("organisms.regenerateKeyModal.saveWarning", { defaultValue: "Save it now, you will not see it again" })}</AlertTitle>
             </Alert>
 
             <div className="flex flex-col gap-0.5">
-              <span className="text-xs text-muted-foreground">Key Alias</span>
-              <span className="text-sm text-foreground">{selectedToken?.key_alias || "No alias set"}</span>
+              <span className="text-xs text-muted-foreground">{i18n.t("organisms.regenerateKeyModal.keyAlias", { defaultValue: "Key Alias" })}</span>
+              <span className="text-sm text-foreground">{selectedToken?.key_alias || i18n.t("organisms.regenerateKeyModal.noAliasSet", { defaultValue: "No alias set" })}</span>
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Virtual Key</span>
+              <span className="text-xs text-muted-foreground">{i18n.t("organisms.regenerateKeyModal.virtualKey", { defaultValue: "Virtual Key" })}</span>
               <div className="rounded-md border border-border bg-muted px-4 py-3.5 font-mono text-base break-all text-foreground">
                 {regeneratedKey}
               </div>
@@ -176,12 +177,12 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
           <TooltipProvider>
             <form onSubmit={(event) => event.preventDefault()} noValidate className="mt-1">
               <FieldGroup>
-                <FormField control={form.control} name="key_alias" label="Key Alias">
+                <FormField control={form.control} name="key_alias" label={i18n.t("organisms.regenerateKeyModal.keyAlias", { defaultValue: "Key Alias" })}>
                   {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} disabled />}
                 </FormField>
 
                 <div className="grid grid-cols-3 gap-3">
-                  <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
+                  <FormField control={form.control} name="max_budget" label={i18n.t("organisms.regenerateKeyModal.maxBudget", { defaultValue: "Max Budget (CNY)" })}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -194,7 +195,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="tpm_limit" label="TPM Limit">
+                  <FormField control={form.control} name="tpm_limit" label={i18n.t("organisms.regenerateKeyModal.tpmLimit", { defaultValue: "TPM Limit" })}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -206,7 +207,7 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="rpm_limit" label="RPM Limit">
+                  <FormField control={form.control} name="rpm_limit" label={i18n.t("organisms.regenerateKeyModal.rpmLimit", { defaultValue: "RPM Limit" })}>
                     {({ ref, value, onChange, ...field }) => (
                       <Input
                         {...field}
@@ -223,30 +224,30 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
                   <FormField
                     control={form.control}
                     name="duration"
-                    label="Expire Key"
+                    label={i18n.t("organisms.regenerateKeyModal.expireKey", { defaultValue: "Expire Key" })}
                     description={
                       <span className="flex flex-col gap-0.5 text-xs">
                         <span className={keyIsExpired ? "text-destructive" : "text-muted-foreground"}>
-                          Current expiry: {selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : "Never"}
-                          {keyIsExpired && " (expired)"}
+                          {i18n.t("organisms.regenerateKeyModal.currentExpiry", { value: selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : i18n.t("common.never", { defaultValue: "Never" }), defaultValue: `Current expiry: ${selectedToken?.expires ? formatExpiresUtc(selectedToken.expires) : "Never"}` })}
+                          {keyIsExpired && i18n.t("organisms.regenerateKeyModal.expiredSuffix", { defaultValue: " (expired)" })}
                         </span>
-                        {newExpiryTime && <span className="text-success">New expiry: {newExpiryTime}</span>}
+                        {newExpiryTime && <span className="text-success">{i18n.t("organisms.regenerateKeyModal.newExpiry", { value: newExpiryTime, defaultValue: `New expiry: ${newExpiryTime}` })}</span>}
                       </span>
                     }
                   >
-                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. 30s, 30h, 30d" />}
+                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={i18n.t("organisms.regenerateKeyModal.durationPlaceholder", { defaultValue: "e.g. 30s, 30h, 30d" })} />}
                   </FormField>
 
                   <FormField
                     control={form.control}
                     name="grace_period"
                     label={labelWithHint(
-                      "Grace Period",
-                      "Keep the old key valid for this duration after rotation. Both keys work during this period for seamless cutover. Empty = immediate revoke.",
+                      i18n.t("organisms.regenerateKeyModal.gracePeriod", { defaultValue: "Grace Period" }),
+                      i18n.t("organisms.regenerateKeyModal.gracePeriodTooltip", { defaultValue: "Keep the old key valid for this duration after rotation. Both keys work during this period for seamless cutover. Empty = immediate revoke." }),
                     )}
-                    description={<span className="text-xs">Recommended: 24h to 72h for production keys</span>}
+                    description={<span className="text-xs">{i18n.t("organisms.regenerateKeyModal.gracePeriodRecommended", { defaultValue: "Recommended: 24h to 72h for production keys" })}</span>}
                   >
-                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. 24h, 2d" />}
+                    {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={i18n.t("organisms.regenerateKeyModal.gracePeriodPlaceholder", { defaultValue: "e.g. 24h, 2d" })} />}
                   </FormField>
                 </div>
               </FieldGroup>
@@ -257,23 +258,23 @@ export function RegenerateKeyModal({ selectedToken, visible, onClose, onKeyUpdat
           {regeneratedKey ? (
             <>
               <Button variant="outline" onClick={handleClose}>
-                Close
+                {i18n.t("common.close", { defaultValue: "Close" })}
               </Button>
               <CopyToClipboard text={regeneratedKey} onCopy={handleCopyKey}>
                 <Button>
                   {copied ? <Check /> : <Copy />}
-                  {copied ? "Copied" : "Copy Key"}
+                  {copied ? i18n.t("common.copied", { defaultValue: "Copied" }) : i18n.t("organisms.regenerateKeyModal.copyKey", { defaultValue: "Copy Key" })}
                 </Button>
               </CopyToClipboard>
             </>
           ) : (
             <>
               <Button variant="outline" onClick={handleClose}>
-                Cancel
+                {i18n.t("common.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button onClick={handleRegenerateKey} disabled={isRegenerating} aria-busy={isRegenerating}>
                 <RefreshCw />
-                Regenerate
+                {i18n.t("organisms.regenerateKeyModal.regenerate", { defaultValue: "Regenerate" })}
               </Button>
             </>
           )}
