@@ -6092,7 +6092,26 @@
       "optionDescriptionAria": "Description of {{label}}",
       "removeOptionAria": "Remove option {{label}}",
       "levelAria": "Level {{number}}",
-      "inputHint": "The text the model reads before it answers, such as a support ticket or a chat message."
+      "inputHint": "The text the model reads before it answers, such as a support ticket or a chat message.",
+      "example": "Example",
+      "custom": "Custom",
+      "editorAria": "Decisions request editor",
+      "decisionEndpoint": "Decision endpoint",
+      "decisionModel": "Decision model",
+      "pickDecisionModel": "Pick a decision model",
+      "noDecisionModels": "No decision models yet",
+      "noDecisionModelsFound": "No decision models found",
+      "addDecisionModel": "Add a decision model",
+      "virtualKeySource": "Virtual Key Source",
+      "virtualKey": "Virtual Key",
+      "currentUiSession": "Current UI Session",
+      "enterVirtualKey": "Enter Virtual Key",
+      "requestEditorView": "Request editor view",
+      "form": "Form",
+      "howToCall": "How to call /v1/decisions and /v1/systemone",
+      "cancelRequest": "Cancel request",
+      "send": "Send",
+      "resultsAria": "Decisions results"
     }
   },
   "settingsPages": {

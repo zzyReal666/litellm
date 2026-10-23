@@ -6092,7 +6092,26 @@
       "optionDescriptionAria": "{{label}} 的描述",
       "removeOptionAria": "移除选项 {{label}}",
       "levelAria": "等级 {{number}}",
-      "inputHint": "模型在回答前会读取的文本，例如支持工单或聊天消息。"
+      "inputHint": "模型在回答前会读取的文本，例如支持工单或聊天消息。",
+      "example": "示例",
+      "custom": "自定义",
+      "editorAria": "决策请求编辑器",
+      "decisionEndpoint": "决策端点",
+      "decisionModel": "决策模型",
+      "pickDecisionModel": "选择一个决策模型",
+      "noDecisionModels": "暂无决策模型",
+      "noDecisionModelsFound": "未找到决策模型",
+      "addDecisionModel": "添加决策模型",
+      "virtualKeySource": "虚拟密钥来源",
+      "virtualKey": "虚拟密钥",
+      "currentUiSession": "当前 UI 会话",
+      "enterVirtualKey": "输入虚拟密钥",
+      "requestEditorView": "请求编辑器视图",
+      "form": "表单",
+      "howToCall": "如何调用 /v1/decisions 与 /v1/systemone",
+      "cancelRequest": "取消请求",
+      "send": "发送",
+      "resultsAria": "决策结果"
     }
   },
   "settingsPages": {

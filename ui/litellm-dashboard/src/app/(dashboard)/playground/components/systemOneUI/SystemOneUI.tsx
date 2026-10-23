@@ -22,6 +22,7 @@ import SystemOneForm from "./SystemOneForm";
 import OpenAIDecisionsForm from "./OpenAIDecisionsForm";
 import { validateSystemOnePayload, validateOpenAIDecisionsPayload, errorCount } from "./lib/validatePayload";
 import { useDecisionModels, type ApiKeySource } from "./useDecisionModels";
+import i18n from "@/lib/i18n";
 
 interface SystemOneUIProps {
   accessToken: string | null;
@@ -46,13 +47,13 @@ interface PresetPickerProps {
 function PresetPicker({ activePreset, onPick }: PresetPickerProps) {
   return (
     <Select value={activePreset?.id ?? CUSTOM_PRESET} onValueChange={onPick}>
-      <SelectTrigger className="w-56" aria-label="Example">
-        <SelectValue>{activePreset?.label ?? "Custom"}</SelectValue>
+      <SelectTrigger className="w-56" aria-label={i18n.t("playground.systemOne.example", { defaultValue: "Example" })}>
+        <SelectValue>{activePreset?.label ?? i18n.t("playground.systemOne.custom", { defaultValue: "Custom" })}</SelectValue>
       </SelectTrigger>
       <SelectContent>
         {activePreset === undefined && (
           <SelectItem value={CUSTOM_PRESET} disabled>
-            Custom
+            {i18n.t("playground.systemOne.custom", { defaultValue: "Custom" })}
           </SelectItem>
         )}
         {DECISION_PRESETS.map((preset) => (
@@ -166,7 +167,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
           hasResult ? "max-w-7xl xl:grid-cols-2" : "max-w-3xl",
         )}
       >
-        <section className="flex min-h-96 flex-col gap-3 xl:min-h-0" aria-label="Decisions request editor">
+        <section className="flex min-h-96 flex-col gap-3 xl:min-h-0" aria-label={i18n.t("playground.systemOne.editorAria", { defaultValue: "Decisions request editor" })}>
           <div className="flex flex-wrap items-center gap-2">
             <Select
               value={endpoint}
@@ -177,7 +178,7 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
                 }
               }}
             >
-              <SelectTrigger className="w-44" aria-label="Decision endpoint">
+              <SelectTrigger className="w-44" aria-label={i18n.t("playground.systemOne.decisionEndpoint", { defaultValue: "Decision endpoint" })}>
                 <SelectValue>{endpoint}</SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -187,18 +188,18 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
             </Select>
             <div className="w-56">
               <SearchSelect
-                aria-label="Decision model"
+                aria-label={i18n.t("playground.systemOne.decisionModel", { defaultValue: "Decision model" })}
                 options={decisionModels.map((model) => ({ label: model, value: model }))}
                 value={payloadModel(rawPayload) ?? null}
                 onValueChange={handleModelPick}
-                placeholder={decisionModels.length > 0 ? "Pick a decision model" : "No decision models yet"}
-                emptyText="No decision models found"
+                placeholder={decisionModels.length > 0 ? i18n.t("playground.systemOne.pickDecisionModel", { defaultValue: "Pick a decision model" }) : i18n.t("playground.systemOne.noDecisionModels", { defaultValue: "No decision models yet" })}
+                emptyText={i18n.t("playground.systemOne.noDecisionModelsFound", { defaultValue: "No decision models found" })}
                 allowClear={false}
               />
             </div>
             {decisionModelsLoaded && decisionModels.length === 0 && (
               <a href={uiHref("models-and-endpoints")} className="text-sm text-primary underline">
-                Add a decision model
+                {i18n.t("playground.systemOne.addDecisionModel", { defaultValue: "Add a decision model" })}
               </a>
             )}
             <Select
@@ -210,23 +211,23 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               }}
               disabled={disabledPersonalKeyCreation}
             >
-              <SelectTrigger className="w-44" aria-label="Virtual Key Source">
-                <SelectValue>{apiKeySource === "custom" ? "Virtual Key" : "Current UI Session"}</SelectValue>
+              <SelectTrigger className="w-44" aria-label={i18n.t("playground.systemOne.virtualKeySource", { defaultValue: "Virtual Key Source" })}>
+                <SelectValue>{apiKeySource === "custom" ? i18n.t("playground.systemOne.virtualKey", { defaultValue: "Virtual Key" }) : i18n.t("playground.systemOne.currentUiSession", { defaultValue: "Current UI Session" })}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="session" disabled={!accessToken}>
-                  Current UI Session
+                  {i18n.t("playground.systemOne.currentUiSession", { defaultValue: "Current UI Session" })}
                 </SelectItem>
-                <SelectItem value="custom">Virtual Key</SelectItem>
+                <SelectItem value="custom">{i18n.t("playground.systemOne.virtualKey", { defaultValue: "Virtual Key" })}</SelectItem>
               </SelectContent>
             </Select>
             {apiKeySource === "custom" && (
               <Input
                 type="password"
-                aria-label="Virtual Key"
+                aria-label={i18n.t("playground.systemOne.virtualKey", { defaultValue: "Virtual Key" })}
                 value={customApiKey}
                 onChange={(event) => setCustomApiKey(event.target.value)}
-                placeholder="Enter Virtual Key"
+                placeholder={i18n.t("playground.systemOne.enterVirtualKey", { defaultValue: "Enter Virtual Key" })}
                 className="w-56"
               />
             )}
@@ -238,13 +239,13 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
             className="min-h-0 flex-1"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <TabsList aria-label="Request editor view">
-                <TabsTrigger value="form">Form</TabsTrigger>
+              <TabsList aria-label={i18n.t("playground.systemOne.requestEditorView", { defaultValue: "Request editor view" })}>
+                <TabsTrigger value="form">{i18n.t("playground.systemOne.form", { defaultValue: "Form" })}</TabsTrigger>
                 <TabsTrigger value="curl">cURL</TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-1">
                 <PresetPicker activePreset={activePreset} onPick={handlePresetPick} />
-                <SimpleTooltip content="How to call /v1/decisions and /v1/systemone">
+                <SimpleTooltip content={i18n.t("playground.systemOne.howToCall", { defaultValue: "How to call /v1/decisions and /v1/systemone" })}>
                   
                 </SimpleTooltip>
               </div>
@@ -284,12 +285,12 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
               disabled={rawPayload === clearedPayload}
             >
               <Eraser />
-              Clear
+              {i18n.t("common.clear", { defaultValue: "Clear" })}
             </Button>
             <div className="ml-auto flex items-center gap-2">
               {isLoading && (
                 <Button variant="outline" onClick={clearRequestState}>
-                  Cancel request
+                  {i18n.t("playground.systemOne.cancelRequest", { defaultValue: "Cancel request" })}
                 </Button>
               )}
               <Button
@@ -299,14 +300,14 @@ export default function SystemOneUI({ accessToken, disabledPersonalKeyCreation =
                 disabled={!validation.isValid || isLoading || !effectiveApiKey}
               >
                 {isLoading ? <LoaderCircle className="animate-spin" /> : <Send />}
-                Send
+                {i18n.t("playground.systemOne.send", { defaultValue: "Send" })}
               </Button>
             </div>
           </div>
         </section>
 
         {hasResult && (
-          <section className="grid content-start gap-4 xl:min-h-0 xl:overflow-auto" aria-label="Decisions results">
+          <section className="grid content-start gap-4 xl:min-h-0 xl:overflow-auto" aria-label={i18n.t("playground.systemOne.resultsAria", { defaultValue: "Decisions results" })}>
             <ResponseView
               response={systemOne.data?.response}
               view={view}
