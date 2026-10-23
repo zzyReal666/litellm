@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import TeamDropdown from "./common_components/team_dropdown";
 import { getModelDisplayName } from "./key_team_helpers/fetch_available_models_team_key";
 import { toast } from "@/lib/toast";
+import i18n from "@/lib/i18n";
 import {
   getProxyBaseUrl,
   getProxyUISettings,
@@ -137,10 +138,11 @@ const labelWithHint = (label: string, hint: string): React.ReactNode => (
 const EmailInvitationsNotice: React.FC = () => (
   <Alert variant="info" className="mb-4">
     <Info />
-    <AlertTitle>Email invitations</AlertTitle>
+    <AlertTitle>{i18n.t("createUserButton.emailInvitations", { defaultValue: "Email invitations" })}</AlertTitle>
     <AlertDescription>
-      New users receive an email invite only when an email integration (SMTP, Resend, or SendGrid) is configured.{" "}
-      
+      {i18n.t("createUserButton.emailInvitationsDesc", {
+        defaultValue: "New users receive an email invite only when an email integration (SMTP, Resend, or SendGrid) is configured.",
+      })}{" "}
     </AlertDescription>
   </Alert>
 );
@@ -199,7 +201,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
   const handleCreate = async (formValues: CreateUserFormValues) => {
     try {
-      toast.info("Making API Call");
+      toast.info(i18n.t("createUserButton.notifications.makingApiCall", { defaultValue: "Making API Call" }));
       if (!isEmbedded) {
         setIsModalVisible(true);
       }
@@ -226,11 +228,11 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
         setIsInvitationLinkModalVisible(true);
       }
 
-      toast.success("API user Created");
+      toast.success(i18n.t("createUserButton.notifications.userCreated", { defaultValue: "API user Created" }));
       form.reset(defaultValues);
       localStorage.removeItem("userData" + userID);
     } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || error?.message || "Error creating the user";
+      const errorMessage = error.response?.data?.detail || error?.message || i18n.t("createUserButton.notifications.errorCreatingUser", { defaultValue: "Error creating the user" });
       toast.fromError(errorMessage);
       console.error("Error creating the user:", error);
     }
@@ -243,7 +245,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   }));
 
   const userEmailField = (
-    <FormField control={form.control} name="user_email" label="User Email">
+    <FormField control={form.control} name="user_email" label={i18n.t("createUserButton.userEmailLabel", { defaultValue: "User Email" })}>
       {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
     </FormField>
   );
@@ -252,23 +254,23 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
     <FormField
       control={form.control}
       name="team_id"
-      label="Team"
-      description="If selected, user will be added as a 'user' role to the team."
+      label={i18n.t("createUserButton.teamLabel", { defaultValue: "Team" })}
+      description={i18n.t("createUserButton.teamHelp", { defaultValue: "If selected, user will be added as a 'user' role to the team." })}
     >
       {({ id, value, onChange }) => <TeamDropdown id={id} value={value} onChange={onChange} />}
     </FormField>
   );
 
   const metadataField = (
-    <FormField control={form.control} name="metadata" label="Metadata">
+    <FormField control={form.control} name="metadata" label={i18n.t("createUserButton.metadataLabel", { defaultValue: "Metadata" })}>
       {({ ref, value, ...control }) => (
-        <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder="Enter metadata as JSON" />
+        <Textarea {...control} ref={ref} value={value ?? ""} rows={4} placeholder={i18n.t("createUserButton.metadataPlaceholder", { defaultValue: "Enter metadata as JSON" })} />
       )}
     </FormField>
   );
 
   const sendInviteEmailField = (
-    <FormField control={form.control} name="send_invite_email" label="Send invitation email" orientation="horizontal">
+    <FormField control={form.control} name="send_invite_email" label={i18n.t("createUserButton.sendInviteEmailLabel", { defaultValue: "Send invitation email" })} orientation="horizontal">
       {({ id, value, onChange, onBlur }) => (
         <Checkbox id={id} checked={value} onCheckedChange={onChange} onBlur={onBlur} />
       )}
@@ -307,13 +309,13 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
           <EmailInvitationsNotice />
           <FieldGroup>
             {userEmailField}
-            {roleField("User Role")}
+            {roleField(i18n.t("createUserButton.userRoleLabel", { defaultValue: "User Role" }))}
             {teamField}
             {metadataField}
             {sendInviteEmailField}
           </FieldGroup>
           <div className="mt-4 text-right">
-            <Button type="submit">Create User</Button>
+            <Button type="submit">{i18n.t("createUserButton.createUserSubmitButton", { defaultValue: "Create User" })}</Button>
           </div>
         </form>
       </TooltipProvider>
@@ -324,15 +326,15 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   return (
     <>
       <Button type="button" onClick={() => setIsModalVisible(true)}>
-        + Invite User
+        {i18n.t("createUserButton.inviteUserButton", { defaultValue: "+ Invite User" })}
       </Button>
       <Dialog open={isModalVisible} onOpenChange={(open) => !open && handleCancel()}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Invite User</DialogTitle>
+            <DialogTitle>{i18n.t("createUserButton.inviteUserModalTitle", { defaultValue: "Invite User" })}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-3">
-            <p className="mb-1 text-sm text-foreground">Create a User who can own keys</p>
+            <p className="mb-1 text-sm text-foreground">{i18n.t("createUserButton.createUserOwnsKeys", { defaultValue: "Create a User who can own keys" })}</p>
             <EmailInvitationsNotice />
           </div>
           <TooltipProvider>
@@ -341,8 +343,10 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                 {userEmailField}
                 {roleField(
                   labelWithHint(
-                    "Global Proxy Role",
-                    "This role is independent of any team/org specific roles. Configure Team / Organization Admins in the Settings",
+                    i18n.t("createUserButton.globalProxyRoleLabel", { defaultValue: "Global Proxy Role" }),
+                    i18n.t("createUserButton.globalProxyRoleTooltip", {
+                      defaultValue: "This role is independent of any team/org specific roles. Configure Team / Organization Admins in the Settings",
+                    }),
                   ),
                 )}
                 {teamField}
@@ -350,8 +354,8 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                 <FormField
                   control={form.control}
                   name="organization_ids"
-                  label="Organization"
-                  description="The user will be added to the selected organization(s)."
+                  label={i18n.t("createUserButton.organizationLabel", { defaultValue: "Organization" })}
+                  description={i18n.t("createUserButton.organizationHelp", { defaultValue: "The user will be added to the selected organization(s)." })}
                 >
                   {({ id, value, onChange }) => (
                     <Select
@@ -361,10 +365,10 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                       onValueChange={(selected: string[]) => onChange(selected.length === 0 ? undefined : selected)}
                     >
                       <SelectTrigger id={id} className="w-full">
-                        <SelectValue placeholder="Select Organization">
+                        <SelectValue placeholder={i18n.t("createUserButton.selectOrganizationPlaceholder", { defaultValue: "Select Organization" })}>
                           {(selected: string[]) =>
                             selected.length === 0
-                              ? "Select Organization"
+                              ? i18n.t("createUserButton.selectOrganizationPlaceholder", { defaultValue: "Select Organization" })
                               : organizationOptions
                                   .filter((option) => selected.includes(option.value))
                                   .map((option) => option.label)
@@ -392,25 +396,25 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
                       className={`size-4 transition-transform ${isPersonalKeyOpen ? "rotate-90" : ""}`}
                       aria-hidden
                     />
-                    Personal Key Creation
+                    {i18n.t("createUserButton.personalKeyCreation", { defaultValue: "Personal Key Creation" })}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-4">
                     <FormField
                       control={form.control}
                       name="models"
-                      label={labelWithHint("Models", "Models user has access to, outside of team scope.")}
-                      description="Models user has access to, outside of team scope."
+                      label={labelWithHint(i18n.t("createUserButton.modelsLabel", { defaultValue: "Models" }), i18n.t("createUserButton.modelsTooltip", { defaultValue: "Models user has access to, outside of team scope." }))}
+                      description={i18n.t("createUserButton.modelsHelp", { defaultValue: "Models user has access to, outside of team scope." })}
                     >
                       {({ value, onChange }) => (
                         <MultiSelect
                           options={[
-                            { label: "All Proxy Models", value: "all-proxy-models" },
-                            { label: "No Default Models", value: "no-default-models" },
+                            { label: i18n.t("createUserButton.allProxyModels", { defaultValue: "All Proxy Models" }), value: "all-proxy-models" },
+                            { label: i18n.t("createUserButton.noDefaultModels", { defaultValue: "No Default Models" }), value: "no-default-models" },
                             ...userModels.map((model) => ({ label: getModelDisplayName(model), value: model })),
                           ]}
                           value={value ?? []}
                           onValueChange={onChange}
-                          placeholder="Select models"
+                          placeholder={i18n.t("createUserButton.modelsPlaceholder", { defaultValue: "Select models" })}
                         />
                       )}
                     </FormField>
@@ -421,7 +425,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
               <div className="mt-4 text-right">
                 <Button type="submit">
                   <UserPlus />
-                  Invite User
+                  {i18n.t("createUserButton.inviteUserSubmitButton", { defaultValue: "Invite User" })}
                 </Button>
               </div>
             </form>
