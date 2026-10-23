@@ -3346,7 +3346,14 @@
     "showing10Of": "Showing 10 of {{total}} results",
     "distributionTitle": "User Usage Distribution",
     "distributionSubtitle": "Number of users by successful request frequency",
-    "usersCount": "{{count}} users"
+    "usersCount": "{{count}} users",
+    "noData": "No per-user usage data",
+    "range1to9": "1-9 requests",
+    "range10to99": "10-99 requests",
+    "range100to999": "100-999 requests",
+    "range1kto9k": "1K-9.9K requests",
+    "range10kto99k": "10K-99.9K requests",
+    "range100kPlus": "100K+ requests"
   },
   "priceDataReload": {
     "reloadButton": "Reload Price Data",

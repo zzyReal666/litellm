@@ -4,6 +4,7 @@ import { BarChart } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { perUserAnalyticsCall } from "./networking";
+import i18n from "@/lib/i18n";
 
 interface PerUserMetrics {
   user_id: string;
@@ -79,40 +80,40 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
 
   const columns: ColumnDef<PerUserMetrics>[] = [
     {
-      header: "User ID",
+      header: i18n.t("perUserUsage.colUserId", { defaultValue: "User ID" }),
       accessorKey: "user_id",
       cell: ({ row }) => <span className="font-medium">{row.original.user_id}</span>,
     },
     {
-      header: "User Email",
+      header: i18n.t("perUserUsage.colUserEmail", { defaultValue: "User Email" }),
       accessorKey: "user_email",
-      cell: ({ row }) => row.original.user_email || "N/A",
+      cell: ({ row }) => row.original.user_email || i18n.t("perUserUsage.naValue", { defaultValue: "N/A" }),
     },
     {
-      header: "User Agent",
+      header: i18n.t("perUserUsage.colUserAgent", { defaultValue: "User Agent" }),
       accessorKey: "user_agent",
-      cell: ({ row }) => row.original.user_agent || "Unknown",
+      cell: ({ row }) => row.original.user_agent || i18n.t("common.unknown", { defaultValue: "Unknown" }),
     },
     {
-      header: "Success Generations",
+      header: i18n.t("perUserUsage.colSuccessGenerations", { defaultValue: "Success Generations" }),
       accessorKey: "successful_requests",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.successful_requests),
     },
     {
-      header: "Total Tokens",
+      header: i18n.t("perUserUsage.colTotalTokens", { defaultValue: "Total Tokens" }),
       accessorKey: "total_tokens",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.total_tokens),
     },
     {
-      header: "Failed Requests",
+      header: i18n.t("perUserUsage.colFailedRequests", { defaultValue: "Failed Requests" }),
       accessorKey: "failed_requests",
       meta: { numeric: true },
       cell: ({ row }) => formatAbbreviatedNumber(row.original.failed_requests),
     },
     {
-      header: "Total Cost",
+      header: i18n.t("perUserUsage.colTotalCost", { defaultValue: "Total Cost" }),
       accessorKey: "spend",
       meta: { numeric: true },
       cell: ({ row }) => `¥${formatAbbreviatedNumber(row.original.spend, 4)}`,
@@ -121,16 +122,16 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-medium text-foreground">Per User Usage</h3>
-      <p className="text-sm text-muted-foreground">Individual developer usage metrics</p>
+      <h3 className="text-lg font-medium text-foreground">{i18n.t("perUserUsage.title", { defaultValue: "Per User Usage" })}</h3>
+      <p className="text-sm text-muted-foreground">{i18n.t("perUserUsage.subtitle", { defaultValue: "Individual developer usage metrics" })}</p>
 
       <Tabs defaultValue="details">
         <TabsList variant="line" className="mb-6 h-auto w-full justify-start rounded-none border-b p-0">
           <TabsTrigger value="details" className="flex-none rounded-none px-4 py-2">
-            User Details
+            {i18n.t("perUserUsage.tabUserDetails", { defaultValue: "User Details" })}
           </TabsTrigger>
           <TabsTrigger value="distribution" className="flex-none rounded-none px-4 py-2">
-            Usage Distribution
+            {i18n.t("perUserUsage.tabUsageDistribution", { defaultValue: "Usage Distribution" })}
           </TabsTrigger>
         </TabsList>
 
@@ -144,7 +145,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
             pagination={pagination}
             onPaginationChange={handlePaginationChange}
             rowCount={perUserData.total_count}
-            noDataMessage="No per-user usage data"
+            noDataMessage={i18n.t("perUserUsage.noData", { defaultValue: "No per-user usage data" })}
             size="compact"
           />
         </TabsContent>
@@ -152,8 +153,8 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
         {/* Tab 2: Usage Distribution Histogram */}
         <TabsContent value="distribution" keepMounted>
           <div className="mb-4">
-            <h4 className="text-lg font-medium text-foreground">User Usage Distribution</h4>
-            <p className="text-sm text-muted-foreground">Number of users by successful request frequency</p>
+            <h4 className="text-lg font-medium text-foreground">{i18n.t("perUserUsage.distributionTitle", { defaultValue: "User Usage Distribution" })}</h4>
+            <p className="text-sm text-muted-foreground">{i18n.t("perUserUsage.distributionSubtitle", { defaultValue: "Number of users by successful request frequency" })}</p>
           </div>
 
           <BarChart
@@ -161,7 +162,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
               // Get top user agents by frequency first
               const userAgentCounts = new Map<string, number>();
               perUserData.results.forEach((item: PerUserMetrics) => {
-                const agent = item.user_agent || "Unknown";
+                const agent = item.user_agent || i18n.t("common.unknown", { defaultValue: "Unknown" });
                 userAgentCounts.set(agent, (userAgentCounts.get(agent) || 0) + 1);
               });
 
@@ -172,18 +173,18 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
 
               // Categorize users by successful request count and user agent
               const categories = {
-                "1-9 requests": { range: [1, 9], agents: {} as Record<string, number> },
-                "10-99 requests": { range: [10, 99], agents: {} as Record<string, number> },
-                "100-999 requests": { range: [100, 999], agents: {} as Record<string, number> },
-                "1K-9.9K requests": { range: [1000, 9999], agents: {} as Record<string, number> },
-                "10K-99.9K requests": { range: [10000, 99999], agents: {} as Record<string, number> },
-                "100K+ requests": { range: [100000, Infinity], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range1to9", { defaultValue: "1-9 requests" })]: { range: [1, 9], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range10to99", { defaultValue: "10-99 requests" })]: { range: [10, 99], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range100to999", { defaultValue: "100-999 requests" })]: { range: [100, 999], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range1kto9k", { defaultValue: "1K-9.9K requests" })]: { range: [1000, 9999], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range10kto99k", { defaultValue: "10K-99.9K requests" })]: { range: [10000, 99999], agents: {} as Record<string, number> },
+                [i18n.t("perUserUsage.range100kPlus", { defaultValue: "100K+ requests" })]: { range: [100000, Infinity], agents: {} as Record<string, number> },
               };
 
               // Count users in each category by user agent (only for top user agents)
               perUserData.results.forEach((item: PerUserMetrics) => {
                 const successCount = item.successful_requests;
-                const userAgent = item.user_agent || "Unknown";
+                const userAgent = item.user_agent || i18n.t("common.unknown", { defaultValue: "Unknown" });
 
                 // Only process if this is one of the top user agents
                 if (topUserAgents.includes(userAgent)) {
@@ -215,7 +216,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
               // Count user agents by frequency and get top ones
               const userAgentCounts = new Map<string, number>();
               perUserData.results.forEach((item: PerUserMetrics) => {
-                const agent = item.user_agent || "Unknown";
+                const agent = item.user_agent || i18n.t("common.unknown", { defaultValue: "Unknown" });
                 userAgentCounts.set(agent, (userAgentCounts.get(agent) || 0) + 1);
               });
 

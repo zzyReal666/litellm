@@ -3346,7 +3346,14 @@
     "showing10Of": "显示第 10 条，共 {{total}} 条",
     "distributionTitle": "用户用量分布",
     "distributionSubtitle": "按成功请求频率统计的用户数量",
-    "usersCount": "{{count}} 个用户"
+    "usersCount": "{{count}} 个用户",
+    "noData": "没有单用户用量数据",
+    "range1to9": "1-9 次请求",
+    "range10to99": "10-99 次请求",
+    "range100to999": "100-999 次请求",
+    "range1kto9k": "1K-9.9K 次请求",
+    "range10kto99k": "10K-99.9K 次请求",
+    "range100kPlus": "100K+ 次请求"
   },
   "priceDataReload": {
     "reloadButton": "重新加载价格数据",
