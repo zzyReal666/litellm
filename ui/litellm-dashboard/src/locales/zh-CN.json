@@ -12902,6 +12902,31 @@
       "noMatchingSteps": "没有匹配的步骤",
       "clearFilters": "清除筛选",
       "spansInTimeOrder": "按时间顺序排列的 span"
+    },
+    "runHeader": {
+      "errorsRecorded": "已记录错误",
+      "recorded": "已记录",
+      "stepErrors": "{{count}} 个步骤{{noun}}",
+      "stepError": "错误",
+      "stepErrorsNoun": "错误",
+      "recordedWith": "已记录 · {{detail}}",
+      "statusTooltip": "已收到 span 的状态。可能还有更多 span 陆续到达。",
+      "steps": "个步骤",
+      "tokens": "个令牌",
+      "copyForAgent": "复制给 agent",
+      "moreRunActions": "更多运行操作",
+      "traceLinkCopied": "链路链接已复制",
+      "copyLink": "复制链接",
+      "addRunToDataset": "将运行添加到数据集",
+      "backToRuns": "返回运行列表",
+      "copyTraceId": "复制链路 ID",
+      "liveUpdates": "实时更新",
+      "liveOnTooltip": "实时：每 30 秒刷新一次。点击可暂停。",
+      "liveOffTooltip": "已暂停。点击可跟随实时更新。",
+      "live": "实时",
+      "refreshRun": "刷新运行",
+      "traceView": "链路视图",
+      "thread": "线程"
     }
   },
   "mcpServerCredentials": {

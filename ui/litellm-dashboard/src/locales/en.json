@@ -12902,6 +12902,31 @@
       "noMatchingSteps": "No matching steps",
       "clearFilters": "Clear filters",
       "spansInTimeOrder": "Spans in time order"
+    },
+    "runHeader": {
+      "errorsRecorded": "Errors recorded",
+      "recorded": "Recorded",
+      "stepErrors": "{{count}} step {{noun}}",
+      "stepError": "error",
+      "stepErrorsNoun": "errors",
+      "recordedWith": "Recorded · {{detail}}",
+      "statusTooltip": "Status of received spans. More spans may still arrive.",
+      "steps": "steps",
+      "tokens": "tokens",
+      "copyForAgent": "Copy for agent",
+      "moreRunActions": "More run actions",
+      "traceLinkCopied": "Trace link copied",
+      "copyLink": "Copy link",
+      "addRunToDataset": "Add run to dataset",
+      "backToRuns": "Back to runs",
+      "copyTraceId": "Copy trace ID",
+      "liveUpdates": "Live updates",
+      "liveOnTooltip": "Live: refreshes every 30s. Click to pause.",
+      "liveOffTooltip": "Paused. Click to follow live.",
+      "live": "Live",
+      "refreshRun": "Refresh run",
+      "traceView": "Trace view",
+      "thread": "Thread"
     }
   },
   "mcpServerCredentials": {
