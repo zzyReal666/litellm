@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { CogIcon, BanIcon } from "@heroicons/react/outline";
 import { callbackInfo, callback_map, reverse_callback_map } from "./callback_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
+import i18n from "@/lib/i18n";
 
 interface LoggingConfig {
   callback_name: string;
@@ -45,11 +46,11 @@ export function LoggingSettingsView({
   const getEventTypeLabel = (eventType: string) => {
     switch (eventType) {
       case "success":
-        return "Success Only";
+        return i18n.t("loggingSettingsView.successOnly", { defaultValue: "Success Only" });
       case "failure":
-        return "Failure Only";
+        return i18n.t("loggingSettingsView.failureOnly", { defaultValue: "Failure Only" });
       case "success_and_failure":
-        return "Success & Failure";
+        return i18n.t("loggingSettingsView.successAndFailure", { defaultValue: "Success & Failure" });
       default:
         return eventType;
     }
@@ -61,7 +62,7 @@ export function LoggingSettingsView({
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <CogIcon className="h-4 w-4 text-info" />
-          <span className="font-semibold text-foreground">Logging Integrations</span>
+          <span className="font-semibold text-foreground">{i18n.t("loggingSettingsView.loggingIntegrations", { defaultValue: "Logging Integrations" })}</span>
           <Badge variant="secondary">{loggingConfigs.length}</Badge>
         </div>
 
@@ -84,7 +85,7 @@ export function LoggingSettingsView({
                     <div>
                       <span className="block font-medium text-info">{displayName}</span>
                       <span className="block text-xs text-info">
-                        {Object.keys(config.callback_vars).length} parameters configured
+                        {i18n.t("loggingSettingsView.parametersConfigured", { count: Object.keys(config.callback_vars).length, defaultValue: `${Object.keys(config.callback_vars).length} parameters configured` })}
                       </span>
                     </div>
                   </div>
@@ -98,7 +99,7 @@ export function LoggingSettingsView({
         ) : (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
             <CogIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground text-sm">No logging integrations configured</span>
+            <span className="text-muted-foreground text-sm">{i18n.t("loggingSettingsView.noIntegrationsConfigured", { defaultValue: "No logging integrations configured" })}</span>
           </div>
         )}
       </div>
@@ -107,7 +108,7 @@ export function LoggingSettingsView({
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <BanIcon className="h-4 w-4 text-destructive" />
-          <span className="font-semibold text-foreground">Disabled Callbacks</span>
+          <span className="font-semibold text-foreground">{i18n.t("loggingSettingsView.disabledCallbacks", { defaultValue: "Disabled Callbacks" })}</span>
           <Badge variant="destructive">{disabledCallbacks.length}</Badge>
         </div>
 
@@ -130,10 +131,10 @@ export function LoggingSettingsView({
                     />
                     <div>
                       <span className="block font-medium text-destructive">{displayName}</span>
-                      <span className="block text-xs text-destructive">Disabled for this key</span>
+                      <span className="block text-xs text-destructive">{i18n.t("loggingSettingsView.disabledForKey", { defaultValue: "Disabled for this key" })}</span>
                     </div>
                   </div>
-                  <Badge variant="destructive">Disabled</Badge>
+                  <Badge variant="destructive">{i18n.t("common.disabled", { defaultValue: "Disabled" })}</Badge>
                 </div>
               );
             })}
@@ -141,7 +142,7 @@ export function LoggingSettingsView({
         ) : (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
             <BanIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground text-sm">No callbacks disabled</span>
+            <span className="text-muted-foreground text-sm">{i18n.t("loggingSettingsView.noCallbacksDisabled", { defaultValue: "No callbacks disabled" })}</span>
           </div>
         )}
       </div>
@@ -153,9 +154,9 @@ export function LoggingSettingsView({
       <div className={`bg-card border border-border rounded-lg p-6 ${className}`}>
         <div className="flex items-center gap-2 mb-6">
           <div>
-            <span className="block font-semibold text-foreground">Logging Settings</span>
+            <span className="block font-semibold text-foreground">{i18n.t("loggingSettingsView.cardTitle", { defaultValue: "Logging Settings" })}</span>
             <span className="block text-xs text-muted-foreground">
-              Active logging integrations and disabled callbacks for this key
+              {i18n.t("loggingSettingsView.cardSubtitle", { defaultValue: "Active logging integrations and disabled callbacks for this key" })}
             </span>
           </div>
         </div>
@@ -166,7 +167,7 @@ export function LoggingSettingsView({
 
   return (
     <div className={`${className}`}>
-      <span className="block font-medium text-foreground mb-3">Logging Settings</span>
+      <span className="block font-medium text-foreground mb-3">{i18n.t("loggingSettingsView.inlineTitle", { defaultValue: "Logging Settings" })}</span>
       {content}
     </div>
   );
