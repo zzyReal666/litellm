@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import i18n from "@/lib/i18n";
 import { useInfiniteSpendLogEndUsers } from "@/app/(dashboard)/hooks/spendLogs/useSpendLogEndUsers";
 import { useInfiniteSpendLogUsers } from "@/app/(dashboard)/hooks/spendLogs/useSpendLogUsers";
 import { useInfiniteKeyAliases } from "@/app/(dashboard)/hooks/keys/useKeyAliases";
@@ -27,28 +28,28 @@ import { LOG_FILTER_IDS, type LogsWindow } from "./useLogFilterLogic";
 const ALL_VALUE = "all";
 
 const STATUS_FILTER_ITEMS = [
-  { value: ALL_VALUE, label: "All Statuses" },
-  { value: "success", label: "Success" },
-  { value: "failure", label: "Failure" },
+  { value: ALL_VALUE, label: i18n.t("viewLogs.filters.allStatuses", { defaultValue: "All Statuses" }) },
+  { value: "success", label: i18n.t("common.success", { defaultValue: "Success" }) },
+  { value: "failure", label: i18n.t("viewLogs.filters.failure", { defaultValue: "Failure" }) },
 ] as const;
 
 const CACHE_FILTER_ITEMS = [
-  { value: ALL_VALUE, label: "All Requests" },
-  { value: "hit", label: "Cache Hit" },
-  { value: "miss", label: "Cache Miss" },
+  { value: ALL_VALUE, label: i18n.t("viewLogs.filters.allRequests", { defaultValue: "All Requests" }) },
+  { value: "hit", label: i18n.t("viewLogs.filters.cacheHit", { defaultValue: "Cache Hit" }) },
+  { value: "miss", label: i18n.t("viewLogs.filters.cacheMiss", { defaultValue: "Cache Miss" }) },
 ] as const;
 
 const CREDENTIAL_FILTER_ITEMS = [
-  { value: ALL_VALUE, label: "All Credentials" },
+  { value: ALL_VALUE, label: i18n.t("viewLogs.filters.allCredentials", { defaultValue: "All Credentials" }) },
   ...Object.entries(CREDENTIAL_LABELS).map(([value, label]) => ({ value, label })),
 ] as const;
 
 const SPAN_TYPE_FILTER_ITEMS = [
-  { value: ALL_VALUE, label: "All Types" },
+  { value: ALL_VALUE, label: i18n.t("viewLogs.filters.allTypes", { defaultValue: "All Types" }) },
   { value: "llm", label: "LLM" },
-  { value: "agent", label: "Agent" },
+  { value: "agent", label: i18n.t("viewLogs.filters.agent", { defaultValue: "Agent" }) },
   { value: "mcp", label: "MCP" },
-  { value: "batch", label: "Batch" },
+  { value: "batch", label: i18n.t("viewLogs.filters.batch", { defaultValue: "Batch" }) },
 ] as const;
 const PAGE_SIZE = 50;
 
@@ -77,13 +78,13 @@ function TeamFilterField({
   );
 
   return (
-    <DataTableFilterField label="Team ID">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.teamId", { defaultValue: "Team ID" })}>
       <SearchSelect
         options={options}
         value={value}
         onValueChange={(next) => onChange(next ?? undefined)}
-        placeholder="Search or select a team"
-        emptyText="No teams found"
+        placeholder={i18n.t("viewLogs.filters.searchTeam", { defaultValue: "Search or select a team" })}
+        emptyText={i18n.t("viewLogs.filters.noTeams", { defaultValue: "No teams found" })}
       />
     </DataTableFilterField>
   );
@@ -117,7 +118,7 @@ function KeyAliasFilterField({
   }, [data]);
 
   return (
-    <DataTableFilterField label="Key Alias">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.keyAlias", { defaultValue: "Key Alias" })}>
       <PaginatedSearchSelect
         options={options}
         value={value}
@@ -127,8 +128,8 @@ function KeyAliasFilterField({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search a key alias"
-        emptyText="No key aliases found"
+        placeholder={i18n.t("viewLogs.filters.searchKeyAlias", { defaultValue: "Search a key alias" })}
+        emptyText={i18n.t("viewLogs.filters.noKeyAliases", { defaultValue: "No key aliases found" })}
       />
     </DataTableFilterField>
   );
@@ -149,13 +150,13 @@ function ModelFilterField({ value, onChange }: { value: string; onChange: (value
         const modelName = model.model_name ?? "";
         if (!modelId || seen.has(modelId)) return [];
         seen.add(modelId);
-        return [{ label: modelName || modelId, value: modelId, sublabel: `Model ID: ${modelId}` }];
+        return [{ label: modelName || modelId, value: modelId, sublabel: i18n.t("viewLogs.filters.modelIdSublabel", { modelId, defaultValue: `Model ID: ${modelId}` }) }];
       }),
     );
   }, [data]);
 
   return (
-    <DataTableFilterField label="Model">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.model", { defaultValue: "Model" })}>
       <PaginatedSearchSelect
         options={options}
         value={value}
@@ -165,8 +166,8 @@ function ModelFilterField({ value, onChange }: { value: string; onChange: (value
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search a model"
-        emptyText="No models found"
+        placeholder={i18n.t("viewLogs.filters.searchModel", { defaultValue: "Search a model" })}
+        emptyText={i18n.t("viewLogs.filters.noModels", { defaultValue: "No models found" })}
       />
     </DataTableFilterField>
   );
@@ -200,7 +201,7 @@ function UserIdFilterField({
   }, [data]);
 
   return (
-    <DataTableFilterField label="User ID">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.userId", { defaultValue: "User ID" })}>
       <PaginatedSearchSelect
         options={options}
         value={value}
@@ -210,8 +211,8 @@ function UserIdFilterField({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search an internal user"
-        emptyText="No users found"
+        placeholder={i18n.t("viewLogs.filters.searchUser", { defaultValue: "Search an internal user" })}
+        emptyText={i18n.t("viewLogs.filters.noUsers", { defaultValue: "No users found" })}
       />
     </DataTableFilterField>
   );
@@ -245,7 +246,7 @@ function EndUserFilterField({
   }, [data]);
 
   return (
-    <DataTableFilterField label="End User">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.endUser", { defaultValue: "End User" })}>
       <PaginatedSearchSelect
         options={options}
         value={value}
@@ -255,8 +256,8 @@ function EndUserFilterField({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search an end user"
-        emptyText="No end users in this time range"
+        placeholder={i18n.t("viewLogs.filters.searchEndUser", { defaultValue: "Search an end user" })}
+        emptyText={i18n.t("viewLogs.filters.noEndUsers", { defaultValue: "No end users in this time range" })}
       />
     </DataTableFilterField>
   );
@@ -273,7 +274,7 @@ function ErrorCodeFilterField({ value, onChange }: { value: string; onChange: (v
       (option) => option.value === trimmed || option.label.toLowerCase() === lowered,
     );
     if (trimmed === "" || isKnownCode) return matches;
-    return [...matches, { label: `Use custom code: ${trimmed}`, value: trimmed }];
+    return [...matches, { label: i18n.t("viewLogs.filters.useCustomCode", { code: trimmed, defaultValue: `Use custom code: ${trimmed}` }), value: trimmed }];
   }, [query]);
 
   const selected = useMemo<SearchSelectOption | null>(() => {
@@ -288,7 +289,7 @@ function ErrorCodeFilterField({ value, onChange }: { value: string; onChange: (v
   }, [options, selected]);
 
   return (
-    <DataTableFilterField label="Error Code">
+    <DataTableFilterField label={i18n.t("viewLogs.filters.errorCode", { defaultValue: "Error Code" })}>
       <Combobox
         items={items}
         value={selected}
@@ -303,12 +304,12 @@ function ErrorCodeFilterField({ value, onChange }: { value: string; onChange: (v
       >
         <ComboboxInput
           onFocus={(event) => event.currentTarget.select()}
-          placeholder="Select or type an error code"
+          placeholder={i18n.t("viewLogs.filters.searchErrorCode", { defaultValue: "Select or type an error code" })}
           showClear={value !== ""}
           className="w-full"
         />
         <ComboboxContent>
-          <ComboboxEmpty>No error codes found</ComboboxEmpty>
+          <ComboboxEmpty>{i18n.t("viewLogs.filters.noErrorCodes", { defaultValue: "No error codes found" })}</ComboboxEmpty>
           <ComboboxList data-testid="error-code-filter-list">
             {(item: SearchSelectOption) => (
               <ComboboxItem key={item.value} value={item}>
@@ -341,7 +342,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
         teams={teams}
       />
 
-      <DataTableFilterField label="Span Type">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.spanType", { defaultValue: "Span Type" })}>
         <Select
           items={SPAN_TYPE_FILTER_ITEMS}
           value={valueOf(LOG_FILTER_IDS.SPAN_TYPE) === "" ? ALL_VALUE : valueOf(LOG_FILTER_IDS.SPAN_TYPE)}
@@ -350,7 +351,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All Types" />
+            <SelectValue placeholder={i18n.t("viewLogs.filters.allTypes", { defaultValue: "All Types" })} />
           </SelectTrigger>
           <SelectContent>
             {SPAN_TYPE_FILTER_ITEMS.map((item) => (
@@ -362,14 +363,14 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
         </Select>
       </DataTableFilterField>
 
-      <DataTableFilterField label="Status">
+      <DataTableFilterField label={i18n.t("common.status", { defaultValue: "Status" })}>
         <Select
           items={STATUS_FILTER_ITEMS}
           value={valueOf(LOG_FILTER_IDS.STATUS) === "" ? ALL_VALUE : valueOf(LOG_FILTER_IDS.STATUS)}
           onValueChange={(next) => set(LOG_FILTER_IDS.STATUS, next === null || next === ALL_VALUE ? undefined : next)}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All Statuses" />
+            <SelectValue placeholder={i18n.t("viewLogs.filters.allStatuses", { defaultValue: "All Statuses" })} />
           </SelectTrigger>
           <SelectContent>
             {STATUS_FILTER_ITEMS.map((item) => (
@@ -381,7 +382,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
         </Select>
       </DataTableFilterField>
 
-      <DataTableFilterField label="Cache">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.cache", { defaultValue: "Cache" })}>
         <Select
           items={CACHE_FILTER_ITEMS}
           value={valueOf(LOG_FILTER_IDS.CACHE_STATUS) === "" ? ALL_VALUE : valueOf(LOG_FILTER_IDS.CACHE_STATUS)}
@@ -390,7 +391,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All Requests" />
+            <SelectValue placeholder={i18n.t("viewLogs.filters.allRequests", { defaultValue: "All Requests" })} />
           </SelectTrigger>
           <SelectContent>
             {CACHE_FILTER_ITEMS.map((item) => (
@@ -402,7 +403,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
         </Select>
       </DataTableFilterField>
 
-      <DataTableFilterField label="Credential">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.credential", { defaultValue: "Credential" })}>
         <Select
           items={CREDENTIAL_FILTER_ITEMS}
           value={valueOf(LOG_FILTER_IDS.CREDENTIAL) === "" ? ALL_VALUE : valueOf(LOG_FILTER_IDS.CREDENTIAL)}
@@ -411,7 +412,7 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="All Credentials" />
+            <SelectValue placeholder={i18n.t("viewLogs.filters.allCredentials", { defaultValue: "All Credentials" })} />
           </SelectTrigger>
           <SelectContent>
             {CREDENTIAL_FILTER_ITEMS.map((item) => (
@@ -443,37 +444,37 @@ export function RequestLogsFilters({ get, set, teams, logsWindow }: RequestLogsF
 
       <ErrorCodeFilterField value={valueOf(LOG_FILTER_IDS.ERROR_CODE)} onChange={setter(LOG_FILTER_IDS.ERROR_CODE)} />
 
-      <DataTableFilterField label="Error Message">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.errorMessage", { defaultValue: "Error Message" })}>
         <Input
           value={valueOf(LOG_FILTER_IDS.ERROR_MESSAGE)}
           onChange={(event) => set(LOG_FILTER_IDS.ERROR_MESSAGE, emptyToUndefined(event.target.value))}
-          placeholder="Enter error message…"
+          placeholder={i18n.t("viewLogs.filters.enterErrorMessage", { defaultValue: "Enter error message…" })}
         />
       </DataTableFilterField>
 
-      <DataTableFilterField label="Key Hash">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.keyHash", { defaultValue: "Key Hash" })}>
         <Input
           value={valueOf(LOG_FILTER_IDS.KEY_HASH)}
           onChange={(event) => set(LOG_FILTER_IDS.KEY_HASH, emptyToUndefined(event.target.value))}
-          placeholder="Enter key hash…"
+          placeholder={i18n.t("viewLogs.filters.enterKeyHash", { defaultValue: "Enter key hash…" })}
         />
       </DataTableFilterField>
 
-      <DataTableFilterField label="Session ID">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.sessionId", { defaultValue: "Session ID" })}>
         <Input
           value={valueOf(LOG_FILTER_IDS.SESSION_ID)}
           onChange={(event) => set(LOG_FILTER_IDS.SESSION_ID, emptyToUndefined(event.target.value))}
-          placeholder="Enter session ID…"
+          placeholder={i18n.t("viewLogs.filters.enterSessionId", { defaultValue: "Enter session ID…" })}
         />
       </DataTableFilterField>
 
       <ModelFilterField value={valueOf(LOG_FILTER_IDS.MODEL_ID)} onChange={setter(LOG_FILTER_IDS.MODEL_ID)} />
 
-      <DataTableFilterField label="Public model / search tool">
+      <DataTableFilterField label={i18n.t("viewLogs.filters.publicModelSearch", { defaultValue: "Public model / search tool" })}>
         <Input
           value={valueOf(LOG_FILTER_IDS.PUBLIC_MODEL_OR_SEARCH_TOOL)}
           onChange={(event) => set(LOG_FILTER_IDS.PUBLIC_MODEL_OR_SEARCH_TOOL, emptyToUndefined(event.target.value))}
-          placeholder="Enter public model or search tool…"
+          placeholder={i18n.t("viewLogs.filters.enterPublicModelSearch", { defaultValue: "Enter public model or search tool…" })}
         />
       </DataTableFilterField>
     </>

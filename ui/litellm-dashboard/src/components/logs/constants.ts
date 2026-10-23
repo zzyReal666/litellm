@@ -1,3 +1,5 @@
+import i18n from "@/lib/i18n";
+
 export const ERROR_CODE_OPTIONS: { label: string; value: string }[] = [
   { label: "400 - Bad Request", value: "400" },
   { label: "401 - Invalid Authentication", value: "401" },
@@ -23,21 +25,21 @@ export const BATCH_CALL_TYPES = ["acreate_batch", "create_batch", "aretrieve_bat
 
 export const SPAN_TYPE_LABELS: Record<string, string> = {
   llm: "LLM",
-  agent: "Agent",
+  agent: i18n.t("viewLogs.filters.agent", { defaultValue: "Agent" }),
   mcp: "MCP",
-  batch: "Batch",
+  batch: i18n.t("viewLogs.filters.batch", { defaultValue: "Batch" }),
 };
 
 export const CREDENTIAL_LABELS: Record<string, string> = {
-  true: "Client OAuth token",
-  false: "Configured key",
+  true: i18n.t("viewLogs.filters.clientOauthToken", { defaultValue: "Client OAuth token" }),
+  false: i18n.t("viewLogs.filters.configuredKey", { defaultValue: "Configured key" }),
 };
 
 export const QUICK_SELECT_OPTIONS: { label: string; value: number; unit: string }[] = [
-  { label: "Last Minute", value: 1, unit: "minutes" },
-  { label: "Last 15 Minutes", value: 15, unit: "minutes" },
-  { label: "Last Hour", value: 1, unit: "hours" },
-  { label: "Last 4 Hours", value: 4, unit: "hours" },
-  { label: "Last 24 Hours", value: 24, unit: "hours" },
-  { label: "Last 7 Days", value: 7, unit: "days" },
+  { label: i18n.t("viewLogs.filters.lastMinute", { defaultValue: "Last Minute" }), value: 1, unit: "minutes" },
+  { label: i18n.t("viewLogs.filters.last15Minutes", { defaultValue: "Last 15 Minutes" }), value: 15, unit: "minutes" },
+  { label: i18n.t("viewLogs.filters.lastHour", { defaultValue: "Last Hour" }), value: 1, unit: "hours" },
+  { label: i18n.t("viewLogs.filters.last4Hours", { defaultValue: "Last 4 Hours" }), value: 4, unit: "hours" },
+  { label: i18n.t("viewLogs.filters.last24Hours", { defaultValue: "Last 24 Hours" }), value: 24, unit: "hours" },
+  { label: i18n.t("viewLogs.filters.last7Days", { defaultValue: "Last 7 Days" }), value: 7, unit: "days" },
 ];
