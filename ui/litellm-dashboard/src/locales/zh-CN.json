@@ -8902,7 +8902,10 @@
       "rateLimitsTitle": "速率限制",
       "saveChanges": "保存更改",
       "backToAgent": "返回 Agent",
-      "allowedMcpServersTooltip": "选择此 Agent 可访问的 MCP 服务器或访问组。绑定到此 Agent 的密钥只能访问此处授权的服务器。"
+      "allowedMcpServersTooltip": "选择此 Agent 可访问的 MCP 服务器或访问组。绑定到此 Agent 的密钥只能访问此处授权的服务器。",
+      "accessGroupsLabel": "访问组",
+      "accessGroupsTooltip": "附加的组会限制此代理可以访问的模型、MCP 服务器和代理，在其密钥与团队权限之上叠加。留空则不施加额外限制。",
+      "accessGroupsPlaceholder": "选择访问组（可选）"
     },
     "dynamicAgentFormFields": {
       "agentNameLabel": "Agent 名称",

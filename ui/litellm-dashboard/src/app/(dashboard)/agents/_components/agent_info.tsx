@@ -385,7 +385,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
               <DetailItem label={t("agentsPage.agentInfo.rpmLimitLabel", { defaultValue: "RPM Limit" })}>{agent.rpm_limit ?? t("agentsPage.agentInfo.unlimited", { defaultValue: "Unlimited" })}</DetailItem>
               <DetailItem label={t("agentsPage.agentInfo.sessionTpmLimitLabel", { defaultValue: "Session TPM Limit" })}>{agent.session_tpm_limit ?? t("agentsPage.agentInfo.unlimited", { defaultValue: "Unlimited" })}</DetailItem>
               <DetailItem label={t("agentsPage.agentInfo.sessionRpmLimitLabel", { defaultValue: "Session RPM Limit" })}>{agent.session_rpm_limit ?? t("agentsPage.agentInfo.unlimited", { defaultValue: "Unlimited" })}</DetailItem>
-              <DetailItem label="Access Groups">
+              <DetailItem label={t("agentsPage.agentInfo.accessGroupsLabel", { defaultValue: "Access Groups" })}>
                 {agent.access_group_ids?.length ? (
                   <div className="space-y-1">
                     {agent.access_group_ids.map((accessGroupId) => (
@@ -393,7 +393,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                     ))}
                   </div>
                 ) : (
-                  "None"
+                  t("common.none", { defaultValue: "None" })
                 )}
               </DetailItem>
               <DetailItem label={t("common.createdAt", { defaultValue: "Created At" })}>{formatDate(agent.created_at)}</DetailItem>
@@ -453,20 +453,20 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                 <h3 className="text-lg font-medium">{t("agentsPage.agentInfo.skillsSectionTitle", { defaultValue: "Skills" })}</h3>
                 <DetailList className="mt-4">
                   {agent.agent_card_params.skills.map((skill, index) => (
-                    <DetailItem label={skill.name || `Skill ${index + 1}`} key={index}>
+                    <DetailItem label={skill.name || t("agentsPage.agentInfo.skillFallbackLabel", { index: index + 1, defaultValue: `Skill ${index + 1}` })} key={index}>
                       <div>
                         <div>
-                          <strong>ID:</strong> {skill.id}
+                          <strong>{t("agentsPage.agentInfo.skillIdField", { defaultValue: "ID" })}:</strong> {skill.id}
                         </div>
                         <div>
-                          <strong>Description:</strong> {skill.description}
+                          <strong>{t("common.description", { defaultValue: "Description" })}:</strong> {skill.description}
                         </div>
                         <div>
-                          <strong>Tags:</strong> {Array.isArray(skill.tags) ? skill.tags.join(", ") : skill.tags}
+                          <strong>{t("agentsPage.agentInfo.skillTagsField", { defaultValue: "Tags" })}:</strong> {Array.isArray(skill.tags) ? skill.tags.join(", ") : skill.tags}
                         </div>
                         {skill.examples && skill.examples.length > 0 && (
                           <div>
-                            <strong>Examples:</strong>{" "}
+                            <strong>{t("agentsPage.agentInfo.skillExamplesField", { defaultValue: "Examples" })}:</strong>{" "}
                             {Array.isArray(skill.examples) ? skill.examples.join(", ") : skill.examples}
                           </div>
                         )}
@@ -546,20 +546,20 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                         </div>
 
                         <Separator className="my-6" />
-                        <h3 className="text-lg font-medium mb-4">Access Groups</h3>
+                        <h3 className="text-lg font-medium mb-4">{t("agentsPage.agentInfo.accessGroupsLabel", { defaultValue: "Access Groups" })}</h3>
                         <FieldGroup>
                           <AgentFormField
                             name="access_group_ids"
                             label={labelWithHint(
-                              "Access Groups",
-                              "Attached groups cap which models, MCP servers, and agents this agent can reach, on top of its key and team permissions. Leave empty to apply no extra cap.",
+                              t("agentsPage.agentInfo.accessGroupsLabel", { defaultValue: "Access Groups" }),
+                              t("agentsPage.agentInfo.accessGroupsTooltip", { defaultValue: "Attached groups cap which models, MCP servers, and agents this agent can reach, on top of its key and team permissions. Leave empty to apply no extra cap." }),
                             )}
                           >
                             {({ value, onChange }) => (
                               <AccessGroupSelector
                                 value={Array.isArray(value) ? (value as string[]) : []}
                                 onChange={onChange}
-                                placeholder="Select access groups (optional)"
+                                placeholder={t("agentsPage.agentInfo.accessGroupsPlaceholder", { defaultValue: "Select access groups (optional)" })}
                               />
                             )}
                           </AgentFormField>
@@ -621,7 +621,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
                     </FormProvider>
                   </TooltipProvider>
                 ) : (
-                  <p>Click &quot;Edit Settings&quot; to modify agent configuration.</p>
+                  <p>{t("agentsPage.agentInfo.editSettingsHint", { defaultValue: "Click \"Edit Settings\" to modify agent configuration." })}</p>
                 )}
               </Card>
             </TabsContent>

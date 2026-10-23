@@ -8902,7 +8902,10 @@
       "rateLimitsTitle": "Rate Limits",
       "saveChanges": "Save Changes",
       "backToAgent": "Back to Agent",
-      "allowedMcpServersTooltip": "Select which MCP servers or access groups this agent can access. Keys bound to this agent can only reach servers granted here."
+      "allowedMcpServersTooltip": "Select which MCP servers or access groups this agent can access. Keys bound to this agent can only reach servers granted here.",
+      "accessGroupsLabel": "Access Groups",
+      "accessGroupsTooltip": "Attached groups cap which models, MCP servers, and agents this agent can reach, on top of its key and team permissions. Leave empty to apply no extra cap.",
+      "accessGroupsPlaceholder": "Select access groups (optional)"
     },
     "dynamicAgentFormFields": {
       "agentNameLabel": "Agent Name",
