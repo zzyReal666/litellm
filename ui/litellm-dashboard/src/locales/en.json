@@ -13226,6 +13226,24 @@
       "tokens": "{{count}} tok",
       "inspectStepAria": "Inspect step {{name}}",
       "inspect": "Inspect"
+    },
+    "datasetDetail": {
+      "loadingDataset": "Loading dataset…",
+      "fetchingCases": "Fetching its cases.",
+      "couldNotLoadDataset": "Couldn't load this dataset",
+      "proxyReturnedNone": "The proxy returned no dataset.",
+      "allDatasets": "All datasets",
+      "breadcrumbAria": "Breadcrumb",
+      "copyDatasetId": "Copy dataset ID",
+      "exportJsonl": "Export JSONL",
+      "saveAsRevision": "Save as revision {{revision}}",
+      "revisionReadOnly": "Revision {{revision}} is read-only. Switch to the latest revision to make changes.",
+      "noCases": "This revision has no cases. Add some from a trace or a finding.",
+      "revisionConflict": "Someone saved a newer revision while you were editing. Reload to see it, then make your changes again.",
+      "reload": "Reload",
+      "revisionAria": "Revision",
+      "revisionLabel": "Revision {{value}}",
+      "latestSuffix": " (latest)"
     }
   },
   "mcpServerCredentials": {

@@ -13226,6 +13226,24 @@
       "tokens": "{{count}} 个令牌",
       "inspectStepAria": "查看步骤 {{name}}",
       "inspect": "查看"
+    },
+    "datasetDetail": {
+      "loadingDataset": "正在加载数据集…",
+      "fetchingCases": "正在获取其中的案例。",
+      "couldNotLoadDataset": "无法加载此数据集",
+      "proxyReturnedNone": "代理未返回数据集。",
+      "allDatasets": "全部数据集",
+      "breadcrumbAria": "面包屑",
+      "copyDatasetId": "复制数据集 ID",
+      "exportJsonl": "导出 JSONL",
+      "saveAsRevision": "保存为修订 {{revision}}",
+      "revisionReadOnly": "修订 {{revision}} 为只读。请切换到最新修订以进行更改。",
+      "noCases": "此修订没有案例。请从链路或发现中添加一些。",
+      "revisionConflict": "在你编辑期间有人保存了更新的修订。请重新加载以查看，然后再次进行更改。",
+      "reload": "重新加载",
+      "revisionAria": "修订",
+      "revisionLabel": "修订 {{value}}",
+      "latestSuffix": "（最新）"
     }
   },
   "mcpServerCredentials": {

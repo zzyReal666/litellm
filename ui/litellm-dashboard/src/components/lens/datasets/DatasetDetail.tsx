@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronRight, Database, Download, Loader2, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StateMessage } from "@/components/shared/StateMessage";
+import i18n from "@/lib/i18n";
 import { useDatasetRoute } from "../route";
 import { IdChip } from "../traces/ui/IdChip";
 import { isRevisionConflict, useDataset, useExportDataset, useSaveRevision } from "./api";
@@ -27,8 +28,8 @@ export function DatasetDetail({ datasetId, readOnly, onBack }: DatasetDetailProp
       <StateMessage
         role="status"
         icon={<Loader2 className="size-5 animate-spin motion-reduce:animate-none" />}
-        title="Loading dataset…"
-        description="Fetching its cases."
+        title={i18n.t("lens.datasetDetail.loadingDataset", { defaultValue: "Loading dataset…" })}
+        description={i18n.t("lens.datasetDetail.fetchingCases", { defaultValue: "Fetching its cases." })}
       />
     );
   const error = latest.error ?? viewed.error;
@@ -38,11 +39,11 @@ export function DatasetDetail({ datasetId, readOnly, onBack }: DatasetDetailProp
         role="alert"
         tone="destructive"
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn't load this dataset"
-        description={error?.message ?? "The proxy returned no dataset."}
+        title={i18n.t("lens.datasetDetail.couldNotLoadDataset", { defaultValue: "Couldn't load this dataset" })}
+        description={error?.message ?? i18n.t("lens.datasetDetail.proxyReturnedNone", { defaultValue: "The proxy returned no dataset." })}
       >
         <Button size="sm" variant="outline" onClick={onBack}>
-          All datasets
+          {i18n.t("lens.datasetDetail.allDatasets", { defaultValue: "All datasets" })}
         </Button>
       </StateMessage>
     );
@@ -98,9 +99,9 @@ function DatasetRevision(props: DatasetRevisionProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <header className="flex shrink-0 flex-col gap-1 border-b bg-background px-3 pt-2.5 pb-2 sm:px-4">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-xs text-muted-foreground">
+        <nav aria-label={i18n.t("lens.datasetDetail.breadcrumbAria", { defaultValue: "Breadcrumb" })} className="flex items-center gap-1 text-xs text-muted-foreground">
           <button type="button" onClick={onBack} className="rounded hover:text-foreground hover:underline">
-            Datasets
+            {i18n.t("lens.datasetsView.datasetsAria", { defaultValue: "Datasets" })}
           </button>
           <ChevronRight aria-hidden="true" className="size-3" />
           <span className="truncate">{dataset.name}</span>
@@ -109,9 +110,9 @@ function DatasetRevision(props: DatasetRevisionProps) {
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <Database aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
             <h2 className="min-w-0 truncate text-base font-semibold">{dataset.name}</h2>
-            <IdChip value={dataset.id} label="Copy dataset ID" />
+            <IdChip value={dataset.id} label={i18n.t("lens.datasetDetail.copyDatasetId", { defaultValue: "Copy dataset ID" })} />
             <span className="hidden truncate text-xs text-muted-foreground sm:inline">
-              {dataset.agent_name || "Any agent"}
+              {dataset.agent_name || i18n.t("lens.datasetsView.anyAgent", { defaultValue: "Any agent" })}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -123,12 +124,12 @@ function DatasetRevision(props: DatasetRevisionProps) {
               onClick={() => exportDataset.mutate({ id: dataset.id, name: dataset.name, revision: dataset.revision })}
             >
               <Download className="size-3.5" />
-              Export JSONL
+              {i18n.t("lens.datasetDetail.exportJsonl", { defaultValue: "Export JSONL" })}
             </Button>
             {editable && (
               <Button size="sm" disabled={changed === 0 || save.isPending} onClick={saveRevision}>
                 {save.isPending && <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />}
-                Save as revision {dataset.revision + 1}
+                {i18n.t("lens.datasetDetail.saveAsRevision", { revision: dataset.revision + 1, defaultValue: `Save as revision ${dataset.revision + 1}` })}
               </Button>
             )}
           </div>
@@ -137,12 +138,12 @@ function DatasetRevision(props: DatasetRevisionProps) {
       <SaveProblem error={save.error ?? exportDataset.error} onReload={reload} />
       {!isLatest && (
         <p role="status" className="border-b px-4 py-2 text-xs text-muted-foreground">
-          Revision {dataset.revision} is read-only. Switch to the latest revision to make changes.
+          {i18n.t("lens.datasetDetail.revisionReadOnly", { revision: dataset.revision, defaultValue: `Revision ${dataset.revision} is read-only. Switch to the latest revision to make changes.` })}
         </p>
       )}
       {cases.length === 0 ? (
         <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-          This revision has no cases. Add some from a trace or a finding.
+          {i18n.t("lens.datasetDetail.noCases", { defaultValue: "This revision has no cases. Add some from a trace or a finding." })}
         </p>
       ) : (
         <CaseTable
@@ -177,12 +178,12 @@ function SaveProblem({ error, onReload }: { error: Error | null; onReload: () =>
     >
       <span className="min-w-0">
         {conflict
-          ? "Someone saved a newer revision while you were editing. Reload to see it, then make your changes again."
+          ? i18n.t("lens.datasetDetail.revisionConflict", { defaultValue: "Someone saved a newer revision while you were editing. Reload to see it, then make your changes again." })
           : error.message}
       </span>
       {conflict && (
         <Button variant="ghost" size="sm" onClick={onReload}>
-          Reload
+          {i18n.t("lens.datasetDetail.reload", { defaultValue: "Reload" })}
         </Button>
       )}
     </div>
@@ -201,15 +202,15 @@ function RevisionPicker({
   const revisions = Array.from({ length: latest + 1 }, (_, offset) => latest - offset);
   return (
     <select
-      aria-label="Revision"
+      aria-label={i18n.t("lens.datasetDetail.revisionAria", { defaultValue: "Revision" })}
       className="h-8 rounded-md border-0 bg-transparent pr-7 pl-2 text-xs text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
       value={revision}
       onChange={(event) => onPick(Number(event.target.value))}
     >
       {revisions.map((value) => (
         <option key={value} value={value}>
-          Revision {value}
-          {value === latest ? " (latest)" : ""}
+          {i18n.t("lens.datasetDetail.revisionLabel", { value, defaultValue: `Revision ${value}` })}
+          {value === latest ? i18n.t("lens.datasetDetail.latestSuffix", { defaultValue: " (latest)" }) : ""}
         </option>
       ))}
     </select>
