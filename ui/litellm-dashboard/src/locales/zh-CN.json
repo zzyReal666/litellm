@@ -3525,7 +3525,9 @@
     "transformedRequestTitle": "转换后的请求",
     "transformedRequestDesc": "LiteLLM 如何为指定提供商转换您的请求。",
     "sensitiveHeadersNote": "注意：敏感请求头不会显示。",
-    "foundAnError": "发现错误？请在<a>此处</a>提交 issue。"
+    "foundAnError": "发现错误？请在<a>此处</a>提交 issue。",
+    "copyToClipboard": "复制到剪贴板",
+    "copiedToClipboard": "已复制到剪贴板"
   },
   "uiThemeSettings": {
     "title": "界面主题自定义",

@@ -3525,7 +3525,9 @@
     "transformedRequestTitle": "Transformed Request",
     "transformedRequestDesc": "How LiteLLM transforms your request for the specified provider.",
     "sensitiveHeadersNote": "Note: Sensitive headers are not shown.",
-    "foundAnError": "Found an error? File an issue <a>here</a>."
+    "foundAnError": "Found an error? File an issue <a>here</a>.",
+    "copyToClipboard": "Copy to clipboard",
+    "copiedToClipboard": "Copied to clipboard"
   },
   "uiThemeSettings": {
     "title": "UI Theme Customization",
