@@ -3304,7 +3304,15 @@
     "scheduleButton": "设置计划",
     "scheduleModalDesc": "设置每隔以下时间自动重新加载价格数据：",
     "hoursLabel": "小时",
-    "scheduleModalHint": "系统将每 {{hours}} 小时自动从远程源获取最新定价数据。"
+    "scheduleModalHint": "系统将每 {{hours}} 小时自动从远程源获取最新定价数据。",
+    "sourceRevision": "源版本：",
+    "etag": "ETag：",
+    "loadedAt": "加载时间：",
+    "reportedByWorker": "由响应此请求的 worker 上报。其他 worker 会在下次轮询时获取重新加载，Last run 时间为任意 worker 记录的最新一次重新加载。",
+    "hoursRange": "小时数必须是 1 到 168 之间的整数",
+    "status": "状态：",
+    "scheduleModalDescription": "设置 LiteLLM 从远程源获取最新定价数据的频率。",
+    "reloadIntervalAria": "重新加载间隔（小时）"
   },
   "prompts": {
     "addNewPrompt": "+ 添加新提示词",

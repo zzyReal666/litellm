@@ -3304,7 +3304,15 @@
     "scheduleButton": "Schedule",
     "scheduleModalDesc": "Set up automatic reload of price data every:",
     "hoursLabel": "hours",
-    "scheduleModalHint": "This will automatically fetch the latest pricing data from the remote source every {{hours}} hours."
+    "scheduleModalHint": "This will automatically fetch the latest pricing data from the remote source every {{hours}} hours.",
+    "sourceRevision": "Source revision:",
+    "etag": "ETag:",
+    "loadedAt": "Loaded at:",
+    "reportedByWorker": "Reported by the worker that answered this request. Other workers pick up a reload on their next poll, and the Last run time is the latest reload any worker recorded",
+    "hoursRange": "Hours must be a whole number between 1 and 168",
+    "status": "Status:",
+    "scheduleModalDescription": "Set how often LiteLLM should fetch the latest pricing data from the remote source.",
+    "reloadIntervalAria": "Reload interval in hours"
   },
   "prompts": {
     "addNewPrompt": "+ Add New Prompt",
