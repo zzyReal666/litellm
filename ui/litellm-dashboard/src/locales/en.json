@@ -4184,7 +4184,8 @@
       "copyApiKeyHash": "Copy API key hash",
       "copyObjectId": "Copy object ID",
       "notAvailable": "N/A",
-      "title": "Audit log details"
+      "title": "Audit log details",
+      "details": "Details"
     },
     "configInfoMessage": {
       "title": "Request/Response Data Not Available",

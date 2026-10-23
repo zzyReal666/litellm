@@ -4184,7 +4184,8 @@
       "copyApiKeyHash": "复制 API 密钥哈希",
       "copyObjectId": "复制对象 ID",
       "notAvailable": "不适用",
-      "title": "审计日志详情"
+      "title": "审计日志详情",
+      "details": "详情"
     },
     "configInfoMessage": {
       "title": "请求/响应数据不可用",
