@@ -13091,6 +13091,32 @@
       "investigation_one": "{{count}} investigation",
       "investigation_other": "{{count}} investigations",
       "watching": "{{count}} watching"
+    },
+    "findingsTab": {
+      "noFindingsFromRun": "No findings from this run",
+      "findingsWillAppear": "Your findings will appear here",
+      "noMatchingFindingsFromRun": "No matching findings from this run",
+      "noMatchingFindings": "No matching findings",
+      "readyForFirstAnalysis": "Ready for the first analysis",
+      "reviewingActivity": "Lens is reviewing the selected activity.",
+      "reusedTracesHint": "Previously reviewed traces were reused. Choose All accumulated findings to see earlier findings.",
+      "findingsReflectRuns": "Findings reflect the runs analyzed, not a guarantee about all activity.",
+      "findingCategoryAria": "Finding category",
+      "needsAttention": "Needs attention ({{count}})",
+      "patterns": "Patterns ({{count}})",
+      "findingStatusAria": "Finding status",
+      "statusOpen": "Open",
+      "statusResolved": "Resolved",
+      "statusDismissed": "Dismissed",
+      "allStatuses": "All statuses",
+      "issuesHint": "Problems worth investigating, highest priority first.",
+      "patternsHint": "Useful behavior and trends. These do not necessarily need a fix.",
+      "priorityHigh": "high priority",
+      "priorityMedium": "medium priority",
+      "priorityLow": "low priority",
+      "affectedTraces_one": "{{count}} affected trace",
+      "affectedTraces_other": "{{count}} affected traces",
+      "investigationRuns": "{{count}} investigation runs"
     }
   },
   "mcpServerCredentials": {

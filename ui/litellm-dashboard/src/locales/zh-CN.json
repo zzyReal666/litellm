@@ -13091,6 +13091,32 @@
       "investigation_one": "{{count}} 个调查",
       "investigation_other": "{{count}} 个调查",
       "watching": "{{count}} 个监视中"
+    },
+    "findingsTab": {
+      "noFindingsFromRun": "本次运行没有发现",
+      "findingsWillAppear": "你的发现将显示在这里",
+      "noMatchingFindingsFromRun": "本次运行没有匹配的发现",
+      "noMatchingFindings": "没有匹配的发现",
+      "readyForFirstAnalysis": "已就绪，等待首次分析",
+      "reviewingActivity": "Lens 正在审查所选活动。",
+      "reusedTracesHint": "已复用了之前审查过的链路。选择“所有累积的发现”可查看更早的发现。",
+      "findingsReflectRuns": "发现反映了已分析的运行，而非对所有活动的保证。",
+      "findingCategoryAria": "发现类别",
+      "needsAttention": "需要关注 ({{count}})",
+      "patterns": "模式 ({{count}})",
+      "findingStatusAria": "发现状态",
+      "statusOpen": "未关闭",
+      "statusResolved": "已解决",
+      "statusDismissed": "已忽略",
+      "allStatuses": "全部状态",
+      "issuesHint": "值得调查的问题，按优先级从高到低排列。",
+      "patternsHint": "有用的行为与趋势。这些不一定需要修复。",
+      "priorityHigh": "高优先级",
+      "priorityMedium": "中优先级",
+      "priorityLow": "低优先级",
+      "affectedTraces_one": "{{count}} 条受影响的链路",
+      "affectedTraces_other": "{{count}} 条受影响的链路",
+      "investigationRuns": "{{count}} 次调查运行"
     }
   },
   "mcpServerCredentials": {
