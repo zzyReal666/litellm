@@ -5,20 +5,22 @@
 ## 包内容
 
 ```
-docker-compose.yml          litellm + postgres + redis + prometheus
+docker-compose.yml          litellm + headroom + postgres + redis + prometheus
 .env.example                环境变量模板（安装脚本会自动生成 .env）
 config/config.yaml          模型存 DB 模式的配置
 prometheus.yml              指标采集配置
 bin/docker-compose          独立的 compose 二进制，目标机无插件时使用
 images/*.tar                全部镜像，docker load 即可
-scripts/                    启动、停止、状态、日志、备份、恢复、初始化模型
+scripts/                    启动、停止、状态、日志、备份、恢复、初始化模型、启用压缩
 install.sh                  一键安装部署
 uninstall.sh                一键卸载
 ```
 
+`headroom` 是提示词压缩服务，镜像里已经预置压缩模型，目标机全程无需联网。
+
 ## 环境要求
 
-Linux x86_64，Docker 20 以上，root 权限，磁盘至少 10G，内存至少 4G。目标机不需要 Docker Compose 插件。
+Linux x86_64，Docker 20 以上，root 权限，磁盘至少 16G，内存至少 6G。目标机不需要 Docker Compose 插件。
 
 ## 安装
 
@@ -41,6 +43,7 @@ sudo ./install.sh --deepseek-key sk-你的DeepSeekKey
 --deepseek-key-2 <key>   第二组上游 Key，flash/pro 双 deployment 分流
 --skip-images            跳过镜像加载（镜像已在目标机）
 --no-seed                不初始化模型
+--no-compression         不自动创建提示词压缩护栏（headroom 服务仍会启动）
 ```
 
 已有 `.env` 时安装脚本会沿用其中的密码和密钥，不会重置数据。
@@ -50,6 +53,29 @@ sudo ./install.sh --deepseek-key sk-你的DeepSeekKey
 ```bash
 sudo /opt/litellm/scripts/seed-models.sh
 ```
+
+## 提示词压缩（headroom）
+
+安装包自带 headroom 压缩服务，`install.sh` 会在服务就绪后自动创建一条
+`headroom-compression` 护栏并默认对所有请求生效，无需再手工配置。
+
+- 服务只绑定 `127.0.0.1:8787`，仅本机可访问，供 litellm 容器调用
+- 端口冲突时在 `.env` 里改 `HEADROOM_HOST_PORT`
+- 服务之间用 `HEADROOM_PROXY_TOKEN` 鉴权，令牌由安装脚本随机生成，写在 `.env`
+- 压缩服务异常时放行原请求（`fail_open`），不会影响正常流量
+- 关闭压缩：`sudo /opt/litellm/scripts/setup-compression.sh` 只负责创建；如需停用，
+  在管理界面「护栏」页把该护栏删除，或给 litellm 服务加 `--no-compression` 重装
+
+检查与排障：
+
+```bash
+curl -s http://127.0.0.1:8787/livez          # 存活探针
+docker logs litellm-headroom-1 --tail 50     # 压缩服务日志
+# 单独启用护栏（幂等，已存在则跳过）
+sudo /opt/litellm/scripts/setup-compression.sh
+```
+
+压缩省下的 token 会在管理界面「成本优化 → 总览」里作为 compression savings 展示。
 
 ## 日常运维
 

@@ -13,6 +13,7 @@ DEEPSEEK_API_KEY_INPUT="${DEEPSEEK_API_KEY:-}"
 DEEPSEEK_API_KEY_2_INPUT="${DEEPSEEK_API_KEY_2:-}"
 SKIP_IMAGES=0
 SEED_MODELS=1
+SETUP_COMPRESSION=1
 ASSUME_YES=0
 
 log() { printf '%s\n' "$*"; }
@@ -32,6 +33,7 @@ usage() {
   --deepseek-key-2 <key>   第二组上游 Key，用于 flash/pro 双 deployment 分流
   --skip-images            跳过 docker load，镜像已在目标机
   --no-seed                不初始化模型，部署后到界面自行配置
+  --no-compression         不创建提示词压缩护栏（headroom 服务仍会启动）
   --yes                    非交互确认
   -h, --help               显示帮助
 EOF
@@ -48,6 +50,7 @@ while [[ $# -gt 0 ]]; do
     --deepseek-key-2) DEEPSEEK_API_KEY_2_INPUT="$2"; shift 2 ;;
     --skip-images) SKIP_IMAGES=1; shift ;;
     --no-seed) SEED_MODELS=0; shift ;;
+    --no-compression) SETUP_COMPRESSION=0; shift ;;
     --yes) ASSUME_YES=1; shift ;;
     -h|--help) usage; exit 0 ;;
     *) die "未知参数: $1（-h 查看帮助）" ;;
@@ -98,6 +101,7 @@ else
   LITELLM_MASTER_KEY="sk-$(gen_secret)"
   LITELLM_SALT_KEY="sk-$(gen_secret)"
   REDIS_PASSWORD="$(gen_secret)"
+  HEADROOM_PROXY_TOKEN="$(gen_secret)"
   UI_PASSWORD="${UI_PASSWORD:-$(gen_secret)}"
   cat > "${INSTALL_DIR}/.env" <<EOF
 POSTGRES_USER=${POSTGRES_USER}
@@ -111,6 +115,8 @@ LITELLM_BIND=${LITELLM_BIND}
 PROMETHEUS_HOST_PORT=${PROMETHEUS_PORT}
 REDIS_PASSWORD=${REDIS_PASSWORD}
 REDIS_HOST_PORT=6379
+HEADROOM_HOST_PORT=8787
+HEADROOM_PROXY_TOKEN=${HEADROOM_PROXY_TOKEN}
 UI_USERNAME=${UI_USERNAME}
 UI_PASSWORD=${UI_PASSWORD}
 DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY_INPUT}
@@ -119,7 +125,7 @@ EOF
   chmod 600 "${INSTALL_DIR}/.env"
 fi
 
-mkdir -p data/postgres data/redis data/prometheus backups
+mkdir -p data/postgres data/redis data/prometheus data/headroom backups
 if [[ -d data/postgres ]] && [[ -z "$(ls -A data/postgres 2>/dev/null || true)" ]]; then
   chown -R 999:999 data/postgres
 fi
@@ -159,6 +165,11 @@ if [[ "${SEED_MODELS}" -eq 1 ]]; then
   else
     warn "未提供 --deepseek-key，跳过模型初始化，部署后请到界面配置模型"
   fi
+fi
+
+if [[ "${SETUP_COMPRESSION}" -eq 1 ]]; then
+  log "==> 启用提示词压缩（headroom）"
+  bash "${INSTALL_DIR}/scripts/setup-compression.sh" || warn "压缩护栏未创建，可稍后到界面手动添加"
 fi
 
 set -a

@@ -2,7 +2,7 @@ name: litellm
 
 services:
   litellm:
-    image: litellm-zhcn:v1.106.0-zh.6
+    image: litellm-zhcn:v1.106.0-zh.7
     restart: unless-stopped
     cap_add: [ALL]
     ports:
@@ -35,6 +35,35 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  headroom:
+    image: headroom-offline:v1.106.0-zh.7
+    restart: unless-stopped
+    cap_add: [ALL]
+    environment:
+      HEADROOM_HOST: 0.0.0.0
+      HEADROOM_PORT: "8787"
+      HEADROOM_PROXY_TOKEN: ${HEADROOM_PROXY_TOKEN}
+      # litellm 从 compose 网络调用 /v1/compress，需放开 remote 路由；
+      # 该路由仍要求 Bearer 令牌，且端口只绑定 127.0.0.1。
+      HEADROOM_COMPRESS_ALLOW_REMOTE: "1"
+      HEADROOM_BEACON: "off"
+      HEADROOM_TELEMETRY: "off"
+      DO_NOT_TRACK: "1"
+    ports:
+      - "127.0.0.1:${HEADROOM_HOST_PORT:-8787}:8787"
+    volumes:
+      - ./data/headroom:/root/.headroom
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/livez', timeout=5)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
 
   db:
     image: postgres:16.4

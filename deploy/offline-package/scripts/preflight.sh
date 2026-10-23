@@ -31,7 +31,7 @@ if [[ ! -f "${ROOT}/config/config.yaml" ]]; then
   fail=1
 fi
 
-for d in data/postgres data/prometheus backups images; do
+for d in data/postgres data/prometheus data/headroom backups images; do
   if [[ ! -d "${ROOT}/${d}" ]]; then
     echo "warn: 目录不存在，将创建 ${ROOT}/${d}"
     mkdir -p "${ROOT}/${d}"
@@ -46,6 +46,15 @@ if [[ -d "${ROOT}/data/prometheus" ]]; then
     echo "ok: chown data/prometheus -> ${_nobody_uid}:${_nobody_gid}"
   else
     echo "warn: 无法 chown data/prometheus 为 nobody，若 prometheus 反复重启请手动修复权限" >&2
+  fi
+fi
+
+# headroom 镜像以 nonroot(1000:1000) 运行，bind mount 的 ~/.headroom 需属主可写。
+if [[ -d "${ROOT}/data/headroom" ]]; then
+  if chown -R 1000:1000 "${ROOT}/data/headroom" 2>/dev/null; then
+    echo "ok: chown data/headroom -> 1000:1000"
+  else
+    echo "warn: 无法 chown data/headroom 为 1000:1000，若 headroom 反复重启请手动修复权限" >&2
   fi
 fi
 
