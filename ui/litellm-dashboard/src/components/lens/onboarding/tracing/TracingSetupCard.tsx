@@ -11,6 +11,7 @@ import { cn } from "@/lib/cva.config";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { copyToClipboard } from "@/utils/dataUtils";
+import i18n from "@/lib/i18n";
 
 import anthropicLogo from "../../../../../public/assets/logos/anthropic.svg";
 import openaiLogo from "../../../../../public/assets/logos/openai_small.svg";
@@ -71,9 +72,9 @@ export const maskSecret = (secret: string): string =>
   secret.length > 10 ? `${secret.slice(0, 5)}${"•".repeat(16)}${secret.slice(-4)}` : "•".repeat(secret.length);
 
 export const otlpEndpoints = (proxyUrl: string): readonly (readonly [string, string, boolean])[] => [
-  ["Traces endpoint", `${proxyUrl}/v1/traces`, true],
-  ["Auth header", "Authorization: Bearer <Lens tracing key>", true],
-  ["Protocol", "OTLP/HTTP (protobuf or JSON)", false],
+  [i18n.t("lens.tracingSetup.tracesEndpoint", { defaultValue: "Traces endpoint" }), `${proxyUrl}/v1/traces`, true],
+  [i18n.t("lens.tracingSetup.authHeader", { defaultValue: "Auth header" }), "Authorization: Bearer <Lens tracing key>", true],
+  [i18n.t("lens.tracingSetup.protocol", { defaultValue: "Protocol" }), "OTLP/HTTP (protobuf or JSON)", false],
 ];
 
 function CodeBlock({
@@ -81,7 +82,7 @@ function CodeBlock({
   display = code,
   tabs,
   wrap = false,
-  copyLabel = "Copy",
+  copyLabel = i18n.t("lens.tracingSetup.copy", { defaultValue: "Copy" }),
 }: {
   code: string;
   display?: string;
@@ -173,10 +174,10 @@ type SendState =
   | { kind: "failed"; message: string };
 
 const SEND_LABEL: Record<Exclude<SendState["kind"], "ready">, string> = {
-  idle: "Send a test trace",
-  sending: "Sending…",
-  waiting: "Waiting for it to arrive…",
-  failed: "Send a test trace",
+  idle: i18n.t("lens.tracingSetup.sendTestTrace", { defaultValue: "Send a test trace" }),
+  sending: i18n.t("lens.tracingSetup.sending", { defaultValue: "Sending…" }),
+  waiting: i18n.t("lens.tracingSetup.waitingForArrival", { defaultValue: "Waiting for it to arrive…" }),
+  failed: i18n.t("lens.tracingSetup.sendTestTrace", { defaultValue: "Send a test trace" }),
 };
 
 const delay = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -208,7 +209,7 @@ function SendTestTrace({
     setState({ kind: "sending" });
     const sample = sampleTraceExport(Date.now());
     try {
-      if (!tracingKey) throw new Error("Generate a tracing key first");
+      if (!tracingKey) throw new Error(i18n.t("lens.tracingSetup.generateTracingKeyFirst", { defaultValue: "Generate a tracing key first" }));
       const client = createApiClient({ getBaseUrl: () => traceUrl });
       const options: RequestOptions = {
         credentials: "omit",
@@ -219,7 +220,7 @@ function SendTestTrace({
       };
       await client.post("/v1/traces", options);
     } catch {
-      setState({ kind: "failed", message: "Could not send the test trace." });
+      setState({ kind: "failed", message: i18n.t("lens.tracingSetup.couldNotSendTestTrace", { defaultValue: "Could not send the test trace." }) });
       return;
     }
     setState({ kind: "waiting" });
@@ -227,17 +228,17 @@ function SendTestTrace({
     setState(
       trace
         ? { kind: "ready", trace }
-        : { kind: "failed", message: "Sent, but it has not shown up yet. Check again in a moment." },
+        : { kind: "failed", message: i18n.t("lens.tracingSetup.sentNotShownUp", { defaultValue: "Sent, but it has not shown up yet. Check again in a moment." }) },
     );
   };
   if (state.kind === "ready") {
     return (
       <div className="flex flex-wrap items-center gap-3">
         <span role="status" className="inline-flex items-center gap-1 text-sm text-emerald-700 dark:text-emerald-400">
-          <Check aria-hidden="true" className="size-4" /> Test trace received
+          <Check aria-hidden="true" className="size-4" /> {i18n.t("lens.tracingSetup.testTraceReceived", { defaultValue: "Test trace received" })}
         </span>
         <Button onClick={() => onOpenTrace(state.trace)}>
-          View trace <ArrowRight aria-hidden="true" className="size-4" />
+          {i18n.t("lens.tracingSetup.viewTrace", { defaultValue: "View trace" })} <ArrowRight aria-hidden="true" className="size-4" />
         </Button>
       </div>
     );
@@ -271,23 +272,27 @@ function TraceReceipt({
 }) {
   const missingAfterCheck = checked && !checking && !connected;
   return (
-    <section className="mt-6 border-t pt-6" aria-label="Trace connection status">
+    <section className="mt-6 border-t pt-6" aria-label={i18n.t("lens.tracingSetup.traceConnectionStatus", { defaultValue: "Trace connection status" })}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p role="status" className="text-sm font-medium">
-            {connected ? "Traces connected" : "Waiting for your first trace"}
+            {connected
+              ? i18n.t("lens.tracingSetup.tracesConnected", { defaultValue: "Traces connected" })
+              : i18n.t("lens.tracingSetup.waitingForFirstTrace", { defaultValue: "Waiting for your first trace" })}
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">Run your agent once. Its traces will appear here.</p>
+          <p className="mt-1 text-sm text-muted-foreground">{i18n.t("lens.tracingSetup.runAgentHint", { defaultValue: "Run your agent once. Its traces will appear here." })}</p>
         </div>
         <Button variant="outline" onClick={onCheck} disabled={checking}>
           {checking && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-          {checking ? "Checking…" : "Check for traces"}
+          {checking ? i18n.t("lens.tracingSetup.checking", { defaultValue: "Checking…" }) : i18n.t("lens.tracingSetup.checkForTraces", { defaultValue: "Check for traces" })}
         </Button>
       </div>
       {missingAfterCheck && (
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          No traces received yet. Check the Lens URL and tracing key in your agent’s environment, then check its logs
-          for export errors.
+          {i18n.t("lens.tracingSetup.noTracesReceived", {
+            defaultValue:
+              "No traces received yet. Check the Lens URL and tracing key in your agent's environment, then check its logs for export errors.",
+          })}
         </p>
       )}
     </section>
@@ -314,11 +319,11 @@ function TracingKey({
         accessToken,
         body: TRACING_KEY_REQUEST,
       });
-      if (!result.key) throw new Error("The proxy did not return the new key");
+      if (!result.key) throw new Error(i18n.t("lens.tracingSetup.keyCreationNoKeyError", { defaultValue: "The proxy did not return the new key" }));
       setPendingActivation(!result.active);
       onCreated(result.key);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not create a key");
+      setError(cause instanceof Error ? cause.message : i18n.t("lens.tracingSetup.keyCreationError", { defaultValue: "Could not create a key" }));
     } finally {
       setCreating(false);
     }
@@ -328,14 +333,15 @@ function TracingKey({
       <div className="space-y-2">
         {pendingActivation && (
           <p role="status" className="text-sm text-muted-foreground">
-            Key saved. Lens has not confirmed it yet. Once the service is connected, keys sync within 30 seconds.
+            {i18n.t("lens.tracingSetup.keyPendingActivation", { defaultValue: "Key saved. Lens has not confirmed it yet. Once the service is connected, keys sync within 30 seconds." })}
           </p>
         )}
-        <CodeBlock code={tracingKey} display={maskSecret(tracingKey)} tabs={<FileLabel>Your tracing key</FileLabel>} />
+        <CodeBlock code={tracingKey} display={maskSecret(tracingKey)} tabs={<FileLabel>{i18n.t("lens.tracingSetup.yourTracingKey", { defaultValue: "Your tracing key" })}</FileLabel>} />
         <p className="text-sm text-muted-foreground">
-          Hidden for safety. Copy copies the full key, and the environment step below includes it. This key can only
-          send traces and check delivery. Your agent still needs its own key for model calls. Save this key before
-          leaving the page.
+          {i18n.t("lens.tracingSetup.tracingKeySafetyNote", {
+            defaultValue:
+              "Hidden for safety. Copy copies the full key, and the environment step below includes it. This key can only send traces and check delivery. Your agent still needs its own key for model calls. Save this key before leaving the page.",
+          })}
         </p>
       </div>
     );
@@ -348,9 +354,9 @@ function TracingKey({
         ) : (
           <KeyRound aria-hidden="true" className="size-4" />
         )}
-        Generate tracing key
+        {i18n.t("lens.tracingSetup.generateTracingKey", { defaultValue: "Generate tracing key" })}
       </Button>
-      <span className="text-sm text-muted-foreground">Use a dedicated Lens key for tracing.</span>
+      <span className="text-sm text-muted-foreground">{i18n.t("lens.tracingSetup.dedicatedLensKeyHint", { defaultValue: "Use a dedicated Lens key for tracing." })}</span>
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
@@ -364,7 +370,7 @@ function EndpointValue({ value }: { value: string }) {
     <button
       type="button"
       onClick={() => void copy()}
-      aria-label={`Copy ${value}`}
+      aria-label={i18n.t("lens.tracingSetup.copyValue", { value, defaultValue: `Copy ${value}` })}
       className="group inline-flex min-w-0 items-center gap-2 text-left font-mono text-xs text-foreground"
     >
       <span className="break-all">{value}</span>
@@ -383,7 +389,7 @@ function Endpoints({ proxyUrl, children }: { proxyUrl: string; children?: React.
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 id="otel-endpoints" className="inline-flex items-center gap-2 text-sm font-medium">
           <img src={otelLogo.src} alt="" className="size-5" />
-          Connection details
+          {i18n.t("lens.tracingSetup.connectionDetails", { defaultValue: "Connection details" })}
         </h3>
         {children}
       </div>
@@ -407,8 +413,10 @@ const CODING_AGENT_LOGOS: Record<CodingAgent, string> = {
 };
 
 function setupTitle(enabled: boolean, connected: boolean) {
-  if (!enabled) return "Set up Lens";
-  return connected ? "Connect another agent" : "Connect your agent";
+  if (!enabled) return i18n.t("lens.tracingSetup.setUpLens", { defaultValue: "Set up Lens" });
+  return connected
+    ? i18n.t("lens.tracingSetup.connectAnotherAgent", { defaultValue: "Connect another agent" })
+    : i18n.t("lens.tracingSetup.connectYourAgent", { defaultValue: "Connect your agent" });
 }
 
 interface ConnectAgentProps {
@@ -446,35 +454,42 @@ function EnableTracing({
   onCheck: () => void;
 }) {
   const configured = connection.configured ?? connection.connected;
-  let message = "Lens is connected. Set its public tracing address so your agents know where to send traces.";
+  let message = i18n.t("lens.tracingSetup.lensConnectedSetAddress", { defaultValue: "Lens is connected. Set its public tracing address so your agents know where to send traces." });
   if (!configured) {
-    message =
-      "Enable Lens in your existing Helm or Docker deployment. It runs alongside LiteLLM and stores your traces.";
+    message = i18n.t("lens.tracingSetup.enableLensInDeployment", {
+      defaultValue: "Enable Lens in your existing Helm or Docker deployment. It runs alongside LiteLLM and stores your traces.",
+    });
   } else if (!connection.connected) {
-    message =
-      "Lens is configured, but LiteLLM cannot reach it. Check that the Lens service is running and both services use the same service secret.";
+    message = i18n.t("lens.tracingSetup.lensConfiguredUnreachable", {
+      defaultValue:
+        "Lens is configured, but LiteLLM cannot reach it. Check that the Lens service is running and both services use the same service secret.",
+    });
   } else if (!connection.status.storage_ready) {
-    message = "Lens is connected, but its trace storage is unavailable. Check the ClickHouse connection.";
+    message = i18n.t("lens.tracingSetup.lensStorageUnavailable", { defaultValue: "Lens is connected, but its trace storage is unavailable. Check the ClickHouse connection." });
   }
   return (
     <div className="space-y-4">
-      <p className="text-sm font-medium">{configured ? "Check the Lens connection" : "Install Lens"}</p>
+      <p className="text-sm font-medium">
+        {configured
+          ? i18n.t("lens.tracingSetup.checkLensConnection", { defaultValue: "Check the Lens connection" })
+          : i18n.t("lens.tracingSetup.installLens", { defaultValue: "Install Lens" })}
+      </p>
       <p className="text-sm leading-6 text-muted-foreground">{message}</p>
       {!configured && (
         <p className="text-sm text-muted-foreground">
           {connection.release ? (
             <>
-              Use Lens <code>{connection.release}</code> to match this LiteLLM deployment.
+              {i18n.t("lens.tracingSetup.useLensRelease", { release: connection.release, defaultValue: `Use Lens ${connection.release} to match this LiteLLM deployment.` })}
             </>
           ) : (
-            "Use Lens from the same release as this LiteLLM deployment."
+            i18n.t("lens.tracingSetup.useLensSameRelease", { defaultValue: "Use Lens from the same release as this LiteLLM deployment." })
           )}{" "}
-          The deployment connects the services and supplies trace storage.
+          {i18n.t("lens.tracingSetup.deploymentConnectsServices", { defaultValue: "The deployment connects the services and supplies trace storage." })}
         </p>
       )}
       <Button variant="outline" onClick={onCheck} disabled={checking}>
         {checking && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-        {checking ? "Checking…" : "Check setup"}
+        {checking ? i18n.t("lens.tracingSetup.checking", { defaultValue: "Checking…" }) : i18n.t("lens.tracingSetup.checkSetup", { defaultValue: "Check setup" })}
       </Button>
     </div>
   );
@@ -501,7 +516,7 @@ function CodingAgentSetup({
   return (
     <section className="mt-6" aria-labelledby="connect-project">
       <h3 id="connect-project" className="text-sm font-medium">
-        Connect your project
+        {i18n.t("lens.tracingSetup.connectYourProject", { defaultValue: "Connect your project" })}
       </h3>
       <div className="mt-3 overflow-hidden rounded-md border">
         <div className="border-b bg-muted/30 px-4">
@@ -517,8 +532,10 @@ function CodingAgentSetup({
         </div>
         <div className="p-4">
           <p className="text-sm leading-6 text-muted-foreground">
-            Run the setup command in your agent’s project. It uses <code className="text-xs">LITELLM_TRACING_KEY</code>{" "}
-            for traces and keeps your model key separate.
+            {i18n.t("lens.tracingSetup.runSetupCommand", {
+              defaultValue:
+                "Run the setup command in your agent's project. It uses LITELLM_TRACING_KEY for traces and keeps your model key separate.",
+            })}{" "}
           </p>
           <Button className="mt-3" onClick={() => void copy()}>
             {copied === command ? (
@@ -526,10 +543,12 @@ function CodingAgentSetup({
             ) : (
               <Copy aria-hidden="true" className="size-4" />
             )}
-            {copied === command ? "Copied" : "Copy setup command"}
+            {copied === command
+              ? i18n.t("lens.tracingSetup.copied", { defaultValue: "Copied" })
+              : i18n.t("lens.tracingSetup.copySetupCommand", { defaultValue: "Copy setup command" })}
           </Button>
           <details className="mt-3">
-            <summary className="w-fit cursor-pointer text-xs text-muted-foreground">View command</summary>
+            <summary className="w-fit cursor-pointer text-xs text-muted-foreground">{i18n.t("lens.tracingSetup.viewCommand", { defaultValue: "View command" })}</summary>
             <pre className="mt-3 max-h-56 overflow-auto whitespace-pre-wrap rounded-md bg-muted/40 p-3 text-xs leading-5">
               <code>{command}</code>
             </pre>
@@ -569,25 +588,27 @@ function ConnectAgent({
     return (
       <p role="status" className="text-sm text-muted-foreground">
         {connection.isPending
-          ? "Checking Lens connection…"
-          : "Set LITELLM_LENS_PUBLIC_URL on LiteLLM to the Lens address your agents can reach, then restart LiteLLM."}
+          ? i18n.t("lens.tracingSetup.checkingLensConnection", { defaultValue: "Checking Lens connection…" })
+          : i18n.t("lens.tracingSetup.setLensPublicUrl", {
+              defaultValue: "Set LITELLM_LENS_PUBLIC_URL on LiteLLM to the Lens address your agents can reach, then restart LiteLLM.",
+            })}
       </p>
     );
   return (
     <>
       {!connection.data?.connected && (
         <p role="alert" className="text-sm text-destructive">
-          The Lens service is unavailable. Check the service URL and shared secret.
+          {i18n.t("lens.tracingSetup.lensServiceUnavailable", { defaultValue: "The Lens service is unavailable. Check the service URL and shared secret." })}
         </p>
       )}
       {connection.data?.connected && !connection.data.status.storage_ready && (
         <p role="alert" className="text-sm text-destructive">
-          Lens is connected, but ClickHouse is unavailable.
+          {i18n.t("lens.tracingSetup.clickhouseUnavailable", { defaultValue: "Lens is connected, but ClickHouse is unavailable." })}
         </p>
       )}
       <div className="mt-6 space-y-2">
         <label id="tracing-framework" className="block text-sm font-medium">
-          Your agent framework
+          {i18n.t("lens.tracingSetup.yourAgentFramework", { defaultValue: "Your agent framework" })}
         </label>
         <Select
           value={framework}
@@ -612,16 +633,16 @@ function ConnectAgent({
         </Select>
       </div>
 
-      <Step title="Create a tracing key">
+      <Step title={i18n.t("lens.tracingSetup.stepCreateTracingKey", { defaultValue: "Create a tracing key" })}>
         {canMintTracingKey && !readOnly ? (
           <TracingKey accessToken={accessToken} tracingKey={tracingKey} onCreated={setTracingKey} />
         ) : (
-          <p className="text-sm text-muted-foreground">Ask your proxy admin for a dedicated Lens tracing key.</p>
+          <p className="text-sm text-muted-foreground">{i18n.t("lens.tracingSetup.stepCreateTracingKeyHint", { defaultValue: "Ask your proxy admin for a dedicated Lens tracing key." })}</p>
         )}
       </Step>
       <div className="mt-6 border-t pt-6">
         {install && (
-          <Step title="Install dependencies">
+          <Step title={i18n.t("lens.tracingSetup.stepInstallDependencies", { defaultValue: "Install dependencies" })}>
             <CodeBlock
               code={install}
               wrap
@@ -636,38 +657,47 @@ function ConnectAgent({
           </Step>
         )}
         {guide.plugin && (
-          <Step title="Enable the plugin">
+          <Step title={i18n.t("lens.tracingSetup.stepEnablePlugin", { defaultValue: "Enable the plugin" })}>
             <p className="text-sm leading-6 text-muted-foreground">
-              Install and enable the {guide.plugin.label}. {guide.plugin.instruction}
+              {i18n.t("lens.tracingSetup.installAndEnablePlugin", {
+                plugin: guide.plugin.label,
+                instruction: guide.plugin.instruction,
+                defaultValue: `Install and enable the ${guide.plugin.label}. ${guide.plugin.instruction}`,
+              })}
             </p>
           </Step>
         )}
-        <Step title="Configure environment">
+        <Step title={i18n.t("lens.tracingSetup.stepConfigureEnvironment", { defaultValue: "Configure environment" })}>
           <p className="mb-3 text-sm leading-6 text-muted-foreground">
             {tracingKey ? (
               <>
-                Tracing uses the key above. Set <code>LITELLM_API_KEY</code> to a key with model access.
+                {i18n.t("lens.tracingSetup.tracingUsesKeyAbove", {
+                  defaultValue: "Tracing uses the key above. Set LITELLM_API_KEY to a key with model access.",
+                })}
               </>
             ) : (
               <>
-                Set <code>LITELLM_TRACING_KEY</code> to a Lens tracing key and keep <code>LITELLM_API_KEY</code> for
-                model calls.
+                {i18n.t("lens.tracingSetup.setTracingKeyAndApiKey", {
+                  defaultValue: "Set LITELLM_TRACING_KEY to a Lens tracing key and keep LITELLM_API_KEY for model calls.",
+                })}
               </>
             )}
           </p>
           <CodeBlock
-            copyLabel="Copy tracing configuration"
+            copyLabel={i18n.t("lens.tracingSetup.copyTracingConfiguration", { defaultValue: "Copy tracing configuration" })}
             code={tracingEnvSnippet(traceUrl, tracingKey)}
             display={tracingEnvSnippet(traceUrl, tracingKey && maskSecret(tracingKey))}
             tabs={<FileLabel>Shell</FileLabel>}
             wrap
           />
         </Step>
-        <Step title="Run your agent">
+        <Step title={i18n.t("lens.tracingSetup.stepRunAgent", { defaultValue: "Run your agent" })}>
           <p className="mb-3 text-sm leading-6 text-muted-foreground">
-            {guide.existingModel ? "Keep your existing model settings. " : "Save and run this example. "}
-            Replace <code>research_agent</code> with your agent’s name.
-            {!guide.existingModel && " Use a model configured on this proxy."}
+            {guide.existingModel
+              ? i18n.t("lens.tracingSetup.keepExistingModelSettings", { defaultValue: "Keep your existing model settings. " })
+              : i18n.t("lens.tracingSetup.saveAndRunExample", { defaultValue: "Save and run this example. " })}
+            {i18n.t("lens.tracingSetup.replaceAgentName", { name: "research_agent", defaultValue: "Replace research_agent with your agent's name." })}
+            {!guide.existingModel && i18n.t("lens.tracingSetup.useModelOnProxy", { defaultValue: " Use a model configured on this proxy." })}
           </p>
           <CodeBlock code={quickstart} tabs={<FileLabel>{guide.fileName}</FileLabel>} wrap />
           {guide.note && <p className="mt-3 text-sm leading-6 text-muted-foreground">{guide.note}</p>}
