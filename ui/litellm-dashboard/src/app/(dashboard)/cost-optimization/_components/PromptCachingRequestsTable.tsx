@@ -16,6 +16,7 @@ import type { paths } from "@/lib/http/schema";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { uiHref } from "@/utils/uiHref";
 import { usd } from "./costOptimizationUtils";
+import i18n from "@/lib/i18n";
 import { benchmarksWindow as activityWindow } from "./useAutoRouterBenchmarks";
 import type { DateRange } from "./useDailyActivityRange";
 
@@ -79,36 +80,40 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
     <Card>
       <CardHeader className="gap-3">
         <div>
-          <CardTitle>Prompt caching requests</CardTitle>
+          <CardTitle>{i18n.t("costOptimization.promptCachingRequests.title", { defaultValue: "Prompt caching requests" })}</CardTitle>
           <p className="mt-1 text-sm text-muted-foreground">
-            Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not
-            establish LiteLLM injection; older logs may not record it.
+            {i18n.t("costOptimization.promptCachingRequests.description1", {
+              defaultValue:
+                "Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not establish LiteLLM injection; older logs may not record it.",
+            })}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Net savings are estimated from logged usage and current configured pricing, after cache-write premiums.
-            Negative values mean caching cost more; unavailable means the request could not be priced.
+            {i18n.t("costOptimization.promptCachingRequests.description2", {
+              defaultValue:
+                "Net savings are estimated from logged usage and current configured pricing, after cache-write premiums. Negative values mean caching cost more; unavailable means the request could not be priced.",
+            })}
           </p>
         </div>
         <Tabs value={filter} onValueChange={changeFilter}>
-          <TabsList aria-label="Prompt caching request filters">
-            <TabsTrigger value="all">All caching</TabsTrigger>
-            <TabsTrigger value="injected">LiteLLM injected</TabsTrigger>
-            <TabsTrigger value="hits">Cache hits</TabsTrigger>
+          <TabsList aria-label={i18n.t("costOptimization.promptCachingRequests.filtersAria", { defaultValue: "Prompt caching request filters" })}>
+            <TabsTrigger value="all">{i18n.t("costOptimization.promptCachingRequests.tabAll", { defaultValue: "All caching" })}</TabsTrigger>
+            <TabsTrigger value="injected">{i18n.t("costOptimization.promptCachingRequests.tabInjected", { defaultValue: "LiteLLM injected" })}</TabsTrigger>
+            <TabsTrigger value="hits">{i18n.t("costOptimization.promptCachingRequests.tabHits", { defaultValue: "Cache hits" })}</TabsTrigger>
           </TabsList>
         </Tabs>
       </CardHeader>
       <CardContent>
-        {!enabled && <p className="py-8 text-center text-muted-foreground">Select a date range to view requests</p>}
+        {!enabled && <p className="py-8 text-center text-muted-foreground">{i18n.t("costOptimization.promptCachingRequests.selectDateRange", { defaultValue: "Select a date range to view requests" })}</p>}
         {enabled && requests.isPending && (
           <p role="status" className="py-8 text-center text-muted-foreground">
-            Loading requests...
+            {i18n.t("costOptimization.promptCachingRequests.loadingRequests", { defaultValue: "Loading requests..." })}
           </p>
         )}
         {enabled && requests.isError && (
           <div role="alert" className="flex items-center justify-center gap-3 py-8">
-            <p>Could not load prompt caching requests</p>
+            <p>{i18n.t("costOptimization.promptCachingRequests.couldNotLoad", { defaultValue: "Could not load prompt caching requests" })}</p>
             <Button variant="outline" onClick={() => void requests.refetch()} disabled={requests.isFetching}>
-              Retry
+              {i18n.t("common.retry", { defaultValue: "Retry" })}
             </Button>
           </div>
         )}
@@ -116,19 +121,19 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
           <>
             {requests.data.requests.length === 0 ? (
               <p className="py-8 text-center text-muted-foreground">
-                No matching prompt caching requests in this range
+                {i18n.t("costOptimization.promptCachingRequests.noMatchingRequests", { defaultValue: "No matching prompt caching requests in this range" })}
               </p>
             ) : (
-              <Table aria-label="Prompt caching requests">
+              <Table aria-label={i18n.t("costOptimization.promptCachingRequests.title", { defaultValue: "Prompt caching requests" })}>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Request</TableHead>
-                    <TableHead>Model</TableHead>
-                    <TableHead>LiteLLM injection</TableHead>
-                    <TableHead className="text-right">Cache reads</TableHead>
-                    <TableHead className="text-right">Cache writes</TableHead>
-                    <TableHead className="text-right">Actual cost</TableHead>
-                    <TableHead className="text-right">Net savings</TableHead>
+                    <TableHead>{i18n.t("costOptimization.promptCachingRequests.colRequest", { defaultValue: "Request" })}</TableHead>
+                    <TableHead>{i18n.t("costOptimization.promptCachingRequests.colModel", { defaultValue: "Model" })}</TableHead>
+                    <TableHead>{i18n.t("costOptimization.promptCachingRequests.colInjection", { defaultValue: "LiteLLM injection" })}</TableHead>
+                    <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colCacheReads", { defaultValue: "Cache reads" })}</TableHead>
+                    <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colCacheWrites", { defaultValue: "Cache writes" })}</TableHead>
+                    <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colActualCost", { defaultValue: "Actual cost" })}</TableHead>
+                    <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colNetSavings", { defaultValue: "Net savings" })}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -151,14 +156,20 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                           {request.model}
                         </span>
                       </TableCell>
-                      <TableCell>{request.gateway_injected ? "Recorded" : "Not recorded"}</TableCell>
+                      <TableCell>
+                        {request.gateway_injected
+                          ? i18n.t("costOptimization.promptCachingRequests.recorded", { defaultValue: "Recorded" })
+                          : i18n.t("costOptimization.promptCachingRequests.notRecorded", { defaultValue: "Not recorded" })}
+                      </TableCell>
                       <TableCell className="text-right">{formatNumberWithCommas(request.cache_read_tokens)}</TableCell>
                       <TableCell className="text-right">
                         {formatNumberWithCommas(request.cache_creation_tokens)}
                       </TableCell>
                       <TableCell className="text-right">{usd(request.spend)}</TableCell>
                       <TableCell className="text-right">
-                        {request.net_savings === null ? "Unavailable" : usd(request.net_savings)}
+                        {request.net_savings === null
+                          ? i18n.t("costOptimization.promptCachingRequests.unavailable", { defaultValue: "Unavailable" })
+                          : usd(request.net_savings)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -167,7 +178,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
             )}
             <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Rows per page</span>
+                <span>{i18n.t("commonComponents.dataTable.rowsPerPage", { defaultValue: "Rows per page" })}</span>
                 <Select
                   value={String(pageSize)}
                   onValueChange={(value) => {
@@ -176,7 +187,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                     }
                   }}
                 >
-                  <SelectTrigger size="sm" aria-label="Rows per page" className="w-[4.5rem]">
+                  <SelectTrigger size="sm" aria-label={i18n.t("commonComponents.dataTable.rowsPerPage", { defaultValue: "Rows per page" })} className="w-[4.5rem]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -189,12 +200,12 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                 </Select>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground tabular-nums">Page {page}</span>
+                <span className="text-sm text-muted-foreground tabular-nums">{i18n.t("costOptimization.promptCachingRequests.page", { page, defaultValue: `Page ${page}` })}</span>
                 <div className="flex items-center gap-1">
                   <Button
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Go to previous page"
+                    aria-label={i18n.t("commonComponents.dataTable.goToPreviousPage", { defaultValue: "Go to previous page" })}
                     disabled={page === 1}
                     onClick={() => setPagination({ scope, cursors: cursors.slice(0, -1) })}
                   >
@@ -203,7 +214,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                   <Button
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Go to next page"
+                    aria-label={i18n.t("commonComponents.dataTable.goToNextPage", { defaultValue: "Go to next page" })}
                     disabled={!requests.data.has_more || !nextCursor}
                     onClick={() => nextCursor && setPagination({ scope, cursors: [...cursors, nextCursor] })}
                   >

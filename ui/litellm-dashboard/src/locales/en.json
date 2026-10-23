@@ -11841,6 +11841,30 @@
       "compression": "Compression",
       "promptCaching": "Prompt caching",
       "autoRouter": "Auto-router"
+    },
+    "promptCachingRequests": {
+      "title": "Prompt caching requests",
+      "description1": "Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not establish LiteLLM injection; older logs may not record it.",
+      "description2": "Net savings are estimated from logged usage and current configured pricing, after cache-write premiums. Negative values mean caching cost more; unavailable means the request could not be priced.",
+      "filtersAria": "Prompt caching request filters",
+      "tabAll": "All caching",
+      "tabInjected": "LiteLLM injected",
+      "tabHits": "Cache hits",
+      "selectDateRange": "Select a date range to view requests",
+      "loadingRequests": "Loading requests...",
+      "couldNotLoad": "Could not load prompt caching requests",
+      "noMatchingRequests": "No matching prompt caching requests in this range",
+      "colRequest": "Request",
+      "colModel": "Model",
+      "colInjection": "LiteLLM injection",
+      "colCacheReads": "Cache reads",
+      "colCacheWrites": "Cache writes",
+      "colActualCost": "Actual cost",
+      "colNetSavings": "Net savings",
+      "recorded": "Recorded",
+      "notRecorded": "Not recorded",
+      "unavailable": "Unavailable",
+      "page": "Page {{page}}"
     }
   },
   "budgetsPage": {

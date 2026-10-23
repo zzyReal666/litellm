@@ -11841,6 +11841,30 @@
       "compression": "压缩",
       "promptCaching": "提示词缓存",
       "autoRouter": "自动路由"
+    },
+    "promptCachingRequests": {
+      "title": "提示缓存请求",
+      "description1": "记录了 LiteLLM 注入或提供商缓存读取、写入的请求。仅缓存命中并不能说明存在 LiteLLM 注入；较早的日志可能未记录该信息。",
+      "description2": "净节省是根据记录的用量和当前配置的价格（扣除缓存写入溢价后）估算的。负值表示缓存反而增加了成本；不可用表示该请求无法计价。",
+      "filtersAria": "提示缓存请求筛选",
+      "tabAll": "全部缓存",
+      "tabInjected": "LiteLLM 注入",
+      "tabHits": "缓存命中",
+      "selectDateRange": "选择日期范围以查看请求",
+      "loadingRequests": "正在加载请求...",
+      "couldNotLoad": "无法加载提示缓存请求",
+      "noMatchingRequests": "该范围内没有匹配的提示缓存请求",
+      "colRequest": "请求",
+      "colModel": "模型",
+      "colInjection": "LiteLLM 注入",
+      "colCacheReads": "缓存读取",
+      "colCacheWrites": "缓存写入",
+      "colActualCost": "实际成本",
+      "colNetSavings": "净节省",
+      "recorded": "已记录",
+      "notRecorded": "未记录",
+      "unavailable": "不可用",
+      "page": "第 {{page}} 页"
     }
   },
   "budgetsPage": {
