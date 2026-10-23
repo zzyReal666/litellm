@@ -14,6 +14,7 @@ import {
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ACTION_ITEMS } from "./action_options";
+import i18n from "@/lib/i18n";
 
 interface PrebuiltPattern {
   name: string;
@@ -67,12 +68,12 @@ const PatternModal: React.FC<PatternModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Add prebuilt pattern</DialogTitle>
+          <DialogTitle>{i18n.t("guardrails.patternModal.title", { defaultValue: "Add prebuilt pattern" })}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Pattern type</p>
+            <p className="font-semibold">{i18n.t("guardrails.patternModal.patternTypeLabel", { defaultValue: "Pattern type" })}</p>
             <Combobox
               items={patternGroups}
               value={selectedPattern}
@@ -80,9 +81,9 @@ const PatternModal: React.FC<PatternModalProps> = ({
               itemToStringLabel={(pattern: PrebuiltPattern) => pattern.display_name}
               filter={matchesPatternQuery}
             >
-              <ComboboxInput className="mt-2 w-full" placeholder="Choose pattern type" />
+              <ComboboxInput className="mt-2 w-full" placeholder={i18n.t("guardrails.patternModal.patternTypePlaceholder", { defaultValue: "Choose pattern type" })} />
               <ComboboxContent>
-                <ComboboxEmpty>No matching patterns</ComboboxEmpty>
+                <ComboboxEmpty>{i18n.t("guardrails.patternModal.noMatchingPatterns", { defaultValue: "No matching patterns" })}</ComboboxEmpty>
                 <ComboboxList>
                   {(group: PatternGroup) => (
                     <ComboboxGroup key={group.category} items={group.items}>
@@ -102,16 +103,16 @@ const PatternModal: React.FC<PatternModalProps> = ({
           </div>
 
           <div>
-            <p className="font-semibold">Action</p>
+            <p className="font-semibold">{i18n.t("guardrails.patternModal.actionLabel", { defaultValue: "Action" })}</p>
             <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this pattern is detected
+              {i18n.t("guardrails.patternModal.actionDesc", { defaultValue: "Choose what action the guardrail should take when this pattern is detected" })}
             </p>
             <Select
               items={ACTION_ITEMS}
               value={patternAction}
               onValueChange={(value: string | null) => value && onActionChange(value as "BLOCK" | "MASK")}
             >
-              <SelectTrigger className="w-full" aria-label="Action">
+              <SelectTrigger className="w-full" aria-label={i18n.t("guardrails.patternModal.actionLabel", { defaultValue: "Action" })}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -127,9 +128,9 @@ const PatternModal: React.FC<PatternModalProps> = ({
 
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {i18n.t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
-          <Button onClick={onAdd}>Add</Button>
+          <Button onClick={onAdd}>{i18n.t("common.add", { defaultValue: "Add" })}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

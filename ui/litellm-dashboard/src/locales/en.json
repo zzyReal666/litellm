@@ -1801,7 +1801,8 @@
       "actionLabel": "Action",
       "actionDesc": "Choose what action the guardrail should take when this pattern is detected",
       "actionBlock": "Block",
-      "actionMask": "Mask"
+      "actionMask": "Mask",
+      "noMatchingPatterns": "No matching patterns"
     },
     "patternTable": {
       "colType": "Type",

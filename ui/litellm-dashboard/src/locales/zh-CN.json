@@ -1801,7 +1801,8 @@
       "actionLabel": "操作",
       "actionDesc": "选择当检测到此模式时护栏应执行的操作",
       "actionBlock": "拦截",
-      "actionMask": "遮蔽"
+      "actionMask": "遮蔽",
+      "noMatchingPatterns": "没有匹配的模式"
     },
     "patternTable": {
       "colType": "类型",
