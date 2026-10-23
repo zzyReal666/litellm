@@ -13013,6 +13013,26 @@
       "usage": "Usage",
       "cost": "Cost",
       "tags": "Tags"
+    },
+    "datasetsView": {
+      "datasetsAria": "Datasets",
+      "loadingDatasets": "Loading datasets…",
+      "loadingDatasetsDesc": "Fetching the datasets you can see.",
+      "couldNotLoadDatasets": "Couldn't load datasets",
+      "tryAgain": "Try again",
+      "noDatasetsYet": "No datasets yet",
+      "noDatasetsDesc": "Open a trace or a finding and choose Add to dataset to save real conversations for an agent.",
+      "anyAgent": "Any agent",
+      "colDataset": "Dataset",
+      "colAgent": "Agent",
+      "colRevision": "Revision",
+      "colCases": "Cases",
+      "colUpdated": "Updated",
+      "colOpen": "Open",
+      "dataset_one": "{{count}} dataset",
+      "dataset_other": "{{count}} datasets",
+      "case_one": "{{count}} case",
+      "case_other": "{{count}} cases"
     }
   },
   "mcpServerCredentials": {

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { formatActivityTimestamp } from "@/utils/activityTimestamp";
 import { FINDING_PANEL_WIDTH_KEY } from "../storage";
 import { StateMessage } from "@/components/shared/StateMessage";
+import i18n from "@/lib/i18n";
 import { useDatasetRoute } from "../route";
 import { useDatasets } from "./api";
 import { DatasetDetail } from "./DatasetDetail";
@@ -27,7 +28,7 @@ export interface DatasetsViewProps {
 export function DatasetsView({ readOnly = false }: DatasetsViewProps) {
   const { datasetId, openDataset } = useDatasetRoute();
   return (
-    <section aria-label="Datasets" className="flex w-full min-w-0 flex-1 flex-col">
+    <section aria-label={i18n.t("lens.datasetsView.datasetsAria", { defaultValue: "Datasets" })} className="flex w-full min-w-0 flex-1 flex-col">
       {datasetId ? (
         <DatasetDetail key={datasetId} datasetId={datasetId} readOnly={readOnly} onBack={() => openDataset(null)} />
       ) : (
@@ -44,8 +45,8 @@ function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
       <StateMessage
         role="status"
         icon={<Loader2 className="size-5 animate-spin motion-reduce:animate-none" />}
-        title="Loading datasets…"
-        description="Fetching the datasets you can see."
+        title={i18n.t("lens.datasetsView.loadingDatasets", { defaultValue: "Loading datasets…" })}
+        description={i18n.t("lens.datasetsView.loadingDatasetsDesc", { defaultValue: "Fetching the datasets you can see." })}
       />
     );
   if (datasets.isError)
@@ -54,11 +55,11 @@ function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
         role="alert"
         tone="destructive"
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn't load datasets"
+        title={i18n.t("lens.datasetsView.couldNotLoadDatasets", { defaultValue: "Couldn't load datasets" })}
         description={datasets.error.message}
       >
         <Button size="sm" onClick={() => void datasets.refetch()}>
-          Try again
+          {i18n.t("lens.datasetsView.tryAgain", { defaultValue: "Try again" })}
         </Button>
       </StateMessage>
     );
@@ -67,8 +68,8 @@ function DatasetList({ onOpen }: { onOpen: (id: string) => void }) {
       <StateMessage
         role="status"
         icon={<Database className="size-5" />}
-        title="No datasets yet"
-        description="Open a trace or a finding and choose Add to dataset to save real conversations for an agent."
+        title={i18n.t("lens.datasetsView.noDatasetsYet", { defaultValue: "No datasets yet" })}
+        description={i18n.t("lens.datasetsView.noDatasetsDesc", { defaultValue: "Open a trace or a finding and choose Add to dataset to save real conversations for an agent." })}
       />
     );
   return <DatasetTable datasets={datasets.data} onOpen={onOpen} />;
@@ -82,13 +83,13 @@ function NameCell({ row: { original: dataset } }: Cell) {
   return (
     <span className="flex min-w-0 flex-col">
       <span className="truncate font-medium text-foreground">{dataset.name}</span>
-      <span className="truncate text-xs text-muted-foreground md:hidden">{dataset.agent_name || "Any agent"}</span>
+      <span className="truncate text-xs text-muted-foreground md:hidden">{dataset.agent_name || i18n.t("lens.datasetsView.anyAgent", { defaultValue: "Any agent" })}</span>
     </span>
   );
 }
 
 function AgentCell({ row: { original: dataset } }: Cell) {
-  return <span className="block truncate text-muted-foreground">{dataset.agent_name || "Any agent"}</span>;
+  return <span className="block truncate text-muted-foreground">{dataset.agent_name || i18n.t("lens.datasetsView.anyAgent", { defaultValue: "Any agent" })}</span>;
 }
 
 function RevisionCell({ row: { original: dataset } }: Cell) {
@@ -112,12 +113,12 @@ function OpenCell() {
 }
 
 const COLUMNS: ColumnDef<DatasetSummary>[] = [
-  { id: "name", header: "Dataset", cell: NameCell },
-  { id: "agent", size: 160, header: "Agent", cell: AgentCell },
-  { id: "revision", size: 80, header: "Revision", cell: RevisionCell, meta: { numeric: true } },
-  { id: "cases", size: 64, header: "Cases", cell: CasesCell, meta: { numeric: true } },
-  { id: "updated", size: 200, header: "Updated", cell: UpdatedCell },
-  { id: "open", size: 40, header: "Open", cell: OpenCell, meta: { headerClassName: "sr-only", className: "pl-0" } },
+  { id: "name", header: i18n.t("lens.datasetsView.colDataset", { defaultValue: "Dataset" }), cell: NameCell },
+  { id: "agent", size: 160, header: i18n.t("lens.datasetsView.colAgent", { defaultValue: "Agent" }), cell: AgentCell },
+  { id: "revision", size: 80, header: i18n.t("lens.datasetsView.colRevision", { defaultValue: "Revision" }), cell: RevisionCell, meta: { numeric: true } },
+  { id: "cases", size: 64, header: i18n.t("lens.datasetsView.colCases", { defaultValue: "Cases" }), cell: CasesCell, meta: { numeric: true } },
+  { id: "updated", size: 200, header: i18n.t("lens.datasetsView.colUpdated", { defaultValue: "Updated" }), cell: UpdatedCell },
+  { id: "open", size: 40, header: i18n.t("lens.datasetsView.colOpen", { defaultValue: "Open" }), cell: OpenCell, meta: { headerClassName: "sr-only", className: "pl-0" } },
 ];
 
 function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[]; onOpen: (id: string) => void }) {
@@ -144,7 +145,7 @@ function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[
     >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
         <InspectorTable.Root table={table}>
-          <InspectorTable.Grid aria-label="Datasets" className="text-xs md:min-w-[720px]">
+          <InspectorTable.Grid aria-label={i18n.t("lens.datasetsView.datasetsAria", { defaultValue: "Datasets" })} className="text-xs md:min-w-[720px]">
             <InspectorTable.Header />
             <InspectorTable.Body<DatasetSummary> rowHeight={() => (desktop ? DATASET_HEIGHT : 48)}>
               {(row) => (
@@ -160,7 +161,7 @@ function DatasetTable({ datasets, onOpen }: { datasets: readonly DatasetSummary[
           </InspectorTable.Grid>
         </InspectorTable.Root>
         <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-          {datasets.length} {datasets.length === 1 ? "dataset" : "datasets"} · {cases} {cases === 1 ? "case" : "cases"}
+          {i18n.t("lens.datasetsView.dataset", { count: datasets.length })} · {i18n.t("lens.datasetsView.case", { count: cases })}
         </footer>
       </div>
     </Inspector.Root>
