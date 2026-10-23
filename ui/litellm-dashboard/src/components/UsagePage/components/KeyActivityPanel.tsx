@@ -1,6 +1,8 @@
 import { KeyRound, Search, X } from "lucide-react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
+import i18n from "@/lib/i18n";
+
 import {
   formatCompact,
   formatUsd,
@@ -59,9 +61,9 @@ type KeyDetailState =
   | { status: "loaded"; metrics: ModelActivityData | undefined };
 
 const keyCountText = (searching: boolean, isFiltering: boolean, shownKeys: number, total: number): string => {
-  if (searching) return "Searching...";
-  if (isFiltering) return `${shownKeys.toLocaleString()} matching keys`;
-  return `${total.toLocaleString()} keys`;
+  if (searching) return i18n.t("usagePage.keyActivityPanel.searching", { defaultValue: "Searching..." });
+  if (isFiltering) return i18n.t("usagePage.keyActivityPanel.matchingKeys", { count: shownKeys.toLocaleString(), defaultValue: `${shownKeys.toLocaleString()} matching keys` });
+  return i18n.t("usagePage.keyActivityPanel.keysCount", { count: total.toLocaleString(), defaultValue: `${total.toLocaleString()} keys` });
 };
 
 interface KeyDetailContentProps {
@@ -73,20 +75,20 @@ interface KeyDetailContentProps {
 
 const KeyDetailContent: React.FC<KeyDetailContentProps> = ({ apiKey, detail, hidePromptCachingMetrics, onRetry }) => {
   if (detail?.status === "loading") {
-    return <p className="py-4 text-sm text-muted-foreground">Loading key details...</p>;
+    return <p className="py-4 text-sm text-muted-foreground">{i18n.t("usagePage.keyActivityPanel.loadingKeyDetails", { defaultValue: "Loading key details..." })}</p>;
   }
   if (detail?.status === "failed") {
     return (
       <p className="py-4 text-sm text-muted-foreground">
-        Could not load key details.{" "}
+        {i18n.t("usagePage.keyActivityPanel.couldNotLoadKeyDetails", { defaultValue: "Could not load key details." })}{" "}
         <button type="button" className="font-medium text-foreground underline" onClick={onRetry}>
-          Retry
+          {i18n.t("common.retry", { defaultValue: "Retry" })}
         </button>
       </p>
     );
   }
   if (detail?.status !== "loaded" || detail.metrics === undefined) {
-    return <p className="py-4 text-sm text-muted-foreground">No daily details available</p>;
+    return <p className="py-4 text-sm text-muted-foreground">{i18n.t("usagePage.keyActivityPanel.noDailyDetails", { defaultValue: "No daily details available" })}</p>;
   }
   return (
     <ModelSection modelName={apiKey} metrics={detail.metrics} hidePromptCachingMetrics={hidePromptCachingMetrics} />
@@ -131,51 +133,58 @@ const KeySummaryStrip: React.FC<KeySummaryStripProps> = ({ summary, loading, hid
     >
       {loading ? (
         <span role="status" className="sr-only">
-          Loading chart data...
+          {i18n.t("usagePage.keyActivityPanel.loadingChartData", { defaultValue: "Loading chart data..." })}
         </span>
       ) : (
-        <h3 className="sr-only">Overall Usage</h3>
+        <h3 className="sr-only">{i18n.t("activityMetrics.overallUsage", { defaultValue: "Overall Usage" })}</h3>
       )}
       <StatCell trend={trend("spend")}>
-        <Stat label="Spend" value={formatUsd(summary.total_spend)} pending={loading} />
+        <Stat label={i18n.t("usagePage.keyActivityPanel.spend", { defaultValue: "Spend" })} value={formatUsd(summary.total_spend)} pending={loading} />
       </StatCell>
       <StatCell trend={trend("requests")}>
-        <Stat label="Requests" value={summary.total_requests.toLocaleString()} pending={loading} />
+        <Stat label={i18n.t("usagePage.keyActivityPanel.requests", { defaultValue: "Requests" })} value={summary.total_requests.toLocaleString()} pending={loading} />
         {!loading && (
           <div className="mt-0.5 flex gap-3 text-xs text-muted-foreground">
             <span>
-              <span className="text-success tabular-nums">{summary.total_successful_requests.toLocaleString()}</span> ok
+              <span className="text-success tabular-nums">{summary.total_successful_requests.toLocaleString()}</span> {i18n.t("usagePage.keyActivityPanel.ok", { defaultValue: "ok" })}
             </span>
             <span>
               <span className={summary.total_failed_requests > 0 ? "text-destructive tabular-nums" : "tabular-nums"}>
                 {summary.total_failed_requests.toLocaleString()}
               </span>{" "}
-              failed
+              {i18n.t("usagePage.keyActivityPanel.failed", { defaultValue: "failed" })}
             </span>
           </div>
         )}
       </StatCell>
       <StatCell trend={trend("tokens")}>
         <Stat
-          label="Tokens"
+          label={i18n.t("usagePage.keyActivityPanel.tokens", { defaultValue: "Tokens" })}
           value={summary.total_tokens.toLocaleString()}
           pending={loading}
           hint={
             loading
               ? undefined
-              : `${formatCompact(summary.prompt_tokens)} in · ${formatCompact(summary.completion_tokens)} out`
+              : i18n.t("usagePage.keyActivityPanel.tokensHint", {
+                  prompt: formatCompact(summary.prompt_tokens),
+                  completion: formatCompact(summary.completion_tokens),
+                  defaultValue: `${formatCompact(summary.prompt_tokens)} in · ${formatCompact(summary.completion_tokens)} out`,
+                })
           }
         />
       </StatCell>
       <StatCell>
         <Stat
-          label="Avg cost / request"
+          label={i18n.t("usagePage.keyActivityPanel.avgCostPerRequest", { defaultValue: "Avg cost / request" })}
           value={formatUsd(avgCost, 4)}
           pending={loading}
           hint={
             loading || hidePromptCachingMetrics
               ? undefined
-              : `${formatCompact(summary.total_cache_read_input_tokens)} cache read tokens`
+              : i18n.t("usagePage.keyActivityPanel.cacheReadTokensHint", {
+                  count: formatCompact(summary.total_cache_read_input_tokens),
+                  defaultValue: `${formatCompact(summary.total_cache_read_input_tokens)} cache read tokens`,
+                })
           }
         />
       </StatCell>
@@ -357,7 +366,7 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   const visibleDetails = detailState?.scope === fetchKeyPage ? detailState.details : {};
   const keyCountLabel =
     searchSettled && searchFailed && shownKeys === 0
-      ? "Search failed"
+      ? i18n.t("usagePage.keyActivityPanel.searchFailed", { defaultValue: "Search failed" })
       : keyCountText(searching, isFiltering, shownKeys, total);
 
   const retryFirstPage = () => {
@@ -383,16 +392,16 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   };
   const firstPageError = (
     <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-      Could not load keys for this range.{" "}
+      {i18n.t("usagePage.keyActivityPanel.couldNotLoadKeys", { defaultValue: "Could not load keys for this range." })}{" "}
       <button type="button" className="font-medium text-foreground underline" onClick={retryFirstPage}>
-        Retry
+        {i18n.t("common.retry", { defaultValue: "Retry" })}
       </button>
     </p>
   );
   const emptyListBody = (() => {
     if (failed) return firstPageError;
     if (!loading) return null;
-    return <p className="px-4 py-8 text-center text-sm text-muted-foreground">Loading keys...</p>;
+    return <p className="px-4 py-8 text-center text-sm text-muted-foreground">{i18n.t("usagePage.keyActivityPanel.loadingKeys", { defaultValue: "Loading keys..." })}</p>;
   })();
   const maxSpend = Math.max(0, ...Object.values(filteredMetrics).map((metrics) => metrics.total_spend));
   const keyList = Object.entries(filteredMetrics).map(([apiKey, metrics]) => {
@@ -416,7 +425,7 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
             </div>
             <span className="text-right text-sm tabular-nums text-foreground">{formatUsd(metrics.total_spend)}</span>
             <span className="text-right text-sm tabular-nums text-muted-foreground">
-              {metrics.total_requests.toLocaleString()} <span className="sr-only">requests</span>
+              {metrics.total_requests.toLocaleString()} <span className="sr-only">{i18n.t("usagePage.keyActivityPanel.requestsSr", { defaultValue: "requests" })}</span>
             </span>
           </div>
         }
@@ -440,14 +449,14 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
   const showSearchErrorNote = !noMatches && searchFailed && !searching;
   const searchRetryButton = (
     <button type="button" className="font-medium text-foreground underline" onClick={retrySearch}>
-      Retry search
+      {i18n.t("usagePage.keyActivityPanel.retrySearch", { defaultValue: "Retry search" })}
     </button>
   );
   const emptyFilterBody = searchFailed ? (
-    <p className="px-4 py-8 text-center text-sm text-muted-foreground">Could not search keys. {searchRetryButton}</p>
+    <p className="px-4 py-8 text-center text-sm text-muted-foreground">{i18n.t("usagePage.keyActivityPanel.couldNotSearchKeys", { defaultValue: "Could not search keys." })} {searchRetryButton}</p>
   ) : (
     <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-      No keys match &quot;{trimmedQuery}&quot; in this date range
+      {i18n.t("usagePage.keyActivityPanel.noKeysMatch", { query: trimmedQuery, defaultValue: `No keys match "${trimmedQuery}" in this date range` })}
     </p>
   );
 
@@ -489,14 +498,14 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
         <Search className="size-3.5 text-muted-foreground" />
       </InputGroupAddon>
       <InputGroupInput
-        aria-label="Search keys"
-        placeholder="Search alias, hash, user ID, or email"
+        aria-label={i18n.t("usagePage.keyActivityPanel.searchKeysAria", { defaultValue: "Search keys" })}
+        placeholder={i18n.t("usagePage.keyActivityPanel.searchKeysPlaceholder", { defaultValue: "Search alias, hash, user ID, or email" })}
         value={query}
         onChange={(event) => updateQuery(event.target.value)}
       />
       {isFiltering && (
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs" aria-label="Clear key search" onClick={() => updateQuery("")}>
+          <InputGroupButton size="icon-xs" aria-label={i18n.t("usagePage.keyActivityPanel.clearKeySearch", { defaultValue: "Clear key search" })} onClick={() => updateQuery("")}>
             <X />
           </InputGroupButton>
         </InputGroupAddon>
@@ -515,27 +524,27 @@ const KeyActivityPanel: React.FC<KeyActivityPanelProps> = ({
         )}
       </div>
       <KeySummaryStrip summary={summary} loading={summaryLoading} hidePromptCachingMetrics={hidePromptCachingMetrics} />
-      <Panel icon={KeyRound} title="Virtual keys" className="overflow-hidden" bodyClassName="px-0 pt-3 pb-0">
+      <Panel icon={KeyRound} title={i18n.t("usagePage.keyActivityPanel.virtualKeys", { defaultValue: "Virtual keys" })} className="overflow-hidden" bodyClassName="px-0 pt-3 pb-0">
         {showColumnHeaders && (
           <div
             aria-hidden="true"
             className={`${KEY_ROW_GRID} border-y bg-muted/40 py-2 pr-4 pl-10 text-xs font-medium text-muted-foreground`}
           >
-            <span>Key</span>
-            <span className="text-right">Spend</span>
-            <span className="text-right">Requests</span>
+            <span>{i18n.t("usagePage.keyActivityPanel.key", { defaultValue: "Key" })}</span>
+            <span className="text-right">{i18n.t("usagePage.keyActivityPanel.spend", { defaultValue: "Spend" })}</span>
+            <span className="text-right">{i18n.t("usagePage.keyActivityPanel.requests", { defaultValue: "Requests" })}</span>
           </div>
         )}
         <div className={showColumnHeaders ? undefined : "border-t"}>{noMatches ? emptyFilterBody : listBody}</div>
         {showFooter && (
           <div className="border-t px-4 py-2.5 text-xs text-muted-foreground">
-            {showSearchErrorNote && <p>Could not search all keys. {searchRetryButton}</p>}
-            {loadingMore && <p>Loading more keys...</p>}
+            {showSearchErrorNote && <p>{i18n.t("usagePage.keyActivityPanel.couldNotSearchAllKeys", { defaultValue: "Could not search all keys." })} {searchRetryButton}</p>}
+            {loadingMore && <p>{i18n.t("usagePage.keyActivityPanel.loadingMoreKeys", { defaultValue: "Loading more keys..." })}</p>}
             {showNextPageRetry && (
               <p>
-                Could not load more keys.{" "}
+                {i18n.t("usagePage.keyActivityPanel.couldNotLoadMoreKeys", { defaultValue: "Could not load more keys." })}{" "}
                 <button type="button" className="font-medium text-foreground underline" onClick={retryNextPage}>
-                  Retry
+                  {i18n.t("common.retry", { defaultValue: "Retry" })}
                 </button>
               </p>
             )}
