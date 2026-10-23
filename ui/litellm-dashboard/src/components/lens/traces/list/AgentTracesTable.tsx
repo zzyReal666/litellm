@@ -11,6 +11,7 @@ import { InspectorTable, useInspectorTable } from "@/components/shared/Inspector
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import { formatActivityTimestamp, formatRunTimestamp, localTimeZoneAbbreviation } from "@/utils/activityTimestamp";
 
 import { SpanIcon } from "../ui/SpanIcon";
@@ -114,14 +115,14 @@ function InputCell({ run }: { run: TraceSummary }) {
       {input ? (
         <span className="truncate text-foreground">{input}</span>
       ) : (
-        <span className="truncate text-muted-foreground">No input recorded</span>
+        <span className="truncate text-muted-foreground">{i18n.t("lens.agentTraces.noInputRecorded", { defaultValue: "No input recorded" })}</span>
       )}
       {run.resolution_limited && (
         <span
           className="shrink-0 text-xs text-muted-foreground"
-          title="This run is too large to calculate all totals in this view"
+          title={i18n.t("lens.agentTraces.totalsTooLarge", { defaultValue: "This run is too large to calculate all totals in this view" })}
         >
-          Partial totals
+          {i18n.t("lens.agentTraces.partialTotals", { defaultValue: "Partial totals" })}
         </span>
       )}
       <span className="hidden max-w-32 min-w-0 shrink-[100] truncate font-mono text-xs text-muted-foreground 2xl:inline">
@@ -134,23 +135,23 @@ function InputCell({ run }: { run: TraceSummary }) {
 function FindingCount({ run }: { run: TraceSummary }) {
   const state = useContext(FindingsContext).get(runKey(run));
   if (!state || state.status === "pending")
-    return <Skeleton aria-label="Loading findings" className="ml-auto h-3 w-5" />;
-  if (state.status === "error") return <span title="Could not load findings">Unavailable</span>;
-  if (state.count === null) return <span title="No conclusive investigation for this trace">-</span>;
-  return <span title={`${state.count} findings from completed investigations`}>{state.count.toLocaleString()}</span>;
+    return <Skeleton aria-label={i18n.t("lens.agentTraces.loadingFindings", { defaultValue: "Loading findings" })} className="ml-auto h-3 w-5" />;
+  if (state.status === "error") return <span title={i18n.t("lens.agentTraces.couldNotLoadFindings", { defaultValue: "Could not load findings" })}>{i18n.t("lens.agentTraces.unavailable", { defaultValue: "Unavailable" })}</span>;
+  if (state.count === null) return <span title={i18n.t("lens.agentTraces.noConclusiveInvestigation", { defaultValue: "No conclusive investigation for this trace" })}>-</span>;
+  return <span title={i18n.t("lens.agentTraces.findingsCount", { count: state.count, defaultValue: `${state.count} findings from completed investigations` })}>{state.count.toLocaleString()}</span>;
 }
 
 function SignalsHeader() {
   const { configured, onSetUp } = useContext(SignalSetupContext);
-  if (configured || !onSetUp) return <>Signals</>;
+  if (configured || !onSetUp) return <>{i18n.t("lens.agentTraces.signals", { defaultValue: "Signals" })}</>;
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap">
-      Signals
+      {i18n.t("lens.agentTraces.signals", { defaultValue: "Signals" })}
       <Button
         type="button"
         variant="outline"
         size="xs"
-        aria-label="Set up signals"
+        aria-label={i18n.t("lens.agentTraces.setUpSignals", { defaultValue: "Set up signals" })}
         onClick={(event) => {
           event.stopPropagation();
           onSetUp();
@@ -158,7 +159,7 @@ function SignalsHeader() {
         className="h-5 rounded-full px-2 font-medium tracking-normal normal-case"
       >
         <Plus />
-        Set up
+        {i18n.t("lens.agentTraces.setUp", { defaultValue: "Set up" })}
       </Button>
     </span>
   );
@@ -174,15 +175,15 @@ function SignalsCell({ run }: { run: TraceSummary }) {
   const { configured } = useContext(SignalSetupContext);
   const state = useContext(SignalsContext).get(runKey(run));
   const muted = mutedCell;
-  if (!configured) return muted("-", "Signals are not set up");
-  if (!state || state.status === "pending") return <Skeleton aria-label="Loading signals" className="h-3 w-16" />;
-  if (state.status === "error") return muted("Unavailable", "Could not load signals");
+  if (!configured) return muted("-", i18n.t("lens.agentTraces.signalsNotSetUp", { defaultValue: "Signals are not set up" }));
+  if (!state || state.status === "pending") return <Skeleton aria-label={i18n.t("lens.agentTraces.loadingSignals", { defaultValue: "Loading signals" })} className="h-3 w-16" />;
+  if (state.status === "error") return muted(i18n.t("lens.agentTraces.unavailable", { defaultValue: "Unavailable" }), i18n.t("lens.agentTraces.couldNotLoadSignals", { defaultValue: "Could not load signals" }));
   const { status } = state.signals;
   if (status === "unclassified" || status === "pending")
-    return muted("Checking", "The System 1 model is checking this run");
-  if (status === "failed") return muted("Not checked", "The System 1 model could not check this run");
+    return muted(i18n.t("lens.agentTraces.checking", { defaultValue: "Checking" }), i18n.t("lens.agentTraces.systemOneChecking", { defaultValue: "The System 1 model is checking this run" }));
+  if (status === "failed") return muted(i18n.t("lens.agentTraces.notChecked", { defaultValue: "Not checked" }), i18n.t("lens.agentTraces.systemOneFailed", { defaultValue: "The System 1 model could not check this run" }));
   const flags = flaggedSignals(state.signals);
-  if (!flags.length) return <span title="No signals detected" />;
+  if (!flags.length) return <span title={i18n.t("lens.agentTraces.noSignalsDetected", { defaultValue: "No signals detected" })} />;
   return <SignalPills flags={flags} className="overflow-hidden" />;
 }
 
@@ -191,10 +192,10 @@ export const formatScore = (score: number): string => (Number.isInteger(score) ?
 export function FeedbackScore({ run }: { run: TraceSummary }) {
   const state = useContext(FeedbackContext).get(runKey(run));
   if (!state || state.status === "pending")
-    return <Skeleton aria-label="Loading feedback" className="ml-auto h-3 w-8" />;
-  if (state.status === "error") return <span title="Could not load feedback">Unavailable</span>;
+    return <Skeleton aria-label={i18n.t("lens.agentTraces.loadingFeedback", { defaultValue: "Loading feedback" })} className="ml-auto h-3 w-8" />;
+  if (state.status === "error") return <span title={i18n.t("lens.agentTraces.couldNotLoadFeedback", { defaultValue: "Could not load feedback" })}>{i18n.t("lens.agentTraces.unavailable", { defaultValue: "Unavailable" })}</span>;
   const { count, average, lowest } = state.summary;
-  if (count === 0 || average == null) return <span title="No feedback yet">—</span>;
+  if (count === 0 || average == null) return <span title={i18n.t("lens.agentTraces.noFeedbackYet", { defaultValue: "No feedback yet" })}>—</span>;
   const low = lowest != null && lowest <= LOW_SCORE;
   return (
     <span
@@ -305,7 +306,7 @@ const RUN_COLUMNS: ColumnDef<TraceSummary>[] = [
     id: "open",
     size: 32,
     enableHiding: false,
-    header: ({ table }) => <DataTableViewOptions table={table} label="Columns" iconOnly />,
+    header: ({ table }) => <DataTableViewOptions table={table} label={i18n.t("commonComponents.dataTable.columnsLabel", { defaultValue: "Columns" })} iconOnly />,
     cell: () => <ChevronRight className="size-3 text-muted-foreground/60" />,
     meta: { className: "px-0", headerClassName: "px-1", renderSkeleton: () => null },
   },
@@ -330,18 +331,18 @@ function EmptyRuns({ rangeEmpty, onSetUpTracing }: { rangeEmpty: boolean; onSetU
   if (!rangeEmpty)
     return (
       <div className="flex items-center justify-center gap-3 py-16 text-xs text-muted-foreground">
-        <span>No runs match these filters.</span>
+        <span>{i18n.t("lens.agentTraces.noRunsMatchFilters", { defaultValue: "No runs match these filters." })}</span>
         <Button size="xs" variant="outline" onClick={onSetUpTracing}>
-          Set up tracing
+          {i18n.t("lens.agentTraces.setUpTracing", { defaultValue: "Set up tracing" })}
         </Button>
       </div>
     );
   return (
     <div className="flex flex-col items-center gap-1 py-16 text-center">
-      <p className="text-sm font-medium">No runs in this time range</p>
-      <p className="text-xs text-muted-foreground">Connect an agent to start sending traces.</p>
+      <p className="text-sm font-medium">{i18n.t("lens.agentTraces.noRunsInRange", { defaultValue: "No runs in this time range" })}</p>
+      <p className="text-xs text-muted-foreground">{i18n.t("lens.agentTraces.connectAgentHint", { defaultValue: "Connect an agent to start sending traces." })}</p>
       <Button size="sm" className="mt-3" onClick={onSetUpTracing}>
-        Set up tracing
+        {i18n.t("lens.agentTraces.setUpTracing", { defaultValue: "Set up tracing" })}
       </Button>
     </div>
   );
@@ -404,7 +405,7 @@ export function AgentTracesTable({
         <SignalsContext.Provider value={signals}>
           <SignalSetupContext.Provider value={{ configured: showSignals, onSetUp: onSetUpSignals }}>
             <InspectorTable.Root table={table} data-testid="runs-table">
-              <InspectorTable.Grid aria-label="Agent runs" aria-busy={isFetching} className="min-w-[900px] text-xs">
+              <InspectorTable.Grid aria-label={i18n.t("lens.agentTraces.agentRuns", { defaultValue: "Agent runs" })} aria-busy={isFetching} className="min-w-[900px] text-xs">
                 <InspectorTable.Header />
                 <InspectorTable.Body<TraceSummary>
                   className={bodyClassName(isPlaceholder)}
@@ -433,26 +434,28 @@ export function AgentTracesTable({
               </InspectorTable.Grid>
               {isLoading && (
                 <p role="status" className="sr-only">
-                  Loading runs…
+                  {i18n.t("lens.agentTraces.loadingRuns", { defaultValue: "Loading runs…" })}
                 </p>
               )}
               {error && (
                 <div role="alert" className="flex items-center justify-center gap-3 py-6 text-xs text-muted-foreground">
                   <span>
-                    {traces.length ? "Could not load more runs" : "Could not load runs"}: {error.message}
+                    {traces.length
+                      ? i18n.t("lens.agentTraces.couldNotLoadMoreRuns", { defaultValue: "Could not load more runs" })
+                      : i18n.t("lens.agentTraces.couldNotLoadRuns", { defaultValue: "Could not load runs" })}: {error.message}
                   </span>
                   {onRetry && (
                     <Button size="xs" variant="outline" disabled={isFetching} onClick={onRetry}>
-                      Retry
+                      {i18n.t("common.retry", { defaultValue: "Retry" })}
                     </Button>
                   )}
                 </div>
               )}
               {canContinue && traces.length === 0 && (
                 <div className="flex items-center justify-center gap-3 py-16 text-xs text-muted-foreground">
-                  <span>No loaded runs match these filters.</span>
+                  <span>{i18n.t("lens.agentTraces.noLoadedRunsMatch", { defaultValue: "No loaded runs match these filters." })}</span>
                   <Button size="xs" variant="outline" disabled={isFetching} onClick={onLoadMore}>
-                    Load older runs
+                    {i18n.t("lens.agentTraces.loadOlderRuns", { defaultValue: "Load older runs" })}
                   </Button>
                 </div>
               )}
