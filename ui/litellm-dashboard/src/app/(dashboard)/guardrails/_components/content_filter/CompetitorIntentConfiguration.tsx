@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 
 import { TagsInput } from "./TagsInput";
 import { ThresholdInput } from "./ThresholdInput";
+import i18n from "@/lib/i18n";
 
 export interface MajorAirline {
   id: string;
@@ -50,24 +51,24 @@ const DEFAULT_CONFIG: CompetitorIntentConfig = {
 };
 
 const INTENT_TYPES = [
-  { value: "airline", label: "Airline (auto-load competitors from IATA)" },
-  { value: "generic", label: "Generic (specify competitors manually)" },
+  { value: "airline", label: i18n.t("guardrails.competitorIntentConfiguration.typeAirline", { defaultValue: "Airline (auto-load competitors from IATA)" }) },
+  { value: "generic", label: i18n.t("guardrails.competitorIntentConfiguration.typeGeneric", { defaultValue: "Generic (specify competitors manually)" }) },
 ] as const;
 
 const COMPETITOR_COMPARISON_POLICIES = [
-  { value: "refuse", label: "Refuse (block request)" },
-  { value: "reframe", label: "Reframe (suggest alternative)" },
+  { value: "refuse", label: i18n.t("guardrails.competitorIntentConfiguration.policyRefuse", { defaultValue: "Refuse (block request)" }) },
+  { value: "reframe", label: i18n.t("guardrails.competitorIntentConfiguration.policyReframe", { defaultValue: "Reframe (suggest alternative)" }) },
 ] as const;
 
 const POSSIBLE_COMPETITOR_COMPARISON_POLICIES = [
-  { value: "refuse", label: "Refuse (block request)" },
-  { value: "reframe", label: "Reframe (suggest alternative to backend LLM)" },
+  { value: "refuse", label: i18n.t("guardrails.competitorIntentConfiguration.policyRefuse", { defaultValue: "Refuse (block request)" }) },
+  { value: "reframe", label: i18n.t("guardrails.competitorIntentConfiguration.policyReframeBackend", { defaultValue: "Reframe (suggest alternative to backend LLM)" }) },
 ] as const;
 
 const THRESHOLDS = [
-  { field: "threshold_high", label: "High", hint: "e.g. 0.7", fallback: 0.7 },
-  { field: "threshold_medium", label: "Medium", hint: "e.g. 0.45", fallback: 0.45 },
-  { field: "threshold_low", label: "Low", hint: "e.g. 0.3", fallback: 0.3 },
+  { field: "threshold_high", label: i18n.t("guardrails.competitorIntentConfiguration.thresholdHighShort", { defaultValue: "High" }), hint: i18n.t("guardrails.competitorIntentConfiguration.thresholdHighExample", { defaultValue: "e.g. 0.7" }), fallback: 0.7 },
+  { field: "threshold_medium", label: i18n.t("guardrails.competitorIntentConfiguration.thresholdMediumShort", { defaultValue: "Medium" }), hint: i18n.t("guardrails.competitorIntentConfiguration.thresholdMediumExample", { defaultValue: "e.g. 0.45" }), fallback: 0.45 },
+  { field: "threshold_low", label: i18n.t("guardrails.competitorIntentConfiguration.thresholdLowShort", { defaultValue: "Low" }), hint: i18n.t("guardrails.competitorIntentConfiguration.thresholdLowExample", { defaultValue: "e.g. 0.3" }), fallback: 0.3 },
 ] as const;
 
 const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps> = ({
@@ -139,7 +140,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
 
   const header = (
     <CardHeader className="gap-0">
-      <CardTitle className="text-base">Competitor Intent Filter</CardTitle>
+      <CardTitle className="text-base">{i18n.t("guardrails.competitorIntentConfiguration.title", { defaultValue: "Competitor Intent Filter" })}</CardTitle>
       <CardAction>
         <Switch checked={enabled} onCheckedChange={handleEnabledChange} />
       </CardAction>
@@ -152,8 +153,10 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
         {header}
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            Block or reframe competitor comparison questions. When enabled, airline type auto-loads competitors from
-            IATA; generic type requires manual competitor list.
+            {i18n.t("guardrails.competitorIntentConfiguration.disabledDescription", {
+              defaultValue:
+                "Block or reframe competitor comparison questions. When enabled, airline type auto-loads competitors from IATA; generic type requires manual competitor list.",
+            })}
           </p>
         </CardContent>
       </Card>
@@ -180,12 +183,14 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
       {header}
       <CardContent>
         <p className="mb-4 text-sm text-muted-foreground">
-          Block or reframe competitor comparison questions. Airline type uses major airlines (excluding your brand);
-          generic requires manual competitor list.
+          {i18n.t("guardrails.competitorIntentConfiguration.enabledDescription", {
+            defaultValue:
+              "Block or reframe competitor comparison questions. Airline type uses major airlines (excluding your brand); generic requires manual competitor list.",
+          })}
         </p>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-type`}>Type</FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-type`}>{i18n.t("guardrails.competitorIntentConfiguration.typeLabel", { defaultValue: "Type" })}</FieldLabel>
             <Select
               items={INTENT_TYPES}
               value={effectiveConfig.competitor_intent_type}
@@ -205,7 +210,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
           </Field>
 
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-brand-self`}>Your Brand (brand_self)</FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-brand-self`}>{i18n.t("guardrails.competitorIntentConfiguration.brandSelfLabel", { defaultValue: "Your Brand (brand_self)" })}</FieldLabel>
             <TagsInput
               id={`${fieldId}-brand-self`}
               value={effectiveConfig.brand_self}
@@ -219,47 +224,47 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
               loading={loadingAirlines}
               placeholder={
                 effectiveConfig.competitor_intent_type === "airline"
-                  ? "Search or select airline, or type to add custom"
-                  : "Type and press Enter to add"
+                  ? i18n.t("guardrails.competitorIntentConfiguration.brandSelfPlaceholderAirline", { defaultValue: "Search or select airline, or type to add custom" })
+                  : i18n.t("guardrails.competitorIntentConfiguration.tagsPlaceholder", { defaultValue: "Type and press Enter to add" })
               }
             />
             <FieldDescription>
               {effectiveConfig.competitor_intent_type === "airline"
-                ? "Select your airline from the list (excluded from competitors) or type to add a custom term"
-                : "Names/codes users use for your brand"}
+                ? i18n.t("guardrails.competitorIntentConfiguration.brandSelfHelpAirline", { defaultValue: "Select your airline from the list (excluded from competitors) or type to add a custom term" })
+                : i18n.t("guardrails.competitorIntentConfiguration.brandSelfHelpGeneric", { defaultValue: "Names/codes users use for your brand" })}
             </FieldDescription>
           </Field>
 
           {effectiveConfig.competitor_intent_type === "airline" && (
             <Field>
-              <FieldLabel htmlFor={`${fieldId}-locations`}>Locations (optional)</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-locations`}>{i18n.t("guardrails.competitorIntentConfiguration.locationsLabel", { defaultValue: "Locations (optional)" })}</FieldLabel>
               <TagsInput
                 id={`${fieldId}-locations`}
                 value={effectiveConfig.locations ?? []}
                 onValueChange={(v) => handleNestedArrayChange("locations", v)}
                 tokenSeparators={[","]}
-                placeholder="Type and press Enter to add"
+                placeholder={i18n.t("guardrails.competitorIntentConfiguration.tagsPlaceholder", { defaultValue: "Type and press Enter to add" })}
               />
-              <FieldDescription>Countries, cities, airports for disambiguation (e.g. qatar, doha)</FieldDescription>
+              <FieldDescription>{i18n.t("guardrails.competitorIntentConfiguration.locationsHelp", { defaultValue: "Countries, cities, airports for disambiguation (e.g. qatar, doha)" })}</FieldDescription>
             </Field>
           )}
 
           {effectiveConfig.competitor_intent_type === "generic" && (
             <Field>
-              <FieldLabel htmlFor={`${fieldId}-competitors`}>Competitors</FieldLabel>
+              <FieldLabel htmlFor={`${fieldId}-competitors`}>{i18n.t("guardrails.competitorIntentConfiguration.competitorsLabel", { defaultValue: "Competitors" })}</FieldLabel>
               <TagsInput
                 id={`${fieldId}-competitors`}
                 value={effectiveConfig.competitors ?? []}
                 onValueChange={(v) => handleNestedArrayChange("competitors", v)}
                 tokenSeparators={[","]}
-                placeholder="Type and press Enter to add"
+                placeholder={i18n.t("guardrails.competitorIntentConfiguration.tagsPlaceholder", { defaultValue: "Type and press Enter to add" })}
               />
-              <FieldDescription>Competitor names to detect (required for generic type)</FieldDescription>
+              <FieldDescription>{i18n.t("guardrails.competitorIntentConfiguration.competitorsHelp", { defaultValue: "Competitor names to detect (required for generic type)" })}</FieldDescription>
             </Field>
           )}
 
           <Field>
-            <FieldLabel htmlFor={`${fieldId}-competitor-comparison`}>Policy: Competitor comparison</FieldLabel>
+            <FieldLabel htmlFor={`${fieldId}-competitor-comparison`}>{i18n.t("guardrails.competitorIntentConfiguration.policyCompetitorLabel", { defaultValue: "Policy: Competitor comparison" })}</FieldLabel>
             <Select
               items={COMPETITOR_COMPARISON_POLICIES}
               value={effectiveConfig.policy?.competitor_comparison ?? "refuse"}
@@ -280,7 +285,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
 
           <Field>
             <FieldLabel htmlFor={`${fieldId}-possible-competitor-comparison`}>
-              Policy: Possible competitor comparison
+              {i18n.t("guardrails.competitorIntentConfiguration.policyPossibleCompetitorLabel", { defaultValue: "Policy: Possible competitor comparison" })}
             </FieldLabel>
             <Select
               items={POSSIBLE_COMPETITOR_COMPARISON_POLICIES}
@@ -303,7 +308,7 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
           </Field>
 
           <Field>
-            <FieldLabel>Confidence thresholds</FieldLabel>
+            <FieldLabel>{i18n.t("guardrails.competitorIntentConfiguration.confidenceThresholdsLabel", { defaultValue: "Confidence thresholds" })}</FieldLabel>
             <div className="flex flex-wrap gap-4">
               {THRESHOLDS.map((threshold) => (
                 <Field key={threshold.field} className="w-20">
@@ -321,21 +326,27 @@ const CompetitorIntentConfiguration: React.FC<CompetitorIntentConfigurationProps
               ))}
             </div>
             <FieldDescription>
-              Classify competitor intent by confidence (0–1). Higher confidence -&gt; stronger intent.
+              {i18n.t("guardrails.competitorIntentConfiguration.confidenceThresholdsHelp", {
+                defaultValue: "Classify competitor intent by confidence (0–1). Higher confidence → stronger intent.",
+              })}
               <ul className="mt-1 mb-0 list-disc pl-5">
                 <li>
-                  <strong>High (≥)</strong>: Treat as full competitor comparison -&gt; uses &quot;Competitor
-                  comparison&quot; policy
+                  <strong>{i18n.t("guardrails.competitorIntentConfiguration.thresholdHighLabel", { defaultValue: "High (≥)" })}</strong>: {i18n.t("guardrails.competitorIntentConfiguration.thresholdHighDesc", {
+                    defaultValue: "Treat as full competitor comparison → uses \"Competitor comparison\" policy",
+                  })}
                 </li>
                 <li>
-                  <strong>Medium (≥)</strong>: Treat as possible comparison -&gt; uses &quot;Possible competitor
-                  comparison&quot; policy
+                  <strong>{i18n.t("guardrails.competitorIntentConfiguration.thresholdMediumLabel", { defaultValue: "Medium (≥)" })}</strong>: {i18n.t("guardrails.competitorIntentConfiguration.thresholdMediumDesc", {
+                    defaultValue: "Treat as possible comparison → uses \"Possible competitor comparison\" policy",
+                  })}
                 </li>
                 <li>
-                  <strong>Low (≥)</strong>: Log only; allow request. Below Low -&gt; allow with no action
+                  <strong>{i18n.t("guardrails.competitorIntentConfiguration.thresholdLowLabel", { defaultValue: "Low (≥)" })}</strong>: {i18n.t("guardrails.competitorIntentConfiguration.thresholdLowDesc", {
+                    defaultValue: "Log only; allow request. Below Low → allow with no action",
+                  })}
                 </li>
               </ul>
-              Raise thresholds to be more permissive; lower them to be stricter.
+              {i18n.t("guardrails.competitorIntentConfiguration.thresholdsNote", { defaultValue: "Raise thresholds to be more permissive; lower them to be stricter." })}
             </FieldDescription>
           </Field>
         </FieldGroup>

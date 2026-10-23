@@ -1644,7 +1644,8 @@
       "thresholdMediumShort": "中",
       "thresholdMediumExample": "例如：0.45",
       "thresholdLowShort": "低",
-      "thresholdLowExample": "例如：0.3"
+      "thresholdLowExample": "例如：0.3",
+      "typeLabel": "类型"
     },
     "contentCategoryConfiguration": {
       "title": "封锁主题",

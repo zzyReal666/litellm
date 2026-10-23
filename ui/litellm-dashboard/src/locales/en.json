@@ -1644,7 +1644,8 @@
       "thresholdMediumShort": "Medium",
       "thresholdMediumExample": "e.g. 0.45",
       "thresholdLowShort": "Low",
-      "thresholdLowExample": "e.g. 0.3"
+      "thresholdLowExample": "e.g. 0.3",
+      "typeLabel": "Type"
     },
     "contentCategoryConfiguration": {
       "title": "Blocked topics",
