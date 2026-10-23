@@ -977,7 +977,8 @@
     "selectPermissionsPlaceholder": "Select permissions",
     "loadingAriaLabel": "Loading default team settings",
     "defaultOrganizationLabel": "Default Organization",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "defaultOrganizationDesc": "Teams created without an explicit organization are assigned to this organization."
   },
   "toolDetail": {
     "backToToolPolicies": "Back to Tool Policies",

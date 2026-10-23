@@ -218,7 +218,7 @@ describe("TeamSSOSettings", () => {
     });
 
     // Descriptions
-    expect(screen.getByText("Maximum budget (in USD) for new automatically created teams.")).toBeInTheDocument();
+    expect(screen.getByText("Maximum budget (in CNY) for new automatically created teams.")).toBeInTheDocument();
     expect(screen.getByText("How frequently the team's budget resets.")).toBeInTheDocument();
   });
 

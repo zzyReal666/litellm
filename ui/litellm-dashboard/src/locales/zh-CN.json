@@ -977,7 +977,8 @@
     "selectPermissionsPlaceholder": "选择权限",
     "loadingAriaLabel": "正在加载默认团队设置",
     "defaultOrganizationLabel": "默认组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "defaultOrganizationDesc": "未显式指定组织而创建的团队会被分配到该组织。"
   },
   "toolDetail": {
     "backToToolPolicies": "返回工具策略",

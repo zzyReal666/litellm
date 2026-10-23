@@ -193,7 +193,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
     return (
       <Card>
         <CardContent>
-          <p>No team settings available or you do not have permission to view them.</p>
+          <p>{t("teamSsoSettings.noSettings", { defaultValue: "No team settings available or you do not have permission to view them." })}</p>
         </CardContent>
       </Card>
     );
@@ -209,7 +209,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
             </h3>
           </CardTitle>
           <CardDescription className="mt-1">
-            These settings will be applied by default when creating new teams.
+            {t("teamSsoSettings.subtitle", { defaultValue: "These settings will be applied by default when creating new teams." })}
           </CardDescription>
         </div>
         <CardAction>
@@ -244,7 +244,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
           <div className="border-t border-border">
             <SettingRow
               label={t("teamSsoSettings.maxBudgetLabel", { defaultValue: "Max Budget" })}
-              description="Maximum budget (in USD) for new automatically created teams."
+              description={t("teamSsoSettings.maxBudgetDesc", { defaultValue: "Maximum budget (in CNY) for new automatically created teams." })}
               isEditing={isEditing}
               viewContent={
                 values.max_budget != null ? <span>${Number(values.max_budget).toLocaleString()}</span> : <NotSet />
@@ -269,7 +269,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={t("teamSsoSettings.budgetDurationLabel", { defaultValue: "Budget Duration" })}
-              description="How frequently the team's budget resets."
+              description={t("teamSsoSettings.budgetDurationDesc", { defaultValue: "How frequently the team's budget resets." })}
               isEditing={isEditing}
               viewContent={
                 values.budget_duration ? <span>{getBudgetDurationLabel(values.budget_duration, t)}</span> : <NotSet />
@@ -285,7 +285,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={t("teamSsoSettings.tpmLimitLabel", { defaultValue: "TPM Limit" })}
-              description="Maximum tokens per minute allowed across all models."
+              description={t("teamSsoSettings.tpmLimitDesc", { defaultValue: "Maximum tokens per minute allowed across all models." })}
               isEditing={isEditing}
               viewContent={values.tpm_limit != null ? <span>{values.tpm_limit.toLocaleString()}</span> : <NotSet />}
               editContent={
@@ -306,7 +306,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={t("teamSsoSettings.rpmLimitLabel", { defaultValue: "RPM Limit" })}
-              description="Maximum requests per minute allowed across all models."
+              description={t("teamSsoSettings.rpmLimitDesc", { defaultValue: "Maximum requests per minute allowed across all models." })}
               isEditing={isEditing}
               viewContent={values.rpm_limit != null ? <span>{values.rpm_limit.toLocaleString()}</span> : <NotSet />}
               editContent={
@@ -334,7 +334,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
           <div className="border-t border-border">
             <SettingRow
               label={t("teamSsoSettings.defaultOrganizationLabel", { defaultValue: "Default Organization" })}
-              description="Teams created without an explicit organization are assigned to this organization."
+              description={t("teamSsoSettings.defaultOrganizationDesc", { defaultValue: "Teams created without an explicit organization are assigned to this organization." })}
               isEditing={isEditing}
               viewContent={
                 values.organization_id ? (
@@ -360,7 +360,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={t("teamSsoSettings.modelsLabel", { defaultValue: "Models" })}
-              description="Default list of models that new teams can access."
+              description={t("teamSsoSettings.modelsDesc", { defaultValue: "Default list of models that new teams can access." })}
               isEditing={isEditing}
               viewContent={renderTags(values.models, getModelDisplayName)}
               editContent={
@@ -377,7 +377,7 @@ const TeamSSOSettings: React.FC<TeamSSOSettingsProps> = ({ accessToken }) => {
 
             <SettingRow
               label={t("teamSsoSettings.teamMemberPermissionsLabel", { defaultValue: "Team Member Permissions" })}
-              description="Default permissions granted to members of newly created teams. /key/info and /key/health are always included."
+              description={t("teamSsoSettings.teamMemberPermissionsDesc", { defaultValue: "Default permissions granted to members of newly created teams. /key/info and /key/health are always included." })}
               isEditing={isEditing}
               viewContent={renderTags(values.team_member_permissions)}
               editContent={
