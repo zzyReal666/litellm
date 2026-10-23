@@ -1004,7 +1004,9 @@
     "updateInputPolicyFailed": "更新输入策略失败：{{error}}",
     "updateOutputPolicyFailed": "更新输出策略失败：{{error}}",
     "addOverrideFailed": "添加覆盖规则失败：{{error}}",
-    "removeOverrideFailed": "移除覆盖规则失败：{{error}}"
+    "removeOverrideFailed": "移除覆盖规则失败：{{error}}",
+    "noKeysFound": "未找到密钥",
+    "recentInvocationsTitle": "最近调用"
   },
   "toolPolicies": {
     "title": "工具策略",

@@ -1004,7 +1004,9 @@
     "updateInputPolicyFailed": "Failed to update input policy: {{error}}",
     "updateOutputPolicyFailed": "Failed to update output policy: {{error}}",
     "addOverrideFailed": "Failed to add override: {{error}}",
-    "removeOverrideFailed": "Failed to remove override: {{error}}"
+    "removeOverrideFailed": "Failed to remove override: {{error}}",
+    "noKeysFound": "No keys found",
+    "recentInvocationsTitle": "Recent invocations"
   },
   "toolPolicies": {
     "title": "Tool Policies",

@@ -160,12 +160,12 @@ describe("ToolDetail", () => {
   it("keeps the block button disabled until a team is chosen, then blocks that team", async () => {
     renderDetail();
 
-    const blockButton = await screen.findByRole("button", { name: /Block for team/ });
+    const blockButton = await screen.findByRole("button", { name: /Block for Team/ });
     expect(blockButton).toBeDisabled();
 
     await userEvent.click(screen.getByRole("button", { name: "pick team" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: /Block for team/ })).toBeEnabled());
-    await userEvent.click(screen.getByRole("button", { name: /Block for team/ }));
+    await waitFor(() => expect(screen.getByRole("button", { name: /Block for Team/ })).toBeEnabled());
+    await userEvent.click(screen.getByRole("button", { name: /Block for Team/ }));
 
     await waitFor(() =>
       expect(updateToolPolicy).toHaveBeenCalledWith(
@@ -183,7 +183,7 @@ describe("ToolDetail", () => {
     await screen.findByText("Block for team or key");
     await userEvent.click(screen.getByRole("radio", { name: "Key" }));
 
-    expect(await screen.findByRole("button", { name: /Block for key/ })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /Block for Key/ })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "pick team" })).not.toBeInTheDocument();
   });
 
