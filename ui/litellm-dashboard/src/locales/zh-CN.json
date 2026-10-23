@@ -2785,7 +2785,9 @@
       "questionActionAria": "问题 {{position}} 的操作",
       "threshold": "阈值",
       "questionThresholdAria": "问题 {{position}} 的阈值",
-      "addQuestion": "添加问题"
+      "addQuestion": "添加问题",
+      "checks": "检查项",
+      "check": "检查项"
     }
   },
   "keyValueInput": {

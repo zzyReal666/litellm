@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import i18n from "@/lib/i18n";
 import { DEFAULT_DECISION_THRESHOLD } from "./decision_model/decisionModelQuestion";
 import { GuardrailModeRows } from "./GuardrailModeDisplay";
 import { GuardrailStreamScopeDetail } from "./StreamScopeFields";
@@ -19,14 +20,14 @@ const DecisionModelSection = ({
   checks: DecisionModelCheckView[];
 }) => (
   <div>
-    <p className="font-medium">Decision Model</p>
+    <p className="font-medium">{i18n.t("guardrails.decisionModel.decisionModelLabel", { defaultValue: "Decision Model" })}</p>
     <div className="font-mono">{decisionModel}</div>
-    <p className="mt-2 font-medium">Checks</p>
+    <p className="mt-2 font-medium">{i18n.t("guardrails.decisionModel.checks", { defaultValue: "Checks" })}</p>
     <div className="mt-2 overflow-hidden rounded-lg border border-border">
       <div className="flex border-b border-border bg-muted/40 px-4 py-2 text-xs font-semibold">
-        <span className="flex-1">Check</span>
-        <span className="w-24 text-right">Action</span>
-        <span className="w-24 text-right">Threshold</span>
+        <span className="flex-1">{i18n.t("guardrails.decisionModel.check", { defaultValue: "Check" })}</span>
+        <span className="w-24 text-right">{i18n.t("guardrails.decisionModel.action", { defaultValue: "Action" })}</span>
+        <span className="w-24 text-right">{i18n.t("guardrails.decisionModel.threshold", { defaultValue: "Threshold" })}</span>
       </div>
       {checks.map((check) => (
         <div key={check.name} className="flex items-center border-b border-border px-4 py-2 text-sm last:border-b-0">
@@ -75,40 +76,42 @@ export const GuardrailReadOnlyDetails = ({
 }) => (
   <div className="space-y-4">
     <div>
-      <p className="font-medium">Guardrail ID</p>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.guardrailIdLabel", { defaultValue: "Guardrail ID" })}</p>
       <div className="font-mono">{guardrailId}</div>
     </div>
     <div>
-      <p className="font-medium">Guardrail Name</p>
-      <div>{guardrailName || "Unnamed Guardrail"}</div>
+      <p className="font-medium">{i18n.t("guardrails.editGuardrailForm.guardrailNameLabel", { defaultValue: "Guardrail Name" })}</p>
+      <div>{guardrailName || i18n.t("guardrails.guardrailInfo.unnamedGuardrail", { defaultValue: "Unnamed Guardrail" })}</div>
     </div>
     <div>
-      <p className="font-medium">Provider</p>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.provider", { defaultValue: "Provider" })}</p>
       <div>{displayName}</div>
     </div>
     <GuardrailModeRows litellmParams={litellmParams} />
     <GuardrailStreamScopeDetail raw={streamScope} />
     <div>
-      <p className="font-medium">Default On</p>
-      <Badge variant={defaultOn ? "secondary" : "outline"}>{defaultOn ? "Yes" : "No"}</Badge>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.defaultOn", { defaultValue: "Default On" })}</p>
+      <Badge variant={defaultOn ? "secondary" : "outline"}>
+        {defaultOn ? i18n.t("common.yes", { defaultValue: "Yes" }) : i18n.t("common.no", { defaultValue: "No" })}
+      </Badge>
     </div>
     {litellmParams.guardrail === "decision_model" && litellmParams.decision_model && (
       <DecisionModelSection decisionModel={litellmParams.decision_model} checks={litellmParams.checks ?? []} />
     )}
     {piiEntityCount > 0 && (
       <div>
-        <p className="font-medium">PII Protection</p>
+        <p className="font-medium">{i18n.t("guardrails.guardrailInfo.piiProtection", { defaultValue: "PII Protection" })}</p>
         <div className="mt-2">
-          <Badge variant="secondary">{piiEntityCount} PII entities configured</Badge>
+          <Badge variant="secondary">{i18n.t("guardrails.guardrailInfo.piiEntitiesConfigured", { count: piiEntityCount })}</Badge>
         </div>
       </div>
     )}
     <div>
-      <p className="font-medium">Created At</p>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" })}</p>
       <div>{createdAt}</div>
     </div>
     <div>
-      <p className="font-medium">Last Updated</p>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.lastUpdatedLabel", { defaultValue: "Last Updated" })}</p>
       <div>{updatedAt}</div>
     </div>
     {showToolPermission && <ToolPermissionRulesEditor value={toolPermissionConfig} disabled />}

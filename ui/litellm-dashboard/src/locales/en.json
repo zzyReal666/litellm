@@ -2785,7 +2785,9 @@
       "questionActionAria": "Question {{position}} action",
       "threshold": "Threshold",
       "questionThresholdAria": "Question {{position}} threshold",
-      "addQuestion": "Add question"
+      "addQuestion": "Add question",
+      "checks": "Checks",
+      "check": "Check"
     }
   },
   "keyValueInput": {
