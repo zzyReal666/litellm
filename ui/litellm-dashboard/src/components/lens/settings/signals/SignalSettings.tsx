@@ -13,6 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { uiHref } from "@/utils/uiHref";
 
+import { Trans } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { useLensApi } from "../../data/LensServices";
 import { lensKeys, lensQueries } from "../../data/queries";
 import { SIGNAL_LIBRARY, signalsConfigured, systemOneModels } from "../../model/signals";
@@ -34,8 +36,8 @@ const LIBRARY_QUESTIONS: ReadonlySet<string> = new Set(SIGNAL_LIBRARY.map((signa
 export function SignalSettings() {
   return (
     <SettingsSection
-      heading="Signals"
-      description="Set once for every trace. A System 1 model checks each run and Traces flags matches in red."
+      heading={i18n.t("lens.signalSettings.heading", { defaultValue: "Signals" })}
+      description={i18n.t("lens.signalSettings.description", { defaultValue: "Set once for every trace. A System 1 model checks each run and Traces flags matches in red." })}
     >
       <SignalConfigLoader />
     </SettingsSection>
@@ -48,10 +50,10 @@ function SignalConfigLoader() {
   if (config.error)
     return (
       <p role="alert" className="text-sm text-destructive">
-        Could not load signals: {config.error.message}
+        {i18n.t("lens.signalSettings.couldNotLoadSignals", { message: config.error.message, defaultValue: `Could not load signals: ${config.error.message}` })}
       </p>
     );
-  if (!config.data) return <Skeleton aria-label="Loading signals" className="h-40 w-full" />;
+  if (!config.data) return <Skeleton aria-label={i18n.t("lens.signalSettings.loadingSignals", { defaultValue: "Loading signals" })} className="h-40 w-full" />;
   return <SignalForm saved={config.data} />;
 }
 
@@ -63,19 +65,18 @@ function SetupCallout({ hasModels }: { hasModels: boolean }) {
     <div className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
       <Flag aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-destructive" />
       <div className="space-y-1">
-        <p className="font-medium">Choose a System 1 model to start flagging traces</p>
+        <p className="font-medium">{i18n.t("lens.signalSettings.chooseSystemOne", { defaultValue: "Choose a System 1 model to start flagging traces" })}</p>
         {hasModels ? (
-          <p className="text-xs text-muted-foreground">Pick one of the evaluation models on this proxy below.</p>
+          <p className="text-xs text-muted-foreground">{i18n.t("lens.signalSettings.pickEvaluationModel", { defaultValue: "Pick one of the evaluation models on this proxy below." })}</p>
         ) : (
           <p className="text-xs text-muted-foreground">
-            This proxy has no System 1 models yet. Add one with mode evaluation, for example typesafe/jev-latest, on{" "}
-            <Link
-              href={uiHref("models-and-endpoints")}
-              className="font-medium text-foreground underline underline-offset-2"
-            >
-              Models + Endpoints
-            </Link>
-            .
+            <Trans
+              i18nKey="lens.signalSettings.noSystemOneModels"
+              defaults="This proxy has no System 1 models yet. Add one with mode evaluation, for example typesafe/jev-latest, on <link>Models + Endpoints</link>."
+              components={{
+                link: <Link href={uiHref("models-and-endpoints")} className="font-medium text-foreground underline underline-offset-2" />,
+              }}
+            />
           </p>
         )}
       </div>
@@ -94,13 +95,13 @@ function SignalFields({
   onChange: (row: SignalRow) => void;
   onRemove: () => void;
 }) {
-  const label = row.name.trim() || "new signal";
+  const label = row.name.trim() || i18n.t("lens.signalSettings.newSignal", { defaultValue: "new signal" });
   return (
     <li className="grid gap-2 rounded-md border border-border p-3 sm:grid-cols-[200px_minmax(0,1fr)_auto]">
       <div>
         <Input
-          aria-label="Signal name"
-          placeholder="User frustration"
+          aria-label={i18n.t("lens.signalSettings.signalName", { defaultValue: "Signal name" })}
+          placeholder={i18n.t("lens.signalSettings.signalNamePlaceholder", { defaultValue: "User frustration" })}
           value={row.name}
           aria-invalid={Boolean(problems?.name)}
           onChange={(event) => onChange({ ...row, name: event.target.value })}
@@ -109,8 +110,8 @@ function SignalFields({
       </div>
       <div>
         <Textarea
-          aria-label={`Question for ${label}`}
-          placeholder="Does the user show frustration with the agent in this run?"
+          aria-label={i18n.t("lens.signalSettings.questionFor", { label, defaultValue: `Question for ${label}` })}
+          placeholder={i18n.t("lens.signalSettings.questionPlaceholder", { defaultValue: "Does the user show frustration with the agent in this run?" })}
           rows={2}
           value={row.question}
           aria-invalid={Boolean(problems?.question)}
@@ -118,7 +119,7 @@ function SignalFields({
         />
         <FieldError>{problems?.question}</FieldError>
       </div>
-      <Button variant="ghost" size="icon-sm" aria-label={`Remove ${label}`} onClick={onRemove}>
+      <Button variant="ghost" size="icon-sm" aria-label={i18n.t("lens.signalSettings.removeSignal", { label, defaultValue: `Remove ${label}` })} onClick={onRemove}>
         <Trash2 aria-hidden="true" />
       </Button>
     </li>
@@ -198,40 +199,42 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
       <SettingsCard className="space-y-4">
         <p role="status" className="inline-flex items-center gap-2 text-sm">
           <StatusDot state={active ? "ok" : "off"} />
-          {active ? `Flagging traces with ${saved.model}` : "Signals are off"}
+          {active
+            ? i18n.t("lens.signalSettings.flaggingWith", { model: saved.model, defaultValue: `Flagging traces with ${saved.model}` })
+            : i18n.t("lens.signalSettings.signalsOff", { defaultValue: "Signals are off" })}
         </p>
         {!saved.model && !details.isPending && <SetupCallout hasModels={models.length > 0} />}
         {savedElsewhere && (
           <div role="alert" className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
-            <span>Signals were changed elsewhere</span>
+            <span>{i18n.t("lens.signalSettings.changedElsewhere", { defaultValue: "Signals were changed elsewhere" })}</span>
             <Button type="button" variant="outline" size="sm" onClick={loadLatest}>
-              Load latest
+              {i18n.t("lens.signalSettings.loadLatest", { defaultValue: "Load latest" })}
             </Button>
           </div>
         )}
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_160px]">
           <div className="space-y-1.5">
             <label htmlFor={modelId} className="text-sm font-medium">
-              System 1 model
+              {i18n.t("lens.signalSettings.systemOneModel", { defaultValue: "System 1 model" })}
             </label>
             <SearchSelect
               inputId={modelId}
-              aria-label="System 1 model"
+              aria-label={i18n.t("lens.signalSettings.systemOneModel", { defaultValue: "System 1 model" })}
               options={options}
               value={draft.model}
               onValueChange={(value) => setDraft((current) => ({ ...current, model: value ?? "" }))}
-              placeholder={details.isPending ? "Loading models…" : "Choose a System 1 model"}
+              placeholder={details.isPending ? i18n.t("lens.signalSettings.loadingModels", { defaultValue: "Loading models…" }) : i18n.t("lens.signalSettings.chooseSystemOneModel", { defaultValue: "Choose a System 1 model" })}
               disabled={details.isPending}
-              emptyText="No System 1 models on this proxy"
+              emptyText={i18n.t("lens.signalSettings.noSystemOneModelsOnProxy", { defaultValue: "No System 1 models on this proxy" })}
               allowClear
             />
             <p className="text-xs text-muted-foreground">
-              Decisions API models onboarded with mode evaluation, such as TypeSafe JEV
+              {i18n.t("lens.signalSettings.systemOneModelHint", { defaultValue: "Decisions API models onboarded with mode evaluation, such as TypeSafe JEV" })}
             </p>
           </div>
           <div className="space-y-1.5">
             <label htmlFor={thresholdId} className="text-sm font-medium">
-              Flag at score
+              {i18n.t("lens.signalSettings.flagAtScore", { defaultValue: "Flag at score" })}
             </label>
             <div className="flex items-center gap-1.5">
               <Input
@@ -254,7 +257,7 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
         </div>
         <div className="space-y-4 border-t border-border pt-4">
           <WatchPicker
-            label="Flag runs where"
+            label={i18n.t("lens.signalSettings.flagRunsWhere", { defaultValue: "Flag runs where" })}
             options={SIGNAL_LIBRARY}
             selected={picked}
             onChange={pick}
@@ -262,7 +265,7 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
             addDisabled={draft.rows.length >= MAX_SIGNALS}
           />
           {custom.length > 0 && (
-            <ul aria-label="Custom signals" className="space-y-2">
+            <ul aria-label={i18n.t("lens.signalSettings.customSignals", { defaultValue: "Custom signals" })} className="space-y-2">
               {custom.map((row) => (
                 <SignalFields
                   key={row.key}
@@ -275,19 +278,21 @@ export function SignalForm({ saved }: { saved: SignalConfig }) {
             </ul>
           )}
           {draft.rows.length === 0 && (
-            <p className="text-xs text-muted-foreground">Pick at least one signal to flag traces</p>
+            <p className="text-xs text-muted-foreground">{i18n.t("lens.signalSettings.pickAtLeastOne", { defaultValue: "Pick at least one signal to flag traces" })}</p>
           )}
           <FieldError>{problems.signals}</FieldError>
         </div>
         <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
           {save.error && (
             <p role="alert" className="text-sm text-destructive">
-              Could not save signals: {save.error.message}
+              {i18n.t("lens.signalSettings.couldNotSaveSignals", { message: save.error.message, defaultValue: `Could not save signals: ${save.error.message}` })}
             </p>
           )}
-          {save.isSuccess && !dirty && <p className="text-xs text-muted-foreground">Saved</p>}
+          {save.isSuccess && !dirty && <p className="text-xs text-muted-foreground">{i18n.t("lens.signalSettings.saved", { defaultValue: "Saved" })}</p>}
           <Button disabled={!dirty || problems.any || save.isPending} onClick={() => save.mutate(next)}>
-            {save.isPending ? "Saving…" : "Save signals"}
+            {save.isPending
+              ? i18n.t("lens.signalSettings.saving", { defaultValue: "Saving…" })
+              : i18n.t("lens.signalSettings.saveSignals", { defaultValue: "Save signals" })}
           </Button>
         </div>
       </SettingsCard>
