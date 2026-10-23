@@ -13058,7 +13058,22 @@
     "askLiteAdmin": "Ask LiteAdmin…",
     "trustModelHint": "Use a model you trust with your gateway data.",
     "askAboutGateway": "Ask about your gateway. Review changes in chat.",
-    "closeLiteAdmin": "Close LiteAdmin"
+    "closeLiteAdmin": "Close LiteAdmin",
+    "reviewChange": "Review change",
+    "applying": "Applying…",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "checkResult": "Check result",
+    "conversationAria": "LiteAdmin conversation",
+    "workingAria": "LiteAdmin is working",
+    "working": "Working…",
+    "howCanIHelp": "How can I help?",
+    "howCanIHelpHint": "Check budgets, inspect usage, or manage keys and teams. You review every change before it runs.",
+    "jumpToLatest": "Jump to latest",
+    "details": "Details",
+    "copyGeneratedKey": "Copy generated key",
+    "copyKeyHint": "Copy this key now. It stays only in this chat session.",
+    "confirmChange": "Confirm change"
   },
   "moyaiLanding": {
     "quickConnectError": "Enter a full http or https URL, without credentials",

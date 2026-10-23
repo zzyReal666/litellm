@@ -13058,7 +13058,22 @@
     "askLiteAdmin": "询问 LiteAdmin…",
     "trustModelHint": "请使用你信任其访问网关数据的模型。",
     "askAboutGateway": "询问你的网关，在对话中审阅更改。",
-    "closeLiteAdmin": "关闭 LiteAdmin"
+    "closeLiteAdmin": "关闭 LiteAdmin",
+    "reviewChange": "审查更改",
+    "applying": "正在应用…",
+    "completed": "已完成",
+    "cancelled": "已取消",
+    "checkResult": "查看结果",
+    "conversationAria": "LiteAdmin 对话",
+    "workingAria": "LiteAdmin 正在工作",
+    "working": "正在工作…",
+    "howCanIHelp": "有什么可以帮你的？",
+    "howCanIHelpHint": "查看预算、检查用量，或管理密钥与团队。每个更改都会在你审查后才执行。",
+    "jumpToLatest": "跳到最新",
+    "details": "详情",
+    "copyGeneratedKey": "复制生成的密钥",
+    "copyKeyHint": "请现在复制此密钥。它只保留在本次聊天会话中。",
+    "confirmChange": "确认更改"
   },
   "moyaiLanding": {
     "quickConnectError": "请输入完整的 http 或 https URL，且不包含凭据",
