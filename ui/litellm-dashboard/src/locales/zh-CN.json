@@ -13044,6 +13044,29 @@
       "dataset_other": "{{count}} 个数据集",
       "case_one": "{{count}} 个案例",
       "case_other": "{{count}} 个案例"
+    },
+    "investigationList": {
+      "investigationDetails": "调查详情",
+      "findingDetails": "发现详情",
+      "openFindings_one": "{{count}} 个未关闭发现",
+      "openFindings_other": "{{count}} 个未关闭发现",
+      "runNowAria": "立即运行 {{name}}",
+      "runNow": "立即运行",
+      "demoRunDisabled": "关闭演示数据才能运行调查",
+      "editAria": "编辑 {{name}}",
+      "edit": "编辑",
+      "demoEditDisabled": "关闭演示数据才能编辑调查",
+      "colInvestigation": "调查",
+      "colAgent": "Agent",
+      "colSchedule": "计划",
+      "colLastRun": "最近运行",
+      "colOpen": "未关闭",
+      "searchLabel": "搜索调查",
+      "investigationsAria": "调查",
+      "noMatch": "没有符合搜索条件的调查。",
+      "investigation_one": "{{count}} 个调查",
+      "investigation_other": "{{count}} 个调查",
+      "watching": "{{count}} 个监视中"
     }
   },
   "mcpServerCredentials": {

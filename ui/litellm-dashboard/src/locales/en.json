@@ -13044,6 +13044,29 @@
       "dataset_other": "{{count}} datasets",
       "case_one": "{{count}} case",
       "case_other": "{{count}} cases"
+    },
+    "investigationList": {
+      "investigationDetails": "Investigation details",
+      "findingDetails": "Finding details",
+      "openFindings_one": "{{count}} open finding",
+      "openFindings_other": "{{count}} open findings",
+      "runNowAria": "Run {{name}} now",
+      "runNow": "Run now",
+      "demoRunDisabled": "Turn off Demo data to run an investigation",
+      "editAria": "Edit {{name}}",
+      "edit": "Edit",
+      "demoEditDisabled": "Turn off Demo data to edit an investigation",
+      "colInvestigation": "Investigation",
+      "colAgent": "Agent",
+      "colSchedule": "Schedule",
+      "colLastRun": "Last run",
+      "colOpen": "Open",
+      "searchLabel": "Search investigations",
+      "investigationsAria": "Investigations",
+      "noMatch": "No investigations match your search.",
+      "investigation_one": "{{count}} investigation",
+      "investigation_other": "{{count}} investigations",
+      "watching": "{{count}} watching"
     }
   },
   "mcpServerCredentials": {

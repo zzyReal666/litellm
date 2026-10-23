@@ -16,6 +16,7 @@ import { Inspector } from "@/components/shared/Inspector";
 import { InspectorTable } from "@/components/shared/InspectorTable";
 import { formatActivityTimestamp } from "@/utils/activityTimestamp";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import { agoLabel, scopeLabel } from "../model/format";
 
 import { findingKey, openFindings, scheduleLabel } from "../model/inbox";
@@ -58,7 +59,10 @@ function useList(): ListContextValue {
 
 type Cell = CellContext<InvestigationRow, unknown>;
 
-const ROW_LABEL = { investigation: "Investigation details", finding: "Finding details" } as const;
+const ROW_LABEL = {
+  investigation: i18n.t("lens.investigationList.investigationDetails", { defaultValue: "Investigation details" }),
+  finding: i18n.t("lens.investigationList.findingDetails", { defaultValue: "Finding details" }),
+} as const;
 
 function NameCell({ row: { original: item } }: Cell) {
   return (
@@ -108,7 +112,7 @@ function FindingCount({ row: { original: item } }: Cell) {
   if (count === 0) return null;
   return (
     <span
-      title={`${count} open ${count === 1 ? "finding" : "findings"}`}
+      title={i18n.t("lens.investigationList.openFindings", { count })}
       className="inline-flex min-w-5 justify-center rounded-full bg-muted px-1.5 font-mono text-xs tabular-nums text-foreground"
     >
       {count}
@@ -126,8 +130,8 @@ function ActionsCell({ row: { original: item } }: Cell) {
     <span className="flex items-center justify-end gap-0.5">
       <button
         type="button"
-        aria-label={`Run ${settings.name} now`}
-        title={demo ? "Turn off Demo data to run an investigation" : "Run now"}
+        aria-label={i18n.t("lens.investigationList.runNowAria", { name: settings.name, defaultValue: `Run ${settings.name} now` })}
+        title={demo ? i18n.t("lens.investigationList.demoRunDisabled", { defaultValue: "Turn off Demo data to run an investigation" }) : i18n.t("lens.investigationList.runNow", { defaultValue: "Run now" })}
         disabled={readOnly}
         onClick={(event) => {
           event.stopPropagation();
@@ -139,8 +143,8 @@ function ActionsCell({ row: { original: item } }: Cell) {
       </button>
       <button
         type="button"
-        aria-label={`Edit ${settings.name}`}
-        title={demo ? "Turn off Demo data to edit an investigation" : "Edit"}
+        aria-label={i18n.t("lens.investigationList.editAria", { name: settings.name, defaultValue: `Edit ${settings.name}` })}
+        title={demo ? i18n.t("lens.investigationList.demoEditDisabled", { defaultValue: "Turn off Demo data to edit an investigation" }) : i18n.t("lens.investigationList.edit", { defaultValue: "Edit" })}
         disabled={readOnly}
         onClick={(event) => {
           event.stopPropagation();
@@ -155,15 +159,15 @@ function ActionsCell({ row: { original: item } }: Cell) {
 }
 
 const COLUMNS: ColumnDef<InvestigationRow>[] = [
-  { id: "name", header: "Investigation", cell: NameCell },
-  { id: "agent", size: 160, header: "Agent", cell: AgentCell },
-  { id: "schedule", size: 180, header: "Schedule", cell: ScheduleCell },
-  { id: "status", size: 200, header: "Last run", cell: StatusCell },
-  { id: "findings", size: 64, header: "Open", cell: FindingCount, meta: { numeric: true } },
+  { id: "name", header: i18n.t("lens.investigationList.colInvestigation", { defaultValue: "Investigation" }), cell: NameCell },
+  { id: "agent", size: 160, header: i18n.t("lens.investigationList.colAgent", { defaultValue: "Agent" }), cell: AgentCell },
+  { id: "schedule", size: 180, header: i18n.t("lens.investigationList.colSchedule", { defaultValue: "Schedule" }), cell: ScheduleCell },
+  { id: "status", size: 200, header: i18n.t("lens.investigationList.colLastRun", { defaultValue: "Last run" }), cell: StatusCell },
+  { id: "findings", size: 64, header: i18n.t("lens.investigationList.colOpen", { defaultValue: "Open" }), cell: FindingCount, meta: { numeric: true } },
   {
     id: "actions",
     size: 76,
-    header: "Actions",
+    header: i18n.t("common.actions", { defaultValue: "Actions" }),
     cell: ActionsCell,
     meta: { headerClassName: "sr-only", className: "pl-0 pr-3" },
   },
@@ -227,16 +231,16 @@ export function InvestigationList({
             values={itemValues(INVESTIGATION_INDEX, lenses)}
             value={search}
             onValueChange={setSearch}
-            label="Search investigations"
+            label={i18n.t("lens.investigationList.searchLabel", { defaultValue: "Search investigations" })}
           >
-            <SearchBox.Input className="rounded-md" placeholder="Search investigations" />
+            <SearchBox.Input className="rounded-md" placeholder={i18n.t("lens.investigationList.searchLabel", { defaultValue: "Search investigations" })} />
             <SearchBox.Suggestions />
           </SearchBox.Root>
           {actions && <div className="ml-auto flex items-center gap-2">{actions}</div>}
         </div>
         <ListContext.Provider value={{ now, connected, readOnly, demo, onEdit, onRunNow }}>
           <InspectorTable.Root table={table}>
-            <InspectorTable.Grid aria-label="Investigations" className="text-xs md:min-w-[860px]">
+            <InspectorTable.Grid aria-label={i18n.t("lens.investigationList.investigationsAria", { defaultValue: "Investigations" })} className="text-xs md:min-w-[860px]">
               <InspectorTable.Header />
               <InspectorTable.Body<InvestigationRow> rowHeight={() => (desktop ? INVESTIGATION_HEIGHT : 48)}>
                 {(row) => (
@@ -254,14 +258,14 @@ export function InvestigationList({
             </InspectorTable.Grid>
             {!shown.length && (
               <div className="py-16 text-center text-xs text-muted-foreground">
-                No investigations match your search.
+                {i18n.t("lens.investigationList.noMatch", { defaultValue: "No investigations match your search." })}
               </div>
             )}
           </InspectorTable.Root>
         </ListContext.Provider>
         <footer className="flex h-8 shrink-0 items-center border-t bg-muted/30 px-3 text-xs text-muted-foreground">
-          {shown.length} {shown.length === 1 ? "investigation" : "investigations"} ·{" "}
-          {shown.filter((lens) => lens.settings.enabled).length} watching
+          {i18n.t("lens.investigationList.investigation", { count: shown.length })} ·{" "}
+          {i18n.t("lens.investigationList.watching", { count: shown.filter((lens) => lens.settings.enabled).length })}
         </footer>
       </div>
       <Inspector.Panel label={ROW_LABEL[noun]} testId="investigation-panel">
