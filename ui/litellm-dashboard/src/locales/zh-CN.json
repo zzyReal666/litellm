@@ -12582,5 +12582,31 @@
       "runPlural": "运行",
       "backToFinding": "返回发现"
     }
+  },
+  "mcpServerCredentials": {
+    "oauth2": "OAuth2",
+    "byokApiKey": "BYOK API 密钥",
+    "loading": "正在加载用户凭证...",
+    "couldNotLoad": "无法加载用户凭证",
+    "noCredentials": "没有用户为此服务器存储凭证。",
+    "storedCredentials": "已存储的用户凭证",
+    "user": "用户",
+    "type": "类型",
+    "connected": "连接时间",
+    "expires": "过期时间",
+    "updated": "更新时间",
+    "actions": "操作",
+    "revokeAria": "撤销用户 {{user}} 的凭证",
+    "revoke": "撤销",
+    "title": "用户凭证",
+    "description": "为此服务器存储的按用户 OAuth2 令牌和 BYOK API 密钥。撤销会将其从数据库删除并清除缓存副本，用户需要重新连接后，网关才会代其调用此服务器。",
+    "refreshAria": "刷新用户凭证",
+    "refresh": "刷新",
+    "couldNotRevoke": "无法撤销凭证",
+    "revoked": "凭证已撤销",
+    "revokedDescription": "用户 {{user}} 存储的 {{type}} 凭证已删除。",
+    "revokeTitle": "撤销已存储的凭证",
+    "revokeConfirmDescription": "这将删除用户 {{user}} 存储的 {{type}} 凭证。",
+    "revokeConsequence": "在他们重新连接之前，对该服务器的下一次 MCP 请求会失败。"
   }
 }

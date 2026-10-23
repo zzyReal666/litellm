@@ -12582,5 +12582,31 @@
       "runPlural": "runs",
       "backToFinding": "Back to finding"
     }
+  },
+  "mcpServerCredentials": {
+    "oauth2": "OAuth2",
+    "byokApiKey": "BYOK API key",
+    "loading": "Loading user credentials...",
+    "couldNotLoad": "Could not load user credentials",
+    "noCredentials": "No user has a stored credential for this server.",
+    "storedCredentials": "Stored user credentials",
+    "user": "User",
+    "type": "Type",
+    "connected": "Connected",
+    "expires": "Expires",
+    "updated": "Updated",
+    "actions": "Actions",
+    "revokeAria": "Revoke credential for user {{user}}",
+    "revoke": "Revoke",
+    "title": "User Credentials",
+    "description": "Per-user OAuth2 tokens and BYOK API keys stored for this server. Revoking one deletes it from the database and clears the cached copy, so the user must connect again before the gateway will call this server for them.",
+    "refreshAria": "Refresh user credentials",
+    "refresh": "Refresh",
+    "couldNotRevoke": "Could not revoke credential",
+    "revoked": "Credential revoked",
+    "revokedDescription": "The stored {{type}} credential for user {{user}} was deleted.",
+    "revokeTitle": "Revoke stored credential",
+    "revokeConfirmDescription": "This deletes the {{type}} credential stored for user {{user}}.",
+    "revokeConsequence": "Their next MCP request to this server fails until they connect again."
   }
 }
