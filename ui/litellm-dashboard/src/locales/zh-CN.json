@@ -12842,6 +12842,26 @@
       "runDetails": "运行详情",
       "checks_one": "{{count}} 项检查",
       "checks_other": "{{count}} 项检查"
+    },
+    "spanTree": {
+      "layoutTree": "树形",
+      "layoutWaterfall": "瀑布",
+      "stepLayoutAria": "步骤布局",
+      "runSpansAria": "运行 span",
+      "steps": "步骤",
+      "filteredOf": "{{filtered}} / {{total}}",
+      "stepDisplayOptions": "步骤显示选项",
+      "hideFrameworkSpans": "隐藏框架 span",
+      "collapseBranches": "折叠分支",
+      "showDetails": "显示详情",
+      "searchSteps": "搜索步骤",
+      "filterSteps": "筛选步骤",
+      "clearStepSearch": "清除步骤搜索",
+      "errors": "错误",
+      "foundCount": "找到 {{count}} 项",
+      "noMatchingSteps": "没有匹配的步骤",
+      "clearFilters": "清除筛选",
+      "spansInTimeOrder": "按时间顺序排列的 span"
     }
   },
   "mcpServerCredentials": {

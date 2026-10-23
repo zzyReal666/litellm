@@ -12842,6 +12842,26 @@
       "runDetails": "Run details",
       "checks_one": "{{count}} check",
       "checks_other": "{{count}} checks"
+    },
+    "spanTree": {
+      "layoutTree": "Tree",
+      "layoutWaterfall": "Waterfall",
+      "stepLayoutAria": "Step layout",
+      "runSpansAria": "Run spans",
+      "steps": "Steps",
+      "filteredOf": "{{filtered}} of {{total}}",
+      "stepDisplayOptions": "Step display options",
+      "hideFrameworkSpans": "Hide framework spans",
+      "collapseBranches": "Collapse branches",
+      "showDetails": "Show details",
+      "searchSteps": "Search steps",
+      "filterSteps": "Filter steps",
+      "clearStepSearch": "Clear step search",
+      "errors": "Errors",
+      "foundCount": "{{count}} found",
+      "noMatchingSteps": "No matching steps",
+      "clearFilters": "Clear filters",
+      "spansInTimeOrder": "Spans in time order"
     }
   },
   "mcpServerCredentials": {
