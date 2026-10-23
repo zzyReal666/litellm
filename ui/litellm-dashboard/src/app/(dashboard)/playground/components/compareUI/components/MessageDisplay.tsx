@@ -1,4 +1,5 @@
 import { Bot, Loader2, UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -17,6 +18,7 @@ interface MessageDisplayProps {
 }
 
 export function MessageDisplay({ messages, isLoading }: MessageDisplayProps) {
+  const { t } = useTranslation();
   const syntaxTheme = useSyntaxTheme(coy);
   if (messages.length === 0) {
     return <div className="h-full" />;
@@ -155,10 +157,12 @@ export function MessageDisplay({ messages, isLoading }: MessageDisplayProps) {
             ) : isLoading && blockIndex === conversationBlocks.length - 1 ? (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Loader2 size={18} className="animate-spin" />
-                <span>Generating response...</span>
+                <span>{t("playground.messageDisplay.generatingResponse", { defaultValue: "Generating response..." })}</span>
               </div>
             ) : (
-              <div className="text-sm text-muted-foreground">Waiting for a response...</div>
+              <div className="text-sm text-muted-foreground">
+                {t("playground.messageDisplay.waitingForResponse", { defaultValue: "Waiting for a response..." })}
+              </div>
             )}
           </div>
         );
@@ -166,7 +170,7 @@ export function MessageDisplay({ messages, isLoading }: MessageDisplayProps) {
       {isLoading && conversationBlocks.length === 0 && (
         <div className="flex items-center gap-2 text-muted-foreground">
           <Loader2 size={18} className="animate-spin" />
-          <span>Generating response...</span>
+          <span>{t("playground.messageDisplay.generatingResponse", { defaultValue: "Generating response..." })}</span>
         </div>
       )}
     </div>

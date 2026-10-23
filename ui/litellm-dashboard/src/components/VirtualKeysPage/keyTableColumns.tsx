@@ -32,8 +32,8 @@ interface KeyStatus {
 }
 
 const SPEND_BUDGET_SORT_FIELDS: DataTableSortField[] = [
-  { id: "spend", label: "Spend" },
-  { id: "max_budget", label: "Budget" },
+  { id: "spend", label: i18n.t("virtualKeys.virtualKeysTable.spend", { defaultValue: "Spend" }) },
+  { id: "max_budget", label: i18n.t("virtualKeys.virtualKeysTable.budget", { defaultValue: "Budget" }) },
 ];
 
 export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
@@ -46,30 +46,45 @@ export const KEY_TABLE_SORT_FIELDS: readonly string[] = [
 
 const getKeyStatus = (key: KeyResponse): KeyStatus => {
   if (key.deleted_at) {
+    const deletedBy = key.deleted_by
+      ? i18n.t("virtualKeys.virtualKeysTable.deletedBySuffix", { name: key.deleted_by, defaultValue: ` by ${key.deleted_by}` })
+      : "";
     return {
       tone: "neutral",
-      label: "Deleted",
-      tooltip: `Deleted ${new Date(key.deleted_at).toLocaleString()}${key.deleted_by ? ` by ${key.deleted_by}` : ""}. Kept for audit and spend history; requests using this key are rejected.`,
+      label: i18n.t("virtualKeys.virtualKeysTable.deleted", { defaultValue: "Deleted" }),
+      tooltip: i18n.t("virtualKeys.virtualKeysTable.deletedReason", {
+        deletedAt: new Date(key.deleted_at).toLocaleString(),
+        deletedBy,
+        defaultValue: "Deleted {{deletedAt}}{{deletedBy}}. Kept for audit and spend history; requests using this key are rejected.",
+      }),
     };
   }
   if (key.blocked === true) {
     const isScimBlocked = (key.metadata as Record<string, unknown> | null | undefined)?.scim_blocked === true;
     return {
       tone: "error",
-      label: "Blocked",
+      label: i18n.t("virtualKeys.virtualKeysTable.blocked", { defaultValue: "Blocked" }),
       tooltip: isScimBlocked
-        ? "Blocked by SCIM (external identity provider deactivated or deleted the owning user)."
-        : "Blocked. Requests using this key will be rejected with 401.",
+        ? i18n.t("virtualKeys.virtualKeysTable.blockedByScimReason", {
+            defaultValue: "Blocked by SCIM (external identity provider deactivated or deleted the owning user).",
+          })
+        : i18n.t("virtualKeys.virtualKeysTable.blockedReason", {
+            defaultValue: "Blocked. Requests using this key will be rejected with 401.",
+          }),
     };
   }
   const expiresAt = key.expires ? Date.parse(key.expires) : Number.NaN;
   if (!Number.isNaN(expiresAt) && expiresAt < Date.now()) {
-    return { tone: "warning", label: "Expired", tooltip: "This key has passed its expiry date." };
+    return {
+      tone: "warning",
+      label: i18n.t("virtualKeys.virtualKeysTable.expired", { defaultValue: "Expired" }),
+      tooltip: i18n.t("virtualKeys.virtualKeysTable.expiredReason", { defaultValue: "This key has passed its expiry date." }),
+    };
   }
   return {
     tone: "success",
     label: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }),
-    tooltip: "This key is not blocked and has not expired.",
+    tooltip: i18n.t("virtualKeys.virtualKeysTable.activeReason", { defaultValue: "This key is not blocked and has not expired." }),
   };
 };
 
@@ -100,7 +115,7 @@ export const getKeyTableColumns = ({
     id: "key_alias",
     accessorKey: "key_alias",
     meta: {
-      title: "Key",
+      title: i18n.t("virtualKeys.virtualKeysTable.key", { defaultValue: "Key" }),
       renderSkeleton: () => (
         <div className="flex flex-col gap-1 py-1">
           <Skeleton className="h-4 w-32" />
@@ -111,7 +126,9 @@ export const getKeyTableColumns = ({
         </div>
       ),
     },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Key" variant="header-cycle" />,
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={i18n.t("virtualKeys.virtualKeysTable.key", { defaultValue: "Key" })} variant="header-cycle" />
+    ),
     size: 260,
     enableSorting: true,
     cell: ({ row }) => {
@@ -136,8 +153,10 @@ export const getKeyTableColumns = ({
   {
     id: "token",
     accessorKey: "token",
-    meta: { title: "Key ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Key ID" variant="header-cycle" />,
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={i18n.t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" })} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <IdCell value={info.getValue() as string | null} onClick={() => onSelectKey(info.row.original)} />,
@@ -145,8 +164,8 @@ export const getKeyTableColumns = ({
   {
     id: "team_alias",
     accessorKey: "team_id",
-    meta: { title: "Team" },
-    header: "Team",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.team", { defaultValue: "Team" }),
     size: 120,
     enableSorting: false,
     cell: (info) => {
@@ -165,8 +184,8 @@ export const getKeyTableColumns = ({
   {
     id: "organization_alias",
     accessorKey: "org_id",
-    meta: { title: "Organization" },
-    header: "Organization",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }),
     size: 140,
     enableSorting: false,
     cell: (info) => {
@@ -185,9 +204,14 @@ export const getKeyTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    meta: { title: "User" },
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.user", { defaultValue: "User" }) },
     header: () => (
-      <InfoHeader label="User" tooltip="Displays the first available value: User Alias, User Email, or User ID." />
+      <InfoHeader
+        label={i18n.t("virtualKeys.virtualKeysTable.user", { defaultValue: "User" })}
+        tooltip={i18n.t("virtualKeys.virtualKeysTable.userPopoverHint", {
+          defaultValue: "Displays the first available value: User Alias, User Email, or User ID.",
+        })}
+      />
     ),
     size: 160,
     enableSorting: false,
@@ -206,8 +230,10 @@ export const getKeyTableColumns = ({
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" variant="header-cycle" />,
+    meta: { title: i18n.t("common.createdAt", { defaultValue: "Created At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={i18n.t("common.createdAt", { defaultValue: "Created At" })} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" />,
@@ -215,8 +241,8 @@ export const getKeyTableColumns = ({
   {
     id: "created_by",
     accessorKey: "created_by",
-    meta: { title: "Created By" },
-    header: "Created By",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.createdBy", { defaultValue: "Created By" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.createdBy", { defaultValue: "Created By" }),
     size: 160,
     enableSorting: false,
     cell: (info) => {
@@ -236,8 +262,10 @@ export const getKeyTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" variant="header-cycle" />,
+    meta: { title: i18n.t("common.updatedAt", { defaultValue: "Updated At" }) },
+    header: ({ column }) => (
+      <DataTableSortHeader column={column} title={i18n.t("common.updatedAt", { defaultValue: "Updated At" })} variant="header-cycle" />
+    ),
     size: 120,
     enableSorting: true,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
@@ -245,22 +273,24 @@ export const getKeyTableColumns = ({
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: "Last Active" },
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.lastActive", { defaultValue: "Last Active" }) },
     header: () => (
       <InfoHeader
-        label="Last Active"
-        tooltip="This is a new field and is not backfilled. Only new key usage will update this value."
+        label={i18n.t("virtualKeys.virtualKeysTable.lastActive", { defaultValue: "Last Active" })}
+        tooltip={i18n.t("virtualKeys.virtualKeysTable.lastActiveHint", {
+          defaultValue: "This is a new field and is not backfilled. Only new key usage will update this value.",
+        })}
       />
     ),
     size: 130,
     enableSorting: false,
-    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback="Unknown" />,
+    cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.unknown", { defaultValue: "Unknown" })} />,
   },
   {
     id: "expires",
     accessorKey: "expires",
-    meta: { title: "Expires" },
-    header: "Expires",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.expires", { defaultValue: "Expires" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.expires", { defaultValue: "Expires" }),
     size: 120,
     enableSorting: false,
     cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
@@ -268,7 +298,7 @@ export const getKeyTableColumns = ({
   {
     id: "spend",
     accessorKey: "spend",
-    meta: { title: "Spend / Budget", skeleton: "meter", numeric: true },
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.spendBudget", { defaultValue: "Spend / Budget" }), skeleton: "meter", numeric: true },
     header: ({ table }) => <DataTableMultiSortHeader table={table} fields={SPEND_BUDGET_SORT_FIELDS} />,
     size: 180,
     enableSorting: true,
@@ -292,11 +322,14 @@ export const getKeyTableColumns = ({
   {
     id: "total_spend",
     accessorKey: "total_spend",
-    meta: { title: "Lifetime Spend" },
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.lifetimeSpend", { defaultValue: "Lifetime Spend" }) },
     header: () => (
       <InfoHeader
-        label="Lifetime Spend"
-        tooltip="Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
+        label={i18n.t("virtualKeys.virtualKeysTable.lifetimeSpend", { defaultValue: "Lifetime Spend" })}
+        tooltip={i18n.t("virtualKeys.virtualKeysTable.lifetimeSpendHint", {
+          defaultValue:
+            "Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade.",
+        })}
       />
     ),
     size: 130,
@@ -306,8 +339,8 @@ export const getKeyTableColumns = ({
   {
     id: "budget_reset_at",
     accessorKey: "budget_reset_at",
-    meta: { title: "Budget Reset" },
-    header: "Budget Reset",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.budgetReset", { defaultValue: "Budget Reset" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.budgetReset", { defaultValue: "Budget Reset" }),
     size: 130,
     enableSorting: false,
     cell: (info) => <DateCell value={info.getValue() as string | null} fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
@@ -315,8 +348,8 @@ export const getKeyTableColumns = ({
   {
     id: "models",
     accessorKey: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.models", { defaultValue: "Models" }), skeleton: "chips" },
+    header: i18n.t("virtualKeys.virtualKeysTable.models", { defaultValue: "Models" }),
     size: 220,
     enableSorting: false,
     cell: (info) => (
@@ -329,16 +362,17 @@ export const getKeyTableColumns = ({
   },
   {
     id: "rate_limits",
-    meta: { title: "Rate Limits" },
-    header: "Rate Limits",
+    meta: { title: i18n.t("virtualKeys.virtualKeysTable.rateLimits", { defaultValue: "Rate Limits" }) },
+    header: i18n.t("virtualKeys.virtualKeysTable.rateLimits", { defaultValue: "Rate Limits" }),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => {
       const key = row.original;
+      const unlimited = i18n.t("virtualKeys.virtualKeysTable.unlimited", { defaultValue: "Unlimited" });
       return (
         <div className="text-xs">
-          <div>TPM: {key.tpm_limit !== null ? key.tpm_limit : "Unlimited"}</div>
-          <div>RPM: {key.rpm_limit !== null ? key.rpm_limit : "Unlimited"}</div>
+          <div>{i18n.t("virtualKeys.virtualKeysTable.tpmLimit", { value: key.tpm_limit !== null ? key.tpm_limit : unlimited })}</div>
+          <div>{i18n.t("virtualKeys.virtualKeysTable.rpmLimit", { value: key.rpm_limit !== null ? key.rpm_limit : unlimited })}</div>
         </div>
       );
     },

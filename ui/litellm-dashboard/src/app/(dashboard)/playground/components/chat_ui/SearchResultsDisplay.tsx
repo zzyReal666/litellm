@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { VectorStoreSearchResponse } from "@/components/chat_ui/types";
 import { ChevronDown, ChevronRight, Database, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ interface SearchResultsDisplayProps {
 }
 
 export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProps) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
   const [expandedResults, setExpandedResults] = useState<Record<string, boolean>>({});
 
@@ -50,7 +52,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
               {searchResults.map((resultPage, pageIndex) => (
                 <div key={pageIndex}>
                   <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
-                    <span className="font-medium">Query:</span>
+                    <span className="font-medium">{t("playground.searchResultsDisplay.query", { defaultValue: "Query:" })}</span>
                     <span className="italic">&quot;{resultPage.search_query}&quot;</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-muted-foreground">
@@ -97,7 +99,9 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
 
                                 {result.attributes && Object.keys(result.attributes).length > 0 && (
                                   <div className="mt-2 pt-2 border-t border-border">
-                                    <div className="text-xs text-muted-foreground mb-1 font-medium">Metadata:</div>
+                                    <div className="text-xs text-muted-foreground mb-1 font-medium">
+                                      {t("playground.searchResultsDisplay.metadata", { defaultValue: "Metadata:" })}
+                                    </div>
                                     <div className="space-y-1">
                                       {Object.entries(result.attributes).map(([key, value]) => (
                                         <div key={key} className="text-xs flex gap-2">

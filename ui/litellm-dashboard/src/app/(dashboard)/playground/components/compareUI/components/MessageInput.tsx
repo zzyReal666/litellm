@@ -34,7 +34,7 @@ export function MessageInput({ value, onChange, onSend, disabled, hasAttachment,
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message... (Shift+Enter for new line)"
+          placeholder={t("playground.messageInput.placeholder", { defaultValue: "Type your message... (Shift+Enter for new line)" })}
           disabled={disabled}
           rows={1}
           className="max-h-20 min-h-0 flex-1 resize-none overflow-y-auto border-0 bg-transparent px-0 py-1 text-sm leading-5 shadow-none focus-visible:ring-0"

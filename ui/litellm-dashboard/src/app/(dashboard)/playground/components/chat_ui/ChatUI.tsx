@@ -1329,7 +1329,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     <Wrench className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       className="h-8 pl-8"
-                      placeholder="Optional: Enter custom proxy URL (e.g., http://localhost:5000)"
+                      placeholder={i18n.t("playground.chatUi.customProxyUrlPlaceholder", { defaultValue: "Optional: Enter custom proxy URL (e.g., http://localhost:5000)" })}
                       value={customProxyBaseUrl}
                       onChange={(event) => {
                         setCustomProxyBaseUrl(event.target.value);
@@ -1860,7 +1860,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                       type="button"
                       variant="outline"
                       size="icon"
-                      aria-label="Jump to bottom"
+                      aria-label={i18n.t("playground.chatUi.jumpToBottom", { defaultValue: "Jump to bottom" })}
                       className="absolute bottom-3 right-3 rounded-full shadow-sm"
                       onClick={scrollToLastMessage}
                     >
@@ -2019,7 +2019,9 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           {isLoading ? (
                             <>
                               <Loader2 className="size-4 animate-spin text-info" aria-hidden="true" />
-                              <span className="text-sm font-medium text-info">Running Python code...</span>
+                              <span className="text-sm font-medium text-info">
+                                {i18n.t("playground.codeInterpreterOutput.runningPythonCode", { defaultValue: "Running Python code..." })}
+                              </span>
                             </>
                           ) : (
                             <>
@@ -2217,16 +2219,15 @@ const ChatUI: React.FC<ChatUIProps> = ({
           </DialogHeader>
           <div className="space-y-4 py-2">
             <p className="text-foreground">
-              <strong>Toolsets</strong> are named collections of specific tools from one or more MCP servers. Instead of
-              exposing all tools from a server, a toolset gives an agent exactly the tools it needs.
+              {i18n.t("playground.chatUi.toolsetsDescription", {
+                defaultValue:
+                  "Toolsets are named collections of specific tools from one or more MCP servers. Instead of exposing all tools from a server, a toolset gives an agent exactly the tools it needs.",
+              })}
             </p>
             <div>
               <h4 className="mb-2 font-semibold text-foreground">{i18n.t("playground.chatUi.toolsetsHowToUseTitle", { defaultValue: "How to use a toolset:" })}</h4>
               <ol className="list-inside list-decimal space-y-2 text-foreground">
-                <li>
-                  Select a <span className="font-semibold text-violet-600">Toolset</span> (purple badge) from the MCP
-                  Servers dropdown.
-                </li>
+                <li>{i18n.t("playground.chatUi.toolsetsStep1", { defaultValue: "Select a Toolset (purple badge) from the MCP Servers dropdown." })}</li>
                 <li>{i18n.t("playground.chatUi.toolsetsStep2", { defaultValue: "The tool picker will show only the tools included in that toolset." })}</li>
                 <li>{i18n.t("playground.chatUi.toolsetsStep3", { defaultValue: "Select a tool and fill in its parameters, then send." })}</li>
                 <li>{i18n.t("playground.chatUi.toolsetsStep4", { defaultValue: "The tool call is routed to the correct underlying MCP server automatically." })}</li>
@@ -2234,16 +2235,19 @@ const ChatUI: React.FC<ChatUIProps> = ({
             </div>
             <div className="rounded-sm border border-purple-200 bg-purple-50 p-3 dark:border-purple-800 dark:bg-purple-950">
               <p className="text-sm text-purple-800 dark:text-purple-300">
-                <strong>Example:</strong> A &quot;GitHub Read-only&quot; toolset might include only{" "}
-                <code>list_repos</code> and <code>get_file</code> from a GitHub MCP server, preventing agents from
-                making writes.
+                {i18n.t("playground.chatUi.toolsetsExample", {
+                  defaultValue:
+                    "Example: A GitHub Read-only toolset might include only list_repos and get_file from a GitHub MCP server, preventing agents from making writes.",
+                })}
               </p>
             </div>
             <div>
               <h4 className="mb-1 font-semibold text-foreground">{i18n.t("playground.chatUi.toolsetsCreatingTitle", { defaultValue: "Creating toolsets:" })}</h4>
               <p className="text-sm text-muted-foreground">
-                Admins can create and manage toolsets from the <strong>MCP</strong> page → <strong>Toolsets</strong>{" "}
-                tab. Toolsets can then be assigned to keys and teams to scope their tool access.
+                {i18n.t("playground.chatUi.toolsetsCreatingDescription", {
+                  defaultValue:
+                    "Admins can create and manage toolsets from the MCP page, Toolsets tab. Toolsets can then be assigned to keys and teams to scope their tool access.",
+                })}
               </p>
             </div>
           </div>

@@ -44,7 +44,7 @@ const FILTER_LABELS: Record<FilterColumn, string> = {
   org_id: i18n.t("virtualKeys.virtualKeysTable.organization", { defaultValue: "Organization" }),
   user_id: i18n.t("virtualKeys.virtualKeysTable.filterUserId", { defaultValue: "User ID" }),
   key_hash: i18n.t("virtualKeys.virtualKeysTable.keyId", { defaultValue: "Key ID" }),
-  status: "Status",
+  status: i18n.t("common.status", { defaultValue: "Status" }),
 };
 
 const KEY_STATUS_VALUES = ["active", "expired", "revoked", "deleted"] as const;
@@ -53,13 +53,13 @@ const ALL_STATUSES = "all";
 
 const KEY_STATUS_LABELS: Record<KeyStatusFilter, string> = {
   active: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }),
-  expired: "Expired",
-  revoked: "Revoked (blocked)",
-  deleted: "Deleted",
+  expired: i18n.t("virtualKeys.virtualKeysTable.expired", { defaultValue: "Expired" }),
+  revoked: i18n.t("virtualKeys.virtualKeysTable.revoked", { defaultValue: "Revoked (blocked)" }),
+  deleted: i18n.t("virtualKeys.virtualKeysTable.deleted", { defaultValue: "Deleted" }),
 };
 
 const STATUS_FILTER_ITEMS = [
-  { value: ALL_STATUSES, label: "All statuses" },
+  { value: ALL_STATUSES, label: i18n.t("virtualKeys.virtualKeysTable.allStatuses", { defaultValue: "All statuses" }) },
   ...KEY_STATUS_VALUES.map((value) => ({ value, label: KEY_STATUS_LABELS[value] })),
 ];
 
@@ -320,14 +320,14 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
                       placeholder={t("virtualKeys.virtualKeysTable.enterKeyIdPlaceholder", { defaultValue: "Enter Key ID…" })}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="Status">
+                  <DataTableFilterField label={i18n.t("common.status", { defaultValue: "Status" })}>
                     <Select
                       items={STATUS_FILTER_ITEMS}
                       value={(get("status") as string) || ALL_STATUSES}
                       onValueChange={(value) => set("status", value === ALL_STATUSES ? undefined : value)}
                     >
-                      <SelectTrigger className="w-full" aria-label="Status">
-                        <SelectValue placeholder="All statuses" />
+                      <SelectTrigger className="w-full" aria-label={i18n.t("common.status", { defaultValue: "Status" })}>
+                        <SelectValue placeholder={i18n.t("virtualKeys.virtualKeysTable.allStatuses", { defaultValue: "All statuses" })} />
                       </SelectTrigger>
                       <SelectContent>
                         {STATUS_FILTER_ITEMS.map((item) => (
