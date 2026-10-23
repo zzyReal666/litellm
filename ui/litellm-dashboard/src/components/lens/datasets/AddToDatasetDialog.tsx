@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { extractProxyErrorMessage } from "@/lib/http/client";
 import { cn } from "@/lib/cva.config";
 import { toast } from "@/lib/toast";
+import i18n from "@/lib/i18n";
 
 import { useTracesLive } from "../traces/api";
 import { useOptionalLensApi } from "../data/LensServices";
@@ -48,7 +49,7 @@ import type { BuildSource, Dataset, DatasetCase, DatasetMessage, DatasetSummary,
 
 const NEW_DATASET = "__new__";
 
-const cases = (count: number): string => `${count} ${count === 1 ? "case" : "cases"}`;
+const cases = (count: number): string => i18n.t("lens.addToDataset.case", { count });
 
 /** Admins can save cases; the sample session keeps its datasets in memory so anyone can try it. */
 export function useCanAddToDataset(): boolean {
@@ -130,10 +131,10 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
         datasetId: base.id,
         body: { base_revision: base.revision, cases: revisionCases(base.cases, built, draft) },
       });
-      toast.success(`Added ${cases(chosen)} to ${saved.name}`, {
+      toast.success(i18n.t("lens.addToDataset.addedToast", { cases: cases(chosen), name: saved.name, defaultValue: `Added ${cases(chosen)} to ${saved.name}` }), {
         description: (
           <button type="button" className="underline underline-offset-2" onClick={() => openSaved(saved.id)}>
-            Open dataset
+            {i18n.t("lens.addToDataset.openDataset", { defaultValue: "Open dataset" })}
           </button>
         ),
       });
@@ -148,8 +149,8 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
     <Dialog open onOpenChange={(open) => !open && !busy && onClose()}>
       <DialogContent className="max-h-[90vh] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-4 sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add to dataset</DialogTitle>
-          <DialogDescription>Saves a copy of each conversation, so it stays after the trace expires.</DialogDescription>
+          <DialogTitle>{i18n.t("lens.addToDataset.addToDataset", { defaultValue: "Add to dataset" })}</DialogTitle>
+          <DialogDescription>{i18n.t("lens.addToDataset.description", { defaultValue: "Saves a copy of each conversation, so it stays after the trace expires." })}</DialogDescription>
         </DialogHeader>
         <TargetFields datasets={datasets} target={target} name={name} onTarget={pickTarget} onName={setName} />
         <CasePreview
@@ -163,11 +164,13 @@ export function AddToDatasetDialog({ sources, agentName = "", onClose }: AddToDa
           {conflict ? <ConflictNotice onReload={() => void reload()} /> : <span />}
           <div className="flex gap-2">
             <Button variant="outline" disabled={busy} onClick={onClose}>
-              Cancel
+              {i18n.t("common.cancel", { defaultValue: "Cancel" })}
             </Button>
             <Button disabled={!canSave} onClick={() => void submit()}>
               {busy && <Loader2 aria-hidden="true" className="animate-spin motion-reduce:animate-none" />}
-              {chosen > 0 ? `Save ${cases(chosen)}` : "Save"}
+              {chosen > 0
+                ? i18n.t("lens.addToDataset.saveCases", { count: cases(chosen), defaultValue: `Save ${cases(chosen)}` })
+                : i18n.t("lens.addToDataset.save", { defaultValue: "Save" })}
             </Button>
           </div>
         </DialogFooter>
@@ -187,19 +190,19 @@ interface TargetFieldsProps {
 function TargetFields({ datasets, target, name, onTarget, onName }: TargetFieldsProps) {
   const nameId = useId();
   const items = [
-    { value: NEW_DATASET, label: "New dataset" },
+    { value: NEW_DATASET, label: i18n.t("lens.addToDataset.newDataset", { defaultValue: "New dataset" }) },
     ...datasets.map((item) => ({ value: item.id, label: item.name })),
   ];
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       <label className="grid gap-1.5 text-xs text-muted-foreground">
-        Dataset
+        {i18n.t("lens.addToDataset.dataset", { defaultValue: "Dataset" })}
         <Select value={target} items={items} onValueChange={(next: string | null) => next !== null && onTarget(next)}>
-          <SelectTrigger aria-label="Dataset" size="sm" className="w-full text-sm">
-            <SelectValue placeholder="Loading datasets…" />
+          <SelectTrigger aria-label={i18n.t("lens.addToDataset.dataset", { defaultValue: "Dataset" })} size="sm" className="w-full text-sm">
+            <SelectValue placeholder={i18n.t("lens.addToDataset.loadingDatasets", { defaultValue: "Loading datasets…" })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={NEW_DATASET}>New dataset</SelectItem>
+            <SelectItem value={NEW_DATASET}>{i18n.t("lens.addToDataset.newDataset", { defaultValue: "New dataset" })}</SelectItem>
             {datasets.map((item) => (
               <SelectItem key={item.id} value={item.id}>
                 {item.name}
@@ -211,12 +214,12 @@ function TargetFields({ datasets, target, name, onTarget, onName }: TargetFields
       </label>
       {target === NEW_DATASET && (
         <label htmlFor={nameId} className="grid gap-1.5 text-xs text-muted-foreground">
-          Name
+          {i18n.t("lens.addToDataset.name", { defaultValue: "Name" })}
           <Input
             id={nameId}
             value={name}
             maxLength={120}
-            placeholder="checkout regressions"
+            placeholder={i18n.t("lens.addToDataset.namePlaceholder", { defaultValue: "checkout regressions" })}
             onChange={(event) => onName(event.target.value)}
             className="h-8"
           />
@@ -230,10 +233,10 @@ function ConflictNotice({ onReload }: { onReload: () => void }) {
   return (
     <p role="alert" className="flex items-center gap-2 text-xs text-destructive">
       <TriangleAlert aria-hidden="true" className="size-3.5" />
-      Someone saved this dataset since you opened it. Reload to add to the latest version.
+      {i18n.t("lens.addToDataset.conflictNotice", { defaultValue: "Someone saved this dataset since you opened it. Reload to add to the latest version." })}
       <Button variant="outline" size="xs" onClick={onReload}>
         <RotateCw aria-hidden="true" />
-        Reload
+        {i18n.t("lens.addToDataset.reload", { defaultValue: "Reload" })}
       </Button>
     </p>
   );
@@ -252,7 +255,7 @@ function CasePreview({ build, draft, chosen, onToggle, onExpected }: CasePreview
     return (
       <p role="status" className="flex items-center gap-2 py-6 text-sm text-muted-foreground">
         <Loader2 aria-hidden="true" className="size-4 animate-spin motion-reduce:animate-none" />
-        Reading the conversation…
+        {i18n.t("lens.addToDataset.readingConversation", { defaultValue: "Reading the conversation…" })}
       </p>
     );
   if (build.isError)
@@ -266,15 +269,15 @@ function CasePreview({ build, draft, chosen, onToggle, onExpected }: CasePreview
   return (
     <div className="flex min-h-0 flex-col gap-3 overflow-y-auto">
       <div className="flex items-baseline justify-between">
-        <p className="text-sm font-medium">Cases</p>
+        <p className="text-sm font-medium">{i18n.t("lens.addToDataset.cases", { defaultValue: "Cases" })}</p>
         <p className="text-xs text-muted-foreground tabular-nums">
-          {chosen} of {cases.length} selected
+          {i18n.t("lens.addToDataset.selectedCount", { chosen, total: cases.length, defaultValue: `${chosen} of ${cases.length} selected` })}
         </p>
       </div>
       {cases.length === 0 ? (
-        <p className="rounded-xl bg-muted/60 px-3 py-4 text-sm text-muted-foreground">Nothing new to add.</p>
+        <p className="rounded-xl bg-muted/60 px-3 py-4 text-sm text-muted-foreground">{i18n.t("lens.addToDataset.nothingToAdd", { defaultValue: "Nothing new to add." })}</p>
       ) : (
-        <ul aria-label="Cases to add" className="grid gap-2.5">
+        <ul aria-label={i18n.t("lens.addToDataset.casesToAdd", { defaultValue: "Cases to add" })} className="grid gap-2.5">
           {cases.map((item, index) => (
             <CaseTile
               key={item.id}
@@ -308,7 +311,7 @@ function CaseTile({
   onToggle: () => void;
   onExpected: (text: string) => void;
 }) {
-  const label = `Case ${index + 1}`;
+  const label = i18n.t("lens.addToDataset.caseLabel", { position: index + 1, defaultValue: `Case ${index + 1}` });
   return (
     <li
       className={cn(
@@ -325,7 +328,7 @@ function CaseTile({
         />
       )}
       <div className="flex min-w-0 items-start gap-2.5 pr-6">
-        <Checkbox checked={selected} onCheckedChange={onToggle} aria-label={`Include ${label}`} className="mt-0.5" />
+        <Checkbox checked={selected} onCheckedChange={onToggle} aria-label={i18n.t("lens.addToDataset.includeCase", { label, defaultValue: `Include ${label}` })} className="mt-0.5" />
         <span className="grid min-w-0 gap-0.5">
           <span className="line-clamp-2 text-sm font-medium text-foreground">{casePrompt(item) || label}</span>
           <span className="line-clamp-2 text-xs text-muted-foreground">{caseReplySummary(item)}</span>
@@ -334,20 +337,24 @@ function CaseTile({
       {item.messages.length > 0 && (
         <details className="pl-6.5 text-xs">
           <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-            Conversation · {item.messages.length} {item.messages.length === 1 ? "message" : "messages"}
+            {i18n.t("lens.addToDataset.conversationCount", {
+              count: item.messages.length,
+              noun: item.messages.length === 1 ? i18n.t("lens.addToDataset.messageSingular", { defaultValue: "message" }) : i18n.t("lens.addToDataset.messagePlural", { defaultValue: "messages" }),
+              defaultValue: `Conversation · ${item.messages.length} ${item.messages.length === 1 ? "message" : "messages"}`,
+            })}
           </summary>
           <CaseConversation messages={item.messages} />
         </details>
       )}
       {selected && (
         <label className="grid gap-1 pl-6.5 text-xs text-muted-foreground">
-          Expected
+          {i18n.t("lens.addToDataset.expected", { defaultValue: "Expected" })}
           <Textarea
             value={expected}
             rows={1}
-            placeholder="What a good reply does (optional)"
+            placeholder={i18n.t("lens.addToDataset.expectedPlaceholder", { defaultValue: "What a good reply does (optional)" })}
             onChange={(event) => onExpected(event.target.value)}
-            aria-label={`Expected for ${label}`}
+            aria-label={i18n.t("lens.addToDataset.expectedFor", { label, defaultValue: `Expected for ${label}` })}
             className="min-h-8 text-sm"
           />
         </label>
@@ -377,12 +384,12 @@ export function CaseConversation({ messages }: { messages: readonly DatasetMessa
 function SkippedList({ skipped }: { skipped: readonly SkippedCase[] }) {
   return (
     <div className="grid gap-1.5">
-      <p className="text-sm font-medium">Skipped</p>
-      <ul aria-label="Skipped" className="grid gap-1 text-xs text-muted-foreground">
+      <p className="text-sm font-medium">{i18n.t("lens.addToDataset.skipped", { defaultValue: "Skipped" })}</p>
+      <ul aria-label={i18n.t("lens.addToDataset.skipped", { defaultValue: "Skipped" })} className="grid gap-1 text-xs text-muted-foreground">
         {skipped.map((item, index) => (
           <li key={`${item.source.trace_id}-${item.source.span_id}-${index}`} className="flex gap-2">
             <span className="text-foreground">{SKIP_REASON_TEXT[item.reason]}</span>
-            {item.source.trace_id && <span className="truncate">trace {item.source.trace_id.slice(0, 12)}</span>}
+            {item.source.trace_id && <span className="truncate">{i18n.t("lens.addToDataset.tracePrefix", { id: item.source.trace_id.slice(0, 12), defaultValue: `trace ${item.source.trace_id.slice(0, 12)}` })}</span>}
           </li>
         ))}
       </ul>
@@ -401,7 +408,7 @@ export interface AddToDatasetButtonProps {
 export function AddToDatasetButton({
   sources,
   agentName,
-  label = "Add to dataset",
+  label = i18n.t("lens.addToDataset.addToDataset", { defaultValue: "Add to dataset" }),
   className,
 }: AddToDatasetButtonProps) {
   const allowed = useCanAddToDataset();
