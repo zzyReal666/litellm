@@ -11,6 +11,7 @@ import { useRunRoute } from "../../route";
 
 import { money, when } from "../../model/format";
 import { runStatus } from "../../model/status";
+import i18n from "@/lib/i18n";
 
 export interface RunPickerProps {
   readonly lens: Lens;
@@ -29,12 +30,12 @@ export function RunPicker({ lens, job }: RunPickerProps) {
   return (
     <div className="flex min-w-0 items-center gap-1 pb-1">
       <select
-        aria-label="Investigation run"
+        aria-label={i18n.t("lens.runPicker.investigationRunAria", { defaultValue: "Investigation run" })}
         className="h-8 w-44 max-w-full truncate rounded-md border-0 bg-transparent px-2 text-xs text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
         value={batchId}
         onChange={(e) => selectRun(e.target.value)}
       >
-        <option value="latest">Latest run</option>
+        <option value="latest">{i18n.t("lens.runPicker.latestRun", { defaultValue: "Latest run" })}</option>
         {outsideHistory && (
           <option value={batchId}>
             {when(job.created_at)} · {runStatus(job)}
@@ -45,39 +46,38 @@ export function RunPicker({ lens, job }: RunPickerProps) {
             {when(j.created_at)} · {runStatus(j)}
           </option>
         ))}
-        <option value="all">All accumulated findings</option>
+        <option value="all">{i18n.t("lens.runPicker.allFindings", { defaultValue: "All accumulated findings" })}</option>
       </select>
       {batchId !== "all" && (
         <Popover key={job.id}>
           <PopoverTrigger
-            aria-label="Run details"
+            aria-label={i18n.t("lens.runPicker.runDetails", { defaultValue: "Run details" })}
             render={<Button variant="ghost" size="icon" className="size-7 text-muted-foreground" />}
           >
             <Info className="size-3.5" />
           </PopoverTrigger>
           <PopoverContent align="end" className="gap-3">
-            <PopoverTitle>Run details</PopoverTitle>
+            <PopoverTitle>{i18n.t("lens.runPicker.runDetails", { defaultValue: "Run details" })}</PopoverTitle>
             <p className="text-xs text-muted-foreground">
-              {newlyReviewed} newly reviewed · {reused} reused reviews
+              {i18n.t("lens.runPicker.coverageSummary", { newly: newlyReviewed, reused, defaultValue: `${newlyReviewed} newly reviewed · ${reused} reused reviews` })}
               <ScanDuration job={job} />
             </p>
             <p className="text-xs text-muted-foreground">
-              {job.coverage?.partial ?? 0} partial traces · {job.coverage?.unassessable ?? 0} could not be assessed ·{" "}
-              {job.coverage?.inconclusive ?? 0} inconclusive
+              {i18n.t("lens.runPicker.coverageDetail", { partial: job.coverage?.partial ?? 0, unassessable: job.coverage?.unassessable ?? 0, inconclusive: job.coverage?.inconclusive ?? 0, defaultValue: `${job.coverage?.partial ?? 0} partial traces · ${job.coverage?.unassessable ?? 0} could not be assessed · ${job.coverage?.inconclusive ?? 0} inconclusive` })}
             </p>
             <dl className="space-y-2 text-xs">
               <div>
-                <dt className="text-muted-foreground">Activity window</dt>
+                <dt className="text-muted-foreground">{i18n.t("lens.runPicker.activityWindow", { defaultValue: "Activity window" })}</dt>
                 <dd className="mt-1">
-                  {when(job.start)} to {when(job.end)}
+                  {i18n.t("lens.runPicker.rangeTo", { start: when(job.start), end: when(job.end), defaultValue: `${when(job.start)} to ${when(job.end)}` })}
                 </dd>
               </div>
               <div className="flex justify-between gap-2">
-                <dt className="text-muted-foreground">Analysis cost</dt>
+                <dt className="text-muted-foreground">{i18n.t("lens.runPicker.analysisCost", { defaultValue: "Analysis cost" })}</dt>
                 <dd>{money(job.cost ?? 0)}</dd>
               </div>
               <div className="flex justify-between gap-2">
-                <dt className="text-muted-foreground">Status</dt>
+                <dt className="text-muted-foreground">{i18n.t("lens.runPicker.status", { defaultValue: "Status" })}</dt>
                 <dd>{runStatus(job)}</dd>
               </div>
             </dl>

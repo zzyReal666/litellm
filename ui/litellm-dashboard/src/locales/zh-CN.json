@@ -12927,6 +12927,18 @@
       "refreshRun": "刷新运行",
       "traceView": "链路视图",
       "thread": "线程"
+    },
+    "runPicker": {
+      "investigationRunAria": "调查运行",
+      "latestRun": "最新运行",
+      "allFindings": "所有累积的发现",
+      "runDetails": "运行详情",
+      "coverageSummary": "新审查 {{newly}} 项 · 复用审查 {{reused}} 项",
+      "coverageDetail": "{{partial}} 条部分链路 · {{unassessable}} 条无法评估 · {{inconclusive}} 条无定论",
+      "activityWindow": "活动窗口",
+      "rangeTo": "{{start}} 至 {{end}}",
+      "analysisCost": "分析成本",
+      "status": "状态"
     }
   },
   "mcpServerCredentials": {

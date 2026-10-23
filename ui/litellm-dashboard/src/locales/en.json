@@ -12927,6 +12927,18 @@
       "refreshRun": "Refresh run",
       "traceView": "Trace view",
       "thread": "Thread"
+    },
+    "runPicker": {
+      "investigationRunAria": "Investigation run",
+      "latestRun": "Latest run",
+      "allFindings": "All accumulated findings",
+      "runDetails": "Run details",
+      "coverageSummary": "{{newly}} newly reviewed · {{reused}} reused reviews",
+      "coverageDetail": "{{partial}} partial traces · {{unassessable}} could not be assessed · {{inconclusive}} inconclusive",
+      "activityWindow": "Activity window",
+      "rangeTo": "{{start}} to {{end}}",
+      "analysisCost": "Analysis cost",
+      "status": "Status"
     }
   },
   "mcpServerCredentials": {
