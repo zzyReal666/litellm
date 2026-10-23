@@ -202,7 +202,7 @@ export const getTeamTableColumns = ({
       id: "organization_alias",
       accessorKey: "organization_id",
       meta: { title: t("createUserButton.organizationLabel", { defaultValue: "Organization" }) },
-      header: "Organization",
+      header: t("oldTeams.columns.organization", { defaultValue: "Organization" }),
       size: 160,
       enableSorting: false,
       cell: (info) => {
@@ -230,7 +230,7 @@ export const getTeamTableColumns = ({
           </div>
         ),
       },
-      header: "Resources",
+      header: t("oldTeams.columns.resources", { defaultValue: "Resources" }),
       size: 210,
       enableSorting: false,
       cell: ({ row }) => <ResourcesCell team={row.original} />,
@@ -238,8 +238,8 @@ export const getTeamTableColumns = ({
     {
       id: "spend",
       accessorKey: "spend",
-      meta: { title: "Spend / Budget", skeleton: "meter" },
-      header: "Spend / Budget",
+      meta: { title: t("oldTeams.columns.spendBudget", { defaultValue: "Spend / Budget" }), skeleton: "meter" },
+      header: t("oldTeams.columns.spendBudget", { defaultValue: "Spend / Budget" }),
       size: 200,
       enableSorting: false,
       cell: ({ row }) => (
@@ -269,7 +269,7 @@ export const getTeamTableColumns = ({
     {
       id: "members",
       meta: { title: t("oldTeams.deleteModal.labelMembers", { defaultValue: "Members" }) },
-      header: "Members",
+      header: t("oldTeams.deleteModal.labelMembers", { defaultValue: "Members" }),
       size: 110,
       enableSorting: false,
       cell: ({ row }) => <span className="text-sm tabular-nums">{teamMemberCount(row.original)}</span>,
@@ -277,7 +277,7 @@ export const getTeamTableColumns = ({
     {
       id: "models",
       meta: { title: t("createUserButton.modelsLabel", { defaultValue: "Models" }) },
-      header: "Models",
+      header: t("createUserButton.modelsLabel", { defaultValue: "Models" }),
       size: 100,
       enableSorting: false,
       cell: ({ row }) => <span className="text-sm tabular-nums">{teamModelCount(row.original)}</span>,
@@ -285,7 +285,7 @@ export const getTeamTableColumns = ({
     {
       id: "rate_limits",
       meta: { title: t("publicModelHub.rateLimits", { defaultValue: "Rate Limits" }), skeleton: "twoLine" },
-      header: "Rate Limits",
+      header: t("publicModelHub.rateLimits", { defaultValue: "Rate Limits" }),
       size: 140,
       enableSorting: false,
       cell: ({ row }) => (
@@ -299,7 +299,7 @@ export const getTeamTableColumns = ({
       id: "updated_at",
       accessorKey: "updated_at",
       meta: { title: t("viewLogs.auditLogs.actionUpdated", { defaultValue: "Updated" }) },
-      header: "Updated",
+      header: t("viewLogs.auditLogs.actionUpdated", { defaultValue: "Updated" }),
       size: 130,
       enableSorting: false,
       cell: (info) => <DateCell value={info.getValue() as string | null} precision="date" fallback={i18n.t("common.never", { defaultValue: "Never" })} />,
