@@ -12610,5 +12610,24 @@
     "revokeTitle": "Revoke stored credential",
     "revokeConfirmDescription": "This deletes the {{type}} credential stored for user {{user}}.",
     "revokeConsequence": "Their next MCP request to this server fails until they connect again."
+  },
+  "liteAdmin": {
+    "liteAdmin": "LiteAdmin",
+    "loadingGatewaySettings": "Loading gateway settings",
+    "couldNotLoadGatewaySettings": "Could not load gateway settings.",
+    "connectToGateway": "Connect to the configured gateway",
+    "differentAddressHint": "This gateway uses a different address. LiteAdmin will send your existing session credential to the address shown above.",
+    "useConfiguredGateway": "Use configured gateway",
+    "newChat": "New chat",
+    "loadingModels": "Loading models",
+    "liteAdminModel": "LiteAdmin model",
+    "chooseChatModel": "Choose a chat model",
+    "couldNotLoadModels": "Could not load models.",
+    "addChatModelHint": "Add a chat model to your gateway to use LiteAdmin.",
+    "messageTooLong": "Keep your message within {{count}} characters.",
+    "askLiteAdmin": "Ask LiteAdmin…",
+    "trustModelHint": "Use a model you trust with your gateway data.",
+    "askAboutGateway": "Ask about your gateway. Review changes in chat.",
+    "closeLiteAdmin": "Close LiteAdmin"
   }
 }

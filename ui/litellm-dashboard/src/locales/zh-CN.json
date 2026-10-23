@@ -12610,5 +12610,24 @@
     "revokeTitle": "撤销已存储的凭证",
     "revokeConfirmDescription": "这将删除用户 {{user}} 存储的 {{type}} 凭证。",
     "revokeConsequence": "在他们重新连接之前，对该服务器的下一次 MCP 请求会失败。"
+  },
+  "liteAdmin": {
+    "liteAdmin": "LiteAdmin",
+    "loadingGatewaySettings": "正在加载网关设置",
+    "couldNotLoadGatewaySettings": "无法加载网关设置。",
+    "connectToGateway": "连接到已配置的网关",
+    "differentAddressHint": "此网关使用不同的地址。LiteAdmin 会将你现有的会话凭证发送到上面显示的地址。",
+    "useConfiguredGateway": "使用已配置的网关",
+    "newChat": "新对话",
+    "loadingModels": "正在加载模型",
+    "liteAdminModel": "LiteAdmin 模型",
+    "chooseChatModel": "选择一个对话模型",
+    "couldNotLoadModels": "无法加载模型。",
+    "addChatModelHint": "向网关添加一个对话模型以使用 LiteAdmin。",
+    "messageTooLong": "请将消息控制在 {{count}} 个字符以内。",
+    "askLiteAdmin": "询问 LiteAdmin…",
+    "trustModelHint": "请使用你信任其访问网关数据的模型。",
+    "askAboutGateway": "询问你的网关，在对话中审阅更改。",
+    "closeLiteAdmin": "关闭 LiteAdmin"
   }
 }

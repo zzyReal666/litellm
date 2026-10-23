@@ -17,6 +17,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { FieldError } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import { isProxyAdminRole } from "@/utils/roles";
 import { MAX_INPUT_LENGTH, resolveInferenceTarget } from "./agent";
 import { LiteAdminConversation } from "./LiteAdminConversation";
@@ -77,14 +78,14 @@ export default function LiteAdminTrigger() {
   return (
     <Button
       variant="ghost"
-      aria-label="LiteAdmin"
+      aria-label={i18n.t("liteAdmin.liteAdmin", { defaultValue: "LiteAdmin" })}
       aria-keyshortcuts="Meta+J Control+J"
       aria-expanded={state.open}
       onClick={state.toggle}
       className="rounded-full bg-info/10 text-info hover:bg-info/15 hover:text-info/80 aria-expanded:bg-info/15 aria-expanded:text-info"
     >
       <Sparkles className="size-4" />
-      <span className="hidden lg:inline">LiteAdmin</span>
+      <span className="hidden lg:inline">{i18n.t("liteAdmin.liteAdmin", { defaultValue: "LiteAdmin" })}</span>
       <kbd className="hidden rounded-full border border-info/30 px-1.5 font-sans text-xs lg:inline">⌘J</kbd>
     </Button>
   );
@@ -135,29 +136,31 @@ function Destination({
     <Panel open={open}>
       <PanelHeader close={close} />
       <div className="p-4">
-        {loading && <Skeleton className="h-24" aria-label="Loading gateway settings" />}
+        {loading && <Skeleton className="h-24" aria-label={i18n.t("liteAdmin.loadingGatewaySettings", { defaultValue: "Loading gateway settings" })} />}
         {!loading && !target?.baseUrl && (
           <Alert variant="destructive">
-            <AlertDescription>{target?.error || "Could not load gateway settings."}</AlertDescription>
+            <AlertDescription>{target?.error || i18n.t("liteAdmin.couldNotLoadGatewaySettings", { defaultValue: "Could not load gateway settings." })}</AlertDescription>
             <Button variant="link" onClick={retry}>
-              Retry
+              {i18n.t("common.retry", { defaultValue: "Retry" })}
             </Button>
           </Alert>
         )}
         {!loading && target?.baseUrl && (
           <Card size="sm">
             <CardHeader>
-              <CardTitle>Connect to the configured gateway</CardTitle>
+              <CardTitle>{i18n.t("liteAdmin.connectToGateway", { defaultValue: "Connect to the configured gateway" })}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="break-all font-mono text-xs">{target.baseUrl}</p>
               <p className="text-muted-foreground">
-                This gateway uses a different address. LiteAdmin will send your existing session credential to the
-                address shown above.
+                {i18n.t("liteAdmin.differentAddressHint", {
+                  defaultValue:
+                    "This gateway uses a different address. LiteAdmin will send your existing session credential to the address shown above.",
+                })}
               </p>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => setApproved(true)}>Use configured gateway</Button>
+              <Button onClick={() => setApproved(true)}>{i18n.t("liteAdmin.useConfiguredGateway", { defaultValue: "Use configured gateway" })}</Button>
             </CardFooter>
           </Card>
         )}
@@ -187,7 +190,7 @@ function Panel({
   return (
     <aside
       ref={ref}
-      aria-label="LiteAdmin"
+      aria-label={i18n.t("liteAdmin.liteAdmin", { defaultValue: "LiteAdmin" })}
       tabIndex={-1}
       hidden={!open}
       className={cn(
@@ -229,8 +232,8 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="New chat"
-          title="New chat"
+          aria-label={i18n.t("liteAdmin.newChat", { defaultValue: "New chat" })}
+          title={i18n.t("liteAdmin.newChat", { defaultValue: "New chat" })}
           disabled={chat.phase === "applying"}
           onClick={() => {
             chat.reset();
@@ -249,14 +252,14 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
       />
       <div className="space-y-3 border-t p-3">
         {models.isPending ? (
-          <Skeleton className="h-8" aria-label="Loading models" />
+          <Skeleton className="h-8" aria-label={i18n.t("liteAdmin.loadingModels", { defaultValue: "Loading models" })} />
         ) : (
           <SearchSelect
-            aria-label="LiteAdmin model"
+            aria-label={i18n.t("liteAdmin.liteAdminModel", { defaultValue: "LiteAdmin model" })}
             options={(models.data ?? []).map((item) => ({ value: item.model_group, label: item.model_group }))}
             value={selectedModel}
             onValueChange={setModel}
-            placeholder="Choose a chat model"
+            placeholder={i18n.t("liteAdmin.chooseChatModel", { defaultValue: "Choose a chat model" })}
             disabled={busy}
             allowClear={false}
           />
@@ -264,30 +267,30 @@ function LiteAdminChat({ session, open, close }: { session: LiteAdminSession; op
         {models.isError && (
           <Alert variant="destructive">
             <AlertDescription>
-              Could not load models.{" "}
+              {i18n.t("liteAdmin.couldNotLoadModels", { defaultValue: "Could not load models." })}{" "}
               <Button variant="link" onClick={() => void models.refetch()}>
-                Retry
+                {i18n.t("common.retry", { defaultValue: "Retry" })}
               </Button>
             </AlertDescription>
           </Alert>
         )}
         {models.isSuccess && models.data.length === 0 && (
           <Alert role="status">
-            <AlertDescription>Add a chat model to your gateway to use LiteAdmin.</AlertDescription>
+            <AlertDescription>{i18n.t("liteAdmin.addChatModelHint", { defaultValue: "Add a chat model to your gateway to use LiteAdmin." })}</AlertDescription>
           </Alert>
         )}
-        {tooLong && <FieldError>Keep your message within {MAX_INPUT_LENGTH.toLocaleString()} characters.</FieldError>}
+        {tooLong && <FieldError>{i18n.t("liteAdmin.messageTooLong", { count: MAX_INPUT_LENGTH.toLocaleString(), defaultValue: `Keep your message within ${MAX_INPUT_LENGTH.toLocaleString()} characters.` })}</FieldError>}
         <ChatComposer
           value={input}
           onChange={setInput}
           onSubmit={send}
           onCancel={chat.phase === "applying" ? undefined : chat.stop}
-          placeholder="Ask LiteAdmin…"
+          placeholder={i18n.t("liteAdmin.askLiteAdmin", { defaultValue: "Ask LiteAdmin…" })}
           disabled={busy || !selectedModel}
           isLoading={busy}
           submitDisabled={submitDisabled}
         />
-        <p className="text-xs text-muted-foreground">Use a model you trust with your gateway data.</p>
+        <p className="text-xs text-muted-foreground">{i18n.t("liteAdmin.trustModelHint", { defaultValue: "Use a model you trust with your gateway data." })}</p>
       </div>
     </Panel>
   );
@@ -299,13 +302,13 @@ function PanelHeader({ close, children }: { close: () => void; children?: ReactN
       <div className="flex flex-col gap-1 text-sm">
         <h2 className="flex items-center gap-1.5 font-medium">
           <Sparkles className="size-4 text-info" />
-          LiteAdmin
+          {i18n.t("liteAdmin.liteAdmin", { defaultValue: "LiteAdmin" })}
         </h2>
-        <p className="text-muted-foreground">Ask about your gateway. Review changes in chat.</p>
+        <p className="text-muted-foreground">{i18n.t("liteAdmin.askAboutGateway", { defaultValue: "Ask about your gateway. Review changes in chat." })}</p>
       </div>
       <div className="flex shrink-0">
         {children}
-        <Button variant="ghost" size="icon-sm" aria-label="Close LiteAdmin" onClick={close}>
+        <Button variant="ghost" size="icon-sm" aria-label={i18n.t("liteAdmin.closeLiteAdmin", { defaultValue: "Close LiteAdmin" })} onClick={close}>
           <X className="size-4" />
         </Button>
       </div>
