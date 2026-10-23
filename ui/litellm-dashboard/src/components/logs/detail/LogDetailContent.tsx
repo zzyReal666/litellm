@@ -11,6 +11,7 @@ import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { LogEntry } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { PROMPT_CACHE_CREATION_TOOLTIP, PROMPT_CACHE_READ_TOOLTIP } from "@/utils/promptCacheUsage";
+import i18n from "@/lib/i18n";
 import GuardrailViewer from "./sections/GuardrailViewer/GuardrailViewer";
 import EvalViewer from "./sections/EvalViewer/EvalViewer";
 import {
@@ -127,7 +128,7 @@ export function LogDetailContent({
         >
           <CircleAlert className="size-4 shrink-0 text-destructive" />
           <div>
-            <div className="font-medium text-destructive">Request Failed</div>
+            <div className="font-medium text-destructive">{i18n.t("viewLogs.logDetailContent.requestFailed", { defaultValue: "Request Failed" })}</div>
             <ErrorDescription errorInfo={errorInfo} />
           </div>
         </div>
@@ -142,34 +143,34 @@ export function LogDetailContent({
       <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
         <Card size="sm" style={{ marginBottom: 0 }}>
           <CardHeader>
-            <CardTitle>Request Details</CardTitle>
+            <CardTitle>{i18n.t("viewLogs.logDetailContent.requestDetails", { defaultValue: "Request Details" })}</CardTitle>
           </CardHeader>
           <CardContent>
             <DescriptionList>
-              <DescriptionItem label="Model">{logEntry.model}</DescriptionItem>
-              <DescriptionItem label="Provider">{logEntry.custom_llm_provider || "-"}</DescriptionItem>
-              <DescriptionItem label="Call Type">{logEntry.call_type}</DescriptionItem>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelModel", { defaultValue: "Model" })}>{logEntry.model}</DescriptionItem>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelProvider", { defaultValue: "Provider" })}>{logEntry.custom_llm_provider || "-"}</DescriptionItem>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelCallType", { defaultValue: "Call Type" })}>{logEntry.call_type}</DescriptionItem>
               {logEntry.user && (
-                <DescriptionItem label="User">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelUser", { defaultValue: "User" })}>
                   <UserIdentity userId={logEntry.user} email={userEmail} />
                 </DescriptionItem>
               )}
-              <DescriptionItem label="Model ID">
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelModelId", { defaultValue: "Model ID" })}>
                 <TruncatedValue value={logEntry.model_id} />
               </DescriptionItem>
-              <DescriptionItem label="API Base">
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelApiBase", { defaultValue: "API Base" })}>
                 <TruncatedValue value={logEntry.api_base} maxWidth={API_BASE_MAX_WIDTH} />
               </DescriptionItem>
               {logEntry.requester_ip_address && (
-                <DescriptionItem label="IP Address">{logEntry.requester_ip_address}</DescriptionItem>
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelIpAddress", { defaultValue: "IP Address" })}>{logEntry.requester_ip_address}</DescriptionItem>
               )}
               {typeof logEntry.metadata?.used_client_oauth_token === "boolean" && (
-                <DescriptionItem label="Credential">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelCredential", { defaultValue: "Credential" })}>
                   {CREDENTIAL_LABELS[String(logEntry.metadata.used_client_oauth_token)]}
                 </DescriptionItem>
               )}
               {hasGuardrailData && (
-                <DescriptionItem label="Guardrail">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelGuardrail", { defaultValue: "Guardrail" })}>
                   <GuardrailLabel label={primaryGuardrailLabel} maskedCount={totalMaskedEntities} />
                 </DescriptionItem>
               )}
@@ -321,12 +322,12 @@ function ErrorDescription({ errorInfo }: { errorInfo: any }) {
     <div>
       {errorInfo.error_code && (
         <div>
-          <span className="font-semibold">Error Code:</span> {errorInfo.error_code}
+          <span className="font-semibold">{i18n.t("viewLogs.logDetailContent.errorCode", { defaultValue: "Error Code:" })}</span> {errorInfo.error_code}
         </div>
       )}
       {errorInfo.error_message && (
         <div>
-          <span className="font-semibold">Message:</span> {errorInfo.error_message}
+          <span className="font-semibold">{i18n.t("viewLogs.logDetailContent.errorMessage", { defaultValue: "Message:" })}</span> {errorInfo.error_message}
         </div>
       )}
     </div>
@@ -389,10 +390,14 @@ function getUncachedInputTextTokens(metadata: Record<string, any>): number | und
   return Number.isFinite(n) ? n : undefined;
 }
 
-const RESPONSE_CACHE_TOOLTIP =
-  "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.";
-const CACHE_KEY_TOOLTIP =
-  "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.";
+const RESPONSE_CACHE_TOOLTIP = i18n.t("viewLogs.logDetailContent.responseCacheTooltip", {
+  defaultValue:
+    "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
+});
+const CACHE_KEY_TOOLTIP = i18n.t("viewLogs.logDetailContent.cacheKeyTooltip", {
+  defaultValue:
+    "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
+});
 
 function MetricLabel({ label, tooltip }: { label: string; tooltip: string }) {
   return (
@@ -426,21 +431,21 @@ function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metad
     <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
       <Card size="sm" style={{ marginBottom: 0 }}>
         <CardHeader>
-          <CardTitle>Batch Results</CardTitle>
+          <CardTitle>{i18n.t("viewLogs.logDetailContent.batchResults", { defaultValue: "Batch Results" })}</CardTitle>
         </CardHeader>
         <CardContent>
           <DescriptionList>
             {batchId && (
-              <DescriptionItem label="Batch ID">
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelBatchId", { defaultValue: "Batch ID" })}>
                 <TruncatedValue value={batchId} />
               </DescriptionItem>
             )}
             {counts && (
               <>
-                <DescriptionItem label="Successful Requests">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelSuccessfulRequests", { defaultValue: "Successful Requests" })}>
                   {formatNumberWithCommas(counts.successful)}
                 </DescriptionItem>
-                <DescriptionItem label="Failed Requests">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelFailedRequests", { defaultValue: "Failed Requests" })}>
                   {counts.failed > 0 ? (
                     <Badge variant="secondary" className="bg-destructive/15 text-destructive">
                       {formatNumberWithCommas(counts.failed)}
@@ -451,7 +456,7 @@ function BatchResultsSection({ logEntry, metadata }: { logEntry: LogEntry; metad
                 </DescriptionItem>
               </>
             )}
-            {batchModels && <DescriptionItem label="Models">{batchModels.join(", ")}</DescriptionItem>}
+            {batchModels && <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelModels", { defaultValue: "Models" })}>{batchModels.join(", ")}</DescriptionItem>}
           </DescriptionList>
         </CardContent>
       </Card>
@@ -482,19 +487,19 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
     <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6">
       <Card size="sm" style={{ marginBottom: 0 }}>
         <CardHeader>
-          <CardTitle>Metrics</CardTitle>
+          <CardTitle>{i18n.t("viewLogs.logDetailContent.metrics", { defaultValue: "Metrics" })}</CardTitle>
         </CardHeader>
         <CardContent>
           <DescriptionList>
             {showAnthropicMessagesInputOutput ? (
               <>
-                <DescriptionItem label="Input Tokens">{formatNumberWithCommas(uncachedInputTokens)}</DescriptionItem>
-                <DescriptionItem label="Output Tokens">
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelInputTokens", { defaultValue: "Input Tokens" })}>{formatNumberWithCommas(uncachedInputTokens)}</DescriptionItem>
+                <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelOutputTokens", { defaultValue: "Output Tokens" })}>
                   {formatNumberWithCommas(logEntry.completion_tokens)}
                 </DescriptionItem>
               </>
             ) : (
-              <DescriptionItem label="Tokens">
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelTokens", { defaultValue: "Tokens" })}>
                 <TokenFlow
                   prompt={logEntry.prompt_tokens}
                   completion={logEntry.completion_tokens}
@@ -503,33 +508,35 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               </DescriptionItem>
             )}
             {reasoningTokens !== undefined && reasoningTokens > 0 && (
-              <DescriptionItem label="Reasoning Tokens">{formatNumberWithCommas(reasoningTokens)}</DescriptionItem>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelReasoningTokens", { defaultValue: "Reasoning Tokens" })}>{formatNumberWithCommas(reasoningTokens)}</DescriptionItem>
             )}
-            <DescriptionItem label="Cost">¥{formatNumberWithCommas(logEntry.spend || 0, 8)}</DescriptionItem>
-            <DescriptionItem label="Duration">
+            <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelCost", { defaultValue: "Cost" })}>¥{formatNumberWithCommas(logEntry.spend || 0, 8)}</DescriptionItem>
+            <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelDuration", { defaultValue: "Duration" })}>
               {logEntry.request_duration_ms != null ? (logEntry.request_duration_ms / 1000).toFixed(3) : "-"} s
             </DescriptionItem>
             {ttftMs != null && ttftMs > 0 && (
-              <DescriptionItem label="Time to First Token">{(ttftMs / 1000).toFixed(3)} s</DescriptionItem>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelTimeToFirstToken", { defaultValue: "Time to First Token" })}>{(ttftMs / 1000).toFixed(3)} s</DescriptionItem>
             )}
 
             {showResponseCache && (
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label="Response Cache"
+                    label={i18n.t("viewLogs.logDetailContent.labelResponseCache", { defaultValue: "Response Cache" })}
                     tooltip={RESPONSE_CACHE_TOOLTIP}
                   />
                 }
               >
                 <Badge variant="secondary" className={isResponseCacheHit ? "bg-success/15 text-success" : undefined}>
-                  {isResponseCacheHit ? "Hit" : "Miss"}
+                  {isResponseCacheHit
+                    ? i18n.t("viewLogs.logDetailContent.cacheHitLabel", { defaultValue: "Hit" })
+                    : i18n.t("viewLogs.logDetailContent.cacheMissLabel", { defaultValue: "Miss" })}
                 </Badge>
               </DescriptionItem>
             )}
             {responseCacheKey && (
               <DescriptionItem
-                label={<MetricLabel label="Cache Key" tooltip={CACHE_KEY_TOOLTIP} />}
+                label={<MetricLabel label={i18n.t("viewLogs.logDetailContent.labelCacheKey", { defaultValue: "Cache Key" })} tooltip={CACHE_KEY_TOOLTIP} />}
               >
                 <TruncatedValue value={responseCacheKey} />
               </DescriptionItem>
@@ -538,7 +545,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label="Prompt Cache Read Tokens"
+                    label={i18n.t("viewLogs.logDetailContent.labelPromptCacheReadTokens", { defaultValue: "Prompt Cache Read Tokens" })}
                     tooltip={PROMPT_CACHE_READ_TOOLTIP}
                   />
                 }
@@ -550,7 +557,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               <DescriptionItem
                 label={
                   <MetricLabel
-                    label="Prompt Cache Creation Tokens"
+                    label={i18n.t("viewLogs.logDetailContent.labelPromptCacheCreationTokens", { defaultValue: "Prompt Cache Creation Tokens" })}
                     tooltip={PROMPT_CACHE_CREATION_TOOLTIP}
                   />
                 }
@@ -560,12 +567,12 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
             )}
 
             {metadata?.litellm_overhead_time_ms !== undefined && metadata.litellm_overhead_time_ms !== null && (
-              <DescriptionItem label="LiteLLM Overhead">
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelLitellmOverhead", { defaultValue: "LiteLLM Overhead" })}>
                 {metadata.litellm_overhead_time_ms.toFixed(2)} ms
               </DescriptionItem>
             )}
 
-            <DescriptionItem label="Retries">
+            <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelRetries", { defaultValue: "Retries" })}>
               {metadata?.attempted_retries != null && metadata.attempted_retries > 0 && (
                 <>
                   {metadata.attempted_retries}
@@ -576,16 +583,16 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
               )}
               {metadata?.attempted_retries != null && metadata.attempted_retries <= 0 && (
                 <Badge variant="secondary" className="bg-success/15 text-success">
-                  None
+                  {i18n.t("viewLogs.logDetailContent.retriesNone", { defaultValue: "None" })}
                 </Badge>
               )}
               {metadata?.attempted_retries == null && "-"}
             </DescriptionItem>
 
-            <DescriptionItem label="Start Time">
+            <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelStartTime", { defaultValue: "Start Time" })}>
               {moment(logEntry.startTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")}
             </DescriptionItem>
-            <DescriptionItem label="End Time">
+            <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelEndTime", { defaultValue: "End Time" })}>
               {moment(logEntry.endTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")}
             </DescriptionItem>
           </DescriptionList>
@@ -642,12 +649,12 @@ function RequestResponseSection({
                 <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
               )}
               <h3 className="text-lg font-medium text-foreground" style={{ margin: 0 }}>
-                Request & Response
+                {i18n.t("viewLogs.logDetailContent.requestAndResponse", { defaultValue: "Request & Response" })}
               </h3>
             </CollapsibleTrigger>
             <TabsList className="mr-4">
-              <TabsTrigger value="pretty">Pretty</TabsTrigger>
-              <TabsTrigger value="json">JSON</TabsTrigger>
+              <TabsTrigger value="pretty">{i18n.t("viewLogs.logDetailContent.viewPretty", { defaultValue: "Pretty" })}</TabsTrigger>
+              <TabsTrigger value="json">{i18n.t("viewLogs.logDetailContent.viewJson", { defaultValue: "JSON" })}</TabsTrigger>
             </TabsList>
           </div>
           <CollapsibleContent>
@@ -671,12 +678,12 @@ function RequestResponseSection({
                 >
                   <div className="flex items-center justify-between">
                     <TabsList>
-                      <TabsTrigger value={TAB_REQUEST}>Request</TabsTrigger>
-                      <TabsTrigger value={TAB_RESPONSE}>Response</TabsTrigger>
+                      <TabsTrigger value={TAB_REQUEST}>{i18n.t("viewLogs.logDetailContent.tabRequest", { defaultValue: "Request" })}</TabsTrigger>
+                      <TabsTrigger value={TAB_RESPONSE}>{i18n.t("viewLogs.logDetailContent.tabResponse", { defaultValue: "Response" })}</TabsTrigger>
                     </TabsList>
                     <CopyButton
                       getText={getCopyText}
-                      label="Copy JSON"
+                      label={i18n.t("viewLogs.logDetailContent.copyJson", { defaultValue: "Copy JSON" })}
                       disabled={activeTab === TAB_RESPONSE && !hasResponse && !hasError}
                     />
                   </div>
@@ -779,12 +786,12 @@ function MetadataSection({ metadata }: { metadata: Record<string, any> }) {
           ) : (
             <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
           )}
-          <h3 className="text-lg font-medium text-foreground">Metadata</h3>
+          <h3 className="text-lg font-medium text-foreground">{i18n.t("viewLogs.logDetailContent.metadata", { defaultValue: "Metadata" })}</h3>
         </CollapsibleTrigger>
         <CollapsibleContent>
           <div>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-              <CopyButton getText={() => JSON.stringify(metadata, null, 2)} label="Copy Metadata" />
+              <CopyButton getText={() => JSON.stringify(metadata, null, 2)} label={i18n.t("viewLogs.logDetailContent.copyMetadata", { defaultValue: "Copy Metadata" })} />
             </div>
             <pre
               style={{

@@ -3800,7 +3800,9 @@
       "masked": "{{count}} masked",
       "promptCacheCreationTooltip": "Input tokens written to the LLM provider's prompt cache for reuse by later requests.",
       "promptCacheReadTooltip": "Input tokens read from the LLM provider's prompt cache (e.g. Anthropic / OpenAI), billed at a discounted rate. Reported by the provider.",
-      "responseCacheTooltip": "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed."
+      "responseCacheTooltip": "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
+      "labelUser": "User",
+      "labelCredential": "Credential"
     },
     "logDetailsDrawer": {
       "collapseTraceSidebar": "Collapse trace sidebar",

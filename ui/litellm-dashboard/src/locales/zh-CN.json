@@ -3800,7 +3800,9 @@
       "masked": "{{count}} 个已脱敏",
       "promptCacheCreationTooltip": "写入 LLM 提供商提示词缓存、供后续请求复用的输入令牌。",
       "promptCacheReadTooltip": "从 LLM 提供商的提示词缓存（例如 Anthropic / OpenAI）读取的输入令牌，按折扣价格计费。由提供商上报。",
-      "responseCacheTooltip": "该请求是否由 LiteLLM 的响应缓存（例如 Redis / 内存缓存）返回，从而完全跳过 LLM 提供商调用。这与提供商的提示词缓存无关，此处显示未命中并不代表提示词缓存失败。"
+      "responseCacheTooltip": "该请求是否由 LiteLLM 的响应缓存（例如 Redis / 内存缓存）返回，从而完全跳过 LLM 提供商调用。这与提供商的提示词缓存无关，此处显示未命中并不代表提示词缓存失败。",
+      "labelUser": "用户",
+      "labelCredential": "凭证"
     },
     "logDetailsDrawer": {
       "collapseTraceSidebar": "收起追踪侧边栏",
