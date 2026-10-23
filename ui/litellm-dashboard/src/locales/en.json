@@ -9088,7 +9088,21 @@
       "rateLimitsTooltip": "Rate limits for this member's usage within this team.",
       "roleColumnTitle": "Team Role",
       "roleTooltip": "This role applies only to this team and is independent from the user's proxy-level role.",
-      "labelInfoAria": "{{label}} information"
+      "labelInfoAria": "{{label}} information",
+      "teamDefault": "Team default",
+      "custom": "Custom",
+      "memberBudgetTooltip": "Team default follows the team's member budget, so changing it in team settings updates this member too. Custom is set on this member only and ignores later team changes.",
+      "useTeamDefault": "Use team default",
+      "spendResetToast": "Team member spend reset to ¥0",
+      "budgetResetToast": "Team member budget reset to the team default",
+      "askProxyAdminReset": "Ask a proxy admin to reset your own spend",
+      "noSpendToReset": "No current cycle spend to reset",
+      "resetSpendTitle": "Reset Team Member Spend",
+      "resetSpendBody": "Reset current cycle spend for <strong>{{user}}</strong> in this team to <strong>¥0</strong>?",
+      "resetSpendDetail": "Current cycle spend: <strong>¥{{spend}}</strong>. This is the value checked against the member's budget. Total spend and logs are preserved.",
+      "resetBudgetTitle": "Reset Team Member Budget",
+      "resetBudgetBody": "Remove the custom budget for <strong>{{user}}</strong> and put them back on the team default of <strong>{{budget}}</strong>?",
+      "resetBudgetDetail": "Custom budget: <strong>{{budget}}</strong>. Their spend is kept. Future changes to the team's member budget will apply to them again."
     },
     "teamVirtualKeysTable": {
       "colKeyId": "Key ID",

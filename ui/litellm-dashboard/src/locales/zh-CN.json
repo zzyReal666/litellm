@@ -9088,7 +9088,21 @@
       "rateLimitsTooltip": "该成员在此团队内的速率限制。",
       "roleColumnTitle": "团队角色",
       "roleTooltip": "此角色仅适用于当前团队，与用户的代理级角色相互独立。",
-      "labelInfoAria": "{{label}} 信息"
+      "labelInfoAria": "{{label}} 信息",
+      "teamDefault": "团队默认",
+      "custom": "自定义",
+      "memberBudgetTooltip": "团队默认沿用团队的成员预算，因此在团队设置中修改预算也会更新此成员。自定义仅针对该成员设置，之后团队预算的变动不会影响它。",
+      "useTeamDefault": "使用团队默认",
+      "spendResetToast": "团队成员花费已重置为 ¥0",
+      "budgetResetToast": "团队成员预算已重置为团队默认值",
+      "askProxyAdminReset": "请让代理管理员重置你自己的花费",
+      "noSpendToReset": "没有可重置的本周期花费",
+      "resetSpendTitle": "重置团队成员花费",
+      "resetSpendBody": "将此团队中 <strong>{{user}}</strong> 的本周期花费重置为 <strong>¥0</strong>？",
+      "resetSpendDetail": "本周期花费：<strong>¥{{spend}}</strong>。这是与成员预算比对的值。总花费与日志将保留。",
+      "resetBudgetTitle": "重置团队成员预算",
+      "resetBudgetBody": "移除 <strong>{{user}}</strong> 的自定义预算，并将其恢复为团队默认值 <strong>{{budget}}</strong>？",
+      "resetBudgetDetail": "自定义预算：<strong>{{budget}}</strong>。其花费将保留。今后对团队成员预算的更改会再次应用于该成员。"
     },
     "teamVirtualKeysTable": {
       "colKeyId": "密钥 ID",
