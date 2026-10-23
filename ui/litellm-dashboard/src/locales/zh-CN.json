@@ -12779,7 +12779,10 @@
       "loadingRuns": "正在加载运行…",
       "couldNotLoadMoreRuns": "无法加载更多运行",
       "couldNotLoadRuns": "无法加载运行",
-      "loadOlderRuns": "加载更早的运行"
+      "loadOlderRuns": "加载更早的运行",
+      "colAgents": "代理数",
+      "colFindings": "发现",
+      "colFeedback": "反馈"
     },
     "findingDetails": {
       "closeFinding": "关闭发现（Esc）",

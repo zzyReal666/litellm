@@ -12779,7 +12779,10 @@
       "loadingRuns": "Loading runs…",
       "couldNotLoadMoreRuns": "Could not load more runs",
       "couldNotLoadRuns": "Could not load runs",
-      "loadOlderRuns": "Load older runs"
+      "loadOlderRuns": "Load older runs",
+      "colAgents": "Agents",
+      "colFindings": "Findings",
+      "colFeedback": "Feedback"
     },
     "findingDetails": {
       "closeFinding": "Close finding (Esc)",
