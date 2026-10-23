@@ -12850,5 +12850,32 @@
     "trustModelHint": "Use a model you trust with your gateway data.",
     "askAboutGateway": "Ask about your gateway. Review changes in chat.",
     "closeLiteAdmin": "Close LiteAdmin"
+  },
+  "moyaiLanding": {
+    "quickConnectError": "Enter a full http or https URL, without credentials",
+    "quickConnectFailed": "Could not start quick connect",
+    "quickConnect": "Quick connect",
+    "quickConnectTitle": "Quick connect Moyai",
+    "moyaiUrl": "Moyai URL",
+    "confirmNote": "You'll confirm on your Moyai workspace as an admin, then come straight back",
+    "connecting": "Connecting",
+    "connect": "Connect",
+    "statCheaper": "cheaper than our Devin bill",
+    "statProviders": "providers through LiteLLM",
+    "statHarnesses": "agent harnesses",
+    "nowOpenSource": "Now open source",
+    "tagline": "The open source cloud coding agent",
+    "alreadyHaveMoyai": "Already have Moyai deployed?",
+    "askProxyAdmin": "Already have Moyai deployed? Ask a proxy admin to connect it",
+    "worksWith": "Works with Claude Code and Codex",
+    "selfHosted": "Self-hosted · 100+ providers through LiteLLM",
+    "seeItInAction": "See it in action",
+    "seeItDescription": "Give it a task from Slack or the browser. It edits code, runs your tests in its own cloud workspace, and opens a pull request while your laptop is closed.",
+    "anyHarness": "Any harness",
+    "anyHarnessFootnote": "Pick the harness per session. Same workspace, tools and permissions.",
+    "anyModel": "Any model, any provider",
+    "anyModelFootnote": "Routed through your LiteLLM gateway, with spend tracked per teammate.",
+    "runOwnAgent": "Run your own cloud agent",
+    "runOwnDescription": "Deploy it on your own infrastructure and point it at this gateway. Your code and credentials stay in your accounts."
   }
 }

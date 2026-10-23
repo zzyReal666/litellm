@@ -18,6 +18,7 @@ import { PLANET_HORIZON, prefersReducedMotion, startPlanetrise, startStarfield }
 import { normalizeMoyaiUrl } from "./moyaiConnect";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import styles from "./MoyaiLanding.module.css";
+import i18n from "@/lib/i18n";
 
 export const MOYAI_GITHUB_URL = "https://github.com/BerriAI/moyai";
 
@@ -174,7 +175,7 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
   const connect = async () => {
     const normalized = normalizeMoyaiUrl(url);
     if (!normalized) {
-      setError("Enter a full http or https URL, without credentials");
+      setError(i18n.t("moyaiLanding.quickConnectError", { defaultValue: "Enter a full http or https URL, without credentials" }));
       return;
     }
     setError(null);
@@ -182,7 +183,7 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
     try {
       await onQuickConnect(normalized);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not start quick connect");
+      setError(e instanceof Error ? e.message : i18n.t("moyaiLanding.quickConnectFailed", { defaultValue: "Could not start quick connect" }));
       setPending(false);
     }
   };
@@ -198,16 +199,16 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
         }
       >
         <Plug aria-hidden className="size-4 text-[#cfe3ff]" />
-        Quick connect
+        {i18n.t("moyaiLanding.quickConnect", { defaultValue: "Quick connect" })}
         <ArrowRight aria-hidden className="size-4" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Quick connect Moyai</DialogTitle>
+          <DialogTitle>{i18n.t("moyaiLanding.quickConnectTitle", { defaultValue: "Quick connect Moyai" })}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-2">
           <label htmlFor="moyai-quick-connect-url" className="text-sm font-medium">
-            Moyai URL
+            {i18n.t("moyaiLanding.moyaiUrl", { defaultValue: "Moyai URL" })}
           </label>
           <input
             id="moyai-quick-connect-url"
@@ -218,7 +219,7 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
             className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
           />
           <p className="m-0 text-xs text-muted-foreground">
-            You&rsquo;ll confirm on your Moyai workspace as an admin, then come straight back
+            {i18n.t("moyaiLanding.confirmNote", { defaultValue: "You'll confirm on your Moyai workspace as an admin, then come straight back" })}
           </p>
           {error && (
             <p role="alert" className="m-0 text-xs text-red-500">
@@ -233,7 +234,7 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
             onClick={connect}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
           >
-            {pending ? "Connecting" : "Connect"}
+            {pending ? i18n.t("moyaiLanding.connecting", { defaultValue: "Connecting" }) : i18n.t("moyaiLanding.connect", { defaultValue: "Connect" })}
           </button>
         </div>
       </DialogContent>
@@ -242,9 +243,9 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
 }
 
 const STATS = [
-  { value: "79%", label: "cheaper than our Devin bill" },
-  { value: "100+", label: "providers through LiteLLM" },
-  { value: "6", label: "agent harnesses" },
+  { value: "79%", label: i18n.t("moyaiLanding.statCheaper", { defaultValue: "cheaper than our Devin bill" }) },
+  { value: "100+", label: i18n.t("moyaiLanding.statProviders", { defaultValue: "providers through LiteLLM" }) },
+  { value: "6", label: i18n.t("moyaiLanding.statHarnesses", { defaultValue: "agent harnesses" }) },
 ];
 
 export default function MoyaiLanding({
@@ -271,7 +272,7 @@ export default function MoyaiLanding({
             className={`${styles.rise} mb-5 inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-[rgba(220,228,255,0.75)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]`}
           >
             <span className="size-1.5 rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
-            Now open source
+            {i18n.t("moyaiLanding.nowOpenSource", { defaultValue: "Now open source" })}
           </div>
           <h1
             className={`${styles.rise} m-0 flex flex-col items-center text-[clamp(56px,min(8vw,11vh),112px)] font-medium leading-none tracking-[-0.04em] text-white [text-shadow:0_0_40px_rgba(3,4,8,0.9)]`}
@@ -284,7 +285,7 @@ export default function MoyaiLanding({
             className={`${styles.rise} mb-0 mt-3 text-[clamp(18px,1.8vw,26px)] tracking-[-0.01em] text-[rgba(226,234,255,0.86)]`}
             style={{ animationDelay: "0.16s" }}
           >
-            The open source cloud coding agent
+            {i18n.t("moyaiLanding.tagline", { defaultValue: "The open source cloud coding agent" })}
           </p>
           <div
             className={`${styles.rise} mt-6 text-[15px] text-[rgba(226,234,255,0.82)]`}
@@ -292,11 +293,11 @@ export default function MoyaiLanding({
           >
             {canQuickConnect && onQuickConnect ? (
               <span className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full bg-white/[0.05] py-1.5 pl-5 pr-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)] backdrop-blur">
-                Already have Moyai deployed?
+                {i18n.t("moyaiLanding.alreadyHaveMoyai", { defaultValue: "Already have Moyai deployed?" })}
                 <QuickConnectDialog onQuickConnect={onQuickConnect} />
               </span>
             ) : (
-              <span>Already have Moyai deployed? Ask a proxy admin to connect it</span>
+              <span>{i18n.t("moyaiLanding.askProxyAdmin", { defaultValue: "Already have Moyai deployed? Ask a proxy admin to connect it" })}</span>
             )}
           </div>
         </div>
@@ -314,9 +315,9 @@ export default function MoyaiLanding({
 
         <div className="absolute inset-x-0 bottom-[6vh] z-chrome flex flex-col items-center gap-1 px-6 text-center [text-shadow:0_0_30px_rgba(3,4,8,0.95)]">
           <span className="text-[clamp(18px,2vw,28px)] font-medium tracking-[-0.02em] text-white">
-            Works with Claude Code and Codex
+            {i18n.t("moyaiLanding.worksWith", { defaultValue: "Works with Claude Code and Codex" })}
           </span>
-          <span className="text-[15px] text-[rgba(240,236,228,0.8)]">Self-hosted · 100+ providers through LiteLLM</span>
+          <span className="text-[15px] text-[rgba(240,236,228,0.8)]">{i18n.t("moyaiLanding.selfHosted", { defaultValue: "Self-hosted · 100+ providers through LiteLLM" })}</span>
         </div>
       </section>
 
@@ -336,23 +337,22 @@ export default function MoyaiLanding({
         </div>
 
         <h2 className="mb-3 mt-20 text-center text-[clamp(28px,3.2vw,44px)] font-medium leading-tight tracking-[-0.03em] text-white">
-          See it in action
+          {i18n.t("moyaiLanding.seeItInAction", { defaultValue: "See it in action" })}
         </h2>
         <p className="mx-auto mb-8 mt-0 max-w-2xl text-center text-[17px] text-[#c2c6d0]">
-          Give it a task from Slack or the browser. It edits code, runs your tests in its own cloud workspace, and opens
-          a pull request while your laptop is closed.
+          {i18n.t("moyaiLanding.seeItDescription", { defaultValue: "Give it a task from Slack or the browser. It edits code, runs your tests in its own cloud workspace, and opens a pull request while your laptop is closed." })}
         </p>
 
         <div className="mt-16 grid gap-4 md:grid-cols-2">
           <LogoWall
-            title="Any harness"
+            title={i18n.t("moyaiLanding.anyHarness", { defaultValue: "Any harness" })}
             items={HARNESSES}
-            footnote="Pick the harness per session. Same workspace, tools and permissions."
+            footnote={i18n.t("moyaiLanding.anyHarnessFootnote", { defaultValue: "Pick the harness per session. Same workspace, tools and permissions." })}
           />
           <LogoWall
-            title="Any model, any provider"
+            title={i18n.t("moyaiLanding.anyModel", { defaultValue: "Any model, any provider" })}
             items={PROVIDERS}
-            footnote="Routed through your LiteLLM gateway, with spend tracked per teammate."
+            footnote={i18n.t("moyaiLanding.anyModelFootnote", { defaultValue: "Routed through your LiteLLM gateway, with spend tracked per teammate." })}
           />
         </div>
 
@@ -363,11 +363,10 @@ export default function MoyaiLanding({
           />
           <img src={moyaiHead.src} alt="" className={`${styles.mark} relative z-raised mx-auto mb-4 h-14 w-auto`} />
           <h2 className="relative z-raised m-0 text-[clamp(26px,3vw,40px)] font-medium tracking-[-0.03em] text-white">
-            Run your own cloud agent
+            {i18n.t("moyaiLanding.runOwnAgent", { defaultValue: "Run your own cloud agent" })}
           </h2>
           <p className="relative z-raised mx-auto mb-7 mt-3 max-w-xl text-[16px] text-[#c2c6d0]">
-            Deploy it on your own infrastructure and point it at this gateway. Your code and credentials stay in your
-            accounts.
+            {i18n.t("moyaiLanding.runOwnDescription", { defaultValue: "Deploy it on your own infrastructure and point it at this gateway. Your code and credentials stay in your accounts." })}
           </p>
           <code className="relative z-raised mx-auto mb-8 block w-fit max-w-full overflow-x-auto rounded-xl bg-black/50 px-5 py-3 text-left font-mono text-sm text-[#cfe3ff] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]">
             git clone {MOYAI_GITHUB_URL}.git

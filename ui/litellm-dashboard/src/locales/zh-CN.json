@@ -12850,5 +12850,32 @@
     "trustModelHint": "请使用你信任其访问网关数据的模型。",
     "askAboutGateway": "询问你的网关，在对话中审阅更改。",
     "closeLiteAdmin": "关闭 LiteAdmin"
+  },
+  "moyaiLanding": {
+    "quickConnectError": "请输入完整的 http 或 https URL，且不包含凭据",
+    "quickConnectFailed": "无法启动快速连接",
+    "quickConnect": "快速连接",
+    "quickConnectTitle": "快速连接 Moyai",
+    "moyaiUrl": "Moyai URL",
+    "confirmNote": "你将以管理员身份在你的 Moyai 工作区确认，然后直接返回",
+    "connecting": "正在连接",
+    "connect": "连接",
+    "statCheaper": "比我们的 Devin 账单更便宜",
+    "statProviders": "通过 LiteLLM 接入的提供商",
+    "statHarnesses": "种 agent 框架",
+    "nowOpenSource": "现已开源",
+    "tagline": "开源云端编程 agent",
+    "alreadyHaveMoyai": "已经部署了 Moyai？",
+    "askProxyAdmin": "已经部署了 Moyai？请让代理管理员来连接",
+    "worksWith": "兼容 Claude Code 与 Codex",
+    "selfHosted": "自托管 · 通过 LiteLLM 接入 100+ 提供商",
+    "seeItInAction": "观看实际效果",
+    "seeItDescription": "从 Slack 或浏览器给它下达任务。它会编辑代码、在它自己的云工作区运行测试，并在你合上笔记本电脑时发起拉取请求。",
+    "anyHarness": "任意框架",
+    "anyHarnessFootnote": "每个会话可选择框架。工作区、工具与权限保持一致。",
+    "anyModel": "任意模型、任意提供商",
+    "anyModelFootnote": "通过你的 LiteLLM 网关路由，并按成员追踪花费。",
+    "runOwnAgent": "运行你自己的云端 agent",
+    "runOwnDescription": "将其部署在你自己的基础设施上并指向此网关。你的代码与凭据保留在你自己的账户中。"
   }
 }
