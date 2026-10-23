@@ -11376,7 +11376,25 @@
       "grillSession": "grill session",
       "metaState": "state",
       "metaWorktree": "worktree",
-      "metaSession": "session"
+      "metaSession": "session",
+      "statusPending": "Pending",
+      "statusRunning": "Running",
+      "statusPaused": "Paused",
+      "statusCompleted": "Completed",
+      "statusFailed": "Failed",
+      "metaStatus": "status",
+      "metaCreated": "created",
+      "metaPr": "pr",
+      "loadingRuns": "Loading workflow runs…",
+      "searchRuns": "Search runs…",
+      "filters": "Filters",
+      "narrowDown": "Narrow down workflow runs",
+      "allStatuses": "All statuses",
+      "filterByType": "Filter by type…",
+      "workflowRunDetails": "Workflow run details",
+      "drawerDescription": "Metadata, timeline and messages for the selected workflow run",
+      "close": "close",
+      "refresh": "Refresh"
     }
   },
   "pages": {

@@ -16,6 +16,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 
 interface WorkflowRunsProps {
   accessToken: string | null;
@@ -71,11 +72,11 @@ const STATUS_DOT: Record<RunStatus, string> = {
 
 const RUN_STATUS_OPTIONS: RunStatus[] = ["pending", "running", "paused", "completed", "failed"];
 const STATUS_LABELS: Record<RunStatus, string> = {
-  pending: "Pending",
-  running: "Running",
-  paused: "Paused",
-  completed: "Completed",
-  failed: "Failed",
+  pending: i18n.t("workflowRuns.index.statusPending", { defaultValue: "Pending" }),
+  running: i18n.t("workflowRuns.index.statusRunning", { defaultValue: "Running" }),
+  paused: i18n.t("workflowRuns.index.statusPaused", { defaultValue: "Paused" }),
+  completed: i18n.t("workflowRuns.index.statusCompleted", { defaultValue: "Completed" }),
+  failed: i18n.t("workflowRuns.index.statusFailed", { defaultValue: "Failed" }),
 };
 
 const EVENT_COLOR: Record<string, { bar: string; text: string }> = {
@@ -138,7 +139,7 @@ const TruncatedValue: React.FC<{ value: string }> = ({ value }) => {
     <span className="break-all text-foreground">
       {expanded ? value : value.slice(0, TRUNCATE_AT) + "…"}
       <Button variant="link" size="xs" className="h-auto px-1 py-0 text-[11px]" onClick={() => setExpanded((e) => !e)}>
-        {expanded ? "less" : "more"}
+        {expanded ? i18n.t("workflowRuns.index.less", { defaultValue: "less" }) : i18n.t("workflowRuns.index.more", { defaultValue: "more" })}
       </Button>
     </span>
   );
@@ -150,10 +151,10 @@ const MetadataCard: React.FC<{ run: WorkflowRun }> = ({ run }) => {
   const meta = run.metadata ?? {};
 
   const primaryFields: { key: string; label: string }[] = [
-    { key: "state", label: "state" },
-    { key: "worktree_path", label: "worktree" },
-    { key: "grill_session_id", label: "grill session" },
-    { key: "session_id", label: "session" },
+    { key: "state", label: i18n.t("workflowRuns.index.metaState", { defaultValue: "state" }) },
+    { key: "worktree_path", label: i18n.t("workflowRuns.index.metaWorktree", { defaultValue: "worktree" }) },
+    { key: "grill_session_id", label: i18n.t("workflowRuns.index.grillSession", { defaultValue: "grill session" }) },
+    { key: "session_id", label: i18n.t("workflowRuns.index.metaSession", { defaultValue: "session" }) },
   ];
 
   const primaryKeys = new Set(["title", ...primaryFields.map((f) => f.key)]);
@@ -175,15 +176,15 @@ const MetadataCard: React.FC<{ run: WorkflowRun }> = ({ run }) => {
 
       {/* key fields grid */}
       <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-x-6 gap-y-2 px-5 py-3 font-mono text-xs">
-        <FieldPair label="status">
+        <FieldPair label={i18n.t("workflowRuns.index.metaStatus", { defaultValue: "status" })}>
           <span className="capitalize text-foreground">{run.status}</span>
         </FieldPair>
-        <FieldPair label="created">
+        <FieldPair label={i18n.t("workflowRuns.index.metaCreated", { defaultValue: "created" })}>
           <span className="text-foreground">{timeAgo(run.created_at)}</span>
         </FieldPair>
 
         {meta.pr_url && (
-          <FieldPair label="pr">
+          <FieldPair label={i18n.t("workflowRuns.index.metaPr", { defaultValue: "pr" })}>
             <a
               href={String(meta.pr_url)}
               target="_blank"
@@ -233,7 +234,7 @@ const GanttTimeline: React.FC<{
   events: WorkflowRunEvent[];
 }> = ({ run, events }) => {
   if (events.length === 0) {
-    return <div className="py-4 font-mono text-xs text-muted-foreground">No events recorded</div>;
+    return <div className="py-4 font-mono text-xs text-muted-foreground">{i18n.t("workflowRuns.index.noEvents", { defaultValue: "No events recorded" })}</div>;
   }
 
   const runStart = new Date(run.created_at).getTime();
@@ -455,8 +456,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       {
         id: "run",
         accessorFn: (row) => `${runTitle(row)} ${row.run_id}`,
-        header: "Run",
-        meta: { title: "Run", skeleton: "twoLine" },
+        header: i18n.t("workflowRuns.index.colRun", { defaultValue: "Run" }),
+        meta: { title: i18n.t("workflowRuns.index.colRun", { defaultValue: "Run" }), skeleton: "twoLine" },
         cell: ({ row }) => {
           const run = row.original;
           return (
@@ -472,8 +473,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       },
       {
         accessorKey: "workflow_type",
-        header: "Type",
-        meta: { title: "Type" },
+        header: i18n.t("workflowRuns.index.colType", { defaultValue: "Type" }),
+        meta: { title: i18n.t("workflowRuns.index.colType", { defaultValue: "Type" }) },
         filterFn: "includesString",
         cell: ({ row }) => (
           <span className="font-mono text-xs text-muted-foreground">{row.original.workflow_type}</span>
@@ -482,8 +483,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       {
         id: "status",
         accessorKey: "status",
-        header: "Status",
-        meta: { title: "Status" },
+        header: i18n.t("workflowRuns.index.colStatus", { defaultValue: "Status" }),
+        meta: { title: i18n.t("workflowRuns.index.colStatus", { defaultValue: "Status" }) },
         filterFn: "equalsString",
         cell: ({ row }) => {
           const run = row.original;
@@ -497,8 +498,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
       },
       {
         accessorKey: "created_at",
-        header: "Created",
-        meta: { title: "Created" },
+        header: i18n.t("workflowRuns.index.colCreated", { defaultValue: "Created" }),
+        meta: { title: i18n.t("workflowRuns.index.colCreated", { defaultValue: "Created" }) },
         cell: ({ row }) => <span className="text-xs text-muted-foreground">{timeAgo(row.original.created_at)}</span>,
       },
     ],
@@ -509,9 +510,9 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
     <div className="w-full px-8 py-6">
       {/* page header */}
       <div className="mb-5">
-        <div className="text-lg font-semibold text-foreground">Workflow Runs</div>
+        <div className="text-lg font-semibold text-foreground">{i18n.t("workflowRuns.index.pageTitle", { defaultValue: "Workflow Runs" })}</div>
         <div className="mt-0.5 text-[13px] text-muted-foreground">
-          Durable state tracking for agents and automated workflows
+          {i18n.t("workflowRuns.index.pageSubtitle", { defaultValue: "Durable state tracking for agents and automated workflows" })}
         </div>
       </div>
 
@@ -520,8 +521,8 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
         columns={columns}
         getRowId={(run) => run.run_id}
         isLoading={loadingRuns}
-        loadingMessage="Loading workflow runs…"
-        noDataMessage={<div className="py-6 text-center text-[13px] text-muted-foreground">No workflow runs yet</div>}
+        loadingMessage={i18n.t("workflowRuns.index.loadingRuns", { defaultValue: "Loading workflow runs…" })}
+        noDataMessage={<div className="py-6 text-center text-[13px] text-muted-foreground">{i18n.t("workflowRuns.index.noRunsYet", { defaultValue: "No workflow runs yet" })}</div>}
         paginationMode="client"
         pageSizeOptions={[50, 100]}
         filterMode="client"
@@ -537,7 +538,7 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               table={table}
               searchValue={globalFilter}
               onSearchChange={setGlobalFilter}
-              searchPlaceholder="Search runs…"
+              searchPlaceholder={i18n.t("workflowRuns.index.searchRuns", { defaultValue: "Search runs…" })}
               onRefresh={fetchRuns}
               isRefreshing={loadingRuns}
               onOpenFilters={() => setFiltersOpen(true)}
@@ -546,22 +547,22 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
-              description="Narrow down workflow runs"
+              title={i18n.t("workflowRuns.index.filters", { defaultValue: "Filters" })}
+              description={i18n.t("workflowRuns.index.narrowDown", { defaultValue: "Narrow down workflow runs" })}
             >
               {({ get, set }) => (
                 <>
-                  <DataTableFilterField label="Status">
+                  <DataTableFilterField label={i18n.t("workflowRuns.index.colStatus", { defaultValue: "Status" })}>
                     <Select
                       items={STATUS_LABELS}
                       value={(get("status") as string) || null}
                       onValueChange={(value: string | null) => set("status", value ?? "")}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="All statuses" />
+                        <SelectValue placeholder={i18n.t("workflowRuns.index.allStatuses", { defaultValue: "All statuses" })} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All statuses</SelectItem>
+                        <SelectItem value={null}>{i18n.t("workflowRuns.index.allStatuses", { defaultValue: "All statuses" })}</SelectItem>
                         {RUN_STATUS_OPTIONS.map((status) => (
                           <SelectItem key={status} value={status}>
                             {STATUS_LABELS[status]}
@@ -570,11 +571,11 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                       </SelectContent>
                     </Select>
                   </DataTableFilterField>
-                  <DataTableFilterField label="Type">
+                  <DataTableFilterField label={i18n.t("workflowRuns.index.colType", { defaultValue: "Type" })}>
                     <Input
                       value={(get("workflow_type") as string) ?? ""}
                       onChange={(event) => set("workflow_type", event.target.value)}
-                      placeholder="Filter by type…"
+                      placeholder={i18n.t("workflowRuns.index.filterByType", { defaultValue: "Filter by type…" })}
                     />
                   </DataTableFilterField>
                 </>
@@ -590,9 +591,9 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
           showCloseButton={false}
           className="overflow-y-auto p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-[680px]"
         >
-          <SheetTitle className="sr-only">Workflow run details</SheetTitle>
+          <SheetTitle className="sr-only">{i18n.t("workflowRuns.index.workflowRunDetails", { defaultValue: "Workflow run details" })}</SheetTitle>
           <SheetDescription className="sr-only">
-            Metadata, timeline and messages for the selected workflow run
+            {i18n.t("workflowRuns.index.drawerDescription", { defaultValue: "Metadata, timeline and messages for the selected workflow run" })}
           </SheetDescription>
           {!selectedRun ? null : loadingDetail ? (
             <div className="flex justify-center py-20">
@@ -609,11 +610,11 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
                   onClick={() => setDrawerOpen(false)}
                 >
                   <ArrowLeft />
-                  close
+                  {i18n.t("workflowRuns.index.close", { defaultValue: "close" })}
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => fetchRunDetail(selectedRun)}>
                   <RefreshCw />
-                  Refresh
+                  {i18n.t("workflowRuns.index.refresh", { defaultValue: "Refresh" })}
                 </Button>
               </div>
 
@@ -623,19 +624,15 @@ const WorkflowRuns: React.FC<WorkflowRunsProps> = ({ accessToken }) => {
               {/* collapsible sections */}
               <div className="divide-y overflow-hidden rounded-lg border">
                 <DetailSection
-                  title="Timeline"
-                  meta={
-                    <>
-                      {events.length} {events.length === 1 ? "event" : "events"}
-                    </>
-                  }
+                  title={i18n.t("workflowRuns.index.timeline", { defaultValue: "Timeline" })}
+                  meta={i18n.t("workflowRuns.index.eventCount", { count: events.length })}
                   defaultOpen
                 >
                   <GanttTimeline run={selectedRun} events={events} />
                 </DetailSection>
-                <DetailSection title="Messages" meta={messages.length}>
+                <DetailSection title={i18n.t("workflowRuns.index.messages", { defaultValue: "Messages" })} meta={messages.length}>
                   {messages.length === 0 ? (
-                    <div className="py-3 font-mono text-xs text-muted-foreground">No messages</div>
+                    <div className="py-3 font-mono text-xs text-muted-foreground">{i18n.t("workflowRuns.index.noMessages", { defaultValue: "No messages" })}</div>
                   ) : (
                     <div>
                       {messages.map((msg) => (

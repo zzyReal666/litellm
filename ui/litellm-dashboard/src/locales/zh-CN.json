@@ -11376,7 +11376,25 @@
       "grillSession": "grill session",
       "metaState": "状态",
       "metaWorktree": "工作树",
-      "metaSession": "会话"
+      "metaSession": "会话",
+      "statusPending": "待处理",
+      "statusRunning": "运行中",
+      "statusPaused": "已暂停",
+      "statusCompleted": "已完成",
+      "statusFailed": "失败",
+      "metaStatus": "状态",
+      "metaCreated": "创建时间",
+      "metaPr": "pr",
+      "loadingRuns": "正在加载工作流运行…",
+      "searchRuns": "搜索运行…",
+      "filters": "筛选",
+      "narrowDown": "缩小工作流运行范围",
+      "allStatuses": "全部状态",
+      "filterByType": "按类型筛选…",
+      "workflowRunDetails": "工作流运行详情",
+      "drawerDescription": "所选工作流运行的元数据、时间线和消息",
+      "close": "关闭",
+      "refresh": "刷新"
     }
   },
   "pages": {
