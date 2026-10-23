@@ -13180,6 +13180,21 @@
       "workerLabel": "Worker",
       "and": " and ",
       "validResultsPreserved": "Valid results are preserved."
+    },
+    "runsTab": {
+      "notReviewed": "Not reviewed",
+      "insufficientEvidence": "Insufficient evidence",
+      "issueObserved": "Issue observed",
+      "noIssueObserved": "No issue observed",
+      "selectedFrom": "{{selected}} selected from {{eligible}} matching runs",
+      "filterReviewedRunsAria": "Filter reviewed runs",
+      "allOutcomes": "All outcomes",
+      "insufficientOrNotReviewed": "Insufficient evidence or not reviewed",
+      "expectedBehaviorDeviation": "Expected behavior deviation",
+      "noRunsMatchOutcome": "No runs match this outcome.",
+      "selectedActivityAppears": "Selected activity appears here when the worker starts reviewing it.",
+      "previousRuns": "Previous runs",
+      "nextRuns": "Next runs"
     }
   },
   "mcpServerCredentials": {

@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { Inspector } from "@/components/shared/Inspector";
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
+import i18n from "@/lib/i18n";
 
 import { runTime } from "../../model/format";
 import { type Job, type Lens } from "../../model/types";
@@ -22,9 +23,9 @@ interface RunRef {
 const runKey = (run: RunRef): string => run.id;
 
 function assessmentLabel(assessment: Job["assessments"][number] | undefined): string {
-  if (!assessment) return "Not reviewed";
-  if (assessment.cannot_assess) return "Insufficient evidence";
-  return assessment.issue_checks?.length ? "Issue observed" : "No issue observed";
+  if (!assessment) return i18n.t("lens.runsTab.notReviewed", { defaultValue: "Not reviewed" });
+  if (assessment.cannot_assess) return i18n.t("lens.runsTab.insufficientEvidence", { defaultValue: "Insufficient evidence" });
+  return assessment.issue_checks?.length ? i18n.t("lens.runsTab.issueObserved", { defaultValue: "Issue observed" }) : i18n.t("lens.runsTab.noIssueObserved", { defaultValue: "No issue observed" });
 }
 
 export interface RunsTabProps {
@@ -60,10 +61,10 @@ export function RunsTab({ lens, job }: RunsTabProps) {
       <TabsContent value="runs" className="space-y-4 pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            {runs.length} selected from {job?.sample?.eligible ?? 0} matching runs
+            {i18n.t("lens.runsTab.selectedFrom", { selected: runs.length, eligible: job?.sample?.eligible ?? 0, defaultValue: `${runs.length} selected from ${job?.sample?.eligible ?? 0} matching runs` })}
           </p>
           <select
-            aria-label="Filter reviewed runs"
+            aria-label={i18n.t("lens.runsTab.filterReviewedRunsAria", { defaultValue: "Filter reviewed runs" })}
             className="h-8 max-w-full rounded-md border bg-background px-2 text-xs sm:max-w-64"
             value={runFilter}
             onChange={(e) => {
@@ -71,10 +72,10 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               setRunOffset(0);
             }}
           >
-            <option value="all">All outcomes</option>
-            <option value="clear">No issue observed</option>
-            <option value="unknown">Insufficient evidence or not reviewed</option>
-            {job?.settings?.context && <option value="expected_behavior">Expected behavior deviation</option>}
+            <option value="all">{i18n.t("lens.runsTab.allOutcomes", { defaultValue: "All outcomes" })}</option>
+            <option value="clear">{i18n.t("lens.runsTab.noIssueObserved", { defaultValue: "No issue observed" })}</option>
+            <option value="unknown">{i18n.t("lens.runsTab.insufficientOrNotReviewed", { defaultValue: "Insufficient evidence or not reviewed" })}</option>
+            {job?.settings?.context && <option value="expected_behavior">{i18n.t("lens.runsTab.expectedBehaviorDeviation", { defaultValue: "Expected behavior deviation" })}</option>}
             {job?.settings?.checks.map((check) => (
               <option key={check.id} value={check.id}>
                 {check.instruction}
@@ -111,8 +112,8 @@ export function RunsTab({ lens, job }: RunsTabProps) {
           {!visibleRuns.length && (
             <p className="py-10 text-center text-sm text-muted-foreground">
               {runs.length
-                ? "No runs match this outcome."
-                : "Selected activity appears here when the worker starts reviewing it."}
+                ? i18n.t("lens.runsTab.noRunsMatchOutcome", { defaultValue: "No runs match this outcome." })
+                : i18n.t("lens.runsTab.selectedActivityAppears", { defaultValue: "Selected activity appears here when the worker starts reviewing it." })}
             </p>
           )}
         </div>
@@ -124,7 +125,7 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               disabled={!runOffset}
               onClick={() => setRunOffset(Math.max(0, runOffset - PAGE))}
             >
-              Previous runs
+              {i18n.t("lens.runsTab.previousRuns", { defaultValue: "Previous runs" })}
             </Button>
             <span>
               {runOffset + 1}–{Math.min(runOffset + PAGE, visibleRuns.length)} of {visibleRuns.length}
@@ -135,12 +136,12 @@ export function RunsTab({ lens, job }: RunsTabProps) {
               disabled={runOffset + PAGE >= visibleRuns.length}
               onClick={() => setRunOffset(runOffset + PAGE)}
             >
-              Next runs
+              {i18n.t("lens.runsTab.nextRuns", { defaultValue: "Next runs" })}
             </Button>
           </div>
         )}
       </TabsContent>
-      <Inspector.Panel label="Run details" testId="run-panel">
+      <Inspector.Panel label={i18n.t("lens.investigationSetup.runDetails", { defaultValue: "Run details" })} testId="run-panel">
         {(run: RunRef) => <EvidenceView lensId={lens.id} evidence={{ id: run.id, span: "" }} />}
       </Inspector.Panel>
     </Inspector.Root>

@@ -13180,6 +13180,21 @@
       "workerLabel": "工作进程",
       "and": " 和 ",
       "validResultsPreserved": "有效结果已保留。"
+    },
+    "runsTab": {
+      "notReviewed": "未审查",
+      "insufficientEvidence": "证据不足",
+      "issueObserved": "发现问题",
+      "noIssueObserved": "未发现问题",
+      "selectedFrom": "从 {{eligible}} 条匹配运行中选取 {{selected}} 条",
+      "filterReviewedRunsAria": "筛选已审查的运行",
+      "allOutcomes": "全部结果",
+      "insufficientOrNotReviewed": "证据不足或未审查",
+      "expectedBehaviorDeviation": "与预期行为存在偏差",
+      "noRunsMatchOutcome": "没有与此结果匹配的运行。",
+      "selectedActivityAppears": "当工作进程开始审查所选活动时，它会显示在这里。",
+      "previousRuns": "上一批运行",
+      "nextRuns": "下一批运行"
     }
   },
   "mcpServerCredentials": {
