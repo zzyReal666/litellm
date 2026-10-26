@@ -32,18 +32,19 @@ export default function RouterSettingsSummary({ routerSettings, emptyText }: Rou
     <div className="space-y-1 text-sm">
       {settings.routing_strategy != null && (
         <div>
-          Routing Strategy: <Badge variant="secondary">{String(settings.routing_strategy)}</Badge>
+          {t("routerSettings.summary.routingStrategy", { defaultValue: "Routing Strategy:" })}{" "}
+          <Badge variant="secondary">{String(settings.routing_strategy)}</Badge>
         </div>
       )}
-      {settings.num_retries != null && <div>Number of Retries: {String(settings.num_retries)}</div>}
-      {settings.allowed_fails != null && <div>Allowed Failures: {String(settings.allowed_fails)}</div>}
-      {settings.cooldown_time != null && <div>Cooldown Time: {String(settings.cooldown_time)}s</div>}
-      {settings.timeout != null && <div>Timeout: {String(settings.timeout)}s</div>}
-      {settings.retry_after != null && <div>Retry After: {String(settings.retry_after)}s</div>}
-      {Boolean(settings.enable_tag_filtering) && <div>Tag Filtering: Enabled</div>}
+      {settings.num_retries != null && <div>{t("routerSettings.summary.numRetries", { defaultValue: "Number of Retries:" })} {String(settings.num_retries)}</div>}
+      {settings.allowed_fails != null && <div>{t("routerSettings.summary.allowedFails", { defaultValue: "Allowed Failures:" })} {String(settings.allowed_fails)}</div>}
+      {settings.cooldown_time != null && <div>{t("routerSettings.summary.cooldownTime", { defaultValue: "Cooldown Time:" })} {String(settings.cooldown_time)}s</div>}
+      {settings.timeout != null && <div>{t("routerSettings.summary.timeout", { defaultValue: "Timeout:" })} {String(settings.timeout)}s</div>}
+      {settings.retry_after != null && <div>{t("routerSettings.summary.retryAfter", { defaultValue: "Retry After:" })} {String(settings.retry_after)}s</div>}
+      {Boolean(settings.enable_tag_filtering) && <div>{t("routerSettings.summary.tagFiltering", { defaultValue: "Tag Filtering:" })} {t("common.enabled", { defaultValue: "Enabled" })}</div>}
       {fallbacks.length > 0 && (
         <div>
-          <div>Fallbacks:</div>
+          <div>{t("routerSettings.summary.fallbacks", { defaultValue: "Fallbacks:" })}</div>
           <div className="mt-1 space-y-1">
             {fallbacks.map(([model, targets]) => (
               <div key={model} className="text-xs text-muted-foreground">

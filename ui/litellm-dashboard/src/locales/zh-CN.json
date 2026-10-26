@@ -10500,6 +10500,16 @@
       "cost-based-routing": "路由到每 token 成本最低的部署。",
       "usage-based-routing": "路由到 TPM（每分钟 token 数）用量最低的部署。（已废弃）",
       "usage-based-routing-v2": "usage-based routing 的改进版本，用量跟踪更准确。"
+    },
+    "summary": {
+      "routingStrategy": "路由策略：",
+      "numRetries": "重试次数：",
+      "allowedFails": "允许失败次数：",
+      "cooldownTime": "冷却时间：",
+      "timeout": "超时：",
+      "retryAfter": "重试等待：",
+      "tagFiltering": "标签过滤：",
+      "fallbacks": "回退配置："
     }
   },
   "tagManagement": {
