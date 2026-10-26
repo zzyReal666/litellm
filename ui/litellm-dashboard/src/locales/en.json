@@ -5953,7 +5953,14 @@
       "toolsetsExampleText": "<strong>Example:</strong> A \"GitHub Read-only\" toolset might include only <code>list_repos</code> and <code>get_file</code> from a GitHub MCP server, preventing agents from making writes.",
       "jumpToBottom": "Jump to bottom",
       "toolsetsDescription": "Toolsets are named collections of specific tools from one or more MCP servers. Instead of exposing all tools from a server, a toolset gives an agent exactly the tools it needs.",
-      "toolsetsCreatingDescription": "Admins can create and manage toolsets from the MCP page, Toolsets tab. Toolsets can then be assigned to keys and teams to scope their tool access."
+      "toolsetsCreatingDescription": "Admins can create and manage toolsets from the MCP page, Toolsets tab. Toolsets can then be assigned to keys and teams to scope their tool access.",
+      "customHeaders": "Custom Headers",
+      "customHeadersHint": "Sent with every playground request, e.g. provider-specific headers like anthropic-beta.",
+      "vectorStoreSetupHint": "Select vector store(s) to use for this LLM API call. You can set up your vector store",
+      "guardrailsSetupHint": "Select guardrail(s) to use for this LLM API call. You can set up your guardrails",
+      "policiesSetupHint": "Select policy/policies to apply to this LLM API call. Policies define which guardrails are applied based on conditions. You can set up your policies",
+      "tooltipHere": "here",
+      "imageUploadHintDetailed": "Support for PNG, JPG, JPEG, GIF, WebP. Multiple images supported."
     },
     "codeInterpreterOutput": {
       "pythonCodeExecuted": "Python Code Executed",

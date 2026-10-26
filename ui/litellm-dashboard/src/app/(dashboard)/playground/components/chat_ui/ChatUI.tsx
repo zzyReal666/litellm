@@ -1258,7 +1258,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
               <div className="space-y-4">
                 <div>
                   <label className="mb-2 flex items-center text-sm font-medium text-foreground">
-                    <Key className="mr-2 size-4" aria-hidden="true" /> Virtual Key Source
+                    <Key className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.virtualKeySource", { defaultValue: "Virtual Key Source" })}
                   </label>
                   <ShadcnSelect
                     disabled={disabledPersonalKeyCreation}
@@ -1292,7 +1292,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                 <div>
                   <div className="mb-2 flex items-center justify-between">
                     <label className="flex items-center text-sm font-medium text-foreground">
-                      <Settings className="mr-2 size-4" aria-hidden="true" /> Custom Proxy Base URL
+                      <Settings className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.customProxyBaseUrl", { defaultValue: "Custom Proxy Base URL" })}
                     </label>
                     {proxySettings?.LITELLM_UI_API_DOC_BASE_URL && !customProxyBaseUrl && (
                       <Button
@@ -1339,14 +1339,17 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   </div>
                   {customProxyBaseUrl && (
                     <p className="mt-1 text-xs text-muted-foreground">
-                      API calls will be sent to: {customProxyBaseUrl}
+                      {i18n.t("' + NS + '.apiCallsSentTo", {
+                        defaultValue: "API calls will be sent to: {{url}}",
+                        url: customProxyBaseUrl,
+                      })}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label className="mb-2 flex items-center text-sm font-medium text-foreground">
-                    <Wrench className="mr-2 size-4" aria-hidden="true" /> Endpoint Type
+                    <Wrench className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.endpointTypeLabel", { defaultValue: "Endpoint Type" })}
                   </label>
                   <EndpointSelector
                     endpointType={endpointType}
@@ -1391,7 +1394,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   <div>
                     <div className="mb-2 flex items-center justify-between text-sm font-medium text-foreground">
                       <span className="flex items-center">
-                        <Bot className="mr-2 size-4" aria-hidden="true" /> Select Model
+                        <Bot className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.selectModelLabel", { defaultValue: "Select Model" })}
                       </span>
                       {isChatModel() || supportsStreamingToggle ? (
                         <Popover>
@@ -1476,7 +1479,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                 {endpointType === EndpointType.A2A_AGENTS && (
                   <div>
                     <label className="mb-2 flex items-center text-sm font-medium text-foreground">
-                      <Bot className="mr-2 size-4" aria-hidden="true" /> Select Agent
+                      <Bot className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.selectAgentLabel", { defaultValue: "Select Agent" })}
                     </label>
                     <SearchSelect
                       value={selectedAgent}
@@ -1490,7 +1493,9 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     />
                     {agentInfo.length === 0 && (
                       <p className="mt-2 text-xs text-muted-foreground">
-                        No agents found. Create agents via /v1/agents endpoint.
+                        {i18n.t("' + NS + '.noAgentsFound", {
+                          defaultValue: "No agents found. Create agents via /v1/agents endpoint.",
+                        })}
                       </p>
                     )}
                   </div>
@@ -1511,11 +1516,14 @@ const ChatUI: React.FC<ChatUIProps> = ({
                 {endpointType !== EndpointType.REALTIME && (
                   <div>
                     <label className="mb-2 flex items-center text-sm font-medium text-foreground">
-                      <ListPlus className="mr-2 size-4" aria-hidden="true" /> Custom Headers
+                      <ListPlus className="mr-2 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.customHeaders", { defaultValue: "Custom Headers" })}
                     </label>
                     <KeyValueInput value={customHeaderPairs} onChange={setCustomHeaderPairs} />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Sent with every playground request, e.g. provider-specific headers like anthropic-beta.
+                      {i18n.t("' + NS + '.customHeadersHint", {
+                        defaultValue:
+                          "Sent with every playground request, e.g. provider-specific headers like anthropic-beta.",
+                      })}
                     </p>
                   </div>
                 )}
@@ -1620,7 +1628,10 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           return (
                             <div key={serverId} className="rounded-sm border p-2">
                               <p className="mb-1 text-xs text-muted-foreground">
-                                Limit tools for {server?.alias || server?.server_name || serverId}:
+                                {i18n.t("' + NS + '.limitToolsFor", {
+                                  defaultValue: "Limit tools for {{serverName}}:",
+                                  serverName: server?.alias || server?.server_name || serverId,
+                                })}
                               </p>
                               <MultiSelect
                                 value={mcpServerToolRestrictions[serverId] || []}
@@ -1658,7 +1669,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                               key={serverId}
                               className="flex items-center justify-between rounded-sm border border-info/15 bg-info/10 p-2"
                             >
-                              <p className="text-xs text-info">{serverName} requires your API key</p>
+                              <p className="text-xs text-info">
+                                {i18n.t("' + NS + '.serverRequiresApiKey", {
+                                  defaultValue: "{{serverName}} requires your API key",
+                                  serverName,
+                                })}
+                              </p>
                               {server.has_user_credential ? (
                                 <div className="flex items-center gap-2">
                                   <span className="flex items-center gap-1 text-xs font-medium text-success">
@@ -1691,15 +1707,18 @@ const ChatUI: React.FC<ChatUIProps> = ({
 
                 <div>
                   <div className="mb-2 flex items-center gap-1 text-sm font-medium text-foreground">
-                    <Database className="mr-1 size-4" aria-hidden="true" /> Vector Store
+                    <Database className="mr-1 size-4" aria-hidden="true" /> {i18n.t("playground.chatUi.vectorStoreLabel", { defaultValue: "Vector Store" })}
                     <Tooltip>
                       <TooltipTrigger aria-label={i18n.t("playground.chatUi.aboutVectorStores", { defaultValue: "About vector stores" })}>
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        Select vector store(s) to use for this LLM API call. You can set up your vector store{" "}
+                        {i18n.t("' + NS + '.vectorStoreSetupHint", {
+                          defaultValue:
+                            "Select vector store(s) to use for this LLM API call. You can set up your vector store",
+                        })}{" "}
                         <a href={uiHref("vector-stores")} className="text-info underline">
-                          here
+                          {i18n.t("' + NS + '.tooltipHere", { defaultValue: "here" })}
                         </a>
                         .
                       </TooltipContent>
@@ -1721,9 +1740,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        Select guardrail(s) to use for this LLM API call. You can set up your guardrails{" "}
+                        {i18n.t("' + NS + '.guardrailsSetupHint", {
+                          defaultValue:
+                            "Select guardrail(s) to use for this LLM API call. You can set up your guardrails",
+                        })}{" "}
                         <a href={uiHref("guardrails")} className="text-info underline">
-                          here
+                          {i18n.t("playground.chatUi.tooltipHere", { defaultValue: "here" })}
                         </a>
                         .
                       </TooltipContent>
@@ -1746,10 +1768,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <Info className="size-3.5 text-muted-foreground" />
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs">
-                          Select policy/policies to apply to this LLM API call. Policies define which guardrails are
-                          applied based on conditions. You can set up your policies{" "}
+                          {i18n.t("' + NS + '.policiesSetupHint", {
+                            defaultValue:
+                              "Select policy/policies to apply to this LLM API call. Policies define which guardrails are applied based on conditions. You can set up your policies",
+                          })}{" "}
                           <a href={uiHref("policies")} className="text-info underline">
-                            here
+                            {i18n.t("' + NS + '.tooltipHere", { defaultValue: "here" })}
                           </a>
                           .
                         </TooltipContent>
@@ -1884,7 +1908,9 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <ImageIcon className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
                           <p className="text-sm">{i18n.t("playground.chatUi.dragImagesToUpload", { defaultValue: "Click or drag images to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
-                            Support for PNG, JPG, JPEG, GIF, WebP. Multiple images supported.
+                            {i18n.t("' + NS + '.imageUploadHintDetailed", {
+                              defaultValue: "Support for PNG, JPG, JPEG, GIF, WebP. Multiple images supported.",
+                            })}
                           </p>
                           <input
                             type="file"
@@ -1963,7 +1989,9 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <Volume2 className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
                           <p className="text-sm">{i18n.t("playground.chatUi.dragAudioToUpload", { defaultValue: "Click or drag audio file to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
-                            Support for MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM formats. Max file size: 25 MB.
+                            {i18n.t("' + NS + '.audioUploadHint", {
+                              defaultValue: "Support for MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM formats. Max file size: 25 MB.",
+                            })}
                           </p>
                           <input
                             type="file"
@@ -2131,7 +2159,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                               <MCPToolArgumentsForm ref={mcpToolArgsFormRef} tool={mcpTool} className="space-y-2" />
                             ) : (
                               <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
-                                Loading tool schema...
+                                {i18n.t("' + NS + '.loadingToolSchema", { defaultValue: "Loading tool schema..." })}
                               </div>
                             );
                           })()
