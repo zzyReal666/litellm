@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# 7.99: litellm-zhcn:v1.100.0-zh.5 -> v1.106.0-zh.7（含 headroom 压缩服务）
+# 7.99: litellm-zhcn:v1.100.0-zh.5 -> v1.106.0-zh.8（含 headroom 压缩服务）
 # 升级前镜像、配置备份、演练均预置在 /opt/litellm-upgrade。回滚用 rollback-to-zh5.sh。
 set -euo pipefail
 
 ROOT="/opt/litellm"
 KIT="/opt/litellm-upgrade"
-PKG="${KIT}/pkg/litellm-offline-v1.106.0-zh.7.tar.gz"
+PKG="${KIT}/pkg/litellm-offline-v1.106.0-zh.8.tar.gz"
 COMPOSE_SRC="${KIT}/compose/docker-compose.zh7.yml"
-NEW_IMAGE="litellm-zhcn:v1.106.0-zh.7"
+NEW_IMAGE="litellm-zhcn:v1.106.0-zh.8"
 HEADROOM_IMAGE="headroom-offline:v1.106.0-zh.7"
 OLD_IMAGE="litellm-zhcn:v1.100.0-zh.5"
 BACKUP_ROOT="${KIT}/backup"
@@ -94,7 +94,7 @@ cp -a "${COMPOSE_SRC}" docker-compose.yml
 rm -rf "${KIT}/pkg-extract"
 mkdir -p "${KIT}/pkg-extract"
 tar xzf "${PKG}" -C "${KIT}/pkg-extract" --strip-components=1 \
-  'litellm-offline-v1.106.0-zh.7/scripts' 'litellm-offline-v1.106.0-zh.7/assets'
+  'litellm-offline-v1.106.0-zh.8/scripts' 'litellm-offline-v1.106.0-zh.8/assets'
 mkdir -p scripts assets data/headroom
 cp -a "${KIT}/pkg-extract/scripts/." scripts/
 cp -a "${KIT}/pkg-extract/assets/." assets/
