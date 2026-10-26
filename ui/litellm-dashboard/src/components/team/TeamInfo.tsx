@@ -1315,7 +1315,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               <br />
               {info.team_member_budget_table && (
                 <p className="text-muted-foreground">
-                  Team Member Budget: ¥{formatNumberWithCommas(info.team_member_budget_table.max_budget, 2)}
+                  {i18n.t("teamPage.teamInfo.teamMemberBudgetInlineLabel", { defaultValue: "Team Member Budget" })}: ¥{formatNumberWithCommas(info.team_member_budget_table.max_budget, 2)}
                 </p>
               )}
             </div>
@@ -1326,8 +1326,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
             <div className="mt-2">
               <p>TPM: {info.tpm_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</p>
               <p>RPM: {info.rpm_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</p>
-              <p>TPD (batch): {info.tpd_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</p>
-              {info.max_parallel_requests && <p>Max Parallel Requests: {info.max_parallel_requests}</p>}
+              <p>{i18n.t("teamPage.teamInfo.tpdBatchLabel", { defaultValue: "TPD (batch)" })}: {info.tpd_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</p>
+              {info.max_parallel_requests && <p>{i18n.t("teamPage.teamInfo.maxParallelRequestsLabel", { defaultValue: "Max Parallel Requests" })}: {info.max_parallel_requests}</p>}
               {(() => {
                 const modelTpm = (info.metadata?.model_tpm_limit ?? {}) as Record<string, number>;
                 const modelRpm = (info.metadata?.model_rpm_limit ?? {}) as Record<string, number>;
@@ -1344,9 +1344,9 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </div>
                 );
               })()}
-              <p>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? i18n.t("common.default", { defaultValue: "Default" })}</p>
+              <p>{i18n.t("teamPage.teamInfo.estimatedOutputTokensLabel", { defaultValue: "Estimated Output Tokens" })}: {info.metadata?.default_estimated_output_tokens ?? i18n.t("common.default", { defaultValue: "Default" })}</p>
               <p>
-                Estimated Output Tokens Per Model:{" "}
+                {i18n.t("teamPage.teamInfo.estimatedOutputTokensPerModelLabel", { defaultValue: "Estimated Output Tokens Per Model" })}:{" "}
                 {info.metadata?.default_estimated_output_tokens_per_model
                   ? JSON.stringify(info.metadata.default_estimated_output_tokens_per_model)
                   : i18n.t("common.default", { defaultValue: "Default" })}
@@ -1376,9 +1376,9 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           <Card className="block p-6">
             <p className="font-semibold text-foreground">{i18n.t("teamPage.teamInfo.virtualKeys", { defaultValue: "Virtual Keys" })}</p>
             <div className="mt-2">
-              <p>User Keys: {teamData.keys.filter((key) => key.user_id).length}</p>
-              <p>Service Account Keys: {teamData.keys.filter((key) => !key.user_id).length}</p>
-              <p className="text-muted-foreground">Total: {teamData.keys.length}</p>
+              <p>{i18n.t("teamPage.teamInfo.userKeysLabel", { defaultValue: "User Keys" })}: {teamData.keys.filter((key) => key.user_id).length}</p>
+              <p>{i18n.t("teamPage.teamInfo.serviceAccountKeysLabel", { defaultValue: "Service Account Keys" })}: {teamData.keys.filter((key) => !key.user_id).length}</p>
+              <p className="text-muted-foreground">{i18n.t("teamPage.teamInfo.totalKeysLabel", { defaultValue: "Total" })}: {teamData.keys.length}</p>
             </div>
           </Card>
 
@@ -1795,7 +1795,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                       schemaLoading={isTeamMetadataSchemaLoading}
                     />
                     <FieldDescription>
-                      Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {'{"region": "us"}'}.
+                      {i18n.t("teamPage.teamInfo.metadataHelpPrefix", { defaultValue: "Values are saved as text. Enter JSON for typed values, e.g. 3, true, or" })}{" "}{'{"region": "us"}'}.
                     </FieldDescription>
                   </Field>
 
@@ -2164,7 +2164,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                         ref={ref}
                         value={value ?? ""}
                         rows={6}
-                        placeholder='{"namespace": "admin", "mount": "secret", "path_prefix": "litellm"}'
+                        placeholder={i18n.t("teamPage.teamInfo.vaultConfigPlaceholder", { defaultValue: '{"namespace": "admin", "mount": "secret", "path_prefix": "litellm"}' })}
                         disabled={!premiumUser}
                       />
                     )}
@@ -2244,7 +2244,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 <p className="font-medium">{i18n.t("teamPage.teamInfo.rateLimits", { defaultValue: "Rate Limits" })}</p>
                 <div>TPM: {info.tpm_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</div>
                 <div>RPM: {info.rpm_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</div>
-                <div>TPD (batch): {info.tpd_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.tpdBatchLabel", { defaultValue: "TPD (batch)" })}: {info.tpd_limit ?? i18n.t("teamPage.teamInfo.unlimited", { defaultValue: "Unlimited" })}</div>
                 {(() => {
                   const modelTpm = (info.metadata?.model_tpm_limit ?? {}) as Record<string, number>;
                   const modelRpm = (info.metadata?.model_rpm_limit ?? {}) as Record<string, number>;
@@ -2261,9 +2261,9 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     </div>
                   );
                 })()}
-                <div>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? i18n.t("common.default", { defaultValue: "Default" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.estimatedOutputTokensLabel", { defaultValue: "Estimated Output Tokens" })}: {info.metadata?.default_estimated_output_tokens ?? i18n.t("common.default", { defaultValue: "Default" })}</div>
                 <div>
-                  Estimated Output Tokens Per Model:{" "}
+                  {i18n.t("teamPage.teamInfo.estimatedOutputTokensPerModelLabel", { defaultValue: "Estimated Output Tokens Per Model" })}:{" "}
                   {info.metadata?.default_estimated_output_tokens_per_model
                     ? JSON.stringify(info.metadata.default_estimated_output_tokens_per_model)
                     : i18n.t("common.default", { defaultValue: "Default" })}
@@ -2272,22 +2272,22 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               <div>
                 <p className="font-medium">{i18n.t("teamPage.teamInfo.teamBudgetLabel", { defaultValue: "Team Budget" })}</p>
                 <div>
-                  Max Budget: {info.max_budget !== null ? `¥${formatNumberWithCommas(info.max_budget, 4)}` : i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}
+                  {i18n.t("teamPage.teamInfo.maxBudgetInlineLabel", { defaultValue: "Max Budget" })}: {info.max_budget !== null ? `¥${formatNumberWithCommas(info.max_budget, 4)}` : i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}
                 </div>
                 <div>
-                  Soft Budget:{" "}
+                  {i18n.t("teamPage.teamInfo.softBudgetInlineLabel", { defaultValue: "Soft Budget" })}:{" "}
                   {info.soft_budget !== null && info.soft_budget !== undefined
                     ? `¥${formatNumberWithCommas(info.soft_budget, 4)}`
                     : i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}
                 </div>
-                <div>Budget Reset: {info.budget_duration || i18n.t("common.never", { defaultValue: "Never" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.budgetResetInlineLabel", { defaultValue: "Budget Reset" })}: {info.budget_duration || i18n.t("common.never", { defaultValue: "Never" })}</div>
                 {modelMaxBudgetToEntries(info.model_max_budget as ModelMaxBudget | null | undefined).map(
                   ({ model, budgetLimit, timePeriod }) => {
                     const spent = model === null ? undefined : info.model_max_budget_usage?.[model]?.current_spend;
                     return (
                       <div key={model}>
-                        Per-Model Budget ({model}): ¥{budgetLimit ?? "?"} per {timePeriod}
-                        {spent !== undefined && `, spent ¥${spent}`}
+                        {i18n.t("teamPage.teamInfo.perModelBudgetEntry", { defaultValue: "Per-Model Budget ({{model}}): ¥{{limit}} per {{period}}", model, limit: budgetLimit ?? "?", period: timePeriod })}
+                        {spent !== undefined && i18n.t("teamPage.teamInfo.perModelBudgetSpent", { defaultValue: ", spent ¥{{amount}}", amount: spent })}
                       </div>
                     );
                   },
@@ -2295,22 +2295,22 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 {info.metadata?.soft_budget_alerting_emails &&
                   Array.isArray(info.metadata.soft_budget_alerting_emails) &&
                   info.metadata.soft_budget_alerting_emails.length > 0 && (
-                    <div>Soft Budget Alerting Emails: {info.metadata.soft_budget_alerting_emails.join(", ")}</div>
+                    <div>{i18n.t("teamPage.teamInfo.softBudgetEmailsLabel", { defaultValue: "Soft Budget Alerting Emails" })}: {info.metadata.soft_budget_alerting_emails.join(", ")}</div>
                   )}
               </div>
               <div>
                 <p className="font-medium">
-                  Team Member Settings{" "}
+                  {i18n.t("teamPage.teamInfo.teamMemberSettings", { defaultValue: "Team Member Settings" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.teamMemberSettingsTooltip", { defaultValue: "These are limits on individual team members" })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </p>
-                <div>Max Budget: {info.team_member_budget_table?.max_budget ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
-                <div>Budget Duration: {info.team_member_budget_table?.budget_duration || i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
-                <div>Key Duration: {info.metadata?.team_member_key_duration || i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
-                <div>TPM Limit: {info.team_member_budget_table?.tpm_limit ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
-                <div>RPM Limit: {info.team_member_budget_table?.rpm_limit ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
-                <div>Budget Alert Thresholds: {teamMemberBudgetAlertSummary(info.metadata).join("; ") || "None"}</div>
+                <div>{i18n.t("teamPage.teamInfo.maxBudgetInlineLabel", { defaultValue: "Max Budget" })}: {info.team_member_budget_table?.max_budget ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.budgetDurationLabel", { defaultValue: "Budget Duration" })}: {info.team_member_budget_table?.budget_duration || i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.keyDurationLabel", { defaultValue: "Key Duration" })}: {info.metadata?.team_member_key_duration || i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.tpmLimitInlineLabel", { defaultValue: "TPM Limit" })}: {info.team_member_budget_table?.tpm_limit ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.rpmLimitInlineLabel", { defaultValue: "RPM Limit" })}: {info.team_member_budget_table?.rpm_limit ?? i18n.t("teamPage.teamInfo.noLimit", { defaultValue: "No Limit" })}</div>
+                <div>{i18n.t("teamPage.teamInfo.budgetAlertThresholdsLabel", { defaultValue: "Budget Alert Thresholds" })}: {teamMemberBudgetAlertSummary(info.metadata).join("; ") || i18n.t("teamPage.teamInfo.none", { defaultValue: "None" })}</div>
               </div>
               <div>
                 <p className="font-medium">{i18n.t("teamPage.teamInfo.routerSettingsLabel", { defaultValue: "Router Settings" })}</p>
@@ -2321,26 +2321,26 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   <div className="mt-1 space-y-1">
                     {info.router_settings.routing_strategy && (
                       <div>
-                        Routing Strategy: <Badge variant="secondary">{info.router_settings.routing_strategy}</Badge>
+                        {i18n.t("teamPage.teamInfo.routingStrategy", { defaultValue: "Routing Strategy:" })} <Badge variant="secondary">{info.router_settings.routing_strategy}</Badge>
                       </div>
                     )}
                     {info.router_settings.num_retries != null && (
-                      <div>Number of Retries: {info.router_settings.num_retries}</div>
+                      <div>{i18n.t("teamPage.teamInfo.numRetries", { defaultValue: "Number of Retries: {{value}}", value: info.router_settings.num_retries })}</div>
                     )}
                     {info.router_settings.allowed_fails != null && (
-                      <div>Allowed Failures: {info.router_settings.allowed_fails}</div>
+                      <div>{i18n.t("teamPage.teamInfo.allowedFailures", { defaultValue: "Allowed Failures: {{value}}", value: info.router_settings.allowed_fails })}</div>
                     )}
                     {info.router_settings.cooldown_time != null && (
-                      <div>Cooldown Time: {info.router_settings.cooldown_time}s</div>
+                      <div>{i18n.t("teamPage.teamInfo.cooldownTime", { defaultValue: "Cooldown Time: {{value}}s", value: info.router_settings.cooldown_time })}</div>
                     )}
-                    {info.router_settings.timeout != null && <div>Timeout: {info.router_settings.timeout}s</div>}
+                    {info.router_settings.timeout != null && <div>{i18n.t("teamPage.teamInfo.timeout", { defaultValue: "Timeout: {{value}}s", value: info.router_settings.timeout })}</div>}
                     {info.router_settings.retry_after != null && (
-                      <div>Retry After: {info.router_settings.retry_after}s</div>
+                      <div>{i18n.t("teamPage.teamInfo.retryAfter", { defaultValue: "Retry After: {{value}}s", value: info.router_settings.retry_after })}</div>
                     )}
                     {info.router_settings.fallbacks &&
                       Array.isArray(info.router_settings.fallbacks) &&
                       info.router_settings.fallbacks.length > 0 && (
-                        <div>Fallbacks: {info.router_settings.fallbacks.length} configured</div>
+                        <div>{i18n.t("teamPage.teamInfo.fallbacksCount", { defaultValue: "Fallbacks: {{count}} configured", count: info.router_settings.fallbacks.length })}</div>
                       )}
                     {info.router_settings.enable_tag_filtering && <div>{i18n.t("teamPage.teamInfo.tagFilteringEnabled", { defaultValue: "Tag Filtering: Enabled" })}</div>}
                   </div>
@@ -2464,7 +2464,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "max_budget_in_team",
               label: (
                 <span>
-                  Team Member Budget (CNY){" "}
+                  {i18n.t("teamPage.teamInfo.teamMemberBudgetLabel", { defaultValue: "Team Member Budget (CNY)" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.teamMemberBudgetTooltip", { defaultValue: "Maximum amount in CNY this member can spend within this team. This is separate from any global user budget limits" })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
@@ -2479,7 +2479,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "budget_duration",
               label: (
                 <span>
-                  Budget Reset Period{" "}
+                  {i18n.t("teamPage.teamInfo.budgetResetPeriodLabel", { defaultValue: "Budget Reset Period" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.budgetResetPeriodTooltip", { defaultValue: "How often this member's budget resets within the team. Leave unset and the budget never resets." })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
@@ -2491,8 +2491,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "temp_budget_increase",
               label: (
                 <span>
-                  Temporary Budget Increase (CNY){" "}
-                  <SimpleTooltip content="Extra CNY added on top of the team member budget until the expiry below. The permanent budget is left unchanged and the increase stops applying at expiry.">
+                  {i18n.t("teamPage.teamInfo.tempBudgetIncreaseLabel", { defaultValue: "Temporary Budget Increase (CNY)" })}{" "}
+                  <SimpleTooltip content={i18n.t("teamPage.teamInfo.tempBudgetIncreaseTooltip", { defaultValue: "Extra CNY added on top of the team member budget until the expiry below. The permanent budget is left unchanged and the increase stops applying at expiry." })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </span>
@@ -2500,14 +2500,14 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               type: "numerical" as const,
               step: 0.01,
               min: 0,
-              placeholder: "Extra budget for this member until the expiry",
+              placeholder: i18n.t("teamPage.teamInfo.tempBudgetIncreasePlaceholder", { defaultValue: "Extra budget for this member until the expiry" }),
             },
             {
               name: "temp_budget_expiry",
               label: (
                 <span>
-                  Temporary Budget Expiry (UTC){" "}
-                  <SimpleTooltip content="When the temporary budget increase stops applying. Required whenever a temporary budget increase is set.">
+                  {i18n.t("teamPage.teamInfo.tempBudgetExpiryLabel", { defaultValue: "Temporary Budget Expiry (UTC)" })}{" "}
+                  <SimpleTooltip content={i18n.t("teamPage.teamInfo.tempBudgetExpiryTooltip", { defaultValue: "When the temporary budget increase stops applying. Required whenever a temporary budget increase is set." })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
                 </span>
@@ -2518,7 +2518,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "tpm_limit",
               label: (
                 <span>
-                  Team Member TPM Limit{" "}
+                  {i18n.t("teamPage.teamInfo.teamMemberTpmLabel", { defaultValue: "Team Member TPM Limit" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.teamMemberTpmTooltip", { defaultValue: "Maximum tokens per minute this member can use within this team. This is separate from any global user TPM limit" })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
@@ -2533,7 +2533,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "rpm_limit",
               label: (
                 <span>
-                  Team Member RPM Limit{" "}
+                  {i18n.t("teamPage.teamInfo.teamMemberRpmLabel", { defaultValue: "Team Member RPM Limit" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.teamMemberRpmTooltip", { defaultValue: "Maximum requests per minute this member can make within this team. This is separate from any global user RPM limit" })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
@@ -2548,7 +2548,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               name: "allowed_models",
               label: (
                 <span>
-                  Allowed Models{" "}
+                  {i18n.t("teamPage.teamInfo.allowedModelsLabel", { defaultValue: "Allowed Models" })}{" "}
                   <SimpleTooltip content={i18n.t("teamPage.teamInfo.allowedModelsTooltip", { defaultValue: "Models this member can access within this team. Leave empty to inherit all team models." })}>
                     <Info className="ml-1 inline size-3.5 align-text-bottom" />
                   </SimpleTooltip>
