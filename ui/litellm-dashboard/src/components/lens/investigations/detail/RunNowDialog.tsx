@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
@@ -64,10 +65,9 @@ export function RunNowDialog({
     <Dialog open onOpenChange={(open) => !open && !busy && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Run now</DialogTitle>
+          <DialogTitle>{i18n.t("runNowDialog.run-now", { defaultValue: "Run now" })}</DialogTitle>
           <DialogDescription>
-            Runs once with these choices. The saved schedule and settings stay the same.
-          </DialogDescription>
+            {i18n.t("runNowDialog.runs-once-with-these-choices-the-saved-sched", { defaultValue: "Runs once with these choices. The saved schedule and settings stay the same." })}{" "}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <label className="grid gap-1.5 text-sm font-medium">
@@ -79,9 +79,9 @@ export function RunNowDialog({
               onInputValueChange={setAgent}
               onValueChange={(name) => setAgent(name ?? "")}
             >
-              <ComboboxInput aria-label="Agent" placeholder="All agents" showClear={!!agent} className="h-9 w-full" />
+              <ComboboxInput aria-label="Agent" placeholder={i18n.t("runNowDialog.all-agents", { defaultValue: "All agents" })} showClear={!!agent} className="h-9 w-full" />
               <ComboboxContent>
-                <ComboboxEmpty>No matches. You can enter a recorded name.</ComboboxEmpty>
+                <ComboboxEmpty>{i18n.t("runNowDialog.no-matches-you-can-enter-a-recorded-name", { defaultValue: "No matches. You can enter a recorded name." })}</ComboboxEmpty>
                 <ComboboxList>
                   {(name: string) => (
                     <ComboboxItem key={name} value={name}>
@@ -93,7 +93,7 @@ export function RunNowDialog({
             </Combobox>
           </label>
           <fieldset className="space-y-2">
-            <legend className="text-sm font-medium">Traces to review</legend>
+            <legend className="text-sm font-medium">{i18n.t("runNowDialog.traces-to-review", { defaultValue: "Traces to review" })}</legend>
             <div className="flex flex-wrap gap-1.5">
               {RUN_PRESETS.map((p) => (
                 <button
@@ -131,8 +131,7 @@ export function RunNowDialog({
             Cancel
           </Button>
           <Button disabled={busy} onClick={() => void submit()}>
-            Run now
-          </Button>
+            {i18n.t("runNowDialog.run-now-2", { defaultValue: "Run now" })}{" "}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

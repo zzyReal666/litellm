@@ -2905,7 +2905,13 @@
     "allModes": "All Modes",
     "features": "Features:",
     "allFeatures": "All Features",
-    "filtersLabel": "Filters"
+    "filtersLabel": "Filters",
+    "search-models": "Search Models:",
+    "search-model-names": "Search model names...",
+    "all-providers": "All Providers",
+    "all-modes": "All Modes",
+    "all-features": "All Features",
+    "clear-filters": "Clear Filters"
   },
   "modelGroupAliasSettings": {
     "title": "Model Group Alias Settings",
@@ -3245,7 +3251,13 @@
     "title": "Object Permissions",
     "subtitle": "Access control for Vector Stores and MCP Servers",
     "searchToolsTitle": "Search tools",
-    "searchToolsNoRestriction": "No restriction — all configured search tools are allowed for this team."
+    "searchToolsNoRestriction": "No restriction — all configured search tools are allowed for this team.",
+    "search-tools": "Search tools",
+    "no-restriction-all-configured-search-tools-a": "No restriction — all configured search tools are allowed for this team.",
+    "no-private-skills-granted-only-enabled-publi": "No private skills granted. Only enabled (public) Claude Code plugins are visible.",
+    "object-permissions": "Object Permissions",
+    "access-control-for-vector-stores-and-mcp-ser": "Access control for Vector Stores and MCP Servers",
+    "object-permissions-2": "Object Permissions"
   },
   "onboardingLink": {
     "invitationLinkTitle": "Invitation Link",
@@ -13539,5 +13551,72 @@
     "notAppliedDescription": "Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is expected for about 10 seconds after a change or a restart. If it persists, check that proxy's logs: requests it handles are not being intercepted.",
     "pageTitle": "Web Search Interception",
     "pageDescription": "Serve web search tool calls from a configured search tool instead of passing them upstream, so models without native web search can still answer with fresh results. Click 'Save Settings' to apply changes across all pods (takes effect within 10 seconds)."
+  },
+  "lensWorkspace": {
+    "demo-data": "Demo data",
+    "checking-lens-setup": "Checking Lens setup…",
+    "findings-require-proxy-administrator-access": "Findings require proxy administrator access.",
+    "investigations-require-proxy-administrator-a": "Investigations require proxy administrator access. You can still view your traces.",
+    "new-investigation": "New investigation",
+    "datasets-require-proxy-administrator-access": "Datasets require proxy administrator access."
+  },
+  "runNowDialog": {
+    "run-now": "Run now",
+    "runs-once-with-these-choices-the-saved-sched": "Runs once with these choices. The saved schedule and settings stay the same.",
+    "all-agents": "All agents",
+    "no-matches-you-can-enter-a-recorded-name": "No matches. You can enter a recorded name.",
+    "traces-to-review": "Traces to review",
+    "run-now-2": "Run now"
+  },
+  "runView": {
+    "loading-trace": "Loading trace…",
+    "fetching-this-run-and-its-steps": "Fetching this run and its steps.",
+    "back-to-traces": "Back to traces",
+    "could-not-load-trace": "Could not load trace",
+    "could-not-refresh-this-run-previously-receiv": "Could not refresh this run. Previously received steps are still shown.",
+    "retry-refresh": "Retry refresh"
+  },
+  "updateModelCredentialsModal": {
+    "update-api-key": "Update API Key",
+    "update-this-model-s-api-key-only-the-new-key": "Update this model's API key. Only the new key is sent; the rest of the deployment configuration is left untouched.",
+    "new-api-key": "New API Key",
+    "enter-the-new-api-key": "Enter the new API key",
+    "update-api-key-2": "Update API Key"
+  },
+  "evidence": {
+    "this-evidence-is-no-longer-available": "This evidence is no longer available.",
+    "request-evidence": "Request evidence",
+    "original-logged-input-and-output": "Original logged input and output",
+    "loading-request": "Loading request…",
+    "request-was-not-found-or-is-past-retention": "Request was not found or is past retention",
+    "previous-section": "Previous section",
+    "next-section": "Next section"
+  },
+  "runFields": {
+    "keep-watching-for-new-traces": "Keep watching for new traces",
+    "check-every": "Check every",
+    "advanced-options": "Advanced options",
+    "maximum-runs-optional": "Maximum runs (optional)",
+    "no-limit": "No limit",
+    "choose-individual-runs": "Choose individual runs",
+    "monthly-limit-cny": "Monthly limit (CNY)"
+  },
+  "matchingActivityPreview": {
+    "matching-activity": "Matching activity",
+    "refresh-matching-activity": "Refresh matching activity",
+    "no-analysis-cost": "· No analysis cost",
+    "retry-preview": "Retry preview",
+    "no-matches-try-removing-a-condition-or-check": "No matches. Try removing a condition or check that your agent records this metadata. Recent trace updates need two minutes to settle.",
+    "loading-more": "Loading more…"
+  },
+  "agentTracesSection": {
+    "could-not-check-earlier-traces": "Could not check earlier traces.",
+    "retry-trace-check": "Retry trace check",
+    "back-to-traces": "← Back to traces",
+    "trace-details": "Trace details",
+    "refresh-traces": "Refresh traces",
+    "refresh-traces-2": "Refresh traces",
+    "traces-received-select-a-run-to-inspect-it": "Traces received. Select a run to inspect it.",
+    "set-up-tracing": "Set up tracing"
   }
 }

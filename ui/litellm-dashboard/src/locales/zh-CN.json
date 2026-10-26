@@ -2905,7 +2905,13 @@
     "allModes": "所有模式",
     "features": "功能：",
     "allFeatures": "所有功能",
-    "filtersLabel": "筛选"
+    "filtersLabel": "筛选",
+    "search-models": "搜索模型：",
+    "search-model-names": "搜索模型名称…",
+    "all-providers": "全部提供商",
+    "all-modes": "全部模式",
+    "all-features": "全部特性",
+    "clear-filters": "清除筛选"
   },
   "modelGroupAliasSettings": {
     "title": "模型组别名设置",
@@ -3245,7 +3251,13 @@
     "title": "对象权限",
     "subtitle": "向量存储与 MCP 服务器的访问控制",
     "searchToolsTitle": "搜索工具",
-    "searchToolsNoRestriction": "无限制 — 该团队可使用所有已配置的搜索工具。"
+    "searchToolsNoRestriction": "无限制 — 该团队可使用所有已配置的搜索工具。",
+    "search-tools": "搜索工具",
+    "no-restriction-all-configured-search-tools-a": "无限制，该团队可使用所有已配置的搜索工具。",
+    "no-private-skills-granted-only-enabled-publi": "未授予私有技能，仅可见已启用（公开）的 Claude Code 插件。",
+    "object-permissions": "对象权限",
+    "access-control-for-vector-stores-and-mcp-ser": "向量存储与 MCP 服务器的访问控制",
+    "object-permissions-2": "对象权限"
   },
   "onboardingLink": {
     "invitationLinkTitle": "邀请链接",
@@ -13539,5 +13551,72 @@
     "notAppliedDescription": "集群已开启拦截，但为当前页面提供服务的代理尚未应用该配置。这通常在更改或重启后约 10 秒内出现。如果持续存在，请检查该代理的日志：它处理的请求没有被拦截。",
     "pageTitle": "联网搜索拦截",
     "pageDescription": "由已配置的搜索工具处理联网搜索调用，而不是透传给上游，这样没有原生联网搜索的模型也能基于最新结果回答。点击“保存设置”后在所有 Pod 生效（约 10 秒内）。"
+  },
+  "lensWorkspace": {
+    "demo-data": "演示数据",
+    "checking-lens-setup": "正在检查 Lens 设置…",
+    "findings-require-proxy-administrator-access": "发现项需要代理管理员权限。",
+    "investigations-require-proxy-administrator-a": "调查功能需要代理管理员权限。你仍然可以查看自己的链路。",
+    "new-investigation": "新建调查",
+    "datasets-require-proxy-administrator-access": "数据集需要代理管理员权限。"
+  },
+  "runNowDialog": {
+    "run-now": "立即运行",
+    "runs-once-with-these-choices-the-saved-sched": "按当前选择运行一次，已保存的调度与设置保持不变。",
+    "all-agents": "全部 agent",
+    "no-matches-you-can-enter-a-recorded-name": "无匹配项。可以直接输入已记录的名称。",
+    "traces-to-review": "待审查的链路",
+    "run-now-2": "立即运行"
+  },
+  "runView": {
+    "loading-trace": "正在加载链路…",
+    "fetching-this-run-and-its-steps": "正在获取本次运行及其步骤。",
+    "back-to-traces": "返回链路列表",
+    "could-not-load-trace": "无法加载链路",
+    "could-not-refresh-this-run-previously-receiv": "无法刷新本次运行。仍显示之前获取到的步骤。",
+    "retry-refresh": "重试刷新"
+  },
+  "updateModelCredentialsModal": {
+    "update-api-key": "更新 API 密钥",
+    "update-this-model-s-api-key-only-the-new-key": "更新该模型的 API 密钥。仅发送新密钥，其余部署配置保持不变。",
+    "new-api-key": "新 API 密钥",
+    "enter-the-new-api-key": "输入新的 API 密钥",
+    "update-api-key-2": "更新 API 密钥"
+  },
+  "evidence": {
+    "this-evidence-is-no-longer-available": "该证据已不可用。",
+    "request-evidence": "请求证据",
+    "original-logged-input-and-output": "原始记录的输入与输出",
+    "loading-request": "正在加载请求…",
+    "request-was-not-found-or-is-past-retention": "未找到该请求，或已超出保留期",
+    "previous-section": "上一段",
+    "next-section": "下一段"
+  },
+  "runFields": {
+    "keep-watching-for-new-traces": "持续监听新的链路",
+    "check-every": "检查间隔",
+    "advanced-options": "高级选项",
+    "maximum-runs-optional": "最大运行次数（可选）",
+    "no-limit": "不限制",
+    "choose-individual-runs": "选择单次运行",
+    "monthly-limit-cny": "每月限额（人民币）"
+  },
+  "matchingActivityPreview": {
+    "matching-activity": "匹配的活动",
+    "refresh-matching-activity": "刷新匹配活动",
+    "no-analysis-cost": "· 无分析成本",
+    "retry-preview": "重试预览",
+    "no-matches-try-removing-a-condition-or-check": "无匹配项。可以尝试去掉一个条件，或确认 agent 是否记录了该元数据。最新链路更新需要约两分钟生效。",
+    "loading-more": "正在加载更多…"
+  },
+  "agentTracesSection": {
+    "could-not-check-earlier-traces": "无法检查更早的链路。",
+    "retry-trace-check": "重试链路检查",
+    "back-to-traces": "← 返回链路列表",
+    "trace-details": "链路详情",
+    "refresh-traces": "刷新链路",
+    "refresh-traces-2": "刷新链路",
+    "traces-received-select-a-run-to-inspect-it": "已接收到链路。选择一次运行以查看详情。",
+    "set-up-tracing": "设置链路追踪"
   }
 }

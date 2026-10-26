@@ -1,6 +1,7 @@
 "use client";
 
 import { QueryErrorResetBoundary, useQueryClient, useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import i18n from "@/lib/i18n";
 import { ArrowLeft } from "lucide-react";
 import { Suspense, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -36,7 +37,7 @@ function selectedSpanMissing(trace: Trace, spanId: string | null): boolean {
 }
 
 function RunLoading() {
-  return <LoadingState title="Loading trace…" description="Fetching this run and its steps." />;
+  return <LoadingState title={i18n.t("runView.loading-trace", { defaultValue: "Loading trace…" })} description={i18n.t("runView.fetching-this-run-and-its-steps", { defaultValue: "Fetching this run and its steps." })} />;
 }
 
 function RunLoadError({ error, onBack, onRetry }: { error: unknown; onBack: () => void; onRetry: () => void }) {
@@ -47,9 +48,8 @@ function RunLoadError({ error, onBack, onRetry }: { error: unknown; onBack: () =
         onClick={onBack}
         className="mb-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-3.5" /> Back to traces
-      </button>
-      <h1 className="mb-2 text-sm font-medium">Could not load trace</h1>
+        <ArrowLeft className="size-3.5" /> {i18n.t("runView.back-to-traces", { defaultValue: "Back to traces" })}{" "}</button>
+      <h1 className="mb-2 text-sm font-medium">{i18n.t("runView.could-not-load-trace", { defaultValue: "Could not load trace" })}</h1>
       <span className="text-muted-foreground">{error instanceof Error ? error.message : "Unknown error"}</span>
       <Button variant="outline" size="sm" className="ml-3" onClick={onRetry}>
         Retry
@@ -179,10 +179,8 @@ function LoadedRun({
       <FeedbackPanel summary={trace.summary} accessToken={accessToken} />
       {traceQuery.isRefetchError && (
         <div role="alert" className="flex items-center gap-3 border-b p-3 text-xs text-muted-foreground">
-          Could not refresh this run. Previously received steps are still shown.
-          <Button variant="outline" size="sm" disabled={manualRead || traceQuery.isFetching} onClick={refreshRun}>
-            Retry refresh
-          </Button>
+          {i18n.t("runView.could-not-refresh-this-run-previously-receiv", { defaultValue: "Could not refresh this run. Previously received steps are still shown." })}{" "}<Button variant="outline" size="sm" disabled={manualRead || traceQuery.isFetching} onClick={refreshRun}>
+            {i18n.t("runView.retry-refresh", { defaultValue: "Retry refresh" })}{" "}</Button>
         </div>
       )}
       {(traceQuery.hasNextPage || failure) && (

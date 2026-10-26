@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ComponentProps } from "react";
+import i18n from "@/lib/i18n";
 import { ChevronRight, RotateCw } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { Button } from "@/components/ui/button";
@@ -80,7 +81,7 @@ export function MatchingActivityPreview({
   }, [nearTail, canContinue, loadingMore, loadMore]);
   return (
     <section
-      aria-label="Matching activity"
+      aria-label={i18n.t("matchingActivityPreview.matching-activity", { defaultValue: "Matching activity" })}
       data-slot="matching-activity-preview"
       className={cn("self-start rounded-lg border", className)}
       {...props}
@@ -93,29 +94,26 @@ export function MatchingActivityPreview({
           <Button
             variant="ghost"
             size="icon-xs"
-            aria-label="Refresh matching activity"
+            aria-label={i18n.t("matchingActivityPreview.refresh-matching-activity", { defaultValue: "Refresh matching activity" })}
             onClick={status.refresh}
             disabled={!status.ready}
           >
             <RotateCw className="size-3" />
           </Button>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">{status.windowLabel} · No analysis cost</p>
+        <p className="mt-1 text-xs text-muted-foreground">{status.windowLabel} {i18n.t("matchingActivityPreview.no-analysis-cost", { defaultValue: "· No analysis cost" })}</p>
       </div>
       <div ref={setScroller} aria-busy={loadingMore} className="max-h-[60dvh] overflow-y-auto px-4">
         {status.ready && status.error && (
           <p role="alert" className="py-3 text-sm text-destructive">
             {status.error.message}{" "}
             <Button variant="link" onClick={status.refresh}>
-              Retry preview
-            </Button>
+              {i18n.t("matchingActivityPreview.retry-preview", { defaultValue: "Retry preview" })}{" "}</Button>
           </p>
         )}
         {status.ready && page.eligible === 0 && (
           <p className="py-4 text-sm text-muted-foreground">
-            No matches. Try removing a condition or check that your agent records this metadata. Recent trace updates
-            need two minutes to settle.
-          </p>
+            {i18n.t("matchingActivityPreview.no-matches-try-removing-a-condition-or-check", { defaultValue: "No matches. Try removing a condition or check that your agent records this metadata. Recent trace updates need two minutes to settle." })}{" "}</p>
         )}
         {status.ready &&
           page.executions.map((run) => (
@@ -138,8 +136,7 @@ export function MatchingActivityPreview({
           ))}
         {canContinue && (
           <p ref={tailRef} data-testid="preview-placeholder" className="py-3 text-xs text-muted-foreground">
-            Loading more…
-          </p>
+            {i18n.t("matchingActivityPreview.loading-more", { defaultValue: "Loading more…" })}{" "}</p>
         )}
       </div>
       {status.ready && <PreviewFooter page={page} selection={selection} />}

@@ -1,6 +1,7 @@
 "use client";
 
 import moment from "moment";
+import i18n from "@/lib/i18n";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { RefreshCw } from "lucide-react";
 import { traceAgentNames } from "../utils";
@@ -80,10 +81,9 @@ function TraceHistoryError({ history }: { history: ReturnType<typeof useTraceAva
   if (!history.error) return null;
   return (
     <div role="alert" className="flex items-center justify-between gap-4 border-b px-3 py-3 text-sm">
-      <p>Could not check earlier traces. {history.error.message}</p>
+      <p>{i18n.t("agentTracesSection.could-not-check-earlier-traces", { defaultValue: "Could not check earlier traces." })}{" "}{history.error.message}</p>
       <Button variant="outline" size="sm" disabled={history.isFetching} onClick={() => void history.refetch()}>
-        Retry trace check
-      </Button>
+        {i18n.t("agentTracesSection.retry-trace-check", { defaultValue: "Retry trace check" })}{" "}</Button>
     </div>
   );
 }
@@ -165,8 +165,7 @@ export function AgentTracesSection({
           onClick={() => setShowSetup(false)}
           className="mb-3 text-sm text-muted-foreground hover:text-foreground"
         >
-          ← Back to traces
-        </button>
+          {i18n.t("agentTracesSection.back-to-traces", { defaultValue: "← Back to traces" })}{" "}</button>
         <TracingSetupCard detail={null} connected {...setupProps} />
       </div>
     );
@@ -186,7 +185,7 @@ export function AgentTracesSection({
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-card">
         {checkHistory && <TraceHistoryError history={history} />}
         <TracesReceived received={setup.received} />
-        <Inspector.Panel label="Trace details" testId="run-drawer">
+        <Inspector.Panel label={i18n.t("agentTracesSection.trace-details", { defaultValue: "Trace details" })} testId="run-drawer">
           {(shown: TraceRef) => (
             <RunView
               traceId={shown.traceId}
@@ -211,8 +210,8 @@ export function AgentTracesSection({
             variant="ghost"
             size="icon-sm"
             className="h-full w-10 shrink-0 rounded-none border-l"
-            aria-label="Refresh traces"
-            title="Refresh traces"
+            aria-label={i18n.t("agentTracesSection.refresh-traces", { defaultValue: "Refresh traces" })}
+            title={i18n.t("agentTracesSection.refresh-traces-2", { defaultValue: "Refresh traces" })}
             disabled={traces.isFetching}
             onClick={checkTraces}
           >
@@ -259,8 +258,7 @@ function TracesReceived({ received }: { received: boolean }) {
   if (!received) return null;
   return (
     <p role="status" className="border-b px-3 py-3 text-sm text-emerald-700 dark:text-emerald-400">
-      Traces received. Select a run to inspect it.
-    </p>
+      {i18n.t("agentTracesSection.traces-received-select-a-run-to-inspect-it", { defaultValue: "Traces received. Select a run to inspect it." })}{" "}</p>
   );
 }
 
@@ -293,7 +291,6 @@ function TracingSetupAction({ available, live, onSetup }: { available: boolean; 
       disabled={!live}
       onClick={onSetup}
     >
-      Set up tracing
-    </Button>
+      {i18n.t("agentTracesSection.set-up-tracing", { defaultValue: "Set up tracing" })}{" "}</Button>
   );
 }

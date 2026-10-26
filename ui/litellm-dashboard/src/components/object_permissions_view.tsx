@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import VectorStorePermissions from "./permissions/VectorStorePermissions";
 import MCPServerPermissions from "./permissions/MCPServerPermissions";
 import AgentPermissions from "./permissions/AgentPermissions";
@@ -50,11 +51,10 @@ export function ObjectPermissionsView({
         accessToken={accessToken}
       />
       <div className="min-w-0 rounded-md border border-border p-4">
-        <p className="text-sm font-medium text-foreground">Search tools</p>
+        <p className="text-sm font-medium text-foreground">{i18n.t("objectPermissionsView.search-tools", { defaultValue: "Search tools" })}</p>
         {searchTools.length === 0 ? (
           <p className="mt-1 block text-xs text-muted-foreground">
-            No restriction — all configured search tools are allowed for this team.
-          </p>
+            {i18n.t("objectPermissionsView.no-restriction-all-configured-search-tools-a", { defaultValue: "No restriction — all configured search tools are allowed for this team." })}{" "}</p>
         ) : (
           <p className="mt-1 block text-xs break-words text-foreground">{searchTools.join(", ")}</p>
         )}
@@ -63,8 +63,7 @@ export function ObjectPermissionsView({
         <p className="text-sm font-medium text-foreground">Skills</p>
         {skills.length === 0 ? (
           <p className="mt-1 block text-xs text-muted-foreground">
-            No private skills granted. Only enabled (public) Claude Code plugins are visible.
-          </p>
+            {i18n.t("objectPermissionsView.no-private-skills-granted-only-enabled-publi", { defaultValue: "No private skills granted. Only enabled (public) Claude Code plugins are visible." })}{" "}</p>
         ) : (
           <p className="mt-1 block text-xs break-words text-foreground">{skills.join(", ")}</p>
         )}
@@ -77,8 +76,8 @@ export function ObjectPermissionsView({
       <div className={`@container bg-card border border-border rounded-lg p-6 ${className}`}>
         <div className="flex items-center gap-2 mb-6">
           <div>
-            <p className="font-semibold text-foreground">Object Permissions</p>
-            <p className="text-xs text-muted-foreground">Access control for Vector Stores and MCP Servers</p>
+            <p className="font-semibold text-foreground">{i18n.t("objectPermissionsView.object-permissions", { defaultValue: "Object Permissions" })}</p>
+            <p className="text-xs text-muted-foreground">{i18n.t("objectPermissionsView.access-control-for-vector-stores-and-mcp-ser", { defaultValue: "Access control for Vector Stores and MCP Servers" })}</p>
           </div>
         </div>
         {content}
@@ -88,7 +87,7 @@ export function ObjectPermissionsView({
 
   return (
     <div className={`${className}`}>
-      <p className="font-medium text-foreground mb-3">Object Permissions</p>
+      <p className="font-medium text-foreground mb-3">{i18n.t("objectPermissionsView.object-permissions-2", { defaultValue: "Object Permissions" })}</p>
       {content}
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import i18n from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Aperture, ArrowUpRight, Loader2 } from "lucide-react";
 import AgentTracesPage from "@/components/lens/traces/list/AgentTracesPage";
@@ -60,7 +61,7 @@ function DemoToggle({ demo, onChange }: { demo: boolean; onChange: (demo: boolea
         demo ? "font-medium text-info" : "text-muted-foreground",
       )}
     >
-      <label htmlFor={id}>Demo data</label>
+      <label htmlFor={id}>{i18n.t("lensWorkspace.demo-data", { defaultValue: "Demo data" })}</label>
       <Switch id={id} size="sm" checked={demo} onCheckedChange={onChange} className="data-checked:bg-info" />
     </div>
   );
@@ -178,8 +179,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                 {setupState.loading ? (
                   <p role="status" className="flex items-center gap-2 py-8 text-sm text-muted-foreground">
                     <Loader2 aria-hidden="true" className="size-4 animate-spin" />
-                    Checking Lens setup…
-                  </p>
+                    {i18n.t("lensWorkspace.checking-lens-setup", { defaultValue: "Checking Lens setup…" })}{" "}</p>
                 ) : (
                   <LensGettingStarted state={setupState} onStart={startSetup} onExit={exitSetup} />
                 )}
@@ -200,7 +200,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                   {canViewInvestigations ? (
                     <FindingsView readOnly={readOnly || !isAdmin} />
                   ) : (
-                    <p className="py-6 text-sm text-muted-foreground">Findings require proxy administrator access.</p>
+                    <p className="py-6 text-sm text-muted-foreground">{i18n.t("lensWorkspace.findings-require-proxy-administrator-access", { defaultValue: "Findings require proxy administrator access." })}</p>
                   )}
                 </TabsContent>
                 <TabsContent value="investigations" className={PANEL}>
@@ -208,8 +208,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                     <InvestigationsView readOnly={readOnly || !isAdmin} />
                   ) : (
                     <p className="py-6 text-sm text-muted-foreground">
-                      Investigations require proxy administrator access. You can still view your traces.
-                    </p>
+                      {i18n.t("lensWorkspace.investigations-require-proxy-administrator-a", { defaultValue: "Investigations require proxy administrator access. You can still view your traces." })}{" "}</p>
                   )}
                 </TabsContent>
                 <TabsContent value="datasets" className={PANEL}>
@@ -224,8 +223,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
                   workerReadyAction={
                     list.lenses.length === 0 ? (
                       <Button className="w-full" onClick={startFirstInvestigation}>
-                        New investigation
-                      </Button>
+                        {i18n.t("lensWorkspace.new-investigation", { defaultValue: "New investigation" })}{" "}</Button>
                     ) : undefined
                   }
                   onOpenTraces={() => setTab("traces")}
@@ -241,7 +239,7 @@ function LensContent({ userRole, readOnly }: Omit<WorkspaceProps, "accessToken">
 
 function DatasetsPanel({ canView, isAdmin, readOnly }: { canView: boolean; isAdmin: boolean; readOnly: boolean }) {
   if (!canView)
-    return <p className="py-6 text-sm text-muted-foreground">Datasets require proxy administrator access.</p>;
+    return <p className="py-6 text-sm text-muted-foreground">{i18n.t("lensWorkspace.datasets-require-proxy-administrator-access", { defaultValue: "Datasets require proxy administrator access." })}</p>;
   return <DatasetsView readOnly={readOnly || !isAdmin} />;
 }
 

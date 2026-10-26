@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 
 import { Inspector } from "@/components/shared/Inspector";
@@ -65,7 +66,7 @@ function EvidenceBody({
       />
     );
   if (target?.source === "requests") return <RequestEvidence lensId={lensId} evidenceId={evidence.id} />;
-  return <p className="p-4 text-sm text-muted-foreground">This evidence is no longer available.</p>;
+  return <p className="p-4 text-sm text-muted-foreground">{i18n.t("evidence.this-evidence-is-no-longer-available", { defaultValue: "This evidence is no longer available." })}</p>;
 }
 
 export function TraceEvidence({
@@ -101,28 +102,26 @@ function RequestEvidence({ lensId, evidenceId }: { lensId: string; evidenceId: s
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
       <header className="border-b px-4 py-4">
-        <h2 className="text-sm font-semibold">Request evidence</h2>
-        <p className="text-xs text-muted-foreground">Original logged input and output</p>
+        <h2 className="text-sm font-semibold">{i18n.t("evidence.request-evidence", { defaultValue: "Request evidence" })}</h2>
+        <p className="text-xs text-muted-foreground">{i18n.t("evidence.original-logged-input-and-output", { defaultValue: "Original logged input and output" })}</p>
       </header>
       <div className="space-y-3 p-4">
-        {evidence.isLoading && <p role="status">Loading request…</p>}
+        {evidence.isLoading && <p role="status">{i18n.t("evidence.loading-request", { defaultValue: "Loading request…" })}</p>}
         {evidence.error && <p role="alert">{evidence.error.message}</p>}
         {evidence.data?.parts.map((p) => (
           <pre className="text-xs break-words whitespace-pre-wrap" key={p.span_id}>
             {p.content}
           </pre>
         ))}
-        {evidence.data?.parts.length === 0 && <p>Request was not found or is past retention</p>}
+        {evidence.data?.parts.length === 0 && <p>{i18n.t("evidence.request-was-not-found-or-is-past-retention", { defaultValue: "Request was not found or is past retention" })}</p>}
         <div className="flex flex-wrap gap-2">
           {offset > 0 && (
             <Button variant="outline" onClick={() => setOffset(Math.max(0, offset - SECTION))}>
-              Previous section
-            </Button>
+              {i18n.t("evidence.previous-section", { defaultValue: "Previous section" })}{" "}</Button>
           )}
           {evidence.data?.parts.some((p) => p.truncated) && (
             <Button variant="outline" onClick={() => setOffset(offset === 0 ? 1 : offset + SECTION)}>
-              Next section
-            </Button>
+              {i18n.t("evidence.next-section", { defaultValue: "Next section" })}{" "}</Button>
           )}
         </div>
       </div>

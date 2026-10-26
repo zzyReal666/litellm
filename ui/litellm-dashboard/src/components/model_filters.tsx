@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import i18n from "@/lib/i18n";
 import { Card } from "@/components/ui/card";
 import { matchesSearchTerm } from "@/utils/searchUtils";
 
@@ -126,10 +127,10 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
   const filtersContent = (
     <div className="flex flex-wrap gap-4 items-center">
       <div>
-        <p className="text-sm font-medium mb-2">Search Models:</p>
+        <p className="text-sm font-medium mb-2">{i18n.t("modelFilters.search-models", { defaultValue: "Search Models:" })}</p>
         <input
           type="text"
-          placeholder="Search model names..."
+          placeholder={i18n.t("modelFilters.search-model-names", { defaultValue: "Search model names..." })}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="border rounded-sm px-3 py-2 w-64 h-10 text-sm"
@@ -143,8 +144,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-40 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Providers
-          </option>
+            {i18n.t("modelFilters.all-providers", { defaultValue: "All Providers" })}{" "}</option>
           {modelHubData &&
             getUniqueProviders(modelHubData).map((provider) => (
               <option key={provider} value={provider} className="text-sm text-foreground">
@@ -161,8 +161,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-32 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Modes
-          </option>
+            {i18n.t("modelFilters.all-modes", { defaultValue: "All Modes" })}{" "}</option>
           {modelHubData &&
             getUniqueModes(modelHubData).map((mode) => (
               <option key={mode} value={mode} className="text-sm text-foreground">
@@ -179,8 +178,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
           className="border rounded-sm px-3 py-2 text-sm text-muted-foreground w-48 h-10"
         >
           <option value="" className="text-sm text-muted-foreground">
-            All Features
-          </option>
+            {i18n.t("modelFilters.all-features", { defaultValue: "All Features" })}{" "}</option>
           {modelHubData &&
             getUniqueFeatures(modelHubData).map((feature) => (
               <option key={feature} value={feature} className="text-sm text-foreground">
@@ -197,8 +195,7 @@ const ModelFilters: React.FC<ModelFiltersProps> = ({
             onClick={resetFilters}
             className="text-info hover:text-info/80 text-sm underline h-10 flex items-center"
           >
-            Clear Filters
-          </button>
+            {i18n.t("modelFilters.clear-filters", { defaultValue: "Clear Filters" })}{" "}</button>
         </div>
       )}
     </div>

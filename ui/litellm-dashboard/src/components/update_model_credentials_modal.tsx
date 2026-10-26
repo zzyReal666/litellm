@@ -1,4 +1,5 @@
 import { TriangleAlert } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useState } from "react";
 import { z } from "zod";
 import { modelPatchUpdateCall } from "./networking";
@@ -72,12 +73,10 @@ export default function UpdateModelCredentialsModal({
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && close()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Update API Key</DialogTitle>
+          <DialogTitle>{i18n.t("updateModelCredentialsModal.update-api-key", { defaultValue: "Update API Key" })}</DialogTitle>
         </DialogHeader>
         <span className="block mb-4 text-sm text-muted-foreground">
-          Update this model&apos;s API key. Only the new key is sent; the rest of the deployment configuration is left
-          untouched.
-        </span>
+          {i18n.t("updateModelCredentialsModal.update-this-model-s-api-key-only-the-new-key", { defaultValue: "Update this model's API key. Only the new key is sent; the rest of the deployment configuration is left untouched." })}{" "}</span>
         <Alert variant="warning" className="mb-4">
           <TriangleAlert />
           <AlertTitle>
@@ -88,9 +87,9 @@ export default function UpdateModelCredentialsModal({
         </Alert>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
-            <FormField control={form.control} name="api_key" label="New API Key">
+            <FormField control={form.control} name="api_key" label={i18n.t("updateModelCredentialsModal.new-api-key", { defaultValue: "New API Key" })}>
               {({ ref, ...field }) => (
-                <PasswordInput {...field} ref={ref} placeholder="Enter the new API key" autoComplete="new-password" />
+                <PasswordInput {...field} ref={ref} placeholder={i18n.t("updateModelCredentialsModal.enter-the-new-api-key", { defaultValue: "Enter the new API key" })} autoComplete="new-password" />
               )}
             </FormField>
           </FieldGroup>
@@ -100,8 +99,7 @@ export default function UpdateModelCredentialsModal({
             </Button>
             <Button type="submit" disabled={isSaving}>
               {isSaving && <UiLoadingSpinner className="size-4" />}
-              Update API Key
-            </Button>
+              {i18n.t("updateModelCredentialsModal.update-api-key-2", { defaultValue: "Update API Key" })}{" "}</Button>
           </div>
         </form>
       </DialogContent>
