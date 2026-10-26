@@ -325,7 +325,7 @@ export default function WebSearchInterceptionSettings() {
         <Info />
         <AlertTitle>{t("webSearchInterception.pageTitle", { defaultValue: "Web Search Interception" })}</AlertTitle>
         <AlertDescription>
-          {t("' + NS + '.pageDescription', {
+          {t("webSearchInterception.pageDescription", {
             defaultValue:
               "Serve web search tool calls from a configured search tool instead of passing them upstream, so models without native web search can still answer with fresh results. Click 'Save Settings' to apply changes across all pods (takes effect within 10 seconds).",
           })}
