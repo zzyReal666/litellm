@@ -35,30 +35,32 @@ function EmptyState() {
 }
 
 function NoMatchingTags() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1 py-6">
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <SearchX className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No matching tags</div>
-      <div className="text-sm text-muted-foreground">Try a different tag name or description.</div>
+      <div className="text-sm font-medium text-foreground">{t("tagManagement.tagTable.noMatchingTags", { defaultValue: "No matching tags" })}</div>
+      <div className="text-sm text-muted-foreground">{t("tagManagement.tagTable.noMatchingTagsHint", { defaultValue: "Try a different tag name or description." })}</div>
     </div>
   );
 }
 
 function TagFilters({ table }: { table: Table<Tag> }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Input
-        aria-label="Filter by tag name"
-        placeholder="Filter by tag name…"
+        aria-label={t("tagManagement.tagTable.filterByName", { defaultValue: "Filter by tag name" })}
+        placeholder={t("tagManagement.tagTable.filterByNamePlaceholder", { defaultValue: "Filter by tag name…" })}
         className="h-8 w-56"
         value={(table.getColumn("name")?.getFilterValue() as string | undefined) ?? ""}
         onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
       />
       <Input
-        aria-label="Filter by description"
-        placeholder="Filter by description…"
+        aria-label={t("tagManagement.tagTable.filterByDescription", { defaultValue: "Filter by description" })}
+        placeholder={t("tagManagement.tagTable.filterByDescriptionPlaceholder", { defaultValue: "Filter by description…" })}
         className="h-8 w-56"
         value={(table.getColumn("description")?.getFilterValue() as string | undefined) ?? ""}
         onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)}

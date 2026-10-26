@@ -13332,5 +13332,47 @@
     "anyModelFootnote": "Routed through your LiteLLM gateway, with spend tracked per teammate.",
     "runOwnAgent": "Run your own cloud agent",
     "runOwnDescription": "Deploy it on your own infrastructure and point it at this gateway. Your code and credentials stay in your accounts."
+  },
+  "modelInsights": {
+    "couldNotLoad": "Could not load model insights",
+    "pageTitle": "Model Leaderboard",
+    "pageDescription": "See which models your gateway used from {{start}} through {{end}}",
+    "topModels": "Top models",
+    "topModelsDescription": "{{granularity}} {{metric}} across your gateway",
+    "granularity": {
+      "day": "Daily",
+      "week": "Weekly"
+    },
+    "bucketSizeAria": "Bucket size",
+    "metric": {
+      "requests": "requests",
+      "spend": "spend",
+      "tokens": "tokens"
+    },
+    "scale": {
+      "linear": "linear",
+      "log": "log"
+    },
+    "leaderboard": "Leaderboard",
+    "leaderboardDescription": "Share of {{metric}}, with the change between the first and second half of the period",
+    "costPerSession": "Cost per session",
+    "sessionCostNote": "Session cost is not estimated from request counts",
+    "sessionIdHint": "Add a stable session_id to requests to unlock accurate session-level model comparisons in a future bounded session rollup",
+    "gatewayTotal": "Gateway total",
+    "byProvider": "by {{provider}}"
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "subtitle": "Enter your current password and choose a new one. The new password must meet this proxy's password policy.",
+    "resetRequired": "Your password must be changed before you can use the dashboard: it was either found in a known data breach or set by an administrator as a temporary password. After updating it, you will be signed out to log in again.",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "confirmPasswordRequired": "Confirm your new password",
+    "passwordsDoNotMatch": "New passwords do not match",
+    "passwordUpdatedRelogin": "Password updated. Please log in with your new password.",
+    "passwordUpdated": "Password updated"
   }
 }

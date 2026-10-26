@@ -13332,5 +13332,47 @@
     "anyModelFootnote": "通过你的 LiteLLM 网关路由，并按成员追踪花费。",
     "runOwnAgent": "运行你自己的云端 agent",
     "runOwnDescription": "将其部署在你自己的基础设施上并指向此网关。你的代码与凭据保留在你自己的账户中。"
+  },
+  "modelInsights": {
+    "couldNotLoad": "无法加载模型洞察",
+    "pageTitle": "模型排行榜",
+    "pageDescription": "查看网关在 {{start}} 至 {{end}} 期间使用了哪些模型",
+    "topModels": "热门模型",
+    "topModelsDescription": "网关整体 {{granularity}}{{metric}}",
+    "granularity": {
+      "day": "按日",
+      "week": "按周"
+    },
+    "bucketSizeAria": "统计粒度",
+    "metric": {
+      "requests": "请求数",
+      "spend": "花费",
+      "tokens": "Token 数"
+    },
+    "scale": {
+      "linear": "线性",
+      "log": "对数"
+    },
+    "leaderboard": "排行榜",
+    "leaderboardDescription": "各模型在 {{metric}} 中的占比，以及周期前后半段的对比变化",
+    "costPerSession": "单会话成本",
+    "sessionCostNote": "会话成本不会根据请求数估算",
+    "sessionIdHint": "在请求中传入稳定的 session_id，后续有界会话汇总功能才能提供准确的会话级模型对比",
+    "gatewayTotal": "网关总计",
+    "byProvider": "来自 {{provider}}"
+  },
+  "changePassword": {
+    "title": "修改密码",
+    "subtitle": "输入当前密码并设置新密码。新密码必须符合此代理的密码策略。",
+    "resetRequired": "在使用管理界面之前必须先修改密码：该密码要么出现在已知的数据泄露中，要么是管理员设置的临时密码。修改后你将被登出并要求重新登录。",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmNewPassword": "确认新密码",
+    "currentPasswordRequired": "请输入当前密码",
+    "newPasswordRequired": "请输入新密码",
+    "confirmPasswordRequired": "请确认新密码",
+    "passwordsDoNotMatch": "两次输入的新密码不一致",
+    "passwordUpdatedRelogin": "密码已更新，请用新密码重新登录。",
+    "passwordUpdated": "密码已更新"
   }
 }
