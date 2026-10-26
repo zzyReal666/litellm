@@ -13339,6 +13339,25 @@
       "noKeyLimit": "No key limit",
       "noExpiry": "No expiry",
       "otherLimitsApply": "Team, organization, and model limits still apply."
+    },
+    "scopeFields": {
+      "modelGroupOptional": "Model group (optional)",
+      "agentOptional": "Agent (optional)",
+      "allModelGroups": "All model groups",
+      "allAgentsAndActivity": "All agents and activity",
+      "loadingAgents": "Loading agents…",
+      "noMatchesHint": "No matches. You can enter a recorded name.",
+      "couldNotLoadAgents": "Could not load agents.",
+      "advancedFilters": "Advanced filters",
+      "applicationOptional": "Application (optional)",
+      "allApplications": "All applications",
+      "activityType": "Activity type",
+      "agentTraces": "Agent traces",
+      "llmRequests": "LLM requests",
+      "tracesAndRequests": "Traces and LLM requests",
+      "matchHint": "Match any recorded metadata, such as a user ID, environment, or tag. All conditions must match.",
+      "teamIdOptional": "Team ID (optional)",
+      "allAccessibleTeams": "All accessible teams"
     }
   },
   "mcpServerCredentials": {

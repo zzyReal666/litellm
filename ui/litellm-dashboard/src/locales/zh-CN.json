@@ -13339,6 +13339,25 @@
       "noKeyLimit": "密钥无限制",
       "noExpiry": "永不过期",
       "otherLimitsApply": "团队、组织和模型限额仍然生效。"
+    },
+    "scopeFields": {
+      "modelGroupOptional": "模型组（可选）",
+      "agentOptional": "Agent（可选）",
+      "allModelGroups": "全部模型组",
+      "allAgentsAndActivity": "全部 agent 与活动",
+      "loadingAgents": "正在加载 agent…",
+      "noMatchesHint": "无匹配项。可以直接输入已记录的名称。",
+      "couldNotLoadAgents": "无法加载 agent。",
+      "advancedFilters": "高级筛选",
+      "applicationOptional": "应用（可选）",
+      "allApplications": "全部应用",
+      "activityType": "活动类型",
+      "agentTraces": "Agent 链路",
+      "llmRequests": "LLM 请求",
+      "tracesAndRequests": "链路与 LLM 请求",
+      "matchHint": "匹配任意已记录的元数据，例如用户 ID、环境或标签。所有条件都必须满足。",
+      "teamIdOptional": "团队 ID（可选）",
+      "allAccessibleTeams": "全部可访问团队"
     }
   },
   "mcpServerCredentials": {

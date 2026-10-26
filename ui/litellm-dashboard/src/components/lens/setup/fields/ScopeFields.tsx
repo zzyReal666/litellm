@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import {
   Combobox,
@@ -27,7 +28,10 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
   const [advanced, setAdvanced] = useState(showAdvancedByDefault);
   const nameFieldName = selection.source === "requests" ? "selection.service" : "selection.agent_name";
   const selectedName = selection.source === "requests" ? selection.service : selection.agent_name;
-  const nameLabel = selection.source === "requests" ? "Model group (optional)" : "Agent (optional)";
+  const nameLabel =
+    selection.source === "requests"
+      ? i18n.t("lens.scopeFields.modelGroupOptional", { defaultValue: "Model group (optional)" })
+      : i18n.t("lens.scopeFields.agentOptional", { defaultValue: "Agent (optional)" });
   return (
     <>
       <label className="grid gap-2 text-sm font-medium">
@@ -45,13 +49,21 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
             >
               <ComboboxInput
                 aria-label={nameLabel}
-                placeholder={selection.source === "requests" ? "All model groups" : "All agents and activity"}
+                placeholder={
+                  selection.source === "requests"
+                    ? i18n.t("lens.scopeFields.allModelGroups", { defaultValue: "All model groups" })
+                    : i18n.t("lens.scopeFields.allAgentsAndActivity", { defaultValue: "All agents and activity" })
+                }
                 showClear={!!selectedName}
                 className="w-full h-9"
               />
               <ComboboxContent>
                 <ComboboxEmpty>
-                  {agentsLoading ? "Loading agents…" : "No matches. You can enter a recorded name."}
+                  {
+                    agentsLoading
+                      ? i18n.t("lens.scopeFields.loadingAgents", { defaultValue: "Loading agents…" })
+                      : i18n.t("lens.scopeFields.noMatchesHint", { defaultValue: "No matches. You can enter a recorded name." })
+                  }
                 </ComboboxEmpty>
                 <ComboboxList>
                   {(name: string) => (
@@ -67,25 +79,29 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
       </label>
       {selection.source !== "requests" && agentsError && (
         <p role="alert" className="text-sm text-destructive">
-          Could not load agents.{" "}
+          {i18n.t("' + NS + '.couldNotLoadAgents", { defaultValue: "Could not load agents." })}{" "}
           <button type="button" className="underline" onClick={retryAgents}>
-            Retry
+            {i18n.t("common.retry", { defaultValue: "Retry" })}
           </button>
         </p>
       )}
       <details open={advanced} onToggle={(event) => setAdvanced(event.currentTarget.open)} className="group">
         <summary className="cursor-pointer text-sm font-medium">
-          Advanced filters{filters.length ? ` (${filters.length})` : ""}
+          {i18n.t("' + NS + '.advancedFilters", { defaultValue: "Advanced filters" })}
+          {filters.length ? ` (${filters.length})` : ""}
         </summary>
         <div className="mt-4 space-y-4">
           {selection.source !== "requests" && (
             <label className="grid gap-2 text-sm">
-              Application (optional)
-              <Input {...register("selection.service")} placeholder="All applications" />
+              {i18n.t("' + NS + '.applicationOptional", { defaultValue: "Application (optional)" })}
+              <Input
+                {...register("selection.service")}
+                placeholder={i18n.t("' + NS + '.allApplications", { defaultValue: "All applications" })}
+              />
             </label>
           )}
           <label className="grid gap-2 text-sm">
-            Activity type
+            {i18n.t("' + NS + '.activityType", { defaultValue: "Activity type" })}
             <select
               {...register("selection.source", {
                 onChange: () => {
@@ -96,18 +112,23 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
               })}
               className={selectClass}
             >
-              <option value="traces">Agent traces</option>
-              <option value="requests">LLM requests</option>
-              <option value="both">Traces and LLM requests</option>
+              <option value="traces">{i18n.t("lens.scopeFields.agentTraces", { defaultValue: "Agent traces" })}</option>
+              <option value="requests">{i18n.t("lens.scopeFields.llmRequests", { defaultValue: "LLM requests" })}</option>
+              <option value="both">{i18n.t("lens.scopeFields.tracesAndRequests", { defaultValue: "Traces and LLM requests" })}</option>
             </select>
           </label>
           <p className="text-xs leading-5 text-muted-foreground">
-            Match any recorded metadata, such as a user ID, environment, or tag. All conditions must match.
+            {i18n.t("' + NS + '.matchHint", {
+              defaultValue: "Match any recorded metadata, such as a user ID, environment, or tag. All conditions must match.",
+            })}
           </p>
           <MetadataFilters attributes={attributes} keys={keys} />
           <label className="grid gap-2 text-sm">
-            Team ID (optional)
-            <Input {...register("selection.team_id")} placeholder="All accessible teams" />
+            {i18n.t("' + NS + '.teamIdOptional", { defaultValue: "Team ID (optional)" })}
+            <Input
+              {...register("selection.team_id")}
+              placeholder={i18n.t("' + NS + '.allAccessibleTeams", { defaultValue: "All accessible teams" })}
+            />
           </label>
         </div>
       </details>
