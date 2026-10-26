@@ -1,4 +1,4 @@
-# 7.99 升级到 v1.106.0-zh.8（含 headroom 压缩服务）
+# 7.99 升级到 v1.106.0-zh.9（含 headroom 压缩服务）
 
 ## 升级结果（2026-10-23 18:11）
 
@@ -6,7 +6,7 @@
 
 ```
 old_image=litellm-zhcn:v1.100.0-zh.5
-new_image=litellm-zhcn:v1.106.0-zh.8
+new_image=litellm-zhcn:v1.106.0-zh.9
 headroom_image=headroom-offline:v1.106.0-zh.7
 downtime_seconds=88
 readiness=200
@@ -22,12 +22,13 @@ smoke_http=200
 - 真实模型调用返回 200，spend log 正常写入
 - 多轮对话验证压缩生效（headroom 收到压缩请求，prompt_tokens 明显下降）
 - 2026-10-26 补丁到 zh.8：logo 与 favicon 烧录进镜像，管理界面 logo、侧边栏 monogram、浏览器标签图标都是自定义图，不再依赖 assets 目录挂载
+- 2026-10-26 补丁到 zh.9：修复中文界面下用户详情页「获取用户数据失败」。原因是 `/models` 接口的查询参数 `include_model_access_groups` 被本地化成了「是」，后端按布尔解析返回 422；已改为固定发送 True，并加了回归测试
 - db 容器在升级前已用带 `seccomp=unconfined` 的配置重建过一次，升级脚本未再动它
 - redis 因 compose 配置变化被重建，健康
 
 ## 现状
 
-- 目标版本：`litellm-zhcn:v1.106.0-zh.8` + `headroom-offline:v1.106.0-zh.7`
+- 目标版本：`litellm-zhcn:v1.106.0-zh.9` + `headroom-offline:v1.106.0-zh.7`
 - 数据库：36G，其中 `LiteLLM_SpendLogs` 36G（堆 1G，索引 128M，其余是 TOAST）
 - 主机：Kylin V10，内核 4.19，Docker 26.0.1，无 compose 插件（用 `/opt/litellm/bin/docker-compose`），机械盘
 - 规模：7 个模型、196 个密钥、7 个团队、约 35 万条 spend log
@@ -35,7 +36,7 @@ smoke_http=200
 ## 准备好的内容（/opt/litellm-upgrade）
 
 ```
-pkg/litellm-offline-v1.106.0-zh.8.tar.gz   离线包（1.2G，sha256 见 pkg.sha256）
+pkg/litellm-offline-v1.106.0-zh.9.tar.gz   离线包（1.2G，sha256 见 pkg.sha256）
 backup/cfg-pre-zh7-<ts>/                  配置类数据备份（目录格式，18M，排除大表 SpendLogs）
 backup/schema-pre-zh7.sql                 升级前完整结构快照
 backup/prisma-migrations-data.sql          迁移记录表数据

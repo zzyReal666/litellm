@@ -888,3 +888,27 @@ describe("modelCostMap", () => {
     expect(mockFetch.mock.calls[1][0]).toMatch(/\/public\/litellm_model_cost_map$/);
   });
 });
+
+describe("modelAvailableCall - 查询参数必须是协议值", () => {
+  it("中文界面下 include_model_access_groups 仍然发送 True", async () => {
+    const [{ apiClient, modelAvailableCall }, { default: i18n }] = await Promise.all([
+      import("./networking"),
+      import("@/lib/i18n"),
+    ]);
+    const previousLocale = i18n.language;
+    await i18n.changeLanguage("zh-CN");
+    const spy = vi.spyOn(apiClient, "get").mockResolvedValue({ data: [] } as never);
+    try {
+      await modelAvailableCall("test-token", "user-1", "internal_user");
+      expect(spy).toHaveBeenCalledWith(
+        "/models",
+        expect.objectContaining({
+          query: expect.objectContaining({ include_model_access_groups: "True" }),
+        }),
+      );
+    } finally {
+      spy.mockRestore();
+      await i18n.changeLanguage(previousLocale);
+    }
+  });
+});

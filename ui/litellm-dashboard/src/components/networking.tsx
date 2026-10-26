@@ -86,7 +86,6 @@ export const getAutoRouterAssembledPromptCall = async (
 /**
  * Helper file for calls being made to proxy
  */
-import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 import { clearTokenCookies, getCookie, storeLoginToken } from "@/utils/cookieUtils";
 import { decodeToken } from "@/utils/jwtUtils";
@@ -1781,7 +1780,7 @@ export const modelAvailableCall = async (
     return await apiClient.get(`/models`, {
       accessToken,
       query: {
-        include_model_access_groups: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }),
+        include_model_access_groups: "True",
         return_wildcard_routes: return_wildcard_routes === true ? "True" : undefined,
         only_model_access_groups: only_model_access_groups === true ? "True" : undefined,
         team_id: teamID || undefined,

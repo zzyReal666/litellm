@@ -1,6 +1,6 @@
 # LiteLLM 中文版离线安装包
 
-版本：v1.106.0-zh.8，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
+版本：v1.106.0-zh.9，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
 
 ## 包内容
 
@@ -25,8 +25,8 @@ Linux x86_64，Docker 20 以上，root 权限，磁盘至少 16G，内存至少 
 ## 安装
 
 ```bash
-tar xzf litellm-offline-v1.106.0-zh.8.tar.gz
-cd litellm-offline-v1.106.0-zh.8
+tar xzf litellm-offline-v1.106.0-zh.9.tar.gz
+cd litellm-offline-v1.106.0-zh.9
 sudo ./install.sh --deepseek-key sk-你的DeepSeekKey
 ```
 
