@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowRight, Bot } from "lucide-react";
 import { StackedUsageChart } from "@/components/shared/charts";
 import { Logo } from "@/components/molecules/logo/Logo";
@@ -119,8 +120,7 @@ function AgentItem({
             onClick={() => onOpen(agent)}
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
-            View activity
-            <ArrowRight aria-hidden="true" className="size-3 transition-transform group-hover:translate-x-0.5" />
+            {i18n.t("topAgents.view-activity", { defaultValue: "View activity" })}{" "}<ArrowRight aria-hidden="true" className="size-3 transition-transform group-hover:translate-x-0.5" />
           </button>
         ) : (
           <span className="block truncate text-xs text-muted-foreground">{agent.description}</span>
@@ -138,7 +138,7 @@ function AgentItem({
 
 function TopAgentsBody({ loading, empty, children }: { loading: boolean; empty: boolean; children: React.ReactNode }) {
   if (loading) return <ChartSkeleton className="mx-5 h-64 w-auto" />;
-  if (empty) return <p className="py-10 text-center text-xs text-muted-foreground">No agent traffic in this range</p>;
+  if (empty) return <p className="py-10 text-center text-xs text-muted-foreground">{i18n.t("topAgents.no-agent-traffic-in-this-range", { defaultValue: "No agent traffic in this range" })}</p>;
   return <>{children}</>;
 }
 
@@ -192,10 +192,10 @@ export default function TopAgents({
   return (
     <Panel
       icon={Bot}
-      title="Top agents"
+      title={i18n.t("topAgents.top-agents", { defaultValue: "Top agents" })}
       subtitle={subtitle}
       testId="top-agents"
-      action={<Segmented label="Agent metric" value={metric} options={METRICS} onChange={setMetric} />}
+      action={<Segmented label={i18n.t("topAgents.agent-metric", { defaultValue: "Agent metric" })} value={metric} options={METRICS} onChange={setMetric} />}
       bodyClassName="px-0 pt-4 pb-0"
     >
       <TopAgentsBody loading={loading} empty={agents.length === 0}>

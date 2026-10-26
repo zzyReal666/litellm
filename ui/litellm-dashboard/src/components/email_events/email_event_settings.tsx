@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -90,8 +91,8 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Email Notifications</CardTitle>
-        <p className="text-sm text-muted-foreground">Select which events should trigger email notifications.</p>
+        <CardTitle className="text-base">{i18n.t("emailEventSettings.email-notifications", { defaultValue: "Email Notifications" })}</CardTitle>
+        <p className="text-sm text-muted-foreground">{i18n.t("emailEventSettings.select-which-events-should-trigger-email-not", { defaultValue: "Select which events should trigger email notifications." })}</p>
       </CardHeader>
 
       <CardContent>
@@ -122,11 +123,9 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
 
         <div className="mt-6 flex gap-4">
           <Button onClick={handleSaveSettings} disabled={loading}>
-            Save Changes
-          </Button>
+            {i18n.t("emailEventSettings.save-changes", { defaultValue: "Save Changes" })}{" "}</Button>
           <Button variant="secondary" onClick={handleResetSettings} disabled={loading}>
-            Reset to Defaults
-          </Button>
+            {i18n.t("emailEventSettings.reset-to-defaults", { defaultValue: "Reset to Defaults" })}{" "}</Button>
         </div>
       </CardContent>
     </Card>

@@ -644,7 +644,10 @@
       "updatedUsers": "已更新 {{count}} 个用户",
       "addedToTeams": "已将用户添加到 {{count}} 个团队（共 {{total}} 次添加）",
       "failedToAddToTeams": "向 {{count}} 个团队添加用户失败"
-    }
+    },
+    "this-will-apply-changes-to-all-users-in-the": "⚠️ 这会将更改应用到系统中的所有用户，而不仅是已选用户。",
+    "fill-in-the-fields-below-with-the-values-you": "在下方字段中填写要应用到所有已选用户的值。你可以批量编辑：角色、预算、模型和元数据。也可以将用户添加到团队。",
+    "users-will-be-added-with-user-role-by-defaul": "用户默认以 “user” 角色添加。所有用户都会被加入所选的每个团队。"
   },
   "createUserButton": {
     "inviteUserButton": "+ 邀请用户",
@@ -682,7 +685,8 @@
   },
   "debugWarningBanner": {
     "message": "性能警告：详细调试模式已启用",
-    "description": "详细调试日志（<code>LITELLM_LOG=DEBUG</code>）当前已启用。此模式会记录大量诊断信息并显著降低性能，应仅用于排查问题，生产环境请禁用。"
+    "description": "详细调试日志（<code>LITELLM_LOG=DEBUG</code>）当前已启用。此模式会记录大量诊断信息并显著降低性能，应仅用于排查问题，生产环境请禁用。",
+    "performance-warning-detailed-debug-mode-acti": "性能警告：详细调试模式已启用"
   },
   "defaultUserSettings": {
     "title": "默认用户设置",
@@ -13811,5 +13815,58 @@
     "analysis-model-2": "分析模型",
     "could-not-load-models": "无法加载模型：",
     "choose-a-chat-model-that-supports-json-outpu": "请选择支持 JSON 输出的对话模型。"
+  },
+  "mcpServerEdit": {
+    "edit-mcp-server": "编辑 MCP 服务器",
+    "rpm-limit-all-callers": "RPM 限制（所有调用方）",
+    "configure-the-stdio-transport-used-to-launch": "配置用于启动 MCP 服务器进程的 stdio 传输方式。你可以填写下方字段，或粘贴 JSON 配置。",
+    "for-mcp-servers-hosted-on-aws-bedrock-agentc": "适用于托管在 AWS Bedrock AgentCore 上的 MCP 服务器。"
+  },
+  "expectationsFields": {
+    "what-should-the-agent-be-doing": "agent 应该做什么？",
+    "answer-the-customer-s-question-using-verifie": "使用经过验证的来源回答客户的问题，并在信息缺失时说明。",
+    "custom-checks": "自定义检查",
+    "e-g-quotes-a-price-without-checking-the-pric": "例如：未查询定价工具就报价"
+  },
+  "spanPane": {
+    "span-details": "Span 详情",
+    "add-this-turn-to-dataset": "将此轮添加到数据集",
+    "copy-step": "复制步骤",
+    "span-detail-sections": "Span 详情分段"
+  },
+  "auditLogsPanel": {
+    "enterprise-feature": "✨ 企业版功能。",
+    "this-is-a-litellm-enterprise-feature-and-req": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。",
+    "here-s-a-preview-of-what-audit-logs-offer": "以下是审计日志功能预览：",
+    "audit-logs-preview": "审计日志预览"
+  },
+  "commandPalette": {
+    "command-palette": "命令面板",
+    "virtual-keys": "虚拟密钥",
+    "unable-to-search-keys": "无法搜索密钥"
+  },
+  "emailEventSettings": {
+    "email-notifications": "邮件通知",
+    "select-which-events-should-trigger-email-not": "选择哪些事件应触发邮件通知。",
+    "save-changes": "保存更改",
+    "reset-to-defaults": "恢复默认值"
+  },
+  "topAgents": {
+    "view-activity": "查看活动",
+    "no-agent-traffic-in-this-range": "该时间范围内没有 agent 流量",
+    "top-agents": "热门 agent",
+    "agent-metric": "Agent 指标"
+  },
+  "uIAccessControlForm": {
+    "configure-who-can-access-the-ui-interface-an": "配置谁可以访问 UI 界面，以及如何从 JWT Token 中提取用户组信息。",
+    "select-access-mode": "选择访问模式",
+    "restricted-sso-group": "受限 SSO 组",
+    "update-ui-access-control": "更新 UI 访问控制"
+  },
+  "usageStatStrip": {
+    "total-requests": "总请求数",
+    "total-tokens": "总 Token 数",
+    "avg-cost-request": "平均成本 / 请求",
+    "avg-latency": "平均延迟"
   }
 }

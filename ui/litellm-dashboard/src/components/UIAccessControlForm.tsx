@@ -1,4 +1,5 @@
 import { CircleHelp } from "lucide-react";
+import i18n from "@/lib/i18n";
 import React, { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -151,8 +152,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
       <div className="p-4">
         <div className="mb-4">
           <p className="text-sm text-muted-foreground">
-            Configure who can access the UI interface and how group information is extracted from JWT tokens.
-          </p>
+            {i18n.t("uIAccessControlForm.configure-who-can-access-the-ui-interface-an", { defaultValue: "Configure who can access the UI interface and how group information is extracted from JWT tokens." })}{" "}</p>
         </div>
 
         <form onSubmit={form.handleSubmit(submitMountedValues)} noValidate>
@@ -174,7 +174,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                   >
-                    <SelectValue placeholder="Select access mode" />
+                    <SelectValue placeholder={i18n.t("uIAccessControlForm.select-access-mode", { defaultValue: "Select access mode" })} />
                   </SelectTrigger>
                   <SelectContent>
                     {UI_ACCESS_MODE_OPTIONS.map((option) => (
@@ -188,7 +188,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
             </FormField>
 
             {uiAccessModeType === "restricted_sso_group" && (
-              <FormField control={form.control} name="restricted_sso_group" label="Restricted SSO Group">
+              <FormField control={form.control} name="restricted_sso_group" label={i18n.t("uIAccessControlForm.restricted-sso-group", { defaultValue: "Restricted SSO Group" })}>
                 {({ ref, value, ...field }) => (
                   <Input {...field} ref={ref} value={value ?? ""} placeholder="ui-access-group" />
                 )}
@@ -210,8 +210,7 @@ const UIAccessControlForm: React.FC<UIAccessControlFormProps> = ({ accessToken, 
           <div className="mt-4 text-right">
             <Button type="submit" disabled={loading}>
               {loading && <UiLoadingSpinner className="size-4" />}
-              Update UI Access Control
-            </Button>
+              {i18n.t("uIAccessControlForm.update-ui-access-control", { defaultValue: "Update UI Access Control" })}{" "}</Button>
           </div>
         </form>
       </div>

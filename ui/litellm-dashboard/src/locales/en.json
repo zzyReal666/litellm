@@ -644,7 +644,10 @@
       "updatedUsers": "Updated {{count}} user(s)",
       "addedToTeams": "Added users to {{count}} team(s) ({{total}} total additions)",
       "failedToAddToTeams": "Failed to add users to {{count}} team(s)"
-    }
+    },
+    "this-will-apply-changes-to-all-users-in-the": "⚠️ This will apply changes to ALL users in the system, not just the selected ones.",
+    "fill-in-the-fields-below-with-the-values-you": "Fill in the fields below with the values you want to apply to all selected users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.",
+    "users-will-be-added-with-user-role-by-defaul": "Users will be added with \"user\" role by default. All users will be added to each selected team."
   },
   "createUserButton": {
     "inviteUserButton": "+ Invite User",
@@ -682,7 +685,8 @@
   },
   "debugWarningBanner": {
     "message": "Performance Warning: Detailed Debug Mode Active",
-    "description": "Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments."
+    "description": "Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments.",
+    "performance-warning-detailed-debug-mode-acti": "Performance Warning: Detailed Debug Mode Active"
   },
   "defaultUserSettings": {
     "title": "Default User Settings",
@@ -13811,5 +13815,58 @@
     "analysis-model-2": "Analysis model",
     "could-not-load-models": "Could not load models:",
     "choose-a-chat-model-that-supports-json-outpu": "Choose a chat model that supports JSON output."
+  },
+  "mcpServerEdit": {
+    "edit-mcp-server": "Edit MCP server",
+    "rpm-limit-all-callers": "RPM limit (all callers)",
+    "configure-the-stdio-transport-used-to-launch": "Configure the stdio transport used to launch the MCP server process. You can either fill in the fields below or paste a JSON configuration.",
+    "for-mcp-servers-hosted-on-aws-bedrock-agentc": "For MCP servers hosted on AWS Bedrock AgentCore."
+  },
+  "expectationsFields": {
+    "what-should-the-agent-be-doing": "What should the agent be doing?",
+    "answer-the-customer-s-question-using-verifie": "Answer the customer's question using verified sources and explain when information is missing.",
+    "custom-checks": "Custom checks",
+    "e-g-quotes-a-price-without-checking-the-pric": "e.g. Quotes a price without checking the pricing tool"
+  },
+  "spanPane": {
+    "span-details": "Span details",
+    "add-this-turn-to-dataset": "Add this turn to dataset",
+    "copy-step": "Copy step",
+    "span-detail-sections": "Span detail sections"
+  },
+  "auditLogsPanel": {
+    "enterprise-feature": "✨ Enterprise Feature.",
+    "this-is-a-litellm-enterprise-feature-and-req": "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+    "here-s-a-preview-of-what-audit-logs-offer": "Here's a preview of what Audit Logs offer:",
+    "audit-logs-preview": "Audit Logs Preview"
+  },
+  "commandPalette": {
+    "command-palette": "Command palette",
+    "virtual-keys": "Virtual Keys",
+    "unable-to-search-keys": "Unable to search keys"
+  },
+  "emailEventSettings": {
+    "email-notifications": "Email Notifications",
+    "select-which-events-should-trigger-email-not": "Select which events should trigger email notifications.",
+    "save-changes": "Save Changes",
+    "reset-to-defaults": "Reset to Defaults"
+  },
+  "topAgents": {
+    "view-activity": "View activity",
+    "no-agent-traffic-in-this-range": "No agent traffic in this range",
+    "top-agents": "Top agents",
+    "agent-metric": "Agent metric"
+  },
+  "uIAccessControlForm": {
+    "configure-who-can-access-the-ui-interface-an": "Configure who can access the UI interface and how group information is extracted from JWT tokens.",
+    "select-access-mode": "Select access mode",
+    "restricted-sso-group": "Restricted SSO Group",
+    "update-ui-access-control": "Update UI Access Control"
+  },
+  "usageStatStrip": {
+    "total-requests": "Total Requests",
+    "total-tokens": "Total Tokens",
+    "avg-cost-request": "Avg cost / request",
+    "avg-latency": "Avg latency"
   }
 }

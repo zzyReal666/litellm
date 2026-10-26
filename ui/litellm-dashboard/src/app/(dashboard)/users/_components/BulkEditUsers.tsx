@@ -243,8 +243,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
             {updateAllUsers && (
               <div className="mt-2">
                 <span className="text-xs text-warning">
-                  ⚠️ This will apply changes to ALL users in the system, not just the selected ones.
-                </span>
+                  {i18n.t("bulkEditUsers.this-will-apply-changes-to-all-users-in-the", { defaultValue: "⚠️ This will apply changes to ALL users in the system, not just the selected ones." })}{" "}</span>
               </div>
             )}
           </div>
@@ -288,9 +287,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         <div className="mb-4">
           <p className="text-sm text-foreground">
-            <strong>{i18n.t("bulkEditUsers.instructionsLabel", { defaultValue: "Instructions:" })}</strong> Fill in the fields below with the values you want to apply to all selected
-            users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.
-          </p>
+            <strong>{i18n.t("bulkEditUsers.instructionsLabel", { defaultValue: "Instructions:" })}</strong> {i18n.t("bulkEditUsers.fill-in-the-fields-below-with-the-values-you", { defaultValue: "Fill in the fields below with the values you want to apply to all selected users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams." })}{" "}</p>
         </div>
 
         {/* Team Management Section */}
@@ -354,9 +351,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                   </div>
 
                   <span className="text-xs text-muted-foreground">
-                    Users will be added with &quot;user&quot; role by default. All users will be added to each selected
-                    team.
-                  </span>
+                    {i18n.t("bulkEditUsers.users-will-be-added-with-user-role-by-defaul", { defaultValue: "Users will be added with \"user\" role by default. All users will be added to each selected team." })}{" "}</span>
                 </>
               )}
             </div>

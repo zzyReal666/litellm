@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import i18n from "@/lib/i18n";
 import type { DailyData } from "@/components/UsagePage/types";
 import { cn } from "@/lib/cva.config";
 import { dailyTotals, formatCompact, formatLatency, formatUsd, type OverviewTotals } from "./overviewData";
@@ -36,7 +37,7 @@ export default function UsageStatStrip({
         />
       </StatCell>
       <StatCell trend={<Sparkline data={daily} dataKey="requests" color={BRAND} className="h-14" />}>
-        <Stat label="Total Requests" value={totals.requests.toLocaleString()} pending={requestCountsPending} />
+        <Stat label={i18n.t("usageStatStrip.total-requests", { defaultValue: "Total Requests" })} value={totals.requests.toLocaleString()} pending={requestCountsPending} />
         {!requestCountsPending && (
           <div className="mt-0.5 flex gap-3 text-xs leading-4 text-muted-foreground">
             <span>
@@ -53,7 +54,7 @@ export default function UsageStatStrip({
       </StatCell>
       <StatCell trend={<Sparkline data={daily} dataKey="tokens" color={BRAND} className="h-14" />}>
         <Stat
-          label="Total Tokens"
+          label={i18n.t("usageStatStrip.total-tokens", { defaultValue: "Total Tokens" })}
           value={loading ? null : formatCompact(totals.tokens)}
           exact={`${totals.tokens.toLocaleString()} tokens`}
           pending={loading}
@@ -62,9 +63,9 @@ export default function UsageStatStrip({
       </StatCell>
       <StatCell>
         <div className="grid gap-3">
-          <Stat label="Avg cost / request" value={formatUsd(totals.avgCostPerRequest, 4)} pending={loading} />
+          <Stat label={i18n.t("usageStatStrip.avg-cost-request", { defaultValue: "Avg cost / request" })} value={formatUsd(totals.avgCostPerRequest, 4)} pending={loading} />
           <Stat
-            label="Avg latency"
+            label={i18n.t("usageStatStrip.avg-latency", { defaultValue: "Avg latency" })}
             value={totals.avgLatencyMs === null ? "—" : formatLatency(totals.avgLatencyMs)}
             pending={loading}
             hint={totals.successRate === null ? undefined : `${totals.successRate.toFixed(1)}% success rate`}

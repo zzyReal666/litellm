@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { FileText, KeyRound, LoaderCircle, Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -242,14 +243,13 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         overlayClassName="bg-black/35 backdrop-blur-sm"
         className="top-[15vh] max-h-[70vh] translate-y-0 gap-0 overflow-hidden rounded-xl border border-border p-0 shadow-2xl sm:max-w-[640px]"
       >
-        <DialogTitle className="sr-only">Command palette</DialogTitle>
+        <DialogTitle className="sr-only">{i18n.t("commandPalette.command-palette", { defaultValue: "Command palette" })}</DialogTitle>
         <div className="flex h-14 items-center gap-3 border-b border-border px-4">
           <Search className="size-4 shrink-0 text-muted-foreground" />
           {scope === "keys" && (
             <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-muted px-2 py-1 text-xs font-medium">
               <KeyRound className="size-3.5" />
-              Virtual Keys
-            </span>
+              {i18n.t("commandPalette.virtual-keys", { defaultValue: "Virtual Keys" })}{" "}</span>
           )}
           <input
             autoFocus
@@ -272,8 +272,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         <div id="command-palette-results" role="listbox" className="max-h-[400px] overflow-y-auto p-2">
           {hasKeyError && (
             <div className="flex h-20 items-center justify-center text-sm text-muted-foreground">
-              Unable to search keys
-            </div>
+              {i18n.t("commandPalette.unable-to-search-keys", { defaultValue: "Unable to search keys" })}{" "}</div>
           )}
           {!hasKeyError && scope === "global" && trimmedQuery && groups.length === 0 && (
             <div className="px-2 py-3 text-sm text-muted-foreground">No results for “{trimmedQuery}”</div>

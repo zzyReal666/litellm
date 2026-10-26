@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import i18n from "@/lib/i18n";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ColumnFiltersState, OnChangeFn, PaginationState } from "@tanstack/react-table";
@@ -101,16 +102,14 @@ export default function AuditLogsPanel({
   if (!premiumUser) {
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto text-center">
-        <h1 style={{ display: "block", marginBottom: "10px" }}>✨ Enterprise Feature.</h1>
+        <h1 style={{ display: "block", marginBottom: "10px" }}>{i18n.t("auditLogsPanel.enterprise-feature", { defaultValue: "✨ Enterprise Feature." })}</h1>
         <p style={{ display: "block", marginBottom: "10px" }}>
-          This is a LiteLLM Enterprise feature, and requires a valid key to use.
-        </p>
+          {i18n.t("auditLogsPanel.this-is-a-litellm-enterprise-feature-and-req", { defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use." })}{" "}</p>
         <p style={{ display: "block", marginBottom: "20px", fontStyle: "italic" }}>
-          Here&apos;s a preview of what Audit Logs offer:
-        </p>
+          {i18n.t("auditLogsPanel.here-s-a-preview-of-what-audit-logs-offer", { defaultValue: "Here's a preview of what Audit Logs offer:" })}{" "}</p>
         <img
           src={resolveLogoSrc(auditLogsPreviewImg)}
-          alt="Audit Logs Preview"
+          alt={i18n.t("auditLogsPanel.audit-logs-preview", { defaultValue: "Audit Logs Preview" })}
           style={{
             maxWidth: "100%",
             maxHeight: "700px",

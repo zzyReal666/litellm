@@ -837,7 +837,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
           <FormProvider {...form}>
             <MountedFormProvider value={{ control: form.control, registry }}>
               <form
-                aria-label="Edit MCP server"
+                aria-label={i18n.t("mcpServerEdit.edit-mcp-server", { defaultValue: "Edit MCP server" })}
                 onSubmit={(event) => {
                   event.preventDefault();
                   void submitForm();
@@ -976,8 +976,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                 <MountedFormField
                   label={
                     <span className="text-sm font-medium text-foreground flex items-center">
-                      RPM limit (all callers)
-                      <SimpleTooltip content="Max requests per minute to this server across all keys and teams. Leave empty for no limit">
+                      {i18n.t("mcpServerEdit.rpm-limit-all-callers", { defaultValue: "RPM limit (all callers)" })}{" "}<SimpleTooltip content="Max requests per minute to this server across all keys and teams. Leave empty for no limit">
                         <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                       </SimpleTooltip>
                     </span>
@@ -1040,9 +1039,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                 {isStdioTransport && (
                   <div className="rounded-lg border border-border p-4 space-y-4">
                     <p className="text-sm text-muted-foreground">
-                      Configure the stdio transport used to launch the MCP server process. You can either fill in the
-                      fields below or paste a JSON configuration.
-                    </p>
+                      {i18n.t("mcpServerEdit.configure-the-stdio-transport-used-to-launch", { defaultValue: "Configure the stdio transport used to launch the MCP server process. You can either fill in the fields below or paste a JSON configuration." })}{" "}</p>
 
                     <MountedFormField
                       label={i18n.t("mcpTools.mcpServerEdit.stdioCommandLabel", { defaultValue: "Command" })}
@@ -1149,7 +1146,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                 {!isStdioTransport && isAwsSigV4AuthType && (
                   <>
                     <p className="text-sm text-muted-foreground mb-2">
-                      For MCP servers hosted on AWS Bedrock AgentCore.{" "}
+                      {i18n.t("mcpServerEdit.for-mcp-servers-hosted-on-aws-bedrock-agentc", { defaultValue: "For MCP servers hosted on AWS Bedrock AgentCore." })}{" "}
                       
                     </p>
                     <MountedFormField

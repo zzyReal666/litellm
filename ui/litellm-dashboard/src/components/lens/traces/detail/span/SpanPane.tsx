@@ -1,6 +1,7 @@
 "use client";
 
 import CopyButton from "@/components/shared/CopyButton";
+import i18n from "@/lib/i18n";
 
 import { AddToDatasetButton } from "../../../datasets/AddToDatasetDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -50,7 +51,7 @@ export function SpanPane({
   const traceStartMs = Date.parse(startTime);
   const detailQuery = useSpanDetail(accessToken, traceId, tab === "attributes" ? span.span_id : null, traceRef);
   return (
-    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label="Span details">
+    <aside className="flex h-full min-w-0 flex-col bg-background text-sm text-foreground" aria-label={i18n.t("spanPane.span-details", { defaultValue: "Span details" })}>
       <PaneHeader
         type={span.type}
         model={span.model}
@@ -65,18 +66,18 @@ export function SpanPane({
               <AddToDatasetButton
                 sources={[{ kind: "trace", trace_id: traceId, trace_ref: traceRef ?? "", span_id: span.span_id }]}
                 agentName={span.agent}
-                label="Add this turn to dataset"
+                label={i18n.t("spanPane.add-this-turn-to-dataset", { defaultValue: "Add this turn to dataset" })}
                 className="h-6"
               />
             )}
-            <CopyButton variant="action" value={handoff.text} label="Copy step" copiedLabel={handoff.copied} />
+            <CopyButton variant="action" value={handoff.text} label={i18n.t("spanPane.copy-step", { defaultValue: "Copy step" })} copiedLabel={handoff.copied} />
           </>
         }
         onClose={onClose}
       />
       <Tabs value={tab} onValueChange={(value) => onSpanTabChange(value as SpanTab)} className="min-h-0 flex-1 gap-0">
         <div className="shrink-0 border-b px-4">
-          <TabsList variant="line" aria-label="Span detail sections" className="h-9 gap-4 px-0">
+          <TabsList variant="line" aria-label={i18n.t("spanPane.span-detail-sections", { defaultValue: "Span detail sections" })} className="h-9 gap-4 px-0">
             {SPAN_TABS.map((id) => (
               <TabsTrigger key={id} value={id} className="flex-none px-0 text-sm">
                 {TAB_LABELS[id]}

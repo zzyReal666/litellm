@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -19,11 +20,10 @@ export function ExpectationsFields() {
   return (
     <div className="space-y-5">
       <label className="grid gap-2 text-sm font-medium">
-        What should the agent be doing?
-        <Textarea
+        {i18n.t("expectationsFields.what-should-the-agent-be-doing", { defaultValue: "What should the agent be doing?" })}{" "}<Textarea
           {...register("context")}
           rows={4}
-          placeholder="Answer the customer's question using verified sources and explain when information is missing."
+          placeholder={i18n.t("expectationsFields.answer-the-customer-s-question-using-verifie", { defaultValue: "Answer the customer's question using verified sources and explain when information is missing." })}
         />
       </label>
       {errors.context?.message && (
@@ -43,7 +43,7 @@ export function ExpectationsFields() {
         )}
       />
       <fieldset className="space-y-2">
-        <legend className="sr-only">Custom checks</legend>
+        <legend className="sr-only">{i18n.t("expectationsFields.custom-checks", { defaultValue: "Custom checks" })}</legend>
         {fields.map((check, index) => (
           <div key={check.fieldId} className="flex items-start gap-2">
             <div className="min-w-0 flex-1">
@@ -51,7 +51,7 @@ export function ExpectationsFields() {
                 aria-label={`Check ${index + 1}`}
                 {...register(`questions.${index}.instruction`)}
                 rows={2}
-                placeholder="e.g. Quotes a price without checking the pricing tool"
+                placeholder={i18n.t("expectationsFields.e-g-quotes-a-price-without-checking-the-pric", { defaultValue: "e.g. Quotes a price without checking the pricing tool" })}
               />
               {errors.questions?.[index]?.instruction?.message && (
                 <p role="alert" className="mt-1 text-sm text-destructive">
