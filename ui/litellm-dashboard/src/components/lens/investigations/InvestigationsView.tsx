@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -141,8 +142,7 @@ export function InvestigationsView({ readOnly = false }: InvestigationsViewProps
                 <>
                   <WatchAllBanner lenses={current.lenses} />
                   <Button size="sm" className="h-8" disabled={!status.ready} onClick={() => openDialog("new")}>
-                    <Plus className="size-4" /> New investigation
-                  </Button>
+                    <Plus className="size-4" /> {i18n.t("investigationsView.new-investigation", { defaultValue: "New investigation" })}</Button>
                 </>
               )
             }

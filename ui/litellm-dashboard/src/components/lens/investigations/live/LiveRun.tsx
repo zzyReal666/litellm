@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 
 import { modelsUsed } from "../../model/inbox";
 import {
@@ -72,8 +73,7 @@ export function LiveRun({
           onClick={() => setStripOpen(true)}
           className="self-start text-xs text-muted-foreground hover:text-foreground"
         >
-          Show live trace results
-        </button>
+          {i18n.t("liveRun.show-live-trace-results", { defaultValue: "Show live trace results" })}</button>
       )}
       <LiveDrawer
         open={drawerOpen}

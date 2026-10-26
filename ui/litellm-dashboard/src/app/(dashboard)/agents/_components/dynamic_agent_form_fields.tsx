@@ -148,7 +148,7 @@ const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTy
       <AgentFormPanel panelKey={AGENT_FORM_CONFIG.cost.key} title={AGENT_FORM_CONFIG.cost.title} panels={panels}>
         <CostConfigFields />
       </AgentFormPanel>
-      <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title="Kill Switch" panels={panels}>
+      <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title={i18n.t("dynamicAgentFormFields.kill-switch", { defaultValue: "Kill Switch" })} panels={panels}>
         <KillSwitchFormFields />
       </AgentFormPanel>
     </div>

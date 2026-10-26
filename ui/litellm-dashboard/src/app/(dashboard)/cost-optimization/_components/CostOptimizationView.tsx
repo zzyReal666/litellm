@@ -1,6 +1,7 @@
 "use client";
 
 import { Trans, useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import React from "react";
 import { Info, PiggyBank } from "lucide-react";
@@ -85,9 +86,7 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
         {activity.failed && (
           <Alert variant="error">
             <AlertDescription className="text-inherit">
-              Fetching spend data failed, so the savings below may be empty rather than final. Reload the page to try
-              again.
-            </AlertDescription>
+              {i18n.t("costOptimizationView.fetching-spend-data-failed-so-the-savings-be", { defaultValue: "Fetching spend data failed, so the savings below may be empty rather than final. Reload the page to try again." })}</AlertDescription>
           </Alert>
         )}
         <TabsContent value="usage" keepMounted={visitedTabs.includes("usage")}>

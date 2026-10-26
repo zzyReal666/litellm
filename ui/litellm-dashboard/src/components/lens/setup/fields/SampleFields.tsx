@@ -1,6 +1,7 @@
 "use client";
 
 import { Controller, useFormContext } from "react-hook-form";
+import i18n from "@/lib/i18n";
 import { Input } from "@/components/ui/input";
 
 import { DurationInput } from "@/components/shared/DurationInput";

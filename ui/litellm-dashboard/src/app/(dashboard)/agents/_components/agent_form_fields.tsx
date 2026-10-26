@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
@@ -403,7 +404,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ panels, showAgentName
         )}
 
         {shouldShow(KILL_SWITCH_PANEL_KEY) && (
-          <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title="Kill Switch" panels={panels}>
+          <AgentFormPanel panelKey={KILL_SWITCH_PANEL_KEY} title={i18n.t("agentFormFields.kill-switch", { defaultValue: "Kill Switch" })} panels={panels}>
             <KillSwitchFormFields />
           </AgentFormPanel>
         )}

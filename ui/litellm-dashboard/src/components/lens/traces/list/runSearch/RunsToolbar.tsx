@@ -1,6 +1,7 @@
 "use client";
 
 import type { TraceSummary } from "../../types";
+import i18n from "@/lib/i18n";
 import type { TimeWindow } from "@/components/shared/timeRange/timeRange";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,7 +39,7 @@ export function RunsToolbar({ query, onQueryChange, runs, range, busy, children 
           value={status}
           onValueChange={(value: "all" | "ok" | "error" | null) => value !== null && setStatus(value)}
         >
-          <SelectTrigger size="sm" className="h-8 min-w-28 text-xs" aria-label="Filter traces by status">
+          <SelectTrigger size="sm" className="h-8 min-w-28 text-xs" aria-label={i18n.t("runsToolbar.filter-traces-by-status", { defaultValue: "Filter traces by status" })}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

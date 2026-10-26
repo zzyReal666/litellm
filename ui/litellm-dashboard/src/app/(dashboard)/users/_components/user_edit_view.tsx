@@ -292,8 +292,7 @@ export function UserEditView({
             name="max_budget"
             label={
               <>
-                Max Budget (CNY)
-                <label className="ml-3 inline-flex items-center gap-2 font-normal">
+                {i18n.t("userEditView.max-budget-cny", { defaultValue: "Max Budget (CNY)" })}<label className="ml-3 inline-flex items-center gap-2 font-normal">
                   <Checkbox checked={unlimitedBudget} onCheckedChange={handleUnlimitedBudgetChange} />
                   {i18n.t("userEditView.unlimitedBudget", { defaultValue: "Unlimited Budget" })}
                 </label>

@@ -59,7 +59,7 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {budget ? "Edit" : "Set"} budget for &quot;{accessGroup?.access_group}&quot;
+            {budget ? "Edit" : "Set"} budget for "{accessGroup?.access_group}&quot;
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">

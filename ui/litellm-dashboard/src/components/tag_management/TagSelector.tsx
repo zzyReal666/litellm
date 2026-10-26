@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import i18n from "@/lib/i18n";
 import { Tag } from "./types";
 import { tagListCall } from "../networking";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -33,7 +34,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({ onChange, value, className, a
 
   return (
     <MultiSelect
-      placeholder="Select or create tags"
+      placeholder={i18n.t("tagSelector.select-or-create-tags", { defaultValue: "Select or create tags" })}
       onValueChange={onChange}
       value={value}
       loading={loading}

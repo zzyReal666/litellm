@@ -1,4 +1,5 @@
 import { SearchSelect } from "@/components/shared/SearchSelect";
+import i18n from "@/lib/i18n";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
@@ -146,7 +147,7 @@ export function ModelMaxBudgetEditor({
               onClick={() => removeEntry(entry.id)}
               disabled={!premiumUser}
               title={hintWhenLocked}
-              aria-label="Remove model budget"
+              aria-label={i18n.t("modelMaxBudgetEditor.remove-model-budget", { defaultValue: "Remove model budget" })}
               className="absolute top-2 right-2 text-muted-foreground hover:text-destructive transition-colors p-1"
             >
               <X className="w-4 h-4" />

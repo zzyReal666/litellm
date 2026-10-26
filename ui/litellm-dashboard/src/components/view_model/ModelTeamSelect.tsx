@@ -1,4 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import i18n from "@/lib/i18n";
 import type { Team } from "../key_team_helpers/key_list";
 
 interface ModelTeamSelectProps {
@@ -17,7 +18,7 @@ export const ModelTeamSelect: React.FC<ModelTeamSelectProps> = ({ id, value, onC
   return (
     <Select items={items} value={value || null} onValueChange={(selected: string | null) => onChange(selected ?? "")}>
       <SelectTrigger id={id} className="w-full" onBlur={onBlur}>
-        <SelectValue placeholder="Select a team" />
+        <SelectValue placeholder={i18n.t("modelTeamSelect.select-a-team", { defaultValue: "Select a team" })} />
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (

@@ -58,7 +58,7 @@ const KeyModelUsageView: React.FC<KeyModelUsageViewProps> = ({ topModels }) => {
   return (
     <Card className="mt-4">
       <CardHeader>
-        <CardTitle className="text-base font-semibold">Model Usage</CardTitle>
+        <CardTitle className="text-base font-semibold">{i18n.t("keyModelUsageView.model-usage", { defaultValue: "Model Usage" })}</CardTitle>
         <CardAction>
           <div className="flex space-x-2">
             <button

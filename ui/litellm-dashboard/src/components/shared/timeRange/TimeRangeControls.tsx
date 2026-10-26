@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Pause, Play } from "lucide-react";
+import i18n from "@/lib/i18n";
 import moment from "moment";
 
 import {
@@ -49,7 +50,7 @@ export function TimeRangeControls({
     <div className="flex min-w-0 max-w-full items-stretch border-l border-border">
       <DropdownMenu>
         <DropdownMenuTrigger
-          aria-label="Time range"
+          aria-label={i18n.t("timeRangeControls.time-range", { defaultValue: "Time range" })}
           className={cn(SEGMENT, "min-w-0 justify-between text-foreground hover:bg-muted/60 sm:min-w-40")}
           title={label}
           data-testid="time-range-trigger"

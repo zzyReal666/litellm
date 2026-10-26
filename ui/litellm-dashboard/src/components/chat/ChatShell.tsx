@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import i18n from "@/lib/i18n";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Plus, MessageSquare, LayoutGrid, KeyRound, Lock, BarChart3, ScrollText } from "lucide-react";
@@ -72,7 +73,7 @@ const ChatShell: React.FC<ChatShellProps> = ({ children }) => {
   return (
     <div className="flex h-full w-full flex-col bg-background overflow-hidden">
       <div className="shrink-0 border-b border-warning/20 bg-warning/10 px-4 py-1.5 text-center text-[13px] text-warning">
-        This is a pre-v0 feature. Do not use in production, it may change unexpectedly. Please share feedback{" "}
+        {i18n.t("chatShell.this-is-a-pre-v0-feature-do-not-use-in-produ", { defaultValue: "This is a pre-v0 feature. Do not use in production, it may change unexpectedly. Please share feedback" })}{" "}
         
         .
       </div>

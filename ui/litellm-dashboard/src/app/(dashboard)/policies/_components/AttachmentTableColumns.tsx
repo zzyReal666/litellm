@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import i18n from "@/lib/i18n";
 import { TFunction } from "i18next";
 import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -207,7 +208,7 @@ export const getAttachmentTableColumns = ({
     enableSorting: true,
     cell: ({ row }) =>
       row.original.default ? (
-        <StatusBadge tone="info" label="Default" tooltip="Applied only when no non-default attachment matches" />
+        <StatusBadge tone="info" label="Default" tooltip={i18n.t("attachmentTableColumns.applied-only-when-no-non-default-attachment", { defaultValue: "Applied only when no non-default attachment matches" })} />
       ) : (
         <span className="text-muted-foreground">-</span>
       ),

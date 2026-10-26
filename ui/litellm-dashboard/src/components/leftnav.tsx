@@ -304,7 +304,7 @@ const menuGroups: MenuGroup[] = [
         roles: all_admin_roles,
         label: (
           <span className="flex items-center gap-2">
-            Model Leaderboard <BetaBadge />
+            {i18n.t("leftnav.model-leaderboard", { defaultValue: "Model Leaderboard" })}{" "}<BetaBadge />
           </span>
         ),
       },

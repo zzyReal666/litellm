@@ -297,7 +297,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                         <div className="col-span-5" />
                         <div className="col-span-5">
                           <p className="text-sm mb-5 mt-1">
-                            <strong>{i18n.t("defaultUserSettings.teamEntry.maxBudgetPlaceholder", { defaultValue: "Optional" })}</strong> - LiteLLM endpoint to use when health checking this model{" "}
+                            <strong>{i18n.t("defaultUserSettings.teamEntry.maxBudgetPlaceholder", { defaultValue: "Optional" })}</strong> {i18n.t("addModelForm.litellm-endpoint-to-use-when-health-checking", { defaultValue: "- LiteLLM endpoint to use when health checking this model" })}{" "}
                             
                           </p>
                         </div>

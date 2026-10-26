@@ -1,6 +1,7 @@
 "use client";
 
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
+import i18n from "@/lib/i18n";
 import { useUpdateUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUpdateUISettings";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useTranslation } from "react-i18next";
@@ -481,8 +482,7 @@ export default function UISettings() {
                 </Button>
               ) : (
                 <a href={uiHref("moyai")} className="text-sm text-primary underline underline-offset-4">
-                  Connect from the Moyai page
-                </a>
+                  {i18n.t("uISettings.connect-from-the-moyai-page", { defaultValue: "Connect from the Moyai page" })}</a>
               )}
             </div>
 

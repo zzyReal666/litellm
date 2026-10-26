@@ -1,4 +1,5 @@
 import { CircleCheck, ChevronDown, MinusCircle, TriangleAlert, X } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import React, { useState } from "react";
@@ -168,8 +169,7 @@ export function LogViewer({
       )}
       {!logsLoading && displayLogs.length === 0 && (
         <div className="py-12 text-center text-sm text-muted-foreground">
-          No logs to display. Adjust filters or date range.
-        </div>
+          {i18n.t("logViewer.no-logs-to-display-adjust-filters-or-date-ra", { defaultValue: "No logs to display. Adjust filters or date range." })}</div>
       )}
       {!logsLoading && displayLogs.length > 0 && (
         <div className="divide-y divide-border">

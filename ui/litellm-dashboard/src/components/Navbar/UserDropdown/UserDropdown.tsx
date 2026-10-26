@@ -296,8 +296,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLogout, variant = "navbar
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
           >
             <KeyRound className="size-4" />
-            Change Password
-          </button>
+            {i18n.t("userDropdown.change-password", { defaultValue: "Change Password" })}</button>
         )}
         <button
           type="button"

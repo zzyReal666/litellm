@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/DataTable";
@@ -82,7 +83,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
   ];
 
   if (patterns.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No patterns added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{i18n.t("patternTable.no-patterns-added", { defaultValue: "No patterns added." })}</div>;
   }
 
   return <DataTable data={patterns} columns={columns} getRowId={(row) => row.id} size="compact" />;

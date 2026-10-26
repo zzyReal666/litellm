@@ -1,4 +1,5 @@
 import { CircleHelp } from "lucide-react";
+import i18n from "@/lib/i18n";
 import React, { type ReactNode } from "react";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import type { MathRow } from "./usageUnits";
@@ -18,8 +19,7 @@ export function CalcPopover({ title, formula, children }: { title: string; formu
         }
       >
         <CircleHelp className="mt-px size-3.5 shrink-0" />
-        How is this calculated?
-      </PopoverTrigger>
+        {i18n.t("calcPopover.how-is-this-calculated", { defaultValue: "How is this calculated?" })}</PopoverTrigger>
       <PopoverContent side="bottom" align="start" className="w-auto min-w-72 max-w-md gap-3">
         <PopoverTitle>{title}</PopoverTitle>
         <code className="w-fit rounded bg-muted px-2 py-1 text-[11px] text-muted-foreground">{formula}</code>

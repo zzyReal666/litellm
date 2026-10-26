@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import CodeBlock from "@/components/CodeBlock";
 import { Input } from "@/components/ui/input";
@@ -41,8 +42,7 @@ const HowItWorks: React.FC = () => {
             defaultValue: "Discounts are applied to provider costs:",
           })}{" "}
           <code className="rounded-sm bg-muted px-1.5 py-0.5 text-xs text-foreground">
-            final_cost = base_cost × (1 - discount%/100)
-          </code>
+            final_cost = base_cost × (1 - discount%/100)</code>
         </p>
       </div>
       <div>

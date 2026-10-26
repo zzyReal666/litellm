@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import i18n from "@/lib/i18n";
 import {
   Combobox,
   ComboboxChip,
@@ -86,7 +87,7 @@ const SkillSelector: React.FC<SkillSelectorProps> = ({
           }
         </ComboboxValue>
         <ComboboxChipsInput placeholder={placeholder} aria-label={placeholder} disabled={disabled} />
-        {value && value.length > 0 && <ComboboxClear aria-label="Clear all skills" disabled={disabled} />}
+        {value && value.length > 0 && <ComboboxClear aria-label={i18n.t("skillSelector.clear-all-skills", { defaultValue: "Clear all skills" })} disabled={disabled} />}
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
         <ComboboxEmpty>{loading ? "Loading skills…" : "No skills found"}</ComboboxEmpty>

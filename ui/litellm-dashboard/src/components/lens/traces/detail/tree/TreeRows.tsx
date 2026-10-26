@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreHorizontal } from "lucide-react";
+import i18n from "@/lib/i18n";
 
 import { cn } from "@/lib/cva.config";
 
@@ -260,8 +261,7 @@ export function LoadMoreRow({
     >
       <Guides depth={row.depth} guide={guide} />
       <span className="flex items-center gap-2 pl-1.5">
-        <MoreHorizontal className="size-3.5" /> Load 20 more
-        <span>({row.remaining} remaining)</span>
+        <MoreHorizontal className="size-3.5" /> {i18n.t("treeRows.load-20-more", { defaultValue: "Load 20 more" })}<span>({row.remaining} remaining)</span>
       </span>
     </button>
   );

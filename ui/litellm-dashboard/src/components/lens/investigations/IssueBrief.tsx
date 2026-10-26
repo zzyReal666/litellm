@@ -1,4 +1,5 @@
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Check } from "lucide-react";
 import { copyToClipboard } from "@/utils/dataUtils";

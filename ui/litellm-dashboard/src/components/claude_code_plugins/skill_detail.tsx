@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowLeft, Check, Copy } from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 import { cn } from "@/lib/cva.config";

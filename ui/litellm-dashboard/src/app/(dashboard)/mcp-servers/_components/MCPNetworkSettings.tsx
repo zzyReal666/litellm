@@ -323,9 +323,7 @@ const MCPNetworkSettings: React.FC<MCPNetworkSettingsProps> = ({ accessToken }) 
       <div>
         <p className="text-lg font-semibold">{t("mcpTools.mcpNetworkSettings.privateIpRangesTitle", { defaultValue: "Private IP Ranges" })}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Define which IP ranges are part of your private network. Callers from these IPs can see all MCP servers.
-          Callers from any other IP can only see servers marked &quot;Available on Public Internet&quot;.
-        </p>
+          {i18n.t("mCPNetworkSettings.define-which-ip-ranges-are-part-of-your-priv", { defaultValue: "Define which IP ranges are part of your private network. Callers from these IPs can see all MCP servers. Callers from any other IP can only see servers marked \"Available on Public Internet\"." })}</p>
       </div>
 
       <Card className="p-6">

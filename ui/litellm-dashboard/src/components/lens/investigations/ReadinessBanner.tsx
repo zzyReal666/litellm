@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import i18n from "@/lib/i18n";
 import { uiHref } from "@/utils/uiHref";
 import { cn } from "@/lib/cva.config";
 
@@ -19,8 +20,7 @@ export function ReadinessBanner({ activityReady, className, ...props }: Readines
         : "Recorded activity is not ready. Saved results are still available."}
       {!activityReady && (
         <a className="font-medium underline" href={uiHref("lens/?tab=traces")}>
-          Check traces
-        </a>
+          {i18n.t("readinessBanner.check-traces", { defaultValue: "Check traces" })}</a>
       )}
     </div>
   );

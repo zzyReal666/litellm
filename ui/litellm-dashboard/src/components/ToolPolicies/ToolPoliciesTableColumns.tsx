@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import i18n from "@/lib/i18n";
 import { TFunction } from "i18next";
 
 import { ToolRow } from "@/components/networking";
@@ -152,9 +153,7 @@ export const getToolPoliciesTableColumns = ({
         <Tooltip>
           <TooltipTrigger render={<span>User</span>} />
           <TooltipContent>
-            The user who owns the key that discovered this tool. Displays the first available value: User Alias, User
-            Email, or User ID.
-          </TooltipContent>
+            {i18n.t("toolPoliciesTableColumns.the-user-who-owns-the-key-that-discovered-th", { defaultValue: "The user who owns the key that discovered this tool. Displays the first available value: User Alias, User Email, or User ID." })}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     ),

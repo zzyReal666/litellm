@@ -88,9 +88,7 @@ export function AutoRoutersPanel({
         <div>
           <h2 className="text-base font-semibold text-foreground">{i18n.t("pages.modelsAndEndpoints.autoRoutersTitle", { defaultValue: "Auto routers" })}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Auto routers sit above your deployments and pick a model per request. They are called like any other model,
-            so clients keep using a single model name.
-          </p>
+            {i18n.t("autoRoutersPanel.auto-routers-sit-above-your-deployments-and", { defaultValue: "Auto routers sit above your deployments and pick a model per request. They are called like any other model, so clients keep using a single model name." })}</p>
         </div>
         {canCreate && (
           <Button onClick={() => setIsCreating(true)} className="shrink-0">

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import i18n from "@/lib/i18n";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React from "react";
@@ -129,8 +130,7 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
           addWindow();
         }}
       >
-        + Add Budget Window
-      </Button>
+        {i18n.t("budgetWindowsEditor.add-budget-window", { defaultValue: "+ Add Budget Window" })}</Button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import i18n from "@/lib/i18n";
 import {
   Combobox,
   ComboboxChip,
@@ -80,7 +81,7 @@ const SearchToolSelector: React.FC<SearchToolSelectorProps> = ({
           }
         </ComboboxValue>
         <ComboboxChipsInput placeholder={placeholder} aria-label={placeholder} disabled={disabled} />
-        {value && value.length > 0 && <ComboboxClear aria-label="Clear all search tools" disabled={disabled} />}
+        {value && value.length > 0 && <ComboboxClear aria-label={i18n.t("searchToolSelector.clear-all-search-tools", { defaultValue: "Clear all search tools" })} disabled={disabled} />}
       </ComboboxChips>
       <ComboboxContent anchor={anchor}>
         <ComboboxEmpty>{loading ? "Loading search tools…" : "No search tools found"}</ComboboxEmpty>

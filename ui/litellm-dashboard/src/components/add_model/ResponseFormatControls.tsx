@@ -28,9 +28,7 @@ const ResponseFormatControls: React.FC<{
       <strong className="font-semibold">{i18n.t("modelsEndpoints.ResponseFormatControls.capMaxTokensAtTheTier2", { defaultValue: "Cap max_tokens at the tier model's output ceiling" })}</strong>
     </div>
     <span className="block text-xs text-muted-foreground">
-      Replace the caller&apos;s max_tokens with the routed tier model&apos;s output ceiling so one client value fits
-      every tier. Off forwards the caller&apos;s value unchanged.
-    </span>
+      {i18n.t("responseFormatControls.replace-the-caller-s-max-tokens-with-the-rou", { defaultValue: "Replace the caller's max_tokens with the routed tier model's output ceiling so one client value fits every tier. Off forwards the caller's value unchanged." })}</span>
   </>
 );
 

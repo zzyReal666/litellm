@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import i18n from "@/lib/i18n";
 import { Maximize2Icon, Minimize2Icon } from "lucide-react";
 
 import { cn } from "@/lib/cva.config";
@@ -134,7 +135,7 @@ function ResizableSheetContent({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize drawer"
+        aria-label={i18n.t("resizableSheetContent.resize-drawer", { defaultValue: "Resize drawer" })}
         data-slot="sheet-resize-handle"
         className="absolute inset-y-0 left-0 hidden w-1.5 cursor-col-resize touch-none select-none hover:bg-border focus-visible:bg-border focus-visible:outline-none sm:block"
         tabIndex={0}

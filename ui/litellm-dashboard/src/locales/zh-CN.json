@@ -3279,7 +3279,8 @@
     "resetPasswordLinkDesc": "复制并将生成的链接发送给该用户，以便其重置密码。",
     "userId": "用户 ID",
     "copyInvitationLink": "复制邀请链接",
-    "copyPasswordResetLink": "复制密码重置链接"
+    "copyPasswordResetLink": "复制密码重置链接",
+    "user-id": "用户 ID"
   },
   "organizations": {
     "enterpriseFeature": "这是 LiteLLM 企业版功能，需要有效的密钥才能使用。获取试用密钥请访问<pricingLink>此处</pricingLink>。",
@@ -3656,7 +3657,8 @@
     "saveChangesButton": "保存更改",
     "mcpServersLabel": "MCP 服务器 / 访问组",
     "mcpServersTooltip": "限定此用户可访问的 MCP 服务器、访问组和工具。该用户持有的每个密钥都受此范围限制。",
-    "modelMaxBudgetHint": "限制此用户在单个模型上的花费，每个模型有独立的重置周期。适用于该用户持有的所有密钥。"
+    "modelMaxBudgetHint": "限制此用户在单个模型上的花费，每个模型有独立的重置周期。适用于该用户持有的所有密钥。",
+    "max-budget-cny": "最大预算（人民币）"
   },
   "viewUserSpend": {
     "totalSpend": "总花费",
@@ -14129,5 +14131,197 @@
     "open-documentation-in-a-new-tab": "在新标签页中打开文档",
     "api-reference-docs": "API 参考文档",
     "opens-in-a-new-tab": "（在新标签页中打开）"
+  },
+  "agentFormFields": {
+    "kill-switch": "终止开关"
+  },
+  "dynamicAgentFormFields": {
+    "kill-switch": "终止开关"
+  },
+  "budgetTableColumns": {
+    "tpd-batch": "TPD（批量）"
+  },
+  "costOptimizationView": {
+    "fetching-spend-data-failed-so-the-savings-be": "获取花费数据失败，下方节省数据可能为空而非最终值。请刷新页面重试。"
+  },
+  "promptCachingTab": {
+    "date-range-for-requests-and-cache-leakage": "请求与缓存泄漏的日期范围"
+  },
+  "guardrailFormField": {
+    "continue-observing-the-response-after-a-flag": "请求被标记后继续观察响应"
+  },
+  "keywordTable": {
+    "no-keywords-added": "尚未添加关键词。"
+  },
+  "patternTable": {
+    "no-patterns-added": "尚未添加模式。"
+  },
+  "mCPNetworkSettings": {
+    "define-which-ip-ranges-are-part-of-your-priv": "定义属于你私有网络的 IP 范围。来自这些 IP 的调用方可以看到所有 MCP 服务器；其他 IP 的调用方只能看到标记为「公网可用」的服务器。"
+  },
+  "autoRoutersPanel": {
+    "auto-routers-sit-above-your-deployments-and": "自动路由位于部署之上，为每个请求挑选模型。它们像普通模型一样被调用，因此客户端始终使用同一个模型名。"
+  },
+  "modelsAndEndpointsPage": {
+    "last-refreshed": "最近刷新："
+  },
+  "audioRenderer": {
+    "your-browser-does-not-support-the-audio-elem": "你的浏览器不支持音频元素。"
+  },
+  "complianceUI": {
+    "shift-enter": "Shift+Enter"
+  },
+  "playgroundPage": {
+    "your-role-does-not-have-access-to-the-playgr": "你的角色无权访问演练场。请联系代理管理员获取测试模型的权限。"
+  },
+  "attachmentTableColumns": {
+    "applied-only-when-no-non-default-attachment": "仅当没有匹配的非默认附件时应用"
+  },
+  "transformRequestPanel": {
+    "found-an-error-file-an-issue": "发现问题？提交 issue"
+  },
+  "spendByProvider": {
+    "total-provider-spend": "提供商总花费"
+  },
+  "usageAIChatPanel": {
+    "e-g-which-model-costs-me-the-most": "例如 \"哪个模型花费最多？\""
+  },
+  "onboardingLoadingView": {
+    "loading-invitation": "正在加载邀请"
+  },
+  "mCPHubTableColumns": {
+    "hub-listing": "Hub 列表"
+  },
+  "codeBlock": {
+    "copy-code": "复制代码"
+  },
+  "commandPaletteHint": {
+    "dismiss-search-hint": "关闭搜索提示"
+  },
+  "exportTypeSelector": {
+    "export-type": "导出类型"
+  },
+  "calcPopover": {
+    "how-is-this-calculated": "这是如何计算的？"
+  },
+  "logViewer": {
+    "no-logs-to-display-adjust-filters-or-date-ra": "没有可显示的日志。请调整筛选条件或日期范围。"
+  },
+  "userDropdown": {
+    "change-password": "修改密码"
+  },
+  "uISettings": {
+    "connect-from-the-moyai-page": "从 Moyai 页面连接"
+  },
+  "toolPoliciesTableColumns": {
+    "the-user-who-owns-the-key-that-discovered-th": "发现该工具所用密钥的拥有者。按用户别名、用户邮箱、用户 ID 的顺序显示第一个可用值。"
+  },
+  "keyModelUsageView": {
+    "model-usage": "模型用量"
+  },
+  "userBanner": {
+    "dismiss-banner": "关闭横幅"
+  },
+  "addModelForm": {
+    "litellm-endpoint-to-use-when-health-checking": "进行健康检查时使用的 LiteLLM 端点"
+  },
+  "autoRouterClassifierTabs": {
+    "could-not-check-availability": "无法检查可用性。"
+  },
+  "classifierPrimarySettings": {
+    "a-judge-model-is-required": "需要评审模型"
+  },
+  "fuseProfilePresets": {
+    "catalog-version": "目录版本："
+  },
+  "nonReasoningTierToggle": {
+    "adds-non-reasoning-below-simple-for-operatio": "在 Simple 之下新增 NON_REASONING 层级，用于转发或重排信息、而不是进行推理的运维类 agent 流量。当请求需要更多推理时仍会向上升级。"
+  },
+  "responseFormatControls": {
+    "replace-the-caller-s-max-tokens-with-the-rou": "用路由层级模型的输出上限替换调用方的 max_tokens，使一个客户端值适配所有层级。关闭则原样传递调用方的值。"
+  },
+  "chatShell": {
+    "this-is-a-pre-v0-feature-do-not-use-in-produ": "这是 pre-v0 功能，请勿在生产环境使用，它可能随时变更。欢迎分享反馈"
+  },
+  "mCPEventsDisplay": {
+    "list-tools": "列出工具"
+  },
+  "budgetWindowsEditor": {
+    "add-budget-window": "+ 添加预算窗口"
+  },
+  "modelMaxBudgetEditor": {
+    "remove-model-budget": "移除模型预算"
+  },
+  "tagRateLimitEditor": {
+    "add-tag-limit": "+ 添加标签限额"
+  },
+  "leftnav": {
+    "model-leaderboard": "模型排行榜"
+  },
+  "investigationsView": {
+    "new-investigation": "新建调查"
+  },
+  "readinessBanner": {
+    "check-traces": "检查链路"
+  },
+  "watchAllBanner": {
+    "turn-all-on": "全部开启"
+  },
+  "jobMeta": {
+    "total-time-including-any-wait-for-an-analyze": "总耗时，包含等待分析器的时间"
+  },
+  "liveRun": {
+    "show-live-trace-results": "显示实时链路结果"
+  },
+  "messages": {
+    "arguments-not-recorded": "未记录参数"
+  },
+  "pagingBanner": {
+    "refresh-trace": "刷新链路"
+  },
+  "attributesTab": {
+    "loading-attributes": "正在加载属性…"
+  },
+  "detailPane": {
+    "select-a-span-to-inspect-it": "选择一个 Span 以查看详情。"
+  },
+  "treeRows": {
+    "load-20-more": "再加载 20 条"
+  },
+  "runsToolbar": {
+    "filter-traces-by-status": "按状态筛选链路"
+  },
+  "logsTableToolbar": {
+    "custom-range": "自定义范围"
+  },
+  "requestLogsTable": {
+    "narrow-down-request-logs": "缩小请求日志范围"
+  },
+  "searchToolSelector": {
+    "clear-all-search-tools": "清除全部搜索工具"
+  },
+  "inheritedBudgetHint": {
+    "this-key-has-no-budget-of-its-own-but-its-sp": "该密钥本身没有预算，但其花费仍计入："
+  },
+  "inspector": {
+    "close-esc": "关闭（Esc）"
+  },
+  "shortcutHints": {
+    "keyboard-shortcuts": "键盘快捷键"
+  },
+  "timeRangeControls": {
+    "time-range": "时间范围"
+  },
+  "skillSelector": {
+    "clear-all-skills": "清除全部技能"
+  },
+  "tagSelector": {
+    "select-or-create-tags": "选择或创建标签"
+  },
+  "resizableSheetContent": {
+    "resize-drawer": "调整抽屉大小"
+  },
+  "modelTeamSelect": {
+    "select-a-team": "选择团队"
   }
 }

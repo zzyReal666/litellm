@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 
 import { getGeneralSettingsCall } from "@/components/networking";
@@ -57,7 +58,7 @@ const PromptCachingTab: React.FC<PromptCachingTabProps> = ({ accessToken, activi
     <div className="w-full space-y-6">
       <PromptCachingPanel accessToken={accessToken} settings={settings} onChange={handleChange} />
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">Date range for requests and cache leakage</p>
+        <p className="text-sm text-muted-foreground">{i18n.t("promptCachingTab.date-range-for-requests-and-cache-leakage", { defaultValue: "Date range for requests and cache leakage" })}</p>
         <AdvancedDatePicker value={activity.dateValue} onValueChange={activity.onDateChange} />
       </div>
       <PromptCachingRequestsTable accessToken={accessToken} dateValue={activity.dateValue} />

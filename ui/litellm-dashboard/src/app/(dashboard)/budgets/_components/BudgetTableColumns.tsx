@@ -135,7 +135,7 @@ export const getBudgetTableColumns = ({
     id: "tpd_limit",
     accessorKey: "tpd_limit",
     meta: { title: "TPD (batch)", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="TPD (batch)" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("budgetTableColumns.tpd-batch", { defaultValue: "TPD (batch)" })} />,
     size: 110,
     cell: ({ row }) => <RateLimitCell value={row.original.tpd_limit} />,
   },

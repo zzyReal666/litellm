@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, X } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { z } from "zod";
 import { storageKey } from "@/lib/storage";
 import type { PaletteScope } from "./utils";
@@ -34,7 +35,7 @@ export function CommandPaletteHint({ scope, onDismiss }: CommandPaletteHintProps
       <button
         type="button"
         className="ml-0.5 flex size-5 items-center justify-center rounded-full hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label="Dismiss search hint"
+        aria-label={i18n.t("commandPaletteHint.dismiss-search-hint", { defaultValue: "Dismiss search hint" })}
         onClick={onDismiss}
       >
         <X className="size-3" aria-hidden="true" />

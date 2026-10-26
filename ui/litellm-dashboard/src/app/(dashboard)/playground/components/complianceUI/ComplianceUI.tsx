@@ -1457,7 +1457,7 @@ export default function ComplianceUI({
                         {t("playground.complianceUi.keyboardHintEnter", { defaultValue: "Press" })}{" "}
                         <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">Enter</kbd>{" "}
                         {t("playground.complianceUi.keyboardHintSubmit", { defaultValue: "to submit" })} ·{" "}
-                        <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">Shift+Enter</kbd>{" "}
+                        <kbd className="px-1 py-0.5 bg-muted rounded-sm text-[10px] font-mono">{i18n.t("complianceUI.shift-enter", { defaultValue: "Shift+Enter" })}</kbd>{" "}
                         {t("playground.complianceUi.keyboardHintNewLine", { defaultValue: "for new line" })}
                       </span>
                       <span className="text-[10px] text-muted-foreground tabular-nums">{quickTestInput.length}</span>

@@ -203,7 +203,7 @@ ${formattedBody}
       </div>
       <div className="mt-4 text-right">
         <p className="text-sm text-muted-foreground">
-          Found an error? File an issue{" "}
+          {i18n.t("transformRequestPanel.found-an-error-file-an-issue", { defaultValue: "Found an error? File an issue" })}{" "}
           
           .
         </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import AgentBuilderView from "@/app/(dashboard)/playground/components/chat_ui/AgentBuilderView";
 import ChatUI from "@/app/(dashboard)/playground/components/chat_ui/ChatUI";
@@ -50,8 +51,7 @@ export default function PlaygroundPage() {
           {t("molecules.notificationsManager.accessDenied", { defaultValue: "Access Denied" })}
         </h1>
         <p className="text-muted-foreground">
-          Your role does not have access to the Playground. Ask your proxy admin for access to test models.
-        </p>
+          {i18n.t("playgroundPage.your-role-does-not-have-access-to-the-playgr", { defaultValue: "Your role does not have access to the Playground. Ask your proxy admin for access to test models." })}</p>
       </div>
     );
   }

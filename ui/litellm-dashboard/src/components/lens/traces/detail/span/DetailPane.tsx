@@ -1,6 +1,7 @@
 "use client";
 
 import type { TreeRow } from "../../tree";
+import i18n from "@/lib/i18n";
 import type { Trace } from "../../types";
 import { GroupPane } from "./GroupPane";
 import { SpanPane, type SpanTabProps } from "./SpanPane";
@@ -17,8 +18,7 @@ export function DetailPane({ trace, row, accessToken, spanTab, onSpanTabChange, 
   if (!row || row.kind === "load-more") {
     return (
       <div className="grid h-full place-items-center bg-background text-sm text-muted-foreground">
-        Select a span to inspect it.
-      </div>
+        {i18n.t("detailPane.select-a-span-to-inspect-it", { defaultValue: "Select a span to inspect it." })}</div>
     );
   }
   if (row.kind === "group")

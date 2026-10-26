@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import i18n from "@/lib/i18n";
 import type { ColumnDef } from "@tanstack/react-table";
 import React from "react";
 import { DataTable } from "@/components/shared/DataTable";
@@ -67,7 +68,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
   ];
 
   if (keywords.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No keywords added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{i18n.t("keywordTable.no-keywords-added", { defaultValue: "No keywords added." })}</div>;
   }
 
   return <DataTable data={keywords} columns={columns} getRowId={(row) => row.id} size="compact" />;

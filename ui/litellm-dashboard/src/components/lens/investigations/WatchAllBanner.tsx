@@ -1,6 +1,7 @@
 "use client";
 
 import { z } from "zod";
+import i18n from "@/lib/i18n";
 import { useLensUpdate } from "../data/mutations";
 import type { Lens } from "../model/types";
 
@@ -37,8 +38,7 @@ export function WatchAllBanner({ lenses }: WatchAllBannerProps) {
         onClick={() => watchAll.mutate((api) => api.watchAll())}
         className="font-medium text-foreground underline-offset-2 hover:underline disabled:opacity-50"
       >
-        Turn all on
-      </button>
+        {i18n.t("watchAllBanner.turn-all-on", { defaultValue: "Turn all on" })}</button>
     </span>
   );
 }

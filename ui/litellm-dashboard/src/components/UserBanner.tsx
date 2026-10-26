@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CircleAlert, Info, TriangleAlert, X } from "lucide-react";
@@ -62,7 +63,7 @@ export const UserBanner: React.FC<UserBannerProps> = ({ accessToken }) => {
         <UserBannerMarkdown message={banner.message} />
       </AlertDescription>
       <AlertAction>
-        <Button variant="ghost" size="icon-sm" aria-label="Dismiss banner" onClick={handleDismiss}>
+        <Button variant="ghost" size="icon-sm" aria-label={i18n.t("userBanner.dismiss-banner", { defaultValue: "Dismiss banner" })} onClick={handleDismiss}>
           <X />
         </Button>
       </AlertAction>

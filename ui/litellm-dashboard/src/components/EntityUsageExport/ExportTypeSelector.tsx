@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { ExportType, EntityType } from "./types";
 
@@ -35,7 +36,7 @@ const ExportTypeSelector: React.FC<ExportTypeSelectorProps> = ({ value, onChange
 
   return (
     <div>
-      <label className="text-sm font-medium text-foreground block mb-2">Export type</label>
+      <label className="text-sm font-medium text-foreground block mb-2">{i18n.t("exportTypeSelector.export-type", { defaultValue: "Export type" })}</label>
       <RadioGroup value={value} onValueChange={(next) => onChange(next as ExportType)} className="gap-2">
         {scopes.map((scope) => (
           <label

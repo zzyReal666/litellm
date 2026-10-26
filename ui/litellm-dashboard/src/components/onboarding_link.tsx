@@ -1,4 +1,5 @@
 import React, { useId, useRef } from "react";
+import i18n from "@/lib/i18n";
 import { Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
@@ -85,7 +86,7 @@ export default function OnboardingModal({
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <p className="text-xs text-muted-foreground">User ID</p>
+            <p className="text-xs text-muted-foreground">{i18n.t("onboardingLink.user-id", { defaultValue: "User ID" })}</p>
             <p className="font-mono text-sm break-all">{invitationLinkData?.user_id}</p>
           </div>
           <div className="flex flex-col gap-1.5">

@@ -1,6 +1,7 @@
 "use client";
 
 import { Bot, Settings2, User, Wrench } from "lucide-react";
+import i18n from "@/lib/i18n";
 
 import CopyButton from "@/components/shared/CopyButton";
 import { cn } from "@/lib/cva.config";
@@ -39,7 +40,7 @@ export function ToolCallBlock({ call }: { call: TraceToolCall }) {
       </div>
       <div className="px-2.5 py-2">
         {call.args === undefined ? (
-          <p className="py-2 text-xs text-muted-foreground">Arguments not recorded</p>
+          <p className="py-2 text-xs text-muted-foreground">{i18n.t("messages.arguments-not-recorded", { defaultValue: "Arguments not recorded" })}</p>
         ) : (
           <ToolArguments args={call.args} />
         )}

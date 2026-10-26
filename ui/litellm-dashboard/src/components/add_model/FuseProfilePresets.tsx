@@ -138,7 +138,7 @@ function FuseProfilePresetField({
           </p>
           {preset ? (
             <>
-              <p>Catalog version: {catalogVersion}</p>
+              <p>{i18n.t("fuseProfilePresets.catalog-version", { defaultValue: "Catalog version:" })}{" "}{catalogVersion}</p>
               {preset.model && <p>Model: {preset.model}</p>}
             </>
           ) : (

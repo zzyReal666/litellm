@@ -1,6 +1,7 @@
 "use client";
 
 import type { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
+import i18n from "@/lib/i18n";
 import { ScrollText } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 
@@ -137,7 +138,7 @@ export function RequestLogsTable({
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
             title="Filters"
-            description="Narrow down request logs"
+            description={i18n.t("requestLogsTable.narrow-down-request-logs", { defaultValue: "Narrow down request logs" })}
           >
             {({ get, set }) => <RequestLogsFilters get={get} set={set} teams={teams} logsWindow={logsWindow} />}
           </DataTableFilterDrawer>

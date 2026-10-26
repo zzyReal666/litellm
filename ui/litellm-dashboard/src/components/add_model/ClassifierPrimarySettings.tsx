@@ -101,8 +101,7 @@ export default function ClassifierPrimarySettings({
           />
           {missingJudge && (
             <p role="alert" className="text-xs text-destructive">
-              A judge model is required
-            </p>
+              {i18n.t("classifierPrimarySettings.a-judge-model-is-required", { defaultValue: "A judge model is required" })}</p>
           )}
         </div>
       )}

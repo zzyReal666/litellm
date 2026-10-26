@@ -1,6 +1,7 @@
 "use client";
 
 import { fieldEntries } from "../content/payload";
+import i18n from "@/lib/i18n";
 import type { Span } from "../../types";
 import { FieldTree } from "../content/FieldTree";
 import { DetailGroup } from "./DetailGroup";
@@ -30,7 +31,7 @@ export function AttributesTab({ traceId, span, attributes, isLoading }: Attribut
           <FieldTree entries={attributeEntries} />
         </DetailGroup>
       )}
-      {isLoading && <div className="text-sm text-muted-foreground">Loading attributes…</div>}
+      {isLoading && <div className="text-sm text-muted-foreground">{i18n.t("attributesTab.loading-attributes", { defaultValue: "Loading attributes…" })}</div>}
     </div>
   );
 }

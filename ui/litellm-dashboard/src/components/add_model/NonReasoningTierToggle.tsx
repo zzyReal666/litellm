@@ -39,9 +39,7 @@ const NonReasoningTierToggle: React.FC<{
         <strong className="font-semibold">{i18n.t("addModel.nonReasoningTier.addLabel", { defaultValue: "Add a non-reasoning tier" })}</strong>
       </div>
       <span className="block text-xs text-muted-foreground">
-        Adds NON_REASONING below Simple, for operational agent traffic that relays or reformats information rather than
-        reasoning about it. Escalation still moves up out of it when a request needs more.
-        {!available && " Requires the LLM or Jev classification method"}
+        {i18n.t("nonReasoningTierToggle.adds-non-reasoning-below-simple-for-operatio", { defaultValue: "Adds NON_REASONING below Simple, for operational agent traffic that relays or reformats information rather than reasoning about it. Escalation still moves up out of it when a request needs more." })}{!available && " Requires the LLM or Jev classification method"}
       </span>
     </>
   );

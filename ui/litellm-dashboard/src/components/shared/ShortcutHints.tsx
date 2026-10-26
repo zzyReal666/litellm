@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { useHotkeysContext } from "react-hotkeys-hook";
 
 import { cn } from "@/lib/cva.config";
@@ -74,7 +75,7 @@ export function ShortcutHints({ className }: { className?: string }) {
   if (hints.length === 0) return null;
   return (
     <div
-      aria-label="Keyboard shortcuts"
+      aria-label={i18n.t("shortcutHints.keyboard-shortcuts", { defaultValue: "Keyboard shortcuts" })}
       data-slot="shortcut-hints"
       className={cn("flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground", className)}
     >

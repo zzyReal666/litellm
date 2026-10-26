@@ -3279,7 +3279,8 @@
     "resetPasswordLinkDesc": "Copy and send the generated link to the user to reset their password.",
     "userId": "User ID",
     "copyInvitationLink": "Copy invitation link",
-    "copyPasswordResetLink": "Copy password reset link"
+    "copyPasswordResetLink": "Copy password reset link",
+    "user-id": "User ID"
   },
   "organizations": {
     "enterpriseFeature": "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key <pricingLink>here</pricingLink>.",
@@ -3656,7 +3657,8 @@
     "saveChangesButton": "Save Changes",
     "mcpServersLabel": "MCP Servers / Access Groups",
     "mcpServersTooltip": "Caps which MCP servers, access groups, and tools this user may reach. Every key the user holds is limited to this set.",
-    "modelMaxBudgetHint": "Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds."
+    "modelMaxBudgetHint": "Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds.",
+    "max-budget-cny": "Max Budget (CNY)"
   },
   "viewUserSpend": {
     "totalSpend": "Total Spend",
@@ -14129,5 +14131,197 @@
     "open-documentation-in-a-new-tab": "Open documentation in a new tab",
     "api-reference-docs": "API Reference Docs",
     "opens-in-a-new-tab": "(opens in a new tab)"
+  },
+  "agentFormFields": {
+    "kill-switch": "Kill Switch"
+  },
+  "dynamicAgentFormFields": {
+    "kill-switch": "Kill Switch"
+  },
+  "budgetTableColumns": {
+    "tpd-batch": "TPD (batch)"
+  },
+  "costOptimizationView": {
+    "fetching-spend-data-failed-so-the-savings-be": "Fetching spend data failed, so the savings below may be empty rather than final. Reload the page to try again."
+  },
+  "promptCachingTab": {
+    "date-range-for-requests-and-cache-leakage": "Date range for requests and cache leakage"
+  },
+  "guardrailFormField": {
+    "continue-observing-the-response-after-a-flag": "Continue observing the response after a flagged request"
+  },
+  "keywordTable": {
+    "no-keywords-added": "No keywords added."
+  },
+  "patternTable": {
+    "no-patterns-added": "No patterns added."
+  },
+  "mCPNetworkSettings": {
+    "define-which-ip-ranges-are-part-of-your-priv": "Define which IP ranges are part of your private network. Callers from these IPs can see all MCP servers. Callers from any other IP can only see servers marked \"Available on Public Internet\"."
+  },
+  "autoRoutersPanel": {
+    "auto-routers-sit-above-your-deployments-and": "Auto routers sit above your deployments and pick a model per request. They are called like any other model, so clients keep using a single model name."
+  },
+  "modelsAndEndpointsPage": {
+    "last-refreshed": "Last Refreshed:"
+  },
+  "audioRenderer": {
+    "your-browser-does-not-support-the-audio-elem": "Your browser does not support the audio element."
+  },
+  "complianceUI": {
+    "shift-enter": "Shift+Enter"
+  },
+  "playgroundPage": {
+    "your-role-does-not-have-access-to-the-playgr": "Your role does not have access to the Playground. Ask your proxy admin for access to test models."
+  },
+  "attachmentTableColumns": {
+    "applied-only-when-no-non-default-attachment": "Applied only when no non-default attachment matches"
+  },
+  "transformRequestPanel": {
+    "found-an-error-file-an-issue": "Found an error? File an issue"
+  },
+  "spendByProvider": {
+    "total-provider-spend": "Total provider spend"
+  },
+  "usageAIChatPanel": {
+    "e-g-which-model-costs-me-the-most": "e.g. \"Which model costs me the most?\""
+  },
+  "onboardingLoadingView": {
+    "loading-invitation": "Loading invitation"
+  },
+  "mCPHubTableColumns": {
+    "hub-listing": "Hub listing"
+  },
+  "codeBlock": {
+    "copy-code": "Copy code"
+  },
+  "commandPaletteHint": {
+    "dismiss-search-hint": "Dismiss search hint"
+  },
+  "exportTypeSelector": {
+    "export-type": "Export type"
+  },
+  "calcPopover": {
+    "how-is-this-calculated": "How is this calculated?"
+  },
+  "logViewer": {
+    "no-logs-to-display-adjust-filters-or-date-ra": "No logs to display. Adjust filters or date range."
+  },
+  "userDropdown": {
+    "change-password": "Change Password"
+  },
+  "uISettings": {
+    "connect-from-the-moyai-page": "Connect from the Moyai page"
+  },
+  "toolPoliciesTableColumns": {
+    "the-user-who-owns-the-key-that-discovered-th": "The user who owns the key that discovered this tool. Displays the first available value: User Alias, User Email, or User ID."
+  },
+  "keyModelUsageView": {
+    "model-usage": "Model Usage"
+  },
+  "userBanner": {
+    "dismiss-banner": "Dismiss banner"
+  },
+  "addModelForm": {
+    "litellm-endpoint-to-use-when-health-checking": "- LiteLLM endpoint to use when health checking this model"
+  },
+  "autoRouterClassifierTabs": {
+    "could-not-check-availability": "Could not check availability."
+  },
+  "classifierPrimarySettings": {
+    "a-judge-model-is-required": "A judge model is required"
+  },
+  "fuseProfilePresets": {
+    "catalog-version": "Catalog version:"
+  },
+  "nonReasoningTierToggle": {
+    "adds-non-reasoning-below-simple-for-operatio": "Adds NON_REASONING below Simple, for operational agent traffic that relays or reformats information rather than reasoning about it. Escalation still moves up out of it when a request needs more."
+  },
+  "responseFormatControls": {
+    "replace-the-caller-s-max-tokens-with-the-rou": "Replace the caller's max_tokens with the routed tier model's output ceiling so one client value fits every tier. Off forwards the caller's value unchanged."
+  },
+  "chatShell": {
+    "this-is-a-pre-v0-feature-do-not-use-in-produ": "This is a pre-v0 feature. Do not use in production, it may change unexpectedly. Please share feedback"
+  },
+  "mCPEventsDisplay": {
+    "list-tools": "List tools"
+  },
+  "budgetWindowsEditor": {
+    "add-budget-window": "+ Add Budget Window"
+  },
+  "modelMaxBudgetEditor": {
+    "remove-model-budget": "Remove model budget"
+  },
+  "tagRateLimitEditor": {
+    "add-tag-limit": "+ Add Tag Limit"
+  },
+  "leftnav": {
+    "model-leaderboard": "Model Leaderboard"
+  },
+  "investigationsView": {
+    "new-investigation": "New investigation"
+  },
+  "readinessBanner": {
+    "check-traces": "Check traces"
+  },
+  "watchAllBanner": {
+    "turn-all-on": "Turn all on"
+  },
+  "jobMeta": {
+    "total-time-including-any-wait-for-an-analyze": "Total time, including any wait for an analyzer"
+  },
+  "liveRun": {
+    "show-live-trace-results": "Show live trace results"
+  },
+  "messages": {
+    "arguments-not-recorded": "Arguments not recorded"
+  },
+  "pagingBanner": {
+    "refresh-trace": "Refresh trace"
+  },
+  "attributesTab": {
+    "loading-attributes": "Loading attributes…"
+  },
+  "detailPane": {
+    "select-a-span-to-inspect-it": "Select a span to inspect it."
+  },
+  "treeRows": {
+    "load-20-more": "Load 20 more"
+  },
+  "runsToolbar": {
+    "filter-traces-by-status": "Filter traces by status"
+  },
+  "logsTableToolbar": {
+    "custom-range": "Custom Range"
+  },
+  "requestLogsTable": {
+    "narrow-down-request-logs": "Narrow down request logs"
+  },
+  "searchToolSelector": {
+    "clear-all-search-tools": "Clear all search tools"
+  },
+  "inheritedBudgetHint": {
+    "this-key-has-no-budget-of-its-own-but-its-sp": "This key has no budget of its own, but its spend still counts toward:"
+  },
+  "inspector": {
+    "close-esc": "Close (Esc)"
+  },
+  "shortcutHints": {
+    "keyboard-shortcuts": "Keyboard shortcuts"
+  },
+  "timeRangeControls": {
+    "time-range": "Time range"
+  },
+  "skillSelector": {
+    "clear-all-skills": "Clear all skills"
+  },
+  "tagSelector": {
+    "select-or-create-tags": "Select or create tags"
+  },
+  "resizableSheetContent": {
+    "resize-drawer": "Resize drawer"
+  },
+  "modelTeamSelect": {
+    "select-a-team": "Select a team"
   }
 }

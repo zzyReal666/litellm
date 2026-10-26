@@ -1,6 +1,7 @@
 "use client";
 
 import { SimpleTooltip } from "@/components/ui/tooltip";
+import i18n from "@/lib/i18n";
 import type { Team } from "@/components/key_team_helpers/key_list";
 import type { Organization } from "@/components/networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -81,7 +82,7 @@ export function InheritedBudgetHint({ gates }: InheritedBudgetHintProps) {
     <SimpleTooltip
       content={
         <div data-testid="inherited-budget-hint" className="flex flex-col gap-1">
-          <span>This key has no budget of its own, but its spend still counts toward:</span>
+          <span>{i18n.t("inheritedBudgetHint.this-key-has-no-budget-of-its-own-but-its-sp", { defaultValue: "This key has no budget of its own, but its spend still counts toward:" })}</span>
           {gates.map((gate) => (
             <span key={gate.scope}>{formatGate(gate)}</span>
           ))}

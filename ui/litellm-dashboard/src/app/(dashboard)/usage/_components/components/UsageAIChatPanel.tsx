@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { MessageSquare, Sparkles, X } from "lucide-react";
@@ -294,7 +295,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <MessageSquare aria-hidden="true" className="mb-2 size-6" strokeWidth={1.5} />
             <p className="text-sm font-medium text-foreground">{t("usagePage.usageAiChatPanel.emptyStateTitle", { defaultValue: "Ask a question about your usage" })}</p>
-            <p className="text-xs mt-1">e.g. &quot;Which model costs me the most?&quot;</p>
+            <p className="text-xs mt-1">{i18n.t("usageAIChatPanel.e-g-which-model-costs-me-the-most", { defaultValue: "e.g. \"Which model costs me the most?\"" })}</p>
           </div>
         )}
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Trans, useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { Code2 } from "lucide-react";
 import React from "react";
 
@@ -93,9 +94,7 @@ export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePane
       <p className="mb-3 text-sm text-muted-foreground">
         {group.routing_strategy === "priority" ? (
           <>
-            Request <span className="font-medium text-foreground">{group.group_name}</span> to try eligible models in
-            priority order. Direct requests to a member model keep their existing routing behavior.
-          </>
+            Request <span className="font-medium text-foreground">{group.group_name}</span> to try eligible models in priority order. Direct requests to a member model keep their existing routing behavior.</>
         ) : (
           <>
             <Trans

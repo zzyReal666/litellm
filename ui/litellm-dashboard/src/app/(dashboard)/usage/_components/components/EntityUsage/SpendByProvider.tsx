@@ -89,7 +89,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
       {visible.length > 0 && (
         <div className="grid gap-2.5">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="text-xs text-muted-foreground">Total provider spend</span>
+            <span className="text-xs text-muted-foreground">{i18n.t("spendByProvider.total-provider-spend", { defaultValue: "Total provider spend" })}</span>
             <span data-testid="provider-spend-total" className="text-sm font-semibold tabular-nums">
               ¥{formatNumberWithCommas(total, 2)}
             </span>

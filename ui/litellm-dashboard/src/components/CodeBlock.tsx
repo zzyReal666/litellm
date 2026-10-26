@@ -1,4 +1,5 @@
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import { CheckIcon, ClipboardIcon } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -24,7 +25,7 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
       <button
         onClick={copyToClipboard}
         className="absolute top-3 right-3 p-2 rounded-md border border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground z-raised"
-        aria-label="Copy code"
+        aria-label={i18n.t("codeBlock.copy-code", { defaultValue: "Copy code" })}
       >
         {copied ? <CheckIcon size={16} /> : <ClipboardIcon size={16} />}
       </button>

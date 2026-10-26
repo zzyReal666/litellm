@@ -337,7 +337,7 @@ const AutoRouterClassifierTabs: React.FC<AutoRouterClassifierTabsProps> = ({
       )}
       {availability.isError && (
         <p className="text-xs text-muted-foreground">
-          Could not check availability.{" "}
+          {i18n.t("autoRouterClassifierTabs.could-not-check-availability", { defaultValue: "Could not check availability." })}{" "}
           <button type="button" className="underline" onClick={() => availability.refetch?.()}>
             {i18n.t("navbar.retry", { defaultValue: "Retry" })}
           </button>

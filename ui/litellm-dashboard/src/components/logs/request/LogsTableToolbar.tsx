@@ -1,6 +1,7 @@
 "use client";
 
 import moment from "moment";
+import i18n from "@/lib/i18n";
 import { CalendarDays } from "lucide-react";
 import { type ComponentProps, useState } from "react";
 
@@ -84,8 +85,7 @@ export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePicke
               className="w-full justify-start font-normal"
               onClick={() => onValueChange({ ...value, isCustomDate: !value.isCustomDate })}
             >
-              Custom Range
-            </Button>
+              {i18n.t("logsTableToolbar.custom-range", { defaultValue: "Custom Range" })}</Button>
           </div>
         </PopoverContent>
       </Popover>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import i18n from "@/lib/i18n";
 
 import { isRetryableTraceRead, type TraceReadFailure } from "../../list/traceReadFailure";
 
@@ -50,8 +51,7 @@ export function PagingBanner({ loaded, total, failure, busy, onLoadMore, onRefre
       <span className="flex items-center gap-2">
         {failure && (
           <Button size="xs" variant={retryable ? "ghost" : "outline"} disabled={busy} onClick={onRefresh}>
-            Refresh trace
-          </Button>
+            {i18n.t("pagingBanner.refresh-trace", { defaultValue: "Refresh trace" })}</Button>
         )}
         {(!failure || retryable) && (
           <Button size="xs" variant="outline" disabled={busy} onClick={onLoadMore}>

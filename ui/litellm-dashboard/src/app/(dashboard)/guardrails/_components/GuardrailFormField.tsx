@@ -217,7 +217,7 @@ export const LoggingOnlyScopeField: React.FC<{
             onCheckedChange={fieldControl.onChange}
             aria-invalid={fieldControl["aria-invalid"]}
             aria-describedby={fieldControl["aria-describedby"]}
-            aria-label="Continue observing the response after a flagged request"
+            aria-label={i18n.t("guardrailFormField.continue-observing-the-response-after-a-flag", { defaultValue: "Continue observing the response after a flagged request" })}
           />
         )}
       </GuardrailField>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import { ChevronRight } from "lucide-react";
 import type { MCPEvent } from "@/components/mcp_tools/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -85,7 +86,7 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
         {toolsEvent && (
           <MCPEventPanel
             panelKey="list-tools"
-            title="List tools"
+            title={i18n.t("mCPEventsDisplay.list-tools", { defaultValue: "List tools" })}
             open={openKeys.has("list-tools")}
             onOpenChange={(open) => toggleKey("list-tools", open)}
           >

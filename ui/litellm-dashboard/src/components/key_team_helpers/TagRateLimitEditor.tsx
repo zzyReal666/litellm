@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,8 +109,7 @@ export function TagRateLimitEditor({ value, onChange }: TagRateLimitEditorProps)
           addRow();
         }}
       >
-        + Add Tag Limit
-      </Button>
+        {i18n.t("tagRateLimitEditor.add-tag-limit", { defaultValue: "+ Add Tag Limit" })}</Button>
     </div>
   );
 }
