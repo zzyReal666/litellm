@@ -8954,6 +8954,22 @@
     "agentVirtualKeys": {
       "noKeyAssigned": "No virtual key assigned to this agent.",
       "unnamedKey": "Unnamed key"
+    },
+    "agentKillSwitch": {
+      "dangerZone": "Danger Zone",
+      "killSwitch": "Kill switch",
+      "description": "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from LiteLLM",
+      "notConfigured": "Not configured. Add a kill switch webhook under Settings to enable this action",
+      "fireButton": "Fire Kill Switch",
+      "firing": "Firing...",
+      "fired": "Kill switch fired (HTTP {{code}})",
+      "fireFailed": "Failed to fire kill switch",
+      "lastResult": "Last result: HTTP {{code}}",
+      "confirmTitle": "Fire kill switch for {{name}}?",
+      "outageWarningTitle": "This can cause an outage",
+      "outageWarningDescription": "LiteLLM will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside LiteLLM's control and cannot be reverted here",
+      "typeToConfirm": "Type {{name}} to confirm:",
+      "confirmAgentNameAria": "Confirm agent name"
     }
   },
   "teamPage": {
@@ -13276,6 +13292,53 @@
       "revisionAria": "Revision",
       "revisionLabel": "Revision {{value}}",
       "latestSuffix": " (latest)"
+    },
+    "spanError": {
+      "source": {
+        "tool": "Tool",
+        "model": "Model",
+        "litellm": "LiteLLM"
+      },
+      "errorAria": "Error",
+      "storedDiagnosticAria": "Stored diagnostic",
+      "reportedError": "Span reported an error status.",
+      "previewTruncated": "Error preview truncated",
+      "viewStoredDiagnostic": "View stored diagnostic",
+      "loadingDiagnostic": "Loading diagnostic…",
+      "loadDiagnosticFailed": "Could not load diagnostic: {{message}}",
+      "backToBeginning": "Back to beginning",
+      "continuationOf": "Continuation of stored diagnostic ({{chars}} characters)",
+      "beginningOf": "Beginning of stored diagnostic ({{chars}} characters)",
+      "nextSection": "Next section"
+    },
+    "analysisKey": {
+      "noKeyBudget": "No key budget",
+      "period": {
+        "month": "month",
+        "day": "day",
+        "week": "week",
+        "hour": "hour"
+      },
+      "amountPerPeriod": "{{amount}} / {{period}}",
+      "amountTotal": "{{amount}} total",
+      "allModels": "All models",
+      "loadingBillingKey": "Loading billing key…",
+      "billingKeyFailed": "Could not load billing key",
+      "billsTo": "Bills to {{name}}",
+      "assignedVirtualKey": "an assigned virtual key",
+      "keyStatus": "Key {{status}}",
+      "loadingPermissions": "Loading key permissions…",
+      "permissionsFailed": "Could not load key permissions",
+      "modelsLabel": "Models",
+      "keyLimit": "Key limit",
+      "inactiveKey": "This key is {{status}}. Choose an active key.",
+      "otherLimits": "Other limits",
+      "rpmLimit": "Requests per minute: {{value}}",
+      "tpmLimit": "Tokens per minute: {{value}}",
+      "expires": "Expires: {{value}}",
+      "noKeyLimit": "No key limit",
+      "noExpiry": "No expiry",
+      "otherLimitsApply": "Team, organization, and model limits still apply."
     }
   },
   "mcpServerCredentials": {

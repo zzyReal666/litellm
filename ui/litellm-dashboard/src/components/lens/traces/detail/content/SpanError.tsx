@@ -5,6 +5,7 @@ import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import i18n from "@/lib/i18n";
 
 import { useTracesApi } from "../../api";
 import {
@@ -31,12 +32,12 @@ const errorReason = (headline: string): string => /^([A-Za-z_][\w.]*)\(/.exec(he
 export function ErrorBlock({ span }: { span: Span }) {
   const source = errorSource(span);
   if (!source) return null;
-  const headline = errorHeadline(span.error ?? "") || "Span reported an error status.";
+  const headline = errorHeadline(span.error ?? "") || i18n.t("lens.spanError.reportedError", { defaultValue: "Span reported an error status." });
   return (
-    <section aria-label="Error" className="rounded-lg border border-destructive/40 bg-destructive/5 px-3.5 py-3">
+    <section aria-label={i18n.t("lens.spanError.errorAria", { defaultValue: "Error" })} className="rounded-lg border border-destructive/40 bg-destructive/5 px-3.5 py-3">
       <div className="flex items-center gap-2 text-sm font-semibold text-destructive">
         <TriangleAlert className="size-4" />
-        {ERROR_SOURCE_LABEL[source]} · {errorReason(headline)}
+        {i18n.t(`lens.spanError.source.${source}`, { defaultValue: ERROR_SOURCE_LABEL[source] })} · {errorReason(headline)}
       </div>
       <pre className="mt-2 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-foreground">
         {headline}
@@ -69,28 +70,28 @@ export function StoredDiagnostic({ accessToken, traceId, traceRef, span }: Diagn
   const query = useQuery(queryOptions);
   const failure = query.error ? classifyTraceReadFailure(query.error) : null;
   return (
-    <section aria-label="Stored diagnostic" className="flex flex-col items-start gap-2">
-      {span.error_truncated && <p className="text-xs text-muted-foreground">Error preview truncated</p>}
+    <section aria-label={i18n.t("lens.spanError.storedDiagnosticAria", { defaultValue: "Stored diagnostic" })} className="flex flex-col items-start gap-2">
+      {span.error_truncated && <p className="text-xs text-muted-foreground">{i18n.t("lens.spanError.previewTruncated", { defaultValue: "Error preview truncated" })}</p>}
       {!opened && (
         <Button variant="outline" size="xs" onClick={() => setOpened(true)}>
-          View stored diagnostic
+          {i18n.t("' + S + '.viewStoredDiagnostic", { defaultValue: "View stored diagnostic" })}
         </Button>
       )}
       {opened && query.isPending && (
         <p role="status" className="text-xs text-muted-foreground">
-          Loading diagnostic…
+          {i18n.t("' + S + '.loadingDiagnostic", { defaultValue: "Loading diagnostic…" })}
         </p>
       )}
       {failure && (
         <div role="alert" className="flex items-center gap-2 text-xs">
-          Could not load diagnostic: {failure.message}
+          {i18n.t("' + S + '.loadDiagnosticFailed", { defaultValue: "Could not load diagnostic: {{message}}", message: failure.message })}
           {isRetryableTraceRead(failure) || !cursor ? (
             <Button variant="outline" size="xs" onClick={() => query.refetch()}>
-              Retry
+              {i18n.t("common.retry", { defaultValue: "Retry" })}
             </Button>
           ) : (
             <Button variant="outline" size="xs" onClick={() => setCursor(null)}>
-              Back to beginning
+              {i18n.t("' + S + '.backToBeginning", { defaultValue: "Back to beginning" })}
             </Button>
           )}
         </div>
@@ -101,18 +102,19 @@ export function StoredDiagnostic({ accessToken, traceId, traceRef, span }: Diagn
             <TextBody text={query.data.message} format="code" />
           </div>
           <p className="text-xs text-muted-foreground">
-            {cursor ? "Continuation" : "Beginning"} of stored diagnostic ({query.data.total_chars.toLocaleString()}{" "}
-            characters)
+            {cursor
+              ? i18n.t("' + S + '.continuationOf", { defaultValue: "Continuation of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })
+              : i18n.t("' + S + '.beginningOf", { defaultValue: "Beginning of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })}
           </p>
           <div className="flex gap-2">
             {query.data.next_cursor && (
               <Button variant="outline" size="xs" onClick={() => setCursor(query.data.next_cursor)}>
-                Next section
+                {i18n.t("' + S + '.nextSection", { defaultValue: "Next section" })}
               </Button>
             )}
             {cursor && (
               <Button variant="outline" size="xs" onClick={() => setCursor(null)}>
-                Back to beginning
+                {i18n.t("' + S + '.backToBeginning", { defaultValue: "Back to beginning" })}
               </Button>
             )}
           </div>

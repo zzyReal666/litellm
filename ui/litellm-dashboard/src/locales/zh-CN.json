@@ -8954,6 +8954,22 @@
     "agentVirtualKeys": {
       "noKeyAssigned": "此 Agent 未分配虚拟密钥。",
       "unnamedKey": "未命名密钥"
+    },
+    "agentKillSwitch": {
+      "dangerZone": "危险操作",
+      "killSwitch": "终止开关",
+      "description": "调用已配置的 webhook 来停止该 agent 的上游运行时。这会导致所有使用该 agent 的人中断，且无法从 LiteLLM 中恢复",
+      "notConfigured": "未配置。请在设置中添加终止开关 webhook 以启用此操作",
+      "fireButton": "触发终止开关",
+      "firing": "触发中…",
+      "fired": "已触发终止开关（HTTP {{code}}）",
+      "fireFailed": "触发终止开关失败",
+      "lastResult": "最近结果：HTTP {{code}}",
+      "confirmTitle": "确认对 {{name}} 触发终止开关？",
+      "outageWarningTitle": "此操作可能导致服务中断",
+      "outageWarningDescription": "LiteLLM 将立即调用 {{method}} {{url}}。该 webhook 对 agent 的操作不在 LiteLLM 控制范围内，也无法在此撤销",
+      "typeToConfirm": "输入 {{name}} 以确认：",
+      "confirmAgentNameAria": "确认 agent 名称"
     }
   },
   "teamPage": {
@@ -13276,6 +13292,53 @@
       "revisionAria": "修订",
       "revisionLabel": "修订 {{value}}",
       "latestSuffix": "（最新）"
+    },
+    "spanError": {
+      "source": {
+        "tool": "工具",
+        "model": "模型",
+        "litellm": "LiteLLM"
+      },
+      "errorAria": "错误",
+      "storedDiagnosticAria": "已存诊断信息",
+      "reportedError": "该 Span 报告了错误状态。",
+      "previewTruncated": "错误预览已截断",
+      "viewStoredDiagnostic": "查看已存诊断信息",
+      "loadingDiagnostic": "正在加载诊断信息…",
+      "loadDiagnosticFailed": "无法加载诊断信息：{{message}}",
+      "backToBeginning": "回到开头",
+      "continuationOf": "已存诊断信息续页（{{chars}} 字符）",
+      "beginningOf": "已存诊断信息开头（{{chars}} 字符）",
+      "nextSection": "下一段"
+    },
+    "analysisKey": {
+      "noKeyBudget": "密钥无预算",
+      "period": {
+        "month": "月",
+        "day": "天",
+        "week": "周",
+        "hour": "小时"
+      },
+      "amountPerPeriod": "{{amount}} / {{period}}",
+      "amountTotal": "共 {{amount}}",
+      "allModels": "全部模型",
+      "loadingBillingKey": "正在加载计费密钥…",
+      "billingKeyFailed": "无法加载计费密钥",
+      "billsTo": "计费到 {{name}}",
+      "assignedVirtualKey": "已分配的虚拟密钥",
+      "keyStatus": "密钥{{status}}",
+      "loadingPermissions": "正在加载密钥权限…",
+      "permissionsFailed": "无法加载密钥权限",
+      "modelsLabel": "模型",
+      "keyLimit": "密钥限额",
+      "inactiveKey": "该密钥当前为 {{status}}。请选择可用的密钥。",
+      "otherLimits": "其他限额",
+      "rpmLimit": "每分钟请求数：{{value}}",
+      "tpmLimit": "每分钟 Token 数：{{value}}",
+      "expires": "过期时间：{{value}}",
+      "noKeyLimit": "密钥无限制",
+      "noExpiry": "永不过期",
+      "otherLimitsApply": "团队、组织和模型限额仍然生效。"
     }
   },
   "mcpServerCredentials": {
