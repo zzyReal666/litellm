@@ -1595,7 +1595,9 @@
     "smtpSenderEmailDesc": "输入发件人邮箱地址，例如 `sender@berri.ai`",
     "testEmailAddressDesc": "发送「测试邮件告警」的目标邮箱，例如：`info@berri.ai`",
     "emailLogoUrlDesc": "（可选）自定义邮件中显示的 Logo，传入您的 Logo URL",
-    "emailSupportContactDesc": "（可选）自定义邮件中显示的支持邮箱地址，默认为 support@berri.ai"
+    "emailSupportContactDesc": "（可选）自定义邮件中显示的支持邮箱地址，默认为 support@berri.ai",
+    "hideCredential": "隐藏凭据",
+    "showCredential": "显示凭据"
   },
   "generalSettings": {
     "tabLoadbalancing": "负载均衡",
@@ -8970,6 +8972,25 @@
       "outageWarningDescription": "LiteLLM 将立即调用 {{method}} {{url}}。该 webhook 对 agent 的操作不在 LiteLLM 控制范围内，也无法在此撤销",
       "typeToConfirm": "输入 {{name}} 以确认：",
       "confirmAgentNameAria": "确认 agent 名称"
+    },
+    "agentIdentity": {
+      "couldNotLoadEvidence": "无法加载认证凭证",
+      "lastAuthenticated": "最近一次认证身份匹配：{{time}}",
+      "awaitingAuth": "已配置，等待一次已认证的请求",
+      "sectionAria": "Agent 身份",
+      "title": "Agent 身份：Microsoft Entra ID",
+      "tenant": "租户：",
+      "clientId": "应用程序（客户端）ID：",
+      "objectId": "企业应用程序对象 ID：",
+      "notConfigured": "未配置",
+      "enabled": "已启用",
+      "disabled": "已停用",
+      "loading": "加载中",
+      "execution": "执行：{{state}} · 模式：{{mode}}",
+      "unbound": "身份未绑定，执行已停用",
+      "evidenceNote": "最近的凭证来自与该绑定匹配的已校验 Entra Token，会跨重启保留，绑定变更时清除。工具与模型权限另行校验。",
+      "refreshEvidence": "刷新认证凭证",
+      "viewRequestLogs": "查看请求日志"
     }
   },
   "teamPage": {

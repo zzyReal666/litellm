@@ -1595,7 +1595,9 @@
     "smtpSenderEmailDesc": "Enter the sender email address, e.g. `sender@berri.ai`",
     "testEmailAddressDesc": "Email Address to send `Test Email Alert` to. example: `info@berri.ai`",
     "emailLogoUrlDesc": "(Optional) Customize the Logo that appears in the email, pass a url to your logo",
-    "emailSupportContactDesc": "(Optional) Customize the support email address that appears in the email. Default is support@berri.ai"
+    "emailSupportContactDesc": "(Optional) Customize the support email address that appears in the email. Default is support@berri.ai",
+    "hideCredential": "Hide credential",
+    "showCredential": "Show credential"
   },
   "generalSettings": {
     "tabLoadbalancing": "Loadbalancing",
@@ -8970,6 +8972,25 @@
       "outageWarningDescription": "LiteLLM will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside LiteLLM's control and cannot be reverted here",
       "typeToConfirm": "Type {{name}} to confirm:",
       "confirmAgentNameAria": "Confirm agent name"
+    },
+    "agentIdentity": {
+      "couldNotLoadEvidence": "Could not load authentication evidence",
+      "lastAuthenticated": "Last authenticated identity match: {{time}}",
+      "awaitingAuth": "Configured, awaiting an authenticated request",
+      "sectionAria": "Agent Identity",
+      "title": "Agent Identity: Microsoft Entra ID",
+      "tenant": "Tenant:",
+      "clientId": "Application (Client) ID:",
+      "objectId": "Enterprise application Object ID:",
+      "notConfigured": "Not configured",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "loading": "Loading",
+      "execution": "Execution: {{state}} · Mode: {{mode}}",
+      "unbound": "Identity unbound; execution is disabled",
+      "evidenceNote": "Recent evidence comes from a validated Entra token matching this binding. It is persisted across restarts and cleared when the binding changes. Tool and model permissions are checked separately.",
+      "refreshEvidence": "Refresh authentication evidence",
+      "viewRequestLogs": "View request logs"
     }
   },
   "teamPage": {
