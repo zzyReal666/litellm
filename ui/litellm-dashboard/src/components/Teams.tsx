@@ -857,7 +857,10 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                       schemaLoading={isTeamMetadataSchemaLoading}
                     />
                     <FieldDescription>
-                      Values are saved as text. Enter JSON for typed values, e.g. 3, true, or{" "}{'{"region": "us"}'}.
+                      {t("teams.metadataValuesHelp", {
+                        defaultValue:
+                          'Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {"region": "us"}.',
+                      })}
                     </FieldDescription>
                   </Field>
 

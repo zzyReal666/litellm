@@ -42,7 +42,7 @@ function PreviewFooter({ page, selection, className, ...props }: PreviewFooterPr
       {...props}
     >
       <p className="text-xs text-muted-foreground">
-        {count} selected for analysis
+        {i18n.t("lens.setup.matchingActivityPreview.selectedForAnalysis", { defaultValue: "{{count}} selected for analysis", count })}
         {partial && (
           <>
             {" "}
@@ -52,7 +52,7 @@ function PreviewFooter({ page, selection, className, ...props }: PreviewFooterPr
       </p>
       {selection && picked > 0 && (
         <Button variant="outline" size="sm" onClick={selection.clear}>
-          Clear {picked} selected runs
+          {i18n.t("lens.setup.matchingActivityPreview.clearSelectedRuns", { defaultValue: "Clear {{count}} selected runs", count: picked })}
         </Button>
       )}
     </div>

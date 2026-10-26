@@ -540,7 +540,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
           </CardHeader>
           <CardContent className="flex flex-col items-start gap-4">
             <p className="text-sm text-muted-foreground">
-              SpendLogs in DB has {proxySettings.NUM_SPEND_LOGS_ROWS} rows.
+              {t("usage.dbRowsInfo", {
+                defaultValue: "SpendLogs in DB has {{rows}} rows.",
+                rows: proxySettings.NUM_SPEND_LOGS_ROWS,
+              })}
               <br></br>
               {t("usage.dbLimitGuide", { defaultValue: "Please follow our guide to view usage when SpendLogs has more than 1M rows." })}
             </p>
@@ -576,8 +579,11 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
               <div className="grid h-screen w-full grid-cols-2 gap-2">
                 <div className="col-span-2">
                   <p className="mt-2 mb-2 text-lg text-muted-foreground">
-                    Project Spend {new Date().toLocaleString("default", { month: "long" })} 1 -{" "}
-                    {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()}
+                    {t("usage.projectSpendForMonth", {
+                      defaultValue: "Project Spend {{month}} 1 - {{lastDay}}",
+                      month: new Date().toLocaleString(t("common.languageLocale", { defaultValue: "default" }), { month: "long" }),
+                      lastDay: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(),
+                    })}
                   </p>
                   <ViewUserSpend userSpend={totalMonthlySpend} selectedTeam={null} userMaxBudget={null} />
                 </div>
@@ -686,7 +692,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                     <div className="grid grid-cols-2">
                       <div>
                         <p className="text-[15px] font-normal text-muted-foreground">
-                          API Requests {valueFormatterNumbers(globalActivity.sum_api_requests)}
+                          {t("usage.apiRequestsCount", {
+                            defaultValue: "API Requests {{value}}",
+                            value: valueFormatterNumbers(globalActivity.sum_api_requests),
+                          })}
                         </p>
                         <AreaChart
                           className="h-40"
@@ -723,7 +732,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                       <div className="grid grid-cols-2">
                         <div>
                           <p className="text-[15px] font-normal text-muted-foreground">
-                            API Requests {valueFormatterNumbers(globalActivity.sum_api_requests)}
+                            {t("usage.apiRequestsCount", {
+                              defaultValue: "API Requests {{value}}",
+                              value: valueFormatterNumbers(globalActivity.sum_api_requests),
+                            })}
                           </p>
                           <AreaChart
                             className="h-40"
@@ -789,7 +801,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
 
         <TabsContent value="customer-usage" keepMounted>
           <p className="mb-2 text-[12px] text-muted-foreground italic">
-            Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls{" "}
+            {t("usage.customerUsageNote", {
+              defaultValue:
+                "Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls",
+            })}{" "}
             
           </p>
           <div className="grid grid-cols-2">
@@ -914,7 +929,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
                   <p className="text-sm text-muted-foreground">
-                    Get Started by Tracking cost per tag{" "}
+                    {t("usage.getStartedTrackingCostPerTag", { defaultValue: "Get Started by Tracking cost per tag" })}{" "}
                     
                   </p>
                   <BarChart className="h-72" data={topTagsData} index="name" categories={["spend"]} colors={["cyan"]} />

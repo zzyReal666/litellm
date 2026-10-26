@@ -3639,7 +3639,12 @@
     "spendPerTag": "按标签花费",
     "spendPerTagDesc": "从按标签追踪成本开始 <docsLink>此处</docsLink>",
     "selectTags": "选择标签",
-    "adminOnlyDesc": "代理全局用量仅对管理员用户开放。您自己的用量可在用量页面查看。"
+    "adminOnlyDesc": "代理全局用量仅对管理员用户开放。您自己的用量可在用量页面查看。",
+    "dbRowsInfo": "数据库中的 SpendLogs 有 {{rows}} 行。",
+    "projectSpendForMonth": "项目花费 {{month}} 1 日 - {{lastDay}} 日",
+    "apiRequestsCount": "API 请求数 {{value}}",
+    "customerUsageNote": "你的 LLM API 调用客户。当 LLM 调用中传入 `user` 参数时会被跟踪",
+    "getStartedTrackingCostPerTag": "开始按标签跟踪成本"
   },
   "userDashboard": {
     "userIdNotSet": "用户 ID 未设置"
@@ -4864,7 +4869,10 @@
       "logoAltWithName": "{{name}} Logo",
       "oauthFlowNotSet": "未设置 OAuth 流程",
       "oauthFlowNotSetTooltip": "此 OAuth 服务器未设置流程（机器对机器或交互式）。请打开它并选择 OAuth 流程类型，以便 LiteLLM 按您的预期进行认证。",
-      "missingUserFields": "缺少 {{count}} 个用户字段"
+      "missingUserFields": "缺少 {{count}} 个用户字段",
+      "stdioDisabled": "stdio 已禁用",
+      "userFieldsMissing_one": "缺少 {{count}} 个用户字段",
+      "userFieldsMissing_other": "缺少 {{count}} 个用户字段"
     },
     "mcpStandardsSettings": {
       "groupDocumentation": "文档",
@@ -4928,7 +4936,10 @@
       "approveConfirmBody": "这将激活服务器。提交该服务器的用户将在批准后于其 MCP 服务器列表中看到它。",
       "savingRules": "保存中…",
       "searchServersPlaceholder": "搜索 MCP 服务器...",
-      "requiredFieldCount": "{{count}} 个必填项"
+      "requiredFieldCount": "{{count}} 个必填项",
+      "confirmPrompt": "确定要对 <serverName>“{{name}}”</serverName>执行{{action}}吗？",
+      "requiredFieldsCount_one": "{{count}} 个必填字段",
+      "requiredFieldsCount_other": "{{count}} 个必填字段"
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "此工具的输入",
@@ -5623,6 +5634,14 @@
     },
     "mcpFieldRules": {
       "emptyText": "输入后添加"
+    },
+    "openApiByokFields": {
+      "userKeysSentAs": "用户密钥将以如下方式发送：<code>{{format}}</code>",
+      "setAuthTypeHint": "在下方设置<strong>认证类型</strong>，以指定用户密钥的发送方式（例如 Bearer Token、API Key 请求头）。"
+    },
+    "stdioAvailability": {
+      "disabledTitle": "该代理已禁用 stdio",
+      "disabledDescription": "{{message}}。在此之前，该服务器无法以 stdio 启动或保存。"
     }
   },
   "playground": {
@@ -8297,7 +8316,9 @@
       "gatewayRequestsByEndpointSubtitle": "各路由的成功与失败请求数",
       "searchModelsAria": "搜索模型",
       "searchByModelNamePlaceholder": "按模型名称搜索",
-      "clearModelSearchAria": "清除模型搜索"
+      "clearModelSearchAria": "清除模型搜索",
+      "noModelsMatch": "该日期范围内没有匹配「{{query}}」的模型",
+      "credentialTagNote": "使用可复用凭据时，它会在本视图中显示为以 <code>Credential: </code>为前缀的标签。"
     },
     "endpointUsageBarChart": {
       "title": "按端点统计成功与失败请求"
@@ -11000,7 +11021,8 @@
       "updateSucceeded": "已更新路由组\"{{groupName}}\"",
       "deleteSucceeded": "已删除路由组\"{{groupName}}\"",
       "saveFailed": "保存路由组失败",
-      "deleteFailed": "删除路由组失败"
+      "deleteFailed": "删除路由组失败",
+      "deletePriorityNote": "对 <groupName>{{groupName}}</groupName> 的调用将停止工作。直接请求其成员模型仍会保留现有的路由行为。此操作无法撤销。"
     }
   },
   "templates": {
@@ -12536,7 +12558,8 @@
       "openingTag": "开始标签",
       "closingTag": "结束标签",
       "addTagPair": "添加标签对",
-      "removeTagPair": "移除第 {{index}} 组标签"
+      "removeTagPair": "移除第 {{index}} 组标签",
+      "description": "Auto Router 在选择模型时已忽略内置提醒标签，例如 <code>&lt;system-reminder&gt;</code>。留空则保留默认值。可添加自定义的开闭标签，路由时忽略两者之间的文本。自定义标签对会替换默认值，因此请把仍需要的内置标签对一并列出。所选模型仍会收到完整消息。匹配不区分大小写。"
     },
     "ClassifierTypeRadios": {
       "ossClassifier": "OSS 分类器"
@@ -12797,7 +12820,9 @@
       "openBudgetActions": "打开 {{name}} 的预算操作"
     },
     "AccessGroupBudgetModal": {
-      "budgetScopeHint": "通过名称获得此访问组权限的每个密钥都从这一份预算中扣减。通过通配符或 <code>all-proxy-models</code> 访问到该组模型的密钥不计入其中"
+      "budgetScopeHint": "通过名称获得此访问组权限的每个密钥都从这一份预算中扣减。通过通配符或 <code>all-proxy-models</code> 访问到该组模型的密钥不计入其中",
+      "editBudgetTitle": "编辑「{{name}}」的预算",
+      "setBudgetTitle": "设置「{{name}}」的预算"
     },
     "add_auto_router_tab": {
       "missingModels": "缺少：{{models}}"
@@ -13522,6 +13547,12 @@
     "investigations": {
       "frequencyTracesAffected": "共 {{total}} 条链路中 {{affected}} 条受影响",
       "historyRunsReviewed": "已审查 {{count}} 次运行"
+    },
+    "setup": {
+      "matchingActivityPreview": {
+        "selectedForAnalysis": "已选择 {{count}} 条用于分析",
+        "clearSelectedRuns": "清除已选的 {{count}} 次运行"
+      }
     }
   },
   "mcpServerCredentials": {
@@ -13840,13 +13871,17 @@
   "contentFilterDisplay": {
     "content-categories": "内容类别",
     "pattern-detection": "模式检测",
-    "blocked-keywords": "屏蔽关键词"
+    "blocked-keywords": "屏蔽关键词",
+    "categoriesConfigured": "已配置 {{count}} 个类别",
+    "patternsConfigured": "已配置 {{count}} 个模式",
+    "keywordsConfigured": "已配置 {{count}} 个关键词"
   },
   "vectorStoreInfo": {
     "vector-store": "向量存储",
     "vector-store-id": "向量存储 ID：",
     "read-only-defined-in-the-config-file": "只读：在配置文件中定义",
-    "this-vector-store-comes-from-the-proxy-confi": "该向量存储来自代理配置 YAML，因此无法在管理界面中编辑或删除。请在配置文件中修改或删除并重启代理。"
+    "this-vector-store-comes-from-the-proxy-confi": "该向量存储来自代理配置 YAML，因此无法在管理界面中编辑或删除。请在配置文件中修改或删除并重启代理。",
+    "loadFailed": "向量存储 {{name}} 加载失败，可能已被删除。"
   },
   "classificationMethodConfig": {
     "heuristic-v2-success-threshold-inactive": "启发式 v2 成功阈值（未启用）：",
@@ -14571,7 +14606,8 @@
     "please-select-an-organization-to-create-a-te": "请选择要为哪个组织创建团队。你只能在自己是管理员的组织内创建团队。",
     "max-budget-cny": "最大预算（人民币）",
     "id-of-the-team-you-want-to-create-if-not-pro": "要创建的团队 ID。如果不填，将自动生成。",
-    "create-custom-aliases-for-models-that-can-be": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样可以为核心模型创建快捷方式。"
+    "create-custom-aliases-for-models-that-can-be": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样可以为核心模型创建快捷方式。",
+    "metadataValuesHelp": "值按文本保存。类型化值请输入 JSON，例如 3、true 或 {\"region\": \"us\"}。"
   },
   "logsPage": {
     "request-logs": "请求日志",
@@ -14622,5 +14658,9 @@
     "keepCustomBudget_other": "保留自定义预算",
     "resetToBudget_one": "重置为 ¥{{budget}}",
     "resetToBudget_other": "全部重置为 ¥{{budget}}"
+  },
+  "upgradeBanner": {
+    "latestVersionTitle": "最新版本为 v{{version}}：{{notes}}",
+    "currentVersion": "你当前的版本为 v{{version}}"
   }
 }

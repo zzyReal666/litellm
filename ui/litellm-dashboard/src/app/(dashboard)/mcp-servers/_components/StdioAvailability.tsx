@@ -34,8 +34,8 @@ export const TransportSelectItems: FC<{ stdioEnabled: boolean }> = ({ stdioEnabl
 export const StdioDisabledBanner: FC = () => (
   <Alert variant="warning" className="mb-4 rounded-lg">
     <TriangleAlert />
-    <AlertTitle>stdio is disabled on this proxy</AlertTitle>
+    <AlertTitle>{i18n.t("mcpTools.stdioAvailability.disabledTitle", { defaultValue: "stdio is disabled on this proxy" })}</AlertTitle>
     <AlertDescription>
-      {STDIO_DISABLED_MESSAGE}. Until then this server cannot start or be saved as stdio.</AlertDescription>
+      {i18n.t("mcpTools.stdioAvailability.disabledDescription", { defaultValue: "{{message}}. Until then this server cannot start or be saved as stdio.", message: STDIO_DISABLED_MESSAGE })}</AlertDescription>
   </Alert>
 );

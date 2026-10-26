@@ -1,7 +1,7 @@
 "use client";
 
 import i18n from "@/lib/i18n";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import React, { useState, useEffect, useCallback } from "react";
 import {
   SearchIcon,
@@ -108,8 +108,12 @@ function ConfirmDialog({ action, serverName, isCurrentlyActive, onConfirm, onCan
           {isApprove ? t("mcpTools.mCPSubmissionsTab.confirmApproveMcpServer", { defaultValue: "Approve MCP Server" }) : t("mcpTools.mCPSubmissionsTab.confirmRejectMcpServer", { defaultValue: "Reject MCP Server" })}
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Are you sure you want to{" "}{action}{" "}
-          <span className="font-medium text-foreground">&quot;{serverName}&quot;</span>?{" "}
+          <Trans
+            i18nKey="mcpTools.mCPSubmissionsTab.confirmPrompt"
+            defaults='Are you sure you want to {{action}} <serverName>"{{name}}"</serverName>?'
+            values={{ action, name: serverName }}
+            components={{ serverName: <span className="font-medium text-foreground" /> }}
+          />{" "}
           {isApprove
             ? t("mcpTools.mCPSubmissionsTab.approveConfirmBody", { defaultValue: "This will activate the server. The submitting user will see it in their MCP Servers list once approved." })
             : rejectBody}
@@ -176,7 +180,13 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving, disa
           <span className="text-sm font-semibold text-foreground">{t("mcpTools.mCPSubmissionsTab.submissionRulesTitle", { defaultValue: "Submission Rules" })}</span>
           {activeLabels.length > 0 ? (
             <span className="text-xs text-muted-foreground">
-              ({activeLabels.length} required field{activeLabels.length !== 1 ? "s" : ""})
+              (
+              {t("mcpTools.mCPSubmissionsTab.requiredFieldsCount", {
+                count: activeLabels.length,
+                defaultValue_one: "{{count}} required field",
+                defaultValue_other: "{{count}} required fields",
+              })}
+              )
             </span>
           ) : (
             <span className="text-xs text-muted-foreground italic">{t("mcpTools.mCPSubmissionsTab.noRulesSet", { defaultValue: "no rules set" })}</span>

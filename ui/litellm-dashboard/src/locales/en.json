@@ -3639,7 +3639,12 @@
     "spendPerTag": "Spend Per Tag",
     "spendPerTagDesc": "Get Started by Tracking cost per tag <docsLink>here</docsLink>",
     "selectTags": "Select tags",
-    "adminOnlyDesc": "Proxy-wide usage is only available to admin users. Your own usage is on the Usage page."
+    "adminOnlyDesc": "Proxy-wide usage is only available to admin users. Your own usage is on the Usage page.",
+    "dbRowsInfo": "SpendLogs in DB has {{rows}} rows.",
+    "projectSpendForMonth": "Project Spend {{month}} 1 - {{lastDay}}",
+    "apiRequestsCount": "API Requests {{value}}",
+    "customerUsageNote": "Customers of your LLM API calls. Tracked when a `user` param is passed in your LLM calls",
+    "getStartedTrackingCostPerTag": "Get Started by Tracking cost per tag"
   },
   "userDashboard": {
     "userIdNotSet": "User ID is not set"
@@ -4864,7 +4869,10 @@
       "logoAltWithName": "{{name}} logo",
       "oauthFlowNotSet": "OAuth flow not set",
       "oauthFlowNotSetTooltip": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend.",
-      "missingUserFields": "{{count}} user fields missing"
+      "missingUserFields": "{{count}} user fields missing",
+      "stdioDisabled": "stdio disabled",
+      "userFieldsMissing_one": "{{count}} user field missing",
+      "userFieldsMissing_other": "{{count}} user fields missing"
     },
     "mcpStandardsSettings": {
       "groupDocumentation": "Documentation",
@@ -4928,7 +4936,10 @@
       "approveConfirmBody": "This will activate the server. The submitting user will see it in their MCP Servers list once approved.",
       "savingRules": "Saving…",
       "searchServersPlaceholder": "Search MCP servers...",
-      "requiredFieldCount": "{{count}} required fields"
+      "requiredFieldCount": "{{count}} required fields",
+      "confirmPrompt": "Are you sure you want to {{action}} <serverName>\"{{name}}\"</serverName>?",
+      "requiredFieldsCount_one": "{{count}} required field",
+      "requiredFieldsCount_other": "{{count}} required fields"
     },
     "mCPToolArgumentsForm": {
       "inputDescription": "Input for this tool",
@@ -5623,6 +5634,14 @@
     },
     "mcpFieldRules": {
       "emptyText": "Type to add"
+    },
+    "openApiByokFields": {
+      "userKeysSentAs": "User keys will be sent as: <code>{{format}}</code>",
+      "setAuthTypeHint": "Set the <strong>Authentication Type</strong> below to specify how user keys are sent (e.g., Bearer Token, API Key header)."
+    },
+    "stdioAvailability": {
+      "disabledTitle": "stdio is disabled on this proxy",
+      "disabledDescription": "{{message}}. Until then this server cannot start or be saved as stdio."
     }
   },
   "playground": {
@@ -8297,7 +8316,9 @@
       "gatewayRequestsByEndpointSubtitle": "Successful and failed requests per route",
       "searchModelsAria": "Search models",
       "searchByModelNamePlaceholder": "Search by model name",
-      "clearModelSearchAria": "Clear model search"
+      "clearModelSearchAria": "Clear model search",
+      "noModelsMatch": "No models match \"{{query}}\" in this date range",
+      "credentialTagNote": "When a reusable credential is used, it will appear as a tag prefixed with <code>Credential: </code>in this view."
     },
     "endpointUsageBarChart": {
       "title": "Success vs Failed Requests by Endpoint"
@@ -11000,7 +11021,8 @@
       "updateSucceeded": "Updated routing group \"{{groupName}}\"",
       "deleteSucceeded": "Deleted routing group \"{{groupName}}\"",
       "saveFailed": "Failed to save routing group",
-      "deleteFailed": "Failed to delete routing group"
+      "deleteFailed": "Failed to delete routing group",
+      "deletePriorityNote": "Calls to <groupName>{{groupName}}</groupName> will stop working. Direct requests to its member models keep their existing routing behavior. This cannot be undone."
     }
   },
   "templates": {
@@ -12536,7 +12558,8 @@
       "openingTag": "Opening tag",
       "closingTag": "Closing tag",
       "addTagPair": "Add tag pair",
-      "removeTagPair": "Remove tag pair {{index}}"
+      "removeTagPair": "Remove tag pair {{index}}",
+      "description": "Auto Router already ignores built-in reminder tags, such as <code>&lt;system-reminder&gt;</code>, when choosing a model. Leave this empty to keep the defaults. Add custom opening and closing tags to ignore the text between them when routing. Custom pairs replace the defaults, so include any built-in pairs you still need. The selected model still receives the full message. Matching is case-insensitive."
     },
     "ClassifierTypeRadios": {
       "ossClassifier": "OSS Classifier"
@@ -12797,7 +12820,9 @@
       "openBudgetActions": "Open budget actions for {{name}}"
     },
     "AccessGroupBudgetModal": {
-      "budgetScopeHint": "Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it."
+      "budgetScopeHint": "Every key granted this access group by name draws from this one budget. A key that reaches the group's models through a wildcard or <code>all-proxy-models</code> is not charged against it.",
+      "editBudgetTitle": "Edit budget for \"{{name}}\"",
+      "setBudgetTitle": "Set budget for \"{{name}}\""
     },
     "add_auto_router_tab": {
       "missingModels": "Missing: {{models}}"
@@ -13522,6 +13547,12 @@
     "investigations": {
       "frequencyTracesAffected": "{{affected}} of {{total}} traces affected",
       "historyRunsReviewed": "{{count}} runs reviewed"
+    },
+    "setup": {
+      "matchingActivityPreview": {
+        "selectedForAnalysis": "{{count}} selected for analysis",
+        "clearSelectedRuns": "Clear {{count}} selected runs"
+      }
     }
   },
   "mcpServerCredentials": {
@@ -13840,13 +13871,17 @@
   "contentFilterDisplay": {
     "content-categories": "Content Categories",
     "pattern-detection": "Pattern Detection",
-    "blocked-keywords": "Blocked Keywords"
+    "blocked-keywords": "Blocked Keywords",
+    "categoriesConfigured": "{{count}} categories configured",
+    "patternsConfigured": "{{count}} patterns configured",
+    "keywordsConfigured": "{{count}} keywords configured"
   },
   "vectorStoreInfo": {
     "vector-store": "Vector store",
     "vector-store-id": "Vector Store ID:",
     "read-only-defined-in-the-config-file": "Read only: defined in the config file",
-    "this-vector-store-comes-from-the-proxy-confi": "This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard. Change or remove it in the config file and restart the proxy."
+    "this-vector-store-comes-from-the-proxy-confi": "This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard. Change or remove it in the config file and restart the proxy.",
+    "loadFailed": "Vector store {{name}} could not be loaded. It may have been deleted."
   },
   "classificationMethodConfig": {
     "heuristic-v2-success-threshold-inactive": "Heuristic v2 success threshold (inactive):",
@@ -14571,7 +14606,8 @@
     "please-select-an-organization-to-create-a-te": "Please select an organization to create a team for. You can only create teams within organizations where you are an admin.",
     "max-budget-cny": "Max Budget (CNY)",
     "id-of-the-team-you-want-to-create-if-not-pro": "ID of the team you want to create. If not provided, it will be generated automatically.",
-    "create-custom-aliases-for-models-that-can-be": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models."
+    "create-custom-aliases-for-models-that-can-be": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models.",
+    "metadataValuesHelp": "Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {\"region\": \"us\"}."
   },
   "logsPage": {
     "request-logs": "Request Logs",
@@ -14622,5 +14658,9 @@
     "keepCustomBudget_other": "Keep custom budgets",
     "resetToBudget_one": "Reset to ¥{{budget}}",
     "resetToBudget_other": "Reset all to ¥{{budget}}"
+  },
+  "upgradeBanner": {
+    "latestVersionTitle": "The latest version is v{{version}}: {{notes}}",
+    "currentVersion": "Your current version is v{{version}}"
   }
 }

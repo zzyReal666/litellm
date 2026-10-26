@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import type { ComplexityRouterConfigValue } from "./ComplexityRouterConfig";
 import { getReminderMarkersError, type ReminderMarkerPair } from "./build_complexity_router_config";
 import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 
 const ReminderMarkers: React.FC<{
   value: ComplexityRouterConfigValue;
@@ -27,10 +28,11 @@ const ReminderMarkers: React.FC<{
   return (
     <div>
       <p className="mb-4 text-sm text-muted-foreground">
-        Auto Router already ignores built-in reminder tags, such as{" "}<code>&lt;system-reminder&gt;</code>, when choosing
-        a model. Leave this empty to keep the defaults. Add custom opening and closing tags to ignore the text between
-        them when routing. Custom pairs replace the defaults, so include any built-in pairs you still need. The selected
-        model still receives the full message. Matching is case-insensitive.
+        <Trans
+          i18nKey="modelsEndpoints.ReminderMarkers.description"
+          defaults="Auto Router already ignores built-in reminder tags, such as <code>&lt;system-reminder&gt;</code>, when choosing a model. Leave this empty to keep the defaults. Add custom opening and closing tags to ignore the text between them when routing. Custom pairs replace the defaults, so include any built-in pairs you still need. The selected model still receives the full message. Matching is case-insensitive."
+          components={{ code: <code /> }}
+        />
       </p>
       <div className="space-y-3">
         {markers.map((marker, index) => (

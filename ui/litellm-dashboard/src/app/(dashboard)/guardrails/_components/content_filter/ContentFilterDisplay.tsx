@@ -71,7 +71,9 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.content-categories", { defaultValue: "Content Categories" })}</p>
-              <Badge variant="secondary">{categories.length} categories configured</Badge>
+              <Badge variant="secondary">
+                {i18n.t("contentFilterDisplay.categoriesConfigured", { defaultValue: "{{count}} categories configured", count: categories.length })}
+              </Badge>
             </div>
             <CategoryTable
               categories={categories}
@@ -89,7 +91,9 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.pattern-detection", { defaultValue: "Pattern Detection" })}</p>
-              <Badge variant="secondary">{patterns.length} patterns configured</Badge>
+              <Badge variant="secondary">
+                {i18n.t("contentFilterDisplay.patternsConfigured", { defaultValue: "{{count}} patterns configured", count: patterns.length })}
+              </Badge>
             </div>
             <PatternTable
               patterns={patterns}
@@ -105,7 +109,9 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
               <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.blocked-keywords", { defaultValue: "Blocked Keywords" })}</p>
-              <Badge variant="secondary">{blockedWords.length} keywords configured</Badge>
+              <Badge variant="secondary">
+                {i18n.t("contentFilterDisplay.keywordsConfigured", { defaultValue: "{{count}} keywords configured", count: blockedWords.length })}
+              </Badge>
             </div>
             <KeywordTable
               keywords={blockedWords}

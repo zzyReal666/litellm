@@ -6,7 +6,7 @@
  * Works at 1m+ spend logs, by querying an aggregate table instead.
  */
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Download, Search, Sparkles, X } from "lucide-react";
 import type { DateRangePickerValue } from "@/components/shared/date_picker_types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -466,7 +466,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                   Object.keys(modelMetrics).length > 0 &&
                   Object.keys(filteredModelMetrics).length === 0 ? (
                     <p className="rounded-lg border p-6 text-center text-sm text-muted-foreground">
-                      No models match &quot;{trimmedModelQuery}&quot; in this date range
+                      {t("usagePage.usagePageView.noModelsMatch", {
+                        defaultValue: 'No models match "{{query}}" in this date range',
+                        query: trimmedModelQuery,
+                      })}
                     </p>
                   ) : (
                     <ActivityMetrics
@@ -556,9 +559,11 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                 <Alert variant="info" className="mb-5">
                   <AlertTitle>{t("usagePage.usagePageView.credentialBannerMessage", { defaultValue: "Reusable credentials are automatically tracked as tags" })}</AlertTitle>
                   <AlertDescription className="text-inherit">
-                    When a reusable credential is used, it will appear as a tag prefixed with{" "}
-                    <code className="rounded bg-black/5 px-1 py-0.5 font-mono text-xs">Credential: </code>
-                    in this view.
+                    <Trans
+                      i18nKey="usagePage.usagePageView.credentialTagNote"
+                      defaults="When a reusable credential is used, it will appear as a tag prefixed with <code>Credential: </code>in this view."
+                      components={{ code: <code className="rounded bg-black/5 px-1 py-0.5 font-mono text-xs" /> }}
+                    />
                   </AlertDescription>
                   <AlertAction>
                     <Button

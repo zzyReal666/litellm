@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Info } from "lucide-react";
 import React from "react";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -46,10 +46,12 @@ const OpenApiByokFields: React.FC = () => {
             <div className="mb-4 p-3 bg-info/10 rounded-lg text-sm text-info flex items-start gap-2">
               <Info className="mt-0.5 size-4 shrink-0" />
               <span>
-                User keys will be sent as:{" "}
-                <code className="font-mono bg-info/15 px-1 rounded-sm">
-                  {authType === undefined ? "" : AUTH_HEADER_FORMATS[authType]}
-                </code>
+                <Trans
+                  i18nKey="mcpTools.openApiByokFields.userKeysSentAs"
+                  defaults="User keys will be sent as: <code>{{format}}</code>"
+                  values={{ format: authType === undefined ? "" : AUTH_HEADER_FORMATS[authType] }}
+                  components={{ code: <code className="font-mono bg-info/15 px-1 rounded-sm" /> }}
+                />
               </span>
             </div>
           )}
@@ -57,8 +59,11 @@ const OpenApiByokFields: React.FC = () => {
             <div className="mb-4 p-3 bg-warning/10 rounded-lg text-sm text-warning flex items-start gap-2">
               <Info className="mt-0.5 size-4 shrink-0" />
               <span>
-                Set the <strong>Authentication Type</strong> below to specify how user keys are sent (e.g., Bearer
-                Token, API Key header).
+                <Trans
+                  i18nKey="mcpTools.openApiByokFields.setAuthTypeHint"
+                  defaults="Set the <strong>Authentication Type</strong> below to specify how user keys are sent (e.g., Bearer Token, API Key header)."
+                  components={{ strong: <strong /> }}
+                />
               </span>
             </div>
           )}

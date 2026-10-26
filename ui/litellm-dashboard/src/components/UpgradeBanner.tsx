@@ -55,9 +55,15 @@ export const UpgradeBannerView: React.FC<UpgradeBannerViewProps> = ({ currentVer
     <Alert role="status" variant="info" className="rounded-none border-x-0 border-t-0">
       <ArrowUpCircle className="size-4" aria-hidden />
       <AlertTitle>
-        The latest version is v{latestRelease.version}: {describeRelease(latestRelease)}
+        {i18n.t("upgradeBanner.latestVersionTitle", {
+          defaultValue: "The latest version is v{{version}}: {{notes}}",
+          version: latestRelease.version,
+          notes: describeRelease(latestRelease),
+        })}
       </AlertTitle>
-      <AlertDescription>Your current version is v{currentVersion}</AlertDescription>
+      <AlertDescription>
+        {i18n.t("upgradeBanner.currentVersion", { defaultValue: "Your current version is v{{version}}", version: currentVersion })}
+      </AlertDescription>
       <AlertAction>
         <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={handleClose}>
           <X className="size-4" />

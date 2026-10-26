@@ -195,7 +195,12 @@ const RoutingGroups: React.FC = () => {
           <p className="text-sm text-foreground">
             {deletingGroup?.routing_strategy === "priority" ? (
               <>
-                Calls to{" "}<span className="font-medium">{deletingGroup.group_name}</span> will stop working. Direct requests to its member models keep their existing routing behavior. This cannot be undone.</>
+                <Trans
+                  i18nKey="routingGroups.index.deletePriorityNote"
+                  defaults="Calls to <groupName>{{groupName}}</groupName> will stop working. Direct requests to its member models keep their existing routing behavior. This cannot be undone."
+                  values={{ groupName: deletingGroup.group_name }}
+                  components={{ groupName: <span className="font-medium" /> }}
+                /></>
             ) : (
               <Trans
                 i18nKey="routingGroups.index.deleteFallbackNote"

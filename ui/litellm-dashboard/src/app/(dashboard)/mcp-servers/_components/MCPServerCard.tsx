@@ -231,7 +231,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 render={
                   <Badge variant="outline">
                     <CircleAlert />
-                    stdio disabled
+                    {i18n.t("mcpTools.mcpServerCard.stdioDisabled", { defaultValue: "stdio disabled" })}
                   </Badge>
                 }
               />
@@ -294,8 +294,11 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                     render={
                       <span className="inline-flex items-center gap-1 font-semibold text-destructive">
                         <CircleAlert className="size-3.5" />
-                        {missing.length} user field
-                        {missing.length === 1 ? "" : "s"} missing
+                        {i18n.t("mcpTools.mcpServerCard.userFieldsMissing", {
+                          count: missing.length,
+                          defaultValue_one: "{{count}} user field missing",
+                          defaultValue_other: "{{count}} user fields missing",
+                        })}
                       </span>
                     }
                   />

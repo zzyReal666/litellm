@@ -59,7 +59,10 @@ const AccessGroupBudgetModal: React.FC<AccessGroupBudgetModalProps> = ({
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle>
-            {budget ? "Edit" : "Set"} budget for "{accessGroup?.access_group}&quot;
+            {i18n.t(budget ? "modelsEndpoints.AccessGroupBudgetModal.editBudgetTitle" : "modelsEndpoints.AccessGroupBudgetModal.setBudgetTitle", {
+              defaultValue: budget ? 'Edit budget for "{{name}}"' : 'Set budget for "{{name}}"',
+              name: accessGroup?.access_group,
+            })}
           </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">

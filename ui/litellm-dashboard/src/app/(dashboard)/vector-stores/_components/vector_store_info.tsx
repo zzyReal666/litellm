@@ -174,7 +174,10 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
         </Button>
         <h1 className="text-xl font-semibold">{i18n.t("vectorStores.vectorStoreInfo.notFound", { defaultValue: "Vector store not found" })}</h1>
         <p className="text-sm text-muted-foreground">
-          {i18n.t("vectorStoreInfo.vector-store", { defaultValue: "Vector store" })}{" "}{vectorStoreId} could not be loaded. It may have been deleted.{" "}</p>
+          {i18n.t("vectorStoreInfo.loadFailed", {
+            defaultValue: "Vector store {{name}} could not be loaded. It may have been deleted.",
+            name: vectorStoreId,
+          })}{" "}</p>
       </div>
     );
   }
