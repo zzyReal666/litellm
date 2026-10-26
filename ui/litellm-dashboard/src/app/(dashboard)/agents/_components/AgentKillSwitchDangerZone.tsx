@@ -56,7 +56,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
   return (
     <section aria-labelledby="agent-danger-zone-heading" className="mt-6">
       <h3 id="agent-danger-zone-heading" className="text-lg font-medium text-destructive">
-        {i18n.t("' + K + '.dangerZone", { defaultValue: "Danger Zone" })}
+        {i18n.t("agentsPage.agentKillSwitch.dangerZone", { defaultValue: "Danger Zone" })}
       </h3>
       <div className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 p-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -65,7 +65,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
             {killSwitch ? (
               <>
                 <p className="text-muted-foreground">
-                  {i18n.t("' + K + '.description", {
+                  {i18n.t("agentsPage.agentKillSwitch.description", {
                     defaultValue:
                       "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from LiteLLM",
                   })}
@@ -76,20 +76,20 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
               </>
             ) : (
               <p className="text-muted-foreground">
-                {i18n.t("' + K + '.notConfigured", { defaultValue: "Not configured. Add a kill switch webhook under Settings to enable this action" })}
+                {i18n.t("agentsPage.agentKillSwitch.notConfigured", { defaultValue: "Not configured. Add a kill switch webhook under Settings to enable this action" })}
               </p>
             )}
           </div>
           {killSwitch && (
             <Button type="button" variant="destructive" onClick={openConfirm} disabled={isFiring} aria-busy={isFiring}>
               {isFiring && <UiLoadingSpinner className="size-4" />}
-              {i18n.t("' + K + '.fireButton", { defaultValue: "Fire Kill Switch" })}
+              {i18n.t("agentsPage.agentKillSwitch.fireButton", { defaultValue: "Fire Kill Switch" })}
             </Button>
           )}
         </div>
         {lastResult && (
           <p className="mt-3 text-sm text-muted-foreground" role="status">
-            {i18n.t("' + K + '.lastResult", { defaultValue: "Last result: HTTP {{code}}", code: lastResult.status_code })}
+            {i18n.t("agentsPage.agentKillSwitch.lastResult", { defaultValue: "Last result: HTTP {{code}}", code: lastResult.status_code })}
             {lastResult.response_body ? ` ${lastResult.response_body}` : ""}
           </p>
         )}
@@ -105,7 +105,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
               <CircleAlert />
               <AlertTitle>{i18n.t("agentsPage.agentKillSwitch.outageWarningTitle", { defaultValue: "This can cause an outage" })}</AlertTitle>
               <AlertDescription>
-                {i18n.t("' + K + '.outageWarningDescription", {
+                {i18n.t("agentsPage.agentKillSwitch.outageWarningDescription", {
                   defaultValue:
                     "LiteLLM will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside LiteLLM's control and cannot be reverted here",
                   method: killSwitch?.method ?? "POST",
@@ -115,9 +115,9 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
             </Alert>
             <div>
               <p className="mb-2 text-base font-medium text-foreground">
-                {i18n.t("' + K + '.typeToConfirm", { defaultValue: "Type {{name}} to confirm:", name: agentName }).split("{{name}}")[0]}
+                {i18n.t("agentsPage.agentKillSwitch.typeToConfirm", { defaultValue: "Type {{name}} to confirm:", name: agentName }).split("{{name}}")[0]}
                 <span className="font-semibold text-destructive">{agentName}</span>
-                {i18n.t("' + K + '.typeToConfirm", { defaultValue: "Type {{name}} to confirm:", name: agentName }).split("{{name}}")[1]}
+                {i18n.t("agentsPage.agentKillSwitch.typeToConfirm", { defaultValue: "Type {{name}} to confirm:", name: agentName }).split("{{name}}")[1]}
               </p>
               <InputGroup className="rounded-md">
                 <InputGroupAddon>

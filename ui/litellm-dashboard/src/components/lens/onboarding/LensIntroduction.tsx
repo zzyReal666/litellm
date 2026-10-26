@@ -30,10 +30,10 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-trace" className="font-semibold">
-          {i18n.t("' + NS + '.tracing", { defaultValue: "Tracing" })}
+          {i18n.t("lens.introduction.tracing", { defaultValue: "Tracing" })}
         </h3>
         <p className="text-xs text-muted-foreground">
-          {i18n.t("' + NS + '.sampleTrace", { defaultValue: "Sample trace · 14.2s" })}
+          {i18n.t("lens.introduction.sampleTrace", { defaultValue: "Sample trace · 14.2s" })}
         </p>
       </div>
       <ol className="mt-3 space-y-1.5 text-xs leading-5 sm:text-sm" aria-label={i18n.t("lens.introduction.sampleTraceTimelineAria", { defaultValue: "Sample trace timeline" })}>
@@ -125,7 +125,7 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-findings" className="font-semibold">
-          {i18n.t("' + NS + '.lensFindings", { defaultValue: "Lens findings" })}
+          {i18n.t("lens.introduction.lensFindings", { defaultValue: "Lens findings" })}
         </h3>
         <p className="text-xs text-muted-foreground">
           {i18n.t("lens.introduction.sampleRunsReviewed", { defaultValue: "500 sample runs reviewed" })}
@@ -143,7 +143,7 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
               onClick={onHighlight}
             >
               <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-rose-500" />
-              {i18n.t("' + NS + '.findingTitle1", { defaultValue: "Claims numbers it never measured" })}
+              {i18n.t("lens.introduction.findingTitle1", { defaultValue: "Claims numbers it never measured" })}
             </button>
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5">
@@ -151,7 +151,7 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
               {i18n.t("lens.introduction.findingBody1", { defaultValue: "Reports a speedup even though the benchmark failed." })}
             </p>
             <blockquote className="border-l-2 pl-3 italic">
-              {i18n.t("' + NS + '.findingQuote1", {
+              {i18n.t("lens.introduction.findingQuote1", {
                 defaultValue: "“…40% faster than the row store for your workload.”",
               })}
             </blockquote>
@@ -160,23 +160,23 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
               {i18n.t("lens.introduction.findingNextStep1", { defaultValue: "Report the failed benchmark instead of estimating." })}
             </p>
             <p className="text-xs text-muted-foreground">
-              {i18n.t("' + NS + '.findingMeta1", { defaultValue: "38 linked runs · High priority" })}
+              {i18n.t("lens.introduction.findingMeta1", { defaultValue: "38 linked runs · High priority" })}
             </p>
           </div>
         </article>
         <article className="pt-3">
           <h4 className="flex items-start gap-2 text-sm font-semibold">
             <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-500" />
-            {i18n.t("' + NS + '.findingTitle2", { defaultValue: "Promises to follow up, then stops" })}
+            {i18n.t("lens.introduction.findingTitle2", { defaultValue: "Promises to follow up, then stops" })}
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5 text-muted-foreground">
             <p>
-              {i18n.t("' + NS + '.findingBody2", {
+              {i18n.t("lens.introduction.findingBody2", {
                 defaultValue: "After an order lookup times out, the agent promises to check and ends the run.",
               })}
             </p>
             <p className="text-xs">
-              {i18n.t("' + NS + '.findingMeta2", { defaultValue: "12 linked runs · Medium priority" })}
+              {i18n.t("lens.introduction.findingMeta2", { defaultValue: "12 linked runs · Medium priority" })}
             </p>
           </div>
         </article>
@@ -191,17 +191,17 @@ export function LensIntroduction({ onStart }: { onStart: () => void }) {
   return (
     <section aria-labelledby="lens-introduction" className="rounded-2xl border bg-card p-4 sm:px-6 sm:py-5 xl:px-7">
       <h2 id="lens-introduction" className="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-        {i18n.t("' + NS + '.heroTitle", { defaultValue: "The gateway that helps your agents improve" })}
+        {i18n.t("lens.introduction.heroTitle", { defaultValue: "The gateway that helps your agents improve" })}
       </h2>
       <p className="mt-3 max-w-[780px] text-sm leading-6 text-muted-foreground">
-        {i18n.t("' + NS + '.heroDescription", {
+        {i18n.t("lens.introduction.heroDescription", {
           defaultValue:
             "Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.",
         })}
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button className="rounded-lg px-4" onClick={onStart}>
-          {i18n.t("' + NS + '.setUpLens", { defaultValue: "Set up Lens" })}
+          {i18n.t("lens.introduction.setUpLens", { defaultValue: "Set up Lens" })}
         </Button>
         
       </div>

@@ -1339,7 +1339,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                   </div>
                   {customProxyBaseUrl && (
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {i18n.t("' + NS + '.apiCallsSentTo", {
+                      {i18n.t("playground.chatUi.apiCallsSentTo", {
                         defaultValue: "API calls will be sent to: {{url}}",
                         url: customProxyBaseUrl,
                       })}
@@ -1493,7 +1493,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     />
                     {agentInfo.length === 0 && (
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {i18n.t("' + NS + '.noAgentsFound", {
+                        {i18n.t("playground.chatUi.noAgentsFound", {
                           defaultValue: "No agents found. Create agents via /v1/agents endpoint.",
                         })}
                       </p>
@@ -1520,7 +1520,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                     </label>
                     <KeyValueInput value={customHeaderPairs} onChange={setCustomHeaderPairs} />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      {i18n.t("' + NS + '.customHeadersHint", {
+                      {i18n.t("playground.chatUi.customHeadersHint", {
                         defaultValue:
                           "Sent with every playground request, e.g. provider-specific headers like anthropic-beta.",
                       })}
@@ -1628,7 +1628,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           return (
                             <div key={serverId} className="rounded-sm border p-2">
                               <p className="mb-1 text-xs text-muted-foreground">
-                                {i18n.t("' + NS + '.limitToolsFor", {
+                                {i18n.t("playground.chatUi.limitToolsFor", {
                                   defaultValue: "Limit tools for {{serverName}}:",
                                   serverName: server?.alias || server?.server_name || serverId,
                                 })}
@@ -1670,7 +1670,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                               className="flex items-center justify-between rounded-sm border border-info/15 bg-info/10 p-2"
                             >
                               <p className="text-xs text-info">
-                                {i18n.t("' + NS + '.serverRequiresApiKey", {
+                                {i18n.t("playground.chatUi.serverRequiresApiKey", {
                                   defaultValue: "{{serverName}} requires your API key",
                                   serverName,
                                 })}
@@ -1713,12 +1713,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        {i18n.t("' + NS + '.vectorStoreSetupHint", {
+                        {i18n.t("playground.chatUi.vectorStoreSetupHint", {
                           defaultValue:
                             "Select vector store(s) to use for this LLM API call. You can set up your vector store",
                         })}{" "}
                         <a href={uiHref("vector-stores")} className="text-info underline">
-                          {i18n.t("' + NS + '.tooltipHere", { defaultValue: "here" })}
+                          {i18n.t("playground.chatUi.tooltipHere", { defaultValue: "here" })}
                         </a>
                         .
                       </TooltipContent>
@@ -1740,7 +1740,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                         <Info className="size-3.5 text-muted-foreground" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        {i18n.t("' + NS + '.guardrailsSetupHint", {
+                        {i18n.t("playground.chatUi.guardrailsSetupHint", {
                           defaultValue:
                             "Select guardrail(s) to use for this LLM API call. You can set up your guardrails",
                         })}{" "}
@@ -1768,12 +1768,12 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <Info className="size-3.5 text-muted-foreground" />
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs">
-                          {i18n.t("' + NS + '.policiesSetupHint", {
+                          {i18n.t("playground.chatUi.policiesSetupHint", {
                             defaultValue:
                               "Select policy/policies to apply to this LLM API call. Policies define which guardrails are applied based on conditions. You can set up your policies",
                           })}{" "}
                           <a href={uiHref("policies")} className="text-info underline">
-                            {i18n.t("' + NS + '.tooltipHere", { defaultValue: "here" })}
+                            {i18n.t("playground.chatUi.tooltipHere", { defaultValue: "here" })}
                           </a>
                           .
                         </TooltipContent>
@@ -1908,7 +1908,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <ImageIcon className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
                           <p className="text-sm">{i18n.t("playground.chatUi.dragImagesToUpload", { defaultValue: "Click or drag images to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
-                            {i18n.t("' + NS + '.imageUploadHintDetailed", {
+                            {i18n.t("playground.chatUi.imageUploadHintDetailed", {
                               defaultValue: "Support for PNG, JPG, JPEG, GIF, WebP. Multiple images supported.",
                             })}
                           </p>
@@ -1989,7 +1989,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                           <Volume2 className="mb-2 size-6 text-muted-foreground" aria-hidden="true" />
                           <p className="text-sm">{i18n.t("playground.chatUi.dragAudioToUpload", { defaultValue: "Click or drag audio file to upload" })}</p>
                           <p className="text-xs text-muted-foreground">
-                            {i18n.t("' + NS + '.audioUploadHint", {
+                            {i18n.t("playground.chatUi.audioUploadHint", {
                               defaultValue: "Support for MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM formats. Max file size: 25 MB.",
                             })}
                           </p>
@@ -2159,7 +2159,7 @@ const ChatUI: React.FC<ChatUIProps> = ({
                               <MCPToolArgumentsForm ref={mcpToolArgsFormRef} tool={mcpTool} className="space-y-2" />
                             ) : (
                               <div className="flex h-10 items-center justify-center text-sm text-muted-foreground">
-                                {i18n.t("' + NS + '.loadingToolSchema", { defaultValue: "Loading tool schema..." })}
+                                {i18n.t("playground.chatUi.loadingToolSchema", { defaultValue: "Loading tool schema..." })}
                               </div>
                             );
                           })()

@@ -79,7 +79,7 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
       </label>
       {selection.source !== "requests" && agentsError && (
         <p role="alert" className="text-sm text-destructive">
-          {i18n.t("' + NS + '.couldNotLoadAgents", { defaultValue: "Could not load agents." })}{" "}
+          {i18n.t("lens.scopeFields.couldNotLoadAgents", { defaultValue: "Could not load agents." })}{" "}
           <button type="button" className="underline" onClick={retryAgents}>
             {i18n.t("common.retry", { defaultValue: "Retry" })}
           </button>
@@ -87,21 +87,21 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
       )}
       <details open={advanced} onToggle={(event) => setAdvanced(event.currentTarget.open)} className="group">
         <summary className="cursor-pointer text-sm font-medium">
-          {i18n.t("' + NS + '.advancedFilters", { defaultValue: "Advanced filters" })}
+          {i18n.t("lens.scopeFields.advancedFilters", { defaultValue: "Advanced filters" })}
           {filters.length ? ` (${filters.length})` : ""}
         </summary>
         <div className="mt-4 space-y-4">
           {selection.source !== "requests" && (
             <label className="grid gap-2 text-sm">
-              {i18n.t("' + NS + '.applicationOptional", { defaultValue: "Application (optional)" })}
+              {i18n.t("lens.scopeFields.applicationOptional", { defaultValue: "Application (optional)" })}
               <Input
                 {...register("selection.service")}
-                placeholder={i18n.t("' + NS + '.allApplications", { defaultValue: "All applications" })}
+                placeholder={i18n.t("lens.scopeFields.allApplications", { defaultValue: "All applications" })}
               />
             </label>
           )}
           <label className="grid gap-2 text-sm">
-            {i18n.t("' + NS + '.activityType", { defaultValue: "Activity type" })}
+            {i18n.t("lens.scopeFields.activityType", { defaultValue: "Activity type" })}
             <select
               {...register("selection.source", {
                 onChange: () => {
@@ -118,16 +118,16 @@ export function ScopeFields({ names, agentsLoading, agentsError, retryAgents, at
             </select>
           </label>
           <p className="text-xs leading-5 text-muted-foreground">
-            {i18n.t("' + NS + '.matchHint", {
+            {i18n.t("lens.scopeFields.matchHint", {
               defaultValue: "Match any recorded metadata, such as a user ID, environment, or tag. All conditions must match.",
             })}
           </p>
           <MetadataFilters attributes={attributes} keys={keys} />
           <label className="grid gap-2 text-sm">
-            {i18n.t("' + NS + '.teamIdOptional", { defaultValue: "Team ID (optional)" })}
+            {i18n.t("lens.scopeFields.teamIdOptional", { defaultValue: "Team ID (optional)" })}
             <Input
               {...register("selection.team_id")}
-              placeholder={i18n.t("' + NS + '.allAccessibleTeams", { defaultValue: "All accessible teams" })}
+              placeholder={i18n.t("lens.scopeFields.allAccessibleTeams", { defaultValue: "All accessible teams" })}
             />
           </label>
         </div>

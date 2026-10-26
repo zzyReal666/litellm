@@ -74,24 +74,24 @@ export function StoredDiagnostic({ accessToken, traceId, traceRef, span }: Diagn
       {span.error_truncated && <p className="text-xs text-muted-foreground">{i18n.t("lens.spanError.previewTruncated", { defaultValue: "Error preview truncated" })}</p>}
       {!opened && (
         <Button variant="outline" size="xs" onClick={() => setOpened(true)}>
-          {i18n.t("' + S + '.viewStoredDiagnostic", { defaultValue: "View stored diagnostic" })}
+          {i18n.t("lens.spanError.viewStoredDiagnostic", { defaultValue: "View stored diagnostic" })}
         </Button>
       )}
       {opened && query.isPending && (
         <p role="status" className="text-xs text-muted-foreground">
-          {i18n.t("' + S + '.loadingDiagnostic", { defaultValue: "Loading diagnostic…" })}
+          {i18n.t("lens.spanError.loadingDiagnostic", { defaultValue: "Loading diagnostic…" })}
         </p>
       )}
       {failure && (
         <div role="alert" className="flex items-center gap-2 text-xs">
-          {i18n.t("' + S + '.loadDiagnosticFailed", { defaultValue: "Could not load diagnostic: {{message}}", message: failure.message })}
+          {i18n.t("lens.spanError.loadDiagnosticFailed", { defaultValue: "Could not load diagnostic: {{message}}", message: failure.message })}
           {isRetryableTraceRead(failure) || !cursor ? (
             <Button variant="outline" size="xs" onClick={() => query.refetch()}>
               {i18n.t("common.retry", { defaultValue: "Retry" })}
             </Button>
           ) : (
             <Button variant="outline" size="xs" onClick={() => setCursor(null)}>
-              {i18n.t("' + S + '.backToBeginning", { defaultValue: "Back to beginning" })}
+              {i18n.t("lens.spanError.backToBeginning", { defaultValue: "Back to beginning" })}
             </Button>
           )}
         </div>
@@ -103,18 +103,18 @@ export function StoredDiagnostic({ accessToken, traceId, traceRef, span }: Diagn
           </div>
           <p className="text-xs text-muted-foreground">
             {cursor
-              ? i18n.t("' + S + '.continuationOf", { defaultValue: "Continuation of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })
-              : i18n.t("' + S + '.beginningOf", { defaultValue: "Beginning of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })}
+              ? i18n.t("lens.spanError.continuationOf", { defaultValue: "Continuation of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })
+              : i18n.t("lens.spanError.beginningOf", { defaultValue: "Beginning of stored diagnostic ({{chars}} characters)", chars: query.data.total_chars.toLocaleString() })}
           </p>
           <div className="flex gap-2">
             {query.data.next_cursor && (
               <Button variant="outline" size="xs" onClick={() => setCursor(query.data.next_cursor)}>
-                {i18n.t("' + S + '.nextSection", { defaultValue: "Next section" })}
+                {i18n.t("lens.spanError.nextSection", { defaultValue: "Next section" })}
               </Button>
             )}
             {cursor && (
               <Button variant="outline" size="xs" onClick={() => setCursor(null)}>
-                {i18n.t("' + S + '.backToBeginning", { defaultValue: "Back to beginning" })}
+                {i18n.t("lens.spanError.backToBeginning", { defaultValue: "Back to beginning" })}
               </Button>
             )}
           </div>

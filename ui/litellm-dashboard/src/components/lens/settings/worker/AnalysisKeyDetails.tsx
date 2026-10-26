@@ -8,12 +8,12 @@ import { useAnalysisKeyInfo } from "./useAnalysisKeyInfo";
 function budgetLabel(amount: number | null, duration?: string | null): string {
   if (amount === null) return i18n.t("lens.analysisKey.noKeyBudget", { defaultValue: "No key budget" });
   const periods: Record<string, string> = {
-    "1mo": i18n.t("' + A + '.period.month", { defaultValue: "month" }),
-    "30d": i18n.t("' + A + '.period.month", { defaultValue: "month" }),
-    "1d": i18n.t("' + A + '.period.day", { defaultValue: "day" }),
-    "24h": i18n.t("' + A + '.period.day", { defaultValue: "day" }),
-    "7d": i18n.t("' + A + '.period.week", { defaultValue: "week" }),
-    "1h": i18n.t("' + A + '.period.hour", { defaultValue: "hour" }),
+    "1mo": i18n.t("lens.analysisKey.period.month", { defaultValue: "month" }),
+    "30d": i18n.t("lens.analysisKey.period.month", { defaultValue: "month" }),
+    "1d": i18n.t("lens.analysisKey.period.day", { defaultValue: "day" }),
+    "24h": i18n.t("lens.analysisKey.period.day", { defaultValue: "day" }),
+    "7d": i18n.t("lens.analysisKey.period.week", { defaultValue: "week" }),
+    "1h": i18n.t("lens.analysisKey.period.hour", { defaultValue: "hour" }),
   };
   const dollars = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -32,11 +32,11 @@ function modelsLabel(models: readonly string[]): string {
 export function AnalysisKeySummary({ keyId }: { keyId: string }) {
   const key = useAnalysisKeyInfo(keyId);
   if (key.isLoading)
-    return <p className="text-xs text-muted-foreground">{i18n.t("' + A + '.loadingBillingKey", { defaultValue: "Loading billing key…" })}</p>;
+    return <p className="text-xs text-muted-foreground">{i18n.t("lens.analysisKey.loadingBillingKey", { defaultValue: "Loading billing key…" })}</p>;
   if (key.error || !key.data)
     return (
       <p role="alert" className="flex items-center gap-2 text-xs text-destructive">
-        {i18n.t("' + A + '.billingKeyFailed", { defaultValue: "Could not load billing key" })}
+        {i18n.t("lens.analysisKey.billingKeyFailed", { defaultValue: "Could not load billing key" })}
         <Button variant="link" size="xs" className="h-auto p-0" onClick={() => void key.refetch()}>
           {i18n.t("common.retry", { defaultValue: "Retry" })}
         </Button>
@@ -60,11 +60,11 @@ export function AnalysisKeySummary({ keyId }: { keyId: string }) {
 export function AnalysisKeyDetails({ keyId }: { keyId: string }) {
   const key = useAnalysisKeyInfo(keyId);
   if (key.isLoading)
-    return <p className="text-xs text-muted-foreground">{i18n.t("' + A + '.loadingPermissions", { defaultValue: "Loading key permissions…" })}</p>;
+    return <p className="text-xs text-muted-foreground">{i18n.t("lens.analysisKey.loadingPermissions", { defaultValue: "Loading key permissions…" })}</p>;
   if (key.error || !key.data)
     return (
       <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
-        {i18n.t("' + A + '.permissionsFailed", { defaultValue: "Could not load key permissions" })}
+        {i18n.t("lens.analysisKey.permissionsFailed", { defaultValue: "Could not load key permissions" })}
         <Button variant="ghost" size="sm" onClick={() => void key.refetch()}>
           {i18n.t("common.retry", { defaultValue: "Retry" })}
         </Button>
@@ -81,7 +81,7 @@ export function AnalysisKeyDetails({ keyId }: { keyId: string }) {
       </dl>
       {info.status && info.status !== "active" && (
         <p role="alert" className="text-destructive">
-          {i18n.t("' + A + '.inactiveKey", { defaultValue: "This key is {{status}}. Choose an active key.", status: info.status })}
+          {i18n.t("lens.analysisKey.inactiveKey", { defaultValue: "This key is {{status}}. Choose an active key.", status: info.status })}
         </p>
       )}
       <details className="text-xs text-muted-foreground">
