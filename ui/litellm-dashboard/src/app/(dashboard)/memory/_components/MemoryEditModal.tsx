@@ -116,7 +116,7 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
                 name="metadata"
                 label={labelWithHint(
                   <span>
-                    Metadata <span className="text-muted-foreground">(optional JSON)</span>
+                    Metadata <span className="text-muted-foreground">{i18n.t("memoryEditModal.optional-json", { defaultValue: "(optional JSON)" })}</span>
                   </span>,
                   t("memoryView.memoryEditModal.metadataTooltip", { defaultValue: "Optional structured metadata — must be valid JSON if provided." }),
                 )}

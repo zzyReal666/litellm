@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { Activity, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/shared/StatusDot";
@@ -13,7 +14,7 @@ const TRACING_DOCS = "https://docs.litellm.ai/docs/proxy/lens";
 
 function TracingSection({ enabled, onOpenTraces }: { enabled: boolean; onOpenTraces: () => void }) {
   return (
-    <SettingsSection heading="Tracing" description="Where your agents send runs so Lens can read them.">
+    <SettingsSection heading="Tracing" description={i18n.t("lensSettings.where-your-agents-send-runs-so-lens-can-read", { defaultValue: "Where your agents send runs so Lens can read them." })}>
       <SettingsCard className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 text-sm">
           <Activity aria-hidden="true" className="size-4 text-muted-foreground" />
@@ -49,7 +50,7 @@ export function LensSettings({
       <SignalSettings />
       <SettingsSection
         heading="Analysis worker"
-        description="Runs investigations on your server and bills model usage to an analysis key."
+        description={i18n.t("lensSettings.runs-investigations-on-your-server-and-bills", { defaultValue: "Runs investigations on your server and bills model usage to an analysis key." })}
       >
         <WorkerSettings workers={list.workers} readyAction={workerReadyAction} />
       </SettingsSection>

@@ -215,8 +215,7 @@ export function LogDetailContent({
         <div className="bg-card rounded-lg shadow-sm w-full max-w-full overflow-hidden mb-6 p-8 text-center">
           <UiLoadingSpinner className="inline-block size-5" />
           <div style={{ marginTop: 8, color: "var(--color-muted-foreground)" }}>
-            Loading request &amp; response data...
-          </div>
+            {i18n.t("logDetailContent.loading-request-response-data", { defaultValue: "Loading request & response data..." })}</div>
         </div>
       ) : null}
       {!isLoadingDetails && hasClassifierAudit && (
@@ -705,8 +704,7 @@ function RequestResponseSection({
                             fontStyle: "italic",
                           }}
                         >
-                          Response data not available
-                        </div>
+                          {i18n.t("logDetailContent.response-data-not-available", { defaultValue: "Response data not available" })}</div>
                       )}
                     </div>
                   </TabsContent>

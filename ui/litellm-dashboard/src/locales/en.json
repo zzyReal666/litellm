@@ -78,7 +78,9 @@
       "markAsRead": "Mark as read"
     },
     "logoAlt": "LiteLLM",
-    "productDocsAriaLabel": "Product documentation"
+    "productDocsAriaLabel": "Product documentation",
+    "litellm-brand": "LiteLLM Brand",
+    "thanks-for-using-litellm": "Thanks for using LiteLLM!"
   },
   "user": {
     "tier": "Tier",
@@ -3664,7 +3666,9 @@
     "totalSpend": "Total Spend",
     "maxBudget": "Max Budget",
     "budgetLimit": "¥{{amount}} limit",
-    "noLimit": "No limit"
+    "noLimit": "No limit",
+    "total-spend": "Total Spend",
+    "max-budget": "Max Budget"
   },
   "viewUsers": {
     "selectUsers": "Select Users",
@@ -12446,7 +12450,9 @@
     "ptuFieldsTogether": "PTU Count and Cost per PTU / Hour must be set together",
     "ptuStartRequired": "PTU Effective From is required when PTU Count is set",
     "ptuWindowOrder": "PTU Effective To must be after PTU Effective From",
-    "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank"
+    "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank",
+    "attached-knowledge-bases-rag": "Attached Knowledge Bases (RAG)",
+    "litellm-params": "LiteLLM Params"
   },
   "noRedisWarning": {
     "title": "No Redis configured. Redis is highly recommended",
@@ -14323,5 +14329,171 @@
   },
   "modelTeamSelect": {
     "select-a-team": "Select a team"
+  },
+  "agentsTableColumns": {
+    "open-agent-actions": "Open agent actions",
+    "agent-id": "Agent ID"
+  },
+  "editBudgetModal": {
+    "max-tokens-per-day-batch": "Max Tokens per day (batch)",
+    "daily-token-budget-for-batch-submissions-whe": "Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM."
+  },
+  "categoryTable": {
+    "severity-threshold": "Severity Threshold",
+    "no-categories-configured": "No categories configured."
+  },
+  "contentFilterManager": {
+    "content-filter-configuration": "Content Filter Configuration",
+    "you-have-unsaved-changes-to-patterns-or-keyw": "You have unsaved changes to patterns or keywords. Remember to click \"Save Changes\" at the bottom."
+  },
+  "customCodeLoggingOnlyScope": {
+    "logging-only-scope": "Logging only scope",
+    "logging-only-scope-2": "Logging only scope"
+  },
+  "guardrailGarden": {
+    "decision-model": "Decision Model",
+    "ask-a-decision-model-yes-no-questions-about": "Ask a decision model yes/no questions about each request or response, and block or log when a score reaches its threshold."
+  },
+  "(dashboard)Layout": {
+    "configure-the-plugin-url-in-settings": "Configure the plugin URL in settings",
+    "open-navigation": "Open navigation"
+  },
+  "createMCPServer": {
+    "your-submission-will-be-sent-for-admin-revie": "Your submission will be sent for admin review. Once approved, the server will appear in your MCP Servers list. The request must be made with a team-scoped API key.",
+    "rpm-limit-all-callers": "RPM limit (all callers)"
+  },
+  "memoryEditModal": {
+    "optional-json": "(optional JSON)"
+  },
+  "organizationFilters": {
+    "search-by-organization-name": "Search by Organization Name",
+    "search-by-organization-id": "Search by Organization ID"
+  },
+  "addPolicyForm": {
+    "you-ll-be-taken-to-the-flow-builder-to-desig": "You'll be taken to the Flow Builder to design your policy logic visually.",
+    "by-default-this-policy-will-run-on-all-model": "By default, this policy will run on all models. You can optionally restrict it to specific models below."
+  },
+  "impactPreviewAlert": {
+    "default-attachments-only-apply-to-requests-n": "Default attachments only apply to requests no non-default attachment matches, so fewer may be affected."
+  },
+  "breakdownChart": {
+    "group-by": "Group by",
+    "no-usage-in-this-range": "No usage in this range"
+  },
+  "moyaiPage": {
+    "opening-moyai": "Opening Moyai"
+  },
+  "onboardingFormBody": {
+    "sso-is-under-the-enterprise-tier": "SSO is under the Enterprise Tier.",
+    "email-address": "Email Address"
+  },
+  "dashboardHeader": {
+    "more-options": "More options",
+    "gateway-tools": "Gateway tools"
+  },
+  "deletedKeysPage": {
+    "coming-soon-to-enterprise": "Coming soon to Enterprise",
+    "deleted-key-auditing-is-graduating-from-beta": "Deleted key auditing is graduating from beta into our Enterprise audit & compliance suite."
+  },
+  "deletedKeysTable": {
+    "no-deleted-keys-found": "No deleted keys found",
+    "keys-deleted-from-this-proxy-will-show-up-he": "Keys deleted from this proxy will show up here."
+  },
+  "deletedTeamsPage": {
+    "coming-soon-to-enterprise": "Coming soon to Enterprise",
+    "deleted-team-auditing-is-graduating-from-bet": "Deleted team auditing is graduating from beta into our Enterprise audit & compliance suite."
+  },
+  "deletedTeamsTable": {
+    "no-deleted-teams-found": "No deleted teams found",
+    "teams-deleted-from-this-proxy-will-show-up-h": "Teams deleted from this proxy will show up here."
+  },
+  "usageExportHeader": {
+    "no-options-found": "No options found",
+    "export-data": "Export Data"
+  },
+  "passThroughEndpointsTable": {
+    "no-pass-through-endpoints-configured": "No pass-through endpoints configured",
+    "add-a-pass-through-endpoint-to-route-custom": "Add a pass-through endpoint to route custom paths."
+  },
+  "teamAdminEditableFieldsSettings": {
+    "team-admin-editable-fields": "Team admin editable fields",
+    "this-proxy-version-does-not-support-enabling": "This proxy version does not support enabling any team settings fields for team admins yet."
+  },
+  "sidebarUsageCard": {
+    "enterprise-usage": "Enterprise usage",
+    "enterprise-usage-2": "Enterprise usage"
+  },
+  "addAutoRouterTab": {
+    "could-not-load-templates-so-only-start-from": "Could not load templates, so only Start from scratch is shown.",
+    "could-not-load-available-models": "Could not load available models."
+  },
+  "endUserBudgetSelect": {
+    "default-customer-budget": "Default Customer Budget",
+    "no-default-budget": "No default budget"
+  },
+  "frequencyCard": {
+    "share-of-traces-sampled-by-the-reporting-inv": "Share of traces sampled by the reporting investigations"
+  },
+  "stepFeed": {
+    "investigation-steps": "Investigation steps",
+    "waiting-for-the-worker-to-start": "Waiting for the worker to start…"
+  },
+  "conclusionsPanel": {
+    "no-observations-flagged-yet": "No observations flagged yet.",
+    "observations-by-check": "Observations by check"
+  },
+  "lensSettings": {
+    "where-your-agents-send-runs-so-lens-can-read": "Where your agents send runs so Lens can read them.",
+    "runs-investigations-on-your-server-and-bills": "Runs investigations on your server and bills model usage to an analysis key."
+  },
+  "workerForm": {
+    "advanced-options": "Advanced options",
+    "use-an-existing-virtual-key": "Use an existing virtual key"
+  },
+  "workerList": {
+    "edit-access": "Edit access",
+    "revoke-access": "Revoke access"
+  },
+  "watchPicker": {
+    "add-your-own": "Add your own",
+    "describe-anything-else-in-plain-english": "describe anything else in plain English"
+  },
+  "metadataFilters": {
+    "metadata-key": "Metadata key",
+    "add-condition": "Add condition"
+  },
+  "paneHeader": {
+    "copy-span-id": "Copy span ID",
+    "close-details": "Close details"
+  },
+  "runSearch": {
+    "search-runs": "Search runs",
+    "search-input-or-trace-id": "Search input or trace ID"
+  },
+  "logDetailContent": {
+    "loading-request-response-data": "Loading request & response data...",
+    "response-data-not-available": "Response data not available"
+  },
+  "presidioDetectedEntities": {
+    "entity-type": "Entity Type:"
+  },
+  "agentPermissions": {
+    "allowed-agents-to-call": "Allowed agents to call",
+    "no-agents-or-access-groups-configured": "No agents or access groups configured"
+  },
+  "vectorStorePermissions": {
+    "vector-stores": "Vector Stores",
+    "no-vector-stores-configured": "No vector stores configured"
+  },
+  "scopedSavingsTab": {
+    "spend-is-bucketed-by-utc-day": "Spend is bucketed by UTC day",
+    "savings-are-unavailable-for-this-range-try-a": "Savings are unavailable for this range. Try another date range or reopen this tab."
+  },
+  "timeline": {
+    "clear-time-zoom": "Clear time zoom"
+  },
+  "teamAdminSettingsForm": {
+    "a-proxy-admin-chose-which-settings-team-admi": "A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else.",
+    "save-changes": "Save Changes"
   }
 }

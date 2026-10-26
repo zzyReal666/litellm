@@ -1,4 +1,5 @@
 import { type FC } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { TriangleAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -35,7 +36,6 @@ export const StdioDisabledBanner: FC = () => (
     <TriangleAlert />
     <AlertTitle>stdio is disabled on this proxy</AlertTitle>
     <AlertDescription>
-      {STDIO_DISABLED_MESSAGE}. Until then this server cannot start or be saved as stdio.
-    </AlertDescription>
+      {STDIO_DISABLED_MESSAGE}. Until then this server cannot start or be saved as stdio.</AlertDescription>
   </Alert>
 );

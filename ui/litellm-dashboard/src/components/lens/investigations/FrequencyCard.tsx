@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import i18n from "@/lib/i18n";
 import { dayLabel, type Frequency, percentLabel } from "../model/frequency";
 
 const AFFECTED = "var(--finding-affected)";
@@ -81,7 +82,7 @@ export function FrequencyCard({ frequency }: { frequency: Frequency }) {
       )}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Legend />
-        <p className="text-xs text-muted-foreground">Share of traces sampled by the reporting investigations</p>
+        <p className="text-xs text-muted-foreground">{i18n.t("frequencyCard.share-of-traces-sampled-by-the-reporting-inv", { defaultValue: "Share of traces sampled by the reporting investigations" })}</p>
       </div>
     </section>
   );

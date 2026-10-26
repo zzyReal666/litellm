@@ -1,5 +1,6 @@
 "use client";
 import { PaginationState } from "@tanstack/react-table";
+import i18n from "@/lib/i18n";
 import { Info } from "lucide-react";
 import { PageContent } from "@/components/shared/Page";
 import { useState } from "react";
@@ -22,10 +23,9 @@ export default function DeletedTeamsPage() {
       {!premiumUser && (
         <Alert className="shrink-0">
           <Info />
-          <AlertTitle>Coming soon to Enterprise</AlertTitle>
+          <AlertTitle>{i18n.t("deletedTeamsPage.coming-soon-to-enterprise", { defaultValue: "Coming soon to Enterprise" })}</AlertTitle>
           <AlertDescription>
-            Deleted team auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
-          </AlertDescription>
+            {i18n.t("deletedTeamsPage.deleted-team-auditing-is-graduating-from-bet", { defaultValue: "Deleted team auditing is graduating from beta into our Enterprise audit & compliance suite." })}</AlertDescription>
         </Alert>
       )}
       <DeletedTeamsTable

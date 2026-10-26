@@ -1,4 +1,5 @@
 import { TriangleAlert } from "lucide-react";
+import i18n from "@/lib/i18n";
 import React, { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/shared/Alert";
 import { Separator } from "@/components/ui/separator";
@@ -234,15 +235,14 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
   return (
     <>
       <div className="my-6 flex items-center gap-4">
-        <span className="shrink-0 font-medium">Content Filter Configuration</span>
+        <span className="shrink-0 font-medium">{i18n.t("contentFilterManager.content-filter-configuration", { defaultValue: "Content Filter Configuration" })}</span>
         <Separator className="flex-1" />
       </div>
       {hasUnsavedChanges && (
         <Alert variant="warning" className="mb-4">
           <TriangleAlert />
           <AlertDescription>
-            You have unsaved changes to patterns or keywords. Remember to click &quot;Save Changes&quot; at the bottom.
-          </AlertDescription>
+            {i18n.t("contentFilterManager.you-have-unsaved-changes-to-patterns-or-keyw", { defaultValue: "You have unsaved changes to patterns or keywords. Remember to click \"Save Changes\" at the bottom." })}</AlertDescription>
         </Alert>
       )}
       <div className="mb-6">

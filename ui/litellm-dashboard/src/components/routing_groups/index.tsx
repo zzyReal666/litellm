@@ -1,6 +1,7 @@
 "use client";
 
 import { Trans, useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -194,9 +195,7 @@ const RoutingGroups: React.FC = () => {
           <p className="text-sm text-foreground">
             {deletingGroup?.routing_strategy === "priority" ? (
               <>
-                Calls to <span className="font-medium">{deletingGroup.group_name}</span> will stop working. Direct
-                requests to its member models keep their existing routing behavior. This cannot be undone.
-              </>
+                Calls to{" "}<span className="font-medium">{deletingGroup.group_name}</span> will stop working. Direct requests to its member models keep their existing routing behavior. This cannot be undone.</>
             ) : (
               <Trans
                 i18nKey="routingGroups.index.deleteFallbackNote"

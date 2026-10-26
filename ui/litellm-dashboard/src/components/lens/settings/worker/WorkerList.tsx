@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { useNow } from "@/hooks/useNow";
 import { StatusDot, type StatusDotProps } from "@/components/shared/StatusDot";
@@ -46,16 +47,14 @@ export function WorkerList({ workers, onEditBilling, onRevoke, className, ...pro
               </div>
               <div className="flex items-center gap-1">
                 <Button variant="outline" size="sm" onClick={() => onEditBilling(worker)}>
-                  Edit access
-                </Button>
+                  {i18n.t("workerList.edit-access", { defaultValue: "Edit access" })}</Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-muted-foreground hover:text-destructive"
                   onClick={() => onRevoke(worker.id)}
                 >
-                  Revoke access
-                </Button>
+                  {i18n.t("workerList.revoke-access", { defaultValue: "Revoke access" })}</Button>
               </div>
             </li>
           );

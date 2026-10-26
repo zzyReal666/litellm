@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { UserGroupIcon } from "@heroicons/react/outline";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -67,7 +68,7 @@ export function AgentPermissions({
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <UserGroupIcon className="h-4 w-4 text-purple-600" />
-        <p className="text-sm font-semibold text-foreground">Allowed agents to call</p>
+        <p className="text-sm font-semibold text-foreground">{i18n.t("agentPermissions.allowed-agents-to-call", { defaultValue: "Allowed agents to call" })}</p>
         <Badge variant="secondary">{totalCount}</Badge>
       </div>
 
@@ -106,7 +107,7 @@ export function AgentPermissions({
       ) : (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
           <UserGroupIcon className="h-4 w-4 text-muted-foreground" />
-          <p className="text-muted-foreground text-sm">No agents or access groups configured</p>
+          <p className="text-muted-foreground text-sm">{i18n.t("agentPermissions.no-agents-or-access-groups-configured", { defaultValue: "No agents or access groups configured" })}</p>
         </div>
       )}
     </div>

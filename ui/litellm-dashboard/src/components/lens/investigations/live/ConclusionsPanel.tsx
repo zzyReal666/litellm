@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
+import i18n from "@/lib/i18n";
 
 import { cn } from "@/lib/cva.config";
 
@@ -36,10 +37,10 @@ export const ConclusionsPanel = memo(function ConclusionsPanel({
   onSelect: (key: string | null) => void;
 }) {
   const flashing = useFlashing(groups);
-  if (!groups.length) return <p className="text-xs text-muted-foreground">No observations flagged yet.</p>;
+  if (!groups.length) return <p className="text-xs text-muted-foreground">{i18n.t("conclusionsPanel.no-observations-flagged-yet", { defaultValue: "No observations flagged yet." })}</p>;
   return (
     <div className="flex flex-col gap-1.5">
-      <ol aria-label="Observations by check" className="flex flex-col gap-1.5">
+      <ol aria-label={i18n.t("conclusionsPanel.observations-by-check", { defaultValue: "Observations by check" })} className="flex flex-col gap-1.5">
         {groups.map((group) => {
           const active = selected === group.key;
           return (

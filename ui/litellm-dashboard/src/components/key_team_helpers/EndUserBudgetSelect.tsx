@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import i18n from "@/lib/i18n";
 
 import { useBudgetOptions } from "@/app/(dashboard)/hooks/budgets/useBudgetOptions";
 import type { budgetItem } from "@/app/(dashboard)/hooks/budgets/useBudgets";
@@ -43,8 +44,8 @@ export const EndUserBudgetSelect: React.FC<EndUserBudgetSelectProps> = ({
   return (
     <SearchSelect
       inputId={id}
-      aria-label="Default Customer Budget"
-      placeholder="No default budget"
+      aria-label={i18n.t("endUserBudgetSelect.default-customer-budget", { defaultValue: "Default Customer Budget" })}
+      placeholder={i18n.t("endUserBudgetSelect.no-default-budget", { defaultValue: "No default budget" })}
       emptyText="No budgets found. Create one under Budgets."
       options={options}
       value={value}

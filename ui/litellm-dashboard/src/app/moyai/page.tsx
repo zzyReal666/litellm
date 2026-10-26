@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useSyncExternalStore } from "react";
+import i18n from "@/lib/i18n";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
 import Navbar from "@/components/navbar";
@@ -67,9 +68,9 @@ function MoyaiPageContent() {
     } else if (moyaiUrl) {
       content = (
         <div className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center gap-3 bg-[#04060c] px-6 text-center text-[#e3e3e3]">
-          <p className="m-0 text-lg font-medium text-white">Opening Moyai</p>
+          <p className="m-0 text-lg font-medium text-white">{i18n.t("moyaiPage.opening-moyai", { defaultValue: "Opening Moyai" })}</p>
           <a href={moyaiUrl} className="text-sm text-[#8b9bff] underline underline-offset-4">
-            Continue to {moyaiUrl}
+            Continue to{" "}{moyaiUrl}
           </a>
         </div>
       );

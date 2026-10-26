@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import i18n from "@/lib/i18n";
 import { modelAvailableCall } from "./networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -115,11 +116,11 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
     <div className="flex items-center">
       <div className="flex justify-between gap-x-6">
         <div>
-          <p className="text-sm text-muted-foreground">Total Spend</p>
+          <p className="text-sm text-muted-foreground">{i18n.t("viewUserSpend.total-spend", { defaultValue: "Total Spend" })}</p>
           <p className="text-2xl font-semibold text-foreground">¥{roundedSpend}</p>
         </div>
         <div>
-          <p className="text-sm text-muted-foreground">Max Budget</p>
+          <p className="text-sm text-muted-foreground">{i18n.t("viewUserSpend.max-budget", { defaultValue: "Max Budget" })}</p>
           <p className="text-2xl font-semibold text-foreground">{displayMaxBudget}</p>
         </div>
       </div>

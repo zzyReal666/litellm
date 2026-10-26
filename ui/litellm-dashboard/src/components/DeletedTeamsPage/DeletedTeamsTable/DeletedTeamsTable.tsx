@@ -1,6 +1,7 @@
 "use client";
 
 import { OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
+import i18n from "@/lib/i18n";
 import { Inbox } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -25,8 +26,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No deleted teams found</div>
-      <div className="text-sm text-muted-foreground">Teams deleted from this proxy will show up here.</div>
+      <div className="text-sm font-medium text-foreground">{i18n.t("deletedTeamsTable.no-deleted-teams-found", { defaultValue: "No deleted teams found" })}</div>
+      <div className="text-sm text-muted-foreground">{i18n.t("deletedTeamsTable.teams-deleted-from-this-proxy-will-show-up-h", { defaultValue: "Teams deleted from this proxy will show up here." })}</div>
     </div>
   );
 }

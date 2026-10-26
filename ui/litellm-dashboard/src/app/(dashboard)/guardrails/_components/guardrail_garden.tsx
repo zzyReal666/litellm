@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React, { useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
@@ -90,12 +91,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
 
       <section className="mb-10" aria-labelledby="guardrail-garden-decision-model">
         <h2 id="guardrail-garden-decision-model" className="mt-0 mb-1 text-xl font-semibold text-foreground">
-          Decision Model
-        </h2>
+          {i18n.t("guardrailGarden.decision-model", { defaultValue: "Decision Model" })}</h2>
         <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          Ask a decision model yes/no questions about each request or response, and block or log when a score reaches
-          its threshold.
-        </p>
+          {i18n.t("guardrailGarden.ask-a-decision-model-yes-no-questions-about", { defaultValue: "Ask a decision model yes/no questions about each request or response, and block or log when a score reaches its threshold." })}</p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {decisionModelCards.map((card) => (
             <GuardrailCard key={card.id} card={card} onClick={() => setSelectedCard(card)} />

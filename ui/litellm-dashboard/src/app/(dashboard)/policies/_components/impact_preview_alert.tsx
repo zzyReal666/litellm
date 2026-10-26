@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +52,7 @@ const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, i
         ) : (
           <div>
             <span>
-              This attachment would affect {qualifier}
+              This attachment would affect{" "}{qualifier}
               <strong>
                 {impactResult.affected_keys_count} key{impactResult.affected_keys_count !== 1 ? "s" : ""}
               </strong>{" "}
@@ -63,8 +64,7 @@ const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, i
             </span>
             {isDefault && (
               <div className="text-xs text-muted-foreground">
-                Default attachments only apply to requests no non-default attachment matches, so fewer may be affected.
-              </div>
+                {i18n.t("impactPreviewAlert.default-attachments-only-apply-to-requests-n", { defaultValue: "Default attachments only apply to requests no non-default attachment matches, so fewer may be affected." })}</div>
             )}
             {impactResult.sample_keys.length > 0 && (
               <SampleList

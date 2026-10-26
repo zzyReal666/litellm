@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/DataTable";
@@ -61,7 +62,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
               value && onSeverityChange?.(id, value as "high" | "medium" | "low")
             }
           >
-            <SelectTrigger size="sm" className="w-[150px]" aria-label="Severity Threshold">
+            <SelectTrigger size="sm" className="w-[150px]" aria-label={i18n.t("categoryTable.severity-threshold", { defaultValue: "Severity Threshold" })}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -121,7 +122,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   }
 
   if (categories.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No categories configured.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{i18n.t("categoryTable.no-categories-configured", { defaultValue: "No categories configured." })}</div>;
   }
 
   return <DataTable data={categories} columns={columns} getRowId={(row) => row.id} size="compact" />;

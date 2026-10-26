@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import React, { useId, useState } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";

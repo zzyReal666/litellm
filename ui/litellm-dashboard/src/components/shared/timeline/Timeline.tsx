@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import i18n from "@/lib/i18n";
 import moment from "moment";
 import { useRef, useState, type RefObject } from "react";
 import { useResizeObserver } from "usehooks-ts";
@@ -340,7 +341,7 @@ export function Timeline({ buckets, selection, onSelect, noun }: TimelineProps) 
         <button
           type="button"
           onClick={() => onSelect(null)}
-          aria-label="Clear time zoom"
+          aria-label={i18n.t("timeline.clear-time-zoom", { defaultValue: "Clear time zoom" })}
           className="absolute top-1 right-3 inline-flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <X className="size-3" />

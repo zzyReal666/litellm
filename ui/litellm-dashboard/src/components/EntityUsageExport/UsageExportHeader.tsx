@@ -1,4 +1,5 @@
 import type { DateRangePickerValue } from "@/components/shared/date_picker_types";
+import i18n from "@/lib/i18n";
 import { Download } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ const UsageExportHeader: React.FC<UsageExportHeaderProps> = ({
 
   const filterList = (
     <ComboboxContent anchor={anchor}>
-      <ComboboxEmpty>No options found</ComboboxEmpty>
+      <ComboboxEmpty>{i18n.t("usageExportHeader.no-options-found", { defaultValue: "No options found" })}</ComboboxEmpty>
       <ComboboxList>
         {(value: string) => (
           <ComboboxItem key={value} value={value}>
@@ -123,8 +124,7 @@ const UsageExportHeader: React.FC<UsageExportHeaderProps> = ({
           <div className="justify-self-end">
             <Button variant="outline" size="sm" onClick={() => setIsExportModalOpen(true)}>
               <Download />
-              Export Data
-            </Button>
+              {i18n.t("usageExportHeader.export-data", { defaultValue: "Export Data" })}</Button>
           </div>
         </div>
       </div>

@@ -78,7 +78,9 @@
       "markAsRead": "标记为已读"
     },
     "logoAlt": "LiteLLM 品牌",
-    "productDocsAriaLabel": "产品文档"
+    "productDocsAriaLabel": "产品文档",
+    "litellm-brand": "LiteLLM 品牌",
+    "thanks-for-using-litellm": "感谢使用 LiteLLM！"
   },
   "user": {
     "tier": "套餐",
@@ -3664,7 +3666,9 @@
     "totalSpend": "总花费",
     "maxBudget": "最大预算",
     "budgetLimit": "¥{{amount}} 上限",
-    "noLimit": "无上限"
+    "noLimit": "无上限",
+    "total-spend": "总花费",
+    "max-budget": "最大预算"
   },
   "viewUsers": {
     "selectUsers": "选择用户",
@@ -12446,7 +12450,9 @@
     "ptuFieldsTogether": "PTU 数量与每 PTU/小时成本必须同时设置",
     "ptuStartRequired": "设置 PTU 数量时，必须填写 PTU 生效开始时间",
     "ptuWindowOrder": "PTU 生效结束时间必须晚于 PTU 生效开始时间",
-    "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空"
+    "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空",
+    "attached-knowledge-bases-rag": "关联知识库（RAG）",
+    "litellm-params": "LiteLLM 参数"
   },
   "noRedisWarning": {
     "title": "未配置 Redis，强烈建议配置",
@@ -14323,5 +14329,171 @@
   },
   "modelTeamSelect": {
     "select-a-team": "选择团队"
+  },
+  "agentsTableColumns": {
+    "open-agent-actions": "打开 agent 操作",
+    "agent-id": "Agent ID"
+  },
+  "editBudgetModal": {
+    "max-tokens-per-day-batch": "每日最大 Token 数（批量）",
+    "daily-token-budget-for-batch-submissions-whe": "批量提交的每日 Token 预算。设置后，批量请求将按此计费，而非 TPM/RPM。"
+  },
+  "categoryTable": {
+    "severity-threshold": "严重程度阈值",
+    "no-categories-configured": "未配置类别。"
+  },
+  "contentFilterManager": {
+    "content-filter-configuration": "内容过滤配置",
+    "you-have-unsaved-changes-to-patterns-or-keyw": "你有未保存的模式或关键词更改。记得点击底部的「保存更改」。"
+  },
+  "customCodeLoggingOnlyScope": {
+    "logging-only-scope": "仅记录范围",
+    "logging-only-scope-2": "仅记录范围"
+  },
+  "guardrailGarden": {
+    "decision-model": "决策模型",
+    "ask-a-decision-model-yes-no-questions-about": "对每个请求或响应向决策模型提出是/否问题，并在分数达到阈值时拦截或记录。"
+  },
+  "(dashboard)Layout": {
+    "configure-the-plugin-url-in-settings": "在设置中配置插件 URL",
+    "open-navigation": "打开导航"
+  },
+  "createMCPServer": {
+    "your-submission-will-be-sent-for-admin-revie": "你的提交将发送给管理员审核。通过后会出现在你的 MCP 服务器列表中。该请求必须使用团队范围的 API 密钥。",
+    "rpm-limit-all-callers": "RPM 限制（所有调用方）"
+  },
+  "memoryEditModal": {
+    "optional-json": "（可选 JSON）"
+  },
+  "organizationFilters": {
+    "search-by-organization-name": "按组织名称搜索",
+    "search-by-organization-id": "按组织 ID 搜索"
+  },
+  "addPolicyForm": {
+    "you-ll-be-taken-to-the-flow-builder-to-desig": "你将进入流程构建器，以可视化方式设计策略逻辑。",
+    "by-default-this-policy-will-run-on-all-model": "默认情况下，该策略会在所有模型上运行。你也可以在下方将其限制为特定模型。"
+  },
+  "impactPreviewAlert": {
+    "default-attachments-only-apply-to-requests-n": "默认附件仅应用于没有匹配到非默认附件的请求，因此受影响的数量可能更少。"
+  },
+  "breakdownChart": {
+    "group-by": "分组方式",
+    "no-usage-in-this-range": "该时间范围内没有用量"
+  },
+  "moyaiPage": {
+    "opening-moyai": "正在打开 Moyai"
+  },
+  "onboardingFormBody": {
+    "sso-is-under-the-enterprise-tier": "SSO 属于企业版功能。",
+    "email-address": "邮箱地址"
+  },
+  "dashboardHeader": {
+    "more-options": "更多选项",
+    "gateway-tools": "网关工具"
+  },
+  "deletedKeysPage": {
+    "coming-soon-to-enterprise": "即将进入企业版",
+    "deleted-key-auditing-is-graduating-from-beta": "已删除密钥审计正从 beta 转为我们的企业版审计与合规套件。"
+  },
+  "deletedKeysTable": {
+    "no-deleted-keys-found": "未找到已删除的密钥",
+    "keys-deleted-from-this-proxy-will-show-up-he": "从该代理删除的密钥会显示在这里。"
+  },
+  "deletedTeamsPage": {
+    "coming-soon-to-enterprise": "即将进入企业版",
+    "deleted-team-auditing-is-graduating-from-bet": "已删除团队审计正从 beta 转为我们的企业版审计与合规套件。"
+  },
+  "deletedTeamsTable": {
+    "no-deleted-teams-found": "未找到已删除的团队",
+    "teams-deleted-from-this-proxy-will-show-up-h": "从该代理删除的团队会显示在这里。"
+  },
+  "usageExportHeader": {
+    "no-options-found": "未找到选项",
+    "export-data": "导出数据"
+  },
+  "passThroughEndpointsTable": {
+    "no-pass-through-endpoints-configured": "未配置透传端点",
+    "add-a-pass-through-endpoint-to-route-custom": "添加透传端点以路由自定义路径。"
+  },
+  "teamAdminEditableFieldsSettings": {
+    "team-admin-editable-fields": "团队管理员可编辑字段",
+    "this-proxy-version-does-not-support-enabling": "该代理版本尚不支持为团队管理员启用任何团队设置字段。"
+  },
+  "sidebarUsageCard": {
+    "enterprise-usage": "企业版用量",
+    "enterprise-usage-2": "企业版用量"
+  },
+  "addAutoRouterTab": {
+    "could-not-load-templates-so-only-start-from": "无法加载模板，因此仅显示「从空白开始」。",
+    "could-not-load-available-models": "无法加载可用模型。"
+  },
+  "endUserBudgetSelect": {
+    "default-customer-budget": "默认客户预算",
+    "no-default-budget": "无默认预算"
+  },
+  "frequencyCard": {
+    "share-of-traces-sampled-by-the-reporting-inv": "由上报调查采样的链路占比"
+  },
+  "stepFeed": {
+    "investigation-steps": "调查步骤",
+    "waiting-for-the-worker-to-start": "正在等待 worker 启动…"
+  },
+  "conclusionsPanel": {
+    "no-observations-flagged-yet": "尚未标记任何观察项。",
+    "observations-by-check": "按检查项分组的观察"
+  },
+  "lensSettings": {
+    "where-your-agents-send-runs-so-lens-can-read": "你的 agent 将运行数据发送到这里，供 Lens 读取。",
+    "runs-investigations-on-your-server-and-bills": "在你的服务器上运行调查，模型用量计入分析密钥。"
+  },
+  "workerForm": {
+    "advanced-options": "高级选项",
+    "use-an-existing-virtual-key": "使用已有虚拟密钥"
+  },
+  "workerList": {
+    "edit-access": "编辑访问权限",
+    "revoke-access": "撤销访问权限"
+  },
+  "watchPicker": {
+    "add-your-own": "添加自定义",
+    "describe-anything-else-in-plain-english": "用自然语言描述其他任何内容"
+  },
+  "metadataFilters": {
+    "metadata-key": "元数据键",
+    "add-condition": "添加条件"
+  },
+  "paneHeader": {
+    "copy-span-id": "复制 Span ID",
+    "close-details": "关闭详情"
+  },
+  "runSearch": {
+    "search-runs": "搜索运行",
+    "search-input-or-trace-id": "搜索输入或链路 ID"
+  },
+  "logDetailContent": {
+    "loading-request-response-data": "正在加载请求与响应数据…",
+    "response-data-not-available": "响应数据不可用"
+  },
+  "presidioDetectedEntities": {
+    "entity-type": "实体类型："
+  },
+  "agentPermissions": {
+    "allowed-agents-to-call": "允许调用的 agent",
+    "no-agents-or-access-groups-configured": "未配置 agent 或访问组"
+  },
+  "vectorStorePermissions": {
+    "vector-stores": "向量存储",
+    "no-vector-stores-configured": "未配置向量存储"
+  },
+  "scopedSavingsTab": {
+    "spend-is-bucketed-by-utc-day": "花费按 UTC 日期分桶",
+    "savings-are-unavailable-for-this-range-try-a": "该时间范围无法提供节省数据。请尝试其他日期范围或重新打开此标签页。"
+  },
+  "timeline": {
+    "clear-time-zoom": "清除时间缩放"
+  },
+  "teamAdminSettingsForm": {
+    "a-proxy-admin-chose-which-settings-team-admi": "代理管理员已指定团队管理员可以修改哪些设置。其他修改请联系代理管理员。",
+    "save-changes": "保存更改"
   }
 }

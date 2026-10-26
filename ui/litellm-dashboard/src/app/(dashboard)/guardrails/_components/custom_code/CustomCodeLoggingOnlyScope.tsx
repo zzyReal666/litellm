@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import {
   choiceToLoggingOnlyScope,
   effectiveLoggingOnlyContinue,
@@ -20,7 +21,7 @@ export const CustomCodeLoggingOnlyScopeSelect: React.FC<{
   onChange: (choice: LoggingOnlyScopeChoice) => void;
 }> = ({ value, onChange }) => (
   <div className="w-[240px]">
-    <label className="mb-1 block text-xs font-medium text-muted-foreground">Logging only scope</label>
+    <label className="mb-1 block text-xs font-medium text-muted-foreground">{i18n.t("customCodeLoggingOnlyScope.logging-only-scope", { defaultValue: "Logging only scope" })}</label>
     <Select
       items={LOGGING_ONLY_SCOPE_ITEMS}
       value={value}
@@ -28,7 +29,7 @@ export const CustomCodeLoggingOnlyScopeSelect: React.FC<{
         if (isLoggingOnlyScopeChoice(nextValue)) onChange(nextValue);
       }}
     >
-      <SelectTrigger className="w-full" aria-label="Logging only scope">
+      <SelectTrigger className="w-full" aria-label={i18n.t("customCodeLoggingOnlyScope.logging-only-scope-2", { defaultValue: "Logging only scope" })}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

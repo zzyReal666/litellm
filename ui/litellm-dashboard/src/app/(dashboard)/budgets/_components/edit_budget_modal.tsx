@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import i18n from "@/lib/i18n";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -135,8 +136,8 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
             <FormField
               control={form.control}
               name="tpd_limit"
-              label="Max Tokens per day (batch)"
-              description="Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM."
+              label={i18n.t("editBudgetModal.max-tokens-per-day-batch", { defaultValue: "Max Tokens per day (batch)" })}
+              description={i18n.t("editBudgetModal.daily-token-budget-for-batch-submissions-whe", { defaultValue: "Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM." })}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input

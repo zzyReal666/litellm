@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { ProviderLogo } from "@/components/molecules/models/ProviderLogo";
 import type { DailyData } from "@/components/UsagePage/types";
@@ -61,7 +62,7 @@ export function BreakdownControls({
       />
       {showDimension && (
         <Segmented
-          label="Group by"
+          label={i18n.t("breakdownChart.group-by", { defaultValue: "Group by" })}
           value={state.dimension}
           options={DIMENSION_OPTIONS}
           onChange={(dimension) => onChange({ ...state, dimension })}
@@ -130,7 +131,7 @@ export function Leaderboard({
   const value = (row: LeaderRow) => rankValue(row, metric);
   const rows = ranking.slice(0, limit);
   if (rows.length === 0) {
-    return <p className="py-8 text-center text-xs text-muted-foreground">No usage in this range</p>;
+    return <p className="py-8 text-center text-xs text-muted-foreground">{i18n.t("breakdownChart.no-usage-in-this-range", { defaultValue: "No usage in this range" })}</p>;
   }
   const half = columns === 2 ? Math.ceil(rows.length / 2) : rows.length;
   const groups = columns === 2 ? [rows.slice(0, half), rows.slice(half)] : [rows];

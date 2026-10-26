@@ -1,6 +1,7 @@
 "use client";
 
 import { Save } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -54,8 +55,7 @@ export default function TeamAdminSettingsForm({
     <form onSubmit={(event) => void submit(event)}>
       <FieldGroup>
         <p className="text-sm text-muted-foreground">
-          A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else.
-        </p>
+          {i18n.t("teamAdminSettingsForm.a-proxy-admin-chose-which-settings-team-admi", { defaultValue: "A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else." })}</p>
         {TEAM_ADMIN_SETTINGS_FIELDS.filter((name) => editableFields.has(name)).map((name) => (
           <FormField key={name} control={form.control} name={name} label={teamAdminFieldLabel(name)}>
             {({ ref, value, ...field }) => (
@@ -71,8 +71,7 @@ export default function TeamAdminSettingsForm({
         </Button>
         <Button type="submit" disabled={isSaving || !hasChanges}>
           {isSaving ? <UiLoadingSpinner className="size-4" /> : <Save className="size-4" />}
-          Save Changes
-        </Button>
+          {i18n.t("teamAdminSettingsForm.save-changes", { defaultValue: "Save Changes" })}</Button>
       </div>
     </form>
   );

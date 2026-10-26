@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { CircleAlert, Info } from "lucide-react";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
@@ -52,7 +53,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
               <AlertTitle>SSO</AlertTitle>
               <AlertDescription>
                 <div className="flex justify-between items-center">
-                  <span>SSO is under the Enterprise Tier.</span>
+                  <span>{i18n.t("onboardingFormBody.sso-is-under-the-enterprise-tier", { defaultValue: "SSO is under the Enterprise Tier." })}</span>
                   
                 </div>
               </AlertDescription>
@@ -62,7 +63,7 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
           <form className="mt-10 mb-5" onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor={emailFieldId}>Email Address</FieldLabel>
+                <FieldLabel htmlFor={emailFieldId}>{i18n.t("onboardingFormBody.email-address", { defaultValue: "Email Address" })}</FieldLabel>
                 <Input id={emailFieldId} type="email" value={userEmail} readOnly disabled />
               </Field>
 

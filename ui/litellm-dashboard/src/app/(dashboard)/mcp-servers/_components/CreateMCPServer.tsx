@@ -655,9 +655,7 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
               <form onSubmit={handleSubmit} className="space-y-6">
                 {!isAdmin && (
                   <div className="rounded-md bg-info/10 border border-info/20 px-4 py-3 text-sm text-info">
-                    Your submission will be sent for admin review. Once approved, the server will appear in your MCP
-                    Servers list. The request must be made with a team-scoped API key.
-                  </div>
+                    {i18n.t("createMCPServer.your-submission-will-be-sent-for-admin-revie", { defaultValue: "Your submission will be sent for admin review. Once approved, the server will appear in your MCP Servers list. The request must be made with a team-scoped API key." })}</div>
                 )}
                 <div className="grid grid-cols-1 gap-6">
                   <MountedFormField
@@ -821,8 +819,7 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
                   <MountedFormField
                     label={
                       <span className="text-sm font-medium text-foreground flex items-center">
-                        RPM limit (all callers)
-                        <SimpleTooltip content="Max requests per minute to this server across all keys and teams. Leave empty for no limit">
+                        {i18n.t("createMCPServer.rpm-limit-all-callers", { defaultValue: "RPM limit (all callers)" })}<SimpleTooltip content="Max requests per minute to this server across all keys and teams. Leave empty for no limit">
                           <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                         </SimpleTooltip>
                       </span>

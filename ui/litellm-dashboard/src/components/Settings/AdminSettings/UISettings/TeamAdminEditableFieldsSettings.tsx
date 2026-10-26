@@ -1,6 +1,7 @@
 "use client";
 
 import { Controller } from "react-hook-form";
+import i18n from "@/lib/i18n";
 import { z } from "zod";
 
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
@@ -35,7 +36,7 @@ export default function TeamAdminEditableFieldsSettings() {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <CardTitle>Team admin editable fields</CardTitle>
+          <CardTitle>{i18n.t("teamAdminEditableFieldsSettings.team-admin-editable-fields", { defaultValue: "Team admin editable fields" })}</CardTitle>
           <Badge variant={enabledFields.length > 0 ? "secondary" : "outline"}>
             {enabledFields.length > 0
               ? `${enabledFields.length} field${enabledFields.length !== 1 ? "s" : ""} enabled`
@@ -95,8 +96,7 @@ function TeamAdminEditableFieldsForm({
   if (supportedFields.length === 0) {
     return (
       <p className="text-sm italic text-muted-foreground">
-        This proxy version does not support enabling any team settings fields for team admins yet.
-      </p>
+        {i18n.t("teamAdminEditableFieldsSettings.this-proxy-version-does-not-support-enabling", { defaultValue: "This proxy version does not support enabling any team settings fields for team admins yet." })}</p>
     );
   }
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 
 interface RecognitionMetadata {
   recognizer_name: string;
@@ -83,7 +84,7 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
                     <div className="grid grid-cols-2 gap-4 mb-2">
                       <div className="space-y-2">
                         <div className="flex">
-                          <span className="font-medium w-1/3">Entity Type:</span>
+                          <span className="font-medium w-1/3">{i18n.t("presidioDetectedEntities.entity-type", { defaultValue: "Entity Type:" })}</span>
                           <span>{entity.entity_type}</span>
                         </div>
                         <div className="flex">

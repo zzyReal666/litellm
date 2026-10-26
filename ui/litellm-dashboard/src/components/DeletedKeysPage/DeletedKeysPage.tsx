@@ -1,5 +1,6 @@
 "use client";
 import { PageContent } from "@/components/shared/Page";
+import i18n from "@/lib/i18n";
 import { useState } from "react";
 import { PaginationState } from "@tanstack/react-table";
 import { Info } from "lucide-react";
@@ -19,10 +20,9 @@ export default function DeletedKeysPage() {
       {!premiumUser && (
         <Alert className="shrink-0">
           <Info />
-          <AlertTitle>Coming soon to Enterprise</AlertTitle>
+          <AlertTitle>{i18n.t("deletedKeysPage.coming-soon-to-enterprise", { defaultValue: "Coming soon to Enterprise" })}</AlertTitle>
           <AlertDescription>
-            Deleted key auditing is graduating from beta into our Enterprise audit &amp; compliance suite.
-          </AlertDescription>
+            {i18n.t("deletedKeysPage.deleted-key-auditing-is-graduating-from-beta", { defaultValue: "Deleted key auditing is graduating from beta into our Enterprise audit & compliance suite." })}</AlertDescription>
         </Alert>
       )}
       <DeletedKeysTable

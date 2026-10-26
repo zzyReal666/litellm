@@ -589,8 +589,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                Attached Knowledge Bases (RAG)
-                <DocsHint
+                {i18n.t("modelInfoEditForm.attached-knowledge-bases-rag", { defaultValue: "Attached Knowledge Bases (RAG)" })}<DocsHint
                   text={i18n.t("modelInfoView.tooltipKnowledgeBases", { defaultValue: "Vector stores used for RAG. Every request to this model will automatically retrieve context from these knowledge bases." })}
                 />
               </FieldLabel>
@@ -777,8 +776,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                LiteLLM Params
-                <DocsHint
+                {i18n.t("modelInfoEditForm.litellm-params", { defaultValue: "LiteLLM Params" })}<DocsHint
                   text={i18n.t("modelInfoView.tooltipLitellmParams", { defaultValue: "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by LiteLLM." })}
                 />
               </FieldLabel>

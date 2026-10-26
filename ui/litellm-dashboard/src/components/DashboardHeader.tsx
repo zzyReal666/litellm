@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { ToolbarSeparator } from "@/components/shared/ToolbarSeparator";
+import i18n from "@/lib/i18n";
 import { getBreadcrumb } from "@/components/leftnav";
 import ViewSwitcher from "@/components/Navbar/ViewSwitcher";
 import LiteAdmin from "@/components/liteadmin/LiteAdmin";
@@ -73,11 +74,11 @@ export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: Rea
       <div className="flex shrink-0 items-center gap-1 md:hidden">
         <CommandPaletteTrigger mobile />
         <Popover open={!isDesktop && mobileToolsOpen} onOpenChange={setMobileToolsOpen}>
-          <PopoverTrigger render={<Button variant="ghost" size="icon" className="size-11" aria-label="More options" />}>
+          <PopoverTrigger render={<Button variant="ghost" size="icon" className="size-11" aria-label={i18n.t("dashboardHeader.more-options", { defaultValue: "More options" })} />}>
             <Ellipsis />
           </PopoverTrigger>
           <PopoverContent align="end" className="max-w-[calc(100vw-2rem)]">
-            <PopoverTitle>Gateway tools</PopoverTitle>
+            <PopoverTitle>{i18n.t("dashboardHeader.gateway-tools", { defaultValue: "Gateway tools" })}</PopoverTitle>
             <ViewSwitcher />
             {showWorkerSwitch && <WorkerDropdown onWorkerSwitch={handleWorkerSwitch} />}
             <div className="flex flex-wrap items-center gap-2">

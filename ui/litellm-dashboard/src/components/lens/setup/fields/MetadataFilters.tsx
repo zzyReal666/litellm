@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import i18n from "@/lib/i18n";
 import { Plus, X } from "lucide-react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attrib
               {...register(`selection.filters.${index}.key`)}
               aria-label={`Metadata key ${index + 1}`}
               list={`${id}-keys`}
-              placeholder="Metadata key"
+              placeholder={i18n.t("metadataFilters.metadata-key", { defaultValue: "Metadata key" })}
             />
             <Button
               variant="ghost"
@@ -68,8 +69,7 @@ export function MetadataFilters({ attributes, keys }: Pick<ScopeOptions, "attrib
         ))}
       </datalist>
       <Button variant="outline" size="sm" disabled={filters.length >= 8} onClick={() => append({ key: "", value: "" })}>
-        <Plus className="size-3" /> Add condition
-      </Button>
+        <Plus className="size-3" /> {i18n.t("metadataFilters.add-condition", { defaultValue: "Add condition" })}</Button>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { CircleHelp, Info } from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";

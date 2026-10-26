@@ -1,6 +1,7 @@
 "use client";
 
 import { PanelRightClose } from "lucide-react";
+import i18n from "@/lib/i18n";
 
 import { Button } from "@/components/ui/button";
 
@@ -27,14 +28,14 @@ export function PaneHeader({ type, model, failed, title, idValue, facts, actions
       <div className="flex min-w-0 items-center gap-2">
         <SpanIcon type={type} model={model} error={failed} size="lg" />
         <h2 className="min-w-0 truncate text-base font-semibold text-foreground">{title}</h2>
-        {idValue && <IdChip value={idValue} label="Copy span ID" />}
+        {idValue && <IdChip value={idValue} label={i18n.t("paneHeader.copy-span-id", { defaultValue: "Copy span ID" })} />}
         <div className="ml-auto flex shrink-0 items-center gap-1">
           {actions}
           <Button
             variant="ghost"
             size="icon-xs"
             onClick={onClose}
-            aria-label="Close details"
+            aria-label={i18n.t("paneHeader.close-details", { defaultValue: "Close details" })}
             className="text-muted-foreground"
           >
             <PanelRightClose className="size-4" />

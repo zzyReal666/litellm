@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import i18n from "@/lib/i18n";
 
 import type { TraceSummary } from "../../types";
 import type { TimeWindow } from "@/components/shared/timeRange/timeRange";
@@ -31,12 +32,12 @@ export function RunSearch({ value, onChange, runs, range, busy = false }: RunSea
       values={itemValues(RUN_INDEX, runs)}
       value={value}
       onValueChange={onChange}
-      label="Search runs"
+      label={i18n.t("runSearch.search-runs", { defaultValue: "Search runs" })}
       className="h-10 min-w-0 basis-full sm:w-auto sm:basis-0"
     >
       <SearchBox.Input
         className="h-full overflow-hidden rounded-none border-0 px-3 whitespace-nowrap focus-within:bg-muted/40 focus-within:ring-0 dark:bg-transparent"
-        placeholder="Search input or trace ID"
+        placeholder={i18n.t("runSearch.search-input-or-trace-id", { defaultValue: "Search input or trace ID" })}
         busy={busy}
       />
       <SearchBox.Suggestions>

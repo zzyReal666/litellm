@@ -255,8 +255,7 @@ const TierSetToolbar: React.FC<{
     )}
     {editing && keywordRulesError && (
       <span className="block mt-1 text-xs text-destructive">
-        {keywordRulesError}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back
-      </span>
+        {keywordRulesError}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back</span>
     )}
   </>
 );

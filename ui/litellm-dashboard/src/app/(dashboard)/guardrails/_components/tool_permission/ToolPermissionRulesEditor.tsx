@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import type { TFunction } from "i18next";
 import { Info, Plus, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";

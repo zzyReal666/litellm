@@ -26,7 +26,7 @@ function AgentRowActions({ agent, onDeleteClick }: AgentRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open agent actions"
+        aria-label={i18n.t("agentsTableColumns.open-agent-actions", { defaultValue: "Open agent actions" })}
         data-testid={`agent-actions-${agent.agent_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -77,7 +77,7 @@ export const getAgentsTableColumns = ({
     id: "agent_id",
     accessorKey: "agent_id",
     meta: { title: "Agent ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Agent ID" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={i18n.t("agentsTableColumns.agent-id", { defaultValue: "Agent ID" })} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (

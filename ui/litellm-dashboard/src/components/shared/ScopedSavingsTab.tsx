@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import i18n from "@/lib/i18n";
 
 import { AreaChart, BarChart, CustomLegend } from "@/components/shared/charts";
 import AdvancedDatePicker from "@/components/shared/advanced_date_picker";
@@ -81,7 +82,7 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
   return (
     <div className="w-full space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-4">
-        <span className="text-sm text-muted-foreground">Spend is bucketed by UTC day</span>
+        <span className="text-sm text-muted-foreground">{i18n.t("scopedSavingsTab.spend-is-bucketed-by-utc-day", { defaultValue: "Spend is bucketed by UTC day" })}</span>
         <AdvancedDatePicker value={dateValue} onValueChange={onDateChange} />
       </div>
 
@@ -93,8 +94,7 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
 
       {unavailable && (
         <p role="alert" className="text-sm text-muted-foreground">
-          Savings are unavailable for this range. Try another date range or reopen this tab.
-        </p>
+          {i18n.t("scopedSavingsTab.savings-are-unavailable-for-this-range-try-a", { defaultValue: "Savings are unavailable for this range. Try another date range or reopen this tab." })}</p>
       )}
       {showResults && <SavingsTiles results={results} isLoading={false} />}
 

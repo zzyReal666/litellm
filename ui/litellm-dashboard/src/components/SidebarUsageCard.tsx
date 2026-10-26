@@ -1,4 +1,5 @@
 import { useLicenseInfo } from "@/app/(dashboard)/hooks/license/useLicenseInfo";
+import i18n from "@/lib/i18n";
 import { formatExpirationStatus } from "@/utils/licenseUtils";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -84,7 +85,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
       <Button
         variant="outline"
         onClick={onExpandRail}
-        title="Enterprise usage"
+        title={i18n.t("sidebarUsageCard.enterprise-usage", { defaultValue: "Enterprise usage" })}
         className="h-9 w-full rounded-lg border-sidebar-border bg-sidebar text-sidebar-primary shadow-none hover:bg-sidebar-accent hover:text-sidebar-primary/80"
       >
         <Award className="size-[18px]" strokeWidth={1.75} />
@@ -102,7 +103,7 @@ export default function SidebarUsageCard({ accessToken, collapsed, onExpandRail 
           <Award className="size-4" strokeWidth={1.75} />
         </span>
         <span className="min-w-0 flex-1 leading-tight">
-          <span className="block text-[13px] font-semibold text-foreground">Enterprise usage</span>
+          <span className="block text-[13px] font-semibold text-foreground">{i18n.t("sidebarUsageCard.enterprise-usage-2", { defaultValue: "Enterprise usage" })}</span>
           <span className="block truncate text-[11px] text-muted-foreground">{subtitle}</span>
         </span>
         <ChevronDown className="size-4 flex-none -rotate-90 text-muted-foreground transition-transform group-data-[panel-open]/usage:rotate-0" />

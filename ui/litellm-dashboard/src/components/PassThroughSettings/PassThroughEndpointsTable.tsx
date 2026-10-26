@@ -1,6 +1,7 @@
 "use client";
 
 import { Waypoints } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useMemo } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
@@ -21,8 +22,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Waypoints className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No pass-through endpoints configured</div>
-      <div className="text-sm text-muted-foreground">Add a pass-through endpoint to route custom paths.</div>
+      <div className="text-sm font-medium text-foreground">{i18n.t("passThroughEndpointsTable.no-pass-through-endpoints-configured", { defaultValue: "No pass-through endpoints configured" })}</div>
+      <div className="text-sm text-muted-foreground">{i18n.t("passThroughEndpointsTable.add-a-pass-through-endpoint-to-route-custom", { defaultValue: "Add a pass-through endpoint to route custom paths." })}</div>
     </div>
   );
 }

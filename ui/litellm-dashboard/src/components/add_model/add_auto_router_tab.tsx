@@ -595,7 +595,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
         {presetsPending && <div className="text-xs mt-1 text-muted-foreground">{i18n.t("addModel.addAutoRouterTab.loadingTemplates", { defaultValue: "Loading templates..." })}</div>}
         {presetsUnavailable && (
           <div className="text-xs mt-1 text-destructive">
-            Could not load templates, so only Start from scratch is shown.{" "}
+            {i18n.t("addAutoRouterTab.could-not-load-templates-so-only-start-from", { defaultValue: "Could not load templates, so only Start from scratch is shown." })}{" "}
             <button type="button" className="underline" onClick={() => void refetchPresets()}>
               {i18n.t("common.retry", { defaultValue: "Retry" })}
             </button>
@@ -721,7 +721,7 @@ const AddAutoRouterTab: React.FC<AddAutoRouterTabProps> = ({
                 <FieldGroup>
                   {modelsUnverifiable && (
                     <p className="text-sm text-destructive">
-                      Could not load available models.{" "}
+                      {i18n.t("addAutoRouterTab.could-not-load-available-models", { defaultValue: "Could not load available models." })}{" "}
                       <button type="button" className="underline" onClick={() => void refetchModels()}>
                         {i18n.t("common.retry", { defaultValue: "Retry" })}
                       </button>

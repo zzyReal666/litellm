@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Suspense, useState, useRef, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import Navbar from "@/components/navbar";
@@ -81,7 +82,7 @@ export function AgentControlPlaneView() {
       <div className="flex flex-1 items-center justify-center text-muted-foreground">
         <div className="text-center">
           <p className="text-lg font-medium mb-2">Plugin</p>
-          <p className="text-sm">Configure the plugin URL in settings</p>
+          <p className="text-sm">{i18n.t("(dashboard)Layout.configure-the-plugin-url-in-settings", { defaultValue: "Configure the plugin URL in settings" })}</p>
         </div>
       </div>
     );
@@ -183,7 +184,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
                 <SheetTrigger
                   handle={mobileNavigationHandle}
                   render={
-                    <Button variant="ghost" size="icon" className="size-11 md:hidden" aria-label="Open navigation" />
+                    <Button variant="ghost" size="icon" className="size-11 md:hidden" aria-label={i18n.t("(dashboard)Layout.open-navigation", { defaultValue: "Open navigation" })} />
                   }
                 >
                   <Menu />

@@ -343,7 +343,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
           {selectedMode === "flow_builder" && (
             <Alert variant="info" className="mt-4 border border-info/20 bg-info/10">
-              <AlertTitle>You&apos;ll be taken to the Flow Builder to design your policy logic visually.</AlertTitle>
+              <AlertTitle>{i18n.t("addPolicyForm.you-ll-be-taken-to-the-flow-builder-to-desig", { defaultValue: "You'll be taken to the Flow Builder to design your policy logic visually." })}</AlertTitle>
             </Alert>
           )}
 
@@ -479,9 +479,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
                 <Info />
                 <AlertTitle>{i18n.t("policies.addPolicyForm.modelScopeAlertTitle", { defaultValue: "Model Scope" })}</AlertTitle>
                 <AlertDescription>
-                  By default, this policy will run on all models. You can optionally restrict it to specific models
-                  below.
-                </AlertDescription>
+                  {i18n.t("addPolicyForm.by-default-this-policy-will-run-on-all-model", { defaultValue: "By default, this policy will run on all models. You can optionally restrict it to specific models below." })}</AlertDescription>
               </Alert>
 
               <div role="group" className="flex w-full flex-col gap-3">

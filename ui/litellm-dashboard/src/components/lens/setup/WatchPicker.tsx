@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import i18n from "@/lib/i18n";
 import { watches as defaultWatches } from "../model/watches";
 import { cn } from "@/lib/cva.config";
 
@@ -187,8 +188,8 @@ export function WatchPicker({
         >
           +
         </span>
-        <span className="font-medium">Add your own</span>
-        <span className="text-muted-foreground">describe anything else in plain English</span>
+        <span className="font-medium">{i18n.t("watchPicker.add-your-own", { defaultValue: "Add your own" })}</span>
+        <span className="text-muted-foreground">{i18n.t("watchPicker.describe-anything-else-in-plain-english", { defaultValue: "describe anything else in plain English" })}</span>
       </button>
     </fieldset>
   );

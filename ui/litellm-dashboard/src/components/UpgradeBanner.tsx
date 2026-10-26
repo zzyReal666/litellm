@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowUpCircle, X } from "lucide-react";
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Button } from "@/components/ui/button";
