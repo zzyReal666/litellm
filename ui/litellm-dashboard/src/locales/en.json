@@ -5817,8 +5817,8 @@
       "maxTokensLabel": "Max tokens",
       "mcpServersLabel": "MCP servers",
       "mcpServersPlaceholder": "Select MCP servers to attach (same format as chat completions API)",
-      "mcpServersSaved_one": "{{count}} MCP server saved. Use the same <toolsCode>tools</toolsCode> array in chat completions when calling this agent.",
-      "mcpServersSaved_other": "{{count}} MCP servers saved. Use the same <toolsCode>tools</toolsCode> array in chat completions when calling this agent.",
+      "mcpServersSaved_one": "{{count}} MCP server saved. Use the same <code>tools</code> array in chat completions when calling this agent.",
+      "mcpServersSaved_other": "{{count}} MCP servers saved. Use the same <code>tools</code> array in chat completions when calling this agent.",
       "updateAgent": "Update Agent",
       "testInChat": "Test in Chat",
       "saveAgentFirst": "Save an agent first to test in Chat.",
@@ -5842,7 +5842,11 @@
       "deleteAgentTitle": "Delete agent",
       "deleteAgentConfirm": "Are you sure you want to delete \"{{name}}\"? This cannot be undone.",
       "agentDeleted": "Agent deleted",
-      "failedToDeleteAgent": "Failed to delete agent"
+      "failedToDeleteAgent": "Failed to delete agent",
+      "createKeyDescription": "Create a virtual key that can only call this agent. The key will be scoped to you (user_id) and restricted to the model <model>{{model}}</model>.",
+      "keyCreatedNotice": "Key created. It is shown in the cURL example above — copy the snippet to use it.",
+      "experimentalNotice": "Agent Builder is experimental and may change or be removed without notice.",
+      "missingModelIdNotice": "This agent cannot be updated or deleted here (missing model id). Manage it from Models & Endpoints."
     },
     "audioRenderer": {
       "browserNotSupported": "Your browser does not support the audio element."
@@ -6909,7 +6913,15 @@
       "noMatchingKeys": "No matching keys",
       "noMatchingPolicies": "No matching policies",
       "noMatchingTeams": "No matching teams",
-      "teamsNotExist": "These teams don't exist: {{teams}}. Choose an existing team, or use a wildcard like \"team-*\" to match by prefix."
+      "teamsNotExist": "These teams don't exist: {{teams}}. Choose an existing team, or use a wildcard like \"team-*\" to match by prefix.",
+      "tagsDescription": "Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically in the request body. Use <code>*</code> as a suffix wildcard (e.g., <code>prod-*</code> matches <code>prod-us</code>, <code>prod-eu</code>).",
+      "priorityLabel": "Priority",
+      "priorityTooltip": "Lower numbers run first. Attachments with a priority run before attachments without one.",
+      "priorityDescription": "Optional. Leave blank to keep the default order: global, then teams, keys, tags, models.",
+      "priorityPlaceholder": "e.g. 10",
+      "defaultLabel": "Default (fallback)",
+      "defaultTooltip": "A default attachment is applied only when no non-default attachment matches the request.",
+      "defaultDescription": "Use this for the guardrail everyone gets unless they opt in to another attachment."
     },
     "addPolicyForm": {
       "simpleModeTitle": "Simple Mode",
@@ -7059,7 +7071,10 @@
       "createAndUseTemplate_one": "Create {{count}} Guardrail & Use Template",
       "createAndUseTemplate_other": "Create {{count}} Guardrails & Use Template",
       "useTemplate": "Use Template",
-      "unknown": "unknown"
+      "unknown": "unknown",
+      "existingCount": "{{count}} already exist",
+      "guardrailsWillBeCreated_one": "guardrail will be created",
+      "guardrailsWillBeCreated_other": "guardrails will be created"
     },
     "impactPopover": {
       "blastRadius": "Blast Radius",
@@ -13805,7 +13820,9 @@
   },
   "userEnvVarsModal": {
     "clear-saved-credentials": "Clear saved credentials",
-    "clear-credentials": "Clear credentials"
+    "clear-credentials": "Clear credentials",
+    "privateValuesNotice": "These values are private to you. Your admin configured this MCP server to require these per-user credentials. Saved values are never shown back; leave an already-set field blank to keep it, or enter a value to set or change it.",
+    "clearConfirmDescription": "This deletes every per-user value you saved for {{name}}. Your next MCP request to this server fails until you set them again."
   },
   "organizationsPanel": {
     "this-is-a-litellm-enterprise-feature-and-req": "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key",

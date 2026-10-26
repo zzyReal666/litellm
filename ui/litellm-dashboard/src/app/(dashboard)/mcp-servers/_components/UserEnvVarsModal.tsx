@@ -201,9 +201,10 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
           ) : (
             <>
               <span className="block text-sm text-muted-foreground">
-                These values are private to you. Your admin configured this MCP server to require these per-user
-                credentials. Saved values are never shown back; leave an already-set field blank to keep it, or enter a
-                value to set or change it.
+                {t("userEnvVarsModal.privateValuesNotice", {
+                  defaultValue:
+                    "These values are private to you. Your admin configured this MCP server to require these per-user credentials. Saved values are never shown back; leave an already-set field blank to keep it, or enter a value to set or change it.",
+                })}
               </span>
               <UserEnvVarsForm
                 required={required}
@@ -220,7 +221,11 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
             <AlertDialogHeader>
               <AlertDialogTitle>{i18n.t("userEnvVarsModal.clear-saved-credentials", { defaultValue: "Clear saved credentials" })}</AlertDialogTitle>
               <AlertDialogDescription>
-                This deletes every per-user value you saved for{" "}{displayName}. Your next MCP request to this server fails until you set them again.{" "}</AlertDialogDescription>
+                {i18n.t("userEnvVarsModal.clearConfirmDescription", {
+                  defaultValue:
+                    "This deletes every per-user value you saved for {{name}}. Your next MCP request to this server fails until you set them again.",
+                  name: displayName,
+                })}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <Button variant="outline" onClick={() => setConfirmingClear(false)}>

@@ -1,4 +1,5 @@
 import i18n from "@/lib/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { CircleHelp } from "lucide-react";
 import { z } from "zod";
@@ -407,9 +408,11 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                     )}
                     description={
                       <span className="text-xs">
-                        Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically in the request
-                        body. Use <code>*</code> as a suffix wildcard (e.g., <code>prod-*</code> matches{" "}
-                        <code>prod-us</code>, <code>prod-eu</code>).
+                        <Trans
+                          i18nKey="policies.addAttachmentForm.tagsDescription"
+                          defaults="Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically in the request body. Use <code>*</code> as a suffix wildcard (e.g., <code>prod-*</code> matches <code>prod-us</code>, <code>prod-eu</code>)."
+                          components={{ code: <code /> }}
+                        />
                       </span>
                     }
                   >
@@ -441,10 +444,14 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                 control={form.control}
                 name="priority"
                 label={labelWithHint(
-                  "Priority",
-                  "Lower numbers run first. Attachments with a priority run before attachments without one.",
+                  i18n.t("policies.addAttachmentForm.priorityLabel", { defaultValue: "Priority" }),
+                  i18n.t("policies.addAttachmentForm.priorityTooltip", {
+                    defaultValue: "Lower numbers run first. Attachments with a priority run before attachments without one.",
+                  }),
                 )}
-                description="Optional. Leave blank to keep the default order: global, then teams, keys, tags, models."
+                description={i18n.t("policies.addAttachmentForm.priorityDescription", {
+                  defaultValue: "Optional. Leave blank to keep the default order: global, then teams, keys, tags, models.",
+                })}
               >
                 {({ ref, value, onChange, ...field }) => (
                   <Input
@@ -453,7 +460,7 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                     type="number"
                     step={1}
                     value={value ?? ""}
-                    placeholder="e.g. 10"
+                    placeholder={i18n.t("policies.addAttachmentForm.priorityPlaceholder", { defaultValue: "e.g. 10" })}
                     onChange={(event) => onChange(event.target.value === "" ? null : event.target.valueAsNumber)}
                   />
                 )}
@@ -463,10 +470,14 @@ const AddAttachmentForm: React.FC<AddAttachmentFormProps> = ({
                 control={form.control}
                 name="default"
                 label={labelWithHint(
-                  "Default (fallback)",
-                  "A default attachment is applied only when no non-default attachment matches the request.",
+                  i18n.t("policies.addAttachmentForm.defaultLabel", { defaultValue: "Default (fallback)" }),
+                  i18n.t("policies.addAttachmentForm.defaultTooltip", {
+                    defaultValue: "A default attachment is applied only when no non-default attachment matches the request.",
+                  }),
                 )}
-                description="Use this for the guardrail everyone gets unless they opt in to another attachment."
+                description={i18n.t("policies.addAttachmentForm.defaultDescription", {
+                  defaultValue: "Use this for the guardrail everyone gets unless they opt in to another attachment.",
+                })}
               >
                 {({ value, onChange, ref, ...field }) => (
                   <Switch {...field} inputRef={ref} checked={value === true} onCheckedChange={onChange} />

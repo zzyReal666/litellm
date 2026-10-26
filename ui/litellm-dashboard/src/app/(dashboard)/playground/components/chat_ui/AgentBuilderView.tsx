@@ -129,8 +129,12 @@ function ConnectTabContent({
           {t("playground.agentBuilderView.createKeyTitle", { defaultValue: "Create a key for this agent" })}
         </h3>
         <p className="text-sm text-muted-foreground mb-3">
-          Create a virtual key that can only call this agent. The key will be scoped to you (user_id) and restricted to
-          the model <span className="font-mono text-foreground">{agentName}</span>.
+          <Trans
+            i18nKey="playground.agentBuilderView.createKeyDescription"
+            defaults="Create a virtual key that can only call this agent. The key will be scoped to you (user_id) and restricted to the model <model>{{model}}</model>."
+            values={{ model: agentName }}
+            components={{ model: <span className="font-mono text-foreground" /> }}
+          />
         </p>
         <Button onClick={onCreateKey} disabled={creatingKey || disabledPersonalKeyCreation}>
           {t("playground.agentBuilderView.createKeyButton", { defaultValue: "Create key for this agent" })}
@@ -144,7 +148,9 @@ function ConnectTabContent({
         )}
         {createdKeyValue && (
           <p className="text-xs text-success mt-2">
-            Key created. It is shown in the cURL example above — copy the snippet to use it.
+            {t("playground.agentBuilderView.keyCreatedNotice", {
+              defaultValue: "Key created. It is shown in the cURL example above — copy the snippet to use it.",
+            })}
           </p>
         )}
       </div>
@@ -505,7 +511,9 @@ export default function AgentBuilderView({
         <div className="flex items-center gap-2 border-t border-warning/20 bg-warning/10 px-4 py-2 text-xs text-warning">
           <FlaskConical className="size-4 shrink-0 text-warning" />
           <span>
-            Agent Builder is experimental and may change or be removed without notice.
+            {t("playground.agentBuilderView.experimentalNotice", {
+              defaultValue: "Agent Builder is experimental and may change or be removed without notice.",
+            })}
           </span>
         </div>
       </div>
@@ -607,8 +615,10 @@ export default function AgentBuilderView({
                       <div className="mx-auto max-w-xl space-y-4">
                         {!selectedAgentModelId && selectedAgent && (
                           <div className="rounded-sm border border-warning/20 bg-warning/10 px-3 py-2 text-xs text-warning">
-                            This agent cannot be updated or deleted here (missing model id). Manage it from Models &amp;
-                            Endpoints.
+                            {t("playground.agentBuilderView.missingModelIdNotice", {
+                              defaultValue:
+                                "This agent cannot be updated or deleted here (missing model id). Manage it from Models & Endpoints.",
+                            })}
                           </div>
                         )}
                         <div>
@@ -711,9 +721,12 @@ export default function AgentBuilderView({
                           />
                           {selectedAgent && draftTools.length > 0 && (
                             <p className="mt-1 text-xs text-muted-foreground">
-                              {draftTools.length} MCP server{draftTools.length !== 1 ? "s" : ""} saved. Use the same{" "}
-                              <code className="rounded-sm bg-muted px-1">tools</code> array in chat completions when
-                              calling this agent.
+                              <Trans
+                                i18nKey="playground.agentBuilderView.mcpServersSaved"
+                                count={draftTools.length}
+                                defaults="{{count}} MCP servers saved. Use the same <code>tools</code> array in chat completions when calling this agent."
+                                components={{ code: <code className="rounded-sm bg-muted px-1" /> }}
+                              />
                             </p>
                           )}
                         </div>

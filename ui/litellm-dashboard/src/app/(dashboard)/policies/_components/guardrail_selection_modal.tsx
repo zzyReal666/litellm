@@ -112,13 +112,28 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
             <Info className="size-4 text-muted-foreground" />
             <div className="flex-1">
               <div className="text-sm">
-                <span className="font-medium">{guardrailsInfo.length} total guardrails</span>
+                <span className="font-medium">
+                  {i18n.t("policies.guardrailSelectionModal.totalGuardrails", {
+                    defaultValue: "{{count}} total guardrails",
+                    count: guardrailsInfo.length,
+                  })}
+                </span>
                 <span className="mx-2 text-muted-foreground">•</span>
-                <span className="font-medium text-success">{newGuardrailsCount} new</span>
+                <span className="font-medium text-success">
+                  {i18n.t("policies.guardrailSelectionModal.newCount", {
+                    defaultValue: "{{count}} new",
+                    count: newGuardrailsCount,
+                  })}
+                </span>
                 {existingCount > 0 && (
                   <>
                     <span className="mx-2 text-muted-foreground">•</span>
-                    <span className="text-muted-foreground">{existingCount} already exist</span>
+                    <span className="text-muted-foreground">
+                      {i18n.t("policies.guardrailSelectionModal.existingCount", {
+                        defaultValue: "{{count}} already exist",
+                        count: existingCount,
+                      })}
+                    </span>
                   </>
                 )}
               </div>
@@ -200,7 +215,10 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
                 <div className="mb-2 flex items-center gap-2">
                   <span className="text-lg">✨</span>
                   <span className="text-sm font-medium">
-                    AI-Discovered Competitors ({template.discoveredCompetitors.length})
+                    {i18n.t("policies.guardrailSelectionModal.aiDiscoveredCompetitors", {
+                      defaultValue: "AI-Discovered Competitors ({{count}})",
+                      count: template.discoveredCompetitors.length,
+                    })}
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -223,15 +241,21 @@ const GuardrailSelectionModal: React.FC<GuardrailSelectionModalProps> = ({
           <div className="text-sm text-muted-foreground">
             {selectedCount > 0 ? (
               <p>
-                <span className="font-medium text-foreground">{selectedCount}</span> guardrail
-                {selectedCount > 1 ? "s" : ""} will be created
+                <span className="font-medium text-foreground">{selectedCount}</span>{" "}
+                {i18n.t("policies.guardrailSelectionModal.guardrailsWillBeCreated", {
+                  count: selectedCount,
+                  defaultValue_one: "guardrail will be created",
+                  defaultValue_other: "guardrails will be created",
+                })}
               </p>
             ) : existingCount > 0 ? (
               <p className="text-success">{i18n.t("policies.guardrailSelectionModal.allExistProceed", { defaultValue: "All guardrails already exist. You can proceed to use this template." })}</p>
             ) : (
               <p className="text-warning">
-                Select at least one guardrail to create, or click &quot;Use Template&quot; to proceed without creating
-                new guardrails.
+                {i18n.t("policies.guardrailSelectionModal.selectAtLeastOne", {
+                  defaultValue:
+                    'Select at least one guardrail to create, or click "Use Template" to proceed without creating new guardrails.',
+                })}
               </p>
             )}
           </div>

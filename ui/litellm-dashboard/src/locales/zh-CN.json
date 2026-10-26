@@ -5817,8 +5817,8 @@
       "maxTokensLabel": "最大 Token 数",
       "mcpServersLabel": "MCP 服务器",
       "mcpServersPlaceholder": "选择要附加的 MCP 服务器（格式与 chat completions API 相同）",
-      "mcpServersSaved_one": "已保存 {{count}} 个 MCP 服务器。调用此 Agent 时，请在 chat completions 中使用相同的 <toolsCode>tools</toolsCode> 数组。",
-      "mcpServersSaved_other": "已保存 {{count}} 个 MCP 服务器。调用此 Agent 时，请在 chat completions 中使用相同的 <toolsCode>tools</toolsCode> 数组。",
+      "mcpServersSaved_one": "已保存 {{count}} 个 MCP 服务器。调用该 agent 时，请在聊天补全中使用相同的 <code>tools</code> 数组。",
+      "mcpServersSaved_other": "已保存 {{count}} 个 MCP 服务器。调用该 agent 时，请在聊天补全中使用相同的 <code>tools</code> 数组。",
       "updateAgent": "更新 Agent",
       "testInChat": "在聊天中测试",
       "saveAgentFirst": "请先保存 Agent 以在聊天中测试。",
@@ -5842,7 +5842,11 @@
       "deleteAgentTitle": "删除 Agent",
       "deleteAgentConfirm": "确定要删除 \"{{name}}\"？此操作无法撤销。",
       "agentDeleted": "Agent 已删除",
-      "failedToDeleteAgent": "删除 Agent 失败"
+      "failedToDeleteAgent": "删除 Agent 失败",
+      "createKeyDescription": "创建只能调用该 agent 的虚拟密钥。密钥将限定为你（user_id）使用，并限制为模型 <model>{{model}}</model>。",
+      "keyCreatedNotice": "密钥已创建。它显示在上方的 cURL 示例中，复制该片段即可使用。",
+      "experimentalNotice": "Agent Builder 为实验性功能，可能随时变更或移除，恕不另行通知。",
+      "missingModelIdNotice": "该 agent 无法在此更新或删除（缺少模型 ID）。请前往「模型与端点」管理。"
     },
     "audioRenderer": {
       "browserNotSupported": "您的浏览器不支持音频元素。"
@@ -6909,7 +6913,15 @@
       "noMatchingKeys": "没有匹配的密钥",
       "noMatchingPolicies": "没有匹配的策略",
       "noMatchingTeams": "没有匹配的团队",
-      "teamsNotExist": "以下团队不存在：{{teams}}。请选择已有团队，或使用类似 \"team-*\" 的通配符按前缀匹配。"
+      "teamsNotExist": "以下团队不存在：{{teams}}。请选择已有团队，或使用类似 \"team-*\" 的通配符按前缀匹配。",
+      "tagsDescription": "匹配密钥/团队的 <code>metadata.tags</code> 标签，或请求体中动态传入的标签。使用 <code>*</code> 作为后缀通配符（例如 <code>prod-*</code> 可匹配 <code>prod-us</code>、<code>prod-eu</code>）。",
+      "priorityLabel": "优先级",
+      "priorityTooltip": "数字越小越先执行。设置了优先级的附件会先于未设置优先级的附件执行。",
+      "priorityDescription": "可选。留空则保持默认顺序：全局、团队、密钥、标签、模型。",
+      "priorityPlaceholder": "例如 10",
+      "defaultLabel": "默认（兜底）",
+      "defaultTooltip": "仅当没有非默认附件匹配请求时，才会应用默认附件。",
+      "defaultDescription": "用于设置所有人都默认生效的护栏，除非他们选择了其他附件。"
     },
     "addPolicyForm": {
       "simpleModeTitle": "简单模式",
@@ -7039,7 +7051,7 @@
       "templateProgress": "模板 {{current}} / {{total}}",
       "noDescriptionAvailable": "暂无描述",
       "totalGuardrails": "共 {{count}} 个护栏",
-      "newCount": "{{count}} 个新护栏",
+      "newCount": "{{count}} 个新增",
       "alreadyExistCount": "{{count}} 个已存在",
       "selectAllNew": "全选新护栏",
       "deselectAll": "取消全选",
@@ -7050,16 +7062,19 @@
       "categoryCount_other": "{{count}} 个类别",
       "noGuardrailsDefined": "此模板未定义护栏。",
       "usesExistingGuardrails": "此模板将使用系统中已有的护栏。",
-      "aiDiscoveredCompetitors": "AI 发现的竞争对手（{{count}} 个）",
+      "aiDiscoveredCompetitors": "AI 发现的竞争对手（{{count}}）",
       "competitorBlockerNote": "这些竞争对手名称将由竞争对手名称拦截护栏自动屏蔽。",
       "willBeCreated_one": "将创建 {{count}} 个护栏",
       "willBeCreated_other": "将创建 {{count}} 个护栏",
       "allExistProceed": "所有护栏均已存在，您可以直接使用此模板。",
-      "selectAtLeastOne": "请至少选择一个护栏来创建，或点击「使用模板」直接使用而不创建新护栏。",
+      "selectAtLeastOne": "请至少选择一个要创建的护栏，或点击「使用模板」在不创建新护栏的情况下继续。",
       "createAndUseTemplate_one": "创建 {{count}} 个护栏并使用模板",
       "createAndUseTemplate_other": "创建 {{count}} 个护栏并使用模板",
       "useTemplate": "使用模板",
-      "unknown": "未知"
+      "unknown": "未知",
+      "existingCount": "{{count}} 个已存在",
+      "guardrailsWillBeCreated_one": "个护栏将被创建",
+      "guardrailsWillBeCreated_other": "个护栏将被创建"
     },
     "impactPopover": {
       "blastRadius": "影响范围",
@@ -13805,7 +13820,9 @@
   },
   "userEnvVarsModal": {
     "clear-saved-credentials": "清除已保存的凭据",
-    "clear-credentials": "清除凭据"
+    "clear-credentials": "清除凭据",
+    "privateValuesNotice": "这些值仅对你可见。管理员已将该 MCP 服务器配置为需要这些按用户凭据。已保存的值不会回显；保留空白即保持原值，输入新值则会设置或修改。",
+    "clearConfirmDescription": "这会删除你为 {{name}} 保存的所有按用户值。在你重新设置之前，下一次对该服务器的 MCP 请求将会失败。"
   },
   "organizationsPanel": {
     "this-is-a-litellm-enterprise-feature-and-req": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。获取试用密钥",
