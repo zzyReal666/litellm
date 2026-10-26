@@ -3212,7 +3212,7 @@
     "notSpecified": "Not specified",
     "wildcardTitle": "Wildcard Routing",
     "wildcardDesc": "This model uses wildcard routing. You can pass any value where you see the <code>*</code> symbol.",
-    "wildcardExample": "For example, with <code>{{model}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern.",
+    "wildcardExample": "For example, with <code>{{group}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern.",
     "tokenCostInfo": "Token & Cost Information",
     "labelMaxInputTokens": "Max Input Tokens:",
     "labelMaxOutputTokens": "Max Output Tokens:",
@@ -3264,7 +3264,8 @@
     "unknownStatus": "Unknown",
     "builtWithPrefix": "Built with litellm: v",
     "serviceStatusLabel": "Service status:",
-    "searchMcpServersPlaceholder": "Search MCP server names or descriptions..."
+    "searchMcpServersPlaceholder": "Search MCP server names or descriptions...",
+    "wildcardDescription": "This model uses wildcard routing. You can pass any value where you see the <code>*</code> symbol."
   },
   "objectPermissionsView": {
     "title": "Object Permissions",
@@ -7764,7 +7765,13 @@
       "timeoutHint": "How long the classifier call has before it fails and the fallback below takes over.",
       "timeoutLabel": "Timeout (ms)",
       "contextWindowSizeHint": "Number of prior user turns (tool output and harness reminders excluded) sent to the classifier as context, so a referring follow-up like \"now do the same for the streaming path\" is classified against what it refers to. Set to 0 to send only the current message.",
-      "includeAssistantTurnsHint": "Let the classifier read the assistant's replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns."
+      "includeAssistantTurnsHint": "Let the classifier read the assistant's replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns.",
+      "heuristicDescription": "(default), rule-based scoring with no API calls and <1ms latency",
+      "heuristicV2Description": "uses bundled calibrated four-tier probabilities with no API call",
+      "llmDescription": "calls a model to decide the tier (e.g. a small/fast model)",
+      "ossDescription": "uses Jev, Laya, Bespoke, or a Databricks endpoint to decide the tier",
+      "heuristicFirstDescription": "scores locally, and only pays for the classifier when the score does not confidently land a cheap tier",
+      "hybridDescription": "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary"
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "Circuit breaker cooldown (seconds)",
@@ -11900,7 +11907,9 @@
       "searchPlaceholderEllipsis": "Search model names…",
       "currentTeamAria": "Current team",
       "teamLabel": "Team",
-      "noModelAccessGroups": "No model access groups found"
+      "noModelAccessGroups": "No model access groups found",
+      "accessWithoutTeam": "To access these models, create a Virtual Key without selecting a team on the <keysLink>Virtual Keys page</keysLink>.",
+      "accessWithTeam": "To access these models, create a Virtual Key and select Team as \"{{team}}\" on the <keysLink>Virtual Keys page</keysLink>."
     },
     "modelRetrySettings": {
       "retryScopeLabel": "Retry Policy Scope:",
@@ -12015,7 +12024,8 @@
       "errorCodeFailed": "Error code {{code}}: {{count}} failed",
       "failedRequestsByErrorCode": "Failed requests by error code: {{callType}}",
       "hoverHint": "Hover a bar to see the error classes behind that code."
-    }
+    },
+    "analyticsDescription": "Analytics for LiteLLM's prompt caching (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side prompt caching (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page."
   },
   "costOptimization": {
     "autoRouterBenchmarks": {

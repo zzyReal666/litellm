@@ -29,7 +29,9 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
             <span>
               <strong className="font-semibold">{i18n.t("addModel.classificationMethod.heuristicLabel", { defaultValue: "Heuristic" })}</strong>{" "}
               <span className="text-muted-foreground">
-                (default), rule-based scoring with no API calls and &lt;1ms latency
+                {i18n.t("addModel.classificationMethod.heuristicDescription", {
+                  defaultValue: "(default), rule-based scoring with no API calls and <1ms latency",
+                })}
               </span>
             </span>
           </Label>
@@ -40,7 +42,9 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
             <span>
               <strong className="font-semibold">{i18n.t("viewLogs.routingDecisionCard.causeHeuristicV2", { defaultValue: "Heuristic v2" })}</strong>{" "}
               <span className="text-muted-foreground">
-                uses bundled calibrated four-tier probabilities with no API call
+                {i18n.t("addModel.classificationMethod.heuristicV2Description", {
+                  defaultValue: "uses bundled calibrated four-tier probabilities with no API call",
+                })}
               </span>
             </span>
           </Label>
@@ -49,7 +53,11 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
           <RadioGroupItem value="llm" className="mt-0.5" />
           <span>
             <strong className="font-semibold">{i18n.t("addModel.classificationMethod.llmClassifierLabel", { defaultValue: "LLM Classifier" })}</strong>{" "}
-            <span className="text-muted-foreground">calls a model to decide the tier (e.g. a small/fast model)</span>
+            <span className="text-muted-foreground">
+              {i18n.t("addModel.classificationMethod.llmDescription", {
+                defaultValue: "calls a model to decide the tier (e.g. a small/fast model)",
+              })}
+            </span>
           </span>
         </Label>
         <Label className="items-start font-normal leading-normal">
@@ -57,7 +65,9 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
           <span>
             <strong className="font-semibold">{i18n.t("modelsEndpoints.ClassifierTypeRadios.ossClassifier", { defaultValue: "OSS Classifier" })}</strong>{" "}
             <span className="text-muted-foreground">
-              uses Jev, Laya, Bespoke, or a Databricks endpoint to decide the tier
+              {i18n.t("addModel.classificationMethod.ossDescription", {
+                defaultValue: "uses Jev, Laya, Bespoke, or a Databricks endpoint to decide the tier",
+              })}
             </span>
           </span>
         </Label>
@@ -67,7 +77,10 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
             <span>
               <strong className="font-semibold">{i18n.t("addModel.classificationMethod.heuristicFirstLabel", { defaultValue: "Heuristic first" })}</strong>{" "}
               <span className="text-muted-foreground">
-                scores locally, and only pays for the classifier when the score does not confidently land a cheap tier
+                {i18n.t("addModel.classificationMethod.heuristicFirstDescription", {
+                  defaultValue:
+                    "scores locally, and only pays for the classifier when the score does not confidently land a cheap tier",
+                })}
               </span>
             </span>
           </Label>
@@ -78,8 +91,10 @@ const ClassifierTypeRadios: React.FC<ClassifierTypeRadiosProps> = ({ value, clas
             <span>
               <strong className="font-semibold">{i18n.t("addModel.classificationMethod.hybridLabel", { defaultValue: "Hybrid" })}</strong>{" "}
               <span className="text-muted-foreground">
-                keeps the local score at any tier, and only pays for the classifier when that score lands near a tier
-                boundary
+                {i18n.t("addModel.classificationMethod.hybridDescription", {
+                  defaultValue:
+                    "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary",
+                })}
               </span>
             </span>
           </Label>

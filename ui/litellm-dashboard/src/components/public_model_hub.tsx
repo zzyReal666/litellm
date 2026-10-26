@@ -3,7 +3,7 @@ import { ExternalLinkIcon, SearchIcon } from "@heroicons/react/outline";
 import { SortingState } from "@tanstack/react-table";
 import { Copy, Inbox, Info } from "lucide-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {
@@ -829,19 +829,22 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                               {t("publicModelHub.wildcardTitle", { defaultValue: "Wildcard Routing" })}
                             </p>
                             <p className="text-sm text-info mb-2">
-                              This model uses wildcard routing. You can pass any value where you see the{" "}
-                              <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs">*</code> symbol.
+                              <Trans
+                                i18nKey="publicModelHub.wildcardDescription"
+                                defaults="This model uses wildcard routing. You can pass any value where you see the <code>*</code> symbol."
+                                components={{ code: <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs" /> }}
+                              />
                             </p>
                             <p className="text-sm text-info">
-                              For example, with{" "}
-                              <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs">
-                                {selectedModel.model_group}
-                              </code>
-                              , you can use any string (
-                              <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs">
-                                {selectedModel.model_group.replaceAll("*", "my-custom-value")}
-                              </code>
-                              ) that matches this pattern.
+                              <Trans
+                                i18nKey="publicModelHub.wildcardExample"
+                                defaults="For example, with <code>{{group}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern."
+                                values={{
+                                  group: selectedModel.model_group,
+                                  example: selectedModel.model_group.replaceAll("*", "my-custom-value"),
+                                }}
+                                components={{ code: <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs" /> }}
+                              />
                             </p>
                           </div>
                         </div>

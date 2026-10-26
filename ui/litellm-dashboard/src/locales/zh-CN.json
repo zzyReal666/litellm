@@ -3212,7 +3212,7 @@
     "notSpecified": "未指定",
     "wildcardTitle": "通配符路由",
     "wildcardDesc": "该模型使用通配符路由，您可以在 <code>*</code> 符号处传入任意值。",
-    "wildcardExample": "例如，对于 <code>{{model}}</code>，您可以使用任意与此模式匹配的字符串（<code>{{example}}</code>）。",
+    "wildcardExample": "例如，使用 <code>{{group}}</code> 时，可以使用任何匹配该模式的字符串（<code>{{example}}</code>）。",
     "tokenCostInfo": "Token 与成本信息",
     "labelMaxInputTokens": "最大输入 Token：",
     "labelMaxOutputTokens": "最大输出 Token：",
@@ -3264,7 +3264,8 @@
     "unknownStatus": "未知",
     "builtWithPrefix": "基于 LiteLLM 构建：v",
     "serviceStatusLabel": "服务状态：",
-    "searchMcpServersPlaceholder": "搜索 MCP 服务器名称或描述…"
+    "searchMcpServersPlaceholder": "搜索 MCP 服务器名称或描述…",
+    "wildcardDescription": "该模型使用通配路由。在出现 <code>*</code> 符号的位置可以传入任意值。"
   },
   "objectPermissionsView": {
     "title": "对象权限",
@@ -7764,7 +7765,13 @@
       "timeoutHint": "分类器调用在失败并由下方回退方案接管之前可用的时长。",
       "timeoutLabel": "超时（毫秒）",
       "contextWindowSizeHint": "发送给分类器作为上下文的先前用户轮次数量（不含工具输出和 harness 提醒），因此像「现在对流式路径也这样做」这类指代性追问会结合其所指的内容来分类。设为 0 则只发送当前消息。",
-      "includeAssistantTurnsHint": "让分类器读取助手的回复，这样由模型而非用户表达的难度也能保持可见：助手称之为复杂的计划，仅用「是」批准，也会按被批准的工作来分类。此时「上下文窗口大小」统计的是两种角色合计的最近 N 轮，而不是最近的 N 个用户轮次。"
+      "includeAssistantTurnsHint": "让分类器读取助手的回复，这样由模型而非用户表达的难度也能保持可见：助手称之为复杂的计划，仅用「是」批准，也会按被批准的工作来分类。此时「上下文窗口大小」统计的是两种角色合计的最近 N 轮，而不是最近的 N 个用户轮次。",
+      "heuristicDescription": "（默认）基于规则打分，不调用 API，延迟 <1ms",
+      "heuristicV2Description": "使用内置校准的四档概率，不调用 API",
+      "llmDescription": "调用模型来决定层级（例如小/快模型）",
+      "ossDescription": "使用 Jev、Laya、Bespoke 或 Databricks 端点来决定层级",
+      "heuristicFirstDescription": "本地打分，仅当分数无法明确落入低价层级时才调用分类器",
+      "hybridDescription": "任何层级都保留本地分数，仅当分数接近层级边界时才调用分类器"
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "熔断冷却时间（秒）",
@@ -11900,7 +11907,9 @@
       "searchPlaceholderEllipsis": "搜索模型名称…",
       "currentTeamAria": "当前团队",
       "teamLabel": "团队",
-      "noModelAccessGroups": "未找到模型访问组"
+      "noModelAccessGroups": "未找到模型访问组",
+      "accessWithoutTeam": "要访问这些模型，请在不选择团队的情况下创建虚拟密钥，入口在 <keysLink>虚拟密钥页面</keysLink>。",
+      "accessWithTeam": "要访问这些模型，请创建虚拟密钥并将团队选择为 “{{team}}”，入口在 <keysLink>虚拟密钥页面</keysLink>。"
     },
     "modelRetrySettings": {
       "retryScopeLabel": "重试策略范围：",
@@ -12015,7 +12024,8 @@
       "errorCodeFailed": "错误码 {{code}}：{{count}} 次失败",
       "failedRequestsByErrorCode": "按错误码统计的失败请求：{{callType}}",
       "hoverHint": "将鼠标悬停在柱状图上，可查看该错误码对应的错误类别。"
-    }
+    },
+    "analyticsDescription": "LiteLLM 的提示缓存分析（例如 Redis / 内存缓存）：由缓存直接返回而未调用 LLM 提供商的请求。提供商侧的提示缓存（来自 Anthropic、OpenAI 等的缓存输入 Token）不在此显示；请查看 Usage 页面的「Prompt Caching Metrics」或 Logs 页面中的单条请求。"
   },
   "costOptimization": {
     "autoRouterBenchmarks": {

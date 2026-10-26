@@ -1,6 +1,7 @@
 "use client";
 
 import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 import { useModelCostMap } from "@/app/(dashboard)/hooks/models/useModelCostMap";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { useCredentials } from "@/app/(dashboard)/hooks/credentials/useCredentials";
@@ -341,19 +342,24 @@ const AllModelsTab = ({
             <Info className="mt-0.5 size-3.5 shrink-0" />
             {selectedTeamValue === PERSONAL_TEAM_VALUE ? (
               <span>
-                To access these models, create a Virtual Key without selecting a team on the{" "}
-                <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  {i18n.t("pages.allModelsTab.virtualKeysPageLink", { defaultValue: "Virtual Keys page" })}
-                </a>
-                .
+                <Trans
+                  i18nKey="pages.allModelsTab.accessWithoutTeam"
+                  defaults="To access these models, create a Virtual Key without selecting a team on the <keysLink>Virtual Keys page</keysLink>."
+                  components={{
+                    keysLink: <a href={uiHref("api-keys")} className="font-medium text-info hover:underline" />,
+                  }}
+                />
               </span>
             ) : (
               <span>
-                To access these models, create a Virtual Key and select Team as &quot;{teamAccessLabel}&quot; on the{" "}
-                <a href={uiHref("api-keys")} className="font-medium text-info hover:underline">
-                  {i18n.t("pages.allModelsTab.virtualKeysPageLink", { defaultValue: "Virtual Keys page" })}
-                </a>
-                .
+                <Trans
+                  i18nKey="pages.allModelsTab.accessWithTeam"
+                  defaults='To access these models, create a Virtual Key and select Team as "{{team}}" on the <keysLink>Virtual Keys page</keysLink>.'
+                  values={{ team: teamAccessLabel }}
+                  components={{
+                    keysLink: <a href={uiHref("api-keys")} className="font-medium text-info hover:underline" />,
+                  }}
+                />
               </span>
             )}
           </div>
