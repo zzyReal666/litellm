@@ -10,6 +10,7 @@ import {
 import { uiHref } from "@/utils/uiHref";
 import type { MountedFormValues } from "../common_components/MountedFormField";
 import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 
 interface DecisionModelNoteProps {
   catalog: DecisionCatalog;
@@ -37,15 +38,18 @@ export default function DecisionModelNote({ catalog, litellmProvider }: Decision
       <AlertTitle>{i18n.t("modelsEndpoints.DecisionModelNote.decisionModel", { defaultValue: "Decision model" })}</AlertTitle>
       <AlertDescription>
         <p>
-          For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System
-          One format).{" "}
-          
+          <Trans
+            i18nKey="modelsEndpoints.DecisionModelNote.decisionEndpointHelp"
+            defaults="For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System One format)."
+            components={{ code: <code /> }}
+          />
         </p>
         <p>
-          After you add it,{" "}
-          <a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} className="underline">
-            test it in the Decisions playground
-          </a>
+          <Trans
+            i18nKey="modelsEndpoints.DecisionModelNote.playgroundHint"
+            defaults="After you add it, <playground>test it in the Decisions playground</playground>"
+            components={{ playground: <a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} className="underline" /> }}
+          />
         </p>
       </AlertDescription>
     </Alert>

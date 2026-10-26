@@ -688,7 +688,8 @@
   "debugWarningBanner": {
     "message": "性能警告：详细调试模式已启用",
     "description": "详细调试日志（<code>LITELLM_LOG=DEBUG</code>）当前已启用。此模式会记录大量诊断信息并显著降低性能，应仅用于排查问题，生产环境请禁用。",
-    "performance-warning-detailed-debug-mode-acti": "性能警告：详细调试模式已启用"
+    "performance-warning-detailed-debug-mode-acti": "性能警告：详细调试模式已启用",
+    "detailedDebugDescription": "详细调试日志（<code>LITELLM_LOG=DEBUG</code>）当前已启用。该模式会记录大量诊断信息并显著降低性能，仅应在排查问题时使用，生产环境请关闭。"
   },
   "defaultUserSettings": {
     "title": "默认用户设置",
@@ -12582,7 +12583,9 @@
     "DecisionModelNote": {
       "decisionModelNotice": "决策模型提示",
       "decisionModel": "决策模型",
-      "howToCallDecisionModels": "如何调用决策模型"
+      "howToCallDecisionModels": "如何调用决策模型",
+      "decisionEndpointHelp": "对于决策请求，请调用 <code>/v1/decisions</code>（OpenAI 格式）或 <code>/v1/systemone</code>（System One 格式）。",
+      "playgroundHint": "添加后，<playground>在决策演练场中试用</playground>"
     },
     "AddModelForm": {
       "promise": "Promise",
@@ -13995,7 +13998,11 @@
     "no-mcp-servers-access-groups-or-toolsets-con": "未配置 MCP 服务器、访问组或工具集"
   },
   "createdKeyDisplay": {
-    "virtual-key": "虚拟密钥："
+    "virtual-key": "虚拟密钥：",
+    "copySuccess": "密钥已复制到剪贴板",
+    "saveSecretKeyHint": "请将此密钥保存在安全且可访问的位置。出于安全原因，<b>你将无法再次查看它</b>。如果丢失此密钥，你需要重新生成。",
+    "copied": "已复制！",
+    "copyVirtualKey": "复制虚拟密钥"
   },
   "searchBox": {
     "loading-results": "正在加载结果",
@@ -14555,5 +14562,16 @@
     "litellm-mcp-oauth": "LiteLLM MCP OAuth",
     "authorization-complete-you-may-close-this-wi": "授权完成。你可以关闭此窗口并返回 LiteLLM 管理界面。",
     "if-the-window-does-not-close-automatically-e": "如果窗口没有自动关闭，所有内容仍已保存，你可以手动关闭。"
+  },
+  "envCredentialLoginWarningBanner": {
+    "title": "环境凭据登录已启用",
+    "description": "任何拥有 <code>UI_USERNAME</code>/<code>UI_PASSWORD</code>（或主密钥，当 <code>UI_PASSWORD</code> 未设置时）的人都能以代理管理员身份使用共享的静态密钥登录。请先创建一个拥有独立密码的普通管理员账号，然后设置 <code>general_settings.disable_env_credential_login: true</code> 关闭此登录方式。",
+    "dismissAria": "关闭横幅"
+  },
+  "decisionModelsBanner": {
+    "title": "现已支持决策模型",
+    "description": "通过 <code>/v1/decisions</code> 或 <code>/v1/systemone</code> 调用它们，或在决策演练场中试用。",
+    "tryButton": "试用决策模型",
+    "dismissAria": "关闭横幅"
   }
 }

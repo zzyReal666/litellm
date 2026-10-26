@@ -2,6 +2,7 @@
 
 import React from "react";
 import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 import { TriangleAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { useHealthReadinessDetails } from "@/app/(dashboard)/hooks/healthReadiness/useHealthReadinessDetails";
@@ -23,7 +24,11 @@ export const DebugWarningBanner: React.FC<DebugWarningBannerProps> = ({ accessTo
       <TriangleAlert className="size-4" aria-hidden />
       <AlertTitle>{i18n.t("debugWarningBanner.performance-warning-detailed-debug-mode-acti", { defaultValue: "Performance Warning: Detailed Debug Mode Active" })}</AlertTitle>
       <AlertDescription>
-        Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments.{" "}</AlertDescription>
+        <Trans
+          i18nKey="debugWarningBanner.detailedDebugDescription"
+          defaults="Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments."
+          components={{ code: <code /> }}
+        /></AlertDescription>
     </Alert>
   );
 };

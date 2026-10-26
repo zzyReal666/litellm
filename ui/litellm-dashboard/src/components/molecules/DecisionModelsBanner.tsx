@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Trans } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { ArrowRight, Sparkles, X } from "lucide-react";
 
 import { SYSTEM_ONE_PLAYGROUND_ROUTE } from "@/lib/decisionModels";
@@ -26,10 +28,15 @@ const DecisionModelsBanner: React.FC = () => {
         <Sparkles className="size-4 text-muted-foreground" />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className="m-0 text-sm font-semibold text-foreground">Decision models are now supported</h4>
+        <h4 className="m-0 text-sm font-semibold text-foreground">
+          {i18n.t("decisionModelsBanner.title", { defaultValue: "Decision models are now supported" })}
+        </h4>
         <p className="m-0 mt-0.5 text-xs text-muted-foreground">
-          Call them at <code>/v1/decisions</code> or <code>/v1/systemone</code>, or try them in the Decisions
-          playground.
+          <Trans
+            i18nKey="decisionModelsBanner.description"
+            defaults="Call them at <code>/v1/decisions</code> or <code>/v1/systemone</code>, or try them in the Decisions playground."
+            components={{ code: <code /> }}
+          />
         </p>
       </div>
       <Button
@@ -38,7 +45,7 @@ const DecisionModelsBanner: React.FC = () => {
         role="link"
         render={<a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} />}
       >
-        Try decision models
+        {i18n.t("decisionModelsBanner.tryButton", { defaultValue: "Try decision models" })}
         <ArrowRight />
       </Button>
       <Button
@@ -50,7 +57,7 @@ const DecisionModelsBanner: React.FC = () => {
           localStorage.setItem(STORAGE_KEY, "true");
         }}
         className="shrink-0"
-        aria-label="Dismiss banner"
+        aria-label={i18n.t("decisionModelsBanner.dismissAria", { defaultValue: "Dismiss banner" })}
       >
         <X />
       </Button>

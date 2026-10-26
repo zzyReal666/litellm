@@ -688,7 +688,8 @@
   "debugWarningBanner": {
     "message": "Performance Warning: Detailed Debug Mode Active",
     "description": "Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments.",
-    "performance-warning-detailed-debug-mode-acti": "Performance Warning: Detailed Debug Mode Active"
+    "performance-warning-detailed-debug-mode-acti": "Performance Warning: Detailed Debug Mode Active",
+    "detailedDebugDescription": "Detailed debug logging (<code>LITELLM_LOG=DEBUG</code>) is currently enabled. This mode logs extensive diagnostic information and will significantly degrade performance. It should only be used for troubleshooting and disabled in production environments."
   },
   "defaultUserSettings": {
     "title": "Default User Settings",
@@ -12582,7 +12583,9 @@
     "DecisionModelNote": {
       "decisionModelNotice": "Decision model notice",
       "decisionModel": "Decision model",
-      "howToCallDecisionModels": "How to call decision models"
+      "howToCallDecisionModels": "How to call decision models",
+      "decisionEndpointHelp": "For decision requests, call <code>/v1/decisions</code> (OpenAI format) or <code>/v1/systemone</code> (System One format).",
+      "playgroundHint": "After you add it, <playground>test it in the Decisions playground</playground>"
     },
     "AddModelForm": {
       "promise": "Promise",
@@ -13995,7 +13998,11 @@
     "no-mcp-servers-access-groups-or-toolsets-con": "No MCP servers, access groups, or toolsets configured"
   },
   "createdKeyDisplay": {
-    "virtual-key": "Virtual Key:"
+    "virtual-key": "Virtual Key:",
+    "copySuccess": "Key copied to clipboard",
+    "saveSecretKeyHint": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one.",
+    "copied": "Copied!",
+    "copyVirtualKey": "Copy Virtual Key"
   },
   "searchBox": {
     "loading-results": "Loading results",
@@ -14555,5 +14562,16 @@
     "litellm-mcp-oauth": "LiteLLM MCP OAuth",
     "authorization-complete-you-may-close-this-wi": "Authorization complete. You may close this window and return to the LiteLLM dashboard.",
     "if-the-window-does-not-close-automatically-e": "If the window does not close automatically, everything is still saved—you can close it manually."
+  },
+  "envCredentialLoginWarningBanner": {
+    "title": "Environment-credential login is enabled",
+    "description": "Anyone with <code>UI_USERNAME</code>/<code>UI_PASSWORD</code> (or the master key, when <code>UI_PASSWORD</code> is unset) can sign in as a proxy admin with a shared static secret. First create a regular admin account with its own password, then set <code>general_settings.disable_env_credential_login: true</code> to turn this login path off.",
+    "dismissAria": "Dismiss banner"
+  },
+  "decisionModelsBanner": {
+    "title": "Decision models are now supported",
+    "description": "Call them at <code>/v1/decisions</code> or <code>/v1/systemone</code>, or try them in the Decisions playground.",
+    "tryButton": "Try decision models",
+    "dismissAria": "Dismiss banner"
   }
 }
