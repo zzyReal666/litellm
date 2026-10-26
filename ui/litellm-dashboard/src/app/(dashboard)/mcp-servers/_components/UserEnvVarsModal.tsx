@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React from "react";
 import { CircleAlert, Info } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -217,19 +218,16 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
         <AlertDialog open={confirmingClear} onOpenChange={(opened) => !opened && setConfirmingClear(false)}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Clear saved credentials</AlertDialogTitle>
+              <AlertDialogTitle>{i18n.t("userEnvVarsModal.clear-saved-credentials", { defaultValue: "Clear saved credentials" })}</AlertDialogTitle>
               <AlertDialogDescription>
-                This deletes every per-user value you saved for {displayName}. Your next MCP request to this server
-                fails until you set them again.
-              </AlertDialogDescription>
+                This deletes every per-user value you saved for{" "}{displayName}. Your next MCP request to this server fails until you set them again.{" "}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <Button variant="outline" onClick={() => setConfirmingClear(false)}>
                 {t("teamSsoSettings.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button variant="destructive" onClick={confirmClear}>
-                Clear credentials
-              </Button>
+                {i18n.t("userEnvVarsModal.clear-credentials", { defaultValue: "Clear credentials" })}{" "}</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

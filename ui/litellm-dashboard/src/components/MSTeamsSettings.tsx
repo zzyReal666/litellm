@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
@@ -21,8 +22,7 @@ interface MSTeamsSettingsProps {
 const FIELD_HELP: Record<string, React.ReactNode> = {
   MS_TEAMS_WEBHOOK_URL: (
     <>
-      Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)
-      <span className="text-destructive"> Required * </span>
+      {i18n.t("mSTeamsSettings.incoming-webhook-url-for-your-teams-channel", { defaultValue: "Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)" })}{" "}<span className="text-destructive"> Required * </span>
     </>
   ),
 };
@@ -86,7 +86,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Microsoft Teams Alerting Settings</CardTitle>
+        <CardTitle className="text-base">{i18n.t("mSTeamsSettings.microsoft-teams-alerting-settings", { defaultValue: "Microsoft Teams Alerting Settings" })}</CardTitle>
         <p className="text-sm">
           Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook. Create one from{" "}
           
@@ -130,7 +130,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
           ))}
 
         <div className="mt-6 flex gap-2">
-          <Button onClick={() => handleSaveMSTeamsSettings()}>Save Changes</Button>
+          <Button onClick={() => handleSaveMSTeamsSettings()}>{i18n.t("mSTeamsSettings.save-changes", { defaultValue: "Save Changes" })}</Button>
           <Button
             variant="secondary"
             onClick={async () => {
@@ -143,8 +143,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
               }
             }}
           >
-            Test MS Teams Alerts
-          </Button>
+            {i18n.t("mSTeamsSettings.test-ms-teams-alerts", { defaultValue: "Test MS Teams Alerts" })}{" "}</Button>
         </div>
       </CardContent>
     </Card>

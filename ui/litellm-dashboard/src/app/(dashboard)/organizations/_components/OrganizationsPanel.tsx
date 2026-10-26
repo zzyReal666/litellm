@@ -1,4 +1,5 @@
 import { organizationKeys, useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
+import i18n from "@/lib/i18n";
 import { useUserModels } from "@/app/(dashboard)/hooks/models/useModels";
 import OrganizationFilters, { FilterState } from "@/app/(dashboard)/organizations/OrganizationFilters";
 import { useQueryClient } from "@tanstack/react-query";
@@ -99,7 +100,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     return (
       <div className="mx-4 mt-4">
         <p className="text-sm text-muted-foreground">
-          This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key{" "}
+          {i18n.t("organizationsPanel.this-is-a-litellm-enterprise-feature-and-req", { defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key" })}{" "}
           
           .
         </p>
@@ -111,8 +112,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     <div className="mx-4 mt-4 flex flex-col gap-4">
       {(userRole === "Admin" || userRole === "Org Admin") && (
         <Button className="w-fit" onClick={() => setIsOrgModalVisible(true)}>
-          + Create New Organization
-        </Button>
+          {i18n.t("organizationsPanel.create-new-organization", { defaultValue: "+ Create New Organization" })}{" "}</Button>
       )}
 
       {selectedOrgId ? (
@@ -126,7 +126,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
         />
       ) : (
         <>
-          <p className="text-sm text-muted-foreground">Click on an organization ID to view its details.</p>
+          <p className="text-sm text-muted-foreground">{i18n.t("organizationsPanel.click-on-an-organization-id-to-view-its-deta", { defaultValue: "Click on an organization ID to view its details." })}</p>
           <OrganizationFilters
             filters={filters}
             showFilters={showFilters}
@@ -150,8 +150,8 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
 
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete Organization?"
-        message="Are you sure you want to delete this organization? This action cannot be undone."
+        title={i18n.t("organizationsPanel.delete-organization", { defaultValue: "Delete Organization?" })}
+        message={i18n.t("organizationsPanel.are-you-sure-you-want-to-delete-this-organiz", { defaultValue: "Are you sure you want to delete this organization? This action cannot be undone." })}
         resourceInformationTitle="Organization Information"
         resourceInformation={[{ label: "Organization ID", value: orgToDelete, code: true }]}
         onCancel={cancelDelete}

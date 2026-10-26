@@ -108,7 +108,7 @@ function ConfirmDialog({ action, serverName, isCurrentlyActive, onConfirm, onCan
           {isApprove ? t("mcpTools.mCPSubmissionsTab.confirmApproveMcpServer", { defaultValue: "Approve MCP Server" }) : t("mcpTools.mCPSubmissionsTab.confirmRejectMcpServer", { defaultValue: "Reject MCP Server" })}
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Are you sure you want to {action}{" "}
+          Are you sure you want to{" "}{action}{" "}
           <span className="font-medium text-foreground">&quot;{serverName}&quot;</span>?{" "}
           {isApprove
             ? t("mcpTools.mCPSubmissionsTab.approveConfirmBody", { defaultValue: "This will activate the server. The submitting user will see it in their MCP Servers list once approved." })
@@ -207,9 +207,7 @@ function SubmissionRulesPanel({ requiredFields, onChange, onSave, isSaving, disa
       {expanded && (
         <div className="border-t border-border px-4 pt-4 pb-4">
           <p className="text-xs text-muted-foreground mb-4">
-            Select which fields must be filled in before a submission is considered compliant. LiteLLM will show ✓ / ✗
-            for each rule on every submission card below.
-          </p>
+            {i18n.t("mCPSubmissionsTab.select-which-fields-must-be-filled-in-before", { defaultValue: "Select which fields must be filled in before a submission is considered compliant. LiteLLM will show ✓ / ✗ for each rule on every submission card below." })}{" "}</p>
           <div className="grid grid-cols-2 gap-x-8 gap-y-5">
             {FIELD_GROUPS.map((group) => (
               <div key={group.label}>
@@ -463,13 +461,13 @@ function MCPServerCard({ server, onApprove, onReject, requiredFields }: MCPServe
               </span>
               <span>·</span>
               <span>
-                Submitted by: <span className="text-muted-foreground">{server.submitted_by ?? "—"}</span>
+                {i18n.t("mCPSubmissionsTab.submitted-by", { defaultValue: "Submitted by:" })}{" "}<span className="text-muted-foreground">{server.submitted_by ?? "—"}</span>
               </span>
               <span>·</span>
               <span>{formatDate(server.submitted_at)}</span>
             </div>
             {approvalStatus === "rejected" && server.review_notes && (
-              <p className="text-xs text-destructive mt-1.5">Rejection reason: {server.review_notes}</p>
+              <p className="text-xs text-destructive mt-1.5">{i18n.t("mCPSubmissionsTab.rejection-reason", { defaultValue: "Rejection reason:" })}{" "}{server.review_notes}</p>
             )}
           </div>
           {checks.length === 0 && (

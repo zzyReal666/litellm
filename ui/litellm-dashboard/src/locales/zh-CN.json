@@ -13679,5 +13679,37 @@
     "model-priorities-2": "模型优先级",
     "select-models-to-set-priorities": "选择要设置优先级的模型",
     "model-is-not-selected": "未选择模型"
+  },
+  "mCPServerCard": {
+    "this-oauth-server-has-no-flow-set-machine-to": "该 OAuth 服务器未设置流程类型（机器对机器或交互式）。打开它并选择 OAuth 流程类型，LiteLLM 才会按你的预期进行认证。",
+    "last-check": "最近检查：",
+    "per-user-credentials": "按用户凭据"
+  },
+  "mCPSubmissionsTab": {
+    "select-which-fields-must-be-filled-in-before": "选择提交被视为合规之前必须填写的字段。LiteLLM 会在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
+    "submitted-by": "提交人：",
+    "rejection-reason": "拒绝原因："
+  },
+  "mCPToolsetsTab": {
+    "clear-search": "清除搜索",
+    "your-toolset": "你的工具集",
+    "curated-collections-of-tools-from-one-or-mor": "来自一个或多个 MCP 服务器的精选工具集合。可通过 MCP 权限下拉菜单将工具集分配给密钥和团队。"
+  },
+  "userEnvVarsModal": {
+    "clear-saved-credentials": "清除已保存的凭据",
+    "clear-credentials": "清除凭据"
+  },
+  "organizationsPanel": {
+    "this-is-a-litellm-enterprise-feature-and-req": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。获取试用密钥",
+    "create-new-organization": "+ 新建组织",
+    "click-on-an-organization-id-to-view-its-deta": "点击组织 ID 查看其详情。",
+    "delete-organization": "删除组织？",
+    "are-you-sure-you-want-to-delete-this-organiz": "确定要删除该组织吗？此操作无法撤销。"
+  },
+  "mSTeamsSettings": {
+    "incoming-webhook-url-for-your-teams-channel": "Teams 频道的传入 webhook URL（Workflows 或传入 webhook 连接器）",
+    "microsoft-teams-alerting-settings": "Microsoft Teams 告警设置",
+    "save-changes": "保存更改",
+    "test-ms-teams-alerts": "测试 MS Teams 告警"
   }
 }

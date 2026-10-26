@@ -249,9 +249,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 }
               />
               <TooltipContent>
-                This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow
-                Type so LiteLLM authenticates it as you intend.
-              </TooltipContent>
+                {i18n.t("mCPServerCard.this-oauth-server-has-no-flow-set-machine-to", { defaultValue: "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend." })}{" "}</TooltipContent>
             </Tooltip>
           )}
           <Tooltip>
@@ -383,7 +381,7 @@ const HealthChip: FC<HealthChipProps> = ({
       <TooltipContent side="top" className="max-w-xs">
         <div className="mb-1 font-semibold">Health: {status}</div>
         {status === "reachable" && <div className="mb-1 text-xs">{MCP_REACHABLE_DESCRIPTION}</div>}
-        {lastCheck && <div className="mb-1 text-xs">Last check: {new Date(lastCheck).toLocaleString()}</div>}
+        {lastCheck && <div className="mb-1 text-xs">{i18n.t("mCPServerCard.last-check", { defaultValue: "Last check:" })}{" "}{new Date(lastCheck).toLocaleString()}</div>}
         {error && (
           <div className="text-xs">
             <div className="mb-1 font-medium">{i18n.t("common.error", { defaultValue: "Error" })}</div>
@@ -399,7 +397,7 @@ const HealthChip: FC<HealthChipProps> = ({
 
 const UserFieldsRow: FC<{ onUpdate?: () => void }> = ({ onUpdate }) => (
   <div className="flex items-center justify-between gap-2 text-xs">
-    <span className="text-muted-foreground">Per-user credentials</span>
+    <span className="text-muted-foreground">{i18n.t("mCPServerCard.per-user-credentials", { defaultValue: "Per-user credentials" })}</span>
     <div className="flex items-center gap-2">
       <Badge variant="outline">
         <Check /> Set

@@ -239,7 +239,7 @@ function CreateToolsetModal({ open, onClose, onSave, accessToken, initialToolset
               />
               {serverSearch && (
                 <InputGroupAddon align="inline-end">
-                  <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setServerSearch("")}>
+                  <InputGroupButton size="icon-xs" aria-label={i18n.t("mCPToolsetsTab.clear-search", { defaultValue: "Clear search" })} onClick={() => setServerSearch("")}>
                     <X />
                   </InputGroupButton>
                 </InputGroupAddon>
@@ -271,7 +271,7 @@ function CreateToolsetModal({ open, onClose, onSave, accessToken, initialToolset
           {/* Right panel: Your Toolset */}
           <div className="w-72 shrink-0">
             <p className="text-sm font-semibold text-foreground mb-2 block">
-              Your Toolset{" "}
+              {i18n.t("mCPToolsetsTab.your-toolset", { defaultValue: "Your Toolset" })}{" "}
               <span className="text-xs font-normal text-muted-foreground">({selectedTools.length} tools)</span>
             </p>
             <div className="space-y-1 overflow-y-auto" style={{ maxHeight: 340 }}>
@@ -361,9 +361,7 @@ function ToolsetUsageGuide() {
       <p className="text-sm font-medium text-foreground mb-1">{t("mcpTools.mCPToolsetsTab.howToolsetsWorkTitle", { defaultValue: "How toolsets work" })}</p>
       <p className="text-sm text-muted-foreground mb-3">
         Create a toolset, assign it to a key via{" "}
-        <span className="font-medium text-foreground">{t("mcpTools.mCPToolsetsTab.howToolsetsWorkPath", { defaultValue: "API Keys → Edit Key → MCP Servers" })}</span>, then point your MCP
-        client at the toolset URL. The client only sees the tools you picked.
-      </p>
+        <span className="font-medium text-foreground">{t("mcpTools.mCPToolsetsTab.howToolsetsWorkPath", { defaultValue: "API Keys → Edit Key → MCP Servers" })}</span>, then point your MCP client at the toolset URL. The client only sees the tools you picked.{" "}</p>
       <div className="text-xs text-muted-foreground mb-1">{t("mcpTools.mCPToolsetsTab.configLabel", { defaultValue: "Claude Code / Cursor config" })}</div>
       <div className="relative">
         <pre className="bg-card border border-border rounded-sm px-4 py-3 text-xs font-mono text-foreground overflow-x-auto leading-relaxed pr-14">
@@ -442,9 +440,7 @@ export function MCPToolsetsTab({ accessToken, userRole }: MCPToolsetsTabProps) {
         <div>
           <h3 className="text-lg font-medium text-foreground">{t("mcpTools.mCPToolsetsTab.pageTitle", { defaultValue: "MCP Toolsets" })}</h3>
           <p className="text-muted-foreground text-sm">
-            Curated collections of tools from one or more MCP servers. Assign toolsets to keys and teams via the MCP
-            permissions dropdown.
-          </p>
+            {i18n.t("mCPToolsetsTab.curated-collections-of-tools-from-one-or-mor", { defaultValue: "Curated collections of tools from one or more MCP servers. Assign toolsets to keys and teams via the MCP permissions dropdown." })}{" "}</p>
         </div>
         {isAdmin && (
           <Button onClick={() => setCreateOpen(true)}>

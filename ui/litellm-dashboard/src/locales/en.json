@@ -13679,5 +13679,37 @@
     "model-priorities-2": "Model priorities",
     "select-models-to-set-priorities": "Select models to set priorities",
     "model-is-not-selected": "Model is not selected"
+  },
+  "mCPServerCard": {
+    "this-oauth-server-has-no-flow-set-machine-to": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend.",
+    "last-check": "Last check:",
+    "per-user-credentials": "Per-user credentials"
+  },
+  "mCPSubmissionsTab": {
+    "select-which-fields-must-be-filled-in-before": "Select which fields must be filled in before a submission is considered compliant. LiteLLM will show ✓ / ✗ for each rule on every submission card below.",
+    "submitted-by": "Submitted by:",
+    "rejection-reason": "Rejection reason:"
+  },
+  "mCPToolsetsTab": {
+    "clear-search": "Clear search",
+    "your-toolset": "Your Toolset",
+    "curated-collections-of-tools-from-one-or-mor": "Curated collections of tools from one or more MCP servers. Assign toolsets to keys and teams via the MCP permissions dropdown."
+  },
+  "userEnvVarsModal": {
+    "clear-saved-credentials": "Clear saved credentials",
+    "clear-credentials": "Clear credentials"
+  },
+  "organizationsPanel": {
+    "this-is-a-litellm-enterprise-feature-and-req": "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key",
+    "create-new-organization": "+ Create New Organization",
+    "click-on-an-organization-id-to-view-its-deta": "Click on an organization ID to view its details.",
+    "delete-organization": "Delete Organization?",
+    "are-you-sure-you-want-to-delete-this-organiz": "Are you sure you want to delete this organization? This action cannot be undone."
+  },
+  "mSTeamsSettings": {
+    "incoming-webhook-url-for-your-teams-channel": "Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)",
+    "microsoft-teams-alerting-settings": "Microsoft Teams Alerting Settings",
+    "save-changes": "Save Changes",
+    "test-ms-teams-alerts": "Test MS Teams Alerts"
   }
 }
