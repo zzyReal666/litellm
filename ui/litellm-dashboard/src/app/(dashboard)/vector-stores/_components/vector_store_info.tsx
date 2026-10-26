@@ -174,8 +174,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
         </Button>
         <h1 className="text-xl font-semibold">{i18n.t("vectorStores.vectorStoreInfo.notFound", { defaultValue: "Vector store not found" })}</h1>
         <p className="text-sm text-muted-foreground">
-          Vector store {vectorStoreId} could not be loaded. It may have been deleted.
-        </p>
+          {i18n.t("vectorStoreInfo.vector-store", { defaultValue: "Vector store" })}{" "}{vectorStoreId} could not be loaded. It may have been deleted.{" "}</p>
       </div>
     );
   }
@@ -196,7 +195,7 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
             {i18n.t("vectorStoreManagement.vectorStoreInfo.backButton", { defaultValue: "Back to Vector Stores" })}
           </Button>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold">Vector Store ID: {vectorStoreDetails.vector_store_id}</h1>
+            <h1 className="text-xl font-semibold">{i18n.t("vectorStoreInfo.vector-store-id", { defaultValue: "Vector Store ID:" })}{" "}{vectorStoreDetails.vector_store_id}</h1>
             <StatusBadge
               tone={vectorStoreDetails.is_config ? "neutral" : "info"}
               label={vectorStoreDetails.is_config ? "Config" : "DB"}
@@ -212,11 +211,9 @@ const VectorStoreInfoView: React.FC<VectorStoreInfoViewProps> = ({
       {vectorStoreDetails.is_config && (
         <Alert variant="info" className="mb-4">
           <Lock className="size-4" aria-hidden />
-          <AlertTitle>Read only: defined in the config file</AlertTitle>
+          <AlertTitle>{i18n.t("vectorStoreInfo.read-only-defined-in-the-config-file", { defaultValue: "Read only: defined in the config file" })}</AlertTitle>
           <AlertDescription>
-            This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard.
-            Change or remove it in the config file and restart the proxy.
-          </AlertDescription>
+            {i18n.t("vectorStoreInfo.this-vector-store-comes-from-the-proxy-confi", { defaultValue: "This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard. Change or remove it in the config file and restart the proxy." })}{" "}</AlertDescription>
         </Alert>
       )}
 

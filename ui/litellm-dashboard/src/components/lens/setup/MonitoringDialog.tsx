@@ -1,4 +1,5 @@
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import { z } from "zod";
 import { Controller } from "react-hook-form";
 import { useZodForm } from "@/lib/forms/useZodForm";
@@ -53,16 +54,15 @@ export function MonitoringDialog({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">Keep monitoring</DialogTitle>
+          <DialogTitle className="text-xl">{i18n.t("monitoringDialog.keep-monitoring", { defaultValue: "Keep monitoring" })}</DialogTitle>
           <DialogDescription>
-            Repeat this investigation with the saved scope, sample, model, and budget.
-          </DialogDescription>
+            {i18n.t("monitoringDialog.repeat-this-investigation-with-the-saved-sco", { defaultValue: "Repeat this investigation with the saved scope, sample, model, and budget." })}{" "}</DialogDescription>
         </DialogHeader>
         <Controller
           control={control}
           name="interval_minutes"
           render={({ field }) => (
-            <DurationInput label="Check every" value={field.value} onChange={field.onChange} base="minutes" />
+            <DurationInput label={i18n.t("monitoringDialog.check-every", { defaultValue: "Check every" })} value={field.value} onChange={field.onChange} base="minutes" />
           )}
         />
         {formState.errors.interval_minutes?.message && (
@@ -71,12 +71,10 @@ export function MonitoringDialog({
           </p>
         )}
         <p className="text-xs leading-5 text-muted-foreground">
-          Each investigation looks back over the saved time range. The interval starts after the previous run finishes.
-        </p>
+          {i18n.t("monitoringDialog.each-investigation-looks-back-over-the-saved", { defaultValue: "Each investigation looks back over the saved time range. The interval starts after the previous run finishes." })}{" "}</p>
         {!ready && (
           <p role="status" className="text-sm text-warning">
-            Reconnect the worker before enabling monitoring.
-          </p>
+            {i18n.t("monitoringDialog.reconnect-the-worker-before-enabling-monitor", { defaultValue: "Reconnect the worker before enabling monitoring." })}{" "}</p>
         )}
         {error && (
           <p role="alert" className="text-sm text-destructive">

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import React, { useState, useEffect } from "react";
 import { Info, Plus } from "lucide-react";
 import { getAgentsList, deleteAgentCall } from "@/components/networking";
@@ -142,16 +143,12 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
       <div className="flex flex-col gap-2 mb-4">
         <h1 className="text-2xl font-bold">{t("agents.title", { defaultValue: "Agents" })}</h1>
         <p className="text-sm text-muted-foreground">
-          List of A2A-spec agents that are available to be used in your organization. Go to AI Hub, to make agents
-          public.
-        </p>
+          {i18n.t("agentsPanel.list-of-a2a-spec-agents-that-are-available-t", { defaultValue: "List of A2A-spec agents that are available to be used in your organization. Go to AI Hub, to make agents public." })}{" "}</p>
         <Alert className="mb-3">
           <Info />
-          <AlertTitle>How do agents authenticate?</AlertTitle>
+          <AlertTitle>{i18n.t("agentsPanel.how-do-agents-authenticate", { defaultValue: "How do agents authenticate?" })}</AlertTitle>
           <AlertDescription>
-            Agents can authenticate with a virtual key or a trusted identity provider using JWT. Configure an identity
-            binding when adding or editing an agent. JWT authentication does not require a virtual key.
-          </AlertDescription>
+            {i18n.t("agentsPanel.agents-can-authenticate-with-a-virtual-key-o", { defaultValue: "Agents can authenticate with a virtual key or a trusted identity provider using JWT. Configure an identity binding when adding or editing an agent. JWT authentication does not require a virtual key." })}{" "}</AlertDescription>
         </Alert>
         {isAdmin && (
           <div className="mt-2 flex items-center gap-4">
@@ -202,8 +199,7 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
             <AlertDialogHeader>
               <AlertDialogTitle>{t("agents.deleteModalTitle", { defaultValue: "Delete Agent" })}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete agent: {agentToDelete.name}? This action cannot be undone.
-              </AlertDialogDescription>
+                Are you sure you want to delete agent:{" "}{agentToDelete.name}? This action cannot be undone.{" "}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t("common.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>

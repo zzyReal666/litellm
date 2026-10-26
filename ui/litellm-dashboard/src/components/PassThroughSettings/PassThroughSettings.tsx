@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -107,7 +108,7 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
     const selectedEndpoint = generalSettings.find((endpoint) => endpoint.id === selectedEndpointId);
 
     if (!selectedEndpoint) {
-      return <div>Endpoint not found</div>;
+      return <div>{i18n.t("passThroughSettings.endpoint-not-found", { defaultValue: "Endpoint not found" })}</div>;
     }
 
     return (
@@ -125,8 +126,8 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
   return (
     <div>
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-foreground">Pass Through Endpoints</h2>
-        <p className="text-sm text-muted-foreground">Configure and manage your pass-through endpoints</p>
+        <h2 className="text-lg font-semibold text-foreground">{i18n.t("passThroughSettings.pass-through-endpoints", { defaultValue: "Pass Through Endpoints" })}</h2>
+        <p className="text-sm text-muted-foreground">{i18n.t("passThroughSettings.configure-and-manage-your-pass-through-endpo", { defaultValue: "Configure and manage your pass-through endpoints" })}</p>
       </div>
 
       <AddPassThroughEndpoint
@@ -146,10 +147,9 @@ const PassThroughSettings: React.FC<PassThroughSettingsProps> = ({ accessToken, 
       <AlertDialog open={isDeleteModalOpen} onOpenChange={(open) => !open && cancelDelete()}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Pass-Through Endpoint</AlertDialogTitle>
+            <AlertDialogTitle>{i18n.t("passThroughSettings.delete-pass-through-endpoint", { defaultValue: "Delete Pass-Through Endpoint" })}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this pass-through endpoint? This action cannot be undone.
-            </AlertDialogDescription>
+              {i18n.t("passThroughSettings.are-you-sure-you-want-to-delete-this-pass-th", { defaultValue: "Are you sure you want to delete this pass-through endpoint? This action cannot be undone." })}{" "}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

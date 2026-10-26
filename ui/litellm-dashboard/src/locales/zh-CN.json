@@ -3342,7 +3342,12 @@
     "openEndpointActions": "打开端点操作",
     "colSource": "来源",
     "sourceConfig": "配置",
-    "sourceDb": "数据库"
+    "sourceDb": "数据库",
+    "endpoint-not-found": "未找到端点",
+    "pass-through-endpoints": "透传端点",
+    "configure-and-manage-your-pass-through-endpo": "配置和管理你的透传端点",
+    "delete-pass-through-endpoint": "删除透传端点",
+    "are-you-sure-you-want-to-delete-this-pass-th": "确定要删除该透传端点吗？此操作无法撤销。"
   },
   "perUserUsage": {
     "title": "每用户用量",
@@ -13711,5 +13716,52 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams 告警设置",
     "save-changes": "保存更改",
     "test-ms-teams-alerts": "测试 MS Teams 告警"
+  },
+  "contentFilterDisplay": {
+    "content-categories": "内容类别",
+    "pattern-detection": "模式检测",
+    "blocked-keywords": "屏蔽关键词"
+  },
+  "vectorStoreInfo": {
+    "vector-store": "向量存储",
+    "vector-store-id": "向量存储 ID：",
+    "read-only-defined-in-the-config-file": "只读：在配置文件中定义",
+    "this-vector-store-comes-from-the-proxy-confi": "该向量存储来自代理配置 YAML，因此无法在管理界面中编辑或删除。请在配置文件中修改或删除并重启代理。"
+  },
+  "classificationMethodConfig": {
+    "heuristic-v2-success-threshold-inactive": "启发式 v2 成功阈值（未启用）：",
+    "route-to-the-default-model": "路由到默认模型"
+  },
+  "agentsPanel": {
+    "list-of-a2a-spec-agents-that-are-available-t": "可在组织中使用的 A2A 规范 agent 列表。前往 AI Hub 可将 agent 设为公开。",
+    "how-do-agents-authenticate": "agent 如何进行认证？",
+    "agents-can-authenticate-with-a-virtual-key-o": "agent 可以使用虚拟密钥或基于 JWT 的可信身份提供商进行认证。在添加或编辑 agent 时配置身份绑定。JWT 认证不需要虚拟密钥。"
+  },
+  "decisionTestSection": {
+    "try-your-questions-on-a-sample-input-before": "保存前先用示例输入试跑你的问题，使用上方的阈值。每次运行都是一次真实的决策模型调用，会计费并出现在日志中。",
+    "test-input": "测试输入",
+    "paste-a-sample-input-to-score-against-your-q": "粘贴一段示例输入，用你的问题对其进行打分",
+    "latest-first-each-run-keeps-its-input-so-you": "最新在前。每次运行都会保留其输入，便于对比。",
+    "the-model-or-questions-changed-since-this-ru": "模型或问题在此次运行后发生了变更。请重新运行以打分。"
+  },
+  "investigationActions": {
+    "investigation-actions": "调查操作",
+    "run-now": "立即运行",
+    "edit-investigation": "编辑调查",
+    "pause-monitoring": "暂停监控",
+    "enable-monitoring": "启用监控"
+  },
+  "monitoringDialog": {
+    "keep-monitoring": "持续监控",
+    "repeat-this-investigation-with-the-saved-sco": "使用已保存的范围、样本、模型和预算重复执行该调查。",
+    "check-every": "检查间隔",
+    "each-investigation-looks-back-over-the-saved": "每次调查都回看已保存的时间范围。间隔从上一轮运行结束后开始计时。",
+    "reconnect-the-worker-before-enabling-monitor": "启用监控前请先重新连接 worker。"
+  },
+  "analysisModelField": {
+    "analysis-model": "分析模型",
+    "analysis-model-2": "分析模型",
+    "could-not-load-models": "无法加载模型：",
+    "choose-a-chat-model-that-supports-json-outpu": "请选择支持 JSON 输出的对话模型。"
   }
 }

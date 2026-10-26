@@ -175,7 +175,7 @@ export const InactiveHeuristicV2Threshold: React.FC<Pick<ClassificationMethodCon
   return (
     <section aria-label={i18n.t("modelsEndpoints.ClassificationMethodConfig.inactiveHeuristicV2Threshold", { defaultValue: "Inactive Heuristic v2 threshold" })} className="mb-4 space-y-2 rounded-md border p-3">
       <p className="text-sm font-medium">
-        Heuristic v2 success threshold (inactive):{" "}
+        {i18n.t("classificationMethodConfig.heuristic-v2-success-threshold-inactive", { defaultValue: "Heuristic v2 success threshold (inactive):" })}{" "}
         <output aria-label={i18n.t("modelsEndpoints.ClassificationMethodConfig.retainedHeuristicV2Threshold", { defaultValue: "Retained Heuristic v2 threshold" })}>
           {Number.isFinite(threshold) ? threshold : "Invalid value"}
         </output>
@@ -638,7 +638,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                     }
                   >
                     <span>
-                      <span>Route to the default model{defaultModel ? ` (${defaultModel})` : ""}</span>{" "}
+                      <span>{i18n.t("classificationMethodConfig.route-to-the-default-model", { defaultValue: "Route to the default model" })}{defaultModel ? ` (${defaultModel})` : ""}</span>{" "}
                       <span className="text-muted-foreground">
                         {i18n.t("addModel.classificationMethod.fallbackDefaultModelHint", { defaultValue: "— right when your prompt grades something other than complexity" })}
                       </span>

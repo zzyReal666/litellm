@@ -1,6 +1,7 @@
 "use client";
 
 import { Pause, Play, Settings2, MoreHorizontal, Copy } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -39,18 +40,16 @@ export function InvestigationActions({
 }: InvestigationActionsProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label="Investigation actions" />}>
+      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label={i18n.t("investigationActions.investigation-actions", { defaultValue: "Investigation actions" })} />}>
         <MoreHorizontal className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem disabled={busy || hasActiveJob(lens.jobs) || !ready} onClick={onRunNow}>
           <Play />
-          Run now
-        </DropdownMenuItem>
+          {i18n.t("investigationActions.run-now", { defaultValue: "Run now" })}{" "}</DropdownMenuItem>
         <DropdownMenuItem onClick={onEdit}>
           <Settings2 />
-          Edit investigation
-        </DropdownMenuItem>
+          {i18n.t("investigationActions.edit-investigation", { defaultValue: "Edit investigation" })}{" "}</DropdownMenuItem>
         <DropdownMenuItem disabled={!ready} onClick={onDuplicate}>
           <Copy />
           Duplicate
@@ -58,13 +57,11 @@ export function InvestigationActions({
         {lens.settings.enabled ? (
           <DropdownMenuItem disabled={busy} onClick={onPause}>
             <Pause />
-            Pause monitoring
-          </DropdownMenuItem>
+            {i18n.t("investigationActions.pause-monitoring", { defaultValue: "Pause monitoring" })}{" "}</DropdownMenuItem>
         ) : (
           <DropdownMenuItem disabled={!ready || busy} onClick={onEnableMonitoring}>
             <Play />
-            Enable monitoring
-          </DropdownMenuItem>
+            {i18n.t("investigationActions.enable-monitoring", { defaultValue: "Enable monitoring" })}{" "}</DropdownMenuItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

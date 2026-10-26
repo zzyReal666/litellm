@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import PatternTable from "./PatternTable";
@@ -69,7 +70,7 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Content Categories</p>
+              <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.content-categories", { defaultValue: "Content Categories" })}</p>
               <Badge variant="secondary">{categories.length} categories configured</Badge>
             </div>
             <CategoryTable
@@ -87,7 +88,7 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Pattern Detection</p>
+              <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.pattern-detection", { defaultValue: "Pattern Detection" })}</p>
               <Badge variant="secondary">{patterns.length} patterns configured</Badge>
             </div>
             <PatternTable
@@ -103,7 +104,7 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Blocked Keywords</p>
+              <p className="text-lg font-semibold">{i18n.t("contentFilterDisplay.blocked-keywords", { defaultValue: "Blocked Keywords" })}</p>
               <Badge variant="secondary">{blockedWords.length} keywords configured</Badge>
             </div>
             <KeywordTable

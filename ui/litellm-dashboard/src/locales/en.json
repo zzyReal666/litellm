@@ -3342,7 +3342,12 @@
     "openEndpointActions": "Open endpoint actions",
     "colSource": "Source",
     "sourceConfig": "Config",
-    "sourceDb": "DB"
+    "sourceDb": "DB",
+    "endpoint-not-found": "Endpoint not found",
+    "pass-through-endpoints": "Pass Through Endpoints",
+    "configure-and-manage-your-pass-through-endpo": "Configure and manage your pass-through endpoints",
+    "delete-pass-through-endpoint": "Delete Pass-Through Endpoint",
+    "are-you-sure-you-want-to-delete-this-pass-th": "Are you sure you want to delete this pass-through endpoint? This action cannot be undone."
   },
   "perUserUsage": {
     "title": "Per User Usage",
@@ -13711,5 +13716,52 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams Alerting Settings",
     "save-changes": "Save Changes",
     "test-ms-teams-alerts": "Test MS Teams Alerts"
+  },
+  "contentFilterDisplay": {
+    "content-categories": "Content Categories",
+    "pattern-detection": "Pattern Detection",
+    "blocked-keywords": "Blocked Keywords"
+  },
+  "vectorStoreInfo": {
+    "vector-store": "Vector store",
+    "vector-store-id": "Vector Store ID:",
+    "read-only-defined-in-the-config-file": "Read only: defined in the config file",
+    "this-vector-store-comes-from-the-proxy-confi": "This vector store comes from the proxy config YAML, so it cannot be edited or deleted on the dashboard. Change or remove it in the config file and restart the proxy."
+  },
+  "classificationMethodConfig": {
+    "heuristic-v2-success-threshold-inactive": "Heuristic v2 success threshold (inactive):",
+    "route-to-the-default-model": "Route to the default model"
+  },
+  "agentsPanel": {
+    "list-of-a2a-spec-agents-that-are-available-t": "List of A2A-spec agents that are available to be used in your organization. Go to AI Hub, to make agents public.",
+    "how-do-agents-authenticate": "How do agents authenticate?",
+    "agents-can-authenticate-with-a-virtual-key-o": "Agents can authenticate with a virtual key or a trusted identity provider using JWT. Configure an identity binding when adding or editing an agent. JWT authentication does not require a virtual key."
+  },
+  "decisionTestSection": {
+    "try-your-questions-on-a-sample-input-before": "Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision model call, so it is billed and shows up in Logs.",
+    "test-input": "Test input",
+    "paste-a-sample-input-to-score-against-your-q": "Paste a sample input to score against your questions",
+    "latest-first-each-run-keeps-its-input-so-you": "Latest first. Each run keeps its input so you can compare.",
+    "the-model-or-questions-changed-since-this-ru": "The model or questions changed since this run. Run it again to score them."
+  },
+  "investigationActions": {
+    "investigation-actions": "Investigation actions",
+    "run-now": "Run now",
+    "edit-investigation": "Edit investigation",
+    "pause-monitoring": "Pause monitoring",
+    "enable-monitoring": "Enable monitoring"
+  },
+  "monitoringDialog": {
+    "keep-monitoring": "Keep monitoring",
+    "repeat-this-investigation-with-the-saved-sco": "Repeat this investigation with the saved scope, sample, model, and budget.",
+    "check-every": "Check every",
+    "each-investigation-looks-back-over-the-saved": "Each investigation looks back over the saved time range. The interval starts after the previous run finishes.",
+    "reconnect-the-worker-before-enabling-monitor": "Reconnect the worker before enabling monitoring."
+  },
+  "analysisModelField": {
+    "analysis-model": "Analysis model",
+    "analysis-model-2": "Analysis model",
+    "could-not-load-models": "Could not load models:",
+    "choose-a-chat-model-that-supports-json-outpu": "Choose a chat model that supports JSON output."
   }
 }

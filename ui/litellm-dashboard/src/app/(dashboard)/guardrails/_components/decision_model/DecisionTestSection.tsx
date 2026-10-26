@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import i18n from "@/lib/i18n";
 import { StatusBadge } from "@/components/shared/table_cells";
 import { Button } from "@/components/ui/button";
 import { FieldLabel } from "@/components/ui/field";
@@ -81,14 +82,12 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       <div className="space-y-1">
         <FieldLabel>Test</FieldLabel>
         <p className="m-0 text-xs text-muted-foreground">
-          Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision
-          model call, so it is billed and shows up in Logs.
-        </p>
+          {i18n.t("decisionTestSection.try-your-questions-on-a-sample-input-before", { defaultValue: "Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision model call, so it is billed and shows up in Logs." })}{" "}</p>
       </div>
       <Textarea
-        aria-label="Test input"
+        aria-label={i18n.t("decisionTestSection.test-input", { defaultValue: "Test input" })}
         rows={3}
-        placeholder="Paste a sample input to score against your questions"
+        placeholder={i18n.t("decisionTestSection.paste-a-sample-input-to-score-against-your-q", { defaultValue: "Paste a sample input to score against your questions" })}
         className="w-full resize-none"
         value={input}
         onChange={(event) => setInput(event.target.value)}
@@ -109,8 +108,7 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       {runs.length > 0 && (
         <>
           <p className="m-0 text-xs text-muted-foreground">
-            Latest first. Each run keeps its input so you can compare.
-          </p>
+            {i18n.t("decisionTestSection.latest-first-each-run-keeps-its-input-so-you", { defaultValue: "Latest first. Each run keeps its input so you can compare." })}{" "}</p>
           <div className="space-y-2" data-slot="decision-test-history">
             {runs.map((run) => {
               const visible = "error" in run ? [] : visibleTestResults(run, checks, model);
@@ -130,8 +128,7 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
                   {"error" in run && <p className="m-0 mt-1.5 text-xs text-destructive">{run.error}</p>}
                   {!("error" in run) && visible.length === 0 && (
                     <p className="m-0 mt-1.5 text-xs text-muted-foreground">
-                      The model or questions changed since this run. Run it again to score them.
-                    </p>
+                      {i18n.t("decisionTestSection.the-model-or-questions-changed-since-this-ru", { defaultValue: "The model or questions changed since this run. Run it again to score them." })}{" "}</p>
                   )}
                   {visible.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
