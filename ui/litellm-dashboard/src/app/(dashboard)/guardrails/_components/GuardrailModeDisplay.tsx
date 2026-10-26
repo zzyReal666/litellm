@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {
@@ -26,9 +27,9 @@ export const GuardrailModeCard: React.FC<{ litellmParams: GuardrailModeParams }>
     </div>
     {modeIncludesLoggingOnly(litellmParams.mode) && (
       <div className="mt-4">
-        <p>Logging only scope</p>
+        <p>{i18n.t("guardrailModeDisplay.logging-only-scope", { defaultValue: "Logging only scope" })}</p>
         <h3 className="text-lg font-medium">{formatLoggingOnlyScope(litellmParams.logging_only_scope)}</h3>
-        <p className="mt-2">Continue after a flagged request</p>
+        <p className="mt-2">{i18n.t("guardrailModeDisplay.continue-after-a-flagged-request", { defaultValue: "Continue after a flagged request" })}</p>
         <h3 className="text-lg font-medium">{loggingOnlyContinueFromParams(litellmParams) ? "On" : "Off"}</h3>
       </div>
     )}
@@ -43,9 +44,9 @@ export const GuardrailModeRows: React.FC<{ litellmParams: GuardrailModeParams }>
     </div>
     {modeIncludesLoggingOnly(litellmParams.mode) && (
       <div>
-        <p className="font-medium">Logging only scope</p>
+        <p className="font-medium">{i18n.t("guardrailModeDisplay.logging-only-scope-2", { defaultValue: "Logging only scope" })}</p>
         <div>{formatLoggingOnlyScope(litellmParams.logging_only_scope)}</div>
-        <p className="font-medium">Continue after a flagged request</p>
+        <p className="font-medium">{i18n.t("guardrailModeDisplay.continue-after-a-flagged-request-2", { defaultValue: "Continue after a flagged request" })}</p>
         <div>{loggingOnlyContinueFromParams(litellmParams) ? "On" : "Off"}</div>
       </div>
     )}

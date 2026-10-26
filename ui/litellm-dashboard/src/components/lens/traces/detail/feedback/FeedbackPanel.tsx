@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import i18n from "@/lib/i18n";
 import { MessageSquareQuote, Star } from "lucide-react";
 
 import { cn } from "@/lib/cva.config";
@@ -36,7 +37,7 @@ function Entry({ entry }: { entry: Feedback }) {
         {entry.comment ? (
           <p className="text-sm whitespace-pre-wrap text-foreground">“{entry.comment}”</p>
         ) : (
-          <p className="text-sm text-muted-foreground italic">No comment</p>
+          <p className="text-sm text-muted-foreground italic">{i18n.t("feedbackPanel.no-comment", { defaultValue: "No comment" })}</p>
         )}
         <span className="text-xs text-muted-foreground">
           {entry.author} · <span title={entry.updated_at}>{formatActivityTimestamp(entry.updated_at)}</span>
@@ -59,7 +60,7 @@ export function FeedbackPanel({ summary, accessToken }: FeedbackPanelProps) {
   const low = isLow(view.lowest);
   return (
     <section
-      aria-label="User feedback"
+      aria-label={i18n.t("feedbackPanel.user-feedback", { defaultValue: "User feedback" })}
       data-low={low || undefined}
       className={cn(
         "flex shrink-0 flex-col gap-2 border-b px-4 py-3",
@@ -68,8 +69,7 @@ export function FeedbackPanel({ summary, accessToken }: FeedbackPanelProps) {
     >
       <header className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
         <MessageSquareQuote className="size-3.5" />
-        User feedback
-        {view.entries.length > 1 && (
+        {i18n.t("feedbackPanel.user-feedback-2", { defaultValue: "User feedback" })}{view.entries.length > 1 && (
           <span className={cn("inline-flex items-center gap-1 font-mono", low && "text-destructive")}>
             <Star className="size-3" />
             {formatScore(view.average)}/10 avg from {view.entries.length} users

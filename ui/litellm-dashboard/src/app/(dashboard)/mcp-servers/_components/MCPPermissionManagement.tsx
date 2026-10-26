@@ -208,8 +208,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
                 </SimpleTooltip>
               </span>
               <p className="text-sm text-muted-foreground mt-1">
-                Enable if this server should be &quot;public&quot; to all keys.
-              </p>
+                {i18n.t("mCPPermissionManagement.enable-if-this-server-should-be-public-to-al", { defaultValue: "Enable if this server should be \"public\" to all keys." })}</p>
             </div>
             <MountedFormField name="allow_all_keys" defaultValue={mcpServer?.allow_all_keys ?? false} className="mb-0">
               {(control) => <Switch aria-label={i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysLabel", { defaultValue: "Allow All LiteLLM Keys" })} {...switchControl(control)} />}
@@ -225,8 +224,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
                 </SimpleTooltip>
               </span>
               <p className="text-sm text-muted-foreground mt-1">
-                Turn on to restrict public IPs. Explicitly published server IDs remain accessible from public IPs.
-              </p>
+                {i18n.t("mCPPermissionManagement.turn-on-to-restrict-public-ips-explicitly-pu", { defaultValue: "Turn on to restrict public IPs. Explicitly published server IDs remain accessible from public IPs." })}</p>
             </div>
             <MountedFormField name="available_on_public_internet" defaultValue={true} className="mb-0">
               {(control) => <Switch aria-label={i18n.t("mcpTools.mcpPermissionManagement.internalNetworkOnlyLabel", { defaultValue: "Internal network only" })} {...invertedSwitchControl(control)} />}
@@ -268,9 +266,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
                   </SimpleTooltip>
                 </span>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Forward upstream OAuth discovery and 401 challenges so clients negotiate OAuth directly with the
-                  upstream MCP server.
-                </p>
+                  {i18n.t("mCPPermissionManagement.forward-upstream-oauth-discovery-and-401-cha", { defaultValue: "Forward upstream OAuth discovery and 401 challenges so clients negotiate OAuth directly with the upstream MCP server." })}</p>
               </div>
               <MountedFormField
                 name="oauth_passthrough"

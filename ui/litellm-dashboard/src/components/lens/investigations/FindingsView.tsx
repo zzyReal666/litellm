@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import i18n from "@/lib/i18n";
 import { Inspector, useInspector } from "@/components/shared/Inspector";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNow } from "@/hooks/useNow";
@@ -220,13 +221,13 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
         )}
         <div className="flex min-h-0 flex-1">
           <section
-            aria-label="Findings list"
+            aria-label={i18n.t("findingsView.findings-list", { defaultValue: "Findings list" })}
             className={`flex min-h-0 w-full flex-col border-r md:w-[22rem] md:shrink-0 lg:w-[28rem] ${selected ? "hidden md:flex" : "flex"}`}
           >
             <div className="flex shrink-0 items-center gap-2 px-3 py-2">
-              <FilterSelect label="Filter by agent" value={filters.agent} items={agents} onChange={filters.setAgent} />
+              <FilterSelect label={i18n.t("findingsView.filter-by-agent", { defaultValue: "Filter by agent" })} value={filters.agent} items={agents} onChange={filters.setAgent} />
               <FilterSelect
-                label="Filter by priority"
+                label={i18n.t("findingsView.filter-by-priority", { defaultValue: "Filter by priority" })}
                 value={filters.priority}
                 items={PRIORITIES}
                 onChange={filters.setPriority}
@@ -247,7 +248,7 @@ export function FindingsView({ readOnly = false }: { readOnly?: boolean }) {
           </section>
           {selected ? (
             <aside
-              aria-label="Finding details"
+              aria-label={i18n.t("findingsView.finding-details", { defaultValue: "Finding details" })}
               data-testid="finding-panel"
               className="flex min-h-0 min-w-0 flex-1 flex-col"
             >

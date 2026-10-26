@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 
 import { StatusBadge, type StatusTone } from "@/components/shared/table_cells";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -153,21 +154,19 @@ export function LiveDrawer({
                   ) : (
                     !running && (
                       <div className="flex flex-col gap-1 px-2 py-6 text-xs text-muted-foreground">
-                        <p className="text-sm text-foreground">Waiting for the first trace…</p>
+                        <p className="text-sm text-foreground">{i18n.t("liveDrawer.waiting-for-the-first-trace", { defaultValue: "Waiting for the first trace…" })}</p>
                         {waiting}
                       </div>
                     )
                   )}
                 </section>
                 <section
-                  aria-label="Preliminary observations"
+                  aria-label={i18n.t("liveDrawer.preliminary-observations", { defaultValue: "Preliminary observations" })}
                   className="flex min-h-0 flex-col gap-3 overflow-y-auto px-5 py-4"
                 >
-                  <h2 className={PANE_TITLE}>Preliminary observations</h2>
+                  <h2 className={PANE_TITLE}>{i18n.t("liveDrawer.preliminary-observations-2", { defaultValue: "Preliminary observations" })}</h2>
                   <p className="text-xs leading-relaxed text-muted-foreground">
-                    First-pass trace observations, grouped by check. Final findings are shown in Findings after the
-                    investigation finishes.
-                  </p>
+                    {i18n.t("liveDrawer.first-pass-trace-observations-grouped-by-che", { defaultValue: "First-pass trace observations, grouped by check. Final findings are shown in Findings after the investigation finishes." })}</p>
                   <ConclusionsPanel
                     groups={groups}
                     total={listed.length}

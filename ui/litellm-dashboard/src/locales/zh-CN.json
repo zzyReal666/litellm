@@ -13868,5 +13868,74 @@
     "total-tokens": "总 Token 数",
     "avg-cost-request": "平均成本 / 请求",
     "avg-latency": "平均延迟"
+  },
+  "findingsView": {
+    "findings-list": "发现项列表",
+    "filter-by-agent": "按 agent 筛选",
+    "filter-by-priority": "按优先级筛选",
+    "finding-details": "发现项详情"
+  },
+  "historyTab": {
+    "could-not-load-run-history": "无法加载运行历史。",
+    "newer-runs": "更新的运行",
+    "older-runs": "更早的运行"
+  },
+  "liveDrawer": {
+    "waiting-for-the-first-trace": "正在等待第一条链路…",
+    "preliminary-observations": "初步观察",
+    "preliminary-observations-2": "初步观察",
+    "first-pass-trace-observations-grouped-by-che": "按检查项分组的首轮链路观察结果。调查结束后，最终发现项会显示在「发现项」中。"
+  },
+  "liveStrip": {
+    "live-trace-results": "实时链路结果",
+    "view-run": "查看运行",
+    "recently-reviewed-traces": "最近审查的链路",
+    "hide-live-trace-results": "隐藏实时链路结果"
+  },
+  "nowReading": {
+    "now-reading": "正在读取",
+    "current-work": "当前工作",
+    "active-analysis-tasks": "进行中的分析任务",
+    "tool-calls": "工具调用："
+  },
+  "onboardingSetup": {
+    "get-lens-running": "让 Lens 运行起来",
+    "each-step-checks-your-connection-so-you-ll-s": "每一步都会检查你的连接状态，让你知道何时已可用。",
+    "could-not-check-setup": "无法检查设置。",
+    "a-gateway-administrator-can-connect-a-worker": "网关管理员可以连接 worker 并运行调查。"
+  },
+  "feedbackPanel": {
+    "no-comment": "无评论",
+    "user-feedback": "用户反馈",
+    "user-feedback-2": "用户反馈"
+  },
+  "requestLogsPanel": {
+    "live-tail": "实时追踪",
+    "refreshing-every-15s": "每 15 秒刷新",
+    "hide-health-checks": "隐藏健康检查",
+    "reset-filters": "重置筛选"
+  },
+  "guardrailModeDisplay": {
+    "logging-only-scope": "仅记录范围",
+    "continue-after-a-flagged-request": "请求被标记后继续",
+    "logging-only-scope-2": "仅记录范围",
+    "continue-after-a-flagged-request-2": "请求被标记后继续"
+  },
+  "guardrailInfo": {
+    "guardrail-not-found": "未找到护栏",
+    "last-updated": "最近更新：",
+    "pii-entities-configured": "已配置的 PII 实体",
+    "custom-code": "自定义代码"
+  },
+  "mCPPermissionManagement": {
+    "enable-if-this-server-should-be-public-to-al": "若该服务器应对所有密钥公开，请启用此项。",
+    "turn-on-to-restrict-public-ips-explicitly-pu": "开启后限制公网 IP。显式发布过的服务器 ID 仍可从公网 IP 访问。",
+    "forward-upstream-oauth-discovery-and-401-cha": "转发上游 OAuth 发现与 401 质询，让客户端直接与上游 MCP 服务器协商 OAuth。"
+  },
+  "aPIReferenceView": {
+    "openai-compatible-proxy-api-reference": "OpenAI 兼容代理：API 参考",
+    "litellm-is-openai-compatible-this-means-your": "LiteLLM 兼容 OpenAI，这意味着你的 API 密钥可用于 OpenAI SDK。只需把 base_url 指向你的 LiteLLM 代理即可，示例如下",
+    "openai-python-sdk": "OpenAI Python SDK",
+    "langchain-py": "Langchain Py"
   }
 }

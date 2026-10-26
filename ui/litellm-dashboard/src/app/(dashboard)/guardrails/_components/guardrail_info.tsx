@@ -523,7 +523,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
   );
 
   if (!guardrailData) {
-    return <div className="p-4">{backButton}Guardrail not found</div>;
+    return <div className="p-4">{backButton}{i18n.t("guardrailInfo.guardrail-not-found", { defaultValue: "Guardrail not found" })}</div>;
   }
 
   const formatDate = (dateString?: string) => (dateString ? new Date(dateString).toLocaleString() : "-");
@@ -597,7 +597,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
                 <p>{t("guardrails.guardrailInfo.createdAt", { defaultValue: "Created At" })}</p>
                 <div className="mt-2">
                   <h3 className="text-lg font-medium">{formatDate(guardrailData.created_at)}</h3>
-                  <p>Last Updated: {formatDate(guardrailData.updated_at)}</p>
+                  <p>{i18n.t("guardrailInfo.last-updated", { defaultValue: "Last Updated:" })}{" "}{formatDate(guardrailData.updated_at)}</p>
                 </div>
               </Card>
             </div>
@@ -608,8 +608,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
                   <div className="flex justify-between items-center">
                     <p className="font-medium">{t("guardrails.guardrailInfo.piiProtection", { defaultValue: "PII Protection" })}</p>
                     <Badge variant="secondary">
-                      {Object.keys(guardrailData.litellm_params.pii_entities_config).length} PII entities configured
-                    </Badge>
+                      {Object.keys(guardrailData.litellm_params.pii_entities_config).length} {i18n.t("guardrailInfo.pii-entities-configured", { defaultValue: "PII entities configured" })}</Badge>
                   </div>
                 </Card>
               )}
@@ -656,7 +655,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center gap-2">
                     <Code className="text-info" />
-                    <p className="font-medium text-lg">Custom Code</p>
+                    <p className="font-medium text-lg">{i18n.t("guardrailInfo.custom-code", { defaultValue: "Custom Code" })}</p>
                   </div>
                   {isAdmin && !isConfigGuardrail && (
                     <Button variant="outline" size="sm" onClick={() => setCustomCodeModalVisible(true)}>

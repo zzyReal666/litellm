@@ -13868,5 +13868,74 @@
     "total-tokens": "Total Tokens",
     "avg-cost-request": "Avg cost / request",
     "avg-latency": "Avg latency"
+  },
+  "findingsView": {
+    "findings-list": "Findings list",
+    "filter-by-agent": "Filter by agent",
+    "filter-by-priority": "Filter by priority",
+    "finding-details": "Finding details"
+  },
+  "historyTab": {
+    "could-not-load-run-history": "Could not load run history.",
+    "newer-runs": "Newer runs",
+    "older-runs": "Older runs"
+  },
+  "liveDrawer": {
+    "waiting-for-the-first-trace": "Waiting for the first trace…",
+    "preliminary-observations": "Preliminary observations",
+    "preliminary-observations-2": "Preliminary observations",
+    "first-pass-trace-observations-grouped-by-che": "First-pass trace observations, grouped by check. Final findings are shown in Findings after the investigation finishes."
+  },
+  "liveStrip": {
+    "live-trace-results": "Live trace results",
+    "view-run": "View run",
+    "recently-reviewed-traces": "Recently reviewed traces",
+    "hide-live-trace-results": "Hide live trace results"
+  },
+  "nowReading": {
+    "now-reading": "Now reading",
+    "current-work": "Current work",
+    "active-analysis-tasks": "Active analysis tasks",
+    "tool-calls": "Tool calls:"
+  },
+  "onboardingSetup": {
+    "get-lens-running": "Get Lens running",
+    "each-step-checks-your-connection-so-you-ll-s": "Each step checks your connection, so you’ll see when it’s working.",
+    "could-not-check-setup": "Could not check setup.",
+    "a-gateway-administrator-can-connect-a-worker": "A gateway administrator can connect a worker and run investigations."
+  },
+  "feedbackPanel": {
+    "no-comment": "No comment",
+    "user-feedback": "User feedback",
+    "user-feedback-2": "User feedback"
+  },
+  "requestLogsPanel": {
+    "live-tail": "Live Tail",
+    "refreshing-every-15s": "Refreshing every 15s",
+    "hide-health-checks": "Hide Health Checks",
+    "reset-filters": "Reset Filters"
+  },
+  "guardrailModeDisplay": {
+    "logging-only-scope": "Logging only scope",
+    "continue-after-a-flagged-request": "Continue after a flagged request",
+    "logging-only-scope-2": "Logging only scope",
+    "continue-after-a-flagged-request-2": "Continue after a flagged request"
+  },
+  "guardrailInfo": {
+    "guardrail-not-found": "Guardrail not found",
+    "last-updated": "Last Updated:",
+    "pii-entities-configured": "PII entities configured",
+    "custom-code": "Custom Code"
+  },
+  "mCPPermissionManagement": {
+    "enable-if-this-server-should-be-public-to-al": "Enable if this server should be \"public\" to all keys.",
+    "turn-on-to-restrict-public-ips-explicitly-pu": "Turn on to restrict public IPs. Explicitly published server IDs remain accessible from public IPs.",
+    "forward-upstream-oauth-discovery-and-401-cha": "Forward upstream OAuth discovery and 401 challenges so clients negotiate OAuth directly with the upstream MCP server."
+  },
+  "aPIReferenceView": {
+    "openai-compatible-proxy-api-reference": "OpenAI Compatible Proxy: API Reference",
+    "litellm-is-openai-compatible-this-means-your": "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
+    "openai-python-sdk": "OpenAI Python SDK",
+    "langchain-py": "Langchain Py"
   }
 }

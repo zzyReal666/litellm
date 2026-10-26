@@ -1,5 +1,6 @@
 "use client";
 import { ListRow } from "@/components/shared/ListRow";
+import i18n from "@/lib/i18n";
 
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
@@ -42,7 +43,7 @@ function HistoryContent({
     <>
       {history.error && (
         <p role="alert" className="text-sm text-destructive">
-          Could not load run history.{" "}
+          {i18n.t("historyTab.could-not-load-run-history", { defaultValue: "Could not load run history." })}{" "}
           <Button variant="link" size="sm" onClick={() => void history.refetch()}>
             Retry
           </Button>
@@ -85,16 +86,14 @@ function HistoryContent({
       {(offset > 0 || (history.data?.length ?? 0) >= PAGE) && (
         <div className="flex justify-between">
           <Button variant="ghost" size="sm" disabled={!offset} onClick={() => setOffset(Math.max(0, offset - PAGE))}>
-            Newer runs
-          </Button>
+            {i18n.t("historyTab.newer-runs", { defaultValue: "Newer runs" })}</Button>
           <Button
             variant="ghost"
             size="sm"
             disabled={(history.data?.length ?? 0) < PAGE}
             onClick={() => setOffset(offset + PAGE)}
           >
-            Older runs
-          </Button>
+            {i18n.t("historyTab.older-runs", { defaultValue: "Older runs" })}</Button>
         </div>
       )}
     </>

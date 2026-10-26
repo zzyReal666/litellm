@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, PanelRight, X } from "lucide-react";
+import i18n from "@/lib/i18n";
 import type { ReactNode } from "react";
 
 import { useLensApi } from "../../data/LensServices";
@@ -103,7 +104,7 @@ export function LiveStrip({
   const finished = state.kind === "done" || state.kind === "failed";
   return (
     <section
-      aria-label="Live trace results"
+      aria-label={i18n.t("liveStrip.live-trace-results", { defaultValue: "Live trace results" })}
       onClick={onOpen}
       className="flex cursor-pointer flex-wrap items-start gap-x-6 gap-y-2 rounded-md bg-muted/30 px-3 py-2 text-xs text-muted-foreground transition-colors hover:bg-muted/50"
     >
@@ -131,8 +132,7 @@ export function LiveStrip({
           }}
         >
           <PanelRight />
-          View run
-          <ArrowRight />
+          {i18n.t("liveStrip.view-run", { defaultValue: "View run" })}<ArrowRight />
         </Button>
       </div>
       <div className="min-w-0 flex-1">
@@ -152,7 +152,7 @@ export function LiveStrip({
           </p>
         )}
         {recent.length > 0 && state.kind !== "waiting" && (
-          <ol aria-label="Recently reviewed traces" className="flex flex-col">
+          <ol aria-label={i18n.t("liveStrip.recently-reviewed-traces", { defaultValue: "Recently reviewed traces" })} className="flex flex-col">
             {recent.map((review) => (
               <RecentLine key={reviewKey(review)} review={review} now={now} onOpen={onOpen} />
             ))}
@@ -162,7 +162,7 @@ export function LiveStrip({
       <Button
         variant="ghost"
         size="icon-xs"
-        aria-label="Hide live trace results"
+        aria-label={i18n.t("liveStrip.hide-live-trace-results", { defaultValue: "Hide live trace results" })}
         className="shrink-0"
         onClick={(event) => {
           event.stopPropagation();

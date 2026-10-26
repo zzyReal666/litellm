@@ -1,6 +1,7 @@
 "use client";
 
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
+import i18n from "@/lib/i18n";
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import type { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import moment from "moment";
@@ -319,20 +320,18 @@ export default function RequestLogsPanel({ accessToken, token, userRole, userID,
         toolbarChildren={
           <LogsToolbar>
             <LogsTimeRangePicker value={timeRange} onValueChange={handleTimeRangeChange} />
-            <LogsToolbarSwitch label="Live Tail" checked={isLiveTail} onCheckedChange={setIsLiveTail} />
+            <LogsToolbarSwitch label={i18n.t("requestLogsPanel.live-tail", { defaultValue: "Live Tail" })} checked={isLiveTail} onCheckedChange={setIsLiveTail} />
             {isLiveTail && pagination.pageIndex === 0 && (
               <span role="status" className="whitespace-nowrap text-xs text-muted-foreground">
-                Refreshing every 15s
-              </span>
+                {i18n.t("requestLogsPanel.refreshing-every-15s", { defaultValue: "Refreshing every 15s" })}</span>
             )}
             <LogsToolbarSwitch
-              label="Hide Health Checks"
+              label={i18n.t("requestLogsPanel.hide-health-checks", { defaultValue: "Hide Health Checks" })}
               checked={excludeInternalHealthChecks}
               onCheckedChange={handleExcludeInternalHealthChecksChange}
             />
             <Button variant="outline" size="sm" onClick={handleResetFilters}>
-              Reset Filters
-            </Button>
+              {i18n.t("requestLogsPanel.reset-filters", { defaultValue: "Reset Filters" })}</Button>
           </LogsToolbar>
         }
       />

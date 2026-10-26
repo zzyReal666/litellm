@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 
 import {
   activityOperation,
@@ -80,7 +81,7 @@ export function NowReading({
   charMs: number;
 }) {
   return (
-    <section aria-label="Now reading" className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border">
+    <section aria-label={i18n.t("nowReading.now-reading", { defaultValue: "Now reading" })} className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border">
       <header className="flex items-center justify-between gap-3 px-0.5">
         <ModelName model={model} size="md" />
         <span role="status" className="text-xs tabular-nums text-muted-foreground">
@@ -106,14 +107,14 @@ export function ActiveWork({ model, activities }: { model: string; activities: r
   const now = useNow(500);
   return (
     <section
-      aria-label="Current work"
+      aria-label={i18n.t("nowReading.current-work", { defaultValue: "Current work" })}
       className="mb-3 flex flex-col gap-2 rounded-xl bg-muted p-2.5 ring-1 ring-border"
     >
       <header className="flex items-center justify-between gap-3 px-0.5">
         <ModelName model={model} size="md" />
         <span className="text-xs tabular-nums text-muted-foreground">{activities.length} active</span>
       </header>
-      <ol aria-label="Active analysis tasks" className="flex flex-col gap-1.5">
+      <ol aria-label={i18n.t("nowReading.active-analysis-tasks", { defaultValue: "Active analysis tasks" })} className="flex flex-col gap-1.5">
         {activities.map((activity) => {
           const tools = toolCallSummary(activity.tool_calls);
           return (
@@ -135,7 +136,7 @@ export function ActiveWork({ model, activities }: { model: string; activities: r
               <p role="status" className="text-foreground">
                 {activityOperation(activity)}
               </p>
-              {tools && <p className="text-muted-foreground">Tool calls: {tools}</p>}
+              {tools && <p className="text-muted-foreground">{i18n.t("nowReading.tool-calls", { defaultValue: "Tool calls:" })}{" "}{tools}</p>}
             </li>
           );
         })}

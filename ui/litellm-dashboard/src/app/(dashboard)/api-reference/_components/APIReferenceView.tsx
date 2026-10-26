@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import i18n from "@/lib/i18n";
 import CodeBlock from "@/components/CodeBlock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -24,25 +25,22 @@ const APIReferenceView: React.FC<ApiRefProps> = ({ proxySettings }) => {
       <div className="mb-5">
         {/* Header row with Docs link on the right */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-foreground">OpenAI Compatible Proxy: API Reference</h1>
+          <h1 className="text-2xl font-semibold text-foreground">{i18n.t("aPIReferenceView.openai-compatible-proxy-api-reference", { defaultValue: "OpenAI Compatible Proxy: API Reference" })}</h1>
         </div>
 
         <p className="mt-2 mb-2 text-sm text-muted-foreground">
-          LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to
-          point to your litellm proxy. Example Below{" "}
+          {i18n.t("aPIReferenceView.litellm-is-openai-compatible-this-means-your", { defaultValue: "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below" })}{" "}
         </p>
 
         <Tabs defaultValue="openai">
           <TabsList variant="line" className="border-b rounded-none w-full justify-start h-auto p-0">
             <TabsTrigger value="openai" className="rounded-none px-4 py-2 flex-none">
-              OpenAI Python SDK
-            </TabsTrigger>
+              {i18n.t("aPIReferenceView.openai-python-sdk", { defaultValue: "OpenAI Python SDK" })}</TabsTrigger>
             <TabsTrigger value="llamaindex" className="rounded-none px-4 py-2 flex-none">
               LlamaIndex
             </TabsTrigger>
             <TabsTrigger value="langchain" className="rounded-none px-4 py-2 flex-none">
-              Langchain Py
-            </TabsTrigger>
+              {i18n.t("aPIReferenceView.langchain-py", { defaultValue: "Langchain Py" })}</TabsTrigger>
           </TabsList>
           <TabsContent value="openai" keepMounted>
             <CodeBlock
