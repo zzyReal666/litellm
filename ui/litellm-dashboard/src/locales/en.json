@@ -13405,6 +13405,31 @@
       "matchHint": "Match any recorded metadata, such as a user ID, environment, or tag. All conditions must match.",
       "teamIdOptional": "Team ID (optional)",
       "allAccessibleTeams": "All accessible teams"
+    },
+    "introduction": {
+      "tracing": "Tracing",
+      "sampleTrace": "Sample trace · 14.2s",
+      "sampleTraceTimelineAria": "Sample trace timeline",
+      "failed": "Failed",
+      "traceStepAria": "{{name}}, {{seconds}} seconds{{failed}}. Highlight related finding",
+      "failedSuffix": ", failed",
+      "outputSuffix": "· output",
+      "benchmarkErrorOutput": "Error: benchmark runner unavailable (503)",
+      "sampleAnswer": "The column store is 40% faster than the row store for your workload.",
+      "lensFindings": "Lens findings",
+      "sampleRunsReviewed": "500 sample runs reviewed",
+      "findingTitle1": "Claims numbers it never measured",
+      "findingBody1": "Reports a speedup even though the benchmark failed.",
+      "findingQuote1": "“…40% faster than the row store for your workload.”",
+      "nextStep": "Next step:",
+      "findingNextStep1": "Report the failed benchmark instead of estimating.",
+      "findingMeta1": "38 linked runs · High priority",
+      "findingTitle2": "Promises to follow up, then stops",
+      "findingBody2": "After an order lookup times out, the agent promises to check and ends the run.",
+      "findingMeta2": "12 linked runs · Medium priority",
+      "heroTitle": "The gateway that helps your agents improve",
+      "heroDescription": "Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.",
+      "setUpLens": "Set up Lens"
     }
   },
   "mcpServerCredentials": {

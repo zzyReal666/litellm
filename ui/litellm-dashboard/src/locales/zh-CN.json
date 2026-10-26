@@ -13405,6 +13405,31 @@
       "matchHint": "匹配任意已记录的元数据，例如用户 ID、环境或标签。所有条件都必须满足。",
       "teamIdOptional": "团队 ID（可选）",
       "allAccessibleTeams": "全部可访问团队"
+    },
+    "introduction": {
+      "tracing": "链路追踪",
+      "sampleTrace": "示例链路 · 14.2 秒",
+      "sampleTraceTimelineAria": "示例链路时间线",
+      "failed": "失败",
+      "traceStepAria": "{{name}}，{{seconds}} 秒{{failed}}。高亮相关发现项",
+      "failedSuffix": "，失败",
+      "outputSuffix": "· 输出",
+      "benchmarkErrorOutput": "错误：基准测试运行器不可用（503）",
+      "sampleAnswer": "在你的工作负载下，列式存储比行式存储快 40%。",
+      "lensFindings": "Lens 发现项",
+      "sampleRunsReviewed": "已审查 500 次示例运行",
+      "findingTitle1": "声称了从未测量过的数字",
+      "findingBody1": "基准测试已失败，却仍然报告了性能提升。",
+      "findingQuote1": "“……在你的工作负载下比行式存储快 40%。”",
+      "nextStep": "下一步：",
+      "findingNextStep1": "如实报告失败的基准测试，而不是估算结果。",
+      "findingMeta1": "关联 38 次运行 · 高优先级",
+      "findingTitle2": "承诺跟进，然后中断",
+      "findingBody2": "订单查询超时后，agent 承诺会核实，却直接结束了运行。",
+      "findingMeta2": "关联 12 次运行 · 中优先级",
+      "heroTitle": "帮助你的 agent 持续改进的网关",
+      "heroDescription": "把已记录的 agent 运行转化为与具体步骤关联的发现项，让你清楚发生了什么、该改什么。",
+      "setUpLens": "设置 Lens"
     }
   },
   "mcpServerCredentials": {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import styles from "./LensIntroduction.module.css";
 import { GatewayFlow } from "./GatewayFlow";
 
@@ -14,7 +15,10 @@ const traceSteps = [
   { name: "answer", start: 9.7, duration: 4.5, failed: false },
 ];
 
-const sampleAnswer = "The column store is 40% faster than the row store for your workload.";
+const sampleAnswer = () =>
+  i18n.t("lens.introduction.sampleAnswer", {
+    defaultValue: "The column store is 40% faster than the row store for your workload.",
+  });
 
 type EvidenceProps = { highlighted: boolean; onHighlight: () => void };
 
@@ -26,11 +30,13 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-trace" className="font-semibold">
-          Tracing
+          {i18n.t("' + NS + '.tracing", { defaultValue: "Tracing" })}
         </h3>
-        <p className="text-xs text-muted-foreground">Sample trace · 14.2s</p>
+        <p className="text-xs text-muted-foreground">
+          {i18n.t("' + NS + '.sampleTrace", { defaultValue: "Sample trace · 14.2s" })}
+        </p>
       </div>
-      <ol className="mt-3 space-y-1.5 text-xs leading-5 sm:text-sm" aria-label="Sample trace timeline">
+      <ol className="mt-3 space-y-1.5 text-xs leading-5 sm:text-sm" aria-label={i18n.t("lens.introduction.sampleTraceTimelineAria", { defaultValue: "Sample trace timeline" })}>
         {traceSteps.map((item, index) => {
           const linked = item.failed || item.name === "answer";
           const rowClass =
@@ -46,7 +52,9 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
                 <span className="truncate" title={item.name}>
                   {item.name}
                 </span>
-                {item.failed && <span className="sr-only">Failed</span>}
+                {item.failed && (
+                  <span className="sr-only">{i18n.t("lens.introduction.failed", { defaultValue: "Failed" })}</span>
+                )}
               </span>
               <span aria-hidden="true" className="relative h-2.5 overflow-hidden rounded-sm bg-muted/70">
                 <span
@@ -68,7 +76,14 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
                   type="button"
                   className={cn(rowClass, styles.evidenceLink)}
                   data-evidence-link=""
-                  aria-label={`${item.name}, ${item.duration} seconds${item.failed ? ", failed" : ""}. Highlight related finding`}
+                  aria-label={i18n.t("lens.introduction.traceStepAria", {
+                    defaultValue: "{{name}}, {{seconds}} seconds{{failed}}. Highlight related finding",
+                    name: item.name,
+                    seconds: item.duration,
+                    failed: item.failed
+                      ? i18n.t("lens.introduction.failedSuffix", { defaultValue: ", failed" })
+                      : "",
+                  })}
                   aria-controls="lens-linked-finding"
                   aria-pressed={highlighted}
                   onClick={onHighlight}
@@ -84,12 +99,18 @@ function TraceExample({ highlighted, onHighlight }: EvidenceProps) {
       </ol>
       <div className="mt-3 grid gap-3 border-t pt-3 sm:grid-cols-2">
         <div id="lens-benchmark-output" className={cn(styles.evidenceOutput, "rounded-lg bg-muted/60 p-2.5")}>
-          <p className="text-xs text-muted-foreground">run_benchmark · output</p>
-          <p className="mt-1.5 text-sm leading-4.5">Error: benchmark runner unavailable (503)</p>
+          <p className="text-xs text-muted-foreground">
+            run_benchmark {i18n.t("lens.introduction.outputSuffix", { defaultValue: "· output" })}
+          </p>
+          <p className="mt-1.5 text-sm leading-4.5">
+            {i18n.t("lens.introduction.benchmarkErrorOutput", { defaultValue: "Error: benchmark runner unavailable (503)" })}
+          </p>
         </div>
         <div id="lens-answer-output" className={cn(styles.evidenceOutput, "rounded-lg bg-muted/60 p-2.5")}>
-          <p className="text-xs text-muted-foreground">answer · output</p>
-          <p className="mt-1.5 text-sm leading-4.5">“{sampleAnswer}”</p>
+          <p className="text-xs text-muted-foreground">
+            answer {i18n.t("lens.introduction.outputSuffix", { defaultValue: "· output" })}
+          </p>
+          <p className="mt-1.5 text-sm leading-4.5">“{sampleAnswer()}”</p>
         </div>
       </div>
     </section>
@@ -104,9 +125,11 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <h3 id="lens-sample-findings" className="font-semibold">
-          Lens findings
+          {i18n.t("' + NS + '.lensFindings", { defaultValue: "Lens findings" })}
         </h3>
-        <p className="text-xs text-muted-foreground">500 sample runs reviewed</p>
+        <p className="text-xs text-muted-foreground">
+          {i18n.t("lens.introduction.sampleRunsReviewed", { defaultValue: "500 sample runs reviewed" })}
+        </p>
       </div>
       <div className="mt-3 divide-y border-t">
         <article id="lens-linked-finding" className={cn(styles.evidenceFinding, "py-3")}>
@@ -120,29 +143,41 @@ function FindingExamples({ highlighted, onHighlight }: EvidenceProps) {
               onClick={onHighlight}
             >
               <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-rose-500" />
-              Claims numbers it never measured
+              {i18n.t("' + NS + '.findingTitle1", { defaultValue: "Claims numbers it never measured" })}
             </button>
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5">
-            <p className="text-muted-foreground">Reports a speedup even though the benchmark failed.</p>
+            <p className="text-muted-foreground">
+              {i18n.t("lens.introduction.findingBody1", { defaultValue: "Reports a speedup even though the benchmark failed." })}
+            </p>
             <blockquote className="border-l-2 pl-3 italic">
-              “…40% faster than the row store for your workload.”
+              {i18n.t("' + NS + '.findingQuote1", {
+                defaultValue: "“…40% faster than the row store for your workload.”",
+              })}
             </blockquote>
             <p>
-              <span className="text-muted-foreground">Next step: </span>Report the failed benchmark instead of
-              estimating.
+              <span className="text-muted-foreground">{i18n.t("lens.introduction.nextStep", { defaultValue: "Next step:" })}{" "}</span>
+              {i18n.t("lens.introduction.findingNextStep1", { defaultValue: "Report the failed benchmark instead of estimating." })}
             </p>
-            <p className="text-xs text-muted-foreground">38 linked runs · High priority</p>
+            <p className="text-xs text-muted-foreground">
+              {i18n.t("' + NS + '.findingMeta1", { defaultValue: "38 linked runs · High priority" })}
+            </p>
           </div>
         </article>
         <article className="pt-3">
           <h4 className="flex items-start gap-2 text-sm font-semibold">
             <span aria-hidden="true" className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-500" />
-            Promises to follow up, then stops
+            {i18n.t("' + NS + '.findingTitle2", { defaultValue: "Promises to follow up, then stops" })}
           </h4>
           <div className="ml-4 mt-1.5 space-y-1.5 text-sm leading-4.5 text-muted-foreground">
-            <p>After an order lookup times out, the agent promises to check and ends the run.</p>
-            <p className="text-xs">12 linked runs · Medium priority</p>
+            <p>
+              {i18n.t("' + NS + '.findingBody2", {
+                defaultValue: "After an order lookup times out, the agent promises to check and ends the run.",
+              })}
+            </p>
+            <p className="text-xs">
+              {i18n.t("' + NS + '.findingMeta2", { defaultValue: "12 linked runs · Medium priority" })}
+            </p>
           </div>
         </article>
       </div>
@@ -156,14 +191,17 @@ export function LensIntroduction({ onStart }: { onStart: () => void }) {
   return (
     <section aria-labelledby="lens-introduction" className="rounded-2xl border bg-card p-4 sm:px-6 sm:py-5 xl:px-7">
       <h2 id="lens-introduction" className="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-        The gateway that helps your agents improve
+        {i18n.t("' + NS + '.heroTitle", { defaultValue: "The gateway that helps your agents improve" })}
       </h2>
       <p className="mt-3 max-w-[780px] text-sm leading-6 text-muted-foreground">
-        Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.
+        {i18n.t("' + NS + '.heroDescription", {
+          defaultValue:
+            "Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.",
+        })}
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button className="rounded-lg px-4" onClick={onStart}>
-          Set up Lens
+          {i18n.t("' + NS + '.setUpLens", { defaultValue: "Set up Lens" })}
         </Button>
         
       </div>
