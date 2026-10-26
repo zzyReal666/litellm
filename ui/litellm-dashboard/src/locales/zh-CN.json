@@ -11981,7 +11981,16 @@
       "bucketFirstVisitSublabel": "上一轮 → 尚未使用过的层级",
       "bucketReturnToTierSublabel": "上一轮 → 之前用过的层级",
       "classificationRate": "（每 1K 轮 {{rate}}）",
-      "classificationRateBelow": "（每 1K 轮低于 ¥0.0001）"
+      "classificationRateBelow": "（每 1K 轮低于 ¥0.0001）",
+      "savingsAria": "自动路由节省",
+      "comparedOn": "基于 {{total}} 次请求中的 {{done}} 次对比；自适应与质量路由不参与对比",
+      "perRouterDiffers": "按路由的明细与记录的节省金额相差 {{amount}}，例如按路由跟踪之前的历史数据，因此无法进行基线对比",
+      "actualSpendTooltip": "区间内复杂度路由的自动路由花费，含分类成本。自适应与质量路由不参与统计。基线等于该花费加上记录的节省金额。",
+      "estimatedBaselineSpend": "估算基线花费",
+      "turnsMeasuredSuffix": "轮已统计",
+      "savingsAndSpendNote": "节省与花费按所选 UTC 日期统计请求。实际花费覆盖复杂度路由上的所有请求，包含 LLM 分类成本。基线等于实际花费加上记录的节省金额，因此节省可能为零或负数。",
+      "sessionMetricsNote": "会话指标覆盖与区间有重叠的所有会话，包括其在区间之外的轮次。",
+      "userUsageNote": "该用户在全部 API 密钥和 JWT 认证请求中的用量。更早的、未记录用户 ID 的会话不包含在内。"
     },
     "cacheLeakageCard": {
       "byModel": "按模型",

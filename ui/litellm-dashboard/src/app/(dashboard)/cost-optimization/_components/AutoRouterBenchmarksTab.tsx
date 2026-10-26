@@ -84,7 +84,7 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
   const classifierCost = stats.baseline_spend == null ? null : stats.savings_estimated_classifier_cost ?? null;
   const comparedAll = stats.savings_estimated_turns === stats.turns;
   return (
-    <Card className="overflow-hidden py-0" role="region" aria-label="Auto-router savings">
+    <Card className="overflow-hidden py-0" role="region" aria-label={i18n.t("costOptimization.autoRouterBenchmarks.savingsAria", { defaultValue: "Auto-router savings" })}>
       <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="flex flex-col items-center justify-center gap-2 p-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -106,14 +106,20 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
           </div>
           {stats.baseline_spend != null && !comparedAll && (
             <p className="text-center text-xs text-muted-foreground">
-              Compared on {stats.savings_estimated_turns.toLocaleString()} of {stats.turns.toLocaleString()} requests;
-              adaptive and quality routers are excluded
+              {i18n.t("' + NS + '.comparedOn", {
+                defaultValue: "Compared on {{done}} of {{total}} requests; adaptive and quality routers are excluded",
+                done: stats.savings_estimated_turns.toLocaleString(),
+                total: stats.turns.toLocaleString(),
+              })}
             </p>
           )}
           {stats.unattributed_saved_spend != null && (
             <p className="text-center text-xs text-muted-foreground">
-              Per-router records differ from recorded savings by {usd(Math.abs(stats.unattributed_saved_spend))}, for
-              example history from before per-router tracking, so the baseline comparison is unavailable
+              {i18n.t("' + NS + '.perRouterDiffers", {
+                defaultValue:
+                  "Per-router records differ from recorded savings by {{amount}}, for example history from before per-router tracking, so the baseline comparison is unavailable",
+                amount: usd(Math.abs(stats.unattributed_saved_spend)),
+              })}
             </p>
           )}
         </div>
@@ -122,7 +128,10 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
           <SpendRow
             label={t("costOptimization.autoRouterBenchmarks.actualAutoRouterSpend", { defaultValue: "Actual auto-router spend" })}
             value={stats.baseline_spend == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.savings_estimated_actual_spend)}
-            tooltip="Auto-routed spend in the range, including classification costs, for complexity routers. Adaptive and quality routers are excluded. Baseline is this spend plus recorded savings."
+            tooltip={i18n.t("costOptimization.autoRouterBenchmarks.actualSpendTooltip", {
+              defaultValue:
+                "Auto-routed spend in the range, including classification costs, for complexity routers. Adaptive and quality routers are excluded. Baseline is this spend plus recorded savings.",
+            })}
           />
           <div className="mb-3 border-l-2 pl-4">
             <SpendRow
@@ -150,7 +159,7 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
           )}
           <Separator />
           <SpendRow
-            label="Estimated baseline spend"
+            label={i18n.t("' + NS + '.estimatedBaselineSpend", { defaultValue: "Estimated baseline spend" })}
             value={stats.baseline_spend == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.baseline_spend)}
           />
         </div>
@@ -258,8 +267,10 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
                   <span className="font-medium tabular-nums text-foreground">{pctLabel(expiredMissPct)}</span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-64">
-                  share of all measured turns that missed cache because a return to an earlier tier came after its TTL
-                  lapsed
+                  {i18n.t("' + NS + '.expiredMissHint", {
+                    defaultValue:
+                      "share of all measured turns that missed cache because a return to an earlier tier came after its TTL lapsed",
+                  })}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -270,15 +281,18 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
           <div className="flex items-baseline justify-between">
             <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{t("costOptimization.autoRouterBenchmarks.shareOfTurns", { defaultValue: "Share of turns" })}</p>
             <p className="text-xs text-muted-foreground">
-              <span className="text-lg font-semibold tabular-nums text-foreground">{total.toLocaleString()}</span> turns
-              measured
+              <span className="text-lg font-semibold tabular-nums text-foreground">{total.toLocaleString()}</span>{" "}
+              {i18n.t("' + NS + '.turnsMeasuredSuffix", { defaultValue: "turns measured" })}
             </p>
           </div>
           <StackedTurnBar buckets={buckets} />
           <BucketTable buckets={buckets} />
           {cache.unordered_turns > 0 && (
             <p className="text-xs text-muted-foreground">
-              {cache.unordered_turns.toLocaleString()} turns arrived out of order across pods and are not bucketed
+              {i18n.t("' + NS + '.unorderedTurns", {
+                defaultValue: "{{turns}} turns arrived out of order across pods and are not bucketed",
+                turns: cache.unordered_turns.toLocaleString(),
+              })}
             </p>
           )}
         </div>
@@ -312,19 +326,22 @@ const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data,
       <TierTurnsChart view={view} autoRouters={autoRouters} />
 
       <p className="text-xs text-muted-foreground">
-        Savings and spend count requests on the selected UTC days. Actual spend covers every request on complexity
-        routers, including LLM classification cost. Baseline is actual spend plus recorded savings, so savings can be
-        zero or negative.
+        {i18n.t("' + NS + '.savingsAndSpendNote", {
+          defaultValue:
+            "Savings and spend count requests on the selected UTC days. Actual spend covers every request on complexity routers, including LLM classification cost. Baseline is actual spend plus recorded savings, so savings can be zero or negative.",
+        })}
       </p>
 
       <p className="text-xs text-muted-foreground">
-        Session metrics cover every session that overlaps the range, including its turns outside the range.
+        {i18n.t("' + NS + '.sessionMetricsNote", {
+          defaultValue: "Session metrics cover every session that overlaps the range, including its turns outside the range.",
+        })}
       </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Metric
           label={t("costOptimization.autoRouterBenchmarks.avgTurnsPerSession", { defaultValue: "Avg turns per session" })}
           value={stats.avg_turns_per_session == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : stats.avg_turns_per_session.toFixed(1)}
-          hint={`· ${stats.sessions.toLocaleString()} sessions`}
+          hint={i18n.t("costOptimization.autoRouterBenchmarks.sessionsSuffix", { defaultValue: "· {{sessions}} sessions", sessions: stats.sessions.toLocaleString() })}
         />
         <Metric
           label={t("costOptimization.autoRouterBenchmarks.avgSessionLength", { defaultValue: "Avg session length" })}
@@ -406,8 +423,10 @@ export const AutoRouterUsageView: React.FC<AutoRouterBenchmarksTabProps> = ({
 
       {userId && (
         <p className="text-sm text-muted-foreground">
-          Usage for this user across API keys and JWT-authenticated requests. Older sessions recorded without a user ID
-          are not included.
+          {i18n.t("' + NS + '.userUsageNote", {
+            defaultValue:
+              "Usage for this user across API keys and JWT-authenticated requests. Older sessions recorded without a user ID are not included.",
+          })}
         </p>
       )}
       <BenchmarksBody

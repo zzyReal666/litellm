@@ -11981,7 +11981,16 @@
       "bucketFirstVisitSublabel": "previous turn → a tier not used yet",
       "bucketReturnToTierSublabel": "previous turn → a tier used earlier",
       "classificationRate": "({{rate}} / 1K turns)",
-      "classificationRateBelow": "(<¥0.0001 / 1K turns)"
+      "classificationRateBelow": "(<¥0.0001 / 1K turns)",
+      "savingsAria": "Auto-router savings",
+      "comparedOn": "Compared on {{done}} of {{total}} requests; adaptive and quality routers are excluded",
+      "perRouterDiffers": "Per-router records differ from recorded savings by {{amount}}, for example history from before per-router tracking, so the baseline comparison is unavailable",
+      "actualSpendTooltip": "Auto-routed spend in the range, including classification costs, for complexity routers. Adaptive and quality routers are excluded. Baseline is this spend plus recorded savings.",
+      "estimatedBaselineSpend": "Estimated baseline spend",
+      "turnsMeasuredSuffix": "turns measured",
+      "savingsAndSpendNote": "Savings and spend count requests on the selected UTC days. Actual spend covers every request on complexity routers, including LLM classification cost. Baseline is actual spend plus recorded savings, so savings can be zero or negative.",
+      "sessionMetricsNote": "Session metrics cover every session that overlaps the range, including its turns outside the range.",
+      "userUsageNote": "Usage for this user across API keys and JWT-authenticated requests. Older sessions recorded without a user ID are not included."
     },
     "cacheLeakageCard": {
       "byModel": "By model",
