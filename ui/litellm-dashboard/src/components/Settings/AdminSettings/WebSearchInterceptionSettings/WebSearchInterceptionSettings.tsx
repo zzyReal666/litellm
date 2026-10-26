@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CircleHelp, Info, Save, TriangleAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { FieldGroup } from "@/components/ui/field";
 import { FormField } from "@/components/shared/form/FormField";
@@ -126,6 +127,7 @@ interface WebSearchInterceptionFormProps {
 }
 
 function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchInterceptionFormProps) {
+  const { t } = useTranslation();
   const {
     mutate: updateSettings,
     isPending: isUpdating,
@@ -139,7 +141,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
     updateSettings(formValues, {
       onSuccess: () => {
         form.reset(formValues);
-        toast.success("Settings updated successfully. Changes will be applied across all pods within 10 seconds.");
+        toast.success(t("webSearchInterception.toastSaved", { defaultValue: "Settings updated successfully. Changes will be applied across all pods within 10 seconds." }));
       },
       onError: (saveError) => {
         toast.fromError(saveError);
@@ -151,7 +153,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
     <>
       {updateError && (
         <Alert variant="error" className="mb-4">
-          <AlertTitle>Could not update settings</AlertTitle>
+          <AlertTitle>{t("webSearchInterception.couldNotUpdate", { defaultValue: "Could not update settings" })}</AlertTitle>
           {updateError instanceof Error && <AlertDescription>{updateError.message}</AlertDescription>}
         </Alert>
       )}
@@ -165,8 +167,10 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="enabled"
                   label={labelWithHint(
-                    "Enable Web Search Interception",
-                    "When enabled, web search tool calls are executed server-side through the selected search tool",
+                    t("' + NS + '.enableLabel", { defaultValue: "Enable Web Search Interception" }),
+                    t("' + NS + '.enableHint", {
+                      defaultValue: "When enabled, web search tool calls are executed server-side through the selected search tool",
+                    }),
                   )}
                   description={schema?.properties?.enabled?.description}
                 >
@@ -179,8 +183,10 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="enabled_providers"
                   label={labelWithHint(
-                    "Providers",
-                    "Which LLM providers to intercept for. Leave empty to intercept Bedrock only.",
+                    t("' + NS + '.providersLabel", { defaultValue: "Providers" }),
+                    t("' + NS + '.providersHint", {
+                      defaultValue: "Which LLM providers to intercept for. Leave empty to intercept Bedrock only.",
+                    }),
                   )}
                   description={schema?.properties?.enabled_providers?.description}
                 >
@@ -190,7 +196,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                       options={PROVIDER_OPTIONS}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Select providers (defaults to Bedrock)"
+                      placeholder={t("webSearchInterception.providersPlaceholder", { defaultValue: "Select providers (defaults to Bedrock)" })}
                       allowCustomValues
                       disabled={isUpdating}
                     />
@@ -201,8 +207,10 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="search_tool_name"
                   label={labelWithHint(
-                    "Search Tool",
-                    "Which configured search tool runs the searches. Leave empty to use the first one available.",
+                    t("' + NS + '.searchToolLabel", { defaultValue: "Search Tool" }),
+                    t("' + NS + '.searchToolHint", {
+                      defaultValue: "Which configured search tool runs the searches. Leave empty to use the first one available.",
+                    }),
                   )}
                   description={schema?.properties?.search_tool_name?.description}
                 >
@@ -212,7 +220,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                       options={searchTools.map((name) => ({ label: name, value: name }))}
                       value={value}
                       onValueChange={onChange}
-                      placeholder="Select a search tool (defaults to the first available)"
+                      placeholder={t("webSearchInterception.searchToolPlaceholder", { defaultValue: "Select a search tool (defaults to the first available)" })}
                       disabled={isUpdating || loadingSearchTools}
                     />
                   )}
@@ -222,8 +230,10 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="max_agentic_loops"
                   label={labelWithHint(
-                    "Max Agentic Loops",
-                    "How many follow-up model calls one intercepted request may chain. Leave empty for the default of 3.",
+                    t("' + NS + '.maxLoopsLabel", { defaultValue: "Max Agentic Loops" }),
+                    t("' + NS + '.maxLoopsHint", {
+                      defaultValue: "How many follow-up model calls one intercepted request may chain. Leave empty for the default of 3.",
+                    }),
                   )}
                   description={schema?.properties?.max_agentic_loops?.description}
                 >
@@ -251,7 +261,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
               disabled={!isDirty || isUpdating}
             >
               {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              Save Settings
+              {t("' + NS + '.saveSettings", { defaultValue: "Save Settings" })}
             </Button>
           </div>
         </form>
@@ -261,13 +271,14 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
 }
 
 export default function WebSearchInterceptionSettings() {
+  const { t } = useTranslation();
   const { accessToken } = useAuthorized();
   const { data, isLoading, isError, error } = useWebSearchInterceptionSettings();
 
   if (!accessToken) {
     return (
       <div className="p-6 text-center text-muted-foreground">
-        Please log in to configure web search interception settings.
+        {t("' + NS + '.loginRequired", { defaultValue: "Please log in to configure web search interception settings." })}
       </div>
     );
   }
@@ -286,7 +297,7 @@ export default function WebSearchInterceptionSettings() {
   if (isError) {
     return (
       <Alert variant="error" className="mb-6">
-        <AlertTitle>Could not load web search interception settings</AlertTitle>
+        <AlertTitle>{t("webSearchInterception.couldNotLoad", { defaultValue: "Could not load web search interception settings" })}</AlertTitle>
         {error instanceof Error && <AlertDescription>{error.message}</AlertDescription>}
       </Alert>
     );
@@ -300,22 +311,24 @@ export default function WebSearchInterceptionSettings() {
       {notAppliedHere && (
         <Alert variant="warning" className="mb-6">
           <TriangleAlert />
-          <AlertTitle>Not running on the proxy that answered this page</AlertTitle>
+          <AlertTitle>{t("webSearchInterception.notAppliedTitle", { defaultValue: "Not running on the proxy that answered this page" })}</AlertTitle>
           <AlertDescription>
-            Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is
-            expected for about 10 seconds after a change or a restart. If it persists, check that proxy&apos;s logs:
-            requests it handles are not being intercepted.
+            {t("' + NS + '.notAppliedDescription", {
+              defaultValue:
+                "Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is expected for about 10 seconds after a change or a restart. If it persists, check that proxy's logs: requests it handles are not being intercepted.",
+            })}
           </AlertDescription>
         </Alert>
       )}
 
       <Alert variant="info" className="mb-6">
         <Info />
-        <AlertTitle>Web Search Interception</AlertTitle>
+        <AlertTitle>{t("webSearchInterception.pageTitle", { defaultValue: "Web Search Interception" })}</AlertTitle>
         <AlertDescription>
-          Serve web search tool calls from a configured search tool instead of passing them upstream, so models without
-          native web search can still answer with fresh results. Click &apos;Save Settings&apos; to apply changes across
-          all pods (takes effect within 10 seconds).
+          {t("' + NS + '.pageDescription', {
+            defaultValue:
+              "Serve web search tool calls from a configured search tool instead of passing them upstream, so models without native web search can still answer with fresh results. Click 'Save Settings' to apply changes across all pods (takes effect within 10 seconds).",
+          })}
         </AlertDescription>
       </Alert>
 

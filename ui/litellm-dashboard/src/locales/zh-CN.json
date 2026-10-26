@@ -13406,5 +13406,26 @@
     "passwordsDoNotMatch": "两次输入的新密码不一致",
     "passwordUpdatedRelogin": "密码已更新，请用新密码重新登录。",
     "passwordUpdated": "密码已更新"
+  },
+  "webSearchInterception": {
+    "toastSaved": "设置已保存。更改将在 10 秒内同步到所有 Pod。",
+    "couldNotUpdate": "无法更新设置",
+    "enableLabel": "启用联网搜索拦截",
+    "enableHint": "启用后，联网搜索工具调用将由所选搜索工具在服务端执行",
+    "providersLabel": "提供商",
+    "providersHint": "要拦截哪些 LLM 提供商。留空则只拦截 Bedrock。",
+    "providersPlaceholder": "选择提供商（默认 Bedrock）",
+    "searchToolLabel": "搜索工具",
+    "searchToolHint": "由哪个已配置的搜索工具执行搜索。留空则使用第一个可用的。",
+    "searchToolPlaceholder": "选择搜索工具（默认第一个可用的）",
+    "maxLoopsLabel": "最大代理循环次数",
+    "maxLoopsHint": "一次被拦截的请求最多可串联多少次后续模型调用。留空则默认为 3。",
+    "saveSettings": "保存设置",
+    "loginRequired": "请登录后配置联网搜索拦截设置。",
+    "couldNotLoad": "无法加载联网搜索拦截设置",
+    "notAppliedTitle": "当前页面所在代理未在运行该功能",
+    "notAppliedDescription": "集群已开启拦截，但为当前页面提供服务的代理尚未应用该配置。这通常在更改或重启后约 10 秒内出现。如果持续存在，请检查该代理的日志：它处理的请求没有被拦截。",
+    "pageTitle": "联网搜索拦截",
+    "pageDescription": "由已配置的搜索工具处理联网搜索调用，而不是透传给上游，这样没有原生联网搜索的模型也能基于最新结果回答。点击“保存设置”后在所有 Pod 生效（约 10 秒内）。"
   }
 }
