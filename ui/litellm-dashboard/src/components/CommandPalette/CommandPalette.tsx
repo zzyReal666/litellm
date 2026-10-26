@@ -275,7 +275,9 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
               {i18n.t("commandPalette.unable-to-search-keys", { defaultValue: "Unable to search keys" })}{" "}</div>
           )}
           {!hasKeyError && scope === "global" && trimmedQuery && groups.length === 0 && (
-            <div className="px-2 py-3 text-sm text-muted-foreground">No results for “{trimmedQuery}”</div>
+            <div className="px-2 py-3 text-sm text-muted-foreground">
+              {i18n.t("commandPalette.noResultsFor", { defaultValue: "No results for “{{query}}”", query: trimmedQuery })}
+            </div>
           )}
           {!hasKeyError &&
             groups.map((group, groupIndex) => {

@@ -1,5 +1,5 @@
 import i18n from "@/lib/i18n";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import React, { useState, useCallback } from "react";
 import { z } from "zod";
 import { SortingState } from "@tanstack/react-table";
@@ -360,8 +360,17 @@ function ToolsetUsageGuide() {
     <div className="mb-6 rounded-lg border border-border bg-muted px-5 py-4">
       <p className="text-sm font-medium text-foreground mb-1">{t("mcpTools.mCPToolsetsTab.howToolsetsWorkTitle", { defaultValue: "How toolsets work" })}</p>
       <p className="text-sm text-muted-foreground mb-3">
-        Create a toolset, assign it to a key via{" "}
-        <span className="font-medium text-foreground">{t("mcpTools.mCPToolsetsTab.howToolsetsWorkPath", { defaultValue: "API Keys → Edit Key → MCP Servers" })}</span>, then point your MCP client at the toolset URL. The client only sees the tools you picked.{" "}</p>
+        <Trans
+          i18nKey="mcpTools.mCPToolsetsTab.howToolsetsWorkDescription"
+          defaults="Create a toolset, assign it to a key via <path>API Keys → Edit Key → MCP Servers</path>, then point your MCP client at the toolset URL. The client only sees the tools you picked."
+          components={{
+            path: (
+              <span className="font-medium text-foreground">
+                {t("mcpTools.mCPToolsetsTab.howToolsetsWorkPath", { defaultValue: "API Keys → Edit Key → MCP Servers" })}
+              </span>
+            ),
+          }}
+        />{" "}</p>
       <div className="text-xs text-muted-foreground mb-1">{t("mcpTools.mCPToolsetsTab.configLabel", { defaultValue: "Claude Code / Cursor config" })}</div>
       <div className="relative">
         <pre className="bg-card border border-border rounded-sm px-4 py-3 text-xs font-mono text-foreground overflow-x-auto leading-relaxed pr-14">

@@ -34,7 +34,7 @@ export const StreamScopeFields = ({
         return (
           <div key={mode} className="space-y-1">
             <label htmlFor={`stream-scope-${mode}`} className="block text-sm font-medium text-foreground">
-              {mode} applies to
+              {i18n.t("guardrails.streamScopeFields.appliesTo", { defaultValue: "{{mode}} applies to", mode })}
             </label>
             <Select
               items={STREAM_SCOPE_ITEMS}

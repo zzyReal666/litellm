@@ -88,7 +88,9 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
       <CardHeader>
         <CardTitle className="text-base">{i18n.t("mSTeamsSettings.microsoft-teams-alerting-settings", { defaultValue: "Microsoft Teams Alerting Settings" })}</CardTitle>
         <p className="text-sm">
-          Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook. Create one from{" "}
+          {i18n.t("mSTeamsSettings.introDescription", {
+            defaultValue: "Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook.",
+          })}
           
         </p>
       </CardHeader>

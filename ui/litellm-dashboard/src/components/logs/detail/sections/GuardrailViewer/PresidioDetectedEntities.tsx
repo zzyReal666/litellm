@@ -48,7 +48,9 @@ const PresidioDetectedEntities = ({ entities }: PresidioDetectedEntitiesProps) =
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
-        <h4 className="font-medium">Detected Entities ({entities.length})</h4>
+        <h4 className="font-medium">
+          {i18n.t("guardrailViewer.detectedEntities", { defaultValue: "Detected Entities ({{count}})", count: entities.length })}
+        </h4>
       </div>
 
       {entityListExpanded && (

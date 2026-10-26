@@ -29,9 +29,10 @@ export function PremiumLoggingSettings({
         </div>
         <div className="p-3 bg-muted border border-border rounded-lg">
           <p className="text-sm text-muted-foreground">
-            Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key{" "}
-            
-            .
+            {i18n.t("premiumLoggingSettings.enterpriseNote", {
+              defaultValue:
+                "Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key.",
+            })}
           </p>
         </div>
       </div>

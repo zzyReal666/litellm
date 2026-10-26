@@ -70,7 +70,7 @@ function MoyaiPageContent() {
         <div className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center gap-3 bg-[#04060c] px-6 text-center text-[#e3e3e3]">
           <p className="m-0 text-lg font-medium text-white">{i18n.t("moyaiPage.opening-moyai", { defaultValue: "Opening Moyai" })}</p>
           <a href={moyaiUrl} className="text-sm text-[#8b9bff] underline underline-offset-4">
-            Continue to{" "}{moyaiUrl}
+            {i18n.t("moyaiPage.continueTo", { defaultValue: "Continue to {{url}}", url: moyaiUrl })}
           </a>
         </div>
       );

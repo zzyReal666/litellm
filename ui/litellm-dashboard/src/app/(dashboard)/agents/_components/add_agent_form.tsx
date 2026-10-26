@@ -1039,7 +1039,10 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       )}
       {assignedKeyAlias && (
         <p className="mt-2 text-sm text-muted-foreground">
-          Key <span className="font-medium">{assignedKeyAlias}</span> has been assigned to this agent.
+          {t("addAgentForm.keyAssignedNotice", {
+            defaultValue: "Key {{alias}} has been assigned to this agent.",
+            alias: assignedKeyAlias,
+          })}
         </p>
       )}
       {!createdKeyValue && !assignedKeyAlias && keyAssignOption === "skip" && (

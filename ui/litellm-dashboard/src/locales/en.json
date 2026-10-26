@@ -232,7 +232,8 @@
       "spendData": "spend data",
       "fetching": "Currently fetching {{subject}}: fetched {{current}} / {{total}} pages. Charts will update periodically as data loads. Moving off of this page will stop and reset this. To continue using the UI in the meantime, <0>open a new tab<1/></0>.",
       "partial": "Showing partial {{subject}} ({{current}}/{{total}} pages loaded)"
-    }
+    },
+    "adminOnlyNotice": "{{title}} is only available to admin users."
   },
   "molecules": {
     "filter": {
@@ -649,7 +650,8 @@
     },
     "this-will-apply-changes-to-all-users-in-the": "⚠️ This will apply changes to ALL users in the system, not just the selected ones.",
     "fill-in-the-fields-below-with-the-values-you": "Fill in the fields below with the values you want to apply to all selected users. You can bulk edit: role, budget, models, and metadata. You can also add users to teams.",
-    "users-will-be-added-with-user-role-by-defaul": "Users will be added with \"user\" role by default. All users will be added to each selected team."
+    "users-will-be-added-with-user-role-by-defaul": "Users will be added with \"user\" role by default. All users will be added to each selected team.",
+    "selectedUsersCount": "Selected Users ({{count}}):"
   },
   "createUserButton": {
     "inviteUserButton": "+ Invite User",
@@ -1213,7 +1215,7 @@
     "noAgentsFound": "No agents found. Click \"+ Add New Agent\" to create one.",
     "needsSetup": "Needs Setup",
     "deleteModalTitle": "Delete Agent",
-    "deleteConfirm": "Are you sure you want to delete agent: {{name}}?",
+    "deleteConfirm": "Are you sure you want to delete agent: {{name}}? This action cannot be undone.",
     "deleteCannotUndo": "This action cannot be undone.",
     "deleteSuccess": "Agent \"{{name}}\" deleted successfully",
     "deleteFailed": "Failed to delete agent",
@@ -2472,7 +2474,8 @@
       "noMatchingProviders": "No matching providers",
       "modePreMcpCall": "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
       "modeDuringMcpCall": "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
-      "validationFailed": "Failed to create guardrail: please fix the highlighted fields"
+      "validationFailed": "Failed to create guardrail: please fix the highlighted fields",
+      "endpointSettingsHint": "Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like <code>/v1/realtime</code>."
     },
     "guardrailOptionalParams": {
       "title": "Optional Parameters",
@@ -2871,6 +2874,9 @@
       "addQuestion": "Add question",
       "checks": "Checks",
       "check": "Check"
+    },
+    "streamScopeFields": {
+      "appliesTo": "{{mode}} applies to"
     }
   },
   "keyValueInput": {
@@ -4995,7 +5001,8 @@
       "howToolsetsWorkDesc2": ", then point your MCP client at the toolset URL. The client only sees the tools you picked.",
       "configLabel": "Claude Code / Cursor config",
       "toolsetNamePlaceholder": "e.g. github-linear-tools",
-      "noToolsetsHint": "Create a toolset to give keys and teams a curated set of MCP tools."
+      "noToolsetsHint": "Create a toolset to give keys and teams a curated set of MCP tools.",
+      "howToolsetsWorkDescription": "Create a toolset, assign it to a key via <path>API Keys → Edit Key → MCP Servers</path>, then point your MCP client at the toolset URL. The client only sees the tools you picked."
     },
     "oAuthFormFields": {
       "leaveBlankToKeep": "leave blank to keep existing",
@@ -7119,7 +7126,12 @@
       "teamWord_other": "teams",
       "keysLabel": "Keys:",
       "teamsLabel": "Teams:",
-      "andMore": "and {{count}} more..."
+      "andMore": "and {{count}} more...",
+      "affectedScope": "This attachment would affect {{qualifier}}{{keys}} and {{teams}}.",
+      "oneKey": "1 key",
+      "manyKeys": "{{count}} keys",
+      "oneTeam": "1 team",
+      "manyTeams": "{{count}} teams"
     },
     "policiesView": {
       "tabTemplates": "Templates",
@@ -7694,7 +7706,8 @@
       "clickToUpload": "Click to Upload",
       "vertexCredentialsHelp": "Give a gcp service account(.json file)",
       "baseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select name from",
-      "baseModelHelpLink": "here"
+      "baseModelHelpLink": "here",
+      "azureBaseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select the name from the options below."
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "All tiers (soft floor)",
@@ -7805,7 +7818,11 @@
       "llmDescription": "calls a model to decide the tier (e.g. a small/fast model)",
       "ossDescription": "uses Jev, Laya, Bespoke, or a Databricks endpoint to decide the tier",
       "heuristicFirstDescription": "scores locally, and only pays for the classifier when the score does not confidently land a cheap tier",
-      "hybridDescription": "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary"
+      "hybridDescription": "keeps the local score at any tier, and only pays for the classifier when that score lands near a tier boundary",
+      "scoreLessThan": "Score < {{value}}",
+      "scoreBetween": "Score {{min}} - {{max}}",
+      "scoreGreaterThan": "Score > {{value}} (or 2+ reasoning markers with a score of at least {{floor}})",
+      "contextBudgetQuotesNothing": "Under {{chars}} characters there is no room to quote a turn that does not already fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0 to turn context off deliberately."
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "Circuit breaker cooldown (seconds)",
@@ -9644,7 +9661,8 @@
       "fieldDescription": "Description:",
       "fieldStatus": "Status:",
       "fieldCreatedAt": "Created At:",
-      "fieldUpdatedAt": "Updated At:"
+      "fieldUpdatedAt": "Updated At:",
+      "decisionModelsAnswerOn": "Decision models answer on <code>/v1/decisions</code> and <code>/v1/systemone</code>, not <code>/chat/completions</code>."
     },
     "skillHubDashboard": {
       "loadingSkills": "Loading skills...",
@@ -10721,7 +10739,8 @@
       "resetBudgetLabel": "Reset Budget",
       "resetBudgetTooltip": "How often the budget should reset. For example, setting 'daily' will reset the budget every 24 hours",
       "tpmRpmNotSupported": "TPM/RPM limits for tags are not currently supported. If you need this feature, please <githubLink>create a GitHub issue</githubLink>.",
-      "createTagButton": "Create Tag"
+      "createTagButton": "Create Tag",
+      "tagLimitsNotSupported": "TPM/RPM limits for tags are not currently supported. If you need this feature, please let us know."
     },
     "index": {
       "pageTitle": "Tag Management",
@@ -11008,7 +11027,8 @@
       "colStrategyTitle": "Strategy",
       "emptyTitle": "No routing groups yet",
       "emptyDescription": "Create a group to load-balance a set of models behind one name.",
-      "loadingMessage": "Loading routing groups…"
+      "loadingMessage": "Loading routing groups…",
+      "priorityRoutingDescription": "Request <groupName>{{groupName}}</groupName> to try eligible models in priority order. Direct requests to a member model keep their existing routing behavior."
     },
     "index": {
       "searchPlaceholder": "Search groups...",
@@ -12659,7 +12679,9 @@
       "clearDisplayNameForTheTier": "Clear display name for the {{p1}} tier",
       "selectModelSForQueries": "Select model(s) for {{p1}} queries",
       "nameForTier": "Name for tier {{index}}",
-      "definitionForTier": "Definition for tier {{index}}"
+      "definitionForTier": "Definition for tier {{index}}",
+      "keywordRulesFixHint": "Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back",
+      "tierRequired": "The {{tier}} tier is required"
     },
     "ComplexityRouterAdvancedSections": {
       "classifierTuning": "Classifier tuning",
@@ -12885,7 +12907,8 @@
     "disconnectedResult": "Disconnected {{count}} {{noun}} on worker pid {{pid}}.",
     "sessionSingular": "session",
     "sessionPlural": "sessions",
-    "clientsMustReinit": "Clients holding those sessions must send a new initialize request, which re-runs authentication. Sessions on other proxy workers are not affected."
+    "clientsMustReinit": "Clients holding those sessions must send a new initialize request, which re-runs authentication. Sessions on other proxy workers are not affected.",
+    "liveSessionsWithPid": "Live sessions (worker pid {{pid}})"
   },
   "lens": {
     "tracingSetup": {
@@ -13546,13 +13569,23 @@
     },
     "investigations": {
       "frequencyTracesAffected": "{{affected}} of {{total}} traces affected",
-      "historyRunsReviewed": "{{count}} runs reviewed"
+      "historyRunsReviewed": "{{count}} runs reviewed",
+      "issueBriefCopyFor": "Copy for"
     },
     "setup": {
       "matchingActivityPreview": {
         "selectedForAnalysis": "{{count}} selected for analysis",
         "clearSelectedRuns": "Clear {{count}} selected runs"
+      },
+      "sampleFields": {
+        "reviewTheLast": "Review the last"
       }
+    },
+    "traces": {
+      "feedbackAverage": "{{score}}/10 avg from {{count}} users"
+    },
+    "span": {
+      "costNotMatched": "Cost not matched"
     }
   },
   "mcpServerCredentials": {
@@ -13818,7 +13851,11 @@
   "guardrailViewer": {
     "not-run": "Not run",
     "export-compliance-log": "Export Compliance Log",
-    "evaluation-details": "Evaluation Details"
+    "evaluation-details": "Evaluation Details",
+    "textRecords_one": "{{count}} text record",
+    "textRecords_other": "{{count}} text records",
+    "totalOverhead": "Total: {{value}}ms overhead",
+    "detectedEntities": "Detected Entities ({{count}})"
   },
   "federationFields": {
     "proxy-default": "Proxy default",
@@ -13866,7 +13903,8 @@
     "incoming-webhook-url-for-your-teams-channel": "Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)",
     "microsoft-teams-alerting-settings": "Microsoft Teams Alerting Settings",
     "save-changes": "Save Changes",
-    "test-ms-teams-alerts": "Test MS Teams Alerts"
+    "test-ms-teams-alerts": "Test MS Teams Alerts",
+    "introDescription": "Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook."
   },
   "contentFilterDisplay": {
     "content-categories": "Content Categories",
@@ -13917,7 +13955,8 @@
     "analysis-model": "Analysis model",
     "analysis-model-2": "Analysis model",
     "could-not-load-models": "Could not load models:",
-    "choose-a-chat-model-that-supports-json-outpu": "Choose a chat model that supports JSON output."
+    "choose-a-chat-model-that-supports-json-outpu": "Choose a chat model that supports JSON output.",
+    "modelUnavailable": "{{model}} is no longer available. Choose another analysis model."
   },
   "mcpServerEdit": {
     "edit-mcp-server": "Edit MCP server",
@@ -13946,7 +13985,8 @@
   "commandPalette": {
     "command-palette": "Command palette",
     "virtual-keys": "Virtual Keys",
-    "unable-to-search-keys": "Unable to search keys"
+    "unable-to-search-keys": "Unable to search keys",
+    "noResultsFor": "No results for “{{query}}”"
   },
   "emailEventSettings": {
     "email-notifications": "Email Notifications",
@@ -14129,7 +14169,8 @@
   },
   "queueReasonText": {
     "connect-worker": "Connect worker",
-    "what-the-worker-is-doing": "What the worker is doing"
+    "what-the-worker-is-doing": "What the worker is doing",
+    "noWorkerPrefix": "No worker connected. Start one from <connect>Connect worker</connect>."
   },
   "investigationDetail": {
     "copy-for-agent": "Copy for agent",
@@ -14201,7 +14242,8 @@
   },
   "modelPricingSummary": {
     "follows-the-model-cost-map": "Follows the model cost map",
-    "custom-pricing": "Custom pricing"
+    "custom-pricing": "Custom pricing",
+    "overridesFor": "Overrides the model cost map for {{models}}"
   },
   "budgetModal": {
     "max-tokens-per-day-batch": "Max Tokens per day (batch)",
@@ -14215,7 +14257,8 @@
   },
   "premiumLoggingSettings": {
     "langfuse-logging": "✨ langfuse-logging",
-    "datadog-logging": "✨ datadog-logging"
+    "datadog-logging": "✨ datadog-logging",
+    "enterpriseNote": "Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key."
   },
   "docLink": {
     "open-documentation-in-a-new-tab": "Open documentation in a new tab",
@@ -14465,7 +14508,8 @@
     "no-usage-in-this-range": "No usage in this range"
   },
   "moyaiPage": {
-    "opening-moyai": "Opening Moyai"
+    "opening-moyai": "Opening Moyai",
+    "continueTo": "Continue to {{url}}"
   },
   "onboardingFormBody": {
     "sso-is-under-the-enterprise-tier": "SSO is under the Enterprise Tier.",
@@ -14587,20 +14631,26 @@
     "budgets-rate-limits": "Budgets & Rate Limits",
     "enable-require-x-litellm-trace-id-on-calls-b": "Enable \"Require x-litellm-trace-id on calls BY this agent\" in Tracing to configure budgets and rate limits.",
     "for-outbound-agents-using-an-identity-provid": "For outbound agents using an identity provider or virtual key",
-    "this-agent-will-authenticate-with-microsoft": "This agent will authenticate with Microsoft Entra ID. You can skip virtual key creation."
+    "this-agent-will-authenticate-with-microsoft": "This agent will authenticate with Microsoft Entra ID. You can skip virtual key creation.",
+    "keyAssignedNotice": "Key {{alias}} has been assigned to this agent."
   },
   "chatPage": {
     "search-models": "Search models...",
     "select-model": "Select model",
     "chat-history-won-t-be-saved-in-this-browser": "Chat history won't be saved in this browser session",
     "chat-with-100-llms-mcp-tools-authenticate-on": "Chat with 100+ LLMs + MCP tools; authenticate once, use them here.",
-    "scroll-to-bottom": "Scroll to bottom"
+    "scroll-to-bottom": "Scroll to bottom",
+    "openIntegrations": "Open Integrations ->"
   },
   "entityUsage": {
     "spend-overview": "Spend Overview",
     "bucket-size": "Bucket size",
     "fetching-spend-data-failed-so-the-totals-bel": "Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try again.",
-    "fetching-agent-data-failed-so-the-totals-bel": "Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try again."
+    "fetching-agent-data-failed-so-the-totals-bel": "Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try again.",
+    "breakdownSubtitle": "{{granularity}} {{metric}}, top 8 stacked",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "flatCostOnTop": ", flat cost on top"
   },
   "teams": {
     "please-select-an-organization-to-create-a-te": "Please select an organization to create a team for. You can only create teams within organizations where you are an admin.",
@@ -14662,5 +14712,10 @@
   "upgradeBanner": {
     "latestVersionTitle": "The latest version is v{{version}}: {{notes}}",
     "currentVersion": "Your current version is v{{version}}"
+  },
+  "logs": {
+    "drawerHeader": {
+      "backTo": "Back to {{label}}"
+    }
   }
 }

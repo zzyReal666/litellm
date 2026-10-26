@@ -72,7 +72,11 @@ export function FeedbackPanel({ summary, accessToken }: FeedbackPanelProps) {
         {i18n.t("feedbackPanel.user-feedback-2", { defaultValue: "User feedback" })}{view.entries.length > 1 && (
           <span className={cn("inline-flex items-center gap-1 font-mono", low && "text-destructive")}>
             <Star className="size-3" />
-            {formatScore(view.average)}/10 avg from {view.entries.length} users
+            {i18n.t("lens.traces.feedbackAverage", {
+              defaultValue: "{{score}}/10 avg from {{count}} users",
+              score: formatScore(view.average),
+              count: view.entries.length,
+            })}
           </span>
         )}
       </header>

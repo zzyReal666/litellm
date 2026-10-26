@@ -324,7 +324,10 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
           {field.key === "base_model" && (
             <div className="grid grid-cols-24">
               <p className="col-start-11 col-span-10 text-sm mb-2">
-                The actual model your azure deployment uses. Used for accurate cost tracking. Select name from{" "}
+                {i18n.t("addModel.providerSpecificFields.azureBaseModelHelp", {
+                  defaultValue:
+                    "The actual model your azure deployment uses. Used for accurate cost tracking. Select the name from the options below.",
+                })}
                 
               </p>
             </div>

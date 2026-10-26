@@ -232,7 +232,8 @@
       "spendData": "花费数据",
       "fetching": "正在抓取{{subject}}：已抓取 {{current}} / {{total}} 页。数据加载过程中图表会定期更新。离开此页面将停止并重置抓取。如果想在此期间继续使用界面，请<0>在新标签页中打开<1/></0>。",
       "partial": "显示部分{{subject}}（已加载 {{current}}/{{total}} 页）"
-    }
+    },
+    "adminOnlyNotice": "{{title}} 仅管理员可用。"
   },
   "molecules": {
     "filter": {
@@ -649,7 +650,8 @@
     },
     "this-will-apply-changes-to-all-users-in-the": "⚠️ 这会将更改应用到系统中的所有用户，而不仅是已选用户。",
     "fill-in-the-fields-below-with-the-values-you": "在下方字段中填写要应用到所有已选用户的值。你可以批量编辑：角色、预算、模型和元数据。也可以将用户添加到团队。",
-    "users-will-be-added-with-user-role-by-defaul": "用户默认以 “user” 角色添加。所有用户都会被加入所选的每个团队。"
+    "users-will-be-added-with-user-role-by-defaul": "用户默认以 “user” 角色添加。所有用户都会被加入所选的每个团队。",
+    "selectedUsersCount": "已选用户（{{count}}）："
   },
   "createUserButton": {
     "inviteUserButton": "+ 邀请用户",
@@ -1213,7 +1215,7 @@
     "noAgentsFound": "未找到 Agent。点击「+ 添加新 Agent」以创建一个。",
     "needsSetup": "待配置",
     "deleteModalTitle": "删除 Agent",
-    "deleteConfirm": "确定要删除 Agent：{{name}}？",
+    "deleteConfirm": "确定要删除 agent：{{name}} 吗？此操作无法撤销。",
     "deleteCannotUndo": "此操作无法撤销。",
     "deleteSuccess": "Agent「{{name}}」已成功删除",
     "deleteFailed": "删除 Agent 失败",
@@ -2472,7 +2474,8 @@
       "noMatchingProviders": "没有匹配的提供商",
       "modePreMcpCall": "MCP 工具调用前 - 在 MCP 工具执行前运行并验证工具调用",
       "modeDuringMcpCall": "MCP 工具调用中 - 与 MCP 工具执行并行运行用于监控",
-      "validationFailed": "创建护栏失败：请修正高亮显示的字段"
+      "validationFailed": "创建护栏失败：请修正高亮显示的字段",
+      "endpointSettingsHint": "为特定调用类型配置设置。大多数护栏不需要此项，除非你在使用 <code>/v1/realtime</code> 这类特定端点，否则可以跳过。"
     },
     "guardrailOptionalParams": {
       "title": "可选参数",
@@ -2871,6 +2874,9 @@
       "addQuestion": "添加问题",
       "checks": "检查项",
       "check": "检查项"
+    },
+    "streamScopeFields": {
+      "appliesTo": "{{mode}} 适用于"
     }
   },
   "keyValueInput": {
@@ -4995,7 +5001,8 @@
       "howToolsetsWorkDesc2": "将其分配给密钥，然后将您的 MCP 客户端指向工具集 URL。客户端只会看到您选定的工具。",
       "configLabel": "Claude Code / Cursor 配置",
       "toolsetNamePlaceholder": "例如：github-linear-tools",
-      "noToolsetsHint": "创建工具集，为密钥和团队提供精选的 MCP 工具集合。"
+      "noToolsetsHint": "创建工具集，为密钥和团队提供精选的 MCP 工具集合。",
+      "howToolsetsWorkDescription": "创建工具集，通过 <path>API 密钥 → 编辑密钥 → MCP 服务器</path> 将其分配给密钥，然后让 MCP 客户端指向工具集 URL。客户端只会看到你挑选的工具。"
     },
     "oAuthFormFields": {
       "leaveBlankToKeep": "留空以保留现有值",
@@ -5033,7 +5040,7 @@
       "registrationUrlOptionalLabel": "Registration URL（可选）",
       "registrationUrlTooltip": "动态客户端注册端点的可选覆盖地址。",
       "tokenValidationRulesLabel": "Token 验证规则（可选）",
-      "tokenValidationRulesTooltip": "存储前对 OAuth Token 响应进行校验的键值规则 JSON 对象。支持点号表示法访问嵌套字段（如 {\"organization\": \"my-org\", \"team.id\": \"123\"}）。验证失败的 Token 将以 HTTP 403 拒绝。",
+      "tokenValidationRulesTooltip": "用于在存储前校验 OAuth Token 响应的键值规则 JSON 对象。支持嵌套字段的点号表示法（例如 {\"organization\": \"my-org\", \"team.id\": \"123\"}）。校验失败的 Token 会以 HTTP 403 拒绝。",
       "mustBeValidJson": "必须是有效的 JSON",
       "tokenStorageTtlLabel": "Token 存储 TTL（秒，可选）",
       "tokenStorageTtlTooltip": "在 Redis 中缓存每位用户 OAuth 访问 Token 的时长（与 Token 自身的 expires_in 无关）。留空则从 Token 的 expires_in 推导 TTL，或回退到默认的 12 小时。",
@@ -5043,7 +5050,7 @@
       "waitingForAuthorization": "等待授权...",
       "exchangingCode": "正在交换授权码...",
       "authorizeAndFetch": "授权并获取 Token",
-      "tokenFetched": "Token 已获取，有效期 {{seconds}} 秒。",
+      "tokenFetched": "Token 已获取，将在 {{seconds}} 秒后过期。",
       "upstreamResourceLabel": "资源指示符（可选）",
       "upstreamResourceTooltip": "发送给授权服务器的 RFC 8707 资源指示符，使其签发的 Token 以本 MCP 服务器为受众。留空表示不发送，这是默认行为，也是大多数提供商期望的方式。填写 'auto' 表示发送本服务器自身的 URL。当授权服务器要求特定标识符时，请填写确切的标识符。部分提供商会拒绝该参数并改为从权限范围推断受众；若出现 AADSTS901002，请留空。若出现 invalid_target，说明授权服务器要求设置该参数。",
       "upstreamResourcePlaceholder": "auto，或 https://mcp.example.com/mcp",
@@ -7119,7 +7126,12 @@
       "teamWord_other": "个团队",
       "keysLabel": "密钥：",
       "teamsLabel": "团队：",
-      "andMore": "及另外 {{count}} 个..."
+      "andMore": "及另外 {{count}} 个...",
+      "affectedScope": "该附件将影响 {{qualifier}}{{keys}} 和 {{teams}}。",
+      "oneKey": "1 个密钥",
+      "manyKeys": "{{count}} 个密钥",
+      "oneTeam": "1 个团队",
+      "manyTeams": "{{count}} 个团队"
     },
     "policiesView": {
       "tabTemplates": "模板",
@@ -7694,7 +7706,8 @@
       "clickToUpload": "点击上传",
       "vertexCredentialsHelp": "提供 GCP 服务账号（.json 文件）",
       "baseModelHelp": "您的 Azure 部署实际使用的模型。用于精确的成本追踪。请从",
-      "baseModelHelpLink": "此处"
+      "baseModelHelpLink": "此处",
+      "azureBaseModelHelp": "Azure 部署实际使用的模型，用于准确计算成本。请从下方选项中选择名称。"
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "所有层级（软下限）",
@@ -7715,7 +7728,7 @@
     "affinityControls": {
       "pinSessionHint": "将同一会话固定在其所属组的同一部署上，以保持提供方提示缓存热度。关闭后每轮都会做负载均衡。",
       "pinSessionLabel": "把会话固定到每个模型组的一个部署上",
-      "ttlHint": "每次复用固定关系的请求后刷新。留空则跟随后端默认的 {{seconds}} 秒。",
+      "ttlHint": "每次复用固定项后刷新。留空则跟随后端默认的 {{seconds}} 秒。",
       "ttlLabel": "固定关系空闲后保留时长（秒）"
     },
     "autoRouterConnectionTest": {
@@ -7805,7 +7818,11 @@
       "llmDescription": "调用模型来决定层级（例如小/快模型）",
       "ossDescription": "使用 Jev、Laya、Bespoke 或 Databricks 端点来决定层级",
       "heuristicFirstDescription": "本地打分，仅当分数无法明确落入低价层级时才调用分类器",
-      "hybridDescription": "任何层级都保留本地分数，仅当分数接近层级边界时才调用分类器"
+      "hybridDescription": "任何层级都保留本地分数，仅当分数接近层级边界时才调用分类器",
+      "scoreLessThan": "分数 < {{value}}",
+      "scoreBetween": "分数 {{min}} - {{max}}",
+      "scoreGreaterThan": "分数 > {{value}}（或至少 {{floor}} 分且有 2 个以上推理标记）",
+      "contextBudgetQuotesNothing": "低于 {{chars}} 个字符时，无法引用任何原本放不下的轮次，因此长对话会完全无上下文地到达分类器。将上下文窗口大小设为 0 可有意关闭上下文。"
     },
     "classifierCircuitBreaker": {
       "cooldownLabel": "熔断冷却时间（秒）",
@@ -9644,7 +9661,8 @@
       "fieldDescription": "描述：",
       "fieldStatus": "状态：",
       "fieldCreatedAt": "创建时间：",
-      "fieldUpdatedAt": "更新时间："
+      "fieldUpdatedAt": "更新时间：",
+      "decisionModelsAnswerOn": "决策模型通过 <code>/v1/decisions</code> 和 <code>/v1/systemone</code> 响应，而不是 <code>/chat/completions</code>。"
     },
     "skillHubDashboard": {
       "loadingSkills": "正在加载技能...",
@@ -10721,7 +10739,8 @@
       "resetBudgetLabel": "重置预算",
       "resetBudgetTooltip": "预算重置频率。例如，设置为「每天」将每 24 小时重置一次预算",
       "tpmRpmNotSupported": "标签的 TPM/RPM 限制暂不支持。如需此功能，请 <githubLink>创建 GitHub Issue</githubLink>。",
-      "createTagButton": "创建标签"
+      "createTagButton": "创建标签",
+      "tagLimitsNotSupported": "标签的 TPM/RPM 限制暂不支持。如果确实需要此功能，请告诉我们。"
     },
     "index": {
       "pageTitle": "标签管理",
@@ -11008,7 +11027,8 @@
       "colStrategyTitle": "策略",
       "emptyTitle": "暂无路由组",
       "emptyDescription": "创建一个组，将一组模型负载均衡到同一个名称下。",
-      "loadingMessage": "正在加载路由组…"
+      "loadingMessage": "正在加载路由组…",
+      "priorityRoutingDescription": "请求 <groupName>{{groupName}}</groupName> 会按优先级顺序尝试可用模型。直接请求成员模型仍保留其现有路由行为。"
     },
     "index": {
       "searchPlaceholder": "搜索组...",
@@ -12659,7 +12679,9 @@
       "clearDisplayNameForTheTier": "清除 {{p1}}层级的显示名称",
       "selectModelSForQueries": "为 {{p1}} 查询选择模型",
       "nameForTier": "第 {{index}} 个层级的名称",
-      "definitionForTier": "第 {{index}} 个层级的定义"
+      "definitionForTier": "第 {{index}} 个层级的定义",
+      "keywordRulesFixHint": "请在「高级：关键词/语义匹配」中修改规则，或恢复该层级",
+      "tierRequired": "{{tier}} 层级为必填项"
     },
     "ComplexityRouterAdvancedSections": {
       "classifierTuning": "分类器调优",
@@ -12885,7 +12907,8 @@
     "disconnectedResult": "已在 worker pid {{pid}} 上断开 {{count}} 个{{noun}}。",
     "sessionSingular": "会话",
     "sessionPlural": "会话",
-    "clientsMustReinit": "持有这些会话的客户端需要发送新的初始化请求以重新进行身份验证。其他代理 worker 上的会话不受影响。"
+    "clientsMustReinit": "持有这些会话的客户端需要发送新的初始化请求以重新进行身份验证。其他代理 worker 上的会话不受影响。",
+    "liveSessionsWithPid": "实时会话（worker pid {{pid}}）"
   },
   "lens": {
     "tracingSetup": {
@@ -13546,13 +13569,23 @@
     },
     "investigations": {
       "frequencyTracesAffected": "共 {{total}} 条链路中 {{affected}} 条受影响",
-      "historyRunsReviewed": "已审查 {{count}} 次运行"
+      "historyRunsReviewed": "已审查 {{count}} 次运行",
+      "issueBriefCopyFor": "复制给"
     },
     "setup": {
       "matchingActivityPreview": {
         "selectedForAnalysis": "已选择 {{count}} 条用于分析",
         "clearSelectedRuns": "清除已选的 {{count}} 次运行"
+      },
+      "sampleFields": {
+        "reviewTheLast": "审查最近"
       }
+    },
+    "traces": {
+      "feedbackAverage": "来自 {{count}} 位用户的平均分 {{score}}/10"
+    },
+    "span": {
+      "costNotMatched": "花费未匹配"
     }
   },
   "mcpServerCredentials": {
@@ -13818,7 +13851,11 @@
   "guardrailViewer": {
     "not-run": "未运行",
     "export-compliance-log": "导出合规日志",
-    "evaluation-details": "评估详情"
+    "evaluation-details": "评估详情",
+    "textRecords_one": "{{count}} 条文本记录",
+    "textRecords_other": "{{count}} 条文本记录",
+    "totalOverhead": "总计：{{value}}ms 开销",
+    "detectedEntities": "检测到的实体（{{count}}）"
   },
   "federationFields": {
     "proxy-default": "代理默认",
@@ -13866,7 +13903,8 @@
     "incoming-webhook-url-for-your-teams-channel": "Teams 频道的传入 webhook URL（Workflows 或传入 webhook 连接器）",
     "microsoft-teams-alerting-settings": "Microsoft Teams 告警设置",
     "save-changes": "保存更改",
-    "test-ms-teams-alerts": "测试 MS Teams 告警"
+    "test-ms-teams-alerts": "测试 MS Teams 告警",
+    "introDescription": "通过传入 webhook 将 LiteLLM 告警发送到 Microsoft Teams 频道。"
   },
   "contentFilterDisplay": {
     "content-categories": "内容类别",
@@ -13917,7 +13955,8 @@
     "analysis-model": "分析模型",
     "analysis-model-2": "分析模型",
     "could-not-load-models": "无法加载模型：",
-    "choose-a-chat-model-that-supports-json-outpu": "请选择支持 JSON 输出的对话模型。"
+    "choose-a-chat-model-that-supports-json-outpu": "请选择支持 JSON 输出的对话模型。",
+    "modelUnavailable": "{{model}} 已不可用。请选择其他分析模型。"
   },
   "mcpServerEdit": {
     "edit-mcp-server": "编辑 MCP 服务器",
@@ -13946,7 +13985,8 @@
   "commandPalette": {
     "command-palette": "命令面板",
     "virtual-keys": "虚拟密钥",
-    "unable-to-search-keys": "无法搜索密钥"
+    "unable-to-search-keys": "无法搜索密钥",
+    "noResultsFor": "没有匹配「{{query}}」的结果"
   },
   "emailEventSettings": {
     "email-notifications": "邮件通知",
@@ -14129,7 +14169,8 @@
   },
   "queueReasonText": {
     "connect-worker": "连接 worker",
-    "what-the-worker-is-doing": "worker 正在做什么"
+    "what-the-worker-is-doing": "worker 正在做什么",
+    "noWorkerPrefix": "未连接 worker。请先从 <connect>连接 worker</connect> 开始。"
   },
   "investigationDetail": {
     "copy-for-agent": "复制给 agent",
@@ -14201,7 +14242,8 @@
   },
   "modelPricingSummary": {
     "follows-the-model-cost-map": "遵循模型成本表",
-    "custom-pricing": "自定义价格"
+    "custom-pricing": "自定义价格",
+    "overridesFor": "覆盖以下模型的价格表：{{models}}"
   },
   "budgetModal": {
     "max-tokens-per-day-batch": "每日最大 Token 数（批量）",
@@ -14215,7 +14257,8 @@
   },
   "premiumLoggingSettings": {
     "langfuse-logging": "✨ langfuse-logging",
-    "datadog-logging": "✨ datadog-logging"
+    "datadog-logging": "✨ datadog-logging",
+    "enterpriseNote": "设置密钥/团队日志属于 LiteLLM 企业版功能。全局日志设置对所有免费用户可用。获取试用密钥。"
   },
   "docLink": {
     "open-documentation-in-a-new-tab": "在新标签页中打开文档",
@@ -14465,7 +14508,8 @@
     "no-usage-in-this-range": "该时间范围内没有用量"
   },
   "moyaiPage": {
-    "opening-moyai": "正在打开 Moyai"
+    "opening-moyai": "正在打开 Moyai",
+    "continueTo": "继续前往 {{url}}"
   },
   "onboardingFormBody": {
     "sso-is-under-the-enterprise-tier": "SSO 属于企业版功能。",
@@ -14587,20 +14631,26 @@
     "budgets-rate-limits": "预算与速率限制",
     "enable-require-x-litellm-trace-id-on-calls-b": "在 Tracing 中启用「要求此 agent 的调用携带 x-litellm-trace-id」以配置预算和速率限制。",
     "for-outbound-agents-using-an-identity-provid": "适用于使用身份提供商或虚拟密钥的出站 agent",
-    "this-agent-will-authenticate-with-microsoft": "该 agent 将使用 Microsoft Entra ID 认证，可以跳过虚拟密钥创建。"
+    "this-agent-will-authenticate-with-microsoft": "该 agent 将使用 Microsoft Entra ID 认证，可以跳过虚拟密钥创建。",
+    "keyAssignedNotice": "密钥 {{alias}} 已分配给该 agent。"
   },
   "chatPage": {
     "search-models": "搜索模型…",
     "select-model": "选择模型",
     "chat-history-won-t-be-saved-in-this-browser": "聊天记录不会保存在本次浏览器会话中",
     "chat-with-100-llms-mcp-tools-authenticate-on": "与 100+ LLM 和 MCP 工具对话；一次认证，随处使用。",
-    "scroll-to-bottom": "滚动到底部"
+    "scroll-to-bottom": "滚动到底部",
+    "openIntegrations": "打开集成 ->"
   },
   "entityUsage": {
     "spend-overview": "花费概览",
     "bucket-size": "分桶粒度",
     "fetching-spend-data-failed-so-the-totals-bel": "获取花费数据失败，下方汇总可能为空而非最终值。请刷新页面重试。",
-    "fetching-agent-data-failed-so-the-totals-bel": "获取 agent 数据失败，下方汇总可能为空而非最终值。请刷新页面重试。"
+    "fetching-agent-data-failed-so-the-totals-bel": "获取 agent 数据失败，下方汇总可能为空而非最终值。请刷新页面重试。",
+    "breakdownSubtitle": "{{granularity}} {{metric}}，前 8 项堆叠",
+    "daily": "每日",
+    "weekly": "每周",
+    "flatCostOnTop": "，固定成本叠加在上"
   },
   "teams": {
     "please-select-an-organization-to-create-a-te": "请选择要为哪个组织创建团队。你只能在自己是管理员的组织内创建团队。",
@@ -14662,5 +14712,10 @@
   "upgradeBanner": {
     "latestVersionTitle": "最新版本为 v{{version}}：{{notes}}",
     "currentVersion": "你当前的版本为 v{{version}}"
+  },
+  "logs": {
+    "drawerHeader": {
+      "backTo": "返回 {{label}}"
+    }
   }
 }

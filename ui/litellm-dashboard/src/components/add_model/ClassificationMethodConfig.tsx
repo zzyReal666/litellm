@@ -122,20 +122,32 @@ const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> =
         {scorerRuns && ranges && (
           <ul className="mt-2 pl-5 text-[13px] text-muted-foreground">
             <li>
-              <strong>{effectiveTierLabel("SIMPLE", value.tier_labels)}</strong>: Score &lt; {ranges.simpleMedium}
+              <strong>{effectiveTierLabel("SIMPLE", value.tier_labels)}</strong>:{" "}
+              {i18n.t("addModel.classificationMethod.scoreLessThan", { defaultValue: "Score < {{value}}", value: ranges.simpleMedium })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("MEDIUM", value.tier_labels)}</strong>: Score {ranges.simpleMedium} -{" "}
-              {ranges.mediumComplex}
+              <strong>{effectiveTierLabel("MEDIUM", value.tier_labels)}</strong>:{" "}
+              {i18n.t("addModel.classificationMethod.scoreBetween", {
+                defaultValue: "Score {{min}} - {{max}}",
+                min: ranges.simpleMedium,
+                max: ranges.mediumComplex,
+              })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("COMPLEX", value.tier_labels)}</strong>: Score {ranges.mediumComplex} -{" "}
-              {ranges.complexReasoning}
+              <strong>{effectiveTierLabel("COMPLEX", value.tier_labels)}</strong>:{" "}
+              {i18n.t("addModel.classificationMethod.scoreBetween", {
+                defaultValue: "Score {{min}} - {{max}}",
+                min: ranges.mediumComplex,
+                max: ranges.complexReasoning,
+              })}
             </li>
             <li>
-              <strong>{effectiveTierLabel("REASONING", value.tier_labels)}</strong>: Score &gt;{" "}
-              {ranges.complexReasoning} (or 2+ reasoning markers with a score of at least{" "}
-              {ranges.reasoningOverrideFloor})
+              <strong>{effectiveTierLabel("REASONING", value.tier_labels)}</strong>:{" "}
+              {i18n.t("addModel.classificationMethod.scoreGreaterThan", {
+                defaultValue: "Score > {{value}} (or 2+ reasoning markers with a score of at least {{floor}})",
+                value: ranges.complexReasoning,
+                floor: ranges.reasoningOverrideFloor,
+              })}
             </li>
           </ul>
         )}
@@ -708,9 +720,11 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             </span>
             {contextBudgetQuotesNothing && (
               <span className="block text-xs text-destructive">
-                Under {MIN_QUOTED_CONTEXT_TURN_CHARS} characters there is no room to quote a turn that does not already
-                fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0
-                to turn context off deliberately.
+                {i18n.t("addModel.classificationMethod.contextBudgetQuotesNothing", {
+                  defaultValue:
+                    "Under {{chars}} characters there is no room to quote a turn that does not already fit, so a long conversation reaches the classifier with no context at all. Set Context Window Size to 0 to turn context off deliberately.",
+                  chars: MIN_QUOTED_CONTEXT_TURN_CHARS,
+                })}
               </span>
             )}
           </div>

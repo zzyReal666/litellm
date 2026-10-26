@@ -40,7 +40,10 @@ export function AnalysisModelField({ models, gate }: AnalysisModelFieldProps) {
       )}
       {gate.unavailable && (
         <p role="alert" className="text-sm text-destructive">
-          {model} is no longer available. Choose another analysis model.{" "}</p>
+          {i18n.t("analysisModelField.modelUnavailable", {
+            defaultValue: "{{model}} is no longer available. Choose another analysis model.",
+            model,
+          })}{" "}</p>
       )}
       {gate.unsupported && (
         <p role="alert" className="text-sm text-destructive">

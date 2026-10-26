@@ -255,7 +255,11 @@ const TierSetToolbar: React.FC<{
     )}
     {editing && keywordRulesError && (
       <span className="block mt-1 text-xs text-destructive">
-        {keywordRulesError}. Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back</span>
+        {keywordRulesError}.{" "}
+        {i18n.t("modelsEndpoints.ComplexityRouterConfig.keywordRulesFixHint", {
+          defaultValue: "Edit the rules under Advanced: Keyword/Semantic Matching, or bring the tier back",
+        })}
+      </span>
     )}
   </>
 );
@@ -826,7 +830,14 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                           {i18n.t("addModel.complexityRouterConfig.multipleModelsHint", { defaultValue: "Multiple models selected: the router randomly picks among them per request (or Thompson-samples within the pool when adaptive routing is on)." })}
                         </span>
                       )}
-                      {tierMissing && <span className="text-xs text-destructive">The {label} tier is required</span>}
+                      {tierMissing && (
+                        <span className="text-xs text-destructive">
+                          {i18n.t("modelsEndpoints.ComplexityRouterConfig.tierRequired", {
+                            defaultValue: "The {{tier}} tier is required",
+                            tier: label,
+                          })}
+                        </span>
+                      )}
                     </div>
                   </div>
                 );

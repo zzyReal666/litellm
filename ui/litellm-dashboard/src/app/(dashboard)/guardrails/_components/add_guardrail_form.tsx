@@ -1,5 +1,5 @@
 import i18n from "@/lib/i18n";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch, type UseFormReturn } from "react-hook-form";
 import { toast } from "@/lib/toast";
@@ -1081,7 +1081,11 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
       <div className="space-y-6">
         <div>
           <p className="text-sm text-muted-foreground">
-            Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like{" "}<code>/v1/realtime</code>.
+            <Trans
+              i18nKey="guardrails.addGuardrailForm.endpointSettingsHint"
+              defaults="Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like <code>/v1/realtime</code>."
+              components={{ code: <code /> }}
+            />
           </p>
         </div>
 

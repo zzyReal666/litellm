@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "react-i18next";
 import { queueReasonText, workerTaskText, type QueueReason } from "../model/status";
 import i18n from "@/lib/i18n";
 import type { QueueContext } from "./useQueueReason";
@@ -8,10 +9,19 @@ export function QueueReasonText({ reason, onConnect }: { reason: QueueReason; on
   if (reason.kind !== "no_worker" || !onConnect) return <>{queueReasonText(reason)}</>;
   return (
     <>
-      No worker connected. Start one from{" "}
-      <button type="button" onClick={onConnect} className="font-medium text-foreground underline underline-offset-2">
-        {i18n.t("queueReasonText.connect-worker", { defaultValue: "Connect worker" })}</button>
-      .
+      <Trans
+        i18nKey="queueReasonText.noWorkerPrefix"
+        defaults="No worker connected. Start one from <connect>Connect worker</connect>."
+        components={{
+          connect: (
+            <button
+              type="button"
+              onClick={onConnect}
+              className="font-medium text-foreground underline underline-offset-2"
+            />
+          ),
+        }}
+      />
     </>
   );
 }

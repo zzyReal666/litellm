@@ -17,7 +17,10 @@ function PricingSource({ overrides }: { overrides: string[] | undefined }) {
     <p className="mt-2 text-xs text-muted-foreground">
       <Badge variant="outline" className="mr-1">
         {i18n.t("modelPricingSummary.custom-pricing", { defaultValue: "Custom pricing" })}</Badge>
-      Overrides the model cost map for{" "}{overrides.join(", ")}
+      {i18n.t("modelPricingSummary.overridesFor", {
+        defaultValue: "Overrides the model cost map for {{models}}",
+        models: overrides.join(", "),
+      })}
     </p>
   );
 }

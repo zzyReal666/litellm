@@ -293,7 +293,10 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
             label={
               <FieldLabel
                 label={i18n.t("mcpTools.oAuthFormFields.tokenValidationRulesLabel", { defaultValue: "Token Validation Rules (optional)" })}
-                tooltip='JSON object of key-value rules checked against the OAuth token response before storing. Supports dot-notation for nested fields (e.g. {"organization": "my-org", "team.id": "123"}). Tokens that fail validation are rejected with HTTP 403.'
+                tooltip={i18n.t("mcpTools.oAuthFormFields.tokenValidationRulesTooltip", {
+                  defaultValue:
+                    'JSON object of key-value rules checked against the OAuth token response before storing. Supports dot-notation for nested fields (e.g. {"organization": "my-org", "team.id": "123"}). Tokens that fail validation are rejected with HTTP 403.',
+                })}
               />
             }
             name="token_validation_json"
@@ -339,7 +342,10 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
               {oauthFlow.error && <p className="text-sm text-destructive">{oauthFlow.error}</p>}
               {oauthFlow.status === "success" && oauthFlow.tokenResponse?.access_token && (
                 <p className="text-sm text-success">
-                  Token fetched. Expires in{" "}{oauthFlow.tokenResponse.expires_in ?? "?"} seconds.
+                  {i18n.t("mcpTools.oAuthFormFields.tokenFetched", {
+                    defaultValue: "Token fetched. Expires in {{seconds}} seconds.",
+                    seconds: oauthFlow.tokenResponse.expires_in ?? "?",
+                  })}
                 </p>
               )}
             </div>

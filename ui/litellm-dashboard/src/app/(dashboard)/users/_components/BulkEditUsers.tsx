@@ -251,7 +251,12 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
 
         {!updateAllUsers && (
           <div className="mb-4">
-            <h5 className="mb-2 text-sm font-semibold text-foreground">Selected Users ({selectedUsers.length}):</h5>
+            <h5 className="mb-2 text-sm font-semibold text-foreground">
+              {i18n.t("bulkEditUsers.selectedUsersCount", {
+                defaultValue: "Selected Users ({{count}}):",
+                count: selectedUsers.length,
+              })}
+            </h5>
             <div className="max-h-[200px] overflow-y-auto rounded-md border border-border">
               <Table>
                 <TableHeader>

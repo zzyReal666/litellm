@@ -52,15 +52,24 @@ const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult, i
         ) : (
           <div>
             <span>
-              This attachment would affect{" "}{qualifier}
-              <strong>
-                {impactResult.affected_keys_count} key{impactResult.affected_keys_count !== 1 ? "s" : ""}
-              </strong>{" "}
-              and{" "}
-              <strong>
-                {impactResult.affected_teams_count} team{impactResult.affected_teams_count !== 1 ? "s" : ""}
-              </strong>
-              .
+              {t("policies.impactPreviewAlert.affectedScope", {
+                defaultValue: "This attachment would affect {{qualifier}}{{keys}} and {{teams}}.",
+                qualifier,
+                keys:
+                  impactResult.affected_keys_count === 1
+                    ? t("policies.impactPreviewAlert.oneKey", { defaultValue: "1 key" })
+                    : t("policies.impactPreviewAlert.manyKeys", {
+                        defaultValue: "{{count}} keys",
+                        count: impactResult.affected_keys_count,
+                      }),
+                teams:
+                  impactResult.affected_teams_count === 1
+                    ? t("policies.impactPreviewAlert.oneTeam", { defaultValue: "1 team" })
+                    : t("policies.impactPreviewAlert.manyTeams", {
+                        defaultValue: "{{count}} teams",
+                        count: impactResult.affected_teams_count,
+                      }),
+              })}
             </span>
             {isDefault && (
               <div className="text-xs text-muted-foreground">

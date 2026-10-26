@@ -188,7 +188,10 @@ function SessionsBody({
       </div>
       <section aria-label={i18n.t("mcpGatewaySessions.liveSessions", { defaultValue: "Live sessions" })} className="rounded-lg border border-border bg-card">
         <h3 className="border-b border-border px-4 py-2 text-sm font-semibold text-foreground">
-          {i18n.t("mcpGatewaySessions.liveSessions", { defaultValue: "Live sessions" })} (worker pid{" "}{data.worker_pid})
+          {i18n.t("mcpGatewaySessions.liveSessionsWithPid", {
+            defaultValue: "Live sessions (worker pid {{pid}})",
+            pid: data.worker_pid,
+          })}
         </h3>
         <Table>
           <TableHeader>

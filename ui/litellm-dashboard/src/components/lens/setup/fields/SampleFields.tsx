@@ -19,7 +19,7 @@ export function SampleFields() {
         control={control}
         name="selection.lookback_hours"
         render={({ field }) => (
-          <DurationInput label="Review the last" value={field.value ?? 24} base="hours" onChange={field.onChange} />
+          <DurationInput label={i18n.t("lens.setup.sampleFields.reviewTheLast", { defaultValue: "Review the last" })} value={field.value ?? 24} base="hours" onChange={field.onChange} />
         )}
       />
       {errors.selection?.lookback_hours?.message && (

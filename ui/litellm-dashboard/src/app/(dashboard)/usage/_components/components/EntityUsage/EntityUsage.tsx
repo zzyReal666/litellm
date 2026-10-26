@@ -482,7 +482,15 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
               {METRIC_TITLE[breakdown.metric]} by {modelViewType === "groups" ? "model" : "deployment"}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {granularity === "day" ? "Daily" : "Weekly"} {breakdown.metric}, top 8 stacked{stackFlatCost ? ", flat cost on top" : ""}
+              {i18n.t("entityUsage.breakdownSubtitle", {
+                defaultValue: "{{granularity}} {{metric}}, top 8 stacked",
+                granularity:
+                  granularity === "day"
+                    ? i18n.t("entityUsage.daily", { defaultValue: "Daily" })
+                    : i18n.t("entityUsage.weekly", { defaultValue: "Weekly" }),
+                metric: breakdown.metric,
+              })}
+              {stackFlatCost ? i18n.t("entityUsage.flatCostOnTop", { defaultValue: ", flat cost on top" }) : ""}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">

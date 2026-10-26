@@ -49,8 +49,10 @@ export const AffinityControls: React.FC<{
           onBlur={(event) => commitTtl(event.target.value)}
         />
         <span className="block text-xs mt-1 text-muted-foreground">
-          Refreshes after every request that reuses a pin. Empty tracks the backend default of{" "}
-          {DEFAULT_SESSION_AFFINITY_TTL_SECONDS} seconds.
+          {i18n.t("addModel.affinityControls.ttlHint", {
+            defaultValue: "Refreshes after every request that reuses a pin. Empty tracks the backend default of {{seconds}} seconds.",
+            seconds: DEFAULT_SESSION_AFFINITY_TTL_SECONDS,
+          })}
         </span>
       </div>
     </>

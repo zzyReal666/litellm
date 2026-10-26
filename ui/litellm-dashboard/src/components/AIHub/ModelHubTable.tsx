@@ -1,4 +1,5 @@
 import i18n from "@/lib/i18n";
+import { Trans } from "react-i18next";
 import { AgentHubData, getAgentHubTableColumns } from "@/components/AIHub/AgentHubTableColumns";
 import MakeAgentPublicForm from "@/components/AIHub/forms/MakeAgentPublicForm";
 import MakeMCPPublicForm from "@/components/AIHub/forms/MakeMCPPublicForm";
@@ -792,8 +793,11 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                 <p className="text-lg font-semibold mb-4">{i18n.t("aiHub.modelHubTable.sectionUsageExample", { defaultValue: "Usage Example" })}</p>
                 {isDecisionMode(selectedModel.mode) && (
                   <p className="mb-2 text-sm text-muted-foreground">
-                    Decision models answer on{" "}<code>/v1/decisions</code> and <code>/v1/systemone</code>, not{" "}
-                    <code>/chat/completions</code>.{" "}
+                    <Trans
+                      i18nKey="aiHub.modelHubTable.decisionModelsAnswerOn"
+                      defaults="Decision models answer on <code>/v1/decisions</code> and <code>/v1/systemone</code>, not <code>/chat/completions</code>."
+                      components={{ code: <code /> }}
+                    />{" "}
                     
                     {canOpenPlayground && (
                       <>

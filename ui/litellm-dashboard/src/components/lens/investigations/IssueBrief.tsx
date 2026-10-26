@@ -42,7 +42,9 @@ export function IssueBrief({ title, brief }: { title: string; brief: IssueBrief 
     <div className="overflow-hidden rounded-lg border border-border">
       <div className="flex h-10 items-center gap-1 border-b border-border bg-muted/40 px-3">
         <span className="font-mono text-xs text-muted-foreground">issue-brief.md</span>
-        <span className="mr-1 ml-auto text-xs text-muted-foreground">Copy for</span>
+        <span className="mr-1 ml-auto text-xs text-muted-foreground">
+          {i18n.t("lens.investigations.issueBriefCopyFor", { defaultValue: "Copy for" })}
+        </span>
         {AGENTS.map((agent) => (
           <button
             key={agent.name}

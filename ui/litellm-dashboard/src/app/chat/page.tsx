@@ -543,7 +543,7 @@ export default function ChatConversationPage() {
                 onClick={() => router.push(getChatRoutes().integrations)}
                 className="h-auto p-0 text-sm font-medium"
               >
-                Open Integrations -&gt;
+                {i18n.t("chatPage.openIntegrations", { defaultValue: "Open Integrations ->" })}
               </Button>
             </p>
 

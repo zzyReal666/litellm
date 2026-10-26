@@ -601,7 +601,11 @@ const EvaluationCard = ({ entry }: { entry: GuardrailInformation }) => {
 
           {textRecords != null && (
             <span className="px-2 py-0.5 bg-muted text-muted-foreground border border-border rounded-sm text-[11px] font-medium shrink-0">
-              {textRecords.toLocaleString()} text record{textRecords === 1 ? "" : "s"}
+              {i18n.t("guardrailViewer.textRecords", {
+                count: textRecords,
+                defaultValue_one: "{{count}} text record",
+                defaultValue_other: "{{count}} text records",
+              })}
             </span>
           )}
 
@@ -805,7 +809,9 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
 
         <div className="flex items-center gap-6">
           <div className="text-right">
-            <div className="text-sm font-medium text-foreground">Total: {totalOverheadMs}ms overhead</div>
+            <div className="text-sm font-medium text-foreground">
+              {i18n.t("guardrailViewer.totalOverhead", { defaultValue: "Total: {{value}}ms overhead", value: totalOverheadMs })}
+            </div>
           </div>
 
           <button

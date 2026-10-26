@@ -157,9 +157,9 @@ const CreateTagModal: React.FC<CreateTagModalProps> = ({ visible, onCancel, onSu
 
                 <div className="mt-4 rounded-md border border-border bg-muted p-3">
                   <p className="text-sm text-muted-foreground">
-                    TPM/RPM limits for tags are not currently supported. If you need this feature, please{" "}
-                    
-                    .
+                    {t("tagManagement.createTagModal.tagLimitsNotSupported", {
+                      defaultValue: "TPM/RPM limits for tags are not currently supported. If you need this feature, please let us know.",
+                    })}
                   </p>
                 </div>
               </CollapsibleContent>

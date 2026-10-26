@@ -42,7 +42,7 @@ export function SpendLogLink({
     if (!reason) return null;
     return (
       <span className="inline-flex items-center gap-1 text-xs text-muted-foreground" title={reason}>
-        Cost <span className="font-medium text-foreground">not matched</span>
+        {i18n.t("lens.span.costNotMatched", { defaultValue: "Cost not matched" })}
       </span>
     );
   }
