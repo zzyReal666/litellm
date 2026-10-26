@@ -14511,5 +14511,49 @@
   "teamAdminSettingsForm": {
     "a-proxy-admin-chose-which-settings-team-admi": "A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else.",
     "save-changes": "Save Changes"
+  },
+  "addAgentForm": {
+    "configure-which-models-agents-and-mcp-tools": "Configure which models, agents, and MCP tools this agent is allowed to use. Leave fields empty to allow all (subject to key/team permissions).",
+    "select-access-groups-optional": "Select access groups (optional)",
+    "budgets-rate-limits": "Budgets & Rate Limits",
+    "enable-require-x-litellm-trace-id-on-calls-b": "Enable \"Require x-litellm-trace-id on calls BY this agent\" in Tracing to configure budgets and rate limits.",
+    "for-outbound-agents-using-an-identity-provid": "For outbound agents using an identity provider or virtual key",
+    "this-agent-will-authenticate-with-microsoft": "This agent will authenticate with Microsoft Entra ID. You can skip virtual key creation."
+  },
+  "chatPage": {
+    "search-models": "Search models...",
+    "select-model": "Select model",
+    "chat-history-won-t-be-saved-in-this-browser": "Chat history won't be saved in this browser session",
+    "chat-with-100-llms-mcp-tools-authenticate-on": "Chat with 100+ LLMs + MCP tools; authenticate once, use them here.",
+    "scroll-to-bottom": "Scroll to bottom"
+  },
+  "entityUsage": {
+    "spend-overview": "Spend Overview",
+    "bucket-size": "Bucket size",
+    "fetching-spend-data-failed-so-the-totals-bel": "Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try again.",
+    "fetching-agent-data-failed-so-the-totals-bel": "Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try again."
+  },
+  "teams": {
+    "please-select-an-organization-to-create-a-te": "Please select an organization to create a team for. You can only create teams within organizations where you are an admin.",
+    "max-budget-cny": "Max Budget (CNY)",
+    "id-of-the-team-you-want-to-create-if-not-pro": "ID of the team you want to create. If not provided, it will be generated automatically.",
+    "create-custom-aliases-for-models-that-can-be": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models."
+  },
+  "logsPage": {
+    "request-logs": "Request Logs",
+    "audit-logs": "Audit Logs",
+    "deleted-keys": "Deleted Keys",
+    "deleted-teams": "Deleted Teams"
+  },
+  "mcpServers": {
+    "my-connections": "My Connections",
+    "live-connections": "Live Connections",
+    "about-access-groups": "About access groups",
+    "an-mcp-access-group-is-a-set-of-users-or-tea": "An MCP Access Group is a set of users or teams that have permission to access specific MCP servers. Use access groups to control and organize who can connect to which servers."
+  },
+  "callbackPage": {
+    "litellm-mcp-oauth": "LiteLLM MCP OAuth",
+    "authorization-complete-you-may-close-this-wi": "Authorization complete. You may close this window and return to the LiteLLM dashboard.",
+    "if-the-window-does-not-close-automatically-e": "If the window does not close automatically, everything is still saved—you can close it manually."
   }
 }

@@ -14511,5 +14511,49 @@
   "teamAdminSettingsForm": {
     "a-proxy-admin-chose-which-settings-team-admi": "代理管理员已指定团队管理员可以修改哪些设置。其他修改请联系代理管理员。",
     "save-changes": "保存更改"
+  },
+  "addAgentForm": {
+    "configure-which-models-agents-and-mcp-tools": "配置该 agent 允许使用哪些模型、agent 和 MCP 工具。留空表示允许全部（仍受密钥/团队权限限制）。",
+    "select-access-groups-optional": "选择访问组（可选）",
+    "budgets-rate-limits": "预算与速率限制",
+    "enable-require-x-litellm-trace-id-on-calls-b": "在 Tracing 中启用「要求此 agent 的调用携带 x-litellm-trace-id」以配置预算和速率限制。",
+    "for-outbound-agents-using-an-identity-provid": "适用于使用身份提供商或虚拟密钥的出站 agent",
+    "this-agent-will-authenticate-with-microsoft": "该 agent 将使用 Microsoft Entra ID 认证，可以跳过虚拟密钥创建。"
+  },
+  "chatPage": {
+    "search-models": "搜索模型…",
+    "select-model": "选择模型",
+    "chat-history-won-t-be-saved-in-this-browser": "聊天记录不会保存在本次浏览器会话中",
+    "chat-with-100-llms-mcp-tools-authenticate-on": "与 100+ LLM 和 MCP 工具对话；一次认证，随处使用。",
+    "scroll-to-bottom": "滚动到底部"
+  },
+  "entityUsage": {
+    "spend-overview": "花费概览",
+    "bucket-size": "分桶粒度",
+    "fetching-spend-data-failed-so-the-totals-bel": "获取花费数据失败，下方汇总可能为空而非最终值。请刷新页面重试。",
+    "fetching-agent-data-failed-so-the-totals-bel": "获取 agent 数据失败，下方汇总可能为空而非最终值。请刷新页面重试。"
+  },
+  "teams": {
+    "please-select-an-organization-to-create-a-te": "请选择要为哪个组织创建团队。你只能在自己是管理员的组织内创建团队。",
+    "max-budget-cny": "最大预算（人民币）",
+    "id-of-the-team-you-want-to-create-if-not-pro": "要创建的团队 ID。如果不填，将自动生成。",
+    "create-custom-aliases-for-models-that-can-be": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样可以为核心模型创建快捷方式。"
+  },
+  "logsPage": {
+    "request-logs": "请求日志",
+    "audit-logs": "审计日志",
+    "deleted-keys": "已删除密钥",
+    "deleted-teams": "已删除团队"
+  },
+  "mcpServers": {
+    "my-connections": "我的连接",
+    "live-connections": "实时连接",
+    "about-access-groups": "关于访问组",
+    "an-mcp-access-group-is-a-set-of-users-or-tea": "MCP 访问组是一组有权访问特定 MCP 服务器的用户或团队。使用访问组来控制和组织谁能连接哪些服务器。"
+  },
+  "callbackPage": {
+    "litellm-mcp-oauth": "LiteLLM MCP OAuth",
+    "authorization-complete-you-may-close-this-wi": "授权完成。你可以关闭此窗口并返回 LiteLLM 管理界面。",
+    "if-the-window-does-not-close-automatically-e": "如果窗口没有自动关闭，所有内容仍已保存，你可以手动关闭。"
   }
 }

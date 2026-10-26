@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import i18n from "@/lib/i18n";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import DeletedKeysPage from "@/components/DeletedKeysPage/DeletedKeysPage";
@@ -33,10 +34,10 @@ export default function LogsPage() {
     <Page className="h-full">
       <PageTabs value={activeTab} onValueChange={(value: LogsTab) => setActiveTab(value)}>
         <PageTabsList>
-          <PageTabsTrigger value="request logs">Request Logs</PageTabsTrigger>
-          {canViewAuditLogs && <PageTabsTrigger value="audit logs">Audit Logs</PageTabsTrigger>}
-          <PageTabsTrigger value="deleted keys">Deleted Keys</PageTabsTrigger>
-          {canViewDeletedTeams && <PageTabsTrigger value="deleted teams">Deleted Teams</PageTabsTrigger>}
+          <PageTabsTrigger value="request logs">{i18n.t("logsPage.request-logs", { defaultValue: "Request Logs" })}</PageTabsTrigger>
+          {canViewAuditLogs && <PageTabsTrigger value="audit logs">{i18n.t("logsPage.audit-logs", { defaultValue: "Audit Logs" })}</PageTabsTrigger>}
+          <PageTabsTrigger value="deleted keys">{i18n.t("logsPage.deleted-keys", { defaultValue: "Deleted Keys" })}</PageTabsTrigger>
+          {canViewDeletedTeams && <PageTabsTrigger value="deleted teams">{i18n.t("logsPage.deleted-teams", { defaultValue: "Deleted Teams" })}</PageTabsTrigger>}
         </PageTabsList>
 
         <PageTabsContent value="request logs" keepMounted>

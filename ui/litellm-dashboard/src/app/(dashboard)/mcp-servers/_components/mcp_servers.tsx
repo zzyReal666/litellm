@@ -514,8 +514,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Link href={uiHref("connect")} className={cn(buttonVariants({ variant: "outline" }), "shrink-0")}>
               <Plug />
-              My Connections
-            </Link>
+              {i18n.t("mcpServers.my-connections", { defaultValue: "My Connections" })}</Link>
             {isAdminRole(userRole) ? (
               <>
                 <Button className="shrink-0" variant="secondary" onClick={() => setImportVisible(true)}>
@@ -592,8 +591,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
             )}
             {isProxyAdminTierRole(userRole) && (
               <TabsTrigger value="connections" className="flex-none rounded-none px-4 py-2">
-                Live Connections
-              </TabsTrigger>
+                {i18n.t("mcpServers.live-connections", { defaultValue: "Live Connections" })}</TabsTrigger>
             )}
           </TabsList>
           <TabsContent value="servers" keepMounted>
@@ -648,14 +646,12 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID, i
                               render={
                                 <CircleHelp
                                   className="ml-1 size-3.5 text-muted-foreground"
-                                  aria-label="About access groups"
+                                  aria-label={i18n.t("mcpServers.about-access-groups", { defaultValue: "About access groups" })}
                                 />
                               }
                             />
                             <TooltipContent>
-                              An MCP Access Group is a set of users or teams that have permission to access specific MCP
-                              servers. Use access groups to control and organize who can connect to which servers.
-                            </TooltipContent>
+                              {i18n.t("mcpServers.an-mcp-access-group-is-a-set-of-users-or-tea", { defaultValue: "An MCP Access Group is a set of users or teams that have permission to access specific MCP servers. Use access groups to control and organize who can connect to which servers." })}</TooltipContent>
                           </Tooltip>
                         </p>
                         <Select

@@ -466,9 +466,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
   const renderEntitlementsStep = () => (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        Configure which models, agents, and MCP tools this agent is allowed to use. Leave fields empty to allow all
-        (subject to key/team permissions).
-      </p>
+        {i18n.t("addAgentForm.configure-which-models-agents-and-mcp-tools", { defaultValue: "Configure which models, agents, and MCP tools this agent is allowed to use. Leave fields empty to allow all (subject to key/team permissions)." })}</p>
 
       <FieldGroup>
         <AgentFormField
@@ -518,7 +516,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
             <AccessGroupSelector
               value={Array.isArray(value) ? (value as string[]) : []}
               onChange={onChange}
-              placeholder="Select access groups (optional)"
+              placeholder={i18n.t("addAgentForm.select-access-groups-optional", { defaultValue: "Select access groups (optional)" })}
             />
           )}
         </AgentFormField>
@@ -618,13 +616,11 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       <Separator />
 
       <div>
-        <h4 className="mb-3 text-sm font-medium text-foreground">Budgets &amp; Rate Limits</h4>
+        <h4 className="mb-3 text-sm font-medium text-foreground">{i18n.t("addAgentForm.budgets-rate-limits", { defaultValue: "Budgets & Rate Limits" })}</h4>
         <div className="space-y-4">
           {!requireTraceIdOutbound && (
             <div className="rounded-lg border border-warning/20 bg-warning/10 p-3 text-sm text-warning">
-              Enable &quot;Require x-litellm-trace-id on calls BY this agent&quot; in Tracing to configure budgets and
-              rate limits.
-            </div>
+              {i18n.t("addAgentForm.enable-require-x-litellm-trace-id-on-calls-b", { defaultValue: "Enable \"Require x-litellm-trace-id on calls BY this agent\" in Tracing to configure budgets and rate limits." })}</div>
           )}
 
           <div className="text-sm font-medium text-foreground">{t("agentsPage.addAgentForm.sessionBudgetsTitle", { defaultValue: "Session Budgets" })}</div>
@@ -800,8 +796,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
                     <StatusBadge tone="warning" label="GENERIC" className="h-4 px-1 text-[10px]" />
                   </span>
                   <span className="block text-xs whitespace-normal text-warning">
-                    For outbound agents using an identity provider or virtual key
-                  </span>
+                    {i18n.t("addAgentForm.for-outbound-agents-using-an-identity-provid", { defaultValue: "For outbound agents using an identity provider or virtual key" })}</span>
                 </span>
               </span>
             </SelectItem>
@@ -932,8 +927,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
 
         {form.getValues("identity_provider") === "microsoft_entra" && (
           <p className="mb-4 text-sm text-muted-foreground">
-            This agent will authenticate with Microsoft Entra ID. You can skip virtual key creation.
-          </p>
+            {i18n.t("addAgentForm.this-agent-will-authenticate-with-microsoft", { defaultValue: "This agent will authenticate with Microsoft Entra ID. You can skip virtual key creation." })}</p>
         )}
         <RadioGroup
           value={keyAssignOption}

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import useCan from "@/app/(dashboard)/hooks/useCan";
@@ -770,9 +771,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         {isOrgAdmin && !isSingleOrg && adminOrgs.length > 1 && (
                           <div className="mb-8 rounded-md border border-info/20 bg-info/10 p-4">
                             <span className="text-sm text-info">
-                              Please select an organization to create a team for. You can only create teams within
-                              organizations where you are an admin.
-                            </span>
+                              {i18n.t("teams.please-select-an-organization-to-create-a-te", { defaultValue: "Please select an organization to create a team for. You can only create teams within organizations where you are an admin." })}</span>
                           </div>
                         )}
                       </>
@@ -802,7 +801,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
+                  <FormField control={form.control} name="max_budget" label={i18n.t("teams.max-budget-cny", { defaultValue: "Max Budget (CNY)" })}>
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} width={200} />
                     )}
@@ -858,7 +857,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                       schemaLoading={isTeamMetadataSchemaLoading}
                     />
                     <FieldDescription>
-                      Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {'{"region": "us"}'}.
+                      Values are saved as text. Enter JSON for typed values, e.g. 3, true, or{" "}{'{"region": "us"}'}.
                     </FieldDescription>
                   </Field>
 
@@ -877,7 +876,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           control={form.control}
                           name="team_id"
                           label={t("oldTeams.form.teamId", { defaultValue: "Team ID" })}
-                          description="ID of the team you want to create. If not provided, it will be generated automatically."
+                          description={i18n.t("teams.id-of-the-team-you-want-to-create-if-not-pro", { defaultValue: "ID of the team you want to create. If not provided, it will be generated automatically." })}
                         >
                           {({ ref, value, ...field }) => <UIInput {...field} ref={ref} value={value ?? ""} />}
                         </FormField>
@@ -1285,9 +1284,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     <CollapsibleContent className="px-4 pb-3">
                       <div className="mt-4">
                         <p className="mb-4 block text-sm text-muted-foreground">
-                          Create custom aliases for models that can be used by team members in API calls. This allows
-                          you to create shortcuts for specific models.
-                        </p>
+                          {i18n.t("teams.create-custom-aliases-for-models-that-can-be", { defaultValue: "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models." })}</p>
                         <ModelAliasManager
                           accessToken={accessToken || ""}
                           initialModelAliases={modelAliases}

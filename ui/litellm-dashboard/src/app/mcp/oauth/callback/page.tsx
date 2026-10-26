@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo } from "react";
+import i18n from "@/lib/i18n";
 import { useSearchParams } from "next/navigation";
 import { getSecureItem, setSecureItem } from "@/utils/secureStorage";
 
@@ -79,13 +80,11 @@ const McpOAuthCallbackContent = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted p-6">
       <div className="max-w-lg w-full rounded-lg bg-card shadow-md p-8 text-center space-y-4">
-        <h1 className="text-xl font-semibold text-foreground">LiteLLM MCP OAuth</h1>
+        <h1 className="text-xl font-semibold text-foreground">{i18n.t("callbackPage.litellm-mcp-oauth", { defaultValue: "LiteLLM MCP OAuth" })}</h1>
         <p className="text-sm text-foreground">
-          Authorization complete. You may close this window and return to the LiteLLM dashboard.
-        </p>
+          {i18n.t("callbackPage.authorization-complete-you-may-close-this-wi", { defaultValue: "Authorization complete. You may close this window and return to the LiteLLM dashboard." })}</p>
         <p className="text-xs text-muted-foreground">
-          If the window does not close automatically, everything is still saved—you can close it manually.
-        </p>
+          {i18n.t("callbackPage.if-the-window-does-not-close-automatically-e", { defaultValue: "If the window does not close automatically, everything is still saved—you can close it manually." })}</p>
       </div>
     </div>
   );

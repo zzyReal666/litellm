@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from "react";
+import i18n from "@/lib/i18n";
 import { Plus, ChevronDown, Check, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -364,7 +365,7 @@ export default function ChatConversationPage() {
           autoFocus
           value={modelSearchText}
           onChange={(e) => setModelSearchText(e.target.value)}
-          placeholder="Search models..."
+          placeholder={i18n.t("chatPage.search-models", { defaultValue: "Search models..." })}
           className="h-8 text-[13px]"
         />
       </div>
@@ -435,7 +436,7 @@ export default function ChatConversationPage() {
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap">{selectedModel}</span>
               </>
             ) : (
-              <span className="text-muted-foreground">Select model</span>
+              <span className="text-muted-foreground">{i18n.t("chatPage.select-model", { defaultValue: "Select model" })}</span>
             )}
             <ChevronDown className="h-3 w-3 text-muted-foreground shrink-0" />
           </Button>
@@ -516,7 +517,7 @@ export default function ChatConversationPage() {
     <>
       {storageUnavailable && !storageBannerDismissed && (
         <div className="bg-warning/10 border-b border-warning/20 px-5 py-1.5 text-[13px] text-warning flex justify-between items-center">
-          <span>Chat history won&apos;t be saved in this browser session</span>
+          <span>{i18n.t("chatPage.chat-history-won-t-be-saved-in-this-browser", { defaultValue: "Chat history won't be saved in this browser session" })}</span>
           <Button
             variant="ghost"
             size="icon-xs"
@@ -536,7 +537,7 @@ export default function ChatConversationPage() {
             </h1>
 
             <p className="-mt-4 mb-7 text-sm text-muted-foreground text-center max-w-[520px] leading-relaxed">
-              Chat with 100+ LLMs + MCP tools; authenticate once, use them here.{" "}
+              {i18n.t("chatPage.chat-with-100-llms-mcp-tools-authenticate-on", { defaultValue: "Chat with 100+ LLMs + MCP tools; authenticate once, use them here." })}{" "}
               <Button
                 variant="link"
                 onClick={() => router.push(getChatRoutes().integrations)}
@@ -589,7 +590,7 @@ export default function ChatConversationPage() {
                   }
                 }}
                 className="absolute bottom-[100px] left-1/2 -translate-x-1/2 z-chrome rounded-full border bg-background/75 text-muted-foreground shadow-sm backdrop-blur-md hover:bg-background/95"
-                aria-label="Scroll to bottom"
+                aria-label={i18n.t("chatPage.scroll-to-bottom", { defaultValue: "Scroll to bottom" })}
               >
                 <ChevronDown className="h-3 w-3" />
               </Button>

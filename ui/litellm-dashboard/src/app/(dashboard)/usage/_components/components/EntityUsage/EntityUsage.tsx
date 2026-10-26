@@ -460,7 +460,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   ) : (
     <div className="grid gap-3">
       <section className="grid gap-2">
-        <h2 className="text-sm font-medium text-foreground">{capitalizedEntityLabel} Spend Overview</h2>
+        <h2 className="text-sm font-medium text-foreground">{capitalizedEntityLabel} {i18n.t("entityUsage.spend-overview", { defaultValue: "Spend Overview" })}</h2>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border lg:grid-cols-5">
           {summaryTiles.map(renderSummaryTile)}
         </div>
@@ -482,14 +482,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
               {METRIC_TITLE[breakdown.metric]} by {modelViewType === "groups" ? "model" : "deployment"}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {granularity === "day" ? "Daily" : "Weekly"} {breakdown.metric}, top 8 stacked
-              {stackFlatCost ? ", flat cost on top" : ""}
+              {granularity === "day" ? "Daily" : "Weekly"} {breakdown.metric}, top 8 stacked{stackFlatCost ? ", flat cost on top" : ""}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <BreakdownControls state={breakdown} onChange={setBreakdown} showDimension={false} />
             <Segmented
-              label="Bucket size"
+              label={i18n.t("entityUsage.bucket-size", { defaultValue: "Bucket size" })}
               value={granularity}
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
@@ -642,17 +641,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       {failed && (
         <Alert variant="error">
           <AlertDescription className="text-inherit">
-            Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
-          </AlertDescription>
+            {i18n.t("entityUsage.fetching-spend-data-failed-so-the-totals-bel", { defaultValue: "Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try again." })}</AlertDescription>
         </Alert>
       )}
       {showAgentBreakdown && agentFailed && (
         <Alert variant="error">
           <AlertDescription className="text-inherit">
-            Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
-          </AlertDescription>
+            {i18n.t("entityUsage.fetching-agent-data-failed-so-the-totals-bel", { defaultValue: "Fetching agent data failed, so the totals below may be empty rather than final. Reload the page to try again." })}</AlertDescription>
         </Alert>
       )}
       <div className="max-w-full [&>div:first-child]:mb-0 [&>div:first-child_label]:sr-only">
