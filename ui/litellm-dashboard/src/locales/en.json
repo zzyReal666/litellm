@@ -3260,7 +3260,10 @@
     "loadingModels": "Loading models…",
     "loadingAgents": "Loading agents…",
     "loadingMcpServers": "Loading MCP servers…",
-    "unknownStatus": "Unknown"
+    "unknownStatus": "Unknown",
+    "builtWithPrefix": "Built with litellm: v",
+    "serviceStatusLabel": "Service status:",
+    "searchMcpServersPlaceholder": "Search MCP server names or descriptions..."
   },
   "objectPermissionsView": {
     "title": "Object Permissions",
@@ -4835,7 +4838,8 @@
       "headerValuePlaceholder": "Header value",
       "addStaticHeader": "Add Static Header",
       "clearHeaderName": "Clear header name",
-      "clearHeaderValue": "Clear header value"
+      "clearHeaderValue": "Clear header value",
+      "internalDelegateWarningDescription": "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream provider and network enforce access controls."
     },
     "mcpServerCard": {
       "testConnection": "Test Connection",
@@ -5426,7 +5430,8 @@
       "authOauthTokenExchange": "OAuth Token Exchange (OBO)",
       "authIdJag": "ID-JAG (Okta Cross App Access)",
       "authTruePassthrough": "True Passthrough (no LiteLLM auth)",
-      "authOauthDelegate": "OAuth Delegate (client-supplied upstream token)"
+      "authOauthDelegate": "OAuth Delegate (client-supplied upstream token)",
+      "noOAuthFlowDescription": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively."
     },
     "mcpServerView": {
       "backToAllServers": "Back to All Servers",
@@ -8264,7 +8269,12 @@
       "exportUsageDataTitle": "Export Usage Data",
       "gatewayCountedTooltip": "Counted by the gateway when it answers a request, independent of spend logging. Deployment-wide, so it will not match the per-key or per-model breakdowns below.",
       "gatewayRequestsByEndpoint": "Gateway Requests by Endpoint",
-      "gatewayRequestsByEndpointTooltip": "Counted by the gateway middleware as each request is answered. Covers LLM, MCP and A2A endpoints across the whole deployment."
+      "gatewayRequestsByEndpointTooltip": "Counted by the gateway middleware as each request is answered. Covers LLM, MCP and A2A endpoints across the whole deployment.",
+      "spendFetchFailed": "Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try again.",
+      "gatewayRequestsByEndpointSubtitle": "Successful and failed requests per route",
+      "searchModelsAria": "Search models",
+      "searchByModelNamePlaceholder": "Search by model name",
+      "clearModelSearchAria": "Clear model search"
     },
     "endpointUsageBarChart": {
       "title": "Success vs Failed Requests by Endpoint"
@@ -13480,6 +13490,10 @@
       "heroTitle": "The gateway that helps your agents improve",
       "heroDescription": "Turn recorded agent runs into findings linked to the exact steps, so you know what happened and what to change.",
       "setUpLens": "Set up Lens"
+    },
+    "investigations": {
+      "frequencyTracesAffected": "{{affected}} of {{total}} traces affected",
+      "historyRunsReviewed": "{{count}} runs reviewed"
     }
   },
   "mcpServerCredentials": {
@@ -13661,7 +13675,8 @@
     "update-this-model-s-api-key-only-the-new-key": "Update this model's API key. Only the new key is sent; the rest of the deployment configuration is left untouched.",
     "new-api-key": "New API Key",
     "enter-the-new-api-key": "Enter the new API key",
-    "update-api-key-2": "Update API Key"
+    "update-api-key-2": "Update API Key",
+    "onlyApiKeyRotated": "Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a Vertex service-account JSON aren't supported yet; update those from the model's LiteLLM Params for now."
   },
   "evidence": {
     "this-evidence-is-no-longer-available": "This evidence is no longer available.",
@@ -14490,7 +14505,8 @@
     "savings-are-unavailable-for-this-range-try-a": "Savings are unavailable for this range. Try another date range or reopen this tab."
   },
   "timeline": {
-    "clear-time-zoom": "Clear time zoom"
+    "clear-time-zoom": "Clear time zoom",
+    "dragToZoom": "drag to zoom"
   },
   "teamAdminSettingsForm": {
     "a-proxy-admin-chose-which-settings-team-admi": "A proxy admin chose which settings team admins can change. Ask a proxy admin to change anything else.",

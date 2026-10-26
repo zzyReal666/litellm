@@ -283,9 +283,10 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
               <TriangleAlert />
               <AlertTitle>{i18n.t("mcpTools.mcpPermissionManagement.internalDelegateWarningTitle", { defaultValue: "Internal server with upstream OAuth delegation" })}</AlertTitle>
               <AlertDescription>
-                This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be
-                able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream
-                provider and network enforce access controls.
+                {i18n.t("mcpTools.mcpPermissionManagement.internalDelegateWarningDescription", {
+                  defaultValue:
+                    "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream provider and network enforce access controls.",
+                })}
               </AlertDescription>
             </Alert>
           )}

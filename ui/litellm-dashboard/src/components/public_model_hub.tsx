@@ -339,7 +339,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                 <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                   <span className="flex items-center">
                     <span className="w-4 h-4 mr-2">🔧</span>
-                    Built with litellm: v{litellmVersion}
+                    {t("publicModelHub.builtWithPrefix", { defaultValue: "Built with litellm: v" })}{litellmVersion}
                   </span>
                 </div>
               </Card>
@@ -381,7 +381,9 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                   {t("publicModelHub.healthStatusTitle", { defaultValue: "Health and Endpoint Status" })}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <p className="text-success font-medium text-sm">Service status: {serviceStatus}</p>
+                  <p className="text-success font-medium text-sm">
+                    {t("publicModelHub.serviceStatusLabel", { defaultValue: "Service status:" })} {serviceStatus}
+                  </p>
                 </div>
               </Card>
             )}
@@ -592,7 +594,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                           <SearchIcon className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
                           <input
                             type="text"
-                            placeholder="Search agent names or descriptions..."
+                            placeholder={t("publicModelHub.searchAgentsPlaceholder", { defaultValue: "Search agent names or descriptions..." })}
                             value={agentSearchTerm}
                             onChange={(e) => setAgentSearchTerm(e.target.value)}
                             className="border border-border rounded-lg pl-10 pr-4 py-2 w-full text-sm focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-transparent bg-card"
@@ -671,7 +673,7 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                           <SearchIcon className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
                           <input
                             type="text"
-                            placeholder="Search MCP server names or descriptions..."
+                            placeholder={t("publicModelHub.searchMcpServersPlaceholder", { defaultValue: "Search MCP server names or descriptions..." })}
                             value={mcpSearchTerm}
                             onChange={(e) => setMcpSearchTerm(e.target.value)}
                             className="border border-border rounded-lg pl-10 pr-4 py-2 w-full text-sm focus:outline-hidden focus:ring-2 focus:ring-ring focus:border-transparent bg-card"
@@ -717,7 +719,11 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
 
                     <div className="mt-8 text-center">
                       <p className="text-sm text-muted-foreground">
-                        Showing {filteredMcpData.length} of {mcpHubData?.length || 0} MCP servers
+                        {t("publicModelHub.showingMcpServers", {
+                          defaultValue: "Showing {{shown}} of {{total}} MCP servers",
+                          shown: filteredMcpData.length,
+                          total: mcpHubData?.length || 0,
+                        })}
                       </p>
                     </div>
                   </TabsContent>

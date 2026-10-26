@@ -338,8 +338,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
       {aggregatedFailed && (
         <Alert variant="error" className="mb-3">
           <AlertDescription className="text-inherit">
-            Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try
-            again.
+            {t("usagePage.usagePageView.spendFetchFailed", {
+              defaultValue:
+                "Fetching spend data failed, so the totals below may be empty rather than final. Reload the page to try again.",
+            })}
           </AlertDescription>
         </Alert>
       )}
@@ -398,7 +400,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                         <Panel
                           testId="gateway-requests-by-endpoint"
                           title={t("usagePage.usagePageView.gatewayRequestsByEndpoint", { defaultValue: "Gateway Requests by Endpoint" })}
-                          subtitle="Successful and failed requests per route"
+                          subtitle={t("usagePage.usagePageView.gatewayRequestsByEndpointSubtitle", { defaultValue: "Successful and failed requests per route" })}
                           bodyClassName="px-2 pt-4"
                         >
                           <StackedUsageChart
@@ -441,8 +443,8 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                         <Search className="size-4 text-muted-foreground" />
                       </InputGroupAddon>
                       <InputGroupInput
-                        aria-label="Search models"
-                        placeholder="Search by model name"
+                        aria-label={t("usagePage.usagePageView.searchModelsAria", { defaultValue: "Search models" })}
+                        placeholder={t("usagePage.usagePageView.searchByModelNamePlaceholder", { defaultValue: "Search by model name" })}
                         value={modelQuery}
                         onChange={(event) => setModelQuery(event.target.value)}
                       />
@@ -450,7 +452,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
                             size="icon-xs"
-                            aria-label="Clear model search"
+                            aria-label={t("usagePage.usagePageView.clearModelSearchAria", { defaultValue: "Clear model search" })}
                             onClick={() => setModelQuery("")}
                           >
                             <X />

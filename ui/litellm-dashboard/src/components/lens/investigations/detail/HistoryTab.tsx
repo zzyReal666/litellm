@@ -60,7 +60,10 @@ function HistoryContent({
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">{when(j.created_at)}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {j.coverage?.screened ?? 0} runs reviewed
+                {i18n.t("lens.investigations.historyRunsReviewed", {
+                  defaultValue: "{{count}} runs reviewed",
+                  count: j.coverage?.screened ?? 0,
+                })}
                 {j.findings != null && <> · {j.findings.length} findings</>}
                 <ScanDuration job={j} />
               </p>

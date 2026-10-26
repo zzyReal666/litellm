@@ -39,7 +39,11 @@ export function FrequencyCard({ frequency }: { frequency: Frequency }) {
           <p className="text-2xl leading-tight font-semibold tracking-tight tabular-nums">
             {percent ?? "—"}
             <span className="ml-1.5 text-sm font-normal tracking-normal text-muted-foreground">
-              {frequency.affected} of {frequency.total} traces affected
+              {i18n.t("lens.investigations.frequencyTracesAffected", {
+                defaultValue: "{{affected}} of {{total}} traces affected",
+                affected: frequency.affected,
+                total: frequency.total,
+              })}
             </span>
           </p>
         </div>

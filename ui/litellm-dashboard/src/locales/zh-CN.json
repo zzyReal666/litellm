@@ -3192,7 +3192,7 @@
     "showingModels": "显示 {{shown}} / {{total}} 个模型",
     "searchAgentsLabel": "搜索 Agent：",
     "searchAgentsTooltip": "按名称或描述搜索 Agent",
-    "searchAgentsPlaceholder": "搜索 Agent 名称或描述...",
+    "searchAgentsPlaceholder": "搜索 agent 名称或描述…",
     "filterSkills": "技能：",
     "selectSkills": "选择技能",
     "showingAgents": "显示 {{shown}} / {{total}} 个 Agent",
@@ -3260,7 +3260,10 @@
     "loadingModels": "正在加载模型…",
     "loadingAgents": "正在加载 Agent…",
     "loadingMcpServers": "正在加载 MCP 服务器…",
-    "unknownStatus": "未知"
+    "unknownStatus": "未知",
+    "builtWithPrefix": "基于 LiteLLM 构建：v",
+    "serviceStatusLabel": "服务状态：",
+    "searchMcpServersPlaceholder": "搜索 MCP 服务器名称或描述…"
   },
   "objectPermissionsView": {
     "title": "对象权限",
@@ -4835,7 +4838,8 @@
       "headerValuePlaceholder": "请求头值",
       "addStaticHeader": "添加静态请求头",
       "clearHeaderName": "清空请求头名称",
-      "clearHeaderValue": "清空请求头值"
+      "clearHeaderValue": "清空请求头值",
+      "internalDelegateWarningDescription": "该 MCP 服务器配置为仅限内部访问，但把认证委托给上游。匿名用户无需 LiteLLM 会话即可访问上游的 OAuth2 /authorize 流程。请确保你的上游提供商和网络已实施访问控制。"
     },
     "mcpServerCard": {
       "testConnection": "测试连接",
@@ -5426,7 +5430,8 @@
       "authOauthTokenExchange": "OAuth Token Exchange（OBO）",
       "authIdJag": "ID-JAG（Okta 跨应用访问）",
       "authTruePassthrough": "真实透传（不使用 LiteLLM 认证）",
-      "authOauthDelegate": "OAuth 委派（由客户端提供上游 Token）"
+      "authOauthDelegate": "OAuth 委派（由客户端提供上游 Token）",
+      "noOAuthFlowDescription": "选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按你的预期进行认证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户认证，并对机器对机器形式的凭据采取保守处理。"
     },
     "mcpServerView": {
       "backToAllServers": "返回所有服务器",
@@ -8264,7 +8269,12 @@
       "exportUsageDataTitle": "导出用量数据",
       "gatewayCountedTooltip": "由网关在应答请求时计数，与消费日志无关。统计范围是整个部署，因此不会与下面的按密钥或按模型明细一致。",
       "gatewayRequestsByEndpoint": "按端点统计的网关请求",
-      "gatewayRequestsByEndpointTooltip": "由网关中间件在每次请求被应答时计数。覆盖整个部署的 LLM、MCP 和 A2A 端点。"
+      "gatewayRequestsByEndpointTooltip": "由网关中间件在每次请求被应答时计数。覆盖整个部署的 LLM、MCP 和 A2A 端点。",
+      "spendFetchFailed": "获取花费数据失败，下方汇总可能为空而非最终值。请刷新页面重试。",
+      "gatewayRequestsByEndpointSubtitle": "各路由的成功与失败请求数",
+      "searchModelsAria": "搜索模型",
+      "searchByModelNamePlaceholder": "按模型名称搜索",
+      "clearModelSearchAria": "清除模型搜索"
     },
     "endpointUsageBarChart": {
       "title": "按端点统计成功与失败请求"
@@ -13480,6 +13490,10 @@
       "heroTitle": "帮助你的 agent 持续改进的网关",
       "heroDescription": "把已记录的 agent 运行转化为与具体步骤关联的发现项，让你清楚发生了什么、该改什么。",
       "setUpLens": "设置 Lens"
+    },
+    "investigations": {
+      "frequencyTracesAffected": "共 {{total}} 条链路中 {{affected}} 条受影响",
+      "historyRunsReviewed": "已审查 {{count}} 次运行"
     }
   },
   "mcpServerCredentials": {
@@ -13661,7 +13675,8 @@
     "update-this-model-s-api-key-only-the-new-key": "更新该模型的 API 密钥。仅发送新密钥，其余部署配置保持不变。",
     "new-api-key": "新 API 密钥",
     "enter-the-new-api-key": "输入新的 API 密钥",
-    "update-api-key-2": "更新 API 密钥"
+    "update-api-key-2": "更新 API 密钥",
+    "onlyApiKeyRotated": "此处仅轮换 API 密钥。使用 Azure AD Token、AWS 凭据或 Vertex 服务账号 JSON 认证的模型暂不支持，请暂时在模型的 LiteLLM 参数中更新。"
   },
   "evidence": {
     "this-evidence-is-no-longer-available": "该证据已不可用。",
@@ -14490,7 +14505,8 @@
     "savings-are-unavailable-for-this-range-try-a": "该时间范围无法提供节省数据。请尝试其他日期范围或重新打开此标签页。"
   },
   "timeline": {
-    "clear-time-zoom": "清除时间缩放"
+    "clear-time-zoom": "清除时间缩放",
+    "dragToZoom": "拖动缩放"
   },
   "teamAdminSettingsForm": {
     "a-proxy-admin-chose-which-settings-team-admi": "代理管理员已指定团队管理员可以修改哪些设置。其他修改请联系代理管理员。",

@@ -99,7 +99,7 @@ function BucketTooltip({
         {bucket.total} {bucket.total === 1 ? noun.singular : noun.plural}
         {bucket.failed > 0 && `, ${bucket.failed} failed`}
       </div>
-      <div className="text-info">drag to zoom</div>
+      <div className="text-info">{i18n.t("timeline.dragToZoom", { defaultValue: "drag to zoom" })}</div>
     </div>
   );
 }
