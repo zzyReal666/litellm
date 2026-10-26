@@ -1,6 +1,7 @@
 "use client";
 
 import { Aperture, ArrowUpRight } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useState } from "react";
 
 import litellmMonogram from "../../../../../../public/assets/logos/litellm_monogram.svg";
@@ -58,11 +59,11 @@ export function SpendLogLink({
         className="tabular-nums active:scale-[0.97] motion-reduce:transition-none"
       >
         <img src={litellmMonogram.src} alt="" aria-hidden className="size-3.5" />
-        <span className="font-medium">LiteLLM Spend Log</span>
+        <span className="font-medium">{i18n.t("spendLogLink.litellm-spend-log", { defaultValue: "LiteLLM Spend Log" })}</span>
         {span.spend != null && <span className="text-muted-foreground">{formatCost(span.spend)}</span>}
         <ArrowUpRight data-icon="inline-end" />
       </Button>
-      {missing && <span className="text-xs text-muted-foreground">Spend log not visible in this time range</span>}
+      {missing && <span className="text-xs text-muted-foreground">{i18n.t("spendLogLink.spend-log-not-visible-in-this-time-range", { defaultValue: "Spend log not visible in this time range" })}</span>}
       <LogDetailsDrawer
         open={open && Boolean(logQuery.data)}
         onClose={() => setOpen(false)}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import i18n from "@/lib/i18n";
 import { Check, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LensReadiness } from "../hooks/useLensReadiness";
@@ -29,7 +30,7 @@ export function LensGettingStarted({ state, onStart, onExit }: LensGettingStarte
     setupRef.current?.focus({ preventScroll: true });
   };
   return (
-    <section aria-label="Get started with Lens" className="@container mx-auto w-full max-w-7xl space-y-6">
+    <section aria-label={i18n.t("lensGettingStarted.get-started-with-lens", { defaultValue: "Get started with Lens" })} className="@container mx-auto w-full max-w-7xl space-y-6">
       <LensIntroduction onStart={start} />
       <div className="grid items-start gap-6 @3xl:grid-cols-[minmax(0,1fr)_280px] @3xl:gap-8">
         <OnboardingSetup
@@ -55,8 +56,7 @@ function Prerequisites() {
   return (
     <aside className="rounded-2xl border bg-card p-6" aria-labelledby="lens-prerequisites">
       <h2 id="lens-prerequisites" className="text-base font-semibold">
-        Before you start
-      </h2>
+        {i18n.t("lensGettingStarted.before-you-start", { defaultValue: "Before you start" })}</h2>
       <ul className="mt-5 space-y-5 text-sm">
         {PREREQUISITES.map((item) => (
           <li key={item.title} className="flex gap-3">
@@ -71,9 +71,7 @@ function Prerequisites() {
       <div className="mt-5 flex gap-2 border-t pt-5 text-xs leading-5 text-muted-foreground">
         <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
         <p>
-          Your infrastructure stores the traces. Investigation content is sent to your selected model provider through
-          the gateway.
-        </p>
+          {i18n.t("lensGettingStarted.your-infrastructure-stores-the-traces-invest", { defaultValue: "Your infrastructure stores the traces. Investigation content is sent to your selected model provider through the gateway." })}</p>
       </div>
     </aside>
   );

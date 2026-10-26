@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import i18n from "@/lib/i18n";
 import { Bot, Check, Copy, Sparkles, Wrench } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -338,7 +339,7 @@ export function LogDetailsDrawer({
                         type="button"
                         onClick={handleCopyLeftPanelId}
                         className="text-muted-foreground hover:text-foreground"
-                        aria-label="Copy trace id"
+                        aria-label={i18n.t("logDetailsDrawer.copy-trace-id", { defaultValue: "Copy trace id" })}
                       >
                         {copiedLeftPanelId ? <Check className="size-3" /> : <Copy className="size-3" />}
                       </button>
@@ -385,7 +386,7 @@ export function LogDetailsDrawer({
                 )}
                 {isSessionMode && sessionTruncated && (
                   <div className="mt-1 text-[11px] text-warning font-mono">
-                    Showing most recent {logsForList.length} of {sessionTotalCount}
+                    {i18n.t("logDetailsDrawer.showing-most-recent", { defaultValue: "Showing most recent" })}{" "}{logsForList.length} of {sessionTotalCount}
                   </div>
                 )}
                 {isSessionMode && (
@@ -399,8 +400,7 @@ export function LogDetailsDrawer({
                         Duration
                       </TabsTrigger>
                       <TabsTrigger value="start_time" className="text-[11px]">
-                        Start time
-                      </TabsTrigger>
+                        {i18n.t("logDetailsDrawer.start-time", { defaultValue: "Start time" })}</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 )}

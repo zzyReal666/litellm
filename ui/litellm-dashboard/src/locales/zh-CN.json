@@ -3058,7 +3058,10 @@
     "noComplexityTiers": "还没有配置复杂度分层，因此没有可测试的内容。",
     "copyModelId": "复制模型 ID",
     "updateApiKey": "更新 API 密钥",
-    "deleteAutoRouterMessage": "确定要删除这个自动路由吗？"
+    "deleteAutoRouterMessage": "确定要删除这个自动路由吗？",
+    "public-model-name": "公开模型名称：",
+    "created-at": "创建时间",
+    "created-by": "创建人"
   },
   "common": {
     "neverExpires": "永不过期",
@@ -3496,7 +3499,10 @@
   "queryParamInput": {
     "paramNamePlaceholder": "参数名称（如：version）",
     "paramValuePlaceholder": "参数值（如：v1）",
-    "addButton": "添加查询参数"
+    "addButton": "添加查询参数",
+    "parameter-name-e-g-version": "参数名（例如 version）",
+    "parameter-value-e-g-v1": "参数值（例如 v1）",
+    "add-query-parameter": "添加查询参数"
   },
   "routePreview": {
     "title": "路由预览",
@@ -14018,5 +14024,110 @@
   "modelHubTable": {
     "make-models-agents-and-mcp-servers-public-fo": "将模型、agent 和 MCP 服务器设为公开，方便开发者了解可用资源。",
     "try-it-in-the-playground": "在演练场中试用"
+  },
+  "agentPicker": {
+    "find-agent": "查找 agent",
+    "find-agent-2": "查找 agent",
+    "no-agents-match": "没有匹配的 agent"
+  },
+  "investigationProgress": {
+    "analysis-progress": "分析进度",
+    "investigation-progress": "调查进度",
+    "analysis-stages": "分析阶段"
+  },
+  "queueReasonText": {
+    "connect-worker": "连接 worker",
+    "what-the-worker-is-doing": "worker 正在做什么"
+  },
+  "investigationDetail": {
+    "copy-for-agent": "复制给 agent",
+    "could-not-load-this-run": "无法加载本次运行。",
+    "this-older-batch-predates-saved-result-snaps": "该较早批次早于结果快照功能，其发现项仍可在「所有累计发现项」中查看。"
+  },
+  "traceList": {
+    "tool-calls": "工具调用：",
+    "no-traces-here-yet": "这里还没有链路。",
+    "reviewed-traces": "已审查的链路"
+  },
+  "lensGettingStarted": {
+    "get-started-with-lens": "开始使用 Lens",
+    "before-you-start": "开始之前",
+    "your-infrastructure-stores-the-traces-invest": "你的基础设施负责存储链路。调查内容会通过网关发送给你选择的模型提供商。"
+  },
+  "tracingSetupCard": {
+    "checking-lens-connection": "正在检查 Lens 连接…",
+    "could-not-check-the-lens-connection": "无法检查 Lens 连接。",
+    "try-again": "重试"
+  },
+  "analysisAccessFields": {
+    "analysis-model": "分析模型",
+    "monthly-limit-cny": "每月限额（人民币）",
+    "shared-across-all-investigations": "所有调查共享。"
+  },
+  "analysisKeyPicker": {
+    "charge-analysis-to": "分析费用计入",
+    "charge-analysis-to-2": "分析费用计入",
+    "search-existing-keys": "搜索已有密钥"
+  },
+  "contentTab": {
+    "loading-span": "正在加载 Span…",
+    "could-not-load-span": "无法加载 Span：",
+    "no-content-recorded-for-this-span": "该 Span 没有记录内容。"
+  },
+  "conversationParts": {
+    "inspect-step": "查看步骤",
+    "no-result-content-recorded": "没有记录结果内容。",
+    "session-context": "会话上下文"
+  },
+  "requestTab": {
+    "this-span-is-not-a-model-request": "该 Span 不是模型请求。",
+    "spend-log": "花费日志",
+    "copy-request-id": "复制请求 ID"
+  },
+  "spendLogLink": {
+    "litellm-spend-log": "LiteLLM 花费日志",
+    "spend-log-not-visible-in-this-time-range": "该时间范围内看不到花费日志"
+  },
+  "drawerHeader": {
+    "request-id": "请求 ID",
+    "esc-to-close": "按 ESC 关闭"
+  },
+  "logDetailsDrawer": {
+    "copy-trace-id": "复制链路 ID",
+    "showing-most-recent": "显示最近",
+    "start-time": "开始时间"
+  },
+  "credentialModal": {
+    "unique-name-that-models-reference-this-crede": "模型引用该凭据时使用的唯一名称",
+    "display-name": "显示名称：",
+    "e-g-production-openai": "例如：生产环境 OpenAI"
+  },
+  "costOptimizationFeedbackBanner": {
+    "help-shape-cost-optimization": "帮助改进成本优化",
+    "we-re-collecting-suggestions-for-cost-optimi": "我们正在收集关于路由、预算等成本优化改进的建议。欢迎告诉我们你希望看到什么。",
+    "dismiss-banner": "关闭横幅"
+  },
+  "modelPricingSummary": {
+    "follows-the-model-cost-map": "遵循模型成本表",
+    "custom-pricing": "自定义价格"
+  },
+  "budgetModal": {
+    "max-tokens-per-day-batch": "每日最大 Token 数（批量）",
+    "daily-token-budget-for-batch-submissions-whe": "批量提交的每日 Token 预算。设置后，批量请求将按此计费，而非 TPM/RPM。",
+    "max-budget-cny": "最大预算（人民币）"
+  },
+  "autoRouterConnectionTest": {
+    "oss-classifier-connection": "OSS 分类器连接",
+    "oss-classifier": "OSS 分类器",
+    "connection-test-results": "连接测试结果"
+  },
+  "premiumLoggingSettings": {
+    "langfuse-logging": "✨ langfuse-logging",
+    "datadog-logging": "✨ datadog-logging"
+  },
+  "docLink": {
+    "open-documentation-in-a-new-tab": "在新标签页中打开文档",
+    "api-reference-docs": "API 参考文档",
+    "opens-in-a-new-tab": "（在新标签页中打开）"
   }
 }

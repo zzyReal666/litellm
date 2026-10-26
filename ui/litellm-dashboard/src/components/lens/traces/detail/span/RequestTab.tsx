@@ -1,6 +1,7 @@
 "use client";
 
 import CopyButton from "@/components/shared/CopyButton";
+import i18n from "@/lib/i18n";
 
 import { fieldEntries } from "../content/payload";
 import { formatCost } from "../../list/AgentTracesTable";
@@ -19,7 +20,7 @@ interface RequestTabProps {
 
 export function RequestTab({ span, accessToken, traceStartMs }: RequestTabProps) {
   if (span.type !== "llm") {
-    return <div className="py-16 text-center text-sm text-muted-foreground">This span is not a model request.</div>;
+    return <div className="py-16 text-center text-sm text-muted-foreground">{i18n.t("requestTab.this-span-is-not-a-model-request", { defaultValue: "This span is not a model request." })}</div>;
   }
 
   const usage = fieldEntries([
@@ -36,14 +37,14 @@ export function RequestTab({ span, accessToken, traceStartMs }: RequestTabProps)
       <DetailGroup title="Usage">
         <FieldTree entries={usage} />
       </DetailGroup>
-      <DetailGroup title="Spend log">
+      <DetailGroup title={i18n.t("requestTab.spend-log", { defaultValue: "Spend log" })}>
         <div className="flex flex-col gap-2 py-1.5">
           {span.spend_log_request_id && (
             <div className="flex min-w-0 items-center gap-1">
               <div className="min-w-0 flex-1">
                 <FieldTree entries={fieldEntries([["request_id", span.spend_log_request_id]])} mono />
               </div>
-              <CopyButton variant="action" value={span.spend_log_request_id} label="Copy request ID" iconOnly />
+              <CopyButton variant="action" value={span.spend_log_request_id} label={i18n.t("requestTab.copy-request-id", { defaultValue: "Copy request ID" })} iconOnly />
             </div>
           )}
           <div className="self-start">

@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
+import i18n from "@/lib/i18n";
 
 import { agoLabel } from "../../model/format";
 import { useNow } from "@/hooks/useNow";
@@ -36,7 +37,7 @@ function Expanded({ review }: { review: Review }) {
   return (
     <div className="flex flex-col gap-1.5 px-7 pt-0.5 pb-2.5 text-xs leading-relaxed">
       {review.reasoning && <p className="text-muted-foreground">{briefReasoning(review.reasoning)}</p>}
-      {tools && <p className="text-muted-foreground">Tool calls: {tools}</p>}
+      {tools && <p className="text-muted-foreground">{i18n.t("traceList.tool-calls", { defaultValue: "Tool calls:" })}{" "}{tools}</p>}
       <ul className="flex flex-col gap-1">
         {verdicts.map((verdict, index) => (
           <li
@@ -105,9 +106,9 @@ export const TraceList = memo(function TraceList({
   const now = useNow(5000);
   const [expanded, setExpanded] = useState<string | null>(null);
   const rows = newestFirst(reviews, LIMIT).filter((review) => inGroup(review, group));
-  if (!rows.length) return <p className="px-2 py-2 text-xs text-muted-foreground">No traces here yet.</p>;
+  if (!rows.length) return <p className="px-2 py-2 text-xs text-muted-foreground">{i18n.t("traceList.no-traces-here-yet", { defaultValue: "No traces here yet." })}</p>;
   return (
-    <ol aria-label="Reviewed traces" className="flex flex-col">
+    <ol aria-label={i18n.t("traceList.reviewed-traces", { defaultValue: "Reviewed traces" })} className="flex flex-col">
       {rows.map((review) => (
         <li
           key={review.execution_id}

@@ -1,4 +1,5 @@
 import { type ReactNode, useState } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowLeft, Check, ChevronDown, ChevronUp, Copy, X } from "lucide-react";
 import moment from "moment";
 import { Badge } from "@/components/ui/badge";
@@ -75,7 +76,7 @@ export function DrawerHeader({
         <Button variant="outline" size="sm" onClick={onClose} className="mb-3 max-w-full">
           <ArrowLeft data-icon="inline-start" />
           {backTo.icon}
-          <span className="truncate">Back to {backTo.label}</span>
+          <span className="truncate">Back to{" "}{backTo.label}</span>
         </Button>
       )}
       {/* Row 0: Model + Provider with Logo */}
@@ -102,7 +103,7 @@ export function DrawerHeader({
       >
         {showToggleWithRequestId && <SidebarToggle isCollapsed onToggle={onToggleSidebar} />}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <CopyableId value={log.request_id} label="Request ID" fontSize={FONT_SIZE_HEADER} />
+          <CopyableId value={log.request_id} label={i18n.t("drawerHeader.request-id", { defaultValue: "Request ID" })} fontSize={FONT_SIZE_HEADER} />
           {callId && (
             <div className="flex items-center gap-1">
               <span
@@ -267,7 +268,7 @@ function NavigationSection({
           <TooltipTrigger render={<Button variant="ghost" size="icon-sm" onClick={onClose} />}>
             <X className="size-4" />
           </TooltipTrigger>
-          <TooltipContent>ESC to close</TooltipContent>
+          <TooltipContent>{i18n.t("drawerHeader.esc-to-close", { defaultValue: "ESC to close" })}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </div>

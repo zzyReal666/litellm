@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Minus, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,12 +24,12 @@ const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange 
       {value.map(([key, val], index) => (
         <div key={index} className="flex items-center gap-2">
           <Input
-            placeholder="Parameter Name (e.g., version)"
+            placeholder={i18n.t("queryParamInput.parameter-name-e-g-version", { defaultValue: "Parameter Name (e.g., version)" })}
             value={key}
             onChange={(e) => handleChange(index, [e.target.value, val])}
           />
           <Input
-            placeholder="Parameter Value (e.g., v1)"
+            placeholder={i18n.t("queryParamInput.parameter-value-e-g-v1", { defaultValue: "Parameter Value (e.g., v1)" })}
             value={val}
             onChange={(e) => handleChange(index, [key, e.target.value])}
           />
@@ -45,8 +46,7 @@ const QueryParamInput: React.FC<QueryParamInputProps> = ({ value = [], onChange 
       ))}
       <Button type="button" variant="outline" onClick={handleAdd}>
         <Plus />
-        Add Query Parameter
-      </Button>
+        {i18n.t("queryParamInput.add-query-parameter", { defaultValue: "Add Query Parameter" })}</Button>
     </div>
   );
 };

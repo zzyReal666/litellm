@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Badge } from "@/components/ui/badge";
 import LoggingSettings from "../team/LoggingSettings";
 
@@ -22,16 +23,13 @@ export function PremiumLoggingSettings({
       <div>
         <div className="flex flex-wrap gap-2 mb-3">
           <Badge variant="secondary" className="opacity-50">
-            ✨ langfuse-logging
-          </Badge>
+            {i18n.t("premiumLoggingSettings.langfuse-logging", { defaultValue: "✨ langfuse-logging" })}</Badge>
           <Badge variant="secondary" className="opacity-50">
-            ✨ datadog-logging
-          </Badge>
+            {i18n.t("premiumLoggingSettings.datadog-logging", { defaultValue: "✨ datadog-logging" })}</Badge>
         </div>
         <div className="p-3 bg-muted border border-border rounded-lg">
           <p className="text-sm text-muted-foreground">
-            Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for
-            all free users. Get a trial key{" "}
+            Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key{" "}
             
             .
           </p>

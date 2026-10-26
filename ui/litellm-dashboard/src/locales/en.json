@@ -3058,7 +3058,10 @@
     "noComplexityTiers": "No complexity tiers are configured yet, so there is nothing to test.",
     "copyModelId": "Copy model ID",
     "updateApiKey": "Update API Key",
-    "deleteAutoRouterMessage": "Are you sure you want to delete this auto-router?"
+    "deleteAutoRouterMessage": "Are you sure you want to delete this auto-router?",
+    "public-model-name": "Public Model Name:",
+    "created-at": "Created At",
+    "created-by": "Created By"
   },
   "common": {
     "neverExpires": "Never",
@@ -3496,7 +3499,10 @@
   "queryParamInput": {
     "paramNamePlaceholder": "Parameter Name (e.g., version)",
     "paramValuePlaceholder": "Parameter Value (e.g., v1)",
-    "addButton": "Add Query Parameter"
+    "addButton": "Add Query Parameter",
+    "parameter-name-e-g-version": "Parameter Name (e.g., version)",
+    "parameter-value-e-g-v1": "Parameter Value (e.g., v1)",
+    "add-query-parameter": "Add Query Parameter"
   },
   "routePreview": {
     "title": "Route Preview",
@@ -14018,5 +14024,110 @@
   "modelHubTable": {
     "make-models-agents-and-mcp-servers-public-fo": "Make models, agents, and MCP servers public for developers to know what's available.",
     "try-it-in-the-playground": "Try it in the Playground"
+  },
+  "agentPicker": {
+    "find-agent": "Find agent",
+    "find-agent-2": "Find agent",
+    "no-agents-match": "No agents match"
+  },
+  "investigationProgress": {
+    "analysis-progress": "Analysis progress",
+    "investigation-progress": "Investigation progress",
+    "analysis-stages": "Analysis stages"
+  },
+  "queueReasonText": {
+    "connect-worker": "Connect worker",
+    "what-the-worker-is-doing": "What the worker is doing"
+  },
+  "investigationDetail": {
+    "copy-for-agent": "Copy for agent",
+    "could-not-load-this-run": "Could not load this run.",
+    "this-older-batch-predates-saved-result-snaps": "This older batch predates saved result snapshots. Its findings remain available under All accumulated findings."
+  },
+  "traceList": {
+    "tool-calls": "Tool calls:",
+    "no-traces-here-yet": "No traces here yet.",
+    "reviewed-traces": "Reviewed traces"
+  },
+  "lensGettingStarted": {
+    "get-started-with-lens": "Get started with Lens",
+    "before-you-start": "Before you start",
+    "your-infrastructure-stores-the-traces-invest": "Your infrastructure stores the traces. Investigation content is sent to your selected model provider through the gateway."
+  },
+  "tracingSetupCard": {
+    "checking-lens-connection": "Checking Lens connection…",
+    "could-not-check-the-lens-connection": "Could not check the Lens connection.",
+    "try-again": "Try again"
+  },
+  "analysisAccessFields": {
+    "analysis-model": "Analysis model",
+    "monthly-limit-cny": "Monthly limit (CNY)",
+    "shared-across-all-investigations": "Shared across all investigations."
+  },
+  "analysisKeyPicker": {
+    "charge-analysis-to": "Charge analysis to",
+    "charge-analysis-to-2": "Charge analysis to",
+    "search-existing-keys": "Search existing keys"
+  },
+  "contentTab": {
+    "loading-span": "Loading span…",
+    "could-not-load-span": "Could not load span:",
+    "no-content-recorded-for-this-span": "No content recorded for this span."
+  },
+  "conversationParts": {
+    "inspect-step": "Inspect step",
+    "no-result-content-recorded": "No result content recorded.",
+    "session-context": "Session context"
+  },
+  "requestTab": {
+    "this-span-is-not-a-model-request": "This span is not a model request.",
+    "spend-log": "Spend log",
+    "copy-request-id": "Copy request ID"
+  },
+  "spendLogLink": {
+    "litellm-spend-log": "LiteLLM Spend Log",
+    "spend-log-not-visible-in-this-time-range": "Spend log not visible in this time range"
+  },
+  "drawerHeader": {
+    "request-id": "Request ID",
+    "esc-to-close": "ESC to close"
+  },
+  "logDetailsDrawer": {
+    "copy-trace-id": "Copy trace id",
+    "showing-most-recent": "Showing most recent",
+    "start-time": "Start time"
+  },
+  "credentialModal": {
+    "unique-name-that-models-reference-this-crede": "Unique name that models reference this credential by",
+    "display-name": "Display Name:",
+    "e-g-production-openai": "e.g. Production OpenAI"
+  },
+  "costOptimizationFeedbackBanner": {
+    "help-shape-cost-optimization": "Help shape cost optimization",
+    "we-re-collecting-suggestions-for-cost-optimi": "We're collecting suggestions for cost optimization improvements across routing, budgets, and more. Let us know what you'd like to see.",
+    "dismiss-banner": "Dismiss banner"
+  },
+  "modelPricingSummary": {
+    "follows-the-model-cost-map": "Follows the model cost map",
+    "custom-pricing": "Custom pricing"
+  },
+  "budgetModal": {
+    "max-tokens-per-day-batch": "Max Tokens per day (batch)",
+    "daily-token-budget-for-batch-submissions-whe": "Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM.",
+    "max-budget-cny": "Max Budget (CNY)"
+  },
+  "autoRouterConnectionTest": {
+    "oss-classifier-connection": "OSS classifier connection",
+    "oss-classifier": "OSS Classifier",
+    "connection-test-results": "Connection Test Results"
+  },
+  "premiumLoggingSettings": {
+    "langfuse-logging": "✨ langfuse-logging",
+    "datadog-logging": "✨ datadog-logging"
+  },
+  "docLink": {
+    "open-documentation-in-a-new-tab": "Open documentation in a new tab",
+    "api-reference-docs": "API Reference Docs",
+    "opens-in-a-new-tab": "(opens in a new tab)"
   }
 }

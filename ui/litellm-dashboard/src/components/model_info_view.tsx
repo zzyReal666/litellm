@@ -569,7 +569,7 @@ export default function ModelInfoView({
             <ArrowLeft className="size-4" />
             {i18n.t("modelInfoView.backToModels", { defaultValue: "Back to Models" })}
           </Button>
-          <h2 className="text-xl font-semibold">Public Model Name: {getDisplayModelName(modelData)}</h2>
+          <h2 className="text-xl font-semibold">{i18n.t("modelInfoView.public-model-name", { defaultValue: "Public Model Name:" })}{" "}{getDisplayModelName(modelData)}</h2>
           <div className="flex items-center cursor-pointer">
             <span className="text-sm text-muted-foreground font-mono">{modelData.model_info.id}</span>
             <Button
@@ -686,7 +686,7 @@ export default function ModelInfoView({
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                Created At{" "}
+                {i18n.t("modelInfoView.created-at", { defaultValue: "Created At" })}{" "}
                 {modelData.model_info.created_at
                   ? new Date(modelData.model_info.created_at).toLocaleDateString("en-US", {
                       month: "short",
@@ -704,7 +704,7 @@ export default function ModelInfoView({
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                Created By {modelData.model_info.created_by || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
+                {i18n.t("modelInfoView.created-by", { defaultValue: "Created By" })}{" "}{modelData.model_info.created_by || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
               </div>
             </div>
 

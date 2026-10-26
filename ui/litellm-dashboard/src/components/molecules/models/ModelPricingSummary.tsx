@@ -1,4 +1,5 @@
 import { ModelData, ModelInfo } from "@/components/model_dashboard/types";
+import i18n from "@/lib/i18n";
 import { Badge } from "@/components/ui/badge";
 import { formatPerSecondCost } from "@/utils/dataUtils";
 
@@ -10,14 +11,13 @@ type PricingFields = Pick<
 function PricingSource({ overrides }: { overrides: string[] | undefined }) {
   if (overrides === undefined) return null;
   if (overrides.length === 0) {
-    return <p className="mt-2 text-xs text-muted-foreground">Follows the model cost map</p>;
+    return <p className="mt-2 text-xs text-muted-foreground">{i18n.t("modelPricingSummary.follows-the-model-cost-map", { defaultValue: "Follows the model cost map" })}</p>;
   }
   return (
     <p className="mt-2 text-xs text-muted-foreground">
       <Badge variant="outline" className="mr-1">
-        Custom pricing
-      </Badge>
-      Overrides the model cost map for {overrides.join(", ")}
+        {i18n.t("modelPricingSummary.custom-pricing", { defaultValue: "Custom pricing" })}</Badge>
+      Overrides the model cost map for{" "}{overrides.join(", ")}
     </p>
   );
 }

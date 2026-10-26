@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, Wrench } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useState } from "react";
 
 import CopyButton from "@/components/shared/CopyButton";
@@ -57,8 +58,7 @@ export function ConversationStep({ item, onOpenStep }: { item: ConversationItem;
             onClick={() => onOpenStep(item.span.span_id)}
             className="shrink-0 text-muted-foreground"
           >
-            Inspect step
-          </Button>
+            {i18n.t("conversationParts.inspect-step", { defaultValue: "Inspect step" })}</Button>
         </div>
       )}
       {item.showError && <ErrorBlock span={item.span} />}
@@ -128,7 +128,7 @@ function ConversationTool({ item, onOpenStep }: { item: ConversationItem; onOpen
           {item.toolResult ? (
             <ToolOutput result={item.toolResult} failed={failed} />
           ) : (
-            <p className="text-sm text-muted-foreground">No result content recorded.</p>
+            <p className="text-sm text-muted-foreground">{i18n.t("conversationParts.no-result-content-recorded", { defaultValue: "No result content recorded." })}</p>
           )}
         </div>
       )}
@@ -142,7 +142,7 @@ export function ConversationMessage({ message }: { message: TraceMessage }) {
   if (message.role === "system")
     return (
       <details className="text-sm text-muted-foreground">
-        <summary className="cursor-pointer">Session context</summary>
+        <summary className="cursor-pointer">{i18n.t("conversationParts.session-context", { defaultValue: "Session context" })}</summary>
         <div className="pt-3">
           <Markdown text={message.content} />
         </div>

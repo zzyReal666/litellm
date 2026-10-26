@@ -1,6 +1,7 @@
 "use client";
 
 import { analysisKeysQuery, type Key } from "../../data/queries";
+import i18n from "@/lib/i18n";
 
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useState } from "react";
@@ -35,7 +36,7 @@ export function AnalysisKeyPicker() {
     : choices;
   return (
     <div className="space-y-2">
-      <p className="text-sm">Charge analysis to</p>
+      <p className="text-sm">{i18n.t("analysisKeyPicker.charge-analysis-to", { defaultValue: "Charge analysis to" })}</p>
       <div className="flex flex-wrap items-start gap-2">
         <div className="min-w-0 flex-1">
           <Controller
@@ -65,7 +66,7 @@ export function AnalysisKeyPicker() {
                   }}
                   onValueChange={handleValueChange}
                 >
-                  <ComboboxInput aria-label="Charge analysis to" placeholder="Search existing keys" />
+                  <ComboboxInput aria-label={i18n.t("analysisKeyPicker.charge-analysis-to-2", { defaultValue: "Charge analysis to" })} placeholder={i18n.t("analysisKeyPicker.search-existing-keys", { defaultValue: "Search existing keys" })} />
                   <ComboboxContent>
                     <ComboboxEmpty>{loading ? "Loading keys…" : "No matching keys"}</ComboboxEmpty>
                     <ComboboxList>

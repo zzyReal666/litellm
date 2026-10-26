@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import i18n from "@/lib/i18n";
 import CopyButton from "@/components/shared/CopyButton";
 import { getProxyBaseUrl } from "@/components/networking";
 import { getAuthHeaderName } from "@/lib/http/runtime";
@@ -80,7 +81,7 @@ export function InvestigationDetail({
             {isLive && (
               <CopyButton
                 variant="action"
-                label="Copy for agent"
+                label={i18n.t("investigationDetail.copy-for-agent", { defaultValue: "Copy for agent" })}
                 copiedLabel="Command copied"
                 value={investigationHandoffText(getProxyBaseUrl(), lens.id, batchId, getAuthHeaderName())}
               />
@@ -119,7 +120,7 @@ export function InvestigationDetail({
           </div>
           {snapshot.error && (
             <p role="alert" className="text-sm text-destructive">
-              Could not load this run.{" "}
+              {i18n.t("investigationDetail.could-not-load-this-run", { defaultValue: "Could not load this run." })}{" "}
               <Button variant="link" onClick={snapshot.refetch}>
                 Retry
               </Button>
@@ -127,9 +128,7 @@ export function InvestigationDetail({
           )}
           {missingSnapshot && section !== "activity" && (
             <p className="text-sm text-muted-foreground">
-              This older batch predates saved result snapshots. Its findings remain available under All accumulated
-              findings.
-            </p>
+              {i18n.t("investigationDetail.this-older-batch-predates-saved-result-snaps", { defaultValue: "This older batch predates saved result snapshots. Its findings remain available under All accumulated findings." })}</p>
           )}
           <FindingsTab lens={lens} job={job} findings={batchFindings}>
             <FindingPanel

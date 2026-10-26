@@ -176,20 +176,20 @@ export default function CredentialModal({
                     value={typeof control.value === "string" ? control.value : ""}
                     onChange={control.onChange}
                     onBlur={control.onBlur}
-                    placeholder="Unique name that models reference this credential by"
+                    placeholder={i18n.t("credentialModal.unique-name-that-models-reference-this-crede", { defaultValue: "Unique name that models reference this credential by" })}
                     disabled={isEdit}
                   />
                 )}
               </MountedFormField>
 
-              <MountedFormField label="Display Name:" name="display_name" className="mb-4">
+              <MountedFormField label={i18n.t("credentialModal.display-name", { defaultValue: "Display Name:" })} name="display_name" className="mb-4">
                 {(control) => (
                   <Input
                     id={control.id}
                     value={typeof control.value === "string" ? control.value : ""}
                     onChange={control.onChange}
                     onBlur={control.onBlur}
-                    placeholder="e.g. Production OpenAI"
+                    placeholder={i18n.t("credentialModal.e-g-production-openai", { defaultValue: "e.g. Production OpenAI" })}
                   />
                 )}
               </MountedFormField>

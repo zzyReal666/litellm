@@ -1,6 +1,7 @@
 "use client";
 
 import { Controller, useFormContext } from "react-hook-form";
+import i18n from "@/lib/i18n";
 import { lensQueries } from "../../data/queries";
 
 import { useQuery } from "@tanstack/react-query";
@@ -21,8 +22,7 @@ export function AnalysisAccessFields() {
     <div className="space-y-5">
       <div className="space-y-2">
         <label htmlFor="analysis-access-model" className="block text-sm font-medium">
-          Analysis model
-        </label>
+          {i18n.t("analysisAccessFields.analysis-model", { defaultValue: "Analysis model" })}</label>
         <Controller
           control={control}
           name="access.model"
@@ -44,10 +44,9 @@ export function AnalysisAccessFields() {
       </div>
       <div className="space-y-2">
         <label htmlFor="analysis-access-budget" className="block text-sm font-medium">
-          Monthly limit (CNY)
-        </label>
+          {i18n.t("analysisAccessFields.monthly-limit-cny", { defaultValue: "Monthly limit (CNY)" })}</label>
         <Input {...register("access.budget")} id="analysis-access-budget" type="number" min="0.01" step="0.01" />
-        <p className="text-xs text-muted-foreground">Shared across all investigations.</p>
+        <p className="text-xs text-muted-foreground">{i18n.t("analysisAccessFields.shared-across-all-investigations", { defaultValue: "Shared across all investigations." })}</p>
       </div>
       {models.error && (
         <p role="alert" className="text-sm text-destructive">

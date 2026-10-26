@@ -1,6 +1,7 @@
 "use client";
 
 import { Bot, Check, ChevronsUpDown, Search } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -54,8 +55,8 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
         <div className="relative">
           <Search aria-hidden className="absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
-            aria-label="Find agent"
-            placeholder="Find agent"
+            aria-label={i18n.t("agentPicker.find-agent", { defaultValue: "Find agent" })}
+            placeholder={i18n.t("agentPicker.find-agent-2", { defaultValue: "Find agent" })}
             autoFocus
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -75,7 +76,7 @@ export function AgentPicker({ agent, agents, onSelect }: AgentPickerProps) {
               </button>
             </li>
           ))}
-          {shown.length === 0 && <li className="px-2 py-1.5 text-sm text-muted-foreground">No agents match</li>}
+          {shown.length === 0 && <li className="px-2 py-1.5 text-sm text-muted-foreground">{i18n.t("agentPicker.no-agents-match", { defaultValue: "No agents match" })}</li>}
         </ul>
       </PopoverContent>
     </Popover>

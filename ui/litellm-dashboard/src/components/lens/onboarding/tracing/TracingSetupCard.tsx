@@ -760,18 +760,15 @@ export function TracingSetupFields({
   if (connection.isPending)
     return (
       <p role="status" className="text-sm text-muted-foreground">
-        Checking Lens connection…
-      </p>
+        {i18n.t("tracingSetupCard.checking-lens-connection", { defaultValue: "Checking Lens connection…" })}</p>
     );
   if (!connection.data)
     return (
       <div className="space-y-3">
         <p role="alert" className="text-sm text-muted-foreground">
-          Could not check the Lens connection.
-        </p>
+          {i18n.t("tracingSetupCard.could-not-check-the-lens-connection", { defaultValue: "Could not check the Lens connection." })}</p>
         <Button variant="outline" onClick={check}>
-          Try again
-        </Button>
+          {i18n.t("tracingSetupCard.try-again", { defaultValue: "Try again" })}</Button>
       </div>
     );
   if (!connection.data.connected || !connection.data.status.storage_ready || !connection.data.url)

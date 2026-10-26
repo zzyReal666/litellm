@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import i18n from "@/lib/i18n";
 
 import { useTracesApi } from "../../api";
 import type { Span, SpanDetail, UIContent } from "../../types";
@@ -93,8 +94,8 @@ export function ContentTab({ accessToken, traceId, traceRef, span }: ContentTabP
           )}
         </div>
       )}
-      {detailQuery.isLoading && <div className={STATUS_TEXT}>Loading span…</div>}
-      {detailQuery.isError && <div className={STATUS_TEXT}>Could not load span: {detailQuery.error.message}</div>}
+      {detailQuery.isLoading && <div className={STATUS_TEXT}>{i18n.t("contentTab.loading-span", { defaultValue: "Loading span…" })}</div>}
+      {detailQuery.isError && <div className={STATUS_TEXT}>{i18n.t("contentTab.could-not-load-span", { defaultValue: "Could not load span:" })}{" "}{detailQuery.error.message}</div>}
       {detail?.input ? (
         <PayloadSection title="Input" raw={detail.input} content={detail.input_ui} span={span} role="input" />
       ) : null}
@@ -102,7 +103,7 @@ export function ContentTab({ accessToken, traceId, traceRef, span }: ContentTabP
         <PayloadSection title="Output" raw={detail.output} content={detail.output_ui} span={span} role="output" />
       ) : null}
       {empty && span.status !== "error" && (
-        <div className="py-12 text-center text-sm text-muted-foreground">No content recorded for this span.</div>
+        <div className="py-12 text-center text-sm text-muted-foreground">{i18n.t("contentTab.no-content-recorded-for-this-span", { defaultValue: "No content recorded for this span." })}</div>
       )}
     </div>
   );

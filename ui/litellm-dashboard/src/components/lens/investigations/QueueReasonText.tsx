@@ -1,6 +1,7 @@
 "use client";
 
 import { queueReasonText, workerTaskText, type QueueReason } from "../model/status";
+import i18n from "@/lib/i18n";
 import type { QueueContext } from "./useQueueReason";
 
 export function QueueReasonText({ reason, onConnect }: { reason: QueueReason; onConnect?: () => void }) {
@@ -9,8 +10,7 @@ export function QueueReasonText({ reason, onConnect }: { reason: QueueReason; on
     <>
       No worker connected. Start one from{" "}
       <button type="button" onClick={onConnect} className="font-medium text-foreground underline underline-offset-2">
-        Connect worker
-      </button>
+        {i18n.t("queueReasonText.connect-worker", { defaultValue: "Connect worker" })}</button>
       .
     </>
   );
@@ -19,7 +19,7 @@ export function QueueReasonText({ reason, onConnect }: { reason: QueueReason; on
 export function WorkerTasks({ reason, queue }: { reason: QueueReason; queue?: QueueContext }) {
   if (reason.kind === "no_worker" || !reason.tasks.length) return null;
   return (
-    <ol aria-label="What the worker is doing" className="flex flex-col">
+    <ol aria-label={i18n.t("queueReasonText.what-the-worker-is-doing", { defaultValue: "What the worker is doing" })} className="flex flex-col">
       {reason.tasks.map((task) => (
         <li key={task.lensId}>
           <button

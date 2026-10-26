@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 
@@ -97,8 +98,8 @@ const AutoRouterConnectionTest: React.FC<AutoRouterConnectionTestProps> = ({
         })}
       </p>
       {jevRequest && (
-        <div role="status" aria-label="OSS classifier connection" className="rounded-lg border p-3 text-sm">
-          <strong>OSS Classifier</strong>
+        <div role="status" aria-label={i18n.t("autoRouterConnectionTest.oss-classifier-connection", { defaultValue: "OSS classifier connection" })} className="rounded-lg border p-3 text-sm">
+          <strong>{i18n.t("autoRouterConnectionTest.oss-classifier", { defaultValue: "OSS Classifier" })}</strong>
           <p>
             {jevResult.status === "pending" && "Testing OSS classification"}
             {jevResult.status === "success" && "OSS classification succeeded"}
@@ -158,7 +159,7 @@ export function AutoRouterConnectionTestDialog({
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Connection Test Results</DialogTitle>
+          <DialogTitle>{i18n.t("autoRouterConnectionTest.connection-test-results", { defaultValue: "Connection Test Results" })}</DialogTitle>
         </DialogHeader>
         {open && <AutoRouterConnectionTest key={testId} {...props} />}
         <DialogFooter>

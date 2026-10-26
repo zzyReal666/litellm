@@ -1,6 +1,7 @@
 "use client";
 
 import { useNow } from "@/hooks/useNow";
+import i18n from "@/lib/i18n";
 import {
   analysisElapsed,
   analysisFraction,
@@ -23,11 +24,11 @@ export function InvestigationProgress({ job, queue }: { job: Job; queue?: QueueC
   const { secondsLeft } = analysisPace(useProgressSamples(progress), now);
   const queued = progress.step < 0;
   return (
-    <section aria-label="Analysis progress" className="space-y-2">
+    <section aria-label={i18n.t("investigationProgress.analysis-progress", { defaultValue: "Analysis progress" })} className="space-y-2">
       <div className="flex items-baseline justify-between gap-3 tabular-nums">
         <span
           role="progressbar"
-          aria-label="Investigation progress"
+          aria-label={i18n.t("investigationProgress.investigation-progress", { defaultValue: "Investigation progress" })}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={percent}
@@ -43,7 +44,7 @@ export function InvestigationProgress({ job, queue }: { job: Job; queue?: QueueC
           {!queued && ` · ${remainingLabel(secondsLeft)} left`}
         </span>
       </div>
-      <ol aria-label="Analysis stages" className="flex gap-1">
+      <ol aria-label={i18n.t("investigationProgress.analysis-stages", { defaultValue: "Analysis stages" })} className="flex gap-1">
         {stages.map((stage) => (
           <li
             key={stage.label}

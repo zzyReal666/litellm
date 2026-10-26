@@ -119,8 +119,8 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
             <FormField
               control={form.control}
               name="tpd_limit"
-              label="Max Tokens per day (batch)"
-              description="Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM."
+              label={i18n.t("budgetModal.max-tokens-per-day-batch", { defaultValue: "Max Tokens per day (batch)" })}
+              description={i18n.t("budgetModal.daily-token-budget-for-batch-submissions-whe", { defaultValue: "Daily token budget for batch submissions. When set, batches are charged against this instead of TPM/RPM." })}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input
@@ -140,7 +140,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
                 <ChevronRight className="size-4 text-muted-foreground transition-transform group-data-panel-open:rotate-90" />
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <FormField control={form.control} name="max_budget" label="Max Budget (CNY)">
+                <FormField control={form.control} name="max_budget" label={i18n.t("budgetModal.max-budget-cny", { defaultValue: "Max Budget (CNY)" })}>
                   {({ ref, value, onChange, ...field }) => (
                     <Input
                       {...field}
