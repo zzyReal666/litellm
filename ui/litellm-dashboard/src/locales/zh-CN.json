@@ -13618,5 +13618,66 @@
     "refresh-traces-2": "刷新链路",
     "traces-received-select-a-run-to-inspect-it": "已接收到链路。选择一次运行以查看详情。",
     "set-up-tracing": "设置链路追踪"
+  },
+  "contentFilterConfiguration": {
+    "configure-patterns-keywords-and-content-cate": "配置用于检测和过滤请求与响应中敏感信息的模式、关键词和内容类别。",
+    "pattern-detection": "模式检测",
+    "detect-sensitive-information-using-regex-pat": "使用正则模式检测敏感信息（身份证号、信用卡、API 密钥等）",
+    "add-prebuilt-pattern": "添加预置模式",
+    "add-custom-regex": "添加自定义正则",
+    "blocked-keywords": "屏蔽关键词",
+    "block-or-mask-specific-sensitive-terms-and-p": "屏蔽或掩码指定的敏感词与短语",
+    "add-keyword": "添加关键词",
+    "upload-yaml-file": "上传 YAML 文件"
+  },
+  "onboardingSteps": {
+    "trace-storage-is-connected": "链路存储已连接",
+    "continue-to-your-agent": "继续配置你的 agent",
+    "request-logs-are-already-available-you-can-i": "请求日志已经可用。你可以现在开始调查，之后再添加 agent 链路。",
+    "your-first-trace-is-ready-continue-setup-so": "第一条链路已就绪。继续设置，让 Lens 能够分析你的 agent 行为。",
+    "recorded-activity-is-required-before-connect": "连接 worker 之前需要先有已记录的活动。",
+    "choose-the-activity-to-review-and-describe-h": "选择要审查的活动，并描述你的 agent 应有的行为。Lens 会给出带证据和修改建议的发现项。",
+    "recorded-activity-and-a-connected-worker-are": "运行调查前需要已记录的活动和已连接的 worker。",
+    "new-investigation": "新建调查"
+  },
+  "gatewayFlow": {
+    "agent-swarms": "Agent 集群",
+    "every-run-every-recorded-step": "每一次运行、每一个记录的步骤",
+    "litellm-gateway": "LiteLLM 网关",
+    "one-place-your-infrastructure": "统一入口，部署在你自己的基础设施中",
+    "findings-to-improve-your-agents": "帮助改进 agent 的发现项"
+  },
+  "investigationStates": {
+    "loading-investigations": "正在加载调查…",
+    "fetching-your-investigations-and-their-lates": "正在获取你的调查及其最新发现项。",
+    "investigation-not-found": "未找到该调查",
+    "it-may-have-been-deleted-or-the-link-points": "它可能已被删除，或链接指向了另一个代理。",
+    "view-all-investigations": "查看全部调查"
+  },
+  "workerInstall": {
+    "connecting-lens": "正在连接 Lens",
+    "your-lens-service-connects-automatically": "你的 Lens 服务会自动连接。",
+    "connecting-your-lens-service-this-page-updat": "正在连接你的 Lens 服务… 此页面会自动更新。如果一直未连接，请检查服务日志。",
+    "worker-connected": "Worker 已连接",
+    "ready-to-run-investigations": "可以开始运行调查了。"
+  },
+  "guardrailViewer": {
+    "not-run": "未运行",
+    "export-compliance-log": "导出合规日志",
+    "evaluation-details": "评估详情"
+  },
+  "federationFields": {
+    "proxy-default": "代理默认",
+    "proxy-default-2": "代理默认",
+    "this-form-does-not-offer-the-stored-identity": "此表单不提供已保存的身份来源。保存会保留该来源及其设置；要更换请选择另一个来源。",
+    "the-proxy-reads-anthropic-identity-token-fil": "代理会从自身环境中读取 ANTHROPIC_IDENTITY_TOKEN_FILE 或 ANTHROPIC_IDENTITY_TOKEN。",
+    "the-proxy-exchanges-the-identity-token-for-a": "仅当代理环境中未设置 OPENAI_API_KEY 时，代理才会用身份 Token 换取 OpenAI 访问 Token；否则直接使用该密钥。"
+  },
+  "routingGroupModal": {
+    "model-priorities": "模型优先级",
+    "use-1-for-your-first-choice-2-for-your-next": "首个选择填 1，次选填 2，以此类推。不可用的模型会被跳过。",
+    "model-priorities-2": "模型优先级",
+    "select-models-to-set-priorities": "选择要设置优先级的模型",
+    "model-is-not-selected": "未选择模型"
   }
 }

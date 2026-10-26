@@ -797,8 +797,7 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${OUTCOME_BADGE_CLASS.not_run}`}
                 >
-                  {notRunCount} Not run
-                </span>
+                  {notRunCount} {i18n.t("guardrailViewer.not-run", { defaultValue: "Not run" })}{" "}</span>
               )}
             </div>
           </div>
@@ -814,8 +813,7 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
             className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-sm font-medium text-foreground bg-card hover:bg-accent transition-colors"
           >
             <DownloadIcon />
-            Export Compliance Log
-          </button>
+            {i18n.t("guardrailViewer.export-compliance-log", { defaultValue: "Export Compliance Log" })}{" "}</button>
         </div>
       </div>
 
@@ -836,8 +834,7 @@ const GuardrailViewer = ({ data, accessToken, logEntry }: GuardrailViewerProps) 
         {/* Evaluation Details */}
         <div className="px-6 py-5">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-            Evaluation Details
-          </h4>
+            {i18n.t("guardrailViewer.evaluation-details", { defaultValue: "Evaluation Details" })}{" "}</h4>
           <div className="space-y-3">
             {guardrailEntries.map((entry, index) => (
               <EvaluationCard key={`${entry.guardrail_name ?? "guardrail"}-${index}`} entry={entry} />

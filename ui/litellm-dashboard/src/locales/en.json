@@ -13618,5 +13618,66 @@
     "refresh-traces-2": "Refresh traces",
     "traces-received-select-a-run-to-inspect-it": "Traces received. Select a run to inspect it.",
     "set-up-tracing": "Set up tracing"
+  },
+  "contentFilterConfiguration": {
+    "configure-patterns-keywords-and-content-cate": "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses.",
+    "pattern-detection": "Pattern Detection",
+    "detect-sensitive-information-using-regex-pat": "Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)",
+    "add-prebuilt-pattern": "Add prebuilt pattern",
+    "add-custom-regex": "Add custom regex",
+    "blocked-keywords": "Blocked Keywords",
+    "block-or-mask-specific-sensitive-terms-and-p": "Block or mask specific sensitive terms and phrases",
+    "add-keyword": "Add keyword",
+    "upload-yaml-file": "Upload YAML file"
+  },
+  "onboardingSteps": {
+    "trace-storage-is-connected": "Trace storage is connected",
+    "continue-to-your-agent": "Continue to your agent",
+    "request-logs-are-already-available-you-can-i": "Request logs are already available. You can investigate them now and add agent traces later.",
+    "your-first-trace-is-ready-continue-setup-so": "Your first trace is ready. Continue setup so Lens can investigate your agent’s behavior.",
+    "recorded-activity-is-required-before-connect": "Recorded activity is required before connecting a worker.",
+    "choose-the-activity-to-review-and-describe-h": "Choose the activity to review and describe how your agent should behave. Lens will show findings with evidence and suggested changes.",
+    "recorded-activity-and-a-connected-worker-are": "Recorded activity and a connected worker are required before you can run an investigation.",
+    "new-investigation": "New investigation"
+  },
+  "gatewayFlow": {
+    "agent-swarms": "Agent swarms",
+    "every-run-every-recorded-step": "Every run, every recorded step",
+    "litellm-gateway": "LiteLLM gateway",
+    "one-place-your-infrastructure": "One place, your infrastructure",
+    "findings-to-improve-your-agents": "Findings to improve your agents"
+  },
+  "investigationStates": {
+    "loading-investigations": "Loading investigations…",
+    "fetching-your-investigations-and-their-lates": "Fetching your investigations and their latest findings.",
+    "investigation-not-found": "Investigation not found",
+    "it-may-have-been-deleted-or-the-link-points": "It may have been deleted, or the link points to a different proxy.",
+    "view-all-investigations": "View all investigations"
+  },
+  "workerInstall": {
+    "connecting-lens": "Connecting Lens",
+    "your-lens-service-connects-automatically": "Your Lens service connects automatically.",
+    "connecting-your-lens-service-this-page-updat": "Connecting your Lens service… This page updates automatically. Check the service logs if it does not connect.",
+    "worker-connected": "Worker connected",
+    "ready-to-run-investigations": "Ready to run investigations."
+  },
+  "guardrailViewer": {
+    "not-run": "Not run",
+    "export-compliance-log": "Export Compliance Log",
+    "evaluation-details": "Evaluation Details"
+  },
+  "federationFields": {
+    "proxy-default": "Proxy default",
+    "proxy-default-2": "Proxy default",
+    "this-form-does-not-offer-the-stored-identity": "This form does not offer the stored identity source. Saving keeps it and its settings as stored. Pick another source to replace it.",
+    "the-proxy-reads-anthropic-identity-token-fil": "The proxy reads ANTHROPIC_IDENTITY_TOKEN_FILE or ANTHROPIC_IDENTITY_TOKEN from its own environment.",
+    "the-proxy-exchanges-the-identity-token-for-a": "The proxy exchanges the identity token for an OpenAI access token only when OPENAI_API_KEY is unset in its environment. Otherwise it sends that key instead."
+  },
+  "routingGroupModal": {
+    "model-priorities": "Model Priorities",
+    "use-1-for-your-first-choice-2-for-your-next": "Use 1 for your first choice, 2 for your next choice, and so on. Unavailable models are skipped.",
+    "model-priorities-2": "Model priorities",
+    "select-models-to-set-priorities": "Select models to set priorities",
+    "model-is-not-selected": "Model is not selected"
   }
 }

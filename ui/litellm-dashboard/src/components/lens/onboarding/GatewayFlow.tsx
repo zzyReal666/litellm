@@ -1,4 +1,5 @@
 import { useId } from "react";
+import i18n from "@/lib/i18n";
 import { cn } from "@/lib/cva.config";
 import styles from "./LensIntroduction.module.css";
 
@@ -31,16 +32,16 @@ export function GatewayFlow() {
     <div className="mt-5 sm:mt-6">
       <div className="grid grid-cols-3 gap-3 text-xs">
         <div>
-          <p className="font-semibold">Agent swarms</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">Every run, every recorded step</p>
+          <p className="font-semibold">{i18n.t("gatewayFlow.agent-swarms", { defaultValue: "Agent swarms" })}</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{i18n.t("gatewayFlow.every-run-every-recorded-step", { defaultValue: "Every run, every recorded step" })}</p>
         </div>
         <div className="text-center">
-          <p className="font-semibold">LiteLLM gateway</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">One place, your infrastructure</p>
+          <p className="font-semibold">{i18n.t("gatewayFlow.litellm-gateway", { defaultValue: "LiteLLM gateway" })}</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{i18n.t("gatewayFlow.one-place-your-infrastructure", { defaultValue: "One place, your infrastructure" })}</p>
         </div>
         <div className="text-right">
           <p className="font-semibold">Lens</p>
-          <p className="mt-0.5 leading-4 text-muted-foreground">Findings to improve your agents</p>
+          <p className="mt-0.5 leading-4 text-muted-foreground">{i18n.t("gatewayFlow.findings-to-improve-your-agents", { defaultValue: "Findings to improve your agents" })}</p>
         </div>
       </div>
       <svg

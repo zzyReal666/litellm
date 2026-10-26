@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import i18n from "@/lib/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { labelWithHint } from "@/components/shared/form/LabelWithHint";
 import { isMaskedSecret } from "@/utils/maskedSecretUtils";
@@ -51,10 +52,10 @@ const renderControl = (field: FederationField, control: MountedFieldControlProps
         onValueChange={(value) => control.onChange(value ?? "")}
       >
         <SelectTrigger id={control.id} onBlur={control.onBlur} className="w-full">
-          <SelectValue placeholder="Proxy default" />
+          <SelectValue placeholder={i18n.t("federationFields.proxy-default", { defaultValue: "Proxy default" })} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={null}>Proxy default</SelectItem>
+          <SelectItem value={null}>{i18n.t("federationFields.proxy-default-2", { defaultValue: "Proxy default" })}</SelectItem>
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}
@@ -152,14 +153,11 @@ function AnthropicFederationFields({
         </Select>
         {identitySource === "unrecognized" && (
           <p className="text-sm text-muted-foreground">
-            This form does not offer the stored identity source. Saving keeps it and its settings as stored. Pick
-            another source to replace it.
-          </p>
+            {i18n.t("federationFields.this-form-does-not-offer-the-stored-identity", { defaultValue: "This form does not offer the stored identity source. Saving keeps it and its settings as stored. Pick another source to replace it." })}{" "}</p>
         )}
         {identitySource === "environment" && (
           <p className="text-sm text-muted-foreground">
-            The proxy reads ANTHROPIC_IDENTITY_TOKEN_FILE or ANTHROPIC_IDENTITY_TOKEN from its own environment.
-          </p>
+            {i18n.t("federationFields.the-proxy-reads-anthropic-identity-token-fil", { defaultValue: "The proxy reads ANTHROPIC_IDENTITY_TOKEN_FILE or ANTHROPIC_IDENTITY_TOKEN from its own environment." })}{" "}</p>
         )}
       </div>
       {identitySourceById(identitySource).fields.map(renderField)}
@@ -171,9 +169,7 @@ function OpenAIFederationFields({ storedValues }: { storedValues: Record<string,
   return (
     <>
       <p className="mb-4 text-sm text-muted-foreground">
-        The proxy exchanges the identity token for an OpenAI access token only when OPENAI_API_KEY is unset in its
-        environment. Otherwise it sends that key instead.
-      </p>
+        {i18n.t("federationFields.the-proxy-exchanges-the-identity-token-for-a", { defaultValue: "The proxy exchanges the identity token for an OpenAI access token only when OPENAI_API_KEY is unset in its environment. Otherwise it sends that key instead." })}{" "}</p>
       {OPENAI_FEDERATION_FIELDS.map((field) => (
         <FederationFieldInput key={field.key} field={field} storedValue={storedValues[field.key]} />
       ))}

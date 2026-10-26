@@ -1,6 +1,7 @@
 "use client";
 
 import { SearchX, TriangleAlert } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { StateMessage } from "@/components/shared/StateMessage";
 import { Button } from "@/components/ui/button";
@@ -48,8 +49,8 @@ export function InvestigationError({ message, refresh }: { message: string; refr
 export function InvestigationsLoading() {
   return (
     <LoadingState
-      title="Loading investigations…"
-      description="Fetching your investigations and their latest findings."
+      title={i18n.t("investigationStates.loading-investigations", { defaultValue: "Loading investigations…" })}
+      description={i18n.t("investigationStates.fetching-your-investigations-and-their-lates", { defaultValue: "Fetching your investigations and their latest findings." })}
     />
   );
 }
@@ -59,12 +60,11 @@ export function InvestigationMissing({ selectLens }: { selectLens: (id: string |
     <StateMessage
       role="alert"
       icon={<SearchX className="size-5" />}
-      title="Investigation not found"
-      description="It may have been deleted, or the link points to a different proxy."
+      title={i18n.t("investigationStates.investigation-not-found", { defaultValue: "Investigation not found" })}
+      description={i18n.t("investigationStates.it-may-have-been-deleted-or-the-link-points", { defaultValue: "It may have been deleted, or the link points to a different proxy." })}
     >
       <Button size="sm" onClick={() => selectLens(null)}>
-        View all investigations
-      </Button>
+        {i18n.t("investigationStates.view-all-investigations", { defaultValue: "View all investigations" })}{" "}</Button>
     </StateMessage>
   );
 }

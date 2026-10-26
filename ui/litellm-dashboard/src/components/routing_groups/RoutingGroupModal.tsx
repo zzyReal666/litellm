@@ -236,20 +236,20 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
               <FormField
                 control={form.control}
                 name="model_priorities"
-                label="Model Priorities"
-                description="Use 1 for your first choice, 2 for your next choice, and so on. Unavailable models are skipped."
+                label={i18n.t("routingGroupModal.model-priorities", { defaultValue: "Model Priorities" })}
+                description={i18n.t("routingGroupModal.use-1-for-your-first-choice-2-for-your-next", { defaultValue: "Use 1 for your first choice, 2 for your next choice, and so on. Unavailable models are skipped." })}
               >
                 {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
-                  <div id={id} className="space-y-2" role="group" aria-label="Model priorities">
+                  <div id={id} className="space-y-2" role="group" aria-label={i18n.t("routingGroupModal.model-priorities-2", { defaultValue: "Model priorities" })}>
                     {value.length === 0 && (
-                      <p className="text-sm text-muted-foreground">Select models to set priorities</p>
+                      <p className="text-sm text-muted-foreground">{i18n.t("routingGroupModal.select-models-to-set-priorities", { defaultValue: "Select models to set priorities" })}</p>
                     )}
                     {value.map((entry, index) => (
                       <div key={entry.model} className="flex items-center justify-between gap-3">
                         <label htmlFor={`${id}-${index}`} className="min-w-0 flex-1 break-words text-sm">
                           {entry.model}
                           {!selectedModels.includes(entry.model) && (
-                            <span className="block text-xs text-destructive">Model is not selected</span>
+                            <span className="block text-xs text-destructive">{i18n.t("routingGroupModal.model-is-not-selected", { defaultValue: "Model is not selected" })}</span>
                           )}
                         </label>
                         <Input

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import i18n from "@/lib/i18n";
 import { Plus, Upload } from "lucide-react";
 import { validateBlockedWordsFile } from "@/components/networking";
 import { toast } from "@/lib/toast";
@@ -220,9 +221,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
       {!showStep && (
         <div>
           <p className="text-muted-foreground">
-            Configure patterns, keywords, and content categories to detect and filter sensitive information in requests
-            and responses.
-          </p>
+            {i18n.t("contentFilterConfiguration.configure-patterns-keywords-and-content-cate", { defaultValue: "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses." })}{" "}</p>
         </div>
       )}
 
@@ -230,22 +229,19 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Pattern Detection</CardTitle>
+              <CardTitle>{i18n.t("contentFilterConfiguration.pattern-detection", { defaultValue: "Pattern Detection" })}</CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)
-              </p>
+                {i18n.t("contentFilterConfiguration.detect-sensitive-information-using-regex-pat", { defaultValue: "Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)" })}{" "}</p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setPatternModalVisible(true)}>
                 <Plus />
-                Add prebuilt pattern
-              </Button>
+                {i18n.t("contentFilterConfiguration.add-prebuilt-pattern", { defaultValue: "Add prebuilt pattern" })}{" "}</Button>
               <Button variant="outline" onClick={() => setCustomPatternModalVisible(true)}>
                 <Plus />
-                Add custom regex
-              </Button>
+                {i18n.t("contentFilterConfiguration.add-custom-regex", { defaultValue: "Add custom regex" })}{" "}</Button>
             </div>
             <PatternTable
               patterns={selectedPatterns}
@@ -260,18 +256,16 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Blocked Keywords</CardTitle>
+              <CardTitle>{i18n.t("contentFilterConfiguration.blocked-keywords", { defaultValue: "Blocked Keywords" })}</CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                Block or mask specific sensitive terms and phrases
-              </p>
+                {i18n.t("contentFilterConfiguration.block-or-mask-specific-sensitive-terms-and-p", { defaultValue: "Block or mask specific sensitive terms and phrases" })}{" "}</p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setKeywordModalVisible(true)}>
                 <Plus />
-                Add keyword
-              </Button>
+                {i18n.t("contentFilterConfiguration.add-keyword", { defaultValue: "Add keyword" })}{" "}</Button>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -286,8 +280,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 {uploadValidating ? <UiLoadingSpinner className="size-4" /> : <Upload />}
-                Upload YAML file
-              </Button>
+                {i18n.t("contentFilterConfiguration.upload-yaml-file", { defaultValue: "Upload YAML file" })}{" "}</Button>
             </div>
             <KeywordTable keywords={blockedWords} onActionChange={onBlockedWordUpdate} onRemove={onBlockedWordRemove} />
           </CardContent>

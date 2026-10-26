@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TracingSetupFields, useLensService } from "@/components/lens/onboarding/tracing/TracingSetupCard";
@@ -38,10 +39,9 @@ function StorageStep({ state, goTo, storageReady }: StepProps) {
   return (
     <div className="space-y-4">
       <p role="status" className="text-sm text-success">
-        Trace storage is connected
-      </p>
+        {i18n.t("onboardingSteps.trace-storage-is-connected", { defaultValue: "Trace storage is connected" })}{" "}</p>
       <Button onClick={() => goTo(1)}>
-        Continue to your agent <ArrowRight aria-hidden="true" className="size-4" />
+        {i18n.t("onboardingSteps.continue-to-your-agent", { defaultValue: "Continue to your agent" })}{" "}<ArrowRight aria-hidden="true" className="size-4" />
       </Button>
       <ActivityContinuation state={state} />
     </div>
@@ -65,8 +65,7 @@ function ActivityContinuation({ state }: { state: LensReadiness }) {
       </Button>
       {state.requestsReady && !state.tracesReady && (
         <p className="mt-2 text-xs text-muted-foreground">
-          Request logs are already available. You can investigate them now and add agent traces later.
-        </p>
+          {i18n.t("onboardingSteps.request-logs-are-already-available-you-can-i", { defaultValue: "Request logs are already available. You can investigate them now and add agent traces later." })}{" "}</p>
       )}
     </div>
   );
@@ -93,8 +92,7 @@ function AgentStep({ state }: StepProps) {
       </div>
       {state.tracesReady && (
         <p role="status" className="text-sm text-success">
-          Your first trace is ready. Continue setup so Lens can investigate your agent’s behavior.
-        </p>
+          {i18n.t("onboardingSteps.your-first-trace-is-ready-continue-setup-so", { defaultValue: "Your first trace is ready. Continue setup so Lens can investigate your agent’s behavior." })}{" "}</p>
       )}
       <ActivityContinuation state={state} />
     </>
@@ -112,7 +110,7 @@ function WorkerStep({ state }: StepProps) {
           : "The worker reviews recorded activity using a model on your gateway. You choose its analysis model and spending limit."}
       </p>
       {!state.activityReady && (
-        <p className="text-sm text-muted-foreground">Recorded activity is required before connecting a worker.</p>
+        <p className="text-sm text-muted-foreground">{i18n.t("onboardingSteps.recorded-activity-is-required-before-connect", { defaultValue: "Recorded activity is required before connecting a worker." })}</p>
       )}
       <Button onClick={state.connected ? create : connect} disabled={!state.activityReady || locked}>
         {state.connected ? "Continue to investigation" : "Connect worker"}
@@ -128,16 +126,13 @@ function InvestigationStep({ state }: StepProps) {
   return (
     <div className="space-y-4">
       <p className="text-sm leading-6 text-muted-foreground">
-        Choose the activity to review and describe how your agent should behave. Lens will show findings with evidence
-        and suggested changes.
-      </p>
+        {i18n.t("onboardingSteps.choose-the-activity-to-review-and-describe-h", { defaultValue: "Choose the activity to review and describe how your agent should behave. Lens will show findings with evidence and suggested changes." })}{" "}</p>
       {!state.ready && (
         <p className="text-sm text-muted-foreground">
-          Recorded activity and a connected worker are required before you can run an investigation.
-        </p>
+          {i18n.t("onboardingSteps.recorded-activity-and-a-connected-worker-are", { defaultValue: "Recorded activity and a connected worker are required before you can run an investigation." })}{" "}</p>
       )}
       <Button onClick={create} disabled={!state.ready || locked}>
-        New investigation <ArrowRight aria-hidden="true" className="size-4" />
+        {i18n.t("onboardingSteps.new-investigation", { defaultValue: "New investigation" })}{" "}<ArrowRight aria-hidden="true" className="size-4" />
       </Button>
     </div>
   );
