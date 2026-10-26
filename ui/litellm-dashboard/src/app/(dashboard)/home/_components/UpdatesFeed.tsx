@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight, Newspaper } from "lucide-react";
+import i18n from "@/lib/i18n";
 import { useBlogPosts, type BlogPost } from "@/app/(dashboard)/hooks/blogPosts/useBlogPosts";
 import { useDisableBlogPosts } from "@/app/(dashboard)/hooks/useDisableBlogPosts";
 import { Button } from "@/components/ui/button";
@@ -46,8 +47,7 @@ export default function UpdatesFeed({ className }: { className?: string }) {
           Updates
         </h2>
         <Button variant="ghost" size="sm">
-          View all
-          <ArrowUpRight className="size-3.5" />
+          {i18n.t("updatesFeed.view-all", { defaultValue: "View all" })}<ArrowUpRight className="size-3.5" />
         </Button>
       </div>
       {isLoading && (
@@ -63,13 +63,13 @@ export default function UpdatesFeed({ className }: { className?: string }) {
       )}
       {isError && (
         <div className="flex items-center justify-between gap-2 py-3 text-sm">
-          <span className="text-destructive">Failed to load posts</span>
+          <span className="text-destructive">{i18n.t("updatesFeed.failed-to-load-posts", { defaultValue: "Failed to load posts" })}</span>
           <Button variant="outline" size="sm" onClick={() => void refetch()}>
             Retry
           </Button>
         </div>
       )}
-      {data && posts.length === 0 && <p className="py-3 text-sm text-muted-foreground">No posts yet</p>}
+      {data && posts.length === 0 && <p className="py-3 text-sm text-muted-foreground">{i18n.t("updatesFeed.no-posts-yet", { defaultValue: "No posts yet" })}</p>}
       {posts.length > 0 && (
         <ol className="m-0 list-none p-0">
           {posts.map((post: BlogPost) => (

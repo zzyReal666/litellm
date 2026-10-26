@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
@@ -110,7 +111,7 @@ const SettingValueEditor: React.FC<{
       <Input
         key={String(setting.stored_in_db)}
         aria-label={setting.field_name}
-        placeholder="Comma-separated values"
+        placeholder={i18n.t("generalSettings.comma-separated-values", { defaultValue: "Comma-separated values" })}
         defaultValue={fromListValue(setting.field_value)}
         onChange={(event) => onChange(setting.field_name, toListValue(event.target.value))}
       />
@@ -215,11 +216,11 @@ export const PromptCachingPanel: React.FC<{
         {systemFirstSetting && (
           <div className="mt-6 flex items-start justify-between gap-8">
             <div className="min-w-0 max-w-2xl">
-              <p className="font-medium">System messages first for OpenAI</p>
+              <p className="font-medium">{i18n.t("generalSettings.system-messages-first-for-openai", { defaultValue: "System messages first for OpenAI" })}</p>
               <p className="mt-1 break-words text-xs text-muted-foreground">{systemFirstSetting.field_description}</p>
             </div>
             <Switch
-              aria-label="System messages first for OpenAI"
+              aria-label={i18n.t("generalSettings.system-messages-first-for-openai-2", { defaultValue: "System messages first for OpenAI" })}
               checked={isOn(systemFirstSetting.field_value)}
               onCheckedChange={(checked) => persist(OPENAI_SYSTEM_MESSAGES_FIRST, checked)}
             />

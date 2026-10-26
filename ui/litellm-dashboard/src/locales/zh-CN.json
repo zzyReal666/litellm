@@ -1617,7 +1617,10 @@
     "statusNotSet": "未设置",
     "automaticAnthropicPromptCaching": "Anthropic 自动提示词缓存",
     "cacheLifetimeTtl": "缓存存活时间（TTL）",
-    "fiveMinutesDefault": "5m（默认）"
+    "fiveMinutesDefault": "5m（默认）",
+    "comma-separated-values": "逗号分隔的值",
+    "system-messages-first-for-openai": "OpenAI 优先使用 system 消息",
+    "system-messages-first-for-openai-2": "OpenAI 优先使用 system 消息"
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -2870,7 +2873,10 @@
   "keyValueInput": {
     "headerNamePlaceholder": "请求头名称",
     "headerValuePlaceholder": "请求头值",
-    "addHeader": "添加请求头"
+    "addHeader": "添加请求头",
+    "header-name": "请求头名称",
+    "header-value": "请求头值",
+    "add-header": "添加请求头"
   },
   "loggingSettingsView": {
     "loggingIntegrations": "日志集成",
@@ -11277,7 +11283,10 @@
       "modelNameLabel": "模型名称：",
       "modelIdLabel": "模型 ID：",
       "noModelsFound": "未找到模型"
-    }
+    },
+    "select-models": "选择模型",
+    "select-models-2": "选择模型",
+    "no-models-found": "未找到模型"
   },
   "organisms": {
     "regenerateKeyModal": {
@@ -13937,5 +13946,77 @@
     "litellm-is-openai-compatible-this-means-your": "LiteLLM 兼容 OpenAI，这意味着你的 API 密钥可用于 OpenAI SDK。只需把 base_url 指向你的 LiteLLM 代理即可，示例如下",
     "openai-python-sdk": "OpenAI Python SDK",
     "langchain-py": "Langchain Py"
+  },
+  "dynamicForm": {
+    "in-db": "数据库中",
+    "in-config": "配置中",
+    "not-set": "未设置",
+    "update-settings": "更新设置"
+  },
+  "moyaiConnected": {
+    "moyai-connected": "Moyai 已连接",
+    "this-deployment-is-now-linked-to-your-litell": "该部署现已关联到你的 LiteLLM 网关。",
+    "open-moyai": "打开 Moyai",
+    "back-to-ai-gateway": "返回 AI 网关"
+  },
+  "mCPServerPermissions": {
+    "mcp-servers": "MCP 服务器",
+    "no-mcp-servers-this-key-is-blocked-from-all": "无 MCP 服务器，该密钥被禁止访问所有 MCP 服务器，包括其所在团队的服务器",
+    "all-proxy-mcp-servers": "所有代理 MCP 服务器",
+    "no-mcp-servers-access-groups-or-toolsets-con": "未配置 MCP 服务器、访问组或工具集"
+  },
+  "createdKeyDisplay": {
+    "virtual-key": "虚拟密钥："
+  },
+  "searchBox": {
+    "loading-results": "正在加载结果",
+    "search-suggestions": "搜索建议",
+    "loading-values": "正在加载取值…",
+    "comparison-operators": "比较运算符"
+  },
+  "streamScopeFields": {
+    "streaming-and-non-streaming": "流式与非流式",
+    "request-shape": "请求形态"
+  },
+  "addGuardrailForm": {
+    "automatically-close-the-session-after-this-m": "当护栏违规达到此次数后自动结束会话。留空则永不自动结束。",
+    "what-the-bot-says-aloud-when-this-guardrail": "该护栏触发时机器人朗读的内容。留空则回退到默认的违规提示语。"
+  },
+  "guardrailOptionalParams": {
+    "select-category-to-configure": "选择要配置的类别",
+    "select-a-category-to-add-threshold-configura": "选择类别以添加阈值配置",
+    "optional-parameters": "可选参数"
+  },
+  "updatesFeed": {
+    "view-all": "查看全部",
+    "failed-to-load-posts": "加载帖子失败",
+    "no-posts-yet": "暂无帖子"
+  },
+  "oAuthFormFields": {
+    "use-oauth-to-fetch-a-fresh-access-token-and": "使用 OAuth 获取新的访问令牌，并临时将其保存到会话中作为认证值。"
+  },
+  "mcpServerView": {
+    "user-credentials": "用户凭据",
+    "defined-in-config-edit-your-yaml-configurati": "在配置中定义。请修改 YAML 配置以进行更改",
+    "network-access": "网络访问"
+  },
+  "usageOverview": {
+    "top-models": "热门模型",
+    "bucket-size": "分桶粒度",
+    "top-virtual-keys": "热门虚拟密钥"
+  },
+  "userInfoView": {
+    "auto-router-usage": "自动路由用量",
+    "savings-are-unavailable-because-this-user-ha": "该用户没有 ID，无法提供节省数据。",
+    "auto-router-usage-is-unavailable-because-thi": "该用户没有 ID，无法提供自动路由用量。"
+  },
+  "onboardingErrorView": {
+    "failed-to-load-invitation": "加载邀请失败",
+    "the-invitation-link-may-be-invalid-or-expire": "邀请链接可能无效或已过期。",
+    "back-to-login": "返回登录"
+  },
+  "modelHubTable": {
+    "make-models-agents-and-mcp-servers-public-fo": "将模型、agent 和 MCP 服务器设为公开，方便开发者了解可用资源。",
+    "try-it-in-the-playground": "在演练场中试用"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import i18n from "@/lib/i18n";
 import { ArrowUpRight, Check, ExternalLink } from "lucide-react";
 import moyaiHead from "../../../public/assets/moyai/moyai-head.svg";
 import styles from "./MoyaiLanding.module.css";
@@ -31,10 +32,9 @@ export default function MoyaiConnected({
           Connected
         </div>
         <img src={moyaiHead.src} alt="" className={`${styles.mark} mb-4 h-14 w-auto`} />
-        <h1 className="m-0 text-[clamp(28px,3.5vw,44px)] font-medium tracking-[-0.03em] text-white">Moyai connected</h1>
+        <h1 className="m-0 text-[clamp(28px,3.5vw,44px)] font-medium tracking-[-0.03em] text-white">{i18n.t("moyaiConnected.moyai-connected", { defaultValue: "Moyai connected" })}</h1>
         <p className="mb-0 mt-3 max-w-md text-[16px] text-[#c2c6d0]">
-          This deployment is now linked to your LiteLLM gateway.
-        </p>
+          {i18n.t("moyaiConnected.this-deployment-is-now-linked-to-your-litell", { defaultValue: "This deployment is now linked to your LiteLLM gateway." })}</p>
 
         <div className="mt-8 w-full max-w-md space-y-2 text-left">
           {rows.map((row) =>
@@ -66,8 +66,7 @@ export default function MoyaiConnected({
               href={moyaiUrl}
               className={`${styles.cta} group inline-flex items-center gap-3 rounded-full px-7 py-3.5 text-base font-semibold text-[#05070d] transition-transform hover:scale-[1.03]`}
             >
-              Open Moyai
-              <ArrowUpRight className="size-4" />
+              {i18n.t("moyaiConnected.open-moyai", { defaultValue: "Open Moyai" })}<ArrowUpRight className="size-4" />
             </a>
           )}
           <a
@@ -75,8 +74,7 @@ export default function MoyaiConnected({
             className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-5 py-3 text-sm font-medium text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur transition-colors hover:bg-white/[0.12]"
           >
             <ExternalLink className="size-4" />
-            Back to AI Gateway
-          </a>
+            {i18n.t("moyaiConnected.back-to-ai-gateway", { defaultValue: "Back to AI Gateway" })}</a>
         </div>
       </div>
     </div>

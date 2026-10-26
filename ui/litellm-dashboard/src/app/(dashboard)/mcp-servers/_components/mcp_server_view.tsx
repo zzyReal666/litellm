@@ -167,8 +167,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
           )}
           {canViewUserCredentials && (
             <TabsTrigger value="3" className="flex-none rounded-none px-4 py-2">
-              User Credentials
-            </TabsTrigger>
+              {i18n.t("mcpServerView.user-credentials", { defaultValue: "User Credentials" })}</TabsTrigger>
           )}
         </TabsList>
 
@@ -249,8 +248,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
             </div>
             {mcpServer.is_config && (
               <p className="mb-4 text-sm text-muted-foreground">
-                Defined in config. Edit your YAML configuration to make changes
-              </p>
+                {i18n.t("mcpServerView.defined-in-config-edit-your-yaml-configurati", { defaultValue: "Defined in config. Edit your YAML configuration to make changes" })}</p>
             )}
             {editing && canEdit ? (
               <MCPServerEdit
@@ -333,7 +331,7 @@ export const MCPServerView: React.FC<MCPServerViewProps> = ({
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 py-3">
-                  <p className="text-sm font-medium text-muted-foreground">Network access</p>
+                  <p className="text-sm font-medium text-muted-foreground">{i18n.t("mcpServerView.network-access", { defaultValue: "Network access" })}</p>
                   <div className="col-span-2">
                     <Badge variant="outline">
                       <span className={`h-1.5 w-1.5 rounded-full ${networkAccess.dotClassName}`} />

@@ -1617,7 +1617,10 @@
     "statusNotSet": "Not Set",
     "automaticAnthropicPromptCaching": "Automatic Anthropic prompt caching",
     "cacheLifetimeTtl": "Cache lifetime (TTL)",
-    "fiveMinutesDefault": "5m (default)"
+    "fiveMinutesDefault": "5m (default)",
+    "comma-separated-values": "Comma-separated values",
+    "system-messages-first-for-openai": "System messages first for OpenAI",
+    "system-messages-first-for-openai-2": "System messages first for OpenAI"
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -2870,7 +2873,10 @@
   "keyValueInput": {
     "headerNamePlaceholder": "Header Name",
     "headerValuePlaceholder": "Header Value",
-    "addHeader": "Add Header"
+    "addHeader": "Add Header",
+    "header-name": "Header Name",
+    "header-value": "Header Value",
+    "add-header": "Add Header"
   },
   "loggingSettingsView": {
     "loggingIntegrations": "Logging Integrations",
@@ -11277,7 +11283,10 @@
       "modelNameLabel": "Model name:",
       "modelIdLabel": "Model ID:",
       "noModelsFound": "No models found"
-    }
+    },
+    "select-models": "Select Models",
+    "select-models-2": "Select Models",
+    "no-models-found": "No models found"
   },
   "organisms": {
     "regenerateKeyModal": {
@@ -13937,5 +13946,77 @@
     "litellm-is-openai-compatible-this-means-your": "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
     "openai-python-sdk": "OpenAI Python SDK",
     "langchain-py": "Langchain Py"
+  },
+  "dynamicForm": {
+    "in-db": "In DB",
+    "in-config": "In Config",
+    "not-set": "Not Set",
+    "update-settings": "Update Settings"
+  },
+  "moyaiConnected": {
+    "moyai-connected": "Moyai connected",
+    "this-deployment-is-now-linked-to-your-litell": "This deployment is now linked to your LiteLLM gateway.",
+    "open-moyai": "Open Moyai",
+    "back-to-ai-gateway": "Back to AI Gateway"
+  },
+  "mCPServerPermissions": {
+    "mcp-servers": "MCP Servers",
+    "no-mcp-servers-this-key-is-blocked-from-all": "No MCP servers — this key is blocked from all MCP servers, including its team's servers",
+    "all-proxy-mcp-servers": "All Proxy MCP Servers",
+    "no-mcp-servers-access-groups-or-toolsets-con": "No MCP servers, access groups, or toolsets configured"
+  },
+  "createdKeyDisplay": {
+    "virtual-key": "Virtual Key:"
+  },
+  "searchBox": {
+    "loading-results": "Loading results",
+    "search-suggestions": "Search suggestions",
+    "loading-values": "Loading values…",
+    "comparison-operators": "Comparison operators"
+  },
+  "streamScopeFields": {
+    "streaming-and-non-streaming": "Streaming and non-streaming",
+    "request-shape": "Request shape"
+  },
+  "addGuardrailForm": {
+    "automatically-close-the-session-after-this-m": "Automatically close the session after this many guardrail violations. Leave empty to never auto-close.",
+    "what-the-bot-says-aloud-when-this-guardrail": "What the bot says aloud when this guardrail fires. Falls back to the default violation message if empty."
+  },
+  "guardrailOptionalParams": {
+    "select-category-to-configure": "Select category to configure",
+    "select-a-category-to-add-threshold-configura": "Select a category to add threshold configuration",
+    "optional-parameters": "Optional Parameters"
+  },
+  "updatesFeed": {
+    "view-all": "View all",
+    "failed-to-load-posts": "Failed to load posts",
+    "no-posts-yet": "No posts yet"
+  },
+  "oAuthFormFields": {
+    "use-oauth-to-fetch-a-fresh-access-token-and": "Use OAuth to fetch a fresh access token and temporarily save it in the session as the authentication value."
+  },
+  "mcpServerView": {
+    "user-credentials": "User Credentials",
+    "defined-in-config-edit-your-yaml-configurati": "Defined in config. Edit your YAML configuration to make changes",
+    "network-access": "Network access"
+  },
+  "usageOverview": {
+    "top-models": "Top models",
+    "bucket-size": "Bucket size",
+    "top-virtual-keys": "Top Virtual Keys"
+  },
+  "userInfoView": {
+    "auto-router-usage": "Auto-router usage",
+    "savings-are-unavailable-because-this-user-ha": "Savings are unavailable because this user has no ID.",
+    "auto-router-usage-is-unavailable-because-thi": "Auto-router usage is unavailable because this user has no ID."
+  },
+  "onboardingErrorView": {
+    "failed-to-load-invitation": "Failed to load invitation",
+    "the-invitation-link-may-be-invalid-or-expire": "The invitation link may be invalid or expired.",
+    "back-to-login": "Back to Login"
+  },
+  "modelHubTable": {
+    "make-models-agents-and-mcp-servers-public-fo": "Make models, agents, and MCP servers public for developers to know what's available.",
+    "try-it-in-the-playground": "Try it in the Playground"
   }
 }

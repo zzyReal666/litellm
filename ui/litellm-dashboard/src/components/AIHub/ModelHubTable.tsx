@@ -420,8 +420,7 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
               <h2 className="text-center text-xl font-semibold">{i18n.t("aiHub.modelHubTable.title", { defaultValue: "AI Hub" })}</h2>
               {isAdminRole(userRole || "") ? (
                 <p className="text-sm text-muted-foreground">
-                  Make models, agents, and MCP servers public for developers to know what&apos;s available.
-                </p>
+                  {i18n.t("modelHubTable.make-models-agents-and-mcp-servers-public-fo", { defaultValue: "Make models, agents, and MCP servers public for developers to know what's available." })}</p>
               ) : (
                 <p className="text-sm text-muted-foreground">
                   {i18n.t("aiHub.modelHubTable.userDescription", { defaultValue: "A list of all public model names personally available to you." })}
@@ -793,15 +792,14 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({
                 <p className="text-lg font-semibold mb-4">{i18n.t("aiHub.modelHubTable.sectionUsageExample", { defaultValue: "Usage Example" })}</p>
                 {isDecisionMode(selectedModel.mode) && (
                   <p className="mb-2 text-sm text-muted-foreground">
-                    Decision models answer on <code>/v1/decisions</code> and <code>/v1/systemone</code>, not{" "}
+                    Decision models answer on{" "}<code>/v1/decisions</code> and <code>/v1/systemone</code>, not{" "}
                     <code>/chat/completions</code>.{" "}
                     
                     {canOpenPlayground && (
                       <>
                         {" · "}
                         <a href={uiHref(SYSTEM_ONE_PLAYGROUND_ROUTE)} className="underline">
-                          Try it in the Playground
-                        </a>
+                          {i18n.t("modelHubTable.try-it-in-the-playground", { defaultValue: "Try it in the Playground" })}</a>
                       </>
                     )}
                   </p>

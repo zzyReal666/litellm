@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { Minus, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,8 @@ const KeyValueInput: React.FC<KeyValueInputProps> = ({ value = [], onChange }) =
     <div className="space-y-2">
       {value.map(([key, val], index) => (
         <div key={index} className="flex items-center gap-2">
-          <Input placeholder="Header Name" value={key} onChange={(e) => handleChange(index, [e.target.value, val])} />
-          <Input placeholder="Header Value" value={val} onChange={(e) => handleChange(index, [key, e.target.value])} />
+          <Input placeholder={i18n.t("keyValueInput.header-name", { defaultValue: "Header Name" })} value={key} onChange={(e) => handleChange(index, [e.target.value, val])} />
+          <Input placeholder={i18n.t("keyValueInput.header-value", { defaultValue: "Header Value" })} value={val} onChange={(e) => handleChange(index, [key, e.target.value])} />
           <Button
             type="button"
             variant="ghost"
@@ -38,8 +39,7 @@ const KeyValueInput: React.FC<KeyValueInputProps> = ({ value = [], onChange }) =
       ))}
       <Button type="button" variant="outline" onClick={handleAdd}>
         <Plus />
-        Add Header
-      </Button>
+        {i18n.t("keyValueInput.add-header", { defaultValue: "Add Header" })}</Button>
     </div>
   );
 };

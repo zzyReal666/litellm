@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import i18n from "@/lib/i18n";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/lib/toast";
@@ -24,11 +25,9 @@ const CreatedKeyDisplay: React.FC<CreatedKeyDisplayProps> = ({ apiKey }) => {
     <div>
       <p className="mb-2">
         Please save this secret key somewhere safe and accessible. For security reasons,{" "}
-        <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will
-        need to generate a new one.
-      </p>
+        <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one.</p>
 
-      <p className="text-sm text-muted-foreground mt-3 mb-1">Virtual Key:</p>
+      <p className="text-sm text-muted-foreground mt-3 mb-1">{i18n.t("createdKeyDisplay.virtual-key", { defaultValue: "Virtual Key:" })}</p>
       <div className="bg-muted rounded-md p-2.5 mb-2.5">
         <pre className="m-0 whitespace-normal break-words text-foreground">{apiKey}</pre>
       </div>

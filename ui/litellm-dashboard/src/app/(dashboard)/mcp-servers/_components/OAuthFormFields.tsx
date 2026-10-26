@@ -324,9 +324,7 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
           {oauthFlow && (
             <div className="rounded-lg border border-dashed border-border p-4 space-y-2">
               <p className="text-sm text-muted-foreground">
-                Use OAuth to fetch a fresh access token and temporarily save it in the session as the authentication
-                value.
-              </p>
+                {i18n.t("oAuthFormFields.use-oauth-to-fetch-a-fresh-access-token-and", { defaultValue: "Use OAuth to fetch a fresh access token and temporarily save it in the session as the authentication value." })}</p>
               <Button
                 variant="secondary"
                 onClick={oauthFlow.startOAuthFlow}
@@ -341,7 +339,7 @@ const OAuthFormFields: React.FC<OAuthFormFieldsProps> = ({
               {oauthFlow.error && <p className="text-sm text-destructive">{oauthFlow.error}</p>}
               {oauthFlow.status === "success" && oauthFlow.tokenResponse?.access_token && (
                 <p className="text-sm text-success">
-                  Token fetched. Expires in {oauthFlow.tokenResponse.expires_in ?? "?"} seconds.
+                  Token fetched. Expires in{" "}{oauthFlow.tokenResponse.expires_in ?? "?"} seconds.
                 </p>
               )}
             </div>

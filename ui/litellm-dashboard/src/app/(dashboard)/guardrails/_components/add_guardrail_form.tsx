@@ -1081,8 +1081,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
       <div className="space-y-6">
         <div>
           <p className="text-sm text-muted-foreground">
-            Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a
-            specific endpoint like <code>/v1/realtime</code>.
+            Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like{" "}<code>/v1/realtime</code>.
           </p>
         </div>
 
@@ -1141,9 +1140,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                     {t("guardrails.addGuardrailForm.endSessionLabel", { defaultValue: "End session after X violations" })}
                   </label>
                   <p className="mb-2 text-xs text-muted-foreground">
-                    Automatically close the session after this many guardrail violations. Leave empty to never
-                    auto-close.
-                  </p>
+                    {i18n.t("addGuardrailForm.automatically-close-the-session-after-this-m", { defaultValue: "Automatically close the session after this many guardrail violations. Leave empty to never auto-close." })}</p>
                   <Input
                     id="guardrail-end-session-after"
                     type="number"
@@ -1193,9 +1190,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
                     {t("guardrails.addGuardrailForm.violationMessageLabel", { defaultValue: "Message the user hears" })}
                   </label>
                   <p className="mb-2 text-xs text-muted-foreground">
-                    What the bot says aloud when this guardrail fires. Falls back to the default violation message if
-                    empty.
-                  </p>
+                    {i18n.t("addGuardrailForm.what-the-bot-says-aloud-when-this-guardrail", { defaultValue: "What the bot says aloud when this guardrail fires. Falls back to the default violation message if empty." })}</p>
                   <Textarea
                     id="guardrail-realtime-message"
                     rows={3}

@@ -1,4 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import i18n from "@/lib/i18n";
 import { GuardrailField, labelWithHint, type GuardrailFormControl } from "./GuardrailFormField";
 import {
   STREAM_SCOPE_OPTIONS,
@@ -44,7 +45,7 @@ export const StreamScopeFields = ({
               }}
             >
               <SelectTrigger id={`stream-scope-${mode}`} className="w-full">
-                <SelectValue placeholder="Streaming and non-streaming" />
+                <SelectValue placeholder={i18n.t("streamScopeFields.streaming-and-non-streaming", { defaultValue: "Streaming and non-streaming" })} />
               </SelectTrigger>
               <SelectContent>
                 {STREAM_SCOPE_OPTIONS.map((option) => (
@@ -88,7 +89,7 @@ export const GuardrailStreamScopeDetail = ({ raw }: { raw: unknown }) => {
   if (!label) return null;
   return (
     <div>
-      <p className="font-medium">Request shape</p>
+      <p className="font-medium">{i18n.t("streamScopeFields.request-shape", { defaultValue: "Request shape" })}</p>
       <div>{label}</div>
     </div>
   );

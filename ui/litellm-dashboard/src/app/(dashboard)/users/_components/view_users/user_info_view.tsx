@@ -499,8 +499,7 @@ export default function UserInfoView({
           )}
           {canViewAutoRouterUsage && (
             <TabsTrigger value="auto-router-usage" className="flex-none data-active:text-primary after:bg-primary">
-              Auto-router usage
-            </TabsTrigger>
+              {i18n.t("userInfoView.auto-router-usage", { defaultValue: "Auto-router usage" })}</TabsTrigger>
           )}
         </TabsList>
 
@@ -731,7 +730,7 @@ export default function UserInfoView({
                   scopeNote="Savings for this user across API keys and JWT-authenticated requests."
                 />
               ) : (
-                <p role="alert">Savings are unavailable because this user has no ID.</p>
+                <p role="alert">{i18n.t("userInfoView.savings-are-unavailable-because-this-user-ha", { defaultValue: "Savings are unavailable because this user has no ID." })}</p>
               ))}
           </TabsContent>
         )}
@@ -746,7 +745,7 @@ export default function UserInfoView({
                   activity={activityDateRange}
                 />
               ) : (
-                <p role="alert">Auto-router usage is unavailable because this user has no ID.</p>
+                <p role="alert">{i18n.t("userInfoView.auto-router-usage-is-unavailable-because-thi", { defaultValue: "Auto-router usage is unavailable because this user has no ID." })}</p>
               ))}
           </TabsContent>
         )}

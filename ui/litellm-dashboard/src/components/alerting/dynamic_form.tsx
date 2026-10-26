@@ -1,4 +1,5 @@
 import React from "react";
+import i18n from "@/lib/i18n";
 import { useForm } from "react-hook-form";
 import { CircleCheck, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -106,12 +107,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             {value.stored_in_db == true ? (
               <Badge variant="secondary">
                 <CircleCheck />
-                In DB
-              </Badge>
+                {i18n.t("dynamicForm.in-db", { defaultValue: "In DB" })}</Badge>
             ) : value.stored_in_db == false ? (
-              <Badge variant="outline">In Config</Badge>
+              <Badge variant="outline">{i18n.t("dynamicForm.in-config", { defaultValue: "In Config" })}</Badge>
             ) : (
-              <Badge variant="outline">Not Set</Badge>
+              <Badge variant="outline">{i18n.t("dynamicForm.not-set", { defaultValue: "Not Set" })}</Badge>
             )}
           </TableCell>
           <TableCell>
@@ -129,7 +129,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         </TableRow>
       ))}
       <div>
-        <Button type="submit">Update Settings</Button>
+        <Button type="submit">{i18n.t("dynamicForm.update-settings", { defaultValue: "Update Settings" })}</Button>
       </div>
     </form>
   );

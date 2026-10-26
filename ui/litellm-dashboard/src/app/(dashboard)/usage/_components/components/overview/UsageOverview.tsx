@@ -7,6 +7,7 @@
  */
 
 import { type ReactNode, useMemo, useState } from "react";
+import i18n from "@/lib/i18n";
 import type { DailyData } from "@/components/UsagePage/types";
 import { KeyRound } from "lucide-react";
 import { StackedUsageChart, type StackedUsageScale } from "@/components/shared/charts";
@@ -76,13 +77,13 @@ export default function UsageOverview({
       />
 
       <Panel
-        title="Top models"
+        title={i18n.t("usageOverview.top-models", { defaultValue: "Top models" })}
         subtitle={`${granularity === "day" ? "Daily" : "Weekly"} ${METRIC_NOUN[state.metric]}, top 8 stacked`}
         action={
           <>
             <BreakdownControls state={state} onChange={setState} showDimension={false} />
             <Segmented
-              label="Bucket size"
+              label={i18n.t("usageOverview.bucket-size", { defaultValue: "Bucket size" })}
               value={granularity}
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
@@ -124,7 +125,7 @@ export default function UsageOverview({
       {topAgents}
       {providerBreakdown}
 
-      <Panel icon={KeyRound} title="Top Virtual Keys">
+      <Panel icon={KeyRound} title={i18n.t("usageOverview.top-virtual-keys", { defaultValue: "Top Virtual Keys" })}>
         {topKeys}
       </Panel>
       {gatewayByEndpoint}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 import { ServerIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -135,7 +136,7 @@ export function MCPServerPermissions({
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <ServerIcon className="h-4 w-4 text-info" />
-        <p className="text-sm font-semibold text-foreground">MCP Servers</p>
+        <p className="text-sm font-semibold text-foreground">{i18n.t("mCPServerPermissions.mcp-servers", { defaultValue: "MCP Servers" })}</p>
         <Badge variant={blocksAllMcpServers ? "destructive" : "secondary"}>
           {blocksAllMcpServers ? "Blocked" : grantsAllProxyMcpServers ? "All" : totalCount}
         </Badge>
@@ -145,13 +146,12 @@ export function MCPServerPermissions({
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/20">
           <ServerIcon className="h-4 w-4 text-destructive" />
           <p className="text-destructive text-sm">
-            No MCP servers — this key is blocked from all MCP servers, including its team&apos;s servers
-          </p>
+            {i18n.t("mCPServerPermissions.no-mcp-servers-this-key-is-blocked-from-all", { defaultValue: "No MCP servers — this key is blocked from all MCP servers, including its team's servers" })}</p>
         </div>
       ) : grantsAllProxyMcpServers ? (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-info/10 border border-info/20">
           <ServerIcon className="h-4 w-4 text-info" />
-          <p className="text-info text-sm">All Proxy MCP Servers</p>
+          <p className="text-info text-sm">{i18n.t("mCPServerPermissions.all-proxy-mcp-servers", { defaultValue: "All Proxy MCP Servers" })}</p>
         </div>
       ) : totalCount > 0 ? (
         <div className="max-h-[400px] overflow-y-auto space-y-2 pr-1">
@@ -285,7 +285,7 @@ export function MCPServerPermissions({
       ) : (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted border border-border">
           <ServerIcon className="h-4 w-4 text-muted-foreground" />
-          <p className="text-muted-foreground text-sm">No MCP servers, access groups, or toolsets configured</p>
+          <p className="text-muted-foreground text-sm">{i18n.t("mCPServerPermissions.no-mcp-servers-access-groups-or-toolsets-con", { defaultValue: "No MCP servers, access groups, or toolsets configured" })}</p>
         </div>
       )}
     </div>
