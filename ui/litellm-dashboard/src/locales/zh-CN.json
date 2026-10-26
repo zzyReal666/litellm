@@ -14573,5 +14573,27 @@
     "description": "通过 <code>/v1/decisions</code> 或 <code>/v1/systemone</code> 调用它们，或在决策演练场中试用。",
     "tryButton": "试用决策模型",
     "dismissAria": "关闭横幅"
+  },
+  "licenseExpiryBanner": {
+    "expiresToday": "今天到期",
+    "expiresInOneDay": "1 天后到期",
+    "expiresInDays": "{{days}} 天后到期",
+    "expiredDescription": "企业版功能已停用。请联系 {{email}} 恢复访问",
+    "criticalDescription": "请立即续费以免失去企业版功能。请联系 {{email}}",
+    "warningDescription": "请在到期前续费以保留企业版功能。请联系 {{email}}",
+    "expiredTitle": "你的 LiteLLM 企业版许可证已于 {{date}} 过期",
+    "activeTitle": "你的 LiteLLM 企业版许可证{{countdown}}（{{date}}）",
+    "closeAria": "关闭"
+  },
+  "resetMemberBudgetsDialog": {
+    "resetTitle": "重置成员预算？",
+    "resetDescription_one": "{{count}} 位成员拥有自定义预算，因此新的团队默认预算 ¥{{budget}} 不会应用于该成员。要将其重置为默认值，还是保留自定义预算？",
+    "resetDescription_other": "{{count}} 位成员拥有自定义预算，因此新的团队默认预算 ¥{{budget}} 不会应用于这些成员。要将它们重置为默认值，还是保留自定义预算？",
+    "cancel": "取消",
+    "retryReset": "重试重置",
+    "keepCustomBudget_one": "保留自定义预算",
+    "keepCustomBudget_other": "保留自定义预算",
+    "resetToBudget_one": "重置为 ¥{{budget}}",
+    "resetToBudget_other": "全部重置为 ¥{{budget}}"
   }
 }

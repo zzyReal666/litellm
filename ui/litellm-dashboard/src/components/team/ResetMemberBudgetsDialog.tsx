@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
-import { pluralize } from "./memberBudgetReset";
+import i18n from "@/lib/i18n";
 import type { MemberBudgetResetState } from "./useMemberBudgetReset";
 
 interface ResetMemberBudgetsDialogProps {
@@ -35,32 +35,49 @@ export default function ResetMemberBudgetsDialog({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Reset member budgets?</DialogTitle>
+          <DialogTitle>
+            {i18n.t("resetMemberBudgetsDialog.resetTitle", { defaultValue: "Reset member budgets?" })}
+          </DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
-          {memberCount} {pluralize(memberCount, "member has", "members have")} a custom budget, so the new team default
-          of ¥{formatNumberWithCommas(newBudget, 2)} will not apply to {pluralize(memberCount, "that member", "them")}.
-          Reset {pluralize(memberCount, "it", "them")} to the default, or keep the custom{" "}
-          {pluralize(memberCount, "budget", "budgets")}?
+          {i18n.t("resetMemberBudgetsDialog.resetDescription", {
+            count: memberCount,
+            defaultValue_one:
+              "{{count}} member has a custom budget, so the new team default of ¥{{budget}} will not apply to that member. Reset it to the default, or keep the custom budget?",
+            defaultValue_other:
+              "{{count}} members have a custom budget, so the new team default of ¥{{budget}} will not apply to them. Reset them to the default, or keep the custom budgets?",
+            budget: formatNumberWithCommas(newBudget, 2),
+          })}
         </p>
         <DialogFooter>
           {failed ? (
             <>
               <Button variant="outline" onClick={onDismiss}>
-                Cancel
+                {i18n.t("resetMemberBudgetsDialog.cancel", { defaultValue: "Cancel" })}
               </Button>
-              <Button onClick={onRetry}>Retry reset</Button>
+              <Button onClick={onRetry}>
+                {i18n.t("resetMemberBudgetsDialog.retryReset", { defaultValue: "Retry reset" })}
+              </Button>
             </>
           ) : (
             <>
               <Button variant="ghost" onClick={onDismiss} disabled={busy}>
-                Cancel
+                {i18n.t("resetMemberBudgetsDialog.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button variant="outline" onClick={onKeep} disabled={busy}>
-                Keep custom {pluralize(memberCount, "budget", "budgets")}
+                {i18n.t("resetMemberBudgetsDialog.keepCustomBudget", {
+                  count: memberCount,
+                  defaultValue_one: "Keep custom budget",
+                  defaultValue_other: "Keep custom budgets",
+                })}
               </Button>
               <Button onClick={onReset} disabled={busy}>
-                {pluralize(memberCount, "Reset", "Reset all")} to ¥{formatNumberWithCommas(newBudget, 2)}
+                {i18n.t("resetMemberBudgetsDialog.resetToBudget", {
+                  count: memberCount,
+                  defaultValue_one: "Reset to ¥{{budget}}",
+                  defaultValue_other: "Reset all to ¥{{budget}}",
+                  budget: formatNumberWithCommas(newBudget, 2),
+                })}
               </Button>
             </>
           )}
