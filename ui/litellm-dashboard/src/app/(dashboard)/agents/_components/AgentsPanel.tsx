@@ -200,9 +200,10 @@ const AgentsPanel: React.FC<AgentsPanelProps> = ({ accessToken, userRole, teams 
               <AlertDialogTitle>{t("agents.deleteModalTitle", { defaultValue: "Delete Agent" })}</AlertDialogTitle>
               <AlertDialogDescription>
                 {t("agents.deleteConfirm", {
-                  defaultValue: "Are you sure you want to delete agent: {{name}}? This action cannot be undone.",
+                  defaultValue: "Are you sure you want to delete agent: {{name}}?",
                   name: agentToDelete.name,
-                })}{" "}</AlertDialogDescription>
+                })}{" "}
+                {t("agents.deleteIrreversible", { defaultValue: "This action cannot be undone." })}{" "}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t("common.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>

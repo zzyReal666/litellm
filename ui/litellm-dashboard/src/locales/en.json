@@ -1215,7 +1215,7 @@
     "noAgentsFound": "No agents found. Click \"+ Add New Agent\" to create one.",
     "needsSetup": "Needs Setup",
     "deleteModalTitle": "Delete Agent",
-    "deleteConfirm": "Are you sure you want to delete agent: {{name}}? This action cannot be undone.",
+    "deleteConfirm": "Are you sure you want to delete agent: {{name}}?",
     "deleteCannotUndo": "This action cannot be undone.",
     "deleteSuccess": "Agent \"{{name}}\" deleted successfully",
     "deleteFailed": "Failed to delete agent",
@@ -1284,7 +1284,8 @@
       "authBasic": "Basic auth",
       "removeHeader": "Remove header",
       "removeQueryParameter": "Remove query parameter"
-    }
+    },
+    "deleteIrreversible": "This action cannot be undone."
   },
   "bulkCreateUsers": {
     "openButton": "+ Bulk Invite Users",
@@ -3218,7 +3219,7 @@
     "notSpecified": "Not specified",
     "wildcardTitle": "Wildcard Routing",
     "wildcardDesc": "This model uses wildcard routing. You can pass any value where you see the <code>*</code> symbol.",
-    "wildcardExample": "For example, with <code>{{group}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern.",
+    "wildcardExample": "For example, with <code>{{model}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern.",
     "tokenCostInfo": "Token & Cost Information",
     "labelMaxInputTokens": "Max Input Tokens:",
     "labelMaxOutputTokens": "Max Output Tokens:",
@@ -5843,8 +5844,8 @@
       "maxTokensLabel": "Max tokens",
       "mcpServersLabel": "MCP servers",
       "mcpServersPlaceholder": "Select MCP servers to attach (same format as chat completions API)",
-      "mcpServersSaved_one": "{{count}} MCP server saved. Use the same <code>tools</code> array in chat completions when calling this agent.",
-      "mcpServersSaved_other": "{{count}} MCP servers saved. Use the same <code>tools</code> array in chat completions when calling this agent.",
+      "mcpServersSaved_one": "{{count}} MCP server saved. Use the same <toolsCode>tools</toolsCode> array in chat completions when calling this agent.",
+      "mcpServersSaved_other": "{{count}} MCP servers saved. Use the same <toolsCode>tools</toolsCode> array in chat completions when calling this agent.",
       "updateAgent": "Update Agent",
       "testInChat": "Test in Chat",
       "saveAgentFirst": "Save an agent first to test in Chat.",

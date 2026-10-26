@@ -69,7 +69,7 @@ describe("GuardrailUsageBreakdown in Chinese", () => {
     render(<GuardrailUsageBreakdown detail={detail} />);
 
     const cost = screen.getByRole("group", { name: "费用" });
-    await user.click(within(cost).getByRole("button", { name: /How is this calculated/ }));
+    await user.click(within(cost).getByRole("button", { name: /这是如何计算的/ }));
 
     const dialog = await screen.findByRole("dialog", { name: "此费用是如何计算的" });
     expect(within(dialog).getByText("已定价单位数 × 每单位价格 = 费用，按计数器分别计算")).toBeInTheDocument();

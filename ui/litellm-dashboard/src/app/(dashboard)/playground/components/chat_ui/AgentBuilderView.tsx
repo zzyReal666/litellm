@@ -724,8 +724,8 @@ export default function AgentBuilderView({
                               <Trans
                                 i18nKey="playground.agentBuilderView.mcpServersSaved"
                                 count={draftTools.length}
-                                defaults="{{count}} MCP servers saved. Use the same <code>tools</code> array in chat completions when calling this agent."
-                                components={{ code: <code className="rounded-sm bg-muted px-1" /> }}
+                                defaults="{{count}} MCP servers saved. Use the same <toolsCode>tools</toolsCode> array in chat completions when calling this agent."
+                                components={{ toolsCode: <code className="rounded-sm bg-muted px-1" /> }}
                               />
                             </p>
                           )}

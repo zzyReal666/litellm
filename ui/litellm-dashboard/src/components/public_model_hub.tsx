@@ -838,9 +838,9 @@ const PublicModelHub: React.FC<PublicModelHubProps> = ({ accessToken, isEmbedded
                             <p className="text-sm text-info">
                               <Trans
                                 i18nKey="publicModelHub.wildcardExample"
-                                defaults="For example, with <code>{{group}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern."
+                                defaults="For example, with <code>{{model}}</code>, you can use any string (<code>{{example}}</code>) that matches this pattern."
                                 values={{
-                                  group: selectedModel.model_group,
+                                  model: selectedModel.model_group,
                                   example: selectedModel.model_group.replaceAll("*", "my-custom-value"),
                                 }}
                                 components={{ code: <code className="bg-info/15 px-1 py-0.5 rounded-sm text-xs" /> }}
