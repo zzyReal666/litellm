@@ -4,6 +4,7 @@ tests/e2e/.fixtures/
 .venv-typecheck
 .venv_policy_test
 .venv-mutmut
+.venv-local
 mutants/
 .env
 .claude
