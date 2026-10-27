@@ -17,7 +17,7 @@ import { PROMPT_CACHE_CREATION_TOOLTIP, PROMPT_CACHE_READ_TOOLTIP } from "@/util
 
 const RESPONSE_CACHE_TOOLTIP = i18n.t("playground.responseMetrics.responseCacheTooltip", {
   defaultValue:
-    "This response was replayed from LiteLLM's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
+    "This response was replayed from 中安云科 AI 安全网关's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
 });
 
 export interface TokenUsage {

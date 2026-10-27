@@ -19,7 +19,7 @@ import type { Span, SpanErrorPage } from "../../types";
 import { errorSource } from "../../utils";
 import { TextBody } from "./PayloadBody";
 
-const ERROR_SOURCE_LABEL: Record<ErrorSource, string> = { tool: "Tool", model: "Model", litellm: "LiteLLM" };
+const ERROR_SOURCE_LABEL: Record<ErrorSource, string> = { tool: "Tool", model: "Model", litellm: "中安云科 AI 安全网关" };
 const TRACEBACK_MARKER = "Traceback (most recent call last):";
 
 /** Exporters record `repr(exc)` + traceback with no separator; keep the exception line. */

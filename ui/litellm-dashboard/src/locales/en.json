@@ -52,35 +52,35 @@
     "aiGateway": "AI Gateway",
     "modeChat": "Chat",
     "adminsCanEnableInSettings": "Admins can enable in Settings",
-    "liteLLMHome": "LiteLLM home",
+    "liteLLMHome": "中安云科 AI 安全网关 home",
     "noMatchingWorkers": "No matching workers",
     "blogLoading": "loading",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
     "docs": "Docs",
     "blog": "Blog",
-    "thanksForUsing": "Thanks for using LiteLLM!",
+    "thanksForUsing": "Thanks for using 中安云科 AI 安全网关!",
     "failedToLoadPosts": "Failed to load posts",
     "retry": "Retry",
     "noPostsAvailable": "No posts available",
     "viewAllPosts": "View all posts",
     "communityLinks": "Community links",
-    "slackCommunity": "LiteLLM Slack community",
+    "slackCommunity": "中安云科 AI 安全网关 Slack community",
     "joinSlack": "Join Slack",
-    "githubRepo": "LiteLLM on GitHub",
+    "githubRepo": "中安云科 AI 安全网关 on GitHub",
     "language": "Language",
     "notificationsBell": {
-      "autoRouterTitle": "LiteLLM Auto Router",
+      "autoRouterTitle": "中安云科 AI 安全网关 Auto Router",
       "autoRouterDescription": "Route every request to the cheapest model that can handle it, no prompt changes needed.",
       "readTheDocs": "Read the docs",
       "notifications": "Notifications",
       "agentPlatformDesc": "Open-source agent infra — sandboxes, durable sessions, and workers on AWS Fargate.",
       "markAsRead": "Mark as read"
     },
-    "logoAlt": "LiteLLM",
+    "logoAlt": "中安云科 AI 安全网关",
     "productDocsAriaLabel": "Product documentation",
-    "litellm-brand": "LiteLLM Brand",
-    "thanks-for-using-litellm": "Thanks for using LiteLLM!"
+    "litellm-brand": "中安云科 AI 安全网关 Brand",
+    "thanks-for-using-litellm": "Thanks for using 中安云科 AI 安全网关!"
   },
   "user": {
     "tier": "Tier",
@@ -113,9 +113,9 @@
   },
   "login": {
     "title": "Login",
-    "subtitle": "Access your LiteLLM Admin UI.",
+    "subtitle": "Access the AI gateway admin console.",
     "defaultCredentialsTitle": "Default Credentials",
-    "defaultCredentialsBody": "By default, Username is <code>admin</code> and Password is your set LiteLLM Proxy<code>MASTER_KEY</code>.",
+    "defaultCredentialsBody": "By default, Username is <code>admin</code> and Password is your set AI 安全网关<code>MASTER_KEY</code>.",
     "docsHint": "Need to set UI credentials or SSO? <docsLink>Check the documentation</docsLink>.",
     "worker": "Worker",
     "workerPlaceholder": "Choose a worker to connect to",
@@ -131,12 +131,12 @@
     "ssoNotConfigured": "Please configure SSO to log in with SSO.",
     "adminUiDisabledTitle": "Admin UI Disabled",
     "adminUiDisabledBody": "The Admin UI has been disabled by the administrator. To re-enable it, please update the following environment variable:",
-    "ssoEnabledNotice": "Single Sign-On (SSO) is enabled. LiteLLM no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration."
+    "ssoEnabledNotice": "Single Sign-On (SSO) is enabled. The AI gateway no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration."
   },
   "shared": {
     "createdKeyDisplay": {
       "copiedToClipboard": "Key copied to clipboard",
-      "saveWarning": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one.",
+      "saveWarning": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your 中安云科 AI 安全网关 account. If you lose this secret key, you will need to generate a new one.",
       "virtualKeyLabel": "Virtual Key:",
       "copyButton": "Copy Virtual Key",
       "copied": "Copied!"
@@ -216,14 +216,14 @@
       "totalSaved": "Total saved",
       "totalSavedHint": "Compression + prompt caching + auto-router",
       "loading": "Loading...",
-      "totalSavedInfo": "The sum of the three tiles beside it. Its caching term is the LiteLLM-injected share, so this total is what the gateway itself delivered; caching that clients or providers brought on their own appears only in the caching tile's Total figure.",
+      "totalSavedInfo": "The sum of the three tiles beside it. Its caching term is the 中安云科 AI 安全网关-injected share, so this total is what the gateway itself delivered; caching that clients or providers brought on their own appears only in the caching tile's Total figure.",
       "compressionSavings": "Compression savings",
       "tokensCompressed": "{{count}} tokens compressed",
       "compressionSavingsInfo": "Tokens Headroom removed before the call, priced at the model's input rate.",
       "promptCachingSavings": "Prompt caching savings",
-      "litellmInjected": "LiteLLM injected",
+      "litellmInjected": "中安云科 AI 安全网关 injected",
       "total": "Total",
-      "promptCachingInfo": "What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share LiteLLM earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two.",
+      "promptCachingInfo": "What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share 中安云科 AI 安全网关 earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two.",
       "autoRouterSavings": "Auto-router savings",
       "autoRouterHint": "vs. the priciest model it could pick",
       "autoRouterInfo": "What this traffic would have cost had every request gone to the most expensive model the auto-router can route to, minus what it actually cost. Switching leaves the new model with a cold cache, so it pays to write the prompt again while the baseline is priced as already warm; a route that thrashes the cache can total below zero, and a genuine first turn, where neither side had anything cached, is undercounted."
@@ -249,7 +249,7 @@
       "credentials": "Credentials",
       "credentialTypes": "Credential types",
       "reusable": "Reusable",
-      "reusableDescription": "Credentials saved in LiteLLM that can be added to models repeatedly.",
+      "reusableDescription": "Credentials saved in 中安云科 AI 安全网关 that can be added to models repeatedly.",
       "manual": "Manual",
       "manualDescription": "Credentials added directly during model creation or defined in the config file.",
       "createdBy": "Created By",
@@ -258,7 +258,7 @@
       "modelAccessGroup": "Model Access Group",
       "unknownProvider": "Unknown provider",
       "publicModelName": "Public Model Name",
-      "litellmModelName": "LiteLLM Model Name",
+      "litellmModelName": "网关模型名称",
       "definedInConfig": "Defined in config",
       "unknownDate": "Unknown date",
       "costPerMTokens": "Cost per 1M tokens",
@@ -447,12 +447,12 @@
     },
     "passThroughSecuritySection": {
       "title": "Security",
-      "subtitle": "When enabled, requests to this endpoint will require a valid LiteLLM Virtual Key",
+      "subtitle": "When enabled, requests to this endpoint will require a valid 网关虚拟密钥",
       "authenticationPremium": "Authentication (Premium)",
-      "enterpriseNotice": "Setting authentication for pass-through endpoints is a LiteLLM Enterprise feature. Get a trial key <pricingLink>here</pricingLink>."
+      "enterpriseNotice": "Setting authentication for pass-through endpoints is a 企业版 feature. Get a trial key <pricingLink>here</pricingLink>."
     },
     "premiumLoggingSettings": {
-      "enterpriseNotice": "Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key <pricingLink>here</pricingLink>."
+      "enterpriseNotice": "Setting Key/Team logging settings is a 企业版 feature. Global Logging Settings are available for all free users. Get a trial key <pricingLink>here</pricingLink>."
     },
     "projectDropdown": {
       "placeholder": "Search or select a project",
@@ -888,7 +888,7 @@
   },
   "scim": {
     "title": "SCIM Configuration",
-    "description": "System for Cross-domain Identity Management (SCIM) allows you to automatically provision and manage users and groups in LiteLLM.",
+    "description": "System for Cross-domain Identity Management (SCIM) allows you to automatically provision and manage users and groups in 中安云科 AI 安全网关.",
     "tenantUrlTitle": "SCIM Tenant URL",
     "tenantUrlDesc": "Use this URL in your identity provider SCIM integration settings.",
     "urlCopied": "URL copied to clipboard",
@@ -1156,7 +1156,7 @@
     "addButton": "+ Add Pass-Through Endpoint",
     "modalTitle": "Add Pass-Through Endpoint",
     "alertMessage": "What is a Pass-Through Endpoint?",
-    "alertDescription": "Route requests from your LiteLLM proxy to any external API. Perfect for custom models, image generation APIs, or any service you want to proxy through LiteLLM.",
+    "alertDescription": "Route requests from your AI 安全网关 to any external API. Perfect for custom models, image generation APIs, or any service you want to proxy through 中安云科 AI 安全网关.",
     "routeConfigTitle": "Route Configuration",
     "routeConfigSubtitle": "Configure how requests to your domain will be forwarded to the target API",
     "pathPrefixLabel": "Path Prefix",
@@ -1252,7 +1252,7 @@
       "enterDelegatedScope": "Enter a delegated scope",
       "delegatedScopesNote": "Users must first sign in through this gateway's Microsoft SSO. Subsequent delegated calls must satisfy both user and agent permissions.",
       "execution": "Execution",
-      "verificationNote": "LiteLLM verifies the agent's Entra token before matching this identity. Saving these fields configures the binding; an authenticated request provides verification. Runtime authentication headers are configured separately."
+      "verificationNote": "中安云科 AI 安全网关 verifies the agent's Entra token before matching this identity. Saving these fields configures the binding; an authenticated request provides verification. Runtime authentication headers are configured separately."
     },
     "killSwitchFields": {
       "nameRequired": "Name required",
@@ -1266,7 +1266,7 @@
       "password": "Password",
       "passwordRequired": "Password required",
       "webhookUrl": "Webhook URL",
-      "webhookUrlHint": "Absolute http(s) URL LiteLLM calls when the kill switch is triggered. Leave empty to remove the kill switch.",
+      "webhookUrlHint": "Absolute http(s) URL 中安云科 AI 安全网关 calls when the kill switch is triggered. Leave empty to remove the kill switch.",
       "method": "Method",
       "headers": "Headers",
       "addHeader": "Add Header",
@@ -1328,7 +1328,7 @@
     "creating": "Creating...",
     "creationComplete": "User creation complete",
     "nextStep": "Next step:",
-    "nextStepDesc": "Download the credentials file containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM requests through LiteLLM.",
+    "nextStepDesc": "Download the credentials file containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM requests through 中安云科 AI 安全网关.",
     "startNewImport": "Start New Bulk Import",
     "downloadCredentials": "Download User Credentials",
     "colRow": "Row",
@@ -1593,7 +1593,7 @@
   },
   "emailSettings": {
     "emailServerSettings": "Email Server Settings",
-    "docsLink": "LiteLLM Docs: email alerts",
+    "docsLink": "中安云科 AI 安全网关 Docs: email alerts",
     "saveChanges": "Save Changes",
     "testEmailAlerts": "Test Email Alerts",
     "saveSuccess": "Email settings updated successfully",
@@ -1974,10 +1974,10 @@
     },
     "guardrailGarden": {
       "searchPlaceholder": "Search guardrails",
-      "litellmSectionTitle": "LiteLLM Content Filter",
+      "litellmSectionTitle": "内容过滤器",
       "showLess": "Show less",
       "showAll": "Show all ({{count}})",
-      "litellmSectionDesc": "Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.",
+      "litellmSectionDesc": "Built-in guardrails powered by 中安云科 AI 安全网关. Zero latency, no external dependencies, no additional cost.",
       "partnerSectionTitle": "Partner Guardrails",
       "partnerSectionDesc": "Third-party guardrail integrations from leading AI security providers.",
       "aim": {
@@ -2227,7 +2227,7 @@
     },
     "guardrailGardenDetail": {
       "propertyProvider": "Provider",
-      "litellmContentFilter": "LiteLLM Content Filter",
+      "litellmContentFilter": "内容过滤器",
       "partnerGuardrail": "Partner Guardrail",
       "propertySubcategory": "Subcategory",
       "propertyCost": "Cost",
@@ -2339,8 +2339,8 @@
       "closeDetailPanel": "Close detail panel",
       "endpoint": "Endpoint",
       "method": "Method",
-      "forwardLiteLLMApiKey": "Forward LiteLLM API Key",
-      "forwardKeyDesc": "When enabled, the caller's LiteLLM API key is forwarded as an <code>Authorization</code> header to your guardrail endpoint. This allows your guardrail to authenticate model calls using the original caller's credentials.",
+      "forwardLiteLLMApiKey": "Forward gateway API key",
+      "forwardKeyDesc": "When enabled, the caller's 网关 API Key is forwarded as an <code>Authorization</code> header to your guardrail endpoint. This allows your guardrail to authenticate model calls using the original caller's credentials.",
       "staticHeadersDesc": "Sent with every request to the guardrail.",
       "removeHeader": "Remove {{name}}",
       "headerNamePlaceholder": "Header name (e.g. X-API-Key)",
@@ -2350,7 +2350,7 @@
       "noForwardClientHeaders": "No forward client headers configured.",
       "extraHeaderPlaceholder": "e.g. x-request-id",
       "equivalentConfig": "Equivalent config",
-      "guardrailInfoNote": "This guardrail runs on a separate instance. It receives the user request and forwards the result to the next step in the pipeline. See <docsLink>LiteLLM Generic Guardrail API docs</docsLink> for configuration details.",
+      "guardrailInfoNote": "This guardrail runs on a separate instance. It receives the user request and forwards the result to the next step in the pipeline. See <docsLink>中安云科 AI 安全网关 Generic Guardrail API docs</docsLink> for configuration details.",
       "testEndpoint": "Test Endpoint",
       "approveGuardrailTitle": "Approve Guardrail",
       "rejectGuardrailTitle": "Reject Guardrail",
@@ -2568,7 +2568,7 @@
       "itemsSelected_other": "{{count}} items selected"
     },
     "toolPermissionRulesEditor": {
-      "title": "LiteLLM Tool Permission Guardrail",
+      "title": "中安云科 AI 安全网关 Tool Permission Guardrail",
       "subtitle": "Provide regex patterns (e.g., ^mcp__github_.*$) for tool names or types and optionally constrain payload fields.",
       "addRule": "Add Rule",
       "noRules": "No tool rules added yet",
@@ -2977,7 +2977,7 @@
     "provider": "Provider",
     "providerLogoAlt": "{{provider}} logo",
     "notSet": "Not Set",
-    "litellmModel": "LiteLLM Model",
+    "litellmModel": "中安云科 AI 安全网关模型",
     "pricing": "Pricing",
     "pricingInput": "Input: ¥{{cost}}/1M tokens",
     "pricingOutput": "Output: ¥{{cost}}/1M tokens",
@@ -2990,8 +2990,8 @@
     "editTooltip": "Only DB models can be edited. You must be an admin or the creator of the model to edit it.",
     "fieldModelName": "Model Name",
     "placeholderModelName": "Enter model name",
-    "fieldLitellmModelName": "LiteLLM Model Name",
-    "placeholderLitellmModelName": "Enter LiteLLM model name",
+    "fieldLitellmModelName": "网关模型名称",
+    "placeholderLitellmModelName": "Enter 网关模型名称",
     "fieldInputCost": "Input Cost (per 1M tokens)",
     "placeholderInputCost": "Enter input cost",
     "fieldOutputCost": "Output Cost (per 1M tokens)",
@@ -3042,8 +3042,8 @@
     "cacheControlRole": "Role: {{role}}",
     "cacheControlIndex": "Index: {{index}}",
     "fieldModelInfo": "Model Info",
-    "fieldLitellmParams": "LiteLLM Params",
-    "tooltipLitellmParams": "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by LiteLLM.",
+    "fieldLitellmParams": "网关参数",
+    "tooltipLitellmParams": "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by 中安云科 AI 安全网关.",
     "fieldTeamId": "Team ID",
     "saveChanges": "Save Changes",
     "deleteModalTitle": "Delete Model",
@@ -3053,7 +3053,7 @@
     "usingExistingCredentialTitle": "Using Existing Credential",
     "storingCredential": "Storing credential..",
     "credentialStoredSuccess": "Credential stored successfully",
-    "invalidJsonLitellmParams": "Invalid JSON in LiteLLM Params",
+    "invalidJsonLitellmParams": "Invalid JSON in 网关参数",
     "invalidJsonModelInfo": "Invalid JSON in Model Info",
     "modelSettingsUpdateSuccess": "Model settings updated successfully",
     "modelSettingsUpdateFailed": "Failed to update model settings",
@@ -3297,7 +3297,7 @@
     "user-id": "User ID"
   },
   "organizations": {
-    "enterpriseFeature": "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key <pricingLink>here</pricingLink>.",
+    "enterpriseFeature": "This is a 企业版 feature, and requires a valid key to use. Get a trial key <pricingLink>here</pricingLink>.",
     "createNewOrg": "+ Create New Organization",
     "tabYourOrgs": "Your Organizations",
     "lastRefreshed": "Last Refreshed: {{time}}",
@@ -3355,7 +3355,7 @@
     "colMethods": "Methods",
     "methodsTooltip": "HTTP methods supported by this endpoint",
     "colAuthentication": "Authentication",
-    "authTooltip": "LiteLLM Virtual Key required to call endpoint",
+    "authTooltip": "网关虚拟密钥 required to call endpoint",
     "colHeaders": "Headers",
     "noData": "No pass-through endpoints configured",
     "endpointNotFound": "Endpoint not found",
@@ -3445,7 +3445,7 @@
     "reportedByWorker": "Reported by the worker that answered this request. Other workers pick up a reload on their next poll, and the Last run time is the latest reload any worker recorded",
     "hoursRange": "Hours must be a whole number between 1 and 168",
     "status": "Status:",
-    "scheduleModalDescription": "Set how often LiteLLM should fetch the latest pricing data from the remote source.",
+    "scheduleModalDescription": "Set how often 中安云科 AI 安全网关 should fetch the latest pricing data from the remote source.",
     "reloadIntervalAria": "Reload interval in hours"
   },
   "prompts": {
@@ -3554,7 +3554,7 @@
     "enterpriseFeature": "✨ Enterprise Feature",
     "testAlerts": "Test Alerts",
     "addCallbackModalTitle": "Add Logging Callback",
-    "litellmDocsLogging": "LiteLLM Docs: Logging",
+    "litellmDocsLogging": "中安云科 AI 安全网关 Docs: Logging",
     "adding": "Adding...",
     "addCallback": "Add Callback",
     "editCallbackModalTitle": "Edit Callback Settings",
@@ -3580,18 +3580,18 @@
   },
   "transformRequest": {
     "title": "Playground",
-    "subtitle": "See how LiteLLM transforms your request for the specified provider.",
+    "subtitle": "See how 中安云科 AI 安全网关 transforms your request for the specified provider.",
     "invalidJson": "Invalid JSON in request body",
     "noAccessToken": "No access token found",
     "transformedSuccess": "Request transformed successfully",
     "unexpectedFormat": "Transformed request received in unexpected format",
     "transformFailed": "Failed to transform request",
     "originalRequestTitle": "Original Request",
-    "originalRequestDesc": "The request you would send to LiteLLM /chat/completions endpoint.",
+    "originalRequestDesc": "The request you would send to 中安云科 AI 安全网关 /chat/completions endpoint.",
     "keyboardShortcutHint": "Press Cmd/Ctrl + Enter to transform",
     "transformButton": "Transform",
     "transformedRequestTitle": "Transformed Request",
-    "transformedRequestDesc": "How LiteLLM transforms your request for the specified provider.",
+    "transformedRequestDesc": "How 中安云科 AI 安全网关 transforms your request for the specified provider.",
     "sensitiveHeadersNote": "Note: Sensitive headers are not shown.",
     "foundAnError": "Found an error? File an issue <a>here</a>.",
     "copyToClipboard": "Copy to clipboard",
@@ -3599,7 +3599,7 @@
   },
   "uiThemeSettings": {
     "title": "UI Theme Customization",
-    "subtitle": "Customize your LiteLLM admin dashboard with a custom logo and favicon.",
+    "subtitle": "Customize your 中安云科 AI 安全网关 admin dashboard with a custom logo and favicon.",
     "logoUrlLabel": "Custom Logo URL",
     "logoUrlHint": "Enter a URL for your custom logo or leave empty for default",
     "faviconUrlLabel": "Custom Favicon URL",
@@ -3954,7 +3954,7 @@
       "labelCacheHit": "Cache Hit",
       "labelCacheReadTokens": "Cache Read Tokens",
       "labelCacheCreationTokens": "Cache Creation Tokens",
-      "labelLitellmOverhead": "LiteLLM Overhead",
+      "labelLitellmOverhead": "中安云科 AI 安全网关 Overhead",
       "labelRetries": "Retries",
       "labelStartTime": "Start Time",
       "labelEndTime": "End Time",
@@ -3977,7 +3977,7 @@
       "errorMessage": "Message:",
       "batchResults": "Batch Results",
       "cacheHitLabel": "Hit",
-      "cacheKeyTooltip": "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
+      "cacheKeyTooltip": "The key 中安云科 AI 安全网关 computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
       "cacheMissLabel": "Miss",
       "docs": "Docs",
       "guardrailsEvaluated": "{{count}} guardrails evaluated",
@@ -3993,7 +3993,7 @@
       "masked": "{{count}} masked",
       "promptCacheCreationTooltip": "Input tokens written to the LLM provider's prompt cache for reuse by later requests.",
       "promptCacheReadTooltip": "Input tokens read from the LLM provider's prompt cache (e.g. Anthropic / OpenAI), billed at a discounted rate. Reported by the provider.",
-      "responseCacheTooltip": "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
+      "responseCacheTooltip": "Whether this request was served from the AI gateway's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
       "labelUser": "User",
       "labelCredential": "Credential"
     },
@@ -4177,7 +4177,7 @@
     },
     "auditLogs": {
       "enterpriseTitle": "Enterprise Feature.",
-      "enterpriseDesc": "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+      "enterpriseDesc": "This is a 企业版 feature, and requires a valid key to use.",
       "previewText": "Here's a preview of what Audit Logs offer:",
       "previewAlt": "Audit Logs Preview",
       "pageTitle": "Audit Logs",
@@ -4265,7 +4265,7 @@
     },
     "configInfoMessage": {
       "title": "Request/Response Data Not Available",
-      "description": "To view request and response details, enable prompt storage in your LiteLLM configuration by adding the following to your <configFile>proxy_config.yaml</configFile> file, or toggle the setting in <settingsPath>Admin Settings → Logging Settings</settingsPath>.",
+      "description": "To view request and response details, enable prompt storage in your 中安云科 AI 安全网关 configuration by adding the following to your <configFile>proxy_config.yaml</configFile> file, or toggle the setting in <settingsPath>Admin Settings → Logging Settings</settingsPath>.",
       "note": "Note: This will only affect new requests after the configuration change."
     },
     "costBreakdownViewer": {
@@ -4407,7 +4407,7 @@
       "noMatchingRequests": "No matching requests",
       "noMatchingRequestsHint": "No requests match your filters for this time range.",
       "noRequestsYet": "No requests yet",
-      "requestsAppearHere": "Requests proxied through LiteLLM will appear here.",
+      "requestsAppearHere": "Requests proxied through The AI gateway will appear here.",
       "searchPlaceholder": "Search logs by ID…"
     },
     "requestLogsTableColumns": {
@@ -4746,9 +4746,9 @@
       "connectedSuccess": "Connected to {{name}}",
       "failedToConnect": "Failed to connect",
       "connectTitle": "Connect {{name}}",
-      "connectDesc": "LiteLLM needs access to {{name}} to complete your request.",
+      "connectDesc": "中安云科 AI 安全网关 needs access to {{name}} to complete your request.",
       "howItWorksTitle": "How it works",
-      "howItWorksDesc": "LiteLLM acts as a secure bridge. Your requests are routed through our MCP client directly to {{name}}'s API.",
+      "howItWorksDesc": "中安云科 AI 安全网关 acts as a secure bridge. Your requests are routed through our MCP client directly to {{name}}'s API.",
       "requestedAccess": "Requested Access",
       "continueToAuth": "Continue to Authentication",
       "provideApiKeyTitle": "Provide API Key",
@@ -4822,20 +4822,20 @@
     "mcpPermissionManagement": {
       "panelTitle": "Permission Management / Access Control",
       "panelSubtitle": "Configure access permissions and security settings (Optional)",
-      "allowAllKeysLabel": "Allow All LiteLLM Keys",
+      "allowAllKeysLabel": "Allow All 中安云科 AI 安全网关 Keys",
       "allowAllKeysTooltip": "When enabled, every API key can access this MCP server.",
       "allowAllKeysDesc": "Enable if this server should be \"public\" to all keys.",
       "internalNetworkOnlyLabel": "Internal network only",
       "internalNetworkOnlyTooltip": "When on, only requests from within your internal network are accepted. Turn off to allow external clients (other clusters, ChatGPT, etc). API key authentication is always required regardless of this setting.",
       "internalNetworkOnlyDesc": "Turn on to restrict access to callers within your internal network only.",
       "delegateAuthLabel": "Delegate auth to upstream (PKCE passthrough)",
-      "delegateAuthTooltip": "When on, LiteLLM skips its own API key/SSO check for this server and lets the client complete PKCE directly with the upstream MCP server. Only honored when Auth Type is oauth2. No spend tracking or per-key rate limiting will run on this route.",
-      "delegateAuthDesc": "Bypass LiteLLM auth so clients authenticate directly with the upstream OAuth MCP server.",
+      "delegateAuthTooltip": "When on, 中安云科 AI 安全网关 skips its own API key/SSO check for this server and lets the client complete PKCE directly with the upstream MCP server. Only honored when Auth Type is oauth2. No spend tracking or per-key rate limiting will run on this route.",
+      "delegateAuthDesc": "Bypass 中安云科 AI 安全网关 auth so clients authenticate directly with the upstream OAuth MCP server.",
       "oauthPassthroughLabel": "OAuth pass-through",
       "oauthPassthroughTooltip": "When on, this server is treated as an OAuth pass-through: the gateway proxies the upstream /.well-known/oauth-protected-resource metadata, emits spec-compliant 401 challenges when no bearer is supplied, and propagates upstream 401/403 responses. Only honored when Auth Type is None and 'Authorization' is in Extra Headers.",
       "oauthPassthroughDesc": "Forward upstream OAuth discovery and 401 challenges so clients negotiate OAuth directly with the upstream MCP server.",
       "internalDelegateWarningTitle": "Internal server with upstream OAuth delegation",
-      "internalDelegateWarningDesc": "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream provider and network enforce access controls.",
+      "internalDelegateWarningDesc": "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a 中安云科 AI 安全网关 session. Ensure your upstream provider and network enforce access controls.",
       "accessGroupsLabel": "MCP Access Groups",
       "accessGroupsTooltip": "Specify access groups for this MCP server. Users must be in at least one of these groups to access the server.",
       "accessGroupsPlaceholder": "Select existing groups or type to create new ones",
@@ -4853,7 +4853,7 @@
       "addStaticHeader": "Add Static Header",
       "clearHeaderName": "Clear header name",
       "clearHeaderValue": "Clear header value",
-      "internalDelegateWarningDescription": "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream provider and network enforce access controls."
+      "internalDelegateWarningDescription": "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a 中安云科 AI 安全网关 session. Ensure your upstream provider and network enforce access controls."
     },
     "mcpServerCard": {
       "testConnection": "Test Connection",
@@ -4875,7 +4875,7 @@
       "connectButton": "Connect",
       "logoAltWithName": "{{name}} logo",
       "oauthFlowNotSet": "OAuth flow not set",
-      "oauthFlowNotSetTooltip": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend.",
+      "oauthFlowNotSetTooltip": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so 中安云科 AI 安全网关 authenticates it as you intend.",
       "missingUserFields": "{{count}} user fields missing",
       "stdioDisabled": "stdio disabled",
       "userFieldsMissing_one": "{{count}} user field missing",
@@ -4915,7 +4915,7 @@
       "requiredFieldCount_one": "{{count}} required field",
       "requiredFieldCount_other": "{{count}} required fields",
       "noRulesSet": "no rules set",
-      "submissionRulesDesc": "Select which fields must be filled in before a submission is considered compliant. LiteLLM will show ✓ / ✗ for each rule on every submission card below.",
+      "submissionRulesDesc": "Select which fields must be filled in before a submission is considered compliant. The AI gateway will show ✓ / ✗ for each rule on every submission card below.",
       "saveRulesButton": "Save Rules",
       "transportLabel": "Transport:",
       "submittedByLabel": "Submitted by:",
@@ -5162,7 +5162,7 @@
       "awsSessionTokenTooltip": "Optional. Only needed for temporary STS credentials.",
       "awsSessionTokenPlaceholder": "Enter session token (optional)",
       "awsRoleArnLabel": "AWS Role ARN",
-      "awsRoleArnTooltip": "Optional. IAM role ARN to assume via STS before signing. If set, LiteLLM calls sts:AssumeRole to get temporary credentials. Uses ambient credentials (IAM role, env vars) as the source identity unless explicit keys are also provided.",
+      "awsRoleArnTooltip": "Optional. IAM role ARN to assume via STS before signing. If set, 中安云科 AI 安全网关 calls sts:AssumeRole to get temporary credentials. Uses ambient credentials (IAM role, env vars) as the source identity unless explicit keys are also provided.",
       "awsRoleArnPlaceholder": "arn:aws:iam::123456789012:role/MyRole (optional)",
       "awsSessionNameLabel": "AWS Session Name",
       "awsSessionNameTooltip": "Optional. Session name for the AssumeRole call — appears in CloudTrail logs. Auto-generated if omitted.",
@@ -5175,9 +5175,9 @@
     },
     "mcpConnect": {
       "pageTitle": "Connect to your MCP client",
-      "pageDesc": "Use tools directly from any MCP client with LiteLLM MCP. Enable your AI assistant to perform real-world tasks through a simple, secure connection.",
+      "pageDesc": "Use tools directly from any MCP client with 中安云科 AI 安全网关 MCP. Enable your AI assistant to perform real-world tasks through a simple, secure connection.",
       "tabOpenAI": "OpenAI API",
-      "tabLiteLLMProxy": "LiteLLM Proxy",
+      "tabLiteLLMProxy": "AI 安全网关",
       "tabCursor": "Cursor",
       "tabStreamableHttp": "Streamable HTTP",
       "implementationExample": "Implementation Example",
@@ -5190,24 +5190,24 @@
       "option2Label": "Option 2:",
       "option2Desc": "Get a group of MCPs:",
       "mixBothText": "You can also mix both:",
-      "litellmProxyApiIntegration": "LiteLLM Proxy API Integration",
-      "litellmProxyDesc": "Connect to LiteLLM Proxy Responses API for seamless tool integration with multiple model providers",
+      "litellmProxyApiIntegration": "AI 安全网关 API Integration",
+      "litellmProxyDesc": "Connect to AI 安全网关 Responses API for seamless tool integration with multiple model providers",
       "virtualKeySetup": "Virtual Key Setup",
-      "virtualKeySetupDesc": "Configure your LiteLLM Proxy Virtual Key for authentication",
-      "getVirtualKeyText": "Get your Virtual Key from your LiteLLM Proxy dashboard or contact your administrator",
+      "virtualKeySetupDesc": "Configure your AI 安全网关 Virtual Key for authentication",
+      "getVirtualKeyText": "Get your Virtual Key from your AI 安全网关 dashboard or contact your administrator",
       "environmentVariable": "Environment Variable",
       "mcpServerInformation": "MCP Server Information",
-      "mcpServerInformationDesc": "Connection details for your LiteLLM MCP server",
+      "mcpServerInformationDesc": "Connection details for your 中安云科 AI 安全网关 MCP server",
       "serverUrl": "Server URL",
-      "litellmImplementationDesc": "Complete cURL example for using the LiteLLM Proxy Responses API",
+      "litellmImplementationDesc": "Complete cURL example for using the AI 安全网关 Responses API",
       "openaiResponsesApiIntegration": "OpenAI Responses API Integration",
-      "openaiDesc": "Connect OpenAI Responses API to your LiteLLM MCP server for seamless tool integration",
+      "openaiDesc": "Connect OpenAI Responses API to your 中安云科 AI 安全网关 MCP server for seamless tool integration",
       "apiKeySetup": "API Key Setup",
       "apiKeySetupDesc": "Configure your OpenAI API key for authentication",
       "getApiKeyText": "Get your API key from the",
       "openaiImplementationDesc": "Complete cURL example for using the Responses API",
       "cursorIdeIntegration": "Cursor IDE Integration",
-      "cursorDesc": "Use tools directly from Cursor IDE with LiteLLM MCP. Enable your AI assistant to perform real-world tasks without leaving your coding environment.",
+      "cursorDesc": "Use tools directly from Cursor IDE with 中安云科 AI 安全网关 MCP. Enable your AI assistant to perform real-world tasks without leaving your coding environment.",
       "setupInstructions": "Setup Instructions",
       "step1Title": "Open Cursor Settings",
       "step1Desc": "Use the keyboard shortcut",
@@ -5218,7 +5218,7 @@
       "step3Desc": "Copy the JSON configuration below and paste it into Cursor, then save with",
       "cursorConfigDesc": "Cursor MCP configuration",
       "streamableHttpTransport": "Streamable HTTP Transport",
-      "streamableHttpDesc": "Connect to LiteLLM MCP using HTTP transport. Compatible with any MCP client that supports HTTP streaming.",
+      "streamableHttpDesc": "Connect to 中安云科 AI 安全网关 MCP using HTTP transport. Compatible with any MCP client that supports HTTP streaming.",
       "universalMcpConnection": "Universal MCP Connection",
       "universalMcpConnectionDesc": "Use this URL with any MCP client that supports HTTP transport",
       "transportMethodText": "Each MCP client supports different transports. Refer to your client documentation to determine the appropriate transport method.",
@@ -5427,7 +5427,7 @@
       "awsSessionTokenLabel": "AWS Session Token",
       "awsSessionTokenTooltip": "Optional. Only needed for temporary STS credentials.",
       "awsRoleArnLabel": "AWS Role ARN",
-      "awsRoleArnTooltip": "Optional. IAM role ARN to assume via STS before signing. If set, LiteLLM calls sts:AssumeRole to get temporary credentials.",
+      "awsRoleArnTooltip": "Optional. IAM role ARN to assume via STS before signing. If set, 中安云科 AI 安全网关 calls sts:AssumeRole to get temporary credentials.",
       "awsSessionNameLabel": "AWS Session Name",
       "awsSessionNameTooltip": "Optional. Session name for the AssumeRole call — appears in CloudTrail logs. Auto-generated if omitted.",
       "leaveBlankPlaceholder": "Leave blank to keep existing",
@@ -5435,7 +5435,7 @@
       "displayNameInvalid": "Only letters, digits, underscores, and hyphens are allowed (no spaces).",
       "serverUrlInvalid": "Please enter a valid URL (e.g., http://service-name.domain:1234/path or https://example.com)",
       "serverNameInvalid": "Cannot contain '-' (hyphen) or spaces. Please use '_' (underscore) instead.",
-      "browserTokenHeldToast": "Token held for this browser session. Tools can now be loaded and configured; the token is not saved to LiteLLM.",
+      "browserTokenHeldToast": "Token held for this browser session. Tools can now be loaded and configured; the token is not saved to 中安云科 AI 安全网关.",
       "incompleteToolPreview": "Complete the URL, authentication, and header settings to load tools.",
       "authorizeUpstreamHint": "Authorize with the upstream (browser-only, in the Authentication section) to load and configure this server's tools.",
       "oauthTokenPersistFailedNoMessage": "MCP Server updated, but failed to persist OAuth token",
@@ -5443,16 +5443,16 @@
       "serverUrlPlaceholder": "https://your-mcp-server.com",
       "specUrlPlaceholder": "https://petstore3.swagger.io/api/v3/openapi.json",
       "maxConcurrentRequestsLabel": "Max Concurrent Requests (optional)",
-      "maxConcurrentRequestsTooltip": "Maximum number of tool calls LiteLLM will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit.",
+      "maxConcurrentRequestsTooltip": "Maximum number of tool calls The AI gateway will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit.",
       "maxConcurrentRequestsPlaceholder": "e.g. 10",
       "authRequired": "Authentication is required",
       "noOAuthFlowSet": "This server has no OAuth flow set",
-      "noOAuthFlowSetDesc": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively.",
+      "noOAuthFlowSetDesc": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so 中安云科 AI 安全网关 authenticates it the way you intend, then save. Until it is set, 中安云科 AI 安全网关 falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively.",
       "authOauthTokenExchange": "OAuth Token Exchange (OBO)",
       "authIdJag": "ID-JAG (Okta Cross App Access)",
-      "authTruePassthrough": "True Passthrough (no LiteLLM auth)",
+      "authTruePassthrough": "True Passthrough (no 中安云科 AI 安全网关 auth)",
       "authOauthDelegate": "OAuth Delegate (client-supplied upstream token)",
-      "noOAuthFlowDescription": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively."
+      "noOAuthFlowDescription": "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so 中安云科 AI 安全网关 authenticates it the way you intend, then save. Until it is set, 中安云科 AI 安全网关 falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively."
     },
     "mcpServerView": {
       "backToAllServers": "Back to All Servers",
@@ -5556,14 +5556,14 @@
     },
     "idJagFormFields": {
       "orgTokenEndpointLabel": "Org Token Endpoint (leg 1)",
-      "orgTokenEndpointTooltip": "Your IdP org authorization server's token endpoint. LiteLLM exchanges the user's identity assertion here for an ID-JAG assertion (RFC 8693 with requested_token_type=urn:ietf:params:oauth:token-type:id-jag).",
+      "orgTokenEndpointTooltip": "Your IdP org authorization server's token endpoint. 中安云科 AI 安全网关 exchanges the user's identity assertion here for an ID-JAG assertion (RFC 8693 with requested_token_type=urn:ietf:params:oauth:token-type:id-jag).",
       "orgTokenEndpointRequired": "The org token endpoint is required for ID-JAG",
       "resourceTokenEndpointLabel": "Resource Token Endpoint (leg 2)",
-      "resourceTokenEndpointTooltip": "The upstream resource authorization server's token endpoint. LiteLLM posts the ID-JAG assertion here as an RFC 7523 jwt-bearer grant to get the access token the MCP server accepts.",
+      "resourceTokenEndpointTooltip": "The upstream resource authorization server's token endpoint. 中安云科 AI 安全网关 posts the ID-JAG assertion here as an RFC 7523 jwt-bearer grant to get the access token the MCP server accepts.",
       "resourceTokenEndpointRequired": "The resource token endpoint is required for ID-JAG",
-      "clientIdTooltip": "OAuth2 client ID LiteLLM authenticates as on both legs.",
+      "clientIdTooltip": "OAuth2 client ID 中安云科 AI 安全网关 authenticates as on both legs.",
       "clientIdRequired": "Client ID is required for ID-JAG",
-      "clientSecretTooltip": "Authenticates LiteLLM as the OAuth client via client_secret_post. Leave blank when using a private key instead; a private key takes precedence over this secret.",
+      "clientSecretTooltip": "Authenticates 中安云科 AI 安全网关 as the OAuth client via client_secret_post. Leave blank when using a private key instead; a private key takes precedence over this secret.",
       "secretOrPrivateKeyRequired": "Provide either a client secret or a client private key",
       "clientPrivateKeyLabel": "Client Private Key (PEM)",
       "clientPrivateKeyTooltip": "PEM private key signing the RFC 7523 private_key_jwt client assertion. Okta Cross App Access normally requires this. When set it takes precedence over the client secret.",
@@ -5599,10 +5599,10 @@
       "clientSecretPlaceholderPublic": "Leave blank for public clients / PKCE",
       "clientIdExtraKeep": "Set this to make everyone authorize through a specific app; required for upstreams without dynamic client registration (e.g. a pre-registered Slack app).",
       "clientIdExtraSwitch": "Switching the auth type discards the previously saved app; enter a client ID here or leave blank to use dynamic client registration.",
-      "description": "Callers bring their own upstream token for this auth type, so LiteLLM never stores tokens. To preview tools and configure the tool allowlist, authorize against the upstream here: the token stays in this browser session only and is never saved to LiteLLM. An OAuth app configured below IS saved with the server, so internal users who authorize from the Tools page go through it.",
+      "description": "Callers bring their own upstream token for this auth type, so 中安云科 AI 安全网关 never stores tokens. To preview tools and configure the tool allowlist, authorize against the upstream here: the token stays in this browser session only and is never saved to 中安云科 AI 安全网关. An OAuth app configured below IS saved with the server, so internal users who authorize from the Tools page go through it.",
       "appMayNotMatchUpstream": "You changed the upstream URL or endpoints; the OAuth app entered here was registered for the previous upstream and may not be valid. Update the client ID, or clear it to use dynamic client registration.",
       "removeStoredAppLabel": "Remove the saved OAuth app on save (the server goes back to dynamic client registration)",
-      "tokenHeld": "Token held for this browser session. Tools can now be previewed and configured; the token was not saved to LiteLLM."
+      "tokenHeld": "Token held for this browser session. Tools can now be previewed and configured; the token was not saved to 中安云科 AI 安全网关."
     },
     "tokenEndpointAuthMethodField": {
       "label": "Token Endpoint Auth Method (optional)",
@@ -5632,12 +5632,12 @@
       "profileEntraObo": "Microsoft Entra OBO"
     },
     "truePassthroughWarning": {
-      "title": "True Passthrough disables LiteLLM authentication for this server",
-      "description": "Anyone who can reach the gateway can call this server without a LiteLLM key. The caller's Authorization header is forwarded to the upstream verbatim, per-key and per-team rate limits and spend tracking do not apply, and the upstream is fully responsible for authenticating callers. Choose OAuth Delegate instead if callers should still authenticate to LiteLLM."
+      "title": "True Passthrough disables 中安云科 AI 安全网关 authentication for this server",
+      "description": "Anyone who can reach the gateway can call this server without a 中安云科 AI 安全网关 key. The caller's Authorization header is forwarded to the upstream verbatim, per-key and per-team rate limits and spend tracking do not apply, and the upstream is fully responsible for authenticating callers. Choose OAuth Delegate instead if callers should still authenticate to 中安云科 AI 安全网关."
     },
     "upstreamTokenHeaderField": {
       "label": "Token Header (optional)",
-      "tooltip": "Which upstream header carries the token LiteLLM resolves for this server. Leave blank to send it as 'Authorization: Bearer <token>', which is the default and what most servers expect. Set a header name when the upstream expects it elsewhere, for example an API gateway that terminates its own credential on 'esb-oauth' while a separate Authorization from Static Headers passes through to the server behind it.",
+      "tooltip": "Which upstream header carries the token 中安云科 AI 安全网关 resolves for this server. Leave blank to send it as 'Authorization: Bearer <token>', which is the default and what most servers expect. Set a header name when the upstream expects it elsewhere, for example an API gateway that terminates its own credential on 'esb-oauth' while a separate Authorization from Static Headers passes through to the server behind it.",
       "placeholder": "Authorization"
     },
     "mcpFieldRules": {
@@ -5969,7 +5969,7 @@
       "codeInterpreterActive": "Code Interpreter Active",
       "disableButton": "Disable",
       "samplePrompt1": "Generate sample sales data CSV and create a chart",
-      "samplePrompt2": "Create a PNG bar chart comparing AI gateway providers including LiteLLM",
+      "samplePrompt2": "Create a PNG bar chart comparing AI gateway providers including 中安云科 AI 安全网关",
       "samplePrompt3": "Generate a CSV of LLM pricing data and visualize it as a line chart",
       "suggestPromptA2A1": "What can you help me with?",
       "suggestPromptA2A2": "Tell me about yourself",
@@ -6090,7 +6090,7 @@
       "total": "Total: {{count}}",
       "toolName": "Tool: {{name}}",
       "responseCache": "Response Cache",
-      "responseCacheTooltip": "This response was replayed from LiteLLM's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
+      "responseCacheTooltip": "This response was replayed from the AI gateway's response cache. The request never reached the provider, so it did not read from or write to the provider's own prompt cache.",
       "hit": "Hit",
       "cacheRead": "Cache Read",
       "cacheWrite": "Cache Write",
@@ -6114,15 +6114,15 @@
     },
     "sessionManagement": {
       "title": "Session Management",
-      "toggleTooltip": "Choose between LiteLLM API session management (using previous_response_id) or UI-based session management (using chat history)",
+      "toggleTooltip": "Choose between 中安云科 AI 安全网关 API session management (using previous_response_id) or UI-based session management (using chat history)",
       "copiedToClipboard": "Response ID copied to clipboard!",
       "apiSessionReady": "API Session: Ready",
       "uiSessionReady": "UI Session: Ready",
       "responseIdPrefix": "Response ID",
       "uiSessionPrefix": "UI Session",
-      "apiSessionReadyDesc": "LiteLLM will manage session using previous_response_id",
+      "apiSessionReadyDesc": "The AI gateway will manage session using previous_response_id",
       "uiSessionReadyDesc": "UI will manage session using chat history",
-      "apiSessionActiveDesc": "LiteLLM API session active - context maintained server-side",
+      "apiSessionActiveDesc": "中安云科 AI 安全网关 API session active - context maintained server-side",
       "uiSessionActiveDesc": "UI session active - context maintained client-side",
       "copyTooltipTitle": "Copy response ID to continue session:",
       "aboutTitle": "About session management",
@@ -6295,7 +6295,7 @@
     },
     "hashicorpVaultEmptyPlaceholder": {
       "noConfigTitle": "No Vault Configuration Found",
-      "noConfigDesc": "Configure Hashicorp Vault to securely manage provider API keys and secrets for your LiteLLM deployment.",
+      "noConfigDesc": "Configure Hashicorp Vault to securely manage provider API keys and secrets for your 中安云科 AI 安全网关 deployment.",
       "configureButton": "Configure Vault"
     },
     "loggingSettings": {
@@ -6711,7 +6711,7 @@
     },
     "cyberArkEmptyPlaceholder": {
       "noConfigTitle": "No CyberArk Configuration Found",
-      "noConfigDesc": "Configure CyberArk Conjur to securely manage provider API keys and secrets for your LiteLLM deployment.",
+      "noConfigDesc": "Configure CyberArk Conjur to securely manage provider API keys and secrets for your 中安云科 AI 安全网关 deployment.",
       "configureButton": "Configure CyberArk"
     }
   },
@@ -7157,7 +7157,7 @@
       "scopeTags": "<strong>Tags</strong> - Matches tags from key/team <code>metadata.tags</code> or tags passed dynamically in the request body (<code>metadata.tags</code>). Use this to enforce policies across groups, e.g. \"all keys tagged <code>healthcare</code> get HIPAA guardrails.\" Supports wildcards (<code>prod-*</code>).",
       "learnMoreAttachments": "Learn more about attachments →",
       "enterpriseFeatureTitle": "Enterprise Feature Notice",
-      "enterpriseFeatureDesc": "Parts of policy attachments will be on LiteLLM Enterprise in subsequent releases.",
+      "enterpriseFeatureDesc": "Parts of policy attachments will be on 企业版 in subsequent releases.",
       "addNewAttachment": "+ Add New Attachment",
       "deletePolicyTitle": "Delete Policy",
       "deletePolicyMessage": "Are you sure you want to delete policy: {{name}}? This action cannot be undone.",
@@ -7385,7 +7385,7 @@
       "providerLoadFailed": "Failed to load providers",
       "providerSelectPlaceholder": "Select a provider",
       "modeLabel": "Mode",
-      "modeHelp": "<strong>Optional</strong> - LiteLLM endpoint to use when health checking this model <learnMoreLink>Learn more</learnMoreLink>",
+      "modeHelp": "<strong>Optional</strong> - 中安云科 AI 安全网关 endpoint to use when health checking this model <learnMoreLink>Learn more</learnMoreLink>",
       "credentialsSectionDesc": "Either select existing credentials OR enter new provider credentials below",
       "existingCredentialsLabel": "Existing Credentials",
       "existingCredentialsPlaceholder": "Select or search for existing credentials",
@@ -7613,7 +7613,7 @@
       "validateNumberError": "Please enter a valid positive number",
       "useInPassThroughLabel": "Use in pass through routes",
       "useInPassThroughTooltip": "Allow using these credentials in pass through routes. <learnMoreLink>Learn more</learnMoreLink>",
-      "litellmParamsLabel": "LiteLLM Params",
+      "litellmParamsLabel": "网关参数",
       "litellmParamsTooltip": "Optional litellm params used for making a litellm.completion() call.",
       "litellmParamsHelpText": "Pass JSON of litellm supported params",
       "litellmParamsHelpLink": "litellm.completion() call",
@@ -7637,7 +7637,7 @@
       "helpText": "Providers like Anthropic, Bedrock API require users to specify where to inject cache control checkpoints, litellm can automatically add them for you as a cost saving feature.",
       "typeLabel": "Type",
       "roleLabel": "Role",
-      "roleTooltip": "LiteLLM will mark all messages of this role as cacheable",
+      "roleTooltip": "The AI gateway will mark all messages of this role as cacheable",
       "rolePlaceholder": "Select a role",
       "roleUser": "User",
       "roleSystem": "System",
@@ -7652,32 +7652,32 @@
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "Public Model Name",
-      "publicModelNameTooltip": "The name you specify in your API calls to LiteLLM Proxy",
-      "tooltipExample": "<strong>Example:</strong> If you name your public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the LiteLLM model",
-      "tooltipUsage": "Usage: You make an API call to the LiteLLM proxy with",
+      "publicModelNameTooltip": "The name you specify in your API calls to AI 安全网关",
+      "tooltipExample": "<strong>Example:</strong> If you name your public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the 中安云科 AI 安全网关 model",
+      "tooltipUsage": "Usage: You make an API call to the AI 安全网关 with",
       "tooltipUsageCode": "model = \"example-name\"",
-      "tooltipResult": "Result: LiteLLM sends",
+      "tooltipResult": "Result: 中安云科 AI 安全网关 sends",
       "tooltipResultCode": "qwen-plus-latest",
       "tooltipResultSuffix": "to the provider",
-      "litellmModelNameColumn": "LiteLLM Model Name",
-      "litellmModelNameTooltip": "The model name LiteLLM will send to the LLM API",
+      "litellmModelNameColumn": "网关模型名称",
+      "litellmModelNameTooltip": "The model name The AI gateway will send to the LLM API",
       "modelMappingsLabel": "Model Mappings",
-      "modelMappingsTooltip": "Map public model names to LiteLLM model names for load balancing",
+      "modelMappingsTooltip": "Map public model names to 网关模型名称s for load balancing",
       "mappingRequired": "At least one model mapping is required",
       "publicNameRequired": "All model mappings must have valid public names",
-      "tooltipUsageWithLabel": "<strongLabel>Usage:</strongLabel> You make an API call to the LiteLLM proxy with",
-      "tooltipResultWithLabel": "<strongLabel>Result:</strongLabel> LiteLLM sends"
+      "tooltipUsageWithLabel": "<strongLabel>Usage:</strongLabel> You make an API call to the AI 安全网关 with",
+      "tooltipResultWithLabel": "<strongLabel>Result:</strongLabel> 中安云科 AI 安全网关 sends"
     },
     "litellmModelName": {
-      "fieldLabel": "LiteLLM Model Name(s)",
-      "fieldTooltip": "The model name LiteLLM will send to the LLM API",
+      "fieldLabel": "网关模型名称",
+      "fieldTooltip": "The model name The AI gateway will send to the LLM API",
       "deploymentNameRequired": "Please enter a deployment name.",
       "modelRequired": "Please enter at least one model.",
       "selectModelsPlaceholder": "Select models",
       "customModelOption": "Custom Model Name (Enter below)",
       "allModelsWildcard": "All {{provider}} Models (Wildcard)",
-      "azureDeploymentDescription": "Your deployment name will be saved as the public model name, and LiteLLM will use 'azure/deployment-name' internally",
-      "modelDescription": "The model name LiteLLM will send to the LLM API",
+      "azureDeploymentDescription": "Your deployment name will be saved as the public model name, and The AI gateway will use 'azure/deployment-name' internally",
+      "modelDescription": "The model name The AI gateway will send to the LLM API",
       "enterAzureDeploymentPlaceholder": "Enter Azure deployment name",
       "enterCustomModelPlaceholder": "Enter custom model name",
       "customModelRequired": "Please enter a custom model name.",
@@ -8164,7 +8164,7 @@
       "dailyMargin": "Daily Margin",
       "monthlyMargin": "Monthly Margin",
       "modelBreakdown": "Model Breakdown",
-      "generatedOn": "Generated by LiteLLM Pricing Calculator on {{date}}",
+      "generatedOn": "Generated by 中安云科 AI 安全网关 Pricing Calculator on {{date}}",
       "inputTokensPerRequest": "Input Tokens per Request:",
       "outputTokensPerRequest": "Output Tokens per Request:",
       "requestsPerDay": "Requests per Day:",
@@ -8582,13 +8582,13 @@
       "databaseTooltip": "The MongoDB database holding the collection you want to search",
       "collectionLabel": "Collection",
       "collectionTooltip": "The collection your MongoDB Vector Search index was built on",
-      "embeddingModelTooltip": "The embedding model on this proxy that created the vectors already stored in your collection. LiteLLM embeds every search query with it, so it must be the same model. A different model of the same size will not error, it will just return wrong results. Add it under Models first if it is not listed",
+      "embeddingModelTooltip": "The embedding model on this proxy that created the vectors already stored in your collection. 中安云科 AI 安全网关 embeds every search query with it, so it must be the same model. A different model of the same size will not error, it will just return wrong results. Add it under Models first if it is not listed",
       "embeddingFieldLabel": "Vector Field Name",
       "embeddingFieldTooltip": "The field in each document that holds its embedding. It must match the path your MongoDB Vector Search index was created on (default: embedding)",
       "textFieldLabel": "Text Field",
-      "textFieldTooltip": "The field in each document that holds its readable text. LiteLLM returns this text in search results, and it accepts a dotted path such as metadata.body (default: text)",
+      "textFieldTooltip": "The field in each document that holds its readable text. 中安云科 AI 安全网关 returns this text in search results, and it accepts a dotted path such as metadata.body (default: text)",
       "numCandidatesLabel": "Candidates Considered",
-      "numCandidatesTooltip": "How many nearest neighbours MongoDB examines before returning the top results. Higher is more accurate and slower. Leave blank to let LiteLLM scale it with the requested result count"
+      "numCandidatesTooltip": "How many nearest neighbours MongoDB examines before returning the top results. Higher is more accurate and slower. Leave blank to let 中安云科 AI 安全网关 scale it with the requested result count"
     },
     "valkey": {
       "hostLabel": "Valkey Host",
@@ -8599,11 +8599,11 @@
       "passwordTooltip": "Password used to log in to your Valkey server. Leave blank if it has no password",
       "sslLabel": "Use TLS",
       "sslTooltip": "Set to true if your Valkey server requires an encrypted (TLS) connection, for example AWS ElastiCache with in-transit encryption turned on",
-      "embeddingModelTooltip": "The embedding model on this proxy that was used to create the embeddings already stored in your Valkey index. LiteLLM uses it to embed each search query, so it must be the same model or results will be wrong. Add it under Models first if it is not listed",
+      "embeddingModelTooltip": "The embedding model on this proxy that was used to create the embeddings already stored in your Valkey index. 中安云科 AI 安全网关 uses it to embed each search query, so it must be the same model or results will be wrong. Add it under Models first if it is not listed",
       "textFieldLabel": "Text Field",
-      "textFieldTooltip": "The field in each stored document that holds its readable text. LiteLLM returns this text in search results. Must match how your documents were stored (default: text)",
+      "textFieldTooltip": "The field in each stored document that holds its readable text. 中安云科 AI 安全网关 returns this text in search results. Must match how your documents were stored (default: text)",
       "embeddingFieldLabel": "Vector Field Name",
-      "embeddingFieldTooltip": "The field in each stored document that holds its embedding. LiteLLM searches against this field, so it must match the field your index was created on (default: embedding)"
+      "embeddingFieldTooltip": "The field in each stored document that holds its embedding. 中安云科 AI 安全网关 searches against this field, so it must match the field your index was created on (default: embedding)"
     }
   },
   "vectorStoreManagement": {
@@ -8683,7 +8683,7 @@
       "providerTooltip": "Select the provider for this vector store",
       "providerRequired": "Please select a provider",
       "pgVectorAlertTitle": "PG Vector Setup Required",
-      "pgVectorAlertDescription": "LiteLLM provides a server to connect to PG Vector. To use this provider:",
+      "pgVectorAlertDescription": "中安云科 AI 安全网关 provides a server to connect to PG Vector. To use this provider:",
       "pgVectorStep1": "Deploy the litellm-pgvector server from:",
       "pgVectorStep2": "Configure your PostgreSQL database with pgvector extension",
       "pgVectorStep3": "Start the server and note the API base URL and API key",
@@ -8701,18 +8701,18 @@
       "vertexSearchStep1Link": "Create a Vertex AI Search data store",
       "vertexSearchStep2": "Pick a supported location: global, us, or eu",
       "vertexSearchStep3": "For most data store types (Cloud Storage, BigQuery, Media): copy the data store ID and enter it in the Vector Store ID field below.",
-      "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the Engine ID and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
+      "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the Engine ID and enter it in the Engine ID field. The Vector Store ID is still required as the 中安云科 AI 安全网关-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
       "vectorStoreIdLabel": "Vector Store ID",
       "vectorStoreIdTooltip": "Enter the vector store ID from your api provider",
       "vectorStoreIdRequired": "Please input the vector store ID from your api provider",
       "vectorStoreIdPlaceholderVertexRag": "6917529027641081856 (Get corpus ID from Vertex AI console)",
       "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890 (Get data store ID from Vertex AI Search console)",
-      "vectorStoreIdPlaceholderVertexSearchEngine": "Any identifier you'll use to reference this in LiteLLM",
+      "vectorStoreIdPlaceholderVertexSearchEngine": "Any identifier you'll use to reference this in 中安云科 AI 安全网关",
       "vectorStoreIdPlaceholderDefault": "Enter vector store ID from your provider",
       "fieldSelectRequired": "Please select the {{label}}",
       "fieldInputRequired": "Please input the {{label}}",
       "vectorStoreNameLabel": "Vector Store Name",
-      "vectorStoreNameTooltip": "Custom name you want to give to the vector store, this name will be rendered on the LiteLLM UI",
+      "vectorStoreNameTooltip": "Custom name you want to give to the vector store, this name will be rendered on the 中安云科 AI 安全网关 UI",
       "existingCredentialsLabel": "Existing Credentials",
       "existingCredentialsTooltip": "Optionally select API provider credentials for this vector store eg. Bedrock API KEY",
       "existingCredentialsPlaceholder": "Select or search for existing credentials",
@@ -8723,12 +8723,12 @@
       "createFailed": "Error creating vector store: {{error}}",
       "metadataPlaceholder": "{\"key\": \"value\"}",
       "pgVectorStep1Deploy": "Deploy the litellm-pgvector server from:",
-      "valkeyIntro": "LiteLLM searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
+      "valkeyIntro": "中安云科 AI 安全网关 searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
       "valkeyRequirement1": "Your Valkey server has vector search enabled (the valkey-search module, included in the valkey-bundle image and in AWS ElastiCache / MemoryDB for Valkey)",
       "valkeyRequirement2": "You have already created a search index and loaded your documents and their embeddings into it. Enter that index name as the Vector Store ID",
       "valkeyRequirement3": "You know which embedding model created those stored embeddings. That model must be added to this proxy under Models so you can pick it below. Using a different model returns wrong results",
       "valkeyRequirement4": "You know the field names your documents use for their text and their embedding. If they are not \"text\" and \"embedding\", set them below",
-      "valkeyQueryNote": "When a query comes in, LiteLLM converts it to an embedding with the model below and returns the closest matching documents from your index.",
+      "valkeyQueryNote": "When a query comes in, 中安云科 AI 安全网关 converts it to an embedding with the model below and returns the closest matching documents from your index.",
       "vertexRagRenameNote": "Note: Google Cloud has renamed this to \"RAG Engine\" in its console — the steps below still apply.",
       "vertexRagCorpusStep": "Set up your Vertex AI RAG Engine corpus following the guide:",
       "vertexRagCorpusIdStep": "Note the corpus ID from the Vertex AI console (now labeled \"RAG Engine\" in Google Cloud)",
@@ -8736,7 +8736,7 @@
       "vertexSearchEnableStep": "Enable the Discovery Engine API on your Google Cloud project and create a data store following the guide:",
       "vertexSearchDataStoreStep": "For most data store types (Cloud Storage, BigQuery, Media): copy the data store ID and enter it in the Vector Store ID field below.",
       "vertexSearchEngineIdStepBefore": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the",
-      "vertexSearchEngineIdStepAfter": "and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
+      "vertexSearchEngineIdStepAfter": "and enter it in the Engine ID field. The Vector Store ID is still required as the 中安云科 AI 安全网关-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
       "engineIdLabel": "Engine ID"
     },
     "vectorStoreTable": {
@@ -8931,7 +8931,7 @@
       "iconUrlLabel": "Icon URL",
       "documentationUrlLabel": "Documentation URL",
       "supportsAuthCardLabel": "Supports Authenticated Extended Card",
-      "litellmTitle": "LiteLLM Parameters",
+      "litellmTitle": "中安云科 AI 安全网关 Parameters",
       "modelOptionalLabel": "Model (Optional)",
       "makePublicLabel": "Make Public",
       "costTitle": "Cost Configuration",
@@ -8953,8 +8953,8 @@
       "skillTagsPlaceholder": "Type a tag and press Enter",
       "skillExamplesLabel": "Examples",
       "skillExamplesPlaceholder": "Type an example and press Enter",
-      "protocolVersionTooltip": "The A2A protocol version LiteLLM serves to clients for this agent. LiteLLM converts the upstream agent's responses to this version, so clients always see the version you pick here regardless of the original agent's version.",
-      "protocolVersionHelpText": "LiteLLM serves this version to clients and converts the upstream agent's responses to match it, regardless of the original agent's version."
+      "protocolVersionTooltip": "The A2A protocol version 中安云科 AI 安全网关 serves to clients for this agent. 中安云科 AI 安全网关 converts the upstream agent's responses to this version, so clients always see the version you pick here regardless of the original agent's version.",
+      "protocolVersionHelpText": "中安云科 AI 安全网关 serves this version to clients and converts the upstream agent's responses to match it, regardless of the original agent's version."
     },
     "agentFormFields": {
       "agentNameLabel": "Agent Name",
@@ -8990,7 +8990,7 @@
       "enterBaseUrl": "Enter the agent's base URL first",
       "failedToDiscover": "Failed to discover agent card",
       "discoverFromUrl": "Discover from agent URL",
-      "discoverTooltip": "LiteLLM will fetch /.well-known/agent-card.json from this URL and let you pick which skills and capabilities to expose through the proxy.",
+      "discoverTooltip": "The AI gateway will fetch /.well-known/agent-card.json from this URL and let you pick which skills and capabilities to expose through the proxy.",
       "usingConnectionDetails": "Using the connection details you entered above. We'll fetch:",
       "fillFieldsAbove": "Fill in the fields above first",
       "rediscover": "Re-discover",
@@ -9006,7 +9006,7 @@
       "noSkills": "Upstream card has no skills",
       "more": "more",
       "capabilitiesTitle": "Capabilities",
-      "capabilitiesTooltip": "Only capabilities LiteLLM can faithfully proxy today are listed. Others (push notifications, extensions) are coming soon.",
+      "capabilitiesTooltip": "Only capabilities 中安云科 AI 安全网关 can faithfully proxy today are listed. Others (push notifications, extensions) are coming soon.",
       "notAdvertisedUpstream": "not advertised upstream",
       "dismissError": "Dismiss error"
     },
@@ -9094,7 +9094,7 @@
     "agentKillSwitch": {
       "dangerZone": "Danger Zone",
       "killSwitch": "Kill switch",
-      "description": "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from LiteLLM",
+      "description": "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from 中安云科 AI 安全网关",
       "notConfigured": "Not configured. Add a kill switch webhook under Settings to enable this action",
       "fireButton": "Fire Kill Switch",
       "firing": "Firing...",
@@ -9103,7 +9103,7 @@
       "lastResult": "Last result: HTTP {{code}}",
       "confirmTitle": "Fire kill switch for {{name}}?",
       "outageWarningTitle": "This can cause an outage",
-      "outageWarningDescription": "LiteLLM will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside LiteLLM's control and cannot be reverted here",
+      "outageWarningDescription": "The AI gateway will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside the AI gateway's control and cannot be reverted here",
       "typeToConfirm": "Type {{name}} to confirm:",
       "confirmAgentNameAria": "Confirm agent name"
     },
@@ -9199,7 +9199,7 @@
     "teamInfo": {
       "failedToLoadTeam": "Failed to load team information",
       "memberAddedSuccess": "Team member added successfully",
-      "assignAdminsEnterprise": "Assigning admins is an enterprise-only feature. Please upgrade your LiteLLM plan to enable this.",
+      "assignAdminsEnterprise": "Assigning admins is an enterprise-only feature. Please upgrade your 中安云科 AI 安全网关 plan to enable this.",
       "failedToAddMember": "Failed to add team member",
       "memberUpdatedSuccess": "Team member updated successfully",
       "failedToUpdateMember": "Failed to update team member",
@@ -9941,7 +9941,7 @@
       "providerLabel": "Provider",
       "providerBedrock": "AWS Bedrock Guardrails",
       "providerGoogle": "Google Cloud AI Safety",
-      "providerLiteLLM": "LiteLLM Built-in",
+      "providerLiteLLM": "中安云科 AI 安全网关内置",
       "providerCustom": "Custom Code",
       "guardrailTypeLabel": "Guardrail Type",
       "typeContentSafety": "Content Safety",
@@ -10016,13 +10016,13 @@
     "guardrailUsageBreakdown": {
       "sectionLabel": "Usage and cost",
       "title": "Usage & Cost",
-      "subtitle": "Billable units the provider reported for this guardrail and what LiteLLM priced them at",
+      "subtitle": "Billable units the provider reported for this guardrail and what 中安云科 AI 安全网关 priced them at",
       "unpricedUnitsColumn": "Unpriced Units",
       "counterColumn": "Counter",
       "unitsColumn": "Units",
       "howThisCostIsCalculated": "How this cost is calculated",
       "costFormula": "priced units × price per unit = cost, per counter",
-      "perUnitPriceNote": "Per-unit prices come from the cost map LiteLLM ships with.",
+      "perUnitPriceNote": "Per-unit prices come from the cost map 中安云科 AI 安全网关 ships with.",
       "howUnitsAddUp": "How usage units add up",
       "unitsFormula": "counter + counter + … = usage units",
       "unitsNote": "Units are the billable counters the provider reported for this guardrail, added up over every call.",
@@ -10311,7 +10311,7 @@
     },
     "cloudZeroEmptyPlaceholder": {
       "title": "No CloudZero Integration Found",
-      "description": "Connect your CloudZero account to start tracking and analyzing your cloud costs directly from LiteLLM.",
+      "description": "Connect your CloudZero account to start tracking and analyzing your cloud costs directly from 中安云科 AI 安全网关.",
       "addButton": "Add CloudZero Integration"
     },
     "cloudZeroIntegrationSettings": {
@@ -10663,7 +10663,7 @@
         "description": "Enable pre-call checks before routing requests"
       },
       "default_litellm_params": {
-        "label": "Default LiteLLM Params",
+        "label": "Default 网关参数",
         "description": "Default parameters for Router.chat.completion.create"
       },
       "set_verbose": {
@@ -10929,7 +10929,7 @@
       "updateSuccess": "Cache settings updated successfully",
       "failedToUpdate": "Failed to update cache settings",
       "title": "Cache Settings",
-      "subtitle": "Configure Redis cache for LiteLLM",
+      "subtitle": "Configure Redis cache for 中安云科 AI 安全网关",
       "connectionSettings": "Connection Settings",
       "clusterConfiguration": "Cluster Configuration",
       "sentinelConfiguration": "Sentinel Configuration",
@@ -10996,7 +10996,7 @@
       "groupNameMaxLength": "Must be {{max}} characters or fewer",
       "groupNamePattern": "Only letters, numbers, dot, underscore, and dash are allowed",
       "groupNameExists": "A group with this name already exists",
-      "groupNameExtra": "Use this name as the model in API calls — LiteLLM routes the request to one of the group's models.",
+      "groupNameExtra": "Use this name as the model in API calls — 中安云科 AI 安全网关 routes the request to one of the group's models.",
       "groupNamePlaceholder": "fast-chat",
       "modelsLabel": "Models",
       "modelsRequired": "Select at least one model",
@@ -11021,7 +11021,7 @@
       "strategyUsageBased": "Usage Based",
       "strategyLatencyBased": "Latency Based",
       "howRoutingWorksTitle": "How routing works for this group",
-      "howRoutingWorksDesc": "Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy.",
+      "howRoutingWorksDesc": "Callers request any model in the group by name; 中安云科 AI 安全网关 picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy.",
       "tabCurl": "cURL",
       "tabPython": "Python (OpenAI SDK)",
       "tabJavascript": "JavaScript (OpenAI SDK)",
@@ -11192,7 +11192,7 @@
       "keyDeletedSuccess": "Key deleted successfully",
       "keySpendResetSuccess": "Key spend reset to ¥0",
       "virtualKey": "Virtual Key",
-      "enterpriseFeatureTooltip": "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+      "enterpriseFeatureTooltip": "This is a 企业版 feature, and requires a valid key to use.",
       "deleteKeyTitle": "Delete Key",
       "deleteKeyAlertMessage": "This action is irreversible and will immediately revoke access for any applications using this key.",
       "deleteKeyMessage": "Are you sure you want to delete this Virtual Key?",
@@ -11447,7 +11447,7 @@
       "searchByEmailHint": "Search by email to find users",
       "selectAgentLabel": "Select Agent",
       "selectAgentPlaceholder": "Select an agent",
-      "agentKeyDescription": "This key will be used by the selected agent to make requests to LiteLLM",
+      "agentKeyDescription": "This key will be used by the selected agent to make requests to 中安云科 AI 安全网关",
       "organizationLabel": "Organization",
       "organizationTooltip": "The organization this key belongs to. Selecting an organization filters the available teams.",
       "teamLabel": "Team",
@@ -11642,7 +11642,7 @@
       "revoked": "Revoked (blocked)",
       "allStatuses": "All statuses",
       "lifetimeSpend": "Lifetime Spend",
-      "lifetimeSpendHint": "Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
+      "lifetimeSpendHint": "Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with 中安云科 AI 安全网关 v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade."
     }
   },
   "editAutoRouter": {
@@ -11865,7 +11865,7 @@
   "pages": {
     "apiReference": {
       "title": "OpenAI Compatible Proxy: API Reference",
-      "description": "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
+      "description": "中安云科 AI 安全网关 is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
       "tabOpenAI": "OpenAI Python SDK",
       "tabLlamaIndex": "LlamaIndex",
       "tabLangchain": "Langchain Py",
@@ -11880,7 +11880,7 @@
       "addAndManageModels": "Add and manage models for the proxy",
       "requestProvider": "Request Provider",
       "missingProviderTitle": "Missing a provider?",
-      "missingProviderDesc": "The LiteLLM engineering team is constantly adding support for new LLM models, providers, endpoints. If you don't see the one you need, let us know and we'll prioritize it.",
+      "missingProviderDesc": "The 中安云科 AI 安全网关 engineering team is constantly adding support for new LLM models, providers, endpoints. If you don't see the one you need, let us know and we'll prioritize it.",
       "dismissBanner": "Dismiss banner",
       "tabAllModels": "All Models",
       "tabYourModels": "Your Models",
@@ -11918,8 +11918,8 @@
       "routesTo": "Routes to",
       "defaultModel": "Default model",
       "created": "Created",
-      "copyLitellmModelName": "Copy LiteLLM model name",
-      "litellmModelNameCopied": "LiteLLM model name copied",
+      "copyLitellmModelName": "Copy 网关模型名称",
+      "litellmModelNameCopied": "网关模型名称 copied",
       "aboutCredentialTypes": "About credential types",
       "costInShort": "IN",
       "costOutShort": "OUT",
@@ -11952,7 +11952,7 @@
       "deleteMessage": "Are you sure you want to delete this model?",
       "modelInformation": "Model Information",
       "modelName": "Model Name",
-      "litellmModelName": "LiteLLM Model Name",
+      "litellmModelName": "网关模型名称",
       "provider": "Provider",
       "createdBy": "Created By",
       "notSet": "Not Set",
@@ -11995,8 +11995,8 @@
       "tabAgentBuilder": "Agent Builder (Experimental)"
     },
     "mcpOauthCallback": {
-      "title": "LiteLLM MCP OAuth",
-      "authComplete": "Authorization complete. You may close this window and return to the LiteLLM dashboard.",
+      "title": "中安云科 AI 安全网关 MCP OAuth",
+      "authComplete": "Authorization complete. You may close this window and return to the 中安云科 AI 安全网关.",
       "closeManually": "If the window does not close automatically, everything is still saved—you can close it manually."
     },
     "onboardingErrorView": {
@@ -12083,7 +12083,7 @@
       "failedRequestsByErrorCode": "Failed requests by error code: {{callType}}",
       "hoverHint": "Hover a bar to see the error classes behind that code."
     },
-    "analyticsDescription": "Analytics for LiteLLM's prompt caching (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side prompt caching (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page."
+    "analyticsDescription": "Analytics for the AI gateway's prompt caching (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side prompt caching (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page."
   },
   "costOptimization": {
     "autoRouterBenchmarks": {
@@ -12178,8 +12178,8 @@
       "apiBaseDescription": "The URL where your Headroom compression service is hosted",
       "applyToAllRequests": "Apply to all requests",
       "created": "Compression guardrail created",
-      "description": "Headroom is a native LiteLLM guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>",
-      "enterpriseNotice": "Applying compression to all requests is available to all users. Enabling it selectively per key or team is a LiteLLM Enterprise feature. Get a trial key <a>here</a>",
+      "description": "Headroom is a native 中安云科 AI 安全网关 guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>",
+      "enterpriseNotice": "Applying compression to all requests is available to all users. Enabling it selectively per key or team is a 企业版 feature. Get a trial key <a>here</a>",
       "failedToCreate": "Failed to create compression guardrail",
       "failedToLoadGuardrails": "Failed to load compression guardrails",
       "title": "Headroom prompt compression",
@@ -12189,7 +12189,7 @@
       "alwaysOn": "Always on",
       "optIn": "Opt-in",
       "apiBaseLabel": "Headroom API base",
-      "apiBaseHint": "Base URL of your Headroom compression service (LiteLLM calls its /v1/compress endpoint)",
+      "apiBaseHint": "Base URL of your Headroom compression service (中安云科 AI 安全网关 calls its /v1/compress endpoint)",
       "addGuardrail": "Add guardrail"
     },
     "shadowEvalSection": {
@@ -12321,11 +12321,11 @@
     },
     "promptCachingRequests": {
       "title": "Prompt caching requests",
-      "description1": "Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not establish LiteLLM injection; older logs may not record it.",
+      "description1": "Requests with recorded 中安云科 AI 安全网关 injection or provider cache reads or writes. A cache hit alone does not establish 中安云科 AI 安全网关 injection; older logs may not record it.",
       "description2": "Net savings are estimated from logged usage and current configured pricing, after cache-write premiums. Negative values mean caching cost more; unavailable means the request could not be priced.",
       "filtersAria": "Prompt caching request filters",
       "tabAll": "All caching",
-      "tabInjected": "LiteLLM injected",
+      "tabInjected": "中安云科 AI 安全网关 injected",
       "tabHits": "Cache hits",
       "selectDateRange": "Select a date range to view requests",
       "loadingRequests": "Loading requests...",
@@ -12333,7 +12333,7 @@
       "noMatchingRequests": "No matching prompt caching requests in this range",
       "colRequest": "Request",
       "colModel": "Model",
-      "colInjection": "LiteLLM injection",
+      "colInjection": "中安云科 AI 安全网关 injection",
       "colCacheReads": "Cache reads",
       "colCacheWrites": "Cache writes",
       "colActualCost": "Actual cost",
@@ -12383,7 +12383,7 @@
       "openBudgetActions": "Open budget actions"
     },
     "budgetModal": {
-      "tpmLimitHelp": "Leave blank for no LiteLLM limit. Provider rate limits still apply."
+      "tpmLimitHelp": "Leave blank for no 中安云科 AI 安全网关 limit. Provider rate limits still apply."
     },
     "budgetPanel": {
       "subtitle": "Spend, TPM and RPM limits you can assign to customers."
@@ -12496,22 +12496,22 @@
       "noMatchingCredentials": "No matching credentials",
       "noMatchingOptions": "No matching options",
       "vectorStoreIdPlaceholderDefault": "Enter vector store ID from your provider",
-      "vectorStoreIdPlaceholderVertexSearchWithEngine": "Any identifier you'll use to reference this in LiteLLM",
+      "vectorStoreIdPlaceholderVertexSearchWithEngine": "Any identifier you'll use to reference this in 中安云科 AI 安全网关",
       "vectorStoreIdPlaceholderVertexRag": "6917529027641081856 (corpus ID from Vertex AI / \"RAG Engine\" console)",
       "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890 (data store ID from Vertex AI / \"Agent Search\" console)",
       "vectorStoreIdPlaceholderValkey": "my-search-index (FT index name in Valkey)",
       "vectorStoreIdPlaceholderMongoDb": "my-vector-index (MongoDB Vector Search index name)",
       "valkeyAlertTitle": "Valkey Setup Required",
-      "valkeyAlertDescription": "LiteLLM searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
+      "valkeyAlertDescription": "中安云科 AI 安全网关 searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
       "valkeyStep1": "Your Valkey server has vector search enabled (the valkey-search module, included in the valkey-bundle image and in AWS ElastiCache / MemoryDB for Valkey)",
       "valkeyStep2": "You have already created a search index and loaded your documents and their embeddings into it. Enter that index name as the Vector Store ID",
       "valkeyStep3": "You know which embedding model created those stored embeddings. That model must be added to this proxy under Models so you can pick it below. Using a different model returns wrong results",
       "valkeyStep4": "You know the field names your documents use for their text and their embedding. If they are not \"text\" and \"embedding\", set them below",
-      "valkeyFooter": "When a query comes in, LiteLLM converts it to an embedding with the model below and returns the closest matching documents from your index.",
+      "valkeyFooter": "When a query comes in, 中安云科 AI 安全网关 converts it to an embedding with the model below and returns the closest matching documents from your index.",
       "vertexRagNote": "Note: Google Cloud has renamed this to \"RAG Engine\" in its console — the steps below still apply.",
       "vertexRagStep3": "Note the corpus ID from the Vertex AI console (now labeled \"RAG Engine\" in Google Cloud)",
       "vertexSearchNote": "Note: Google Cloud has renamed this to \"Agent Search\" in its console — the steps below still apply.",
-      "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set."
+      "vertexSearchStep4": "For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in the Engine ID field. The Vector Store ID is still required as the 中安云科 AI 安全网关-side name for this record, but it isn't used in the GCP URL when Engine ID is set."
     }
   },
   "keyScope": {
@@ -12531,7 +12531,7 @@
     "ptuWindowOrder": "PTU Effective To must be after PTU Effective From",
     "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank",
     "attached-knowledge-bases-rag": "Attached Knowledge Bases (RAG)",
-    "litellm-params": "LiteLLM Params"
+    "litellm-params": "网关参数"
   },
   "noRedisWarning": {
     "title": "No Redis configured. Redis is highly recommended",
@@ -12894,7 +12894,7 @@
     "disconnect": "Disconnect",
     "disconnectSessionAria": "Disconnect session {{session}}",
     "liveConnections": "Live Connections",
-    "liveConnectionsDescription": "Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent the MCP initialize request and by the authenticated LiteLLM user. Stateless requests and SSE connections are not counted.",
+    "liveConnectionsDescription": "Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent the MCP initialize request and by the authenticated 中安云科 AI 安全网关 user. Stateless requests and SSE connections are not counted.",
     "refreshLiveConnections": "Refresh live connections",
     "refresh": "Refresh",
     "couldNotDisconnect": "Could not disconnect",
@@ -12952,13 +12952,13 @@
       "connectAnotherAgent": "Connect another agent",
       "connectYourAgent": "Connect your agent",
       "lensConnectedSetAddress": "Lens is connected. Set its public tracing address so your agents know where to send traces.",
-      "enableLensInDeployment": "Enable Lens in your existing Helm or Docker deployment. It runs alongside LiteLLM and stores your traces.",
-      "lensConfiguredUnreachable": "Lens is configured, but LiteLLM cannot reach it. Check that the Lens service is running and both services use the same service secret.",
+      "enableLensInDeployment": "Enable Lens in your existing Helm or Docker deployment. It runs alongside 中安云科 AI 安全网关 and stores your traces.",
+      "lensConfiguredUnreachable": "Lens is configured, but 中安云科 AI 安全网关 cannot reach it. Check that the Lens service is running and both services use the same service secret.",
       "lensStorageUnavailable": "Lens is connected, but its trace storage is unavailable. Check the ClickHouse connection.",
       "checkLensConnection": "Check the Lens connection",
       "installLens": "Install Lens",
-      "useLensRelease": "Use Lens {{release}} to match this LiteLLM deployment.",
-      "useLensSameRelease": "Use Lens from the same release as this LiteLLM deployment.",
+      "useLensRelease": "Use Lens {{release}} to match this 中安云科 AI 安全网关 deployment.",
+      "useLensSameRelease": "Use Lens from the same release as this 中安云科 AI 安全网关 deployment.",
       "deploymentConnectsServices": "The deployment connects the services and supplies trace storage.",
       "checkSetup": "Check setup",
       "connectYourProject": "Connect your project",
@@ -12966,7 +12966,7 @@
       "copied": "Copied",
       "copySetupCommand": "Copy setup command",
       "checkingLensConnection": "Checking Lens connection…",
-      "setLensPublicUrl": "Set LITELLM_LENS_PUBLIC_URL on LiteLLM to the Lens address your agents can reach, then restart LiteLLM.",
+      "setLensPublicUrl": "Set LITELLM_LENS_PUBLIC_URL on 中安云科 AI 安全网关 to the Lens address your agents can reach, then restart 中安云科 AI 安全网关.",
       "lensServiceUnavailable": "The Lens service is unavailable. Check the service URL and shared secret.",
       "clickhouseUnavailable": "Lens is connected, but ClickHouse is unavailable.",
       "yourAgentFramework": "Your agent framework",
@@ -13481,7 +13481,7 @@
       "source": {
         "tool": "Tool",
         "model": "Model",
-        "litellm": "LiteLLM"
+        "litellm": "中安云科 AI 安全网关"
       },
       "errorAria": "Error",
       "storedDiagnosticAria": "Stored diagnostic",
@@ -13659,20 +13659,20 @@
     "connecting": "Connecting",
     "connect": "Connect",
     "statCheaper": "cheaper than our Devin bill",
-    "statProviders": "providers through LiteLLM",
+    "statProviders": "providers through 中安云科 AI 安全网关",
     "statHarnesses": "agent harnesses",
     "nowOpenSource": "Now open source",
     "tagline": "The open source cloud coding agent",
     "alreadyHaveMoyai": "Already have Moyai deployed?",
     "askProxyAdmin": "Already have Moyai deployed? Ask a proxy admin to connect it",
     "worksWith": "Works with Claude Code and Codex",
-    "selfHosted": "Self-hosted · 100+ providers through LiteLLM",
+    "selfHosted": "Self-hosted · 100+ providers through 中安云科 AI 安全网关",
     "seeItInAction": "See it in action",
     "seeItDescription": "Give it a task from Slack or the browser. It edits code, runs your tests in its own cloud workspace, and opens a pull request while your laptop is closed.",
     "anyHarness": "Any harness",
     "anyHarnessFootnote": "Pick the harness per session. Same workspace, tools and permissions.",
     "anyModel": "Any model, any provider",
-    "anyModelFootnote": "Routed through your LiteLLM gateway, with spend tracked per teammate.",
+    "anyModelFootnote": "Routed through your 中安云科 AI 安全网关, with spend tracked per teammate.",
     "runOwnAgent": "Run your own cloud agent",
     "runOwnDescription": "Deploy it on your own infrastructure and point it at this gateway. Your code and credentials stay in your accounts."
   },
@@ -13769,7 +13769,7 @@
     "new-api-key": "New API Key",
     "enter-the-new-api-key": "Enter the new API key",
     "update-api-key-2": "Update API Key",
-    "onlyApiKeyRotated": "Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a Vertex service-account JSON aren't supported yet; update those from the model's LiteLLM Params for now."
+    "onlyApiKeyRotated": "Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a Vertex service-account JSON aren't supported yet; update those from the model's 网关参数 for now."
   },
   "evidence": {
     "this-evidence-is-no-longer-available": "This evidence is no longer available.",
@@ -13831,7 +13831,7 @@
   "gatewayFlow": {
     "agent-swarms": "Agent swarms",
     "every-run-every-recorded-step": "Every run, every recorded step",
-    "litellm-gateway": "LiteLLM gateway",
+    "litellm-gateway": "中安云科 AI 安全网关",
     "one-place-your-infrastructure": "One place, your infrastructure",
     "findings-to-improve-your-agents": "Findings to improve your agents"
   },
@@ -13873,12 +13873,12 @@
     "model-is-not-selected": "Model is not selected"
   },
   "mCPServerCard": {
-    "this-oauth-server-has-no-flow-set-machine-to": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend.",
+    "this-oauth-server-has-no-flow-set-machine-to": "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so 中安云科 AI 安全网关 authenticates it as you intend.",
     "last-check": "Last check:",
     "per-user-credentials": "Per-user credentials"
   },
   "mCPSubmissionsTab": {
-    "select-which-fields-must-be-filled-in-before": "Select which fields must be filled in before a submission is considered compliant. LiteLLM will show ✓ / ✗ for each rule on every submission card below.",
+    "select-which-fields-must-be-filled-in-before": "Select which fields must be filled in before a submission is considered compliant. The AI gateway will show ✓ / ✗ for each rule on every submission card below.",
     "submitted-by": "Submitted by:",
     "rejection-reason": "Rejection reason:"
   },
@@ -13894,7 +13894,7 @@
     "clearConfirmDescription": "This deletes every per-user value you saved for {{name}}. Your next MCP request to this server fails until you set them again."
   },
   "organizationsPanel": {
-    "this-is-a-litellm-enterprise-feature-and-req": "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key",
+    "this-is-a-litellm-enterprise-feature-and-req": "This is a 企业版 feature, and requires a valid key to use. Get a trial key",
     "create-new-organization": "+ Create New Organization",
     "click-on-an-organization-id-to-view-its-deta": "Click on an organization ID to view its details.",
     "delete-organization": "Delete Organization?",
@@ -13905,7 +13905,7 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams Alerting Settings",
     "save-changes": "Save Changes",
     "test-ms-teams-alerts": "Test MS Teams Alerts",
-    "introDescription": "Send LiteLLM alerts to a Microsoft Teams channel via an incoming webhook."
+    "introDescription": "Send 中安云科 AI 安全网关 alerts to a Microsoft Teams channel via an incoming webhook."
   },
   "contentFilterDisplay": {
     "content-categories": "Content Categories",
@@ -13979,7 +13979,7 @@
   },
   "auditLogsPanel": {
     "enterprise-feature": "✨ Enterprise Feature.",
-    "this-is-a-litellm-enterprise-feature-and-req": "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+    "this-is-a-litellm-enterprise-feature-and-req": "This is a 企业版 feature, and requires a valid key to use.",
     "here-s-a-preview-of-what-audit-logs-offer": "Here's a preview of what Audit Logs offer:",
     "audit-logs-preview": "Audit Logs Preview"
   },
@@ -14078,7 +14078,7 @@
   },
   "aPIReferenceView": {
     "openai-compatible-proxy-api-reference": "OpenAI Compatible Proxy: API Reference",
-    "litellm-is-openai-compatible-this-means-your": "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
+    "litellm-is-openai-compatible-this-means-your": "中安云科 AI 安全网关 is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below",
     "openai-python-sdk": "OpenAI Python SDK",
     "langchain-py": "Langchain Py"
   },
@@ -14090,7 +14090,7 @@
   },
   "moyaiConnected": {
     "moyai-connected": "Moyai connected",
-    "this-deployment-is-now-linked-to-your-litell": "This deployment is now linked to your LiteLLM gateway.",
+    "this-deployment-is-now-linked-to-your-litell": "This deployment is now linked to your 中安云科 AI 安全网关.",
     "open-moyai": "Open Moyai",
     "back-to-ai-gateway": "Back to AI Gateway"
   },
@@ -14103,7 +14103,7 @@
   "createdKeyDisplay": {
     "virtual-key": "Virtual Key:",
     "copySuccess": "Key copied to clipboard",
-    "saveSecretKeyHint": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one.",
+    "saveSecretKeyHint": "Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your 中安云科 AI 安全网关 account. If you lose this secret key, you will need to generate a new one.",
     "copied": "Copied!",
     "copyVirtualKey": "Copy Virtual Key"
   },
@@ -14219,7 +14219,7 @@
     "copy-request-id": "Copy request ID"
   },
   "spendLogLink": {
-    "litellm-spend-log": "LiteLLM Spend Log",
+    "litellm-spend-log": "中安云科 AI 安全网关 Spend Log",
     "spend-log-not-visible-in-this-time-range": "Spend log not visible in this time range"
   },
   "drawerHeader": {
@@ -14259,7 +14259,7 @@
   "premiumLoggingSettings": {
     "langfuse-logging": "✨ langfuse-logging",
     "datadog-logging": "✨ datadog-logging",
-    "enterpriseNote": "Setting Key/Team logging settings is a LiteLLM Enterprise feature. Global Logging Settings are available for all free users. Get a trial key."
+    "enterpriseNote": "Setting Key/Team logging settings is a 企业版 feature. Global Logging Settings are available for all free users. Get a trial key."
   },
   "docLink": {
     "open-documentation-in-a-new-tab": "Open documentation in a new tab",
@@ -14357,7 +14357,7 @@
     "dismiss-banner": "Dismiss banner"
   },
   "addModelForm": {
-    "litellm-endpoint-to-use-when-health-checking": "- LiteLLM endpoint to use when health checking this model"
+    "litellm-endpoint-to-use-when-health-checking": "- 中安云科 AI 安全网关 endpoint to use when health checking this model"
   },
   "autoRouterClassifierTabs": {
     "could-not-check-availability": "Could not check availability."
@@ -14673,8 +14673,8 @@
     "an-mcp-access-group-is-a-set-of-users-or-tea": "An MCP Access Group is a set of users or teams that have permission to access specific MCP servers. Use access groups to control and organize who can connect to which servers."
   },
   "callbackPage": {
-    "litellm-mcp-oauth": "LiteLLM MCP OAuth",
-    "authorization-complete-you-may-close-this-wi": "Authorization complete. You may close this window and return to the LiteLLM dashboard.",
+    "litellm-mcp-oauth": "中安云科 AI 安全网关 MCP OAuth",
+    "authorization-complete-you-may-close-this-wi": "Authorization complete. You may close this window and return to the 中安云科 AI 安全网关.",
     "if-the-window-does-not-close-automatically-e": "If the window does not close automatically, everything is still saved—you can close it manually."
   },
   "envCredentialLoginWarningBanner": {
@@ -14695,8 +14695,8 @@
     "expiredDescription": "Enterprise features are now disabled. Reach out to {{email}} to restore access",
     "criticalDescription": "Renew now to avoid losing enterprise features. Reach out to {{email}}",
     "warningDescription": "Renew before it lapses to keep enterprise features. Reach out to {{email}}",
-    "expiredTitle": "Your LiteLLM Enterprise license expired on {{date}}",
-    "activeTitle": "Your LiteLLM Enterprise license {{countdown}} ({{date}})",
+    "expiredTitle": "Your 企业版 license expired on {{date}}",
+    "activeTitle": "Your 企业版 license {{countdown}} ({{date}})",
     "closeAria": "Close"
   },
   "resetMemberBudgetsDialog": {

@@ -962,7 +962,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                             </span>{" "}
                             {t("bulkCreateUsers.nextStepDesc", {
                               defaultValue:
-                                "Download the credentials file containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM requests through LiteLLM.",
+                                "Download the credentials file containing Virtual Keys and invitation links. Users will need these Virtual Keys to make LLM requests through 中安云科 AI 安全网关.",
                             })}
                           </p>
                         </div>

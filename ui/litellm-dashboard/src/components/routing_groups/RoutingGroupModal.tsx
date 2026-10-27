@@ -138,7 +138,7 @@ const RoutingGroupModal: React.FC<RoutingGroupModalProps> = ({
               control={form.control}
               name="group_name"
               label={i18n.t("routingGroups.routingGroupModal.groupNameLabel", { defaultValue: "Group Name" })}
-              description={i18n.t("routingGroups.routingGroupModal.groupNameExtra", { defaultValue: "Use this name as the model in API calls. LiteLLM routes the request to one of the group's models." })}
+              description={i18n.t("routingGroups.routingGroupModal.groupNameExtra", { defaultValue: "Use this name as the model in API calls. 中安云科 AI 安全网关 routes the request to one of the group's models." })}
             >
               {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={i18n.t("routingGroups.routingGroupModal.groupNamePlaceholder", { defaultValue: "fast-chat" })} disabled={mode === "edit"} />}
             </FormField>

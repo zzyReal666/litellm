@@ -48,7 +48,7 @@ export const tracingEnvSnippet = (proxyUrl: string, tracingKey: string | null = 
 
 export const codingAgentPrompt = (proxyUrl: string, traceUrl: string, guide: FrameworkGuide, model: string): string =>
   [
-    `Send this ${guide.label} project's OpenTelemetry traces to LiteLLM.`,
+    `Send this ${guide.label}  project's OpenTelemetry traces to 中安云科 AI 安全网关..`,
     "Keep the existing model configuration, authentication, and application behavior. Never hardcode keys. Read the model key from LITELLM_API_KEY and the dedicated tracing key from LITELLM_TRACING_KEY.",
     "Set the trace destination wherever this project loads environment variables:",
     tracingEnvSnippet(traceUrl),
@@ -457,12 +457,12 @@ function EnableTracing({
   let message = i18n.t("lens.tracingSetup.lensConnectedSetAddress", { defaultValue: "Lens is connected. Set its public tracing address so your agents know where to send traces." });
   if (!configured) {
     message = i18n.t("lens.tracingSetup.enableLensInDeployment", {
-      defaultValue: "Enable Lens in your existing Helm or Docker deployment. It runs alongside LiteLLM and stores your traces.",
+      defaultValue: "Enable Lens in your existing Helm or Docker deployment. It runs alongside 中安云科 AI 安全网关 and stores your traces.",
     });
   } else if (!connection.connected) {
     message = i18n.t("lens.tracingSetup.lensConfiguredUnreachable", {
       defaultValue:
-        "Lens is configured, but LiteLLM cannot reach it. Check that the Lens service is running and both services use the same service secret.",
+        "Lens is configured, but 中安云科 AI 安全网关 cannot reach it. Check that the Lens service is running and both services use the same service secret.",
     });
   } else if (!connection.status.storage_ready) {
     message = i18n.t("lens.tracingSetup.lensStorageUnavailable", { defaultValue: "Lens is connected, but its trace storage is unavailable. Check the ClickHouse connection." });
@@ -479,10 +479,10 @@ function EnableTracing({
         <p className="text-sm text-muted-foreground">
           {connection.release ? (
             <>
-              {i18n.t("lens.tracingSetup.useLensRelease", { release: connection.release, defaultValue: `Use Lens ${connection.release} to match this LiteLLM deployment.` })}
+              {i18n.t("lens.tracingSetup.useLensRelease", { release: connection.release, defaultValue: `Use Lens ${connection.release}  to match this 中安云科 AI 安全网关 deployment..` })}
             </>
           ) : (
-            i18n.t("lens.tracingSetup.useLensSameRelease", { defaultValue: "Use Lens from the same release as this LiteLLM deployment." })
+            i18n.t("lens.tracingSetup.useLensSameRelease", { defaultValue: "Use Lens from the same release as this 中安云科 AI 安全网关 deployment." })
           )}{" "}
           {i18n.t("lens.tracingSetup.deploymentConnectsServices", { defaultValue: "The deployment connects the services and supplies trace storage." })}
         </p>
@@ -813,7 +813,7 @@ export function TracingSetupCard(props: TracingSetupProps) {
       </div>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
         {enabled
-          ? "Send your agent’s runs to LiteLLM to see its inputs, outputs, and tool calls."
+          ? "Send your agent’s runs to 中安云科 AI 安全网关 to see its inputs, outputs, and tool calls."
           : "Connect Lens to start recording your agent’s runs."}
       </p>
       <TracingSetupFields {...props} />

@@ -249,7 +249,7 @@ const MCPServerCard: FC<MCPServerCardProps> = ({
                 }
               />
               <TooltipContent>
-                {i18n.t("mCPServerCard.this-oauth-server-has-no-flow-set-machine-to", { defaultValue: "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so LiteLLM authenticates it as you intend." })}{" "}</TooltipContent>
+                {i18n.t("mCPServerCard.this-oauth-server-has-no-flow-set-machine-to", { defaultValue: "This OAuth server has no flow set (Machine-to-Machine vs Interactive). Open it and choose an OAuth Flow Type so 中安云科 AI 安全网关 authenticates it as you intend." })}{" "}</TooltipContent>
             </Tooltip>
           )}
           <Tooltip>

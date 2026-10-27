@@ -527,7 +527,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <MountedFormField
               name="litellm_extra_params"
               label={labelWithHint(
-                t("addModel.advancedSettings.litellmParamsLabel", { defaultValue: "LiteLLM Params" }),
+                t("addModel.advancedSettings.litellmParamsLabel", { defaultValue: "网关参数" }),
                 t("addModel.advancedSettings.litellmParamsTooltip", {
                   defaultValue: "Optional litellm params used for making a litellm.completion() call.",
                 }),

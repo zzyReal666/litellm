@@ -22,7 +22,7 @@ export default function HashicorpVaultEmptyPlaceholder({ onAdd }: HashicorpVault
       <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
         {t("settingsPages.hashicorpVaultEmptyPlaceholder.noConfigDesc", {
           defaultValue:
-            "Configure Hashicorp Vault to securely manage provider API keys and secrets for your LiteLLM deployment.",
+            "Configure Hashicorp Vault to securely manage provider API keys and secrets for your 中安云科 AI 安全网关 deployment.",
         })}
       </p>
       <Button size="lg" onClick={onAdd} className="mt-4">

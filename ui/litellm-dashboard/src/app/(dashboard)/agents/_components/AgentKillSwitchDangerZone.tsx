@@ -67,7 +67,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
                 <p className="text-muted-foreground">
                   {i18n.t("agentsPage.agentKillSwitch.description", {
                     defaultValue:
-                      "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from LiteLLM",
+                      "Calls the configured webhook to stop this agent's upstream runtime. This can cause an outage for everyone using the agent and cannot be undone from 中安云科 AI 安全网关",
                   })}
                 </p>
                 <p className="font-mono break-all text-foreground">
@@ -107,7 +107,7 @@ const AgentKillSwitchDangerZone: React.FC<AgentKillSwitchDangerZoneProps> = ({
               <AlertDescription>
                 {i18n.t("agentsPage.agentKillSwitch.outageWarningDescription", {
                   defaultValue:
-                    "LiteLLM will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside LiteLLM's control and cannot be reverted here",
+                    "中安云科 AI 安全网关 will call {{method}} {{url}} immediately. Whatever that webhook does to the agent is outside 中安云科 AI 安全网关's control and cannot be reverted here",
                   method: killSwitch?.method ?? "POST",
                   url: killSwitch?.url,
                 })}

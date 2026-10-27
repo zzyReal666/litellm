@@ -276,7 +276,7 @@ export default function ModelInfoView({
         parsedExtraParams = values.litellm_extra_params ? JSON.parse(values.litellm_extra_params) : {};
         delete parsedExtraParams.litellm_credential_name;
       } catch (e) {
-        toast.fromError(i18n.t("modelInfoView.invalidJsonLitellmParams", { defaultValue: "Invalid JSON in LiteLLM Params" }));
+        toast.fromError(i18n.t("modelInfoView.invalidJsonLitellmParams", { defaultValue: "Invalid JSON in 网关参数" }));
         setIsSaving(false);
         return;
       }
@@ -660,7 +660,7 @@ export default function ModelInfoView({
                 </div>
               </Card>
               <Card className="block p-6">
-                <p className="text-sm">{i18n.t("modelInfoView.litellmModel", { defaultValue: "LiteLLM Model" })}</p>
+                <p className="text-sm">{i18n.t("modelInfoView.litellmModel", { defaultValue: "中安云科 AI 安全网关模型" })}</p>
                 <div className="mt-2 overflow-hidden">
                   <SimpleTooltip content={modelData.litellm_model_name || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })} className="w-full min-w-0">
                     <div className="break-all text-sm font-medium leading-relaxed cursor-pointer">
@@ -780,7 +780,7 @@ export default function ModelInfoView({
             value: modelData?.model_name || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" }),
           },
           {
-            label: i18n.t("modelInfoView.fieldLitellmModelName", { defaultValue: "LiteLLM Model Name" }),
+            label: i18n.t("modelInfoView.fieldLitellmModelName", { defaultValue: "网关模型名称" }),
             value: modelData?.litellm_model_name || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" }),
           },
           {

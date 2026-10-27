@@ -48,7 +48,7 @@ const SavingsTiles = ({ results, isLoading }: { results: DailyData[]; isLoading:
         }
         info={t("shared.savingsTiles.totalSavedInfo", {
           defaultValue:
-            "The sum of the three tiles beside it. Its caching term is the LiteLLM-injected share, so this total is what the gateway itself delivered; caching that clients or providers brought on their own appears only in the caching tile's Total figure.",
+            "The sum of the three tiles beside it. Its caching term is the 中安云科 AI 安全网关-injected share, so this total is what the gateway itself delivered; caching that clients or providers brought on their own appears only in the caching tile's Total figure.",
         })}
       />
       <SummaryCard
@@ -65,14 +65,14 @@ const SavingsTiles = ({ results, isLoading }: { results: DailyData[]; isLoading:
       <SummaryCard
         label={t("shared.savingsTiles.promptCachingSavings", { defaultValue: "Prompt caching savings" })}
         value={usd(totals.gatewayAttributedCaching)}
-        hint={t("shared.savingsTiles.litellmInjected", { defaultValue: "LiteLLM injected" })}
+        hint={t("shared.savingsTiles.litellmInjected", { defaultValue: "中安云科 AI 安全网关 injected" })}
         secondary={{
           label: t("shared.savingsTiles.total", { defaultValue: "Total" }),
           value: usd(totals.caching),
         }}
         info={t("shared.savingsTiles.promptCachingInfo", {
           defaultValue:
-            "What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share LiteLLM earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two.",
+            "What caching saved against paying the input rate for every token: the discount on tokens served from cache, less the premium providers charge to write a cache entry. The headline figure is the share 中安云科 AI 安全网关 earned by inserting the breakpoints itself, through configured injection points or auto prompt caching. The total beside it also counts requests that arrived with their own cache_control and providers that cache implicitly. Either can be negative on traffic that writes more cache than it reuses, which is why the headline is not always the smaller of the two.",
         })}
       />
       <SummaryCard

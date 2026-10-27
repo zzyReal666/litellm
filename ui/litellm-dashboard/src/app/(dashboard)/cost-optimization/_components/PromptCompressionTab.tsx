@@ -131,7 +131,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
           <p className="mb-4 text-sm text-muted-foreground">
             <Trans
               i18nKey="costOptimization.promptCompressionTab.description"
-              defaults="Headroom is a native LiteLLM guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>"
+              defaults="Headroom is a native 中安云科 AI 安全网关 guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>"
               components={{
                 a: (
                   <span />
@@ -202,7 +202,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                     t("costOptimization.promptCompressionTab.apiBaseLabel", { defaultValue: "Headroom API base" }),
                     t("costOptimization.promptCompressionTab.apiBaseHint", {
                       defaultValue:
-                        "Base URL of your Headroom compression service (LiteLLM calls its /v1/compress endpoint)",
+                        "Base URL of your Headroom compression service (中安云科 AI 安全网关 calls its /v1/compress endpoint)",
                     }),
                   )}
                   description={t("costOptimization.promptCompressionTab.apiBaseDescription", {
@@ -233,7 +233,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                 <p className="text-sm text-warning">
                   <Trans
                     i18nKey="costOptimization.promptCompressionTab.enterpriseNotice"
-                    defaults="Applying compression to all requests is available to all users. Enabling it selectively per key or team is a LiteLLM Enterprise feature. Get a trial key <a>here</a>"
+                    defaults="Applying compression to all requests is available to all users. Enabling it selectively per key or team is a 企业版 feature. Get a trial key <a>here</a>"
                     components={{
                       a: (
                         <span />

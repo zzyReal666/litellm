@@ -18,7 +18,7 @@ const UpstreamTokenHeaderField: React.FC = () => {
           <SimpleTooltip
             content={t("mcpTools.upstreamTokenHeaderField.tooltip", {
               defaultValue:
-                "Which upstream header carries the token LiteLLM resolves for this server. Leave blank to send it as 'Authorization: Bearer <token>', which is the default and what most servers expect. Set a header name when the upstream expects it elsewhere, for example an API gateway that terminates its own credential on 'esb-oauth' while a separate Authorization from Static Headers passes through to the server behind it.",
+                "Which upstream header carries the token 中安云科 AI 安全网关 resolves for this server. Leave blank to send it as 'Authorization: Bearer <token>', which is the default and what most servers expect. Set a header name when the upstream expects it elsewhere, for example an API gateway that terminates its own credential on 'esb-oauth' while a separate Authorization from Static Headers passes through to the server behind it.",
             })}
           >
             <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />

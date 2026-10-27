@@ -51,7 +51,7 @@ function SsoEnabledNotice() {
       <AlertTitle>
         <Trans
           i18nKey="login.ssoEnabledNotice"
-          defaults="Single Sign-On (SSO) is enabled. LiteLLM no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration."
+          defaults="Single Sign-On (SSO) is enabled. 中安云科 AI 安全网关 no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration."
           components={{ code: <code className="bg-muted px-1 py-0.5 rounded-sm text-xs" /> }}
         />
       </AlertTitle>
@@ -206,7 +206,7 @@ function LoginPageContent() {
           <CardContent>
             <div className="flex w-full flex-col gap-4">
               <div className="text-center">
-                <h2 className="text-3xl font-semibold text-foreground">🚅 LiteLLM</h2>
+                <h2 className="text-3xl font-semibold text-foreground">🚅 中安云科 AI 安全网关</h2>
               </div>
 
               <Alert variant="warning">
@@ -238,7 +238,7 @@ function LoginPageContent() {
           <TooltipProvider>
             <div className="flex w-full flex-col gap-4">
               <div className="text-center">
-                <h2 className="text-3xl font-semibold text-foreground">🚅 LiteLLM</h2>
+                <h2 className="text-3xl font-semibold text-foreground">🚅 中安云科 AI 安全网关</h2>
               </div>
 
               <div className="text-center">
@@ -246,7 +246,7 @@ function LoginPageContent() {
                   {t("login.title", { defaultValue: "Login" })}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {t("login.subtitle", { defaultValue: "Access your LiteLLM Admin UI." })}
+                  {t("login.subtitle", { defaultValue: "Access your 管理界面." })}
                 </p>
               </div>
 
@@ -258,7 +258,7 @@ function LoginPageContent() {
                     <p className="text-sm">
                       <Trans
                         i18nKey="login.defaultCredentialsBody"
-                        defaults="By default, Username is <code>admin</code> and Password is your set LiteLLM Proxy<code>MASTER_KEY</code>."
+                        defaults="By default, Username is <code>admin</code> and Password is your set AI 安全网关<code>MASTER_KEY</code>."
                         components={{ code: <code className="bg-muted px-1 py-0.5 rounded-sm text-xs" /> }}
                       />
                     </p>

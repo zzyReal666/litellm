@@ -24,7 +24,7 @@ const PassThroughSecuritySection: React.FC<PassThroughSecuritySectionProps> = ({
       </h3>
       <p className="mb-4 text-sm text-muted-foreground">
         {t("commonComponents.passThroughSecuritySection.subtitle", {
-          defaultValue: "When enabled, requests to this endpoint will require a valid LiteLLM Virtual Key",
+          defaultValue: "When enabled, requests to this endpoint will require a valid 网关虚拟密钥",
         })}
       </p>
       {premiumUser ? (
@@ -43,7 +43,7 @@ const PassThroughSecuritySection: React.FC<PassThroughSecuritySectionProps> = ({
             <p className="text-sm text-warning">
               <Trans
                 i18nKey="commonComponents.passThroughSecuritySection.enterpriseNotice"
-                defaults="Setting authentication for pass-through endpoints is a LiteLLM Enterprise feature. Get a trial key <pricingLink>here</pricingLink>."
+                defaults="Setting authentication for pass-through endpoints is a 企业版 feature. Get a trial key <pricingLink>here</pricingLink>."
                 components={{
                   pricingLink: (
                     <span />

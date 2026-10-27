@@ -74,11 +74,11 @@ export const LicenseExpiryBannerView: React.FC<LicenseExpiryBannerViewProps> = (
   const message =
     tier === "expired"
       ? i18n.t("licenseExpiryBanner.expiredTitle", {
-          defaultValue: "Your LiteLLM Enterprise license expired on {{date}}",
+          defaultValue: "Your 企业版 license expired on {{date}}",
           date: formattedDate,
         })
       : i18n.t("licenseExpiryBanner.activeTitle", {
-          defaultValue: "Your LiteLLM Enterprise license {{countdown}} ({{date}})",
+          defaultValue: "Your 企业版 license {{countdown}} ({{date}})",
           countdown: describeCountdown(days),
           date: formattedDate,
         });

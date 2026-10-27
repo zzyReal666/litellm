@@ -211,7 +211,7 @@ const ToolPermissionRulesEditor: React.FC<ToolPermissionRulesEditorProps> = ({ v
         <div className="flex items-center justify-between">
           <div>
             <p className="text-lg font-semibold">
-              {t("guardrails.toolPermissionRulesEditor.title", { defaultValue: "LiteLLM Tool Permission Guardrail" })}
+              {t("guardrails.toolPermissionRulesEditor.title", { defaultValue: "中安云科 AI 安全网关 Tool Permission Guardrail" })}
             </p>
             <p className="text-sm text-muted-foreground">
               {t("guardrails.toolPermissionRulesEditor.subtitle", {

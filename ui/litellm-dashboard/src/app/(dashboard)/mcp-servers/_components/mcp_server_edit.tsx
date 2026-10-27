@@ -316,7 +316,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
         };
         setToken(mcpServer.server_id, browserHeldToken, userID);
         toast.success(
-          i18n.t("mcpTools.mcpServerEdit.browserTokenHeldToast", { defaultValue: "Token held for this browser session. Tools can now be loaded and configured; the token is not saved to LiteLLM." }),
+          i18n.t("mcpTools.mcpServerEdit.browserTokenHeldToast", { defaultValue: "Token held for this browser session. Tools can now be loaded and configured; the token is not saved to 中安云科 AI 安全网关." }),
         );
         return;
       }
@@ -955,7 +955,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                   label={
                     <span className="text-sm font-medium text-foreground flex items-center">
                       {i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsLabel", { defaultValue: "Max Concurrent Requests (optional)" })}
-                      <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsTooltip", { defaultValue: "Maximum number of tool calls LiteLLM will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit." })}>
+                      <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsTooltip", { defaultValue: "Maximum number of tool calls 中安云科 AI 安全网关 will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit." })}>
                         <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                       </SimpleTooltip>
                     </span>
@@ -1122,7 +1122,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                         <AlertDescription>
                           {i18n.t("mcpTools.mcpServerEdit.noOAuthFlowDescription", {
                             defaultValue:
-                              "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so LiteLLM authenticates it the way you intend, then save. Until it is set, LiteLLM falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively.",
+                              "Choose Machine-to-Machine (M2M) or Interactive (PKCE) so 中安云科 AI 安全网关 authenticates it the way you intend, then save. Until it is set, 中安云科 AI 安全网关 falls back to interactive per-user auth and treats a machine-to-machine credential shape conservatively.",
                           })}
                         </AlertDescription>
                       </Alert>
@@ -1249,7 +1249,7 @@ const MCPServerEdit: React.FC<MCPServerEditProps> = ({
                       label={
                         <span className="text-sm font-medium text-foreground flex items-center">
                           {i18n.t("mcpTools.mcpServerEdit.awsRoleArnLabel", { defaultValue: "AWS Role ARN" })}
-                          <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.awsRoleArnTooltip", { defaultValue: "Optional. IAM role ARN to assume via STS before signing. If set, LiteLLM calls sts:AssumeRole to get temporary credentials." })}>
+                          <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.awsRoleArnTooltip", { defaultValue: "Optional. IAM role ARN to assume via STS before signing. If set, 中安云科 AI 安全网关 calls sts:AssumeRole to get temporary credentials." })}>
                             <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                           </SimpleTooltip>
                         </span>

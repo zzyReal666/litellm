@@ -280,7 +280,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
             <TooltipContent>
               {t("agentsPage.agentCardDiscovery.discoverTooltip", {
                 defaultValue:
-                  "LiteLLM will fetch /.well-known/agent-card.json from this URL and let you pick which skills and capabilities to expose through the proxy.",
+                  "中安云科 AI 安全网关 will fetch /.well-known/agent-card.json from this URL and let you pick which skills and capabilities to expose through the proxy.",
               })}
             </TooltipContent>
           </Tooltip>
@@ -483,7 +483,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
                     <TooltipContent>
                       {t("agentsPage.agentCardDiscovery.capabilitiesTooltip", {
                         defaultValue:
-                          "Only capabilities LiteLLM can faithfully proxy today are listed. Others (push notifications, extensions) are coming soon.",
+                          "Only capabilities 中安云科 AI 安全网关 can faithfully proxy today are listed. Others (push notifications, extensions) are coming soon.",
                       })}
                     </TooltipContent>
                   </Tooltip>

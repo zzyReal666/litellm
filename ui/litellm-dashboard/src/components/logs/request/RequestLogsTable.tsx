@@ -57,7 +57,7 @@ function RequestLogsEmptyState({ filtered }: { filtered: boolean }) {
       <div className="max-w-xs text-center text-sm text-muted-foreground">
         {filtered
           ? "No requests match your filters for this time range."
-          : "Requests proxied through LiteLLM will appear here."}
+          : "Requests proxied through 中安云科 AI 安全网关 will appear here."}
       </div>
     </div>
   );

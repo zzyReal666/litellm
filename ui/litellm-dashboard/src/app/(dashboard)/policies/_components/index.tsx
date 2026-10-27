@@ -661,7 +661,7 @@ const PoliciesPanel: React.FC<PoliciesPanelProps> = ({ accessToken, userRole }) 
             icon={<TriangleAlert />}
           >
             {t("policies.policiesView.enterpriseFeatureDesc", {
-              defaultValue: "Parts of policy attachments will be on LiteLLM Enterprise in subsequent releases.",
+              defaultValue: "Parts of policy attachments will be on 企业版 in subsequent releases.",
             })}
           </DismissibleAlert>
 

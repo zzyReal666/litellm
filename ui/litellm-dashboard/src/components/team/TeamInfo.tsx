@@ -831,7 +831,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
       let errMsg = i18n.t("teamPage.teamInfo.failedToAddMember", { defaultValue: "Failed to add team member" });
 
       if (error?.raw?.detail?.error?.includes("Assigning team admins is a premium feature")) {
-        errMsg = i18n.t("teamPage.teamInfo.assignAdminsEnterprise", { defaultValue: "Assigning admins is an enterprise-only feature. Please upgrade your LiteLLM plan to enable this." });
+        errMsg = i18n.t("teamPage.teamInfo.assignAdminsEnterprise", { defaultValue: "Assigning admins is an enterprise-only feature. Please upgrade your 中安云科 AI 安全网关 plan to enable this." });
       } else if (error?.message) {
         errMsg = error.message;
       }
@@ -875,7 +875,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
     } catch (error: any) {
       let errMsg = i18n.t("teamPage.teamInfo.failedToUpdateMember", { defaultValue: "Failed to update team member" });
       if (error?.raw?.detail?.includes("Assigning team admins is a premium feature")) {
-        errMsg = i18n.t("teamPage.teamInfo.assignAdminsEnterprise", { defaultValue: "Assigning admins is an enterprise-only feature. Please upgrade your LiteLLM plan to enable this." });
+        errMsg = i18n.t("teamPage.teamInfo.assignAdminsEnterprise", { defaultValue: "Assigning admins is an enterprise-only feature. Please upgrade your 中安云科 AI 安全网关 plan to enable this." });
       } else if (error?.message) {
         errMsg = error.message;
       }

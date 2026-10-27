@@ -236,7 +236,7 @@ export const AgentIdentityFields = ({ accessToken }: { accessToken: string | nul
             </AgentFormField>
             <p className="text-sm text-muted-foreground">
               {i18n.t("agents.agentIdentityFields.verificationNote", {
-                defaultValue: "LiteLLM verifies the agent's Entra token before matching this identity. Saving these fields configures the binding; an authenticated request provides verification. Runtime authentication headers are configured separately.",
+                defaultValue: "中安云科 AI 安全网关 verifies the agent's Entra token before matching this identity. Saving these fields configures the binding; an authenticated request provides verification. Runtime authentication headers are configured separately.",
               })}
             </p>
           </>

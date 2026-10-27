@@ -127,7 +127,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
               <p className="text-muted-foreground mb-6">
                 {t("mcpTools.byokCredentialModal.connectDesc", {
                   name: serverDisplayName,
-                  defaultValue: "LiteLLM needs access to {{name}} to complete your request.",
+                  defaultValue: "中安云科 AI 安全网关 needs access to {{name}} to complete your request.",
                 })}
               </p>
 
@@ -148,7 +148,7 @@ export const ByokCredentialModal: React.FC<ByokCredentialModalProps> = ({ server
                       {t("mcpTools.byokCredentialModal.howItWorksDesc", {
                         name: serverDisplayName,
                         defaultValue:
-                          "LiteLLM acts as a secure bridge. Your requests are routed through our MCP client directly to {{name}}'s API.",
+                          "中安云科 AI 安全网关 acts as a secure bridge. Your requests are routed through our MCP client directly to {{name}}'s API.",
                       })}
                     </p>
                   </div>

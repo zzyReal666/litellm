@@ -35,7 +35,7 @@ export const ConfigInfoMessage: React.FC<ConfigInfoMessageProps> = ({ show }) =>
         <p className="text-sm text-info mt-1">
           <Trans
             i18nKey="viewLogs.configInfoMessage.description"
-            defaults="To view request and response details, enable prompt storage in your LiteLLM configuration by adding the following to your <configFile>proxy_config.yaml</configFile> file, or toggle the setting in <settingsPath>Admin Settings → Logging Settings</settingsPath>."
+            defaults="To view request and response details, enable prompt storage in your 中安云科 AI 安全网关 configuration by adding the following to your <configFile>proxy_config.yaml</configFile> file, or toggle the setting in <settingsPath>Admin Settings → Logging Settings</settingsPath>."
             components={{
               configFile: <code className="bg-info/15 px-1 py-0.5 rounded-sm" />,
               settingsPath: <strong />,

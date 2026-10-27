@@ -19,7 +19,7 @@ export default function CloudZeroEmptyPlaceholder({ startCreation }: CloudZeroEm
         <p className="mx-auto max-w-md text-sm text-muted-foreground">
           {t("cloudZero.cloudZeroEmptyPlaceholder.description", {
             defaultValue:
-              "Connect your CloudZero account to start tracking and analyzing your cloud costs directly from LiteLLM.",
+              "Connect your CloudZero account to start tracking and analyzing your cloud costs directly from 中安云科 AI 安全网关.",
           })}
         </p>
         <Button size="lg" onClick={startCreation} className="mt-4">

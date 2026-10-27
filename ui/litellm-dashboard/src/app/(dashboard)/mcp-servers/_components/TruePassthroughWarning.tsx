@@ -17,13 +17,13 @@ export default function TruePassthroughWarning({ authType }: { authType?: string
       <TriangleAlert />
       <AlertTitle>
         {t("mcpTools.truePassthroughWarning.title", {
-          defaultValue: "True Passthrough disables LiteLLM authentication for this server",
+          defaultValue: "True Passthrough disables 中安云科 AI 安全网关 authentication for this server",
         })}
       </AlertTitle>
       <AlertDescription>
         {t("mcpTools.truePassthroughWarning.description", {
           defaultValue:
-            "Anyone who can reach the gateway can call this server without a LiteLLM key. The caller's Authorization header is forwarded to the upstream verbatim, per-key and per-team rate limits and spend tracking do not apply, and the upstream is fully responsible for authenticating callers. Choose OAuth Delegate instead if callers should still authenticate to LiteLLM.",
+            "Anyone who can reach the gateway can call this server without a 中安云科 AI 安全网关 key. The caller's Authorization header is forwarded to the upstream verbatim, per-key and per-team rate limits and spend tracking do not apply, and the upstream is fully responsible for authenticating callers. Choose OAuth Delegate instead if callers should still authenticate to 中安云科 AI 安全网关.",
         })}
       </AlertDescription>
     </Alert>

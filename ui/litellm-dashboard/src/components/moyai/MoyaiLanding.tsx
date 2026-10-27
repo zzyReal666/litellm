@@ -244,7 +244,7 @@ function QuickConnectDialog({ onQuickConnect }: { onQuickConnect: (url: string) 
 
 const STATS = [
   { value: "79%", label: i18n.t("moyaiLanding.statCheaper", { defaultValue: "cheaper than our Devin bill" }) },
-  { value: "100+", label: i18n.t("moyaiLanding.statProviders", { defaultValue: "providers through LiteLLM" }) },
+  { value: "100+", label: i18n.t("moyaiLanding.statProviders", { defaultValue: "providers through 中安云科 AI 安全网关" }) },
   { value: "6", label: i18n.t("moyaiLanding.statHarnesses", { defaultValue: "agent harnesses" }) },
 ];
 
@@ -317,7 +317,7 @@ export default function MoyaiLanding({
           <span className="text-[clamp(18px,2vw,28px)] font-medium tracking-[-0.02em] text-white">
             {i18n.t("moyaiLanding.worksWith", { defaultValue: "Works with Claude Code and Codex" })}
           </span>
-          <span className="text-[15px] text-[rgba(240,236,228,0.8)]">{i18n.t("moyaiLanding.selfHosted", { defaultValue: "Self-hosted · 100+ providers through LiteLLM" })}</span>
+          <span className="text-[15px] text-[rgba(240,236,228,0.8)]">{i18n.t("moyaiLanding.selfHosted", { defaultValue: "Self-hosted · 100+ providers through 中安云科 AI 安全网关" })}</span>
         </div>
       </section>
 
@@ -352,7 +352,7 @@ export default function MoyaiLanding({
           <LogoWall
             title={i18n.t("moyaiLanding.anyModel", { defaultValue: "Any model, any provider" })}
             items={PROVIDERS}
-            footnote={i18n.t("moyaiLanding.anyModelFootnote", { defaultValue: "Routed through your LiteLLM gateway, with spend tracked per teammate." })}
+            footnote={i18n.t("moyaiLanding.anyModelFootnote", { defaultValue: "Routed through your 中安云科 AI 安全网关, with spend tracked per teammate." })}
           />
         </div>
 

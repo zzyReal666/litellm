@@ -21,8 +21,8 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "LiteLLM Dashboard",
-  description: "LiteLLM Proxy Admin UI",
+  title: "中安云科 AI 安全网关",
+  description: "AI 安全网关 Admin UI",
   icons: { icon: "/get_favicon" },
 };
 

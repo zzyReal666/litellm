@@ -8,7 +8,7 @@ import valkeyLogo from "../../public/assets/logos/valkey.svg";
 export enum VectorStoreProviders {
   Bedrock = "Amazon Bedrock",
   S3Vectors = "Amazon S3 Vectors",
-  PgVector = "PostgreSQL pgvector (LiteLLM Connector)",
+  PgVector = "PostgreSQL pgvector (网关连接器)",
   VertexRagEngine = "Vertex AI RAG Engine",
   VertexAiSearch = "Vertex AI Search",
   OpenAI = "OpenAI",
@@ -250,7 +250,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Embedding Model",
       labelKey: "settingsPages.mcpSemanticFilterSettings.embeddingModelLabel",
       tooltip:
-        "The embedding model on this proxy that created the vectors already stored in your collection. LiteLLM embeds every search query with it, so it must be the same model. A different model of the same size will not error, it will just return wrong results. Add it under Models first if it is not listed",
+        "The embedding model on this proxy that created the vectors already stored in your collection. 中安云科 AI 安全网关 embeds every search query with it, so it must be the same model. A different model of the same size will not error, it will just return wrong results. Add it under Models first if it is not listed",
       tooltipKey: "vectorStoreProviders.mongodb.embeddingModelTooltip",
       placeholder: "text-embedding-3-small",
       required: true,
@@ -273,7 +273,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Text Field",
       labelKey: "vectorStoreProviders.mongodb.textFieldLabel",
       tooltip:
-        "The field in each document that holds its readable text. LiteLLM returns this text in search results, and it accepts a dotted path such as metadata.body (default: text)",
+        "The field in each document that holds its readable text. 中安云科 AI 安全网关 returns this text in search results, and it accepts a dotted path such as metadata.body (default: text)",
       tooltipKey: "vectorStoreProviders.mongodb.textFieldTooltip",
       placeholder: "text",
       required: false,
@@ -285,7 +285,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Candidates Considered",
       labelKey: "vectorStoreProviders.mongodb.numCandidatesLabel",
       tooltip:
-        "How many nearest neighbours MongoDB examines before returning the top results. Higher is more accurate and slower. Leave blank to let LiteLLM scale it with the requested result count",
+        "How many nearest neighbours MongoDB examines before returning the top results. Higher is more accurate and slower. Leave blank to let 中安云科 AI 安全网关 scale it with the requested result count",
       tooltipKey: "vectorStoreProviders.mongodb.numCandidatesTooltip",
       placeholder: "100",
       required: false,
@@ -343,7 +343,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Embedding Model",
       labelKey: "settingsPages.mcpSemanticFilterSettings.embeddingModelLabel",
       tooltip:
-        "The embedding model on this proxy that was used to create the embeddings already stored in your Valkey index. LiteLLM uses it to embed each search query, so it must be the same model or results will be wrong. Add it under Models first if it is not listed",
+        "The embedding model on this proxy that was used to create the embeddings already stored in your Valkey index. 中安云科 AI 安全网关 uses it to embed each search query, so it must be the same model or results will be wrong. Add it under Models first if it is not listed",
       tooltipKey: "vectorStoreProviders.valkey.embeddingModelTooltip",
       placeholder: "text-embedding-3-small",
       required: true,
@@ -354,7 +354,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Text Field",
       labelKey: "vectorStoreProviders.valkey.textFieldLabel",
       tooltip:
-        "The field in each stored document that holds its readable text. LiteLLM returns this text in search results. Must match how your documents were stored (default: text)",
+        "The field in each stored document that holds its readable text. 中安云科 AI 安全网关 returns this text in search results. Must match how your documents were stored (default: text)",
       tooltipKey: "vectorStoreProviders.valkey.textFieldTooltip",
       placeholder: "text",
       required: false,
@@ -366,7 +366,7 @@ export const vectorStoreProviderFields: Record<string, VectorStoreFieldConfig[]>
       label: "Vector Field Name",
       labelKey: "vectorStoreProviders.valkey.embeddingFieldLabel",
       tooltip:
-        "The field in each stored document that holds its embedding. LiteLLM searches against this field, so it must match the field your index was created on (default: embedding)",
+        "The field in each stored document that holds its embedding. 中安云科 AI 安全网关 searches against this field, so it must match the field your index was created on (default: embedding)",
       tooltipKey: "vectorStoreProviders.valkey.embeddingFieldTooltip",
       placeholder: "embedding",
       required: false,

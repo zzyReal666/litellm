@@ -131,7 +131,7 @@ const UIThemeSettings: React.FC<UIThemeSettingsProps> = ({ userID, userRole, acc
         </h1>
         <p className="text-sm text-muted-foreground">
           {t("uiThemeSettings.subtitle", {
-            defaultValue: "Customize your LiteLLM admin dashboard with a custom logo and favicon.",
+            defaultValue: "Customize your 中安云科 AI 安全网关 admin dashboard with a custom logo and favicon.",
           })}
         </p>
       </div>

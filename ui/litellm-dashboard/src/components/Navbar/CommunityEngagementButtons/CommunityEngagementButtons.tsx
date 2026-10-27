@@ -13,15 +13,15 @@ const COMMUNITY_LINKS = [
     labelKey: "navbar.joinSlack",
     label: "Join Slack",
     tooltipKey: "navbar.slackCommunity",
-    tooltip: "LiteLLM Slack community",
+    tooltip: "中安云科 AI 安全网关 Slack community",
     Icon: Slack,
   },
   {
     href: "https://github.com/BerriAI/litellm",
     labelKey: "navbar.githubRepo",
-    label: "LiteLLM on GitHub",
+    label: "中安云科 AI 安全网关 on GitHub",
     tooltipKey: "navbar.githubRepo",
-    tooltip: "LiteLLM on GitHub",
+    tooltip: "中安云科 AI 安全网关 on GitHub",
     Icon: Github,
   },
 ] as const;

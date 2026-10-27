@@ -52,35 +52,35 @@
     "aiGateway": "AI 网关",
     "modeChat": "对话",
     "adminsCanEnableInSettings": "管理员可在设置中启用",
-    "liteLLMHome": "LiteLLM 首页",
+    "liteLLMHome": "中安云科 AI 安全网关首页",
     "noMatchingWorkers": "没有匹配的 Worker",
     "blogLoading": "加载中",
     "expandSidebar": "展开侧边栏",
     "collapseSidebar": "收起侧边栏",
     "docs": "文档",
     "blog": "博客",
-    "thanksForUsing": "感谢使用 LiteLLM！",
+    "thanksForUsing": "感谢使用中安云科 AI 安全网关！",
     "failedToLoadPosts": "加载文章失败",
     "retry": "重试",
     "noPostsAvailable": "暂无文章",
     "viewAllPosts": "查看全部文章",
     "communityLinks": "社区链接",
-    "slackCommunity": "LiteLLM Slack 社区",
+    "slackCommunity": "中安云科 AI 安全网关 Slack 社区",
     "joinSlack": "加入 Slack",
-    "githubRepo": "LiteLLM 的 GitHub 仓库",
+    "githubRepo": "中安云科 AI 安全网关的 GitHub 仓库",
     "language": "语言",
     "notificationsBell": {
-      "autoRouterTitle": "LiteLLM 自动路由",
+      "autoRouterTitle": "中安云科 AI 安全网关自动路由",
       "autoRouterDescription": "把每个请求都路由到能处理它的最便宜模型，无需修改提示词。",
       "readTheDocs": "阅读文档",
       "notifications": "通知",
       "agentPlatformDesc": "开源 Agent 基础设施 — 沙箱、持久会话以及运行在 AWS Fargate 上的 worker。",
       "markAsRead": "标记为已读"
     },
-    "logoAlt": "LiteLLM 品牌",
+    "logoAlt": "中安云科 AI 安全网关品牌",
     "productDocsAriaLabel": "产品文档",
-    "litellm-brand": "LiteLLM 品牌",
-    "thanks-for-using-litellm": "感谢使用 LiteLLM！"
+    "litellm-brand": "中安云科 AI 安全网关品牌",
+    "thanks-for-using-litellm": "感谢使用中安云科 AI 安全网关！"
   },
   "user": {
     "tier": "套餐",
@@ -112,9 +112,9 @@
     "toggleHideLiteAdmin": "切换隐藏 LiteAdmin"
   },
   "login": {
-    "subtitle": "访问您的 LiteLLM 管理界面。",
+    "subtitle": "访问您的中安云科 AI 安全网关管理界面。",
     "defaultCredentialsTitle": "默认凭据",
-    "defaultCredentialsBody": "默认情况下，用户名为 <code>admin</code>，密码为您设置的 LiteLLM Proxy <code>MASTER_KEY</code>。",
+    "defaultCredentialsBody": "默认情况下，用户名为 <code>admin</code>，密码为您设置的 AI 安全网关 <code>MASTER_KEY</code>。",
     "docsHint": "需要配置 UI 凭据或 SSO？<docsLink>查看文档</docsLink>。",
     "worker": "工作节点",
     "workerPlaceholder": "选择要连接的 worker",
@@ -130,13 +130,13 @@
     "ssoNotConfigured": "请先配置 SSO 后再使用 SSO 登录。",
     "adminUiDisabledTitle": "管理界面已禁用",
     "adminUiDisabledBody": "管理员已禁用管理界面。如需重新启用，请更新以下环境变量：",
-    "ssoEnabledNotice": "单点登录（SSO）已启用。LiteLLM 不再在加载此页面时自动跳转到 SSO 登录流程。如需重新启用自动跳转，请在环境配置中设置 <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code>。",
+    "ssoEnabledNotice": "单点登录（SSO）已启用。中安云科 AI 安全网关不再在加载此页面时自动跳转到 SSO 登录流程。如需重新启用自动跳转，请在环境配置中设置 <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code>。",
     "title": "登录"
   },
   "shared": {
     "createdKeyDisplay": {
       "copiedToClipboard": "密钥已复制到剪贴板",
-      "saveWarning": "请将此密钥保存在安全且易于访问的地方。出于安全原因，<b>您将无法通过 LiteLLM 账户再次查看它</b>。如果丢失此密钥，您需要重新生成一个。",
+      "saveWarning": "请将此密钥保存在安全且易于访问的地方。出于安全原因，<b>您将无法通过中安云科 AI 安全网关账户再次查看它</b>。如果丢失此密钥，您需要重新生成一个。",
       "virtualKeyLabel": "虚拟密钥：",
       "copyButton": "复制虚拟密钥",
       "copied": "已复制！"
@@ -216,14 +216,14 @@
       "totalSaved": "共计节省",
       "totalSavedHint": "压缩 + 提示词缓存 + 自动路由",
       "loading": "加载中...",
-      "totalSavedInfo": "它旁边三个卡片之和。其中的缓存部分只计入 LiteLLM 注入的份额，所以这个合计反映的是网关自身带来的节省；客户端或提供商自带的缓存只出现在缓存卡片的“总计”里。",
+      "totalSavedInfo": "它旁边三个卡片之和。其中的缓存部分只计入 网关注入的份额，所以这个合计反映的是网关自身带来的节省；客户端或提供商自带的缓存只出现在缓存卡片的“总计”里。",
       "compressionSavings": "压缩节省",
       "tokensCompressed": "已压缩 {{count}} 个 Token",
       "compressionSavingsInfo": "调用前由 Headroom 移除的 Token，按对应模型的输入单价计价。",
       "promptCachingSavings": "提示词缓存节省",
-      "litellmInjected": "LiteLLM 注入",
+      "litellmInjected": "网关注入",
       "total": "总计",
-      "promptCachingInfo": "缓存相对“每个 Token 都按输入单价付费”省下的金额：从缓存读取的 Token 的折扣，减去提供商写入缓存条目收取的溢价。主数字是 LiteLLM 通过配置的注入点或自动提示词缓存自行插入断点所获得的份额。旁边的总计还包括自带 cache_control 的请求以及隐式缓存的提供商。当流量写入的缓存多于复用时，两者都可能为负，所以主数字并不总是较小的那个。",
+      "promptCachingInfo": "缓存相对“每个 Token 都按输入单价付费”省下的金额：从缓存读取的 Token 的折扣，减去提供商写入缓存条目收取的溢价。主数字是中安云科 AI 安全网关通过配置的注入点或自动提示词缓存自行插入断点所获得的份额。旁边的总计还包括自带 cache_control 的请求以及隐式缓存的提供商。当流量写入的缓存多于复用时，两者都可能为负，所以主数字并不总是较小的那个。",
       "autoRouterSavings": "自动路由节省",
       "autoRouterHint": "相比它可能选到的最贵模型",
       "autoRouterInfo": "假设所有请求都走自动路由能选到的最贵模型会产生的花费，减去实际花费。切换模型会让新模型的缓存变冷，因此需要重新写入提示词，而基准是按缓存已热计算的；频繁刷掉缓存的路径合计可能为负，而双方都没有缓存的真实首轮对话则会被低估。"
@@ -249,7 +249,7 @@
       "credentials": "凭据",
       "credentialTypes": "凭据类型",
       "reusable": "可复用",
-      "reusableDescription": "保存在 LiteLLM 中可被多次添加到模型的凭据。",
+      "reusableDescription": "保存在中安云科 AI 安全网关中可被多次添加到模型的凭据。",
       "manual": "手动",
       "manualDescription": "在创建模型时直接添加或在配置文件中定义的凭据。",
       "createdBy": "创建者",
@@ -258,7 +258,7 @@
       "modelAccessGroup": "模型访问组",
       "unknownProvider": "未知提供商",
       "publicModelName": "公开模型名称",
-      "litellmModelName": "LiteLLM 模型名称",
+      "litellmModelName": "网关模型名称",
       "definedInConfig": "在配置文件中定义",
       "unknownDate": "未知日期",
       "costPerMTokens": "每百万 Token 费用",
@@ -447,12 +447,12 @@
     },
     "passThroughSecuritySection": {
       "title": "安全",
-      "subtitle": "启用后，发往此端点的请求将需要有效的 LiteLLM 虚拟密钥",
+      "subtitle": "启用后，发往此端点的请求将需要有效的中安云科 AI 安全网关虚拟密钥",
       "authenticationPremium": "认证（高级版）",
-      "enterpriseNotice": "为透传端点设置认证是 LiteLLM 企业版功能。获取试用密钥请访问<pricingLink>此处</pricingLink>。"
+      "enterpriseNotice": "为透传端点设置认证是 企业版功能。获取试用密钥请访问<pricingLink>此处</pricingLink>。"
     },
     "premiumLoggingSettings": {
-      "enterpriseNotice": "设置密钥/团队日志配置是 LiteLLM 企业版功能。所有免费用户均可使用全局日志设置。获取试用密钥请访问<pricingLink>此处</pricingLink>。"
+      "enterpriseNotice": "设置密钥/团队日志配置是 企业版功能。所有免费用户均可使用全局日志设置。获取试用密钥请访问<pricingLink>此处</pricingLink>。"
     },
     "projectDropdown": {
       "placeholder": "搜索或选择项目",
@@ -888,7 +888,7 @@
   },
   "scim": {
     "title": "SCIM 配置",
-    "description": "跨域身份管理系统（SCIM）允许您自动在 LiteLLM 中预配和管理用户及用户组。",
+    "description": "跨域身份管理系统（SCIM）允许您自动在中安云科 AI 安全网关中预配和管理用户及用户组。",
     "tenantUrlTitle": "SCIM 租户 URL",
     "tenantUrlDesc": "在您的身份提供商 SCIM 集成设置中使用此 URL。",
     "urlCopied": "URL 已复制到剪贴板",
@@ -1156,7 +1156,7 @@
     "addButton": "+ 添加透传端点",
     "modalTitle": "添加透传端点",
     "alertMessage": "什么是透传端点？",
-    "alertDescription": "将来自 LiteLLM 代理的请求路由到任意外部 API。适用于自定义模型、图像生成 API 或任何您希望通过 LiteLLM 代理的服务。",
+    "alertDescription": "将来自中安云科 AI 安全网关代理的请求路由到任意外部 API。适用于自定义模型、图像生成 API 或任何您希望通过中安云科 AI 安全网关代理的服务。",
     "routeConfigTitle": "路由配置",
     "routeConfigSubtitle": "配置如何将您域名上的请求转发到目标 API",
     "pathPrefixLabel": "路径前缀",
@@ -1252,7 +1252,7 @@
       "enterDelegatedScope": "输入委派作用域",
       "delegatedScopesNote": "用户必须先通过此网关的 Microsoft SSO 登录。后续委派调用必须同时满足用户与代理的权限。",
       "execution": "执行",
-      "verificationNote": "LiteLLM 在匹配此身份前会验证代理的 Entra 令牌。保存这些字段即配置绑定；已验证的请求提供验证。运行时认证标头需单独配置。"
+      "verificationNote": "中安云科 AI 安全网关在匹配此身份前会验证代理的 Entra 令牌。保存这些字段即配置绑定；已验证的请求提供验证。运行时认证标头需单独配置。"
     },
     "killSwitchFields": {
       "nameRequired": "请输入名称",
@@ -1266,7 +1266,7 @@
       "password": "密码",
       "passwordRequired": "请输入密码",
       "webhookUrl": "Webhook URL",
-      "webhookUrlHint": "触发 kill switch 时 LiteLLM 调用的绝对 http(s) URL。留空以移除 kill switch。",
+      "webhookUrlHint": "触发 kill switch 时中安云科 AI 安全网关调用的绝对 http(s) URL。留空以移除 kill switch。",
       "method": "方法",
       "headers": "标头",
       "addHeader": "添加标头",
@@ -1328,7 +1328,7 @@
     "creating": "创建中...",
     "creationComplete": "用户创建完成",
     "nextStep": "下一步：",
-    "nextStepDesc": "下载包含虚拟密钥和邀请链接的凭据文件。用户需要这些虚拟密钥通过 LiteLLM 发起 LLM 请求。",
+    "nextStepDesc": "下载包含虚拟密钥和邀请链接的凭据文件。用户需要这些虚拟密钥通过中安云科 AI 安全网关发起 LLM 请求。",
     "startNewImport": "开始新的批量导入",
     "downloadCredentials": "下载用户凭据",
     "colRow": "行号",
@@ -1593,7 +1593,7 @@
   },
   "emailSettings": {
     "emailServerSettings": "邮件服务器设置",
-    "docsLink": "LiteLLM 文档：邮件告警",
+    "docsLink": "中安云科 AI 安全网关文档：邮件告警",
     "saveChanges": "保存更改",
     "testEmailAlerts": "测试邮件告警",
     "saveSuccess": "邮件设置已成功更新",
@@ -1974,10 +1974,10 @@
     },
     "guardrailGarden": {
       "searchPlaceholder": "搜索护栏",
-      "litellmSectionTitle": "LiteLLM 内容过滤器",
+      "litellmSectionTitle": "内容过滤器",
       "showLess": "收起",
       "showAll": "显示全部（{{count}}）",
-      "litellmSectionDesc": "由 LiteLLM 内置的护栏，零延迟，无外部依赖，无额外费用。",
+      "litellmSectionDesc": "由中安云科 AI 安全网关内置的护栏，零延迟，无外部依赖，无额外费用。",
       "partnerSectionTitle": "合作伙伴护栏",
       "partnerSectionDesc": "来自领先 AI 安全提供商的第三方护栏集成。",
       "aim": {
@@ -2227,7 +2227,7 @@
     },
     "guardrailGardenDetail": {
       "propertyProvider": "提供商",
-      "litellmContentFilter": "LiteLLM 内容过滤器",
+      "litellmContentFilter": "内容过滤器",
       "partnerGuardrail": "合作伙伴护栏",
       "propertySubcategory": "子类别",
       "propertyCost": "费用",
@@ -2324,8 +2324,8 @@
       "closeDetailPanel": "关闭详情面板",
       "endpoint": "端点",
       "method": "方法",
-      "forwardLiteLLMApiKey": "转发 LiteLLM API 密钥",
-      "forwardKeyDesc": "启用后，调用方的 LiteLLM API 密钥将作为 <code>Authorization</code> 请求头转发到您的护栏端点，使护栏能够使用原始调用方凭据验证模型调用。",
+      "forwardLiteLLMApiKey": "转发中安云科 AI 安全网关 API 密钥",
+      "forwardKeyDesc": "启用后，调用方的中安云科 AI 安全网关 API 密钥将作为 <code>Authorization</code> 请求头转发到您的护栏端点，使护栏能够使用原始调用方凭据验证模型调用。",
       "staticHeadersDesc": "随每次护栏请求一同发送。",
       "removeHeader": "移除 {{name}}",
       "headerNamePlaceholder": "请求头名称（如 X-API-Key）",
@@ -2335,7 +2335,7 @@
       "noForwardClientHeaders": "未配置转发客户端请求头。",
       "extraHeaderPlaceholder": "如 x-request-id",
       "equivalentConfig": "等效配置",
-      "guardrailInfoNote": "此护栏运行在独立实例上，接收用户请求并将结果转发到流水线下一步。请参阅 <docsLink>LiteLLM Generic Guardrail API 文档</docsLink>了解配置详情。",
+      "guardrailInfoNote": "此护栏运行在独立实例上，接收用户请求并将结果转发到流水线下一步。请参阅 <docsLink>中安云科 AI 安全网关 Generic Guardrail API 文档</docsLink>了解配置详情。",
       "testEndpoint": "测试端点",
       "approveGuardrailTitle": "批准护栏",
       "rejectGuardrailTitle": "拒绝护栏",
@@ -2568,7 +2568,7 @@
       "itemsSelected_other": "已选择 {{count}} 项"
     },
     "toolPermissionRulesEditor": {
-      "title": "LiteLLM 工具权限护栏",
+      "title": "中安云科 AI 安全网关工具权限护栏",
       "subtitle": "为工具名称或类型提供正则表达式模式（例如 ^mcp__github_.*$），并可选择性地约束载荷字段。",
       "addRule": "添加规则",
       "noRules": "尚未添加工具规则",
@@ -2977,7 +2977,7 @@
     "provider": "提供商",
     "providerLogoAlt": "{{provider}} 标志",
     "notSet": "未设置",
-    "litellmModel": "LiteLLM 模型",
+    "litellmModel": "中安云科 AI 安全网关模型",
     "pricing": "定价",
     "pricingInput": "输入：¥{{cost}}/百万 Token",
     "pricingOutput": "输出：¥{{cost}}/百万 Token",
@@ -2990,8 +2990,8 @@
     "editTooltip": "只有数据库模型可以编辑。您必须是管理员或该模型的创建者才能编辑。",
     "fieldModelName": "模型名称",
     "placeholderModelName": "输入模型名称",
-    "fieldLitellmModelName": "LiteLLM 模型名称",
-    "placeholderLitellmModelName": "输入 LiteLLM 模型名称",
+    "fieldLitellmModelName": "网关模型名称",
+    "placeholderLitellmModelName": "输入 网关模型名称",
     "fieldInputCost": "输入费用（每百万 Token）",
     "placeholderInputCost": "输入输入费用",
     "fieldOutputCost": "输出费用（每百万 Token）",
@@ -3042,8 +3042,8 @@
     "cacheControlRole": "角色：{{role}}",
     "cacheControlIndex": "索引：{{index}}",
     "fieldModelInfo": "模型信息",
-    "fieldLitellmParams": "LiteLLM 参数",
-    "tooltipLitellmParams": "用于调用 litellm.completion() 的可选参数，部分参数由 LiteLLM 自动添加。",
+    "fieldLitellmParams": "中安云科 AI 安全网关参数",
+    "tooltipLitellmParams": "用于调用 litellm.completion() 的可选参数，部分参数由中安云科 AI 安全网关自动添加。",
     "fieldTeamId": "团队 ID",
     "saveChanges": "保存更改",
     "deleteModalTitle": "删除模型",
@@ -3053,7 +3053,7 @@
     "usingExistingCredentialTitle": "使用现有凭据",
     "storingCredential": "正在存储凭据...",
     "credentialStoredSuccess": "凭据已成功存储",
-    "invalidJsonLitellmParams": "LiteLLM 参数中存在无效的 JSON",
+    "invalidJsonLitellmParams": "中安云科 AI 安全网关参数中存在无效的 JSON",
     "invalidJsonModelInfo": "模型信息中存在无效的 JSON",
     "modelSettingsUpdateSuccess": "模型设置已成功更新",
     "modelSettingsUpdateFailed": "更新模型设置失败",
@@ -3269,7 +3269,7 @@
     "loadingAgents": "正在加载 Agent…",
     "loadingMcpServers": "正在加载 MCP 服务器…",
     "unknownStatus": "未知",
-    "builtWithPrefix": "基于 LiteLLM 构建：v",
+    "builtWithPrefix": "基于中安云科 AI 安全网关构建：v",
     "serviceStatusLabel": "服务状态：",
     "searchMcpServersPlaceholder": "搜索 MCP 服务器名称或描述…",
     "wildcardDescription": "该模型使用通配路由。在出现 <code>*</code> 符号的位置可以传入任意值。"
@@ -3297,7 +3297,7 @@
     "user-id": "用户 ID"
   },
   "organizations": {
-    "enterpriseFeature": "这是 LiteLLM 企业版功能，需要有效的密钥才能使用。获取试用密钥请访问<pricingLink>此处</pricingLink>。",
+    "enterpriseFeature": "这是 企业版功能，需要有效的密钥才能使用。获取试用密钥请访问<pricingLink>此处</pricingLink>。",
     "createNewOrg": "+ 创建新组织",
     "tabYourOrgs": "我的组织",
     "lastRefreshed": "最后刷新：{{time}}",
@@ -3355,7 +3355,7 @@
     "colMethods": "方法",
     "methodsTooltip": "此端点支持的 HTTP 方法",
     "colAuthentication": "认证",
-    "authTooltip": "调用端点需要 LiteLLM 虚拟密钥",
+    "authTooltip": "调用端点需要中安云科 AI 安全网关虚拟密钥",
     "colHeaders": "请求头",
     "noData": "未配置透传端点",
     "endpointNotFound": "未找到端点",
@@ -3445,7 +3445,7 @@
     "reportedByWorker": "由响应此请求的 worker 上报。其他 worker 会在下次轮询时获取重新加载，Last run 时间为任意 worker 记录的最新一次重新加载。",
     "hoursRange": "小时数必须是 1 到 168 之间的整数",
     "status": "状态：",
-    "scheduleModalDescription": "设置 LiteLLM 从远程源获取最新定价数据的频率。",
+    "scheduleModalDescription": "设置中安云科 AI 安全网关从远程源获取最新定价数据的频率。",
     "reloadIntervalAria": "重新加载间隔（小时）"
   },
   "prompts": {
@@ -3554,7 +3554,7 @@
     "enterpriseFeature": "✨ 企业版功能",
     "testAlerts": "测试告警",
     "addCallbackModalTitle": "添加日志回调",
-    "litellmDocsLogging": "LiteLLM 文档：日志",
+    "litellmDocsLogging": "中安云科 AI 安全网关文档：日志",
     "adding": "添加中...",
     "addCallback": "添加回调",
     "editCallbackModalTitle": "编辑回调设置",
@@ -3580,18 +3580,18 @@
   },
   "transformRequest": {
     "title": "Playground",
-    "subtitle": "查看 LiteLLM 如何为指定提供商转换您的请求。",
+    "subtitle": "查看中安云科 AI 安全网关如何为指定提供商转换您的请求。",
     "invalidJson": "请求体中的 JSON 无效",
     "noAccessToken": "未找到访问令牌",
     "transformedSuccess": "请求转换成功",
     "unexpectedFormat": "收到格式异常的转换请求",
     "transformFailed": "请求转换失败",
     "originalRequestTitle": "原始请求",
-    "originalRequestDesc": "您向 LiteLLM /chat/completions 端点发送的请求。",
+    "originalRequestDesc": "您向中安云科 AI 安全网关 /chat/completions 端点发送的请求。",
     "keyboardShortcutHint": "按 Cmd/Ctrl + Enter 进行转换",
     "transformButton": "转换",
     "transformedRequestTitle": "转换后的请求",
-    "transformedRequestDesc": "LiteLLM 如何为指定提供商转换您的请求。",
+    "transformedRequestDesc": "中安云科 AI 安全网关如何为指定提供商转换您的请求。",
     "sensitiveHeadersNote": "注意：敏感请求头不会显示。",
     "foundAnError": "发现错误？请在<a>此处</a>提交 issue。",
     "copyToClipboard": "复制到剪贴板",
@@ -3599,7 +3599,7 @@
   },
   "uiThemeSettings": {
     "title": "界面主题自定义",
-    "subtitle": "为您的 LiteLLM 管理仪表盘自定义 Logo 和 Favicon。",
+    "subtitle": "为您的中安云科 AI 安全网关管理仪表盘自定义 Logo 和 Favicon。",
     "logoUrlLabel": "自定义 Logo URL",
     "logoUrlHint": "输入自定义 Logo 的 URL，留空则使用默认图标",
     "faviconUrlLabel": "自定义 Favicon URL",
@@ -3954,7 +3954,7 @@
       "labelCacheHit": "缓存命中",
       "labelCacheReadTokens": "缓存读取 Token",
       "labelCacheCreationTokens": "缓存创建 Token",
-      "labelLitellmOverhead": "LiteLLM 开销",
+      "labelLitellmOverhead": "中安云科 AI 安全网关开销",
       "labelRetries": "重试次数",
       "labelStartTime": "开始时间",
       "labelEndTime": "结束时间",
@@ -3977,7 +3977,7 @@
       "errorMessage": "消息：",
       "batchResults": "批量结果",
       "cacheHitLabel": "命中",
-      "cacheKeyTooltip": "LiteLLM 为该请求在响应缓存中计算出的键。缓存键相同的请求共用同一份缓存响应；键不同则表示请求内容未匹配到任何缓存条目。",
+      "cacheKeyTooltip": "中安云科 AI 安全网关为该请求在响应缓存中计算出的键。缓存键相同的请求共用同一份缓存响应；键不同则表示请求内容未匹配到任何缓存条目。",
       "cacheMissLabel": "未命中",
       "docs": "文档",
       "guardrailsEvaluated": "已评估 {{count}} 个护栏",
@@ -3993,7 +3993,7 @@
       "masked": "{{count}} 个已脱敏",
       "promptCacheCreationTooltip": "写入 LLM 提供商提示词缓存、供后续请求复用的输入令牌。",
       "promptCacheReadTooltip": "从 LLM 提供商的提示词缓存（例如 Anthropic / OpenAI）读取的输入令牌，按折扣价格计费。由提供商上报。",
-      "responseCacheTooltip": "该请求是否由 LiteLLM 的响应缓存（例如 Redis / 内存缓存）返回，从而完全跳过 LLM 提供商调用。这与提供商的提示词缓存无关，此处显示未命中并不代表提示词缓存失败。",
+      "responseCacheTooltip": "该请求是否由中安云科 AI 安全网关的响应缓存（例如 Redis / 内存缓存）返回，从而完全跳过 LLM 提供商调用。这与提供商的提示词缓存无关，此处显示未命中并不代表提示词缓存失败。",
       "labelUser": "用户",
       "labelCredential": "凭证"
     },
@@ -4177,7 +4177,7 @@
     },
     "auditLogs": {
       "enterpriseTitle": "企业版功能。",
-      "enterpriseDesc": "这是 LiteLLM 企业版功能，需要有效的许可证密钥方可使用。",
+      "enterpriseDesc": "这是 企业版功能，需要有效的许可证密钥方可使用。",
       "previewText": "以下是审计日志功能的预览：",
       "previewAlt": "审计日志预览",
       "pageTitle": "审计日志",
@@ -4265,7 +4265,7 @@
     },
     "configInfoMessage": {
       "title": "请求/响应数据不可用",
-      "description": "要查看请求和响应详情，请在您的 LiteLLM 配置中启用提示词存储，方法是在 <configFile>proxy_config.yaml</configFile> 文件中添加以下内容，或在<settingsPath>管理员设置 → 日志设置</settingsPath>中切换该选项。",
+      "description": "要查看请求和响应详情，请在您的中安云科 AI 安全网关配置中启用提示词存储，方法是在 <configFile>proxy_config.yaml</configFile> 文件中添加以下内容，或在<settingsPath>管理员设置 → 日志设置</settingsPath>中切换该选项。",
       "note": "注意：此设置仅对配置更改后的新请求生效。"
     },
     "costBreakdownViewer": {
@@ -4407,7 +4407,7 @@
       "noMatchingRequests": "没有匹配的请求",
       "noMatchingRequestsHint": "该时间范围内没有符合筛选条件的请求。",
       "noRequestsYet": "暂无请求",
-      "requestsAppearHere": "通过 LiteLLM 代理的请求会显示在这里。",
+      "requestsAppearHere": "通过中安云科 AI 安全网关代理的请求会显示在这里。",
       "searchPlaceholder": "按 ID 搜索日志…"
     },
     "requestLogsTableColumns": {
@@ -4746,9 +4746,9 @@
       "connectedSuccess": "已连接到 {{name}}",
       "failedToConnect": "连接失败",
       "connectTitle": "连接 {{name}}",
-      "connectDesc": "LiteLLM 需要访问 {{name}} 以完成您的请求。",
+      "connectDesc": "中安云科 AI 安全网关需要访问 {{name}} 以完成您的请求。",
       "howItWorksTitle": "工作原理",
-      "howItWorksDesc": "LiteLLM 充当安全桥梁。您的请求通过我们的 MCP 客户端直接路由到 {{name}} 的 API。",
+      "howItWorksDesc": "中安云科 AI 安全网关充当安全桥梁。您的请求通过我们的 MCP 客户端直接路由到 {{name}} 的 API。",
       "requestedAccess": "请求的访问权限",
       "continueToAuth": "继续进行认证",
       "provideApiKeyTitle": "提供 API 密钥",
@@ -4822,20 +4822,20 @@
     "mcpPermissionManagement": {
       "panelTitle": "权限管理 / 访问控制",
       "panelSubtitle": "配置访问权限和安全设置（可选）",
-      "allowAllKeysLabel": "允许所有 LiteLLM 密钥",
+      "allowAllKeysLabel": "允许所有中安云科 AI 安全网关密钥",
       "allowAllKeysTooltip": "启用后，每个 API 密钥都可以访问此 MCP 服务器。",
       "allowAllKeysDesc": "若希望此服务器对所有密钥「公开」，请启用此选项。",
       "internalNetworkOnlyLabel": "仅限内部网络",
       "internalNetworkOnlyTooltip": "开启后，仅接受来自内部网络的请求。关闭后可允许外部客户端（其他集群、ChatGPT 等）访问。无论此设置如何，始终需要 API 密钥认证。",
       "internalNetworkOnlyDesc": "开启后将访问限制为仅限内部网络中的调用方。",
       "delegateAuthLabel": "将认证委托给上游（PKCE 透传）",
-      "delegateAuthTooltip": "开启后，LiteLLM 跳过自身的 API 密钥/SSO 检查，让客户端直接与上游 MCP 服务器完成 PKCE 认证。仅在认证类型为 oauth2 时生效。此路由不会执行花费追踪或按密钥速率限制。",
-      "delegateAuthDesc": "绕过 LiteLLM 认证，让客户端直接与上游 OAuth MCP 服务器进行认证。",
+      "delegateAuthTooltip": "开启后，中安云科 AI 安全网关跳过自身的 API 密钥/SSO 检查，让客户端直接与上游 MCP 服务器完成 PKCE 认证。仅在认证类型为 oauth2 时生效。此路由不会执行花费追踪或按密钥速率限制。",
+      "delegateAuthDesc": "绕过中安云科 AI 安全网关认证，让客户端直接与上游 OAuth MCP 服务器进行认证。",
       "oauthPassthroughLabel": "OAuth 透传",
       "oauthPassthroughTooltip": "开启后，此服务器将作为 OAuth 透传处理：网关代理上游 /.well-known/oauth-protected-resource 元数据，在未提供 bearer 令牌时发出符合规范的 401 挑战，并传播上游 401/403 响应。仅在认证类型为 None 且「Authorization」在额外请求头中时生效。",
       "oauthPassthroughDesc": "转发上游 OAuth 发现信息和 401 挑战，让客户端直接与上游 MCP 服务器协商 OAuth 认证。",
       "internalDelegateWarningTitle": "内部服务器已启用上游 OAuth 委托",
-      "internalDelegateWarningDesc": "此 MCP 服务器配置为仅限内部访问，但已将认证委托给上游。匿名用户将能在没有 LiteLLM 会话的情况下访问上游 OAuth2 /authorize 流程。请确保您的上游提供商和网络已实施访问控制。",
+      "internalDelegateWarningDesc": "此 MCP 服务器配置为仅限内部访问，但已将认证委托给上游。匿名用户将能在没有中安云科 AI 安全网关会话的情况下访问上游 OAuth2 /authorize 流程。请确保您的上游提供商和网络已实施访问控制。",
       "accessGroupsLabel": "MCP 访问组",
       "accessGroupsTooltip": "为此 MCP 服务器指定访问组。用户必须属于至少一个访问组才能访问此服务器。",
       "accessGroupsPlaceholder": "选择现有组或输入新组名",
@@ -4853,7 +4853,7 @@
       "addStaticHeader": "添加静态请求头",
       "clearHeaderName": "清空请求头名称",
       "clearHeaderValue": "清空请求头值",
-      "internalDelegateWarningDescription": "该 MCP 服务器配置为仅限内部访问，但把认证委托给上游。匿名用户无需 LiteLLM 会话即可访问上游的 OAuth2 /authorize 流程。请确保你的上游提供商和网络已实施访问控制。"
+      "internalDelegateWarningDescription": "该 MCP 服务器配置为仅限内部访问，但把认证委托给上游。匿名用户无需中安云科 AI 安全网关会话即可访问上游的 OAuth2 /authorize 流程。请确保你的上游提供商和网络已实施访问控制。"
     },
     "mcpServerCard": {
       "testConnection": "测试连接",
@@ -4875,7 +4875,7 @@
       "connectButton": "连接",
       "logoAltWithName": "{{name}} Logo",
       "oauthFlowNotSet": "未设置 OAuth 流程",
-      "oauthFlowNotSetTooltip": "此 OAuth 服务器未设置流程（机器对机器或交互式）。请打开它并选择 OAuth 流程类型，以便 LiteLLM 按您的预期进行认证。",
+      "oauthFlowNotSetTooltip": "此 OAuth 服务器未设置流程（机器对机器或交互式）。请打开它并选择 OAuth 流程类型，以便中安云科 AI 安全网关按您的预期进行认证。",
       "missingUserFields": "缺少 {{count}} 个用户字段",
       "stdioDisabled": "stdio 已禁用",
       "userFieldsMissing_one": "缺少 {{count}} 个用户字段",
@@ -4915,7 +4915,7 @@
       "requiredFieldCount_one": "{{count}} 个必填项",
       "requiredFieldCount_other": "{{count}} 个必填项",
       "noRulesSet": "未设置规则",
-      "submissionRulesDesc": "选择提交内容被视为合规前必须填写的字段。LiteLLM 将在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
+      "submissionRulesDesc": "选择提交内容被视为合规前必须填写的字段。中安云科 AI 安全网关将在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
       "saveRulesButton": "保存规则",
       "transportLabel": "传输方式：",
       "submittedByLabel": "提交者：",
@@ -5162,7 +5162,7 @@
       "awsSessionTokenTooltip": "可选。仅在使用临时 STS 凭据时需要。",
       "awsSessionTokenPlaceholder": "输入 Session Token（可选）",
       "awsRoleArnLabel": "AWS Role ARN",
-      "awsRoleArnTooltip": "可选。签名前通过 STS 代入的 IAM 角色 ARN。若设置，LiteLLM 将调用 sts:AssumeRole 获取临时凭据。除非同时提供了显式密钥，否则使用环境凭据（IAM 角色、环境变量）作为源身份。",
+      "awsRoleArnTooltip": "可选。签名前通过 STS 代入的 IAM 角色 ARN。若设置，中安云科 AI 安全网关将调用 sts:AssumeRole 获取临时凭据。除非同时提供了显式密钥，否则使用环境凭据（IAM 角色、环境变量）作为源身份。",
       "awsRoleArnPlaceholder": "arn:aws:iam::123456789012:role/MyRole（可选）",
       "awsSessionNameLabel": "AWS Session Name",
       "awsSessionNameTooltip": "可选。AssumeRole 调用的会话名称，出现在 CloudTrail 日志中。若不填写则自动生成。",
@@ -5175,9 +5175,9 @@
     },
     "mcpConnect": {
       "pageTitle": "连接到您的 MCP 客户端",
-      "pageDesc": "通过 LiteLLM MCP 直接在任意 MCP 客户端中使用工具，让您的 AI 助手通过简单、安全的连接执行现实任务。",
+      "pageDesc": "通过中安云科 AI 安全网关 MCP 直接在任意 MCP 客户端中使用工具，让您的 AI 助手通过简单、安全的连接执行现实任务。",
       "tabOpenAI": "OpenAI API",
-      "tabLiteLLMProxy": "LiteLLM Proxy",
+      "tabLiteLLMProxy": "AI 安全网关",
       "tabCursor": "Cursor",
       "tabStreamableHttp": "Streamable HTTP",
       "implementationExample": "实现示例",
@@ -5190,24 +5190,24 @@
       "option2Label": "方式二：",
       "option2Desc": "指定一组 MCP：",
       "mixBothText": "也可以混合使用：",
-      "litellmProxyApiIntegration": "LiteLLM Proxy API 集成",
-      "litellmProxyDesc": "连接 LiteLLM Proxy Responses API，与多个模型提供商无缝集成工具",
+      "litellmProxyApiIntegration": "AI 安全网关 API 集成",
+      "litellmProxyDesc": "连接 AI 安全网关 Responses API，与多个模型提供商无缝集成工具",
       "virtualKeySetup": "虚拟密钥配置",
-      "virtualKeySetupDesc": "配置您的 LiteLLM Proxy 虚拟密钥以完成身份认证",
-      "getVirtualKeyText": "从您的 LiteLLM Proxy 仪表盘获取虚拟密钥，或联系您的管理员",
+      "virtualKeySetupDesc": "配置您的 AI 安全网关 虚拟密钥以完成身份认证",
+      "getVirtualKeyText": "从您的 AI 安全网关 仪表盘获取虚拟密钥，或联系您的管理员",
       "environmentVariable": "环境变量",
       "mcpServerInformation": "MCP 服务器信息",
-      "mcpServerInformationDesc": "您的 LiteLLM MCP 服务器连接详情",
+      "mcpServerInformationDesc": "您的中安云科 AI 安全网关 MCP 服务器连接详情",
       "serverUrl": "服务器 URL",
-      "litellmImplementationDesc": "使用 LiteLLM Proxy Responses API 的完整 cURL 示例",
+      "litellmImplementationDesc": "使用 AI 安全网关 Responses API 的完整 cURL 示例",
       "openaiResponsesApiIntegration": "OpenAI Responses API 集成",
-      "openaiDesc": "将 OpenAI Responses API 连接到您的 LiteLLM MCP 服务器，实现无缝工具集成",
+      "openaiDesc": "将 OpenAI Responses API 连接到您的中安云科 AI 安全网关 MCP 服务器，实现无缝工具集成",
       "apiKeySetup": "API 密钥配置",
       "apiKeySetupDesc": "配置您的 OpenAI API 密钥以完成身份认证",
       "getApiKeyText": "从以下位置获取您的 API 密钥：",
       "openaiImplementationDesc": "使用 Responses API 的完整 cURL 示例",
       "cursorIdeIntegration": "Cursor IDE 集成",
-      "cursorDesc": "通过 LiteLLM MCP 直接在 Cursor IDE 中使用工具。让您的 AI 助手无需离开编码环境即可执行现实任务。",
+      "cursorDesc": "通过中安云科 AI 安全网关 MCP 直接在 Cursor IDE 中使用工具。让您的 AI 助手无需离开编码环境即可执行现实任务。",
       "setupInstructions": "配置说明",
       "step1Title": "打开 Cursor 设置",
       "step1Desc": "使用键盘快捷键",
@@ -5218,7 +5218,7 @@
       "step3Desc": "复制下方 JSON 配置并粘贴到 Cursor，然后按",
       "cursorConfigDesc": "Cursor MCP 配置",
       "streamableHttpTransport": "Streamable HTTP 传输",
-      "streamableHttpDesc": "通过 HTTP 传输连接 LiteLLM MCP，兼容任何支持 HTTP 流式传输的 MCP 客户端。",
+      "streamableHttpDesc": "通过 HTTP 传输连接中安云科 AI 安全网关 MCP，兼容任何支持 HTTP 流式传输的 MCP 客户端。",
       "universalMcpConnection": "通用 MCP 连接",
       "universalMcpConnectionDesc": "使用此 URL 连接任何支持 HTTP 传输的 MCP 客户端",
       "transportMethodText": "不同 MCP 客户端支持的传输方式各不相同，请参阅您的客户端文档以确定合适的传输方式。",
@@ -5427,7 +5427,7 @@
       "awsSessionTokenLabel": "AWS Session Token",
       "awsSessionTokenTooltip": "可选。仅在使用临时 STS 凭证时需要。",
       "awsRoleArnLabel": "AWS Role ARN",
-      "awsRoleArnTooltip": "可选。签名前通过 STS 代入的 IAM 角色 ARN。若设置，LiteLLM 将调用 sts:AssumeRole 获取临时凭证。",
+      "awsRoleArnTooltip": "可选。签名前通过 STS 代入的 IAM 角色 ARN。若设置，中安云科 AI 安全网关将调用 sts:AssumeRole 获取临时凭证。",
       "awsSessionNameLabel": "AWS 会话名称",
       "awsSessionNameTooltip": "可选。AssumeRole 调用的会话名称，会出现在 CloudTrail 日志中。若省略则自动生成。",
       "leaveBlankPlaceholder": "留空保留现有值",
@@ -5435,7 +5435,7 @@
       "displayNameInvalid": "仅允许字母、数字、下划线和连字符（不能包含空格）。",
       "serverUrlInvalid": "请输入有效的 URL（例如 http://service-name.domain:1234/path 或 https://example.com）",
       "serverNameInvalid": "不能包含「-」（连字符）或空格，请改用「_」（下划线）。",
-      "browserTokenHeldToast": "Token 仅保存在本次浏览器会话中。现在可以加载并配置工具；该 Token 不会保存到 LiteLLM。",
+      "browserTokenHeldToast": "Token 仅保存在本次浏览器会话中。现在可以加载并配置工具；该 Token 不会保存到中安云科 AI 安全网关。",
       "incompleteToolPreview": "请补全 URL、身份验证和请求头设置以加载工具。",
       "authorizeUpstreamHint": "请在上游完成授权（仅浏览器会话，位于「身份验证」区块）以加载并配置此服务器的工具。",
       "oauthTokenPersistFailedNoMessage": "MCP 服务器已更新，但 OAuth Token 持久化失败",
@@ -5443,16 +5443,16 @@
       "serverUrlPlaceholder": "https://your-mcp-server.com",
       "specUrlPlaceholder": "https://petstore3.swagger.io/api/v3/openapi.json",
       "maxConcurrentRequestsLabel": "最大并发请求数（可选）",
-      "maxConcurrentRequestsTooltip": "LiteLLM 对此服务器同时运行的工具调用上限。超出的调用会等待空闲槽位。留空表示不限制。",
+      "maxConcurrentRequestsTooltip": "中安云科 AI 安全网关对此服务器同时运行的工具调用上限。超出的调用会等待空闲槽位。留空表示不限制。",
       "maxConcurrentRequestsPlaceholder": "例如 10",
       "authRequired": "身份验证为必填项",
       "noOAuthFlowSet": "此服务器未设置 OAuth 流程",
-      "noOAuthFlowSetDesc": "请选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按您预期的方式进行身份验证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户身份验证，并以保守方式处理机器对机器形式的凭据。",
+      "noOAuthFlowSetDesc": "请选择机器对机器（M2M）或交互式（PKCE），让中安云科 AI 安全网关按您预期的方式进行身份验证，然后保存。在设置之前，中安云科 AI 安全网关会回退到交互式按用户身份验证，并以保守方式处理机器对机器形式的凭据。",
       "authOauthTokenExchange": "OAuth Token Exchange（OBO）",
       "authIdJag": "ID-JAG（Okta 跨应用访问）",
-      "authTruePassthrough": "真实透传（不使用 LiteLLM 认证）",
+      "authTruePassthrough": "真实透传（不使用中安云科 AI 安全网关认证）",
       "authOauthDelegate": "OAuth 委派（由客户端提供上游 Token）",
-      "noOAuthFlowDescription": "选择机器对机器（M2M）或交互式（PKCE），让 LiteLLM 按你的预期进行认证，然后保存。在设置之前，LiteLLM 会回退到交互式按用户认证，并对机器对机器形式的凭据采取保守处理。"
+      "noOAuthFlowDescription": "选择机器对机器（M2M）或交互式（PKCE），让中安云科 AI 安全网关按你的预期进行认证，然后保存。在设置之前，中安云科 AI 安全网关会回退到交互式按用户认证，并对机器对机器形式的凭据采取保守处理。"
     },
     "mcpServerView": {
       "backToAllServers": "返回所有服务器",
@@ -5556,14 +5556,14 @@
     },
     "idJagFormFields": {
       "orgTokenEndpointLabel": "组织 Token 端点（第一段）",
-      "orgTokenEndpointTooltip": "您的 IdP 组织授权服务器的 Token 端点。LiteLLM 在此交换用户身份断言以获取 ID-JAG 断言（RFC 8693，requested_token_type=urn:ietf:params:oauth:token-type:id-jag）。",
+      "orgTokenEndpointTooltip": "您的 IdP 组织授权服务器的 Token 端点。中安云科 AI 安全网关在此交换用户身份断言以获取 ID-JAG 断言（RFC 8693，requested_token_type=urn:ietf:params:oauth:token-type:id-jag）。",
       "orgTokenEndpointRequired": "ID-JAG 必须提供组织 Token 端点",
       "resourceTokenEndpointLabel": "资源 Token 端点（第二段）",
-      "resourceTokenEndpointTooltip": "上游资源授权服务器的 Token 端点。LiteLLM 在此以 RFC 7523 jwt-bearer 授权类型提交 ID-JAG 断言，以获取 MCP 服务器接受的可访问 Token。",
+      "resourceTokenEndpointTooltip": "上游资源授权服务器的 Token 端点。中安云科 AI 安全网关在此以 RFC 7523 jwt-bearer 授权类型提交 ID-JAG 断言，以获取 MCP 服务器接受的可访问 Token。",
       "resourceTokenEndpointRequired": "ID-JAG 必须提供资源 Token 端点",
-      "clientIdTooltip": "LiteLLM 在两段交换中用于身份认证的 OAuth2 客户端 ID。",
+      "clientIdTooltip": "中安云科 AI 安全网关在两段交换中用于身份认证的 OAuth2 客户端 ID。",
       "clientIdRequired": "ID-JAG 必须提供客户端 ID",
-      "clientSecretTooltip": "通过 client_secret_post 将 LiteLLM 认证为 OAuth 客户端。改用私钥时请留空；私钥优先于此密钥。",
+      "clientSecretTooltip": "通过 client_secret_post 将中安云科 AI 安全网关认证为 OAuth 客户端。改用私钥时请留空；私钥优先于此密钥。",
       "secretOrPrivateKeyRequired": "请提供客户端密钥或客户端私钥",
       "clientPrivateKeyLabel": "客户端私钥（PEM）",
       "clientPrivateKeyTooltip": "用于签署 RFC 7523 private_key_jwt 客户端断言的 PEM 私钥。Okta Cross App Access 通常需要该私钥。设置后将优先于客户端密钥。",
@@ -5599,10 +5599,10 @@
       "clientSecretPlaceholderPublic": "公共客户端 / PKCE 请留空",
       "clientIdExtraKeep": "设置后所有人都会通过指定应用进行授权；对于不支持动态客户端注册的上游（例如预注册的 Slack 应用）此项必填。",
       "clientIdExtraSwitch": "切换身份验证类型会丢弃此前保存的应用；请在此填写客户端 ID，或留空以使用动态客户端注册。",
-      "description": "该身份验证类型由调用方自带上游 Token，因此 LiteLLM 不会存储 Token。如需预览工具并配置工具白名单，请在此向上游授权：Token 仅保留在当前浏览器会话中，绝不会保存到 LiteLLM。下方配置的 OAuth 应用会随服务器一并保存，因此在「工具」页面进行授权的内部用户都会经由该应用。",
+      "description": "该身份验证类型由调用方自带上游 Token，因此中安云科 AI 安全网关不会存储 Token。如需预览工具并配置工具白名单，请在此向上游授权：Token 仅保留在当前浏览器会话中，绝不会保存到中安云科 AI 安全网关。下方配置的 OAuth 应用会随服务器一并保存，因此在「工具」页面进行授权的内部用户都会经由该应用。",
       "appMayNotMatchUpstream": "您修改了上游 URL 或端点；此处填写的 OAuth 应用是为之前的上游注册的，可能已失效。请更新客户端 ID，或清空以使用动态客户端注册。",
       "removeStoredAppLabel": "保存时删除已存储的 OAuth 应用（服务器将回到动态客户端注册）",
-      "tokenHeld": "Token 已在当前浏览器会话中保留。现在可以预览并配置工具；该 Token 未保存到 LiteLLM。"
+      "tokenHeld": "Token 已在当前浏览器会话中保留。现在可以预览并配置工具；该 Token 未保存到中安云科 AI 安全网关。"
     },
     "tokenEndpointAuthMethodField": {
       "label": "Token 端点认证方式（可选）",
@@ -5632,12 +5632,12 @@
       "profileEntraObo": "Microsoft Entra OBO"
     },
     "truePassthroughWarning": {
-      "title": "真透传会对此服务器禁用 LiteLLM 身份验证",
-      "description": "任何能够访问网关的人都可以在没有 LiteLLM 密钥的情况下调用此服务器。调用方的 Authorization 请求头会原样转发到上游，按密钥、按团队的速率限制与支出统计不再生效，上游需完全负责对调用方进行身份验证。若仍希望调用方先通过 LiteLLM 认证，请改选 OAuth Delegate。"
+      "title": "真透传会对此服务器禁用中安云科 AI 安全网关身份验证",
+      "description": "任何能够访问网关的人都可以在没有中安云科 AI 安全网关密钥的情况下调用此服务器。调用方的 Authorization 请求头会原样转发到上游，按密钥、按团队的速率限制与支出统计不再生效，上游需完全负责对调用方进行身份验证。若仍希望调用方先通过中安云科 AI 安全网关认证，请改选 OAuth Delegate。"
     },
     "upstreamTokenHeaderField": {
       "label": "Token 请求头（可选）",
-      "tooltip": "LiteLLM 为此服务器解析出的 Token 由哪个上游请求头承载。留空则按默认方式发送为 'Authorization: Bearer <token>'，这也是大多数服务器期望的方式。当上游期望通过其他请求头接收时请填写请求头名称，例如某个 API 网关在 'esb-oauth' 上终止自己的凭据，而来自静态请求头的另一个 Authorization 继续透传到其后的服务器。",
+      "tooltip": "中安云科 AI 安全网关为此服务器解析出的 Token 由哪个上游请求头承载。留空则按默认方式发送为 'Authorization: Bearer <token>'，这也是大多数服务器期望的方式。当上游期望通过其他请求头接收时请填写请求头名称，例如某个 API 网关在 'esb-oauth' 上终止自己的凭据，而来自静态请求头的另一个 Authorization 继续透传到其后的服务器。",
       "placeholder": "Authorization"
     },
     "mcpFieldRules": {
@@ -5969,7 +5969,7 @@
       "codeInterpreterActive": "代码解释器已激活",
       "disableButton": "禁用",
       "samplePrompt1": "生成示例销售数据 CSV 并创建图表",
-      "samplePrompt2": "创建一个对比 AI 网关提供商（包括 LiteLLM）的 PNG 柱状图",
+      "samplePrompt2": "创建一个对比 AI 网关提供商（包括中安云科 AI 安全网关）的 PNG 柱状图",
       "samplePrompt3": "生成 LLM 定价数据的 CSV 并将其可视化为折线图",
       "suggestPromptA2A1": "你能帮我做什么？",
       "suggestPromptA2A2": "介绍一下你自己",
@@ -6090,7 +6090,7 @@
       "total": "总计：{{count}}",
       "toolName": "工具：{{name}}",
       "responseCache": "响应缓存",
-      "responseCacheTooltip": "此响应是从 LiteLLM 的响应缓存中重放的。请求从未到达提供商，因此没有读取或写入提供商自己的提示缓存。",
+      "responseCacheTooltip": "此响应是从中安云科 AI 安全网关的响应缓存中重放的。请求从未到达提供商，因此没有读取或写入提供商自己的提示缓存。",
       "hit": "命中",
       "cacheRead": "缓存读取",
       "cacheWrite": "缓存写入",
@@ -6114,15 +6114,15 @@
     },
     "sessionManagement": {
       "title": "会话管理",
-      "toggleTooltip": "在 LiteLLM API 会话管理（使用 previous_response_id）和基于 UI 的会话管理（使用聊天历史）之间选择",
+      "toggleTooltip": "在中安云科 AI 安全网关 API 会话管理（使用 previous_response_id）和基于 UI 的会话管理（使用聊天历史）之间选择",
       "copiedToClipboard": "响应 ID 已复制到剪贴板！",
       "apiSessionReady": "API 会话：就绪",
       "uiSessionReady": "UI 会话：就绪",
       "responseIdPrefix": "响应 ID",
       "uiSessionPrefix": "UI 会话",
-      "apiSessionReadyDesc": "LiteLLM 将使用 previous_response_id 管理会话",
+      "apiSessionReadyDesc": "中安云科 AI 安全网关将使用 previous_response_id 管理会话",
       "uiSessionReadyDesc": "UI 将使用聊天历史管理会话",
-      "apiSessionActiveDesc": "LiteLLM API 会话活跃 - 上下文在服务端维护",
+      "apiSessionActiveDesc": "中安云科 AI 安全网关 API 会话活跃 - 上下文在服务端维护",
       "uiSessionActiveDesc": "UI 会话活跃 - 上下文在客户端维护",
       "copyTooltipTitle": "复制响应 ID 以继续会话：",
       "aboutTitle": "关于会话管理",
@@ -6295,7 +6295,7 @@
     },
     "hashicorpVaultEmptyPlaceholder": {
       "noConfigTitle": "未找到 Vault 配置",
-      "noConfigDesc": "配置 Hashicorp Vault 以安全管理您的 LiteLLM 部署的提供商 API 密钥和密钥。",
+      "noConfigDesc": "配置 Hashicorp Vault 以安全管理您的中安云科 AI 安全网关部署的提供商 API 密钥和密钥。",
       "configureButton": "配置 Vault"
     },
     "loggingSettings": {
@@ -6711,7 +6711,7 @@
     },
     "cyberArkEmptyPlaceholder": {
       "noConfigTitle": "未找到 CyberArk 配置",
-      "noConfigDesc": "配置 CyberArk Conjur 以安全管理您的 LiteLLM 部署的提供商 API 密钥和密钥。",
+      "noConfigDesc": "配置 CyberArk Conjur 以安全管理您的中安云科 AI 安全网关部署的提供商 API 密钥和密钥。",
       "configureButton": "配置 CyberArk"
     }
   },
@@ -7157,7 +7157,7 @@
       "scopeTags": "<strong>标签</strong> - 匹配密钥/团队 <code>metadata.tags</code> 中的标签，或在请求体中动态传入的标签（<code>metadata.tags</code>）。用于跨组强制执行策略，例如：所有标记为 <code>healthcare</code> 的密钥使用 HIPAA 护栏。支持通配符（<code>prod-*</code>）。",
       "learnMoreAttachments": "了解更多关于附件的信息 →",
       "enterpriseFeatureTitle": "企业版功能通知",
-      "enterpriseFeatureDesc": "策略附件的部分功能将在后续版本中纳入 LiteLLM 企业版。",
+      "enterpriseFeatureDesc": "策略附件的部分功能将在后续版本中纳入 企业版。",
       "addNewAttachment": "+ 添加新附件",
       "deletePolicyTitle": "删除策略",
       "deletePolicyMessage": "确定要删除策略：{{name}}？此操作无法撤销。",
@@ -7385,7 +7385,7 @@
       "providerLoadFailed": "加载提供商失败",
       "providerSelectPlaceholder": "选择提供商",
       "modeLabel": "模式",
-      "modeHelp": "<strong>可选</strong> - 对此模型进行健康检查时使用的 LiteLLM 端点 <learnMoreLink>了解更多</learnMoreLink>",
+      "modeHelp": "<strong>可选</strong> - 对此模型进行健康检查时使用的中安云科 AI 安全网关端点 <learnMoreLink>了解更多</learnMoreLink>",
       "credentialsSectionDesc": "选择已有凭据或在下方输入新的提供商凭据",
       "existingCredentialsLabel": "已有凭据",
       "existingCredentialsPlaceholder": "选择或搜索已有凭据",
@@ -7613,7 +7613,7 @@
       "validateNumberError": "请输入有效的正数",
       "useInPassThroughLabel": "在透传路由中使用",
       "useInPassThroughTooltip": "允许在透传路由中使用这些凭据。<learnMoreLink>了解更多</learnMoreLink>",
-      "litellmParamsLabel": "LiteLLM 参数",
+      "litellmParamsLabel": "中安云科 AI 安全网关参数",
       "litellmParamsTooltip": "用于调用 litellm.completion() 的可选 litellm 参数。",
       "litellmParamsHelpText": "传入 litellm 支持的参数 JSON",
       "litellmParamsHelpLink": "litellm.completion() 调用",
@@ -7637,7 +7637,7 @@
       "helpText": "Anthropic、Bedrock API 等提供商要求用户指定注入缓存控制检查点的位置，litellm 可作为节省成本的功能自动为您添加。",
       "typeLabel": "类型",
       "roleLabel": "角色",
-      "roleTooltip": "LiteLLM 将把该角色的所有消息标记为可缓存",
+      "roleTooltip": "中安云科 AI 安全网关将把该角色的所有消息标记为可缓存",
       "rolePlaceholder": "选择角色",
       "roleUser": "用户",
       "roleSystem": "系统",
@@ -7652,32 +7652,32 @@
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "公开模型名称",
-      "publicModelNameTooltip": "您在 API 调用中向 LiteLLM Proxy 指定的名称",
-      "tooltipExample": "<strong>示例：</strong>如果您将公开模型命名为 <publicName>example-name</publicName>，并选择 <modelName>openai/qwen-plus-latest</modelName> 作为 LiteLLM 模型",
-      "tooltipUsage": "用法：您使用以下参数向 LiteLLM 代理发起 API 调用",
+      "publicModelNameTooltip": "您在 API 调用中向 AI 安全网关 指定的名称",
+      "tooltipExample": "<strong>示例：</strong>如果您将公开模型命名为 <publicName>example-name</publicName>，并选择 <modelName>openai/qwen-plus-latest</modelName> 作为中安云科 AI 安全网关模型",
+      "tooltipUsage": "用法：您使用以下参数向中安云科 AI 安全网关代理发起 API 调用",
       "tooltipUsageCode": "model = \"example-name\"",
-      "tooltipResult": "结果：LiteLLM 向提供商发送",
+      "tooltipResult": "结果：中安云科 AI 安全网关向提供商发送",
       "tooltipResultCode": "qwen-plus-latest",
       "tooltipResultSuffix": "到提供商",
-      "litellmModelNameColumn": "LiteLLM 模型名称",
-      "litellmModelNameTooltip": "LiteLLM 将发送给 LLM API 的模型名称",
+      "litellmModelNameColumn": "网关模型名称",
+      "litellmModelNameTooltip": "中安云科 AI 安全网关将发送给 LLM API 的模型名称",
       "modelMappingsLabel": "模型映射",
-      "modelMappingsTooltip": "将公开模型名称映射到 LiteLLM 模型名称以实现负载均衡",
+      "modelMappingsTooltip": "将公开模型名称映射到 网关模型名称以实现负载均衡",
       "mappingRequired": "至少需要一个模型映射",
       "publicNameRequired": "所有模型映射必须具有有效的公开名称",
-      "tooltipUsageWithLabel": "<strongLabel>用法：</strongLabel>您向 LiteLLM 代理发起 API 调用，其中",
-      "tooltipResultWithLabel": "<strongLabel>结果：</strongLabel>LiteLLM 会把"
+      "tooltipUsageWithLabel": "<strongLabel>用法：</strongLabel>您向中安云科 AI 安全网关代理发起 API 调用，其中",
+      "tooltipResultWithLabel": "<strongLabel>结果：</strongLabel>中安云科 AI 安全网关会把"
     },
     "litellmModelName": {
-      "fieldLabel": "LiteLLM 模型名称",
-      "fieldTooltip": "LiteLLM 将发送给 LLM API 的模型名称",
+      "fieldLabel": "网关模型名称",
+      "fieldTooltip": "中安云科 AI 安全网关将发送给 LLM API 的模型名称",
       "deploymentNameRequired": "请输入部署名称。",
       "modelRequired": "请至少输入一个模型。",
       "selectModelsPlaceholder": "选择模型",
       "customModelOption": "自定义模型名称（在下方输入）",
       "allModelsWildcard": "所有 {{provider}} 模型（通配符）",
-      "azureDeploymentDescription": "您的部署名称将保存为公开模型名称，LiteLLM 内部将使用 'azure/deployment-name'",
-      "modelDescription": "LiteLLM 将发送给 LLM API 的模型名称",
+      "azureDeploymentDescription": "您的部署名称将保存为公开模型名称，中安云科 AI 安全网关内部将使用 'azure/deployment-name'",
+      "modelDescription": "中安云科 AI 安全网关将发送给 LLM API 的模型名称",
       "enterAzureDeploymentPlaceholder": "输入 Azure 部署名称",
       "enterCustomModelPlaceholder": "输入自定义模型名称",
       "customModelRequired": "请输入自定义模型名称。",
@@ -8164,7 +8164,7 @@
       "dailyMargin": "每日利润率",
       "monthlyMargin": "每月利润率",
       "modelBreakdown": "模型明细",
-      "generatedOn": "由 LiteLLM 价格计算器生成于 {{date}}",
+      "generatedOn": "由中安云科 AI 安全网关价格计算器生成于 {{date}}",
       "inputTokensPerRequest": "每次请求输入 Token：",
       "outputTokensPerRequest": "每次请求输出 Token：",
       "requestsPerDay": "每日请求数：",
@@ -8318,9 +8318,9 @@
       "tooltipTotalRequests": "总请求数：{{count}}",
       "topVirtualKeys": "虚拟密钥排行",
       "topPublicModelNames": "公开模型名称排行",
-      "topLitellmModels": "LiteLLM 模型排行",
+      "topLitellmModels": "中安云科 AI 安全网关模型排行",
       "publicModelName": "公开模型名称",
-      "litellmModelName": "LiteLLM 模型名称",
+      "litellmModelName": "网关模型名称",
       "fetchingSpendData": "正在获取花费数据：已获取 {{currentPage}} / {{totalPages}} 页。图表会随数据加载定期更新。离开本页将停止并重置加载。如需继续使用界面，请 <a>新标签页打开</a>。",
       "partialData": "显示部分数据（已加载 {{currentPage}}/{{totalPages}} 页）",
       "stopButton": "停止",
@@ -8582,13 +8582,13 @@
       "databaseTooltip": "存放要搜索的集合的 MongoDB 数据库",
       "collectionLabel": "集合",
       "collectionTooltip": "您的 MongoDB Vector Search 索引所基于的集合",
-      "embeddingModelTooltip": "本代理上创建了您集合中已存储向量的嵌入模型。LiteLLM 会用它嵌入每个搜索查询，因此必须是同一个模型。尺寸相同的其他模型不会报错，只是会返回错误结果。如果列表中没有，请先在 Models 下添加",
+      "embeddingModelTooltip": "本代理上创建了您集合中已存储向量的嵌入模型。中安云科 AI 安全网关会用它嵌入每个搜索查询，因此必须是同一个模型。尺寸相同的其他模型不会报错，只是会返回错误结果。如果列表中没有，请先在 Models 下添加",
       "embeddingFieldLabel": "向量字段名",
       "embeddingFieldTooltip": "每个文档中存放其嵌入向量的字段。必须与创建 MongoDB Vector Search 索引时使用的路径一致（默认：embedding）",
       "textFieldLabel": "文本字段",
-      "textFieldTooltip": "每个文档中存放可读文本的字段。LiteLLM 会在搜索结果中返回该文本，并支持 metadata.body 这类点号路径（默认：text）",
+      "textFieldTooltip": "每个文档中存放可读文本的字段。中安云科 AI 安全网关会在搜索结果中返回该文本，并支持 metadata.body 这类点号路径（默认：text）",
       "numCandidatesLabel": "候选数量",
-      "numCandidatesTooltip": "MongoDB 在返回最佳结果之前检查的最近邻数量。数值越大越准确，速度也越慢。留空则由 LiteLLM 根据请求的结果数量自动调整"
+      "numCandidatesTooltip": "MongoDB 在返回最佳结果之前检查的最近邻数量。数值越大越准确，速度也越慢。留空则由中安云科 AI 安全网关根据请求的结果数量自动调整"
     },
     "valkey": {
       "hostLabel": "Valkey 主机",
@@ -8599,11 +8599,11 @@
       "passwordTooltip": "登录您的 Valkey 服务器所用的密码。如果服务器没有密码，请留空",
       "sslLabel": "使用 TLS",
       "sslTooltip": "如果您的 Valkey 服务器需要加密（TLS）连接，请设置为 true，例如开启了传输中加密的 AWS ElastiCache",
-      "embeddingModelTooltip": "本代理上用于创建您 Valkey 索引中已存储嵌入的嵌入模型。LiteLLM 用它嵌入每个搜索查询，因此必须是同一个模型，否则结果会出错。如果列表中没有，请先在 Models 下添加",
+      "embeddingModelTooltip": "本代理上用于创建您 Valkey 索引中已存储嵌入的嵌入模型。中安云科 AI 安全网关用它嵌入每个搜索查询，因此必须是同一个模型，否则结果会出错。如果列表中没有，请先在 Models 下添加",
       "textFieldLabel": "文本字段",
-      "textFieldTooltip": "每个已存储文档中存放可读文本的字段。LiteLLM 会在搜索结果中返回该文本。必须与您存储文档时使用的字段一致（默认：text）",
+      "textFieldTooltip": "每个已存储文档中存放可读文本的字段。中安云科 AI 安全网关会在搜索结果中返回该文本。必须与您存储文档时使用的字段一致（默认：text）",
       "embeddingFieldLabel": "向量字段名",
-      "embeddingFieldTooltip": "每个已存储文档中存放其嵌入向量的字段。LiteLLM 会针对该字段进行搜索，因此必须与创建索引时使用的字段一致（默认：embedding）"
+      "embeddingFieldTooltip": "每个已存储文档中存放其嵌入向量的字段。中安云科 AI 安全网关会针对该字段进行搜索，因此必须与创建索引时使用的字段一致（默认：embedding）"
     }
   },
   "vectorStoreManagement": {
@@ -8683,7 +8683,7 @@
       "providerTooltip": "为此向量存储选择提供商",
       "providerRequired": "请选择一个提供商",
       "pgVectorAlertTitle": "PG Vector 配置必需",
-      "pgVectorAlertDescription": "LiteLLM 提供了一个连接 PG Vector 的服务器。使用此提供商前：",
+      "pgVectorAlertDescription": "中安云科 AI 安全网关提供了一个连接 PG Vector 的服务器。使用此提供商前：",
       "pgVectorStep1": "从以下地址部署 litellm-pgvector 服务器：",
       "pgVectorStep2": "为您的 PostgreSQL 数据库配置 pgvector 扩展",
       "pgVectorStep3": "启动服务器并记录 API 基础 URL 和 API 密钥",
@@ -8701,18 +8701,18 @@
       "vertexSearchStep1Link": "创建 Vertex AI Search 数据存储",
       "vertexSearchStep2": "选择支持的位置：global、us 或 eu",
       "vertexSearchStep3": "对于大多数数据存储类型（Cloud Storage、BigQuery、媒体）：复制数据存储 ID 并在下方的向量存储 ID 字段中输入。",
-      "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制引擎 ID 并在引擎 ID 字段中输入。此时向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。",
+      "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制引擎 ID 并在引擎 ID 字段中输入。此时向量存储 ID 仍为必填（作为中安云科 AI 安全网关侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。",
       "vectorStoreIdLabel": "向量存储 ID",
       "vectorStoreIdTooltip": "输入您 API 提供商的向量存储 ID",
       "vectorStoreIdRequired": "请输入您 API 提供商的向量存储 ID",
       "vectorStoreIdPlaceholderVertexRag": "6917529027641081856（从 Vertex AI 控制台获取语料库 ID）",
       "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890（从 Vertex AI Search 控制台获取数据存储 ID）",
-      "vectorStoreIdPlaceholderVertexSearchEngine": "您在 LiteLLM 中引用此记录的任意标识符",
+      "vectorStoreIdPlaceholderVertexSearchEngine": "您在中安云科 AI 安全网关中引用此记录的任意标识符",
       "vectorStoreIdPlaceholderDefault": "输入提供商的向量存储 ID",
       "fieldSelectRequired": "请选择 {{label}}",
       "fieldInputRequired": "请输入 {{label}}",
       "vectorStoreNameLabel": "向量存储名称",
-      "vectorStoreNameTooltip": "您要为向量存储起的自定义名称，此名称将在 LiteLLM 界面上显示",
+      "vectorStoreNameTooltip": "您要为向量存储起的自定义名称，此名称将在中安云科 AI 安全网关界面上显示",
       "existingCredentialsLabel": "现有凭据",
       "existingCredentialsTooltip": "可选：为此向量存储选择 API 提供商凭据，例如 Bedrock API 密钥",
       "existingCredentialsPlaceholder": "选择或搜索现有凭据",
@@ -8723,12 +8723,12 @@
       "createFailed": "创建向量存储失败：{{error}}",
       "metadataPlaceholder": "{\"key\": \"value\"}",
       "pgVectorStep1Deploy": "从以下地址部署 litellm-pgvector 服务器：",
-      "valkeyIntro": "LiteLLM 只搜索你已经存放在 Valkey 中的文档，不会替你创建索引或上传文档。创建此向量存储之前，请确认：",
+      "valkeyIntro": "中安云科 AI 安全网关只搜索你已经存放在 Valkey 中的文档，不会替你创建索引或上传文档。创建此向量存储之前，请确认：",
       "valkeyRequirement1": "你的 Valkey 服务器已启用向量搜索（valkey-search 模块，包含在 valkey-bundle 镜像以及 AWS ElastiCache / MemoryDB for Valkey 中）",
       "valkeyRequirement2": "你已经创建了搜索索引，并已把文档及其向量写入其中。将该索引名作为向量存储 ID 填入",
       "valkeyRequirement3": "你清楚这些已存向量是由哪个嵌入模型生成的。该模型必须先在 Models 中添加到本代理，才能在下方选择。使用不同的模型会返回错误结果",
       "valkeyRequirement4": "你清楚文档中用于文本和向量的字段名。如果不是 \"text\" 和 \"embedding\"，请在下方设置",
-      "valkeyQueryNote": "查询到来时，LiteLLM 会用下方模型将其转换为向量，并从你的索引中返回最匹配的文档。",
+      "valkeyQueryNote": "查询到来时，中安云科 AI 安全网关会用下方模型将其转换为向量，并从你的索引中返回最匹配的文档。",
       "vertexRagRenameNote": "注意：Google Cloud 已在其控制台将其更名为 \"RAG Engine\"，以下步骤仍然适用。",
       "vertexRagCorpusStep": "按照指南设置 Vertex AI RAG Engine 语料库：",
       "vertexRagCorpusIdStep": "记下 Vertex AI 控制台中的语料库 ID（在 Google Cloud 中现在标记为 \"RAG Engine\"）",
@@ -8736,7 +8736,7 @@
       "vertexSearchEnableStep": "在 Google Cloud 项目中启用 Discovery Engine API，并按指南创建数据存储：",
       "vertexSearchDataStoreStep": "对于大多数数据存储类型（Cloud Storage、BigQuery、Media）：复制数据存储 ID，并填入下方的向量存储 ID 字段。",
       "vertexSearchEngineIdStepBefore": "对于网站、医疗健康以及基于连接器的数据源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制",
-      "vertexSearchEngineIdStepAfter": "并填入 Engine ID 字段。向量存储 ID 仍需填写，作为该记录在 LiteLLM 侧的名称，但设置 Engine ID 后它不会用于 GCP URL。",
+      "vertexSearchEngineIdStepAfter": "并填入 Engine ID 字段。向量存储 ID 仍需填写，作为该记录在中安云科 AI 安全网关侧的名称，但设置 Engine ID 后它不会用于 GCP URL。",
       "engineIdLabel": "Engine ID"
     },
     "vectorStoreTable": {
@@ -8931,7 +8931,7 @@
       "iconUrlLabel": "图标 URL",
       "documentationUrlLabel": "文档 URL",
       "supportsAuthCardLabel": "支持认证扩展卡片",
-      "litellmTitle": "LiteLLM 参数",
+      "litellmTitle": "中安云科 AI 安全网关参数",
       "modelOptionalLabel": "模型（可选）",
       "makePublicLabel": "公开",
       "costTitle": "花费配置",
@@ -8953,8 +8953,8 @@
       "skillTagsPlaceholder": "输入标签后按 Enter",
       "skillExamplesLabel": "示例",
       "skillExamplesPlaceholder": "输入示例后按 Enter",
-      "protocolVersionTooltip": "LiteLLM 向客户端提供的此 Agent 的 A2A 协议版本。LiteLLM 会将上游 Agent 的响应转换为此版本，因此无论原始 Agent 使用哪个版本，客户端始终看到此处选择的版本。",
-      "protocolVersionHelpText": "LiteLLM 将此版本提供给客户端，并把上游 Agent 的响应转换为该版本，与原始 Agent 的版本无关。"
+      "protocolVersionTooltip": "中安云科 AI 安全网关向客户端提供的此 Agent 的 A2A 协议版本。中安云科 AI 安全网关会将上游 Agent 的响应转换为此版本，因此无论原始 Agent 使用哪个版本，客户端始终看到此处选择的版本。",
+      "protocolVersionHelpText": "中安云科 AI 安全网关将此版本提供给客户端，并把上游 Agent 的响应转换为该版本，与原始 Agent 的版本无关。"
     },
     "agentFormFields": {
       "agentNameLabel": "Agent 名称",
@@ -8990,7 +8990,7 @@
       "enterBaseUrl": "请先输入 Agent 的基础 URL",
       "failedToDiscover": "发现 Agent 卡片失败",
       "discoverFromUrl": "从 Agent URL 发现",
-      "discoverTooltip": "LiteLLM 将从此 URL 获取 /.well-known/agent-card.json，并让您选择通过代理开放的工具和能力。",
+      "discoverTooltip": "中安云科 AI 安全网关将从此 URL 获取 /.well-known/agent-card.json，并让您选择通过代理开放的工具和能力。",
       "usingConnectionDetails": "使用上方填写的连接详情，将获取：",
       "fillFieldsAbove": "请先填写上方字段",
       "rediscover": "重新发现",
@@ -9006,7 +9006,7 @@
       "noSkills": "上游卡片无工具",
       "more": "展开",
       "capabilitiesTitle": "能力",
-      "capabilitiesTooltip": "仅列出 LiteLLM 当前可以忠实代理的能力，其他能力（推送通知、扩展）即将推出。",
+      "capabilitiesTooltip": "仅列出中安云科 AI 安全网关当前可以忠实代理的能力，其他能力（推送通知、扩展）即将推出。",
       "notAdvertisedUpstream": "上游未声明",
       "dismissError": "关闭错误提示"
     },
@@ -9094,7 +9094,7 @@
     "agentKillSwitch": {
       "dangerZone": "危险操作",
       "killSwitch": "终止开关",
-      "description": "调用已配置的 webhook 来停止该 agent 的上游运行时。这会导致所有使用该 agent 的人中断，且无法从 LiteLLM 中恢复",
+      "description": "调用已配置的 webhook 来停止该 agent 的上游运行时。这会导致所有使用该 agent 的人中断，且无法从中安云科 AI 安全网关中恢复",
       "notConfigured": "未配置。请在设置中添加终止开关 webhook 以启用此操作",
       "fireButton": "触发终止开关",
       "firing": "触发中…",
@@ -9103,7 +9103,7 @@
       "lastResult": "最近结果：HTTP {{code}}",
       "confirmTitle": "确认对 {{name}} 触发终止开关？",
       "outageWarningTitle": "此操作可能导致服务中断",
-      "outageWarningDescription": "LiteLLM 将立即调用 {{method}} {{url}}。该 webhook 对 agent 的操作不在 LiteLLM 控制范围内，也无法在此撤销",
+      "outageWarningDescription": "中安云科 AI 安全网关将立即调用 {{method}} {{url}}。该 webhook 对 agent 的操作不在中安云科 AI 安全网关控制范围内，也无法在此撤销",
       "typeToConfirm": "输入 {{name}} 以确认：",
       "confirmAgentNameAria": "确认 agent 名称"
     },
@@ -9199,7 +9199,7 @@
     "teamInfo": {
       "failedToLoadTeam": "加载团队信息失败",
       "memberAddedSuccess": "团队成员添加成功",
-      "assignAdminsEnterprise": "指定管理员是企业专属功能，请升级您的 LiteLLM 套餐以启用此功能。",
+      "assignAdminsEnterprise": "指定管理员是企业专属功能，请升级您的中安云科 AI 安全网关套餐以启用此功能。",
       "failedToAddMember": "添加团队成员失败",
       "memberUpdatedSuccess": "团队成员更新成功",
       "failedToUpdateMember": "更新团队成员失败",
@@ -9941,7 +9941,7 @@
       "providerLabel": "提供商",
       "providerBedrock": "AWS Bedrock 护栏",
       "providerGoogle": "Google Cloud AI 安全",
-      "providerLiteLLM": "LiteLLM 内置",
+      "providerLiteLLM": "中安云科 AI 安全网关内置",
       "providerCustom": "自定义代码",
       "guardrailTypeLabel": "护栏类型",
       "typeContentSafety": "内容安全",
@@ -10016,13 +10016,13 @@
     "guardrailUsageBreakdown": {
       "sectionLabel": "用量与费用",
       "title": "用量与费用",
-      "subtitle": "提供商为此护栏上报的可计费单位，以及 LiteLLM 为它们定价的结果",
+      "subtitle": "提供商为此护栏上报的可计费单位，以及中安云科 AI 安全网关为它们定价的结果",
       "unpricedUnitsColumn": "未定价单位",
       "counterColumn": "计数器",
       "unitsColumn": "单位数",
       "howThisCostIsCalculated": "此费用是如何计算的",
       "costFormula": "已定价单位数 × 每单位价格 = 费用，按计数器分别计算",
-      "perUnitPriceNote": "每单位价格来自 LiteLLM 内置的费用表。",
+      "perUnitPriceNote": "每单位价格来自中安云科 AI 安全网关内置的费用表。",
       "howUnitsAddUp": "用量单位如何累加",
       "unitsFormula": "计数器 + 计数器 + … = 用量单位",
       "unitsNote": "单位是提供商为此护栏上报的可计费计数器，按每次调用累加。",
@@ -10311,7 +10311,7 @@
     },
     "cloudZeroEmptyPlaceholder": {
       "title": "未找到 CloudZero 集成",
-      "description": "连接您的 CloudZero 账户，即可直接在 LiteLLM 中追踪和分析云端成本。",
+      "description": "连接您的 CloudZero 账户，即可直接在中安云科 AI 安全网关中追踪和分析云端成本。",
       "addButton": "添加 CloudZero 集成"
     },
     "cloudZeroIntegrationSettings": {
@@ -10663,7 +10663,7 @@
         "description": "在路由请求前启用预检查"
       },
       "default_litellm_params": {
-        "label": "默认 LiteLLM 参数",
+        "label": "默认中安云科 AI 安全网关参数",
         "description": "Router.chat.completion.create 的默认参数"
       },
       "set_verbose": {
@@ -10929,7 +10929,7 @@
       "updateSuccess": "缓存设置已成功更新",
       "failedToUpdate": "更新缓存设置失败",
       "title": "缓存设置",
-      "subtitle": "为 LiteLLM 配置 Redis 缓存",
+      "subtitle": "为中安云科 AI 安全网关配置 Redis 缓存",
       "connectionSettings": "连接设置",
       "clusterConfiguration": "集群配置",
       "sentinelConfiguration": "哨兵配置",
@@ -10996,7 +10996,7 @@
       "groupNameMaxLength": "不能超过 {{max}} 个字符",
       "groupNamePattern": "只允许字母、数字、点、下划线和短横线",
       "groupNameExists": "已存在同名组",
-      "groupNameExtra": "在 API 调用中将此名称作为模型使用 — LiteLLM 会将请求路由到组内某个模型。",
+      "groupNameExtra": "在 API 调用中将此名称作为模型使用 — 中安云科 AI 安全网关会将请求路由到组内某个模型。",
       "groupNamePlaceholder": "fast-chat",
       "modelsLabel": "模型",
       "modelsRequired": "至少选择一个模型",
@@ -11021,7 +11021,7 @@
       "strategyUsageBased": "基于用量",
       "strategyLatencyBased": "基于延迟",
       "howRoutingWorksTitle": "此组的路由方式",
-      "howRoutingWorksDesc": "调用方按名称请求组内任意模型 — LiteLLM 在后台使用 <strong>{{strategy}}</strong> 策略选取部署。",
+      "howRoutingWorksDesc": "调用方按名称请求组内任意模型 — 中安云科 AI 安全网关在后台使用 <strong>{{strategy}}</strong> 策略选取部署。",
       "tabCurl": "cURL",
       "tabPython": "Python（OpenAI SDK）",
       "tabJavascript": "JavaScript（OpenAI SDK）",
@@ -11192,7 +11192,7 @@
       "keyDeletedSuccess": "密钥删除成功",
       "keySpendResetSuccess": "密钥花费已重置为 ¥0",
       "virtualKey": "虚拟密钥",
-      "enterpriseFeatureTooltip": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。",
+      "enterpriseFeatureTooltip": "这是 企业版功能，需要有效密钥才能使用。",
       "deleteKeyTitle": "删除密钥",
       "deleteKeyAlertMessage": "此操作不可撤销，将立即撤销所有使用此密钥的应用程序的访问权限。",
       "deleteKeyMessage": "确定要删除此虚拟密钥吗？",
@@ -11447,7 +11447,7 @@
       "searchByEmailHint": "通过邮箱搜索用户",
       "selectAgentLabel": "选择 Agent",
       "selectAgentPlaceholder": "选择一个 Agent",
-      "agentKeyDescription": "此密钥将由所选 Agent 用于向 LiteLLM 发起请求",
+      "agentKeyDescription": "此密钥将由所选 Agent 用于向中安云科 AI 安全网关发起请求",
       "organizationLabel": "组织",
       "organizationTooltip": "此密钥所属的组织。选择组织后将筛选可用团队。",
       "teamLabel": "团队",
@@ -11642,7 +11642,7 @@
       "revoked": "已撤销（已封禁）",
       "allStatuses": "全部状态",
       "lifetimeSpend": "累计消费",
-      "lifetimeSpendHint": "跨所有预算周期的累计消费，预算重置不影响此值。累计追踪自 LiteLLM v1.103.0（2026 年 9 月 19 日）开始，因此更早创建的密钥只统计自该升级以来的消费。"
+      "lifetimeSpendHint": "跨所有预算周期的累计消费，预算重置不影响此值。累计追踪自中安云科 AI 安全网关 v1.103.0（2026 年 9 月 19 日）开始，因此更早创建的密钥只统计自该升级以来的消费。"
     }
   },
   "editAutoRouter": {
@@ -11865,7 +11865,7 @@
   "pages": {
     "apiReference": {
       "title": "OpenAI 兼容代理：API 参考",
-      "description": "LiteLLM 与 OpenAI 兼容，这意味着您的 API 密钥可与 OpenAI SDK 配合使用。只需将 base_url 替换为指向您的 litellm 代理即可。示例如下",
+      "description": "中安云科 AI 安全网关与 OpenAI 兼容，这意味着您的 API 密钥可与 OpenAI SDK 配合使用。只需将 base_url 替换为指向您的 litellm 代理即可。示例如下",
       "tabOpenAI": "OpenAI Python SDK",
       "tabLlamaIndex": "LlamaIndex",
       "tabLangchain": "Langchain Py",
@@ -11880,7 +11880,7 @@
       "addAndManageModels": "为代理添加和管理模型",
       "requestProvider": "申请提供商",
       "missingProviderTitle": "缺少某个提供商？",
-      "missingProviderDesc": "LiteLLM 工程团队持续添加对新 LLM 模型、提供商和端点的支持。如果您没有找到所需的提供商，请告知我们，我们将优先处理。",
+      "missingProviderDesc": "中安云科 AI 安全网关工程团队持续添加对新 LLM 模型、提供商和端点的支持。如果您没有找到所需的提供商，请告知我们，我们将优先处理。",
       "dismissBanner": "关闭横幅",
       "tabAllModels": "全部模型",
       "tabYourModels": "我的模型",
@@ -11918,8 +11918,8 @@
       "routesTo": "路由到",
       "defaultModel": "默认模型",
       "created": "创建于",
-      "copyLitellmModelName": "复制 LiteLLM 模型名",
-      "litellmModelNameCopied": "已复制 LiteLLM 模型名",
+      "copyLitellmModelName": "复制中安云科 AI 安全网关模型名",
+      "litellmModelNameCopied": "已复制中安云科 AI 安全网关模型名",
       "aboutCredentialTypes": "关于凭证类型",
       "costInShort": "输入",
       "costOutShort": "输出",
@@ -11952,7 +11952,7 @@
       "deleteMessage": "确定要删除此模型吗？",
       "modelInformation": "模型信息",
       "modelName": "模型名称",
-      "litellmModelName": "LiteLLM 模型名称",
+      "litellmModelName": "网关模型名称",
       "provider": "提供商",
       "createdBy": "创建者",
       "notSet": "未设置",
@@ -11995,8 +11995,8 @@
       "tabAgentBuilder": "Agent 构建器（实验性）"
     },
     "mcpOauthCallback": {
-      "title": "LiteLLM MCP OAuth",
-      "authComplete": "授权完成。您可以关闭此窗口并返回 LiteLLM 仪表盘。",
+      "title": "中安云科 AI 安全网关 MCP OAuth",
+      "authComplete": "授权完成。您可以关闭此窗口并返回中安云科 AI 安全网关仪表盘。",
       "closeManually": "如果窗口未自动关闭，所有数据已保存——您可以手动关闭它。"
     },
     "onboardingErrorView": {
@@ -12083,7 +12083,7 @@
       "failedRequestsByErrorCode": "按错误码统计的失败请求：{{callType}}",
       "hoverHint": "将鼠标悬停在柱状图上，可查看该错误码对应的错误类别。"
     },
-    "analyticsDescription": "LiteLLM 的提示缓存分析（例如 Redis / 内存缓存）：由缓存直接返回而未调用 LLM 提供商的请求。提供商侧的提示缓存（来自 Anthropic、OpenAI 等的缓存输入 Token）不在此显示；请查看 Usage 页面的「Prompt Caching Metrics」或 Logs 页面中的单条请求。"
+    "analyticsDescription": "中安云科 AI 安全网关的提示缓存分析（例如 Redis / 内存缓存）：由缓存直接返回而未调用 LLM 提供商的请求。提供商侧的提示缓存（来自 Anthropic、OpenAI 等的缓存输入 Token）不在此显示；请查看 Usage 页面的「Prompt Caching Metrics」或 Logs 页面中的单条请求。"
   },
   "costOptimization": {
     "autoRouterBenchmarks": {
@@ -12178,8 +12178,8 @@
       "apiBaseDescription": "托管 Headroom 压缩服务的 URL",
       "applyToAllRequests": "应用到所有请求",
       "created": "压缩护栏已创建",
-      "description": "Headroom 是 LiteLLM 原生的护栏，在请求到达模型之前压缩提示词，从而减少输入 Token 费用。被移除的 Token 会计价，并作为压缩节省显示在「用量」标签页。<a>Headroom 配置文档</a>",
-      "enterpriseNotice": "对所有请求启用压缩对所有用户可用。按密钥或团队选择性启用属于 LiteLLM 企业版功能。获取试用密钥请点击<a>这里</a>",
+      "description": "Headroom 是中安云科 AI 安全网关原生的护栏，在请求到达模型之前压缩提示词，从而减少输入 Token 费用。被移除的 Token 会计价，并作为压缩节省显示在「用量」标签页。<a>Headroom 配置文档</a>",
+      "enterpriseNotice": "对所有请求启用压缩对所有用户可用。按密钥或团队选择性启用属于 企业版功能。获取试用密钥请点击<a>这里</a>",
       "failedToCreate": "创建压缩护栏失败",
       "failedToLoadGuardrails": "加载压缩护栏失败",
       "title": "Headroom 提示词压缩",
@@ -12189,7 +12189,7 @@
       "alwaysOn": "始终启用",
       "optIn": "按需启用",
       "apiBaseLabel": "Headroom API 地址",
-      "apiBaseHint": "你的 Headroom 压缩服务的基础 URL（LiteLLM 会调用它的 /v1/compress 端点）",
+      "apiBaseHint": "你的 Headroom 压缩服务的基础 URL（中安云科 AI 安全网关会调用它的 /v1/compress 端点）",
       "addGuardrail": "添加护栏"
     },
     "shadowEvalSection": {
@@ -12321,11 +12321,11 @@
     },
     "promptCachingRequests": {
       "title": "提示缓存请求",
-      "description1": "记录了 LiteLLM 注入或提供商缓存读取、写入的请求。仅缓存命中并不能说明存在 LiteLLM 注入；较早的日志可能未记录该信息。",
+      "description1": "记录了 网关注入或提供商缓存读取、写入的请求。仅缓存命中并不能说明存在 网关注入；较早的日志可能未记录该信息。",
       "description2": "净节省是根据记录的用量和当前配置的价格（扣除缓存写入溢价后）估算的。负值表示缓存反而增加了成本；不可用表示该请求无法计价。",
       "filtersAria": "提示缓存请求筛选",
       "tabAll": "全部缓存",
-      "tabInjected": "LiteLLM 注入",
+      "tabInjected": "网关注入",
       "tabHits": "缓存命中",
       "selectDateRange": "选择日期范围以查看请求",
       "loadingRequests": "正在加载请求...",
@@ -12333,7 +12333,7 @@
       "noMatchingRequests": "该范围内没有匹配的提示缓存请求",
       "colRequest": "请求",
       "colModel": "模型",
-      "colInjection": "LiteLLM 注入",
+      "colInjection": "网关注入",
       "colCacheReads": "缓存读取",
       "colCacheWrites": "缓存写入",
       "colActualCost": "实际成本",
@@ -12383,7 +12383,7 @@
       "openBudgetActions": "打开预算操作"
     },
     "budgetModal": {
-      "tpmLimitHelp": "留空表示不设置 LiteLLM 限制，提供商的速率限制仍然生效。"
+      "tpmLimitHelp": "留空表示不设置中安云科 AI 安全网关限制，提供商的速率限制仍然生效。"
     },
     "budgetPanel": {
       "subtitle": "可分配给客户的花费、TPM 和 RPM 限制。"
@@ -12496,22 +12496,22 @@
       "noMatchingCredentials": "没有匹配的凭据",
       "noMatchingOptions": "没有匹配的选项",
       "vectorStoreIdPlaceholderDefault": "输入来自您提供商的向量存储 ID",
-      "vectorStoreIdPlaceholderVertexSearchWithEngine": "您在 LiteLLM 中引用此向量存储所用的任意标识符",
+      "vectorStoreIdPlaceholderVertexSearchWithEngine": "您在中安云科 AI 安全网关中引用此向量存储所用的任意标识符",
       "vectorStoreIdPlaceholderVertexRag": "6917529027641081856（Vertex AI /“RAG Engine”控制台中的语料库 ID）",
       "vectorStoreIdPlaceholderVertexSearch": "my-datastore_1234567890（Vertex AI /“Agent Search”控制台中的数据存储 ID）",
       "vectorStoreIdPlaceholderValkey": "my-search-index（Valkey 中的 FT 索引名称）",
       "vectorStoreIdPlaceholderMongoDb": "my-vector-index（MongoDB Vector Search 索引名称）",
       "valkeyAlertTitle": "需要配置 Valkey",
-      "valkeyAlertDescription": "LiteLLM 检索的是您已存入 Valkey 的文档，它不会为您创建索引或上传文档。创建此向量存储前，请确认：",
+      "valkeyAlertDescription": "中安云科 AI 安全网关检索的是您已存入 Valkey 的文档，它不会为您创建索引或上传文档。创建此向量存储前，请确认：",
       "valkeyStep1": "您的 Valkey 服务器已启用向量搜索（valkey-search 模块，包含在 valkey-bundle 镜像以及 AWS ElastiCache / MemoryDB for Valkey 中）",
       "valkeyStep2": "您已创建搜索索引，并已将文档及其嵌入加载到其中。请将该索引名称填入向量存储 ID",
       "valkeyStep3": "您知道这些已存储的嵌入由哪个嵌入模型生成。该模型必须添加到本代理的模型列表中，才能在下方选择；使用其他模型会返回错误结果",
       "valkeyStep4": "您知道文档中用于文本和嵌入的字段名称。如果不是“text”和“embedding”，请在下方设置",
-      "valkeyFooter": "收到查询时，LiteLLM 会用下方模型将其转换为嵌入，并从您的索引中返回最接近的文档。",
+      "valkeyFooter": "收到查询时，中安云科 AI 安全网关会用下方模型将其转换为嵌入，并从您的索引中返回最接近的文档。",
       "vertexRagNote": "注意：Google Cloud 已在其控制台将其更名为“RAG Engine”，以下步骤仍然适用。",
       "vertexRagStep3": "记下 Vertex AI 控制台中的语料库 ID（在 Google Cloud 中现在标记为“RAG Engine”）",
       "vertexSearchNote": "注意：Google Cloud 已在其控制台将其更名为“Agent Search”，以下步骤仍然适用。",
-      "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为 LiteLLM 侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
+      "vertexSearchStep4": "对于网站、医疗和基于连接器的来源（Drive、Gmail、Slack、Jira 等）：在数据存储之上创建搜索应用，然后复制<strong>引擎 ID</strong>并在引擎 ID 字段中输入。向量存储 ID 仍为必填（作为中安云科 AI 安全网关侧的记录名称），但设置引擎 ID 后不会用于 GCP URL。"
     }
   },
   "keyScope": {
@@ -12531,7 +12531,7 @@
     "ptuWindowOrder": "PTU 生效结束时间必须晚于 PTU 生效开始时间",
     "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空",
     "attached-knowledge-bases-rag": "关联知识库（RAG）",
-    "litellm-params": "LiteLLM 参数"
+    "litellm-params": "中安云科 AI 安全网关参数"
   },
   "noRedisWarning": {
     "title": "未配置 Redis，强烈建议配置",
@@ -12894,7 +12894,7 @@
     "disconnect": "断开",
     "disconnectSessionAria": "断开会话 {{session}}",
     "liveConnections": "实时连接",
-    "liveConnectionsDescription": "当前在此代理 worker 上打开的有状态 Streamable HTTP 会话，按发送 MCP 初始化请求的 AI 客户端和已认证的 LiteLLM 用户分组。无状态请求和 SSE 连接不计入。",
+    "liveConnectionsDescription": "当前在此代理 worker 上打开的有状态 Streamable HTTP 会话，按发送 MCP 初始化请求的 AI 客户端和已认证的中安云科 AI 安全网关用户分组。无状态请求和 SSE 连接不计入。",
     "refreshLiveConnections": "刷新实时连接",
     "refresh": "刷新",
     "couldNotDisconnect": "无法断开",
@@ -12952,13 +12952,13 @@
       "connectAnotherAgent": "连接另一个代理",
       "connectYourAgent": "连接你的代理",
       "lensConnectedSetAddress": "Lens 已连接。请设置其公开链路追踪地址，让你的代理知道将链路发送到何处。",
-      "enableLensInDeployment": "在你现有的 Helm 或 Docker 部署中启用 Lens。它与 LiteLLM 并行运行并存储你的链路。",
-      "lensConfiguredUnreachable": "Lens 已配置，但 LiteLLM 无法连接。请检查 Lens 服务是否运行，以及两个服务是否使用相同的服务密钥。",
+      "enableLensInDeployment": "在你现有的 Helm 或 Docker 部署中启用 Lens。它与中安云科 AI 安全网关并行运行并存储你的链路。",
+      "lensConfiguredUnreachable": "Lens 已配置，但中安云科 AI 安全网关无法连接。请检查 Lens 服务是否运行，以及两个服务是否使用相同的服务密钥。",
       "lensStorageUnavailable": "Lens 已连接，但其链路存储不可用。请检查 ClickHouse 连接。",
       "checkLensConnection": "检查 Lens 连接",
       "installLens": "安装 Lens",
-      "useLensRelease": "使用与本次 LiteLLM 部署匹配的 Lens {{release}}。",
-      "useLensSameRelease": "使用与本次 LiteLLM 部署相同版本的 Lens。",
+      "useLensRelease": "使用与本次中安云科 AI 安全网关部署匹配的 Lens {{release}}。",
+      "useLensSameRelease": "使用与本次中安云科 AI 安全网关部署相同版本的 Lens。",
       "deploymentConnectsServices": "该部署会连接服务并提供链路存储。",
       "checkSetup": "检查设置",
       "connectYourProject": "连接你的项目",
@@ -12966,7 +12966,7 @@
       "copied": "已复制",
       "copySetupCommand": "复制设置命令",
       "checkingLensConnection": "正在检查 Lens 连接…",
-      "setLensPublicUrl": "请在 LiteLLM 上将 LITELLM_LENS_PUBLIC_URL 设置为你的代理可访问的 Lens 地址，然后重启 LiteLLM。",
+      "setLensPublicUrl": "请在中安云科 AI 安全网关上将 LITELLM_LENS_PUBLIC_URL 设置为你的代理可访问的 Lens 地址，然后重启中安云科 AI 安全网关。",
       "lensServiceUnavailable": "Lens 服务不可用。请检查服务 URL 和共享密钥。",
       "clickhouseUnavailable": "Lens 已连接，但 ClickHouse 不可用。",
       "yourAgentFramework": "你的代理框架",
@@ -13481,7 +13481,7 @@
       "source": {
         "tool": "工具",
         "model": "模型",
-        "litellm": "LiteLLM"
+        "litellm": "中安云科 AI 安全网关"
       },
       "errorAria": "错误",
       "storedDiagnosticAria": "已存诊断信息",
@@ -13659,20 +13659,20 @@
     "connecting": "正在连接",
     "connect": "连接",
     "statCheaper": "比我们的 Devin 账单更便宜",
-    "statProviders": "通过 LiteLLM 接入的提供商",
+    "statProviders": "通过中安云科 AI 安全网关接入的提供商",
     "statHarnesses": "种 agent 框架",
     "nowOpenSource": "现已开源",
     "tagline": "开源云端编程 agent",
     "alreadyHaveMoyai": "已经部署了 Moyai？",
     "askProxyAdmin": "已经部署了 Moyai？请让代理管理员来连接",
     "worksWith": "兼容 Claude Code 与 Codex",
-    "selfHosted": "自托管 · 通过 LiteLLM 接入 100+ 提供商",
+    "selfHosted": "自托管 · 通过中安云科 AI 安全网关接入 100+ 提供商",
     "seeItInAction": "观看实际效果",
     "seeItDescription": "从 Slack 或浏览器给它下达任务。它会编辑代码、在它自己的云工作区运行测试，并在你合上笔记本电脑时发起拉取请求。",
     "anyHarness": "任意框架",
     "anyHarnessFootnote": "每个会话可选择框架。工作区、工具与权限保持一致。",
     "anyModel": "任意模型、任意提供商",
-    "anyModelFootnote": "通过你的 LiteLLM 网关路由，并按成员追踪花费。",
+    "anyModelFootnote": "通过你的中安云科 AI 安全网关网关路由，并按成员追踪花费。",
     "runOwnAgent": "运行你自己的云端 agent",
     "runOwnDescription": "将其部署在你自己的基础设施上并指向此网关。你的代码与凭据保留在你自己的账户中。"
   },
@@ -13769,7 +13769,7 @@
     "new-api-key": "新 API 密钥",
     "enter-the-new-api-key": "输入新的 API 密钥",
     "update-api-key-2": "更新 API 密钥",
-    "onlyApiKeyRotated": "此处仅轮换 API 密钥。使用 Azure AD Token、AWS 凭据或 Vertex 服务账号 JSON 认证的模型暂不支持，请暂时在模型的 LiteLLM 参数中更新。"
+    "onlyApiKeyRotated": "此处仅轮换 API 密钥。使用 Azure AD Token、AWS 凭据或 Vertex 服务账号 JSON 认证的模型暂不支持，请暂时在模型的中安云科 AI 安全网关参数中更新。"
   },
   "evidence": {
     "this-evidence-is-no-longer-available": "该证据已不可用。",
@@ -13831,7 +13831,7 @@
   "gatewayFlow": {
     "agent-swarms": "Agent 集群",
     "every-run-every-recorded-step": "每一次运行、每一个记录的步骤",
-    "litellm-gateway": "LiteLLM 网关",
+    "litellm-gateway": "中安云科 AI 安全网关网关",
     "one-place-your-infrastructure": "统一入口，部署在你自己的基础设施中",
     "findings-to-improve-your-agents": "帮助改进 agent 的发现项"
   },
@@ -13873,12 +13873,12 @@
     "model-is-not-selected": "未选择模型"
   },
   "mCPServerCard": {
-    "this-oauth-server-has-no-flow-set-machine-to": "该 OAuth 服务器未设置流程类型（机器对机器或交互式）。打开它并选择 OAuth 流程类型，LiteLLM 才会按你的预期进行认证。",
+    "this-oauth-server-has-no-flow-set-machine-to": "该 OAuth 服务器未设置流程类型（机器对机器或交互式）。打开它并选择 OAuth 流程类型，中安云科 AI 安全网关才会按你的预期进行认证。",
     "last-check": "最近检查：",
     "per-user-credentials": "按用户凭据"
   },
   "mCPSubmissionsTab": {
-    "select-which-fields-must-be-filled-in-before": "选择提交被视为合规之前必须填写的字段。LiteLLM 会在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
+    "select-which-fields-must-be-filled-in-before": "选择提交被视为合规之前必须填写的字段。中安云科 AI 安全网关会在下方每张提交卡片上为每条规则显示 ✓ / ✗。",
     "submitted-by": "提交人：",
     "rejection-reason": "拒绝原因："
   },
@@ -13894,7 +13894,7 @@
     "clearConfirmDescription": "这会删除你为 {{name}} 保存的所有按用户值。在你重新设置之前，下一次对该服务器的 MCP 请求将会失败。"
   },
   "organizationsPanel": {
-    "this-is-a-litellm-enterprise-feature-and-req": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。获取试用密钥",
+    "this-is-a-litellm-enterprise-feature-and-req": "这是 企业版功能，需要有效密钥才能使用。获取试用密钥",
     "create-new-organization": "+ 新建组织",
     "click-on-an-organization-id-to-view-its-deta": "点击组织 ID 查看其详情。",
     "delete-organization": "删除组织？",
@@ -13905,7 +13905,7 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams 告警设置",
     "save-changes": "保存更改",
     "test-ms-teams-alerts": "测试 MS Teams 告警",
-    "introDescription": "通过传入 webhook 将 LiteLLM 告警发送到 Microsoft Teams 频道。"
+    "introDescription": "通过传入 webhook 将中安云科 AI 安全网关告警发送到 Microsoft Teams 频道。"
   },
   "contentFilterDisplay": {
     "content-categories": "内容类别",
@@ -13979,7 +13979,7 @@
   },
   "auditLogsPanel": {
     "enterprise-feature": "✨ 企业版功能。",
-    "this-is-a-litellm-enterprise-feature-and-req": "这是 LiteLLM 企业版功能，需要有效密钥才能使用。",
+    "this-is-a-litellm-enterprise-feature-and-req": "这是 企业版功能，需要有效密钥才能使用。",
     "here-s-a-preview-of-what-audit-logs-offer": "以下是审计日志功能预览：",
     "audit-logs-preview": "审计日志预览"
   },
@@ -14078,7 +14078,7 @@
   },
   "aPIReferenceView": {
     "openai-compatible-proxy-api-reference": "OpenAI 兼容代理：API 参考",
-    "litellm-is-openai-compatible-this-means-your": "LiteLLM 兼容 OpenAI，这意味着你的 API 密钥可用于 OpenAI SDK。只需把 base_url 指向你的 LiteLLM 代理即可，示例如下",
+    "litellm-is-openai-compatible-this-means-your": "中安云科 AI 安全网关兼容 OpenAI，这意味着你的 API 密钥可用于 OpenAI SDK。只需把 base_url 指向你的中安云科 AI 安全网关代理即可，示例如下",
     "openai-python-sdk": "OpenAI Python SDK",
     "langchain-py": "Langchain Py"
   },
@@ -14090,7 +14090,7 @@
   },
   "moyaiConnected": {
     "moyai-connected": "Moyai 已连接",
-    "this-deployment-is-now-linked-to-your-litell": "该部署现已关联到你的 LiteLLM 网关。",
+    "this-deployment-is-now-linked-to-your-litell": "该部署现已关联到你的中安云科 AI 安全网关网关。",
     "open-moyai": "打开 Moyai",
     "back-to-ai-gateway": "返回 AI 网关"
   },
@@ -14219,7 +14219,7 @@
     "copy-request-id": "复制请求 ID"
   },
   "spendLogLink": {
-    "litellm-spend-log": "LiteLLM 花费日志",
+    "litellm-spend-log": "中安云科 AI 安全网关花费日志",
     "spend-log-not-visible-in-this-time-range": "该时间范围内看不到花费日志"
   },
   "drawerHeader": {
@@ -14259,7 +14259,7 @@
   "premiumLoggingSettings": {
     "langfuse-logging": "✨ langfuse-logging",
     "datadog-logging": "✨ datadog-logging",
-    "enterpriseNote": "设置密钥/团队日志属于 LiteLLM 企业版功能。全局日志设置对所有免费用户可用。获取试用密钥。"
+    "enterpriseNote": "设置密钥/团队日志属于 企业版功能。全局日志设置对所有免费用户可用。获取试用密钥。"
   },
   "docLink": {
     "open-documentation-in-a-new-tab": "在新标签页中打开文档",
@@ -14357,7 +14357,7 @@
     "dismiss-banner": "关闭横幅"
   },
   "addModelForm": {
-    "litellm-endpoint-to-use-when-health-checking": "进行健康检查时使用的 LiteLLM 端点"
+    "litellm-endpoint-to-use-when-health-checking": "进行健康检查时使用的中安云科 AI 安全网关端点"
   },
   "autoRouterClassifierTabs": {
     "could-not-check-availability": "无法检查可用性。"
@@ -14673,8 +14673,8 @@
     "an-mcp-access-group-is-a-set-of-users-or-tea": "MCP 访问组是一组有权访问特定 MCP 服务器的用户或团队。使用访问组来控制和组织谁能连接哪些服务器。"
   },
   "callbackPage": {
-    "litellm-mcp-oauth": "LiteLLM MCP OAuth",
-    "authorization-complete-you-may-close-this-wi": "授权完成。你可以关闭此窗口并返回 LiteLLM 管理界面。",
+    "litellm-mcp-oauth": "中安云科 AI 安全网关 MCP OAuth",
+    "authorization-complete-you-may-close-this-wi": "授权完成。你可以关闭此窗口并返回中安云科 AI 安全网关管理界面。",
     "if-the-window-does-not-close-automatically-e": "如果窗口没有自动关闭，所有内容仍已保存，你可以手动关闭。"
   },
   "envCredentialLoginWarningBanner": {
@@ -14695,8 +14695,8 @@
     "expiredDescription": "企业版功能已停用。请联系 {{email}} 恢复访问",
     "criticalDescription": "请立即续费以免失去企业版功能。请联系 {{email}}",
     "warningDescription": "请在到期前续费以保留企业版功能。请联系 {{email}}",
-    "expiredTitle": "你的 LiteLLM 企业版许可证已于 {{date}} 过期",
-    "activeTitle": "你的 LiteLLM 企业版许可证{{countdown}}（{{date}}）",
+    "expiredTitle": "你的 企业版许可证已于 {{date}} 过期",
+    "activeTitle": "你的 企业版许可证{{countdown}}（{{date}}）",
     "closeAria": "关闭"
   },
   "resetMemberBudgetsDialog": {

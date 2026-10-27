@@ -204,7 +204,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
             <p className="text-sm text-muted-foreground">
               {t("caching.analyticsDescription", {
                 defaultValue:
-                  "Analytics for LiteLLM's prompt caching (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side prompt caching (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page.",
+                  "Analytics for 中安云科 AI 安全网关's prompt caching (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side prompt caching (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page.",
               })}
             </p>
 

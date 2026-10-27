@@ -84,7 +84,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
           <p className="mt-1 text-sm text-muted-foreground">
             {i18n.t("costOptimization.promptCachingRequests.description1", {
               defaultValue:
-                "Requests with recorded LiteLLM injection or provider cache reads or writes. A cache hit alone does not establish LiteLLM injection; older logs may not record it.",
+                "Requests with recorded 中安云科 AI 安全网关 injection or provider cache reads or writes. A cache hit alone does not establish 中安云科 AI 安全网关 injection; older logs may not record it.",
             })}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -97,7 +97,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
         <Tabs value={filter} onValueChange={changeFilter}>
           <TabsList aria-label={i18n.t("costOptimization.promptCachingRequests.filtersAria", { defaultValue: "Prompt caching request filters" })}>
             <TabsTrigger value="all">{i18n.t("costOptimization.promptCachingRequests.tabAll", { defaultValue: "All caching" })}</TabsTrigger>
-            <TabsTrigger value="injected">{i18n.t("costOptimization.promptCachingRequests.tabInjected", { defaultValue: "LiteLLM injected" })}</TabsTrigger>
+            <TabsTrigger value="injected">{i18n.t("costOptimization.promptCachingRequests.tabInjected", { defaultValue: "中安云科 AI 安全网关 injected" })}</TabsTrigger>
             <TabsTrigger value="hits">{i18n.t("costOptimization.promptCachingRequests.tabHits", { defaultValue: "Cache hits" })}</TabsTrigger>
           </TabsList>
         </Tabs>
@@ -129,7 +129,7 @@ export default function PromptCachingRequestsTable({ accessToken, dateValue }: P
                   <TableRow>
                     <TableHead>{i18n.t("costOptimization.promptCachingRequests.colRequest", { defaultValue: "Request" })}</TableHead>
                     <TableHead>{i18n.t("costOptimization.promptCachingRequests.colModel", { defaultValue: "Model" })}</TableHead>
-                    <TableHead>{i18n.t("costOptimization.promptCachingRequests.colInjection", { defaultValue: "LiteLLM injection" })}</TableHead>
+                    <TableHead>{i18n.t("costOptimization.promptCachingRequests.colInjection", { defaultValue: "中安云科 AI 安全网关 injection" })}</TableHead>
                     <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colCacheReads", { defaultValue: "Cache reads" })}</TableHead>
                     <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colCacheWrites", { defaultValue: "Cache writes" })}</TableHead>
                     <TableHead className="text-right">{i18n.t("costOptimization.promptCachingRequests.colActualCost", { defaultValue: "Actual cost" })}</TableHead>

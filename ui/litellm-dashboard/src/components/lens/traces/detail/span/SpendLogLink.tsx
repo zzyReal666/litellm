@@ -55,11 +55,11 @@ export function SpendLogLink({
         size="xs"
         onClick={() => setOpen(true)}
         title={requestId}
-        aria-label={`Open LiteLLM spend log ${requestId}`}
+        aria-label={`OOpen 中安云科 AI 安全网关 spend log  ${requestId}`}
         className="tabular-nums active:scale-[0.97] motion-reduce:transition-none"
       >
         <img src={litellmMonogram.src} alt="" aria-hidden className="size-3.5" />
-        <span className="font-medium">{i18n.t("spendLogLink.litellm-spend-log", { defaultValue: "LiteLLM Spend Log" })}</span>
+        <span className="font-medium">{i18n.t("spendLogLink.litellm-spend-log", { defaultValue: "中安云科 AI 安全网关 Spend Log" })}</span>
         {span.spend != null && <span className="text-muted-foreground">{formatCost(span.spend)}</span>}
         <ArrowUpRight data-icon="inline-end" />
       </Button>

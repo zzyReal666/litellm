@@ -196,7 +196,7 @@ export const getPassThroughEndpointsTableColumns = ({
     id: "auth",
     accessorKey: "auth",
     meta: { title: i18n.t("passThroughSettings.colAuthentication", { defaultValue: "Authentication" }), skeleton: "badge" },
-    header: () => <HeaderWithTooltip title={i18n.t("passThroughSettings.colAuthentication", { defaultValue: "Authentication" })} tooltip={i18n.t("passThroughSettings.authTooltip", { defaultValue: "LiteLLM Virtual Key required to call endpoint" })} />,
+    header: () => <HeaderWithTooltip title={i18n.t("passThroughSettings.colAuthentication", { defaultValue: "Authentication" })} tooltip={i18n.t("passThroughSettings.authTooltip", { defaultValue: "网关虚拟密钥 required to call endpoint" })} />,
     size: 140,
     enableSorting: false,
     cell: ({ row }) => (

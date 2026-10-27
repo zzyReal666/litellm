@@ -36,7 +36,7 @@ export function GatewayFlow() {
           <p className="mt-0.5 leading-4 text-muted-foreground">{i18n.t("gatewayFlow.every-run-every-recorded-step", { defaultValue: "Every run, every recorded step" })}</p>
         </div>
         <div className="text-center">
-          <p className="font-semibold">{i18n.t("gatewayFlow.litellm-gateway", { defaultValue: "LiteLLM gateway" })}</p>
+          <p className="font-semibold">{i18n.t("gatewayFlow.litellm-gateway", { defaultValue: "中安云科 AI 安全网关" })}</p>
           <p className="mt-0.5 leading-4 text-muted-foreground">{i18n.t("gatewayFlow.one-place-your-infrastructure", { defaultValue: "One place, your infrastructure" })}</p>
         </div>
         <div className="text-right">

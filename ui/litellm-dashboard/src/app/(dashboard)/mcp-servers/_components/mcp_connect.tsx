@@ -218,13 +218,13 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
         <div className="flex items-center gap-3 mb-3">
           <Zap className="text-success" size={24} />
           <h4 className="mb-0 text-xl font-semibold text-success">
-            {t("mcpTools.mcpConnect.litellmProxyApiIntegration", { defaultValue: "LiteLLM Proxy API Integration" })}
+            {t("mcpTools.mcpConnect.litellmProxyApiIntegration", { defaultValue: "AI 安全网关 API Integration" })}
           </h4>
         </div>
         <span className="text-success">
           {t("mcpTools.mcpConnect.litellmProxyDesc", {
             defaultValue:
-              "Connect to LiteLLM Proxy Responses API for seamless tool integration with multiple model providers",
+              "Connect to AI 安全网关 Responses API for seamless tool integration with multiple model providers",
           })}
         </span>
       </div>
@@ -234,14 +234,14 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
           icon={<KeyIcon className="text-success" size={16} />}
           title={t("mcpTools.mcpConnect.virtualKeySetup", { defaultValue: "Virtual Key Setup" })}
           description={t("mcpTools.mcpConnect.virtualKeySetupDesc", {
-            defaultValue: "Configure your LiteLLM Proxy Virtual Key for authentication",
+            defaultValue: "Configure your AI 安全网关 Virtual Key for authentication",
           })}
         >
           <div className="flex w-full flex-col gap-4">
             <div>
               <span>
                 {t("mcpTools.mcpConnect.getVirtualKeyText", {
-                  defaultValue: "Get your Virtual Key from your LiteLLM Proxy dashboard or contact your administrator",
+                  defaultValue: "Get your Virtual Key from your AI 安全网关 dashboard or contact your administrator",
                 })}
               </span>
             </div>
@@ -257,7 +257,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
           icon={<ServerIcon className="text-success" size={16} />}
           title={t("mcpTools.mcpConnect.mcpServerInformation", { defaultValue: "MCP Server Information" })}
           description={t("mcpTools.mcpConnect.mcpServerInformationDesc", {
-            defaultValue: "Connection details for your LiteLLM MCP server",
+            defaultValue: "Connection details for your 中安云科 AI 安全网关 MCP server",
           })}
         >
           <CodeBlock
@@ -271,7 +271,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
           icon={<Code className="text-success" size={16} />}
           title={t("mcpTools.mcpConnect.implementationExample", { defaultValue: "Implementation Example" })}
           description={t("mcpTools.mcpConnect.litellmImplementationDesc", {
-            defaultValue: "Complete cURL example for using the LiteLLM Proxy Responses API",
+            defaultValue: "Complete cURL example for using the AI 安全网关 Responses API",
           })}
           serverName={currentServer}
           accessGroups={["dev-group"]}
@@ -318,7 +318,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
         </div>
         <span className="text-info">
           {t("mcpTools.mcpConnect.openaiDesc", {
-            defaultValue: "Connect OpenAI Responses API to your LiteLLM MCP server for seamless tool integration",
+            defaultValue: "Connect OpenAI Responses API to your 中安云科 AI 安全网关 MCP server for seamless tool integration",
           })}
         </span>
       </div>
@@ -350,7 +350,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
           icon={<ServerIcon className="text-info" size={16} />}
           title={t("mcpTools.mcpConnect.mcpServerInformation", { defaultValue: "MCP Server Information" })}
           description={t("mcpTools.mcpConnect.mcpServerInformationDesc", {
-            defaultValue: "Connection details for your LiteLLM MCP server",
+            defaultValue: "Connection details for your 中安云科 AI 安全网关 MCP server",
           })}
         >
           <CodeBlock
@@ -410,7 +410,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
         <span className="text-purple-700 dark:text-purple-300">
           {t("mcpTools.mcpConnect.cursorDesc", {
             defaultValue:
-              "Use tools directly from Cursor IDE with LiteLLM MCP. Enable your AI assistant to perform real-world tasks without leaving your coding environment.",
+              "Use tools directly from Cursor IDE with 中安云科 AI 安全网关 MCP. Enable your AI assistant to perform real-world tasks without leaving your coding environment.",
           })}
         </span>
       </div>
@@ -499,7 +499,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
         <span className="text-success">
           {t("mcpTools.mcpConnect.streamableHttpDesc", {
             defaultValue:
-              "Connect to LiteLLM MCP using HTTP transport. Compatible with any MCP client that supports HTTP streaming.",
+              "Connect to 中安云科 AI 安全网关 MCP using HTTP transport. Compatible with any MCP client that supports HTTP streaming.",
           })}
         </span>
       </div>
@@ -561,7 +561,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
           <p className="text-lg text-muted-foreground">
             {t("mcpTools.mcpConnect.pageDesc", {
               defaultValue:
-                "Use tools directly from any MCP client with LiteLLM MCP. Enable your AI assistant to perform real-world tasks through a simple, secure connection.",
+                "Use tools directly from any MCP client with 中安云科 AI 安全网关 MCP. Enable your AI assistant to perform real-world tasks through a simple, secure connection.",
             })}
           </p>
         </div>
@@ -578,7 +578,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
               <TabsTrigger value="litellm" className="flex-none px-6 py-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Zap size={18} />
-                  {t("mcpTools.mcpConnect.tabLiteLLMProxy", { defaultValue: "LiteLLM Proxy" })}
+                  {t("mcpTools.mcpConnect.tabLiteLLMProxy", { defaultValue: "AI 安全网关" })}
                 </span>
               </TabsTrigger>
               <TabsTrigger value="cursor" className="flex-none px-6 py-3">

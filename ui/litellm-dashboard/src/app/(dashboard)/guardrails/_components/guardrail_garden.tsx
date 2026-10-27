@@ -63,7 +63,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
       <section className="mb-10" aria-labelledby="guardrail-garden-litellm">
         <div className="mb-1 flex items-center justify-between">
           <h2 id="guardrail-garden-litellm" className="m-0 text-xl font-semibold text-foreground">
-            {t("guardrails.guardrailGarden.litellmSectionTitle", { defaultValue: "LiteLLM Content Filter" })}
+            {t("guardrails.guardrailGarden.litellmSectionTitle", { defaultValue: "内容过滤器" })}
           </h2>
           <span
             className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-primary"
@@ -80,7 +80,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
           </span>
         </div>
         <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          {t("guardrails.guardrailGarden.litellmSectionDesc", { defaultValue: "Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost." })}
+          {t("guardrails.guardrailGarden.litellmSectionDesc", { defaultValue: "Built-in guardrails powered by 中安云科 AI 安全网关. Zero latency, no external dependencies, no additional cost." })}
         </p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {(showAllLitellm ? litellmCards : litellmCards.slice(0, CARDS_PER_ROW * VISIBLE_ROWS)).map((card) => (

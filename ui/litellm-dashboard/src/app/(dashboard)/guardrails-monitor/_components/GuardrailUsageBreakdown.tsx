@@ -130,7 +130,7 @@ const CostMath = ({ counters, detail }: { counters: CounterRow[]; detail: Guardr
       <MathTable rows={counters.map(counterMathRow)} total={formatCost(detail.cost)} />
       <p className="text-xs text-muted-foreground">
         {t("guardrailsMonitor.guardrailUsageBreakdown.perUnitPriceNote", {
-          defaultValue: "Per-unit prices come from the cost map LiteLLM ships with.",
+          defaultValue: "Per-unit prices come from the cost map 中安云科 AI 安全网关 ships with.",
         })}
       </p>
       <UnpricedNote unpriced={detail.untracked_usage_units} provider={detail.provider} />
@@ -178,7 +178,7 @@ export function GuardrailUsageBreakdown({ detail }: { detail: GuardrailUsageDeta
         </h5>
         <p className="mt-0.5 text-xs text-muted-foreground">
           {t("guardrailsMonitor.guardrailUsageBreakdown.subtitle", {
-            defaultValue: "Billable units the provider reported for this guardrail and what LiteLLM priced them at",
+            defaultValue: "Billable units the provider reported for this guardrail and what 中安云科 AI 安全网关 priced them at",
           })}
         </p>
       </div>

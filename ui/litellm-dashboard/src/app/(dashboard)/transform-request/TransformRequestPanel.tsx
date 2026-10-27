@@ -129,14 +129,14 @@ ${formattedBody}
     <div className="p-2">
       <h1 className="text-lg font-medium text-foreground">{i18n.t("transformRequest.title", { defaultValue: "Playground" })}</h1>
       <p className="text-sm text-muted-foreground">
-        {i18n.t("transformRequest.subtitle", { defaultValue: "See how LiteLLM transforms your request for the specified provider." })}
+        {i18n.t("transformRequest.subtitle", { defaultValue: "See how 中安云科 AI 安全网关 transforms your request for the specified provider." })}
       </p>
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Original Request Panel */}
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">{i18n.t("transformRequest.originalRequestTitle", { defaultValue: "Original Request" })}</CardTitle>
-            <CardDescription>{i18n.t("transformRequest.originalRequestDesc", { defaultValue: "The request you would send to LiteLLM /chat/completions endpoint." })}</CardDescription>
+            <CardDescription>{i18n.t("transformRequest.originalRequestDesc", { defaultValue: "The request you would send to 中安云科 AI 安全网关 /chat/completions endpoint." })}</CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -161,7 +161,7 @@ ${formattedBody}
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">{i18n.t("transformRequest.transformedRequestTitle", { defaultValue: "Transformed Request" })}</CardTitle>
-            <CardDescription>{i18n.t("transformRequest.transformedRequestDesc", { defaultValue: "How LiteLLM transforms your request for the specified provider." })}</CardDescription>
+            <CardDescription>{i18n.t("transformRequest.transformedRequestDesc", { defaultValue: "How 中安云科 AI 安全网关 transforms your request for the specified provider." })}</CardDescription>
             <p className="mt-2 text-xs text-muted-foreground">{i18n.t("transformRequest.sensitiveHeadersNote", { defaultValue: "Note: Sensitive headers are not shown." })}</p>
           </CardHeader>
 

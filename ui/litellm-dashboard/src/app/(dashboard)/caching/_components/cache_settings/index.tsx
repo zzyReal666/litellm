@@ -165,7 +165,7 @@ const CacheSettings: React.FC<CacheSettingsProps> = ({ accessToken }) => {
               {t("cacheSettings.index.title", { defaultValue: "Cache Settings" })}
             </h3>
             <p className="text-xs text-muted-foreground mt-1">
-              {t("cacheSettings.index.subtitle", { defaultValue: "Configure Redis cache for LiteLLM" })}
+              {t("cacheSettings.index.subtitle", { defaultValue: "Configure Redis cache for 中安云科 AI 安全网关" })}
             </p>
           </div>
 

@@ -4,11 +4,11 @@ const chatCompletionsExample = (baseUrl: string, model: string): string => `impo
 
 client = openai.OpenAI(
     api_key="your_api_key",
-    base_url=${JSON.stringify(baseUrl)}  # Your LiteLLM Proxy URL
+    base_url=${JSON.stringify(baseUrl)}   # Your 网关 Proxy URL
 )
 
 response = client.chat.completions.create(
-    model=${JSON.stringify(model)},
+    model==${JSON.stringify(model)},
     messages=[
         {
             "role": "user",
@@ -22,8 +22,8 @@ print(response.choices[0].message.content)`;
 const systemOneExample = (baseUrl: string, model: string, keyHeaderName: string): string => `import requests
 
 response = requests.post(
-    ${JSON.stringify(`${baseUrl}/v1/systemone`)},  # Your LiteLLM Proxy URL
-    headers={${JSON.stringify(keyHeaderName)}: "Bearer your_api_key"},
+    ${JSON.stringify(`${baseUrl}/v1/systemone`)},,  # Your 网关 Proxy URL
+    headers={{${JSON.stringify(keyHeaderName)}: "Bearer your_api_key"},
     json={
         "model": ${JSON.stringify(model)},
         "state": "I was charged twice for my subscription this month.",

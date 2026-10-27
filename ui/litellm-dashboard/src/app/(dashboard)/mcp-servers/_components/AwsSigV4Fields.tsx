@@ -162,7 +162,7 @@ const AwsSigV4Fields: React.FC = () => {
             label={t("mcpTools.createMcpServer.awsRoleArnLabel", { defaultValue: "AWS Role ARN" })}
             tooltip={t("mcpTools.createMcpServer.awsRoleArnTooltip", {
               defaultValue:
-                "Optional. IAM role ARN to assume via STS before signing. If set, LiteLLM calls sts:AssumeRole to get temporary credentials. Uses ambient credentials (IAM role, env vars) as the source identity unless explicit keys are also provided.",
+                "Optional. IAM role ARN to assume via STS before signing. If set, 中安云科 AI 安全网关 calls sts:AssumeRole to get temporary credentials. Uses ambient credentials (IAM role, env vars) as the source identity unless explicit keys are also provided.",
             })}
           />
         }

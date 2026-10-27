@@ -9,7 +9,7 @@ import { LensIntroduction } from "./LensIntroduction";
 import { OnboardingSetup } from "./OnboardingSetup";
 
 const PREREQUISITES = [
-  { title: "LiteLLM gateway", detail: "Access to its configuration" },
+  { title: "中安云科 AI 安全网关", detail: "Access to its configuration" },
   { title: "Trace storage", detail: "Included, or use your own ClickHouse" },
   { title: "Docker or Kubernetes", detail: "Use your existing deployment" },
   { title: "An analysis model", detail: "For investigations, after tracing is connected" },

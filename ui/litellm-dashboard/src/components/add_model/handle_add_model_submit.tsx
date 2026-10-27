@@ -128,7 +128,7 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
             try {
               litellmExtraParams = JSON.parse(value);
             } catch (error) {
-              toast.fromError("Failed to parse LiteLLM Extra Params: " + error);
+              toast.fromError("Failed to parse 中安云科 AI 安全网关 Extra Params: " + error);
               throw new Error("Failed to parse litellm_extra_params: " + error);
             }
             if ("litellm_credential_name" in litellmExtraParams && formValues.litellm_credential_name) {
@@ -144,7 +144,7 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
             try {
               modelInfoParams = JSON.parse(value);
             } catch (error) {
-              toast.fromError("Failed to parse LiteLLM Extra Params: " + error);
+              toast.fromError("Failed to parse 中安云科 AI 安全网关 Extra Params: " + error);
               throw new Error("Failed to parse litellm_extra_params: " + error);
             }
             for (const [key, value] of Object.entries(modelInfoParams)) {

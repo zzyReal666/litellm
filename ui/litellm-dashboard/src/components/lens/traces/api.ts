@@ -74,7 +74,7 @@ export const agentHandoffText = (traceId: string, spanId?: string | null, traceR
   ).toString();
   const url = params ? `${path}?${params}` : path;
   const quotedUrl = "'" + url.replaceAll("'", "'\"'\"'") + "'";
-  const what = spanId ? "this step of a LiteLLM agent trace" : "this LiteLLM agent trace";
+  const what = spanId ? "this step of a 中安云科 AI 安全网关 agent trace" : "this 中安云科 AI 安全网关 agent trace";
   const guidance = spanId
     ? "The JSON response contains this step's captured input, output, and attributes. Report missing content and capture warnings explicitly."
     : `The JSON response contains span summaries. Follow next_cursor by adding cursor to this URL until it is null, preserving trace_ref and page_size. Fetch captured content at ${base}/spans/{span_id}, using the same trace_ref. Report missing content and capture warnings explicitly.`;

@@ -105,7 +105,7 @@ const LiteLLMModelNameField: React.FC<LiteLLMModelNameFieldProps> = ({
     <>
       <MountedFormField
         name="model"
-        label={labelWithHint(i18n.t("addModel.litellmModelName.fieldLabel", { defaultValue: "LiteLLM Model Name(s)" }), i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name LiteLLM will send to the LLM API" }))}
+        label={labelWithHint(i18n.t("addModel.litellmModelName.fieldLabel", { defaultValue: "网关模型名称" }), i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name 中安云科 AI 安全网关 will send to the LLM API" }))}
         required
         rules={{
           validate: {
@@ -202,8 +202,8 @@ const LiteLLMModelNameField: React.FC<LiteLLMModelNameFieldProps> = ({
       <div className="grid grid-cols-24">
         <p className="col-start-11 col-span-14 text-sm mb-3 mt-1">
           {selectedProvider === Providers.Azure
-            ? i18n.t("addModel.litellmModelName.azureDeploymentDescription", { defaultValue: "Your deployment name will be saved as the public model name, and LiteLLM will use 'azure/deployment-name' internally" })
-            : i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name LiteLLM will send to the LLM API" })}
+            ? i18n.t("addModel.litellmModelName.azureDeploymentDescription", { defaultValue: "Your deployment name will be saved as the public model name, and 中安云科 AI 安全网关 will use 'azure/deployment-name' internally" })
+            : i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name 中安云科 AI 安全网关 will send to the LLM API" })}
         </p>
       </div>
     </>

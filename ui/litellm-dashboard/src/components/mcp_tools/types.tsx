@@ -78,7 +78,7 @@ export const AUTH_TYPE_ITEMS: readonly McpSelectItem[] = [
   },
   {
     value: AUTH_TYPE.TRUE_PASSTHROUGH,
-    label: "True Passthrough (no LiteLLM auth)",
+    label: "True Passthrough (no 中安云科 AI 安全网关 auth)",
     labelKey: "mcpTools.mcpServerEdit.authTruePassthrough",
   },
   {

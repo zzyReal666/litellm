@@ -29,7 +29,7 @@ const APIReferenceView: React.FC<ApiRefProps> = ({ proxySettings }) => {
         </div>
 
         <p className="mt-2 mb-2 text-sm text-muted-foreground">
-          {i18n.t("aPIReferenceView.litellm-is-openai-compatible-this-means-your", { defaultValue: "LiteLLM is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below" })}{" "}
+          {i18n.t("aPIReferenceView.litellm-is-openai-compatible-this-means-your", { defaultValue: "中安云科 AI 安全网关 is OpenAI Compatible. This means your API Key works with the OpenAI SDK. Just replace the base_url to point to your litellm proxy. Example Below" })}{" "}
         </p>
 
         <Tabs defaultValue="openai">

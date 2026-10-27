@@ -202,7 +202,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
           <div className="flex items-start justify-between gap-4">
             <div>
               <span className="text-sm font-medium text-foreground flex items-center">
-                {i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysLabel", { defaultValue: "Allow All LiteLLM Keys" })}
+                {i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysLabel", { defaultValue: "Allow All 中安云科 AI 安全网关 Keys" })}
                 <SimpleTooltip content={i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysTooltip", { defaultValue: "When enabled, every API key can access this MCP server." })}>
                   <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                 </SimpleTooltip>
@@ -211,7 +211,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
                 {i18n.t("mCPPermissionManagement.enable-if-this-server-should-be-public-to-al", { defaultValue: "Enable if this server should be \"public\" to all keys." })}</p>
             </div>
             <MountedFormField name="allow_all_keys" defaultValue={mcpServer?.allow_all_keys ?? false} className="mb-0">
-              {(control) => <Switch aria-label={i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysLabel", { defaultValue: "Allow All LiteLLM Keys" })} {...switchControl(control)} />}
+              {(control) => <Switch aria-label={i18n.t("mcpTools.mcpPermissionManagement.allowAllKeysLabel", { defaultValue: "Allow All 中安云科 AI 安全网关 Keys" })} {...switchControl(control)} />}
             </MountedFormField>
           </div>
 
@@ -236,12 +236,12 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
               <div>
                 <span className="text-sm font-medium text-foreground flex items-center">
                   {i18n.t("mcpTools.mcpPermissionManagement.delegateAuthLabel", { defaultValue: "Delegate auth to upstream (PKCE passthrough)" })}
-                  <SimpleTooltip content={i18n.t("mcpTools.mcpPermissionManagement.delegateAuthTooltip", { defaultValue: "When on, LiteLLM skips its own API key/SSO check for this server and lets the client complete PKCE directly with the upstream MCP server. Only honored when Auth Type is oauth2. No spend tracking or per-key rate limiting will run on this route." })}>
+                  <SimpleTooltip content={i18n.t("mcpTools.mcpPermissionManagement.delegateAuthTooltip", { defaultValue: "When on, 中安云科 AI 安全网关 skips its own API key/SSO check for this server and lets the client complete PKCE directly with the upstream MCP server. Only honored when Auth Type is oauth2. No spend tracking or per-key rate limiting will run on this route." })}>
                     <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                   </SimpleTooltip>
                 </span>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {i18n.t("mcpTools.mcpPermissionManagement.delegateAuthDesc", { defaultValue: "Bypass LiteLLM auth so clients authenticate directly with the upstream OAuth MCP server." })}
+                  {i18n.t("mcpTools.mcpPermissionManagement.delegateAuthDesc", { defaultValue: "Bypass 中安云科 AI 安全网关 auth so clients authenticate directly with the upstream OAuth MCP server." })}
                 </p>
               </div>
               <MountedFormField
@@ -285,7 +285,7 @@ const MCPPermissionManagement: React.FC<MCPPermissionManagementProps> = ({
               <AlertDescription>
                 {i18n.t("mcpTools.mcpPermissionManagement.internalDelegateWarningDescription", {
                   defaultValue:
-                    "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a LiteLLM session. Ensure your upstream provider and network enforce access controls.",
+                    "This MCP server is configured as internal-only but delegates auth to upstream. Anonymous users will be able to reach the upstream OAuth2 /authorize flow without a 中安云科 AI 安全网关 session. Ensure your upstream provider and network enforce access controls.",
                 })}
               </AlertDescription>
             </Alert>

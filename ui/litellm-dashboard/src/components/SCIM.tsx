@@ -88,7 +88,7 @@ const SCIMConfig: React.FC<SCIMConfigProps> = ({ accessToken, userID, proxySetti
           <p className="text-muted-foreground">
             {t("scim.description", {
               defaultValue:
-                "System for Cross-domain Identity Management (SCIM) allows you to automatically provision and manage users and groups in LiteLLM.",
+                "System for Cross-domain Identity Management (SCIM) allows you to automatically provision and manage users and groups in 中安云科 AI 安全网关.",
             })}
           </p>
 

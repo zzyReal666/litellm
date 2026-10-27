@@ -179,12 +179,12 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
         data-testid="sidebar-account-menu-panel"
       >
         <div className="flex items-center gap-2 border-b border-border px-3 py-3">
-          <span className="text-[15px] font-bold tracking-tight text-foreground">LiteLLM</span>
+          <span className="text-[15px] font-bold tracking-tight text-foreground">中安云科 AI 安全网关</span>
           {!disableBouncingIcon && (
             <span
               className="animate-bounce text-lg leading-none"
               style={{ animationDuration: "2s" }}
-              title={t("navbar.thanksForUsing", { defaultValue: "Thanks for using LiteLLM!" })}
+              title={t("navbar.thanksForUsing", { defaultValue: "Thanks for using 中安云科 AI 安全网关!" })}
               aria-hidden
             >
               🌴

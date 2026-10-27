@@ -380,7 +380,7 @@ const AllModelsTab = ({
                   value: modelToDelete.model_name || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
                 {
-                  label: i18n.t("pages.allModelsTab.litellmModelName", { defaultValue: "LiteLLM Model Name" }),
+                  label: i18n.t("pages.allModelsTab.litellmModelName", { defaultValue: "网关模型名称" }),
                   value: modelToDelete.litellm_model_name || i18n.t("pages.allModelsTab.notSet", { defaultValue: "Not Set" }),
                 },
                 {

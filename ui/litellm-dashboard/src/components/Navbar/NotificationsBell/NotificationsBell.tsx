@@ -30,7 +30,7 @@ export const NotificationsBell: React.FC = () => {
   const content = (
     <div className="max-w-[280px]">
       <PopoverTitle className="mt-0! mb-2!">
-        {t("navbar.notificationsBell.autoRouterTitle", { defaultValue: "LiteLLM Auto Router" })}
+        {t("navbar.notificationsBell.autoRouterTitle", { defaultValue: "中安云科 AI 安全网关 Auto Router" })}
       </PopoverTitle>
       <PopoverDescription className="mb-3! text-sm leading-snug">
         {t("navbar.notificationsBell.autoRouterDescription", {

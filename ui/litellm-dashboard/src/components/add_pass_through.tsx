@@ -185,7 +185,7 @@ const AddPassThroughEndpoint: React.FC<AddFallbacksProps> = ({
                 <AlertDescription>
                   {t("addPassThrough.alertDescription", {
                     defaultValue:
-                      "Route requests from your LiteLLM proxy to any external API. Perfect for custom models, image generation APIs, or any service you want to proxy through LiteLLM.",
+                      "Route requests from your AI 安全网关 to any external API. Perfect for custom models, image generation APIs, or any service you want to proxy through 中安云科 AI 安全网关.",
                   })}
                 </AlertDescription>
               </Alert>

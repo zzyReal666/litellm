@@ -59,7 +59,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
     if (!responsesSessionId) {
       return useApiSessionManagement
         ? t("playground.sessionManagement.apiSessionReadyDesc", {
-            defaultValue: "LiteLLM will manage session using previous_response_id",
+            defaultValue: "中安云科 AI 安全网关 will manage session using previous_response_id",
           })
         : t("playground.sessionManagement.uiSessionReadyDesc", {
             defaultValue: "UI will manage session using chat history",
@@ -68,7 +68,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
 
     return useApiSessionManagement
       ? t("playground.sessionManagement.apiSessionActiveDesc", {
-          defaultValue: "LiteLLM API session active - context maintained server-side",
+          defaultValue: "中安云科 AI 安全网关 API session active - context maintained server-side",
         })
       : t("playground.sessionManagement.uiSessionActiveDesc", {
           defaultValue: "UI session active - context maintained client-side",
@@ -92,7 +92,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
             <TooltipContent>
               {t("playground.sessionManagement.toggleTooltip", {
                 defaultValue:
-                  "Choose between LiteLLM API session management (using previous_response_id) or UI-based session management (using chat history)",
+                  "Choose between 中安云科 AI 安全网关 API session management (using previous_response_id) or UI-based session management (using chat history)",
               })}
             </TooltipContent>
           </Tooltip>

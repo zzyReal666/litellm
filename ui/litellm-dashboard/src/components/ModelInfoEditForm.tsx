@@ -469,8 +469,8 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
             {textField("model_name", i18n.t("modelInfoView.fieldModelName", { defaultValue: "Model Name" }), i18n.t("modelInfoView.placeholderModelName", { defaultValue: "Enter model name" }), localModelData.model_name)}
             {textField(
               "litellm_model_name",
-              i18n.t("modelInfoView.fieldLitellmModelName", { defaultValue: "LiteLLM Model Name" }),
-              i18n.t("modelInfoView.placeholderLitellmModelName", { defaultValue: "Enter LiteLLM model name" }),
+              i18n.t("modelInfoView.fieldLitellmModelName", { defaultValue: "网关模型名称" }),
+              i18n.t("modelInfoView.placeholderLitellmModelName", { defaultValue: "Enter 网关模型名称" }),
               localModelData.litellm_model_name,
             )}
 
@@ -776,7 +776,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                {i18n.t("modelInfoEditForm.litellm-params", { defaultValue: "LiteLLM Params" })}<DocsHint
+                {i18n.t("modelInfoEditForm.litellm-params", { defaultValue: "网关参数" })}<DocsHint
                   text={i18n.t("modelInfoView.tooltipLitellmParams", { defaultValue: "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by LiteLLM." })}
                 />
               </FieldLabel>

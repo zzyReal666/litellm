@@ -53,13 +53,13 @@ const publicNameTooltipContent = (t: TFunction): React.ReactNode => (
   <div className="flex flex-col gap-2 text-left font-normal">
     <div>
       {t("addModel.conditionalPublicModelName.publicModelNameTooltip", {
-        defaultValue: "The name you specify in your API calls to LiteLLM Proxy",
+        defaultValue: "The name you specify in your API calls to AI 安全网关",
       })}
     </div>
     <div>
       <Trans
         i18nKey="addModel.conditionalPublicModelName.tooltipExample"
-        defaults="<strong>Example:</strong> If you name your public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the LiteLLM model"
+        defaults="<strong>Example:</strong> If you name your public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the 中安云科 AI 安全网关 model"
         components={{
           strong: <strong />,
           publicName: <code className={tooltipCodeClassName} />,
@@ -70,7 +70,7 @@ const publicNameTooltipContent = (t: TFunction): React.ReactNode => (
     <div>
       <Trans
         i18nKey="addModel.conditionalPublicModelName.tooltipUsageWithLabel"
-        defaults="<strongLabel>Usage:</strongLabel> You make an API call to the LiteLLM proxy with"
+        defaults="<strongLabel>Usage:</strongLabel> You make an API call to the AI 安全网关 with"
         components={{ strongLabel: <strong /> }}
       />{" "}
       <code className={tooltipCodeClassName}>
@@ -80,7 +80,7 @@ const publicNameTooltipContent = (t: TFunction): React.ReactNode => (
     <div>
       <Trans
         i18nKey="addModel.conditionalPublicModelName.tooltipResultWithLabel"
-        defaults="<strongLabel>Result:</strongLabel> LiteLLM sends"
+        defaults="<strongLabel>Result:</strongLabel> 中安云科 AI 安全网关 sends"
         components={{ strongLabel: <strong /> }}
       />{" "}
       <code className={tooltipCodeClassName}>
@@ -140,12 +140,12 @@ const buildColumns = (t: TFunction): ColumnDef<ModelMapping>[] => [
     accessorKey: "litellm_model",
     header: () => (
       <span className="flex items-center">
-        {t("addModel.conditionalPublicModelName.litellmModelNameColumn", { defaultValue: "LiteLLM Model Name" })}
+        {t("addModel.conditionalPublicModelName.litellmModelNameColumn", { defaultValue: "网关模型名称" })}
         <SimpleTooltip
           content={
             <div>
               {t("addModel.conditionalPublicModelName.litellmModelNameTooltip", {
-                defaultValue: "The model name LiteLLM will send to the LLM API",
+                defaultValue: "The model name 中安云科 AI 安全网关 will send to the LLM API",
               })}
             </div>
           }
@@ -254,7 +254,7 @@ const ConditionalPublicModelName: React.FC = () => {
           {t("addModel.conditionalPublicModelName.modelMappingsLabel", { defaultValue: "Model Mappings" })}
           <SimpleTooltip
             content={t("addModel.conditionalPublicModelName.modelMappingsTooltip", {
-              defaultValue: "Map public model names to LiteLLM model names for load balancing",
+              defaultValue: "Map public model names to 网关模型名称s for load balancing",
             })}
           />
         </span>

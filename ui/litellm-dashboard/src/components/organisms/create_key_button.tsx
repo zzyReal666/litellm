@@ -838,7 +838,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                     />
                     <div className="text-xs text-muted-foreground mt-2">
                       {t("organisms.createKeyButton.agentKeyDescription", {
-                        defaultValue: "This key will be used by the selected agent to make requests to LiteLLM",
+                        defaultValue: "This key will be used by the selected agent to make requests to 中安云科 AI 安全网关",
                       })}
                     </div>
                   </div>

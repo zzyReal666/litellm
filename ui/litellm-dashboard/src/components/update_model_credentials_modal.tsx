@@ -82,7 +82,7 @@ export default function UpdateModelCredentialsModal({
           <AlertTitle>
             {i18n.t("updateModelCredentialsModal.onlyApiKeyRotated", {
               defaultValue:
-                "Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a Vertex service-account JSON aren't supported yet; update those from the model's LiteLLM Params for now.",
+                "Only the API key is rotated here. Models that authenticate with an Azure AD token, AWS credentials, or a Vertex service-account JSON aren't supported yet; update those from the model's 网关参数 for now.",
             })}
           </AlertTitle>
         </Alert>

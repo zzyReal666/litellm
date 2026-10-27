@@ -556,7 +556,7 @@ function DetailPanel({
               <div className="flex items-center gap-1.5">
                 <KeyIcon className="h-3.5 w-3.5 text-info" />
                 <span className="text-xs font-semibold text-info">
-                  {t("guardrails.teamGuardrailsTab.forwardLiteLLMApiKey", { defaultValue: "Forward LiteLLM API Key" })}
+                  {t("guardrails.teamGuardrailsTab.forwardLiteLLMApiKey", { defaultValue: "Forward 网关 API Key" })}
                 </span>
               </div>
               <Toggle enabled={g.forwardKey} onToggle={onToggleForwardKey} disabled={!isAdmin} />
@@ -564,7 +564,7 @@ function DetailPanel({
             <p className="text-xs text-info leading-relaxed">
               <Trans
                 i18nKey="guardrails.teamGuardrailsTab.forwardKeyDesc"
-                defaults="When enabled, the caller's LiteLLM API key is forwarded as an <code>Authorization</code> header to your guardrail endpoint. This allows your guardrail to authenticate model calls using the original caller's credentials."
+                defaults="When enabled, the caller's 网关 API Key is forwarded as an <code>Authorization</code> header to your guardrail endpoint. This allows your guardrail to authenticate model calls using the original caller's credentials."
                 components={{ code: <code className="font-mono bg-info/15 px-1 rounded-sm" /> }}
               />
             </p>
@@ -787,7 +787,7 @@ function DetailPanel({
             <p className="text-xs text-muted-foreground leading-relaxed">
               <Trans
                 i18nKey="guardrails.teamGuardrailsTab.guardrailInfoNote"
-                defaults="This guardrail runs on a separate instance. It receives the user request and forwards the result to the next step in the pipeline. See <docsLink>LiteLLM Generic Guardrail API docs</docsLink> for configuration details."
+                defaults="This guardrail runs on a separate instance. It receives the user request and forwards the result to the next step in the pipeline. See <docsLink>中安云科 AI 安全网关 Generic Guardrail API docs</docsLink> for configuration details."
                 components={{
                   docsLink: (
                     <span />

@@ -391,11 +391,11 @@ function getUncachedInputTextTokens(metadata: Record<string, any>): number | und
 
 const RESPONSE_CACHE_TOOLTIP = i18n.t("viewLogs.logDetailContent.responseCacheTooltip", {
   defaultValue:
-    "Whether this request was served from LiteLLM's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
+    "Whether this request was served from 中安云科 AI 安全网关's response cache (e.g. Redis / in-memory), skipping the LLM provider call entirely. This is separate from provider prompt caching; a Miss here does not mean prompt caching failed.",
 });
 const CACHE_KEY_TOOLTIP = i18n.t("viewLogs.logDetailContent.cacheKeyTooltip", {
   defaultValue:
-    "The key LiteLLM computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
+    "The key 中安云科 AI 安全网关 computed for this request in the response cache. Requests with the same cache key share a cached response; a different key means the request content did not match any cached entry.",
 });
 
 function MetricLabel({ label, tooltip }: { label: string; tooltip: string }) {
@@ -566,7 +566,7 @@ function MetricsSection({ logEntry, metadata }: { logEntry: LogEntry; metadata: 
             )}
 
             {metadata?.litellm_overhead_time_ms !== undefined && metadata.litellm_overhead_time_ms !== null && (
-              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelLitellmOverhead", { defaultValue: "LiteLLM Overhead" })}>
+              <DescriptionItem label={i18n.t("viewLogs.logDetailContent.labelLitellmOverhead", { defaultValue: "中安云科 AI 安全网关 Overhead" })}>
                 {metadata.litellm_overhead_time_ms.toFixed(2)} ms
               </DescriptionItem>
             )}

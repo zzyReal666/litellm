@@ -328,7 +328,7 @@ export const getKeyTableColumns = ({
         label={i18n.t("virtualKeys.virtualKeysTable.lifetimeSpend", { defaultValue: "Lifetime Spend" })}
         tooltip={i18n.t("virtualKeys.virtualKeysTable.lifetimeSpendHint", {
           defaultValue:
-            "Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with LiteLLM v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade.",
+            "Cumulative spend across every budget period. Budget resets do not touch this value. Lifetime tracking started with 中安云科 AI 安全网关 v1.103.0 on September 19, 2026, so keys created earlier only count spend since that upgrade.",
         })}
       />
     ),

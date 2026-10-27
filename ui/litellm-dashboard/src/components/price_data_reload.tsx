@@ -449,7 +449,7 @@ const PriceDataReload: React.FC<PriceDataReloadProps> = ({
             <DialogHeader>
               <DialogTitle>{i18n.t("priceDataReload.scheduleModalTitle", { defaultValue: "Set Up Periodic Reload" })}</DialogTitle>
               <DialogDescription>
-                {i18n.t("priceDataReload.scheduleModalDescription", { defaultValue: "Set how often LiteLLM should fetch the latest pricing data from the remote source." })}
+                {i18n.t("priceDataReload.scheduleModalDescription", { defaultValue: "Set how often 中安云科 AI 安全网关 should fetch the latest pricing data from the remote source." })}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">

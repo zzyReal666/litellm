@@ -143,7 +143,7 @@ const KillSwitchFormFields = () => (
       name="kill_switch.url"
       label={labelWithHint(
         i18n.t("agents.killSwitchFields.webhookUrl", { defaultValue: "Webhook URL" }),
-        i18n.t("agents.killSwitchFields.webhookUrlHint", { defaultValue: "Absolute http(s) URL LiteLLM calls when the kill switch is triggered. Leave empty to remove the kill switch." }),
+        i18n.t("agents.killSwitchFields.webhookUrlHint", { defaultValue: "Absolute http(s) URL 中安云科 AI 安全网关 calls when the kill switch is triggered. Leave empty to remove the kill switch." }),
       )}
       placeholder="https://example.com/hooks/kill-agent"
     />

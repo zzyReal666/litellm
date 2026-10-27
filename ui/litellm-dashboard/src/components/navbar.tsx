@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <Link href={uiHref("")} className="flex items-center">
                 <div className="relative">
                   <div className="flex h-10 max-w-48 items-center justify-center overflow-hidden">
-                    <img src={imageUrl} alt={i18n.t("navbar.litellm-brand", { defaultValue: "LiteLLM Brand" })} className={cn(NAV_LOGO_CLASS_NAME, "dark:hidden")} />
+                    <img src={imageUrl} alt={i18n.t("navbar.litellm-brand", { defaultValue: "中安云科 AI 安全网关 Brand" })} className={cn(NAV_LOGO_CLASS_NAME, "dark:hidden")} />
                     <img
                       src={darkImageUrl}
                       alt=""
@@ -93,7 +93,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     <span
                       className="absolute -left-2 -top-1 animate-bounce text-lg"
                       style={{ animationDuration: "2s" }}
-                      title={i18n.t("navbar.thanks-for-using-litellm", { defaultValue: "Thanks for using LiteLLM!" })}
+                      title={i18n.t("navbar.thanks-for-using-litellm", { defaultValue: "Thanks for using 中安云科 AI 安全网关!" })}
                     >
                       🌑
                     </span>

@@ -295,7 +295,7 @@ export function MCPGatewaySessionsTab({ accessToken, canTerminate }: MCPGatewayS
           <p className="text-sm text-muted-foreground">
             {i18n.t("mcpGatewaySessions.liveConnectionsDescription", {
               defaultValue:
-                "Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent the MCP initialize request and by the authenticated LiteLLM user. Stateless requests and SSE connections are not counted.",
+                "Stateful Streamable HTTP sessions currently open on this proxy worker, grouped by the AI client that sent the MCP initialize request and by the authenticated 中安云科 AI 安全网关 user. Stateless requests and SSE connections are not counted.",
             })}
           </p>
         </div>

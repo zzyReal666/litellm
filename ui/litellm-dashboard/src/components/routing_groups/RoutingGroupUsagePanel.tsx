@@ -104,7 +104,7 @@ export function RoutingGroupUsagePanel({ group, baseUrl }: RoutingGroupUsagePane
           <>
             <Trans
               i18nKey="routingGroups.routingGroupsTable.howRoutingWorksDesc"
-              defaults="Callers request any model in the group by name; LiteLLM picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy."
+              defaults="Callers request any model in the group by name; 中安云科 AI 安全网关 picks a deployment behind the scenes using the <strong>{{strategy}}</strong> strategy."
               values={{ strategy: formatStrategyLabel(group.routing_strategy, t) }}
               components={{ strong: <strong /> }}
             />

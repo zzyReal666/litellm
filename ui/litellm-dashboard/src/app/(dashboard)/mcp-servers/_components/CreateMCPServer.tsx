@@ -798,7 +798,7 @@ const CreateMCPServer: React.FC<CreateMCPServerProps> = ({
                     label={
                       <span className="text-sm font-medium text-foreground flex items-center">
                         {i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsLabel", { defaultValue: "Max Concurrent Requests (optional)" })}
-                        <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsTooltip", { defaultValue: "Maximum number of tool calls LiteLLM will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit." })}>
+                        <SimpleTooltip content={i18n.t("mcpTools.mcpServerEdit.maxConcurrentRequestsTooltip", { defaultValue: "Maximum number of tool calls 中安云科 AI 安全网关 will run against this server at the same time. Additional calls wait for a free slot. Leave blank for no limit." })}>
                           <Info className="ml-2 size-4 text-info hover:text-info/80 cursor-help" />
                         </SimpleTooltip>
                       </span>

@@ -100,7 +100,7 @@ const OrganizationsPanel: React.FC<OrganizationsPanelProps> = ({ userRole, acces
     return (
       <div className="mx-4 mt-4">
         <p className="text-sm text-muted-foreground">
-          {i18n.t("organizationsPanel.this-is-a-litellm-enterprise-feature-and-req", { defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use. Get a trial key" })}{" "}
+          {i18n.t("organizationsPanel.this-is-a-litellm-enterprise-feature-and-req", { defaultValue: "This is a 企业版 feature, and requires a valid key to use. Get a trial key" })}{" "}
           
           .
         </p>

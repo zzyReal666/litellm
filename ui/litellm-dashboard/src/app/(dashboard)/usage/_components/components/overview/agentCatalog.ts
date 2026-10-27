@@ -156,7 +156,7 @@ const FAMILIES: readonly AgentFamily[] = [
   },
   {
     id: "litellm",
-    label: "LiteLLM SDK",
+    label: "中安云科 AI 安全网关 SDK",
     description: "litellm Python SDK",
     kind: "sdk",
     logo: litellmLogo.src,

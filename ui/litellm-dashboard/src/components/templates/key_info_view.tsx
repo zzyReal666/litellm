@@ -563,7 +563,7 @@ export default function KeyInfoView({
         regenerateTooltip={
           !premiumUser
             ? t("templates.keyInfoView.enterpriseFeatureTooltip", {
-                defaultValue: "This is a LiteLLM Enterprise feature, and requires a valid key to use.",
+                defaultValue: "This is a 企业版 feature, and requires a valid key to use.",
               })
             : undefined
         }

@@ -86,7 +86,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
               control={form.control}
               name="tpm_limit"
               label={t("budgets.budgetModal.tpmLimitLabel", { defaultValue: "Max Tokens per minute" })}
-              description={t("budgetsPage.budgetModal.tpmLimitHelp", { defaultValue: "Leave blank for no LiteLLM limit. Provider rate limits still apply." })}
+              description={t("budgetsPage.budgetModal.tpmLimitHelp", { defaultValue: "Leave blank for no 中安云科 AI 安全网关 limit. Provider rate limits still apply." })}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input
@@ -103,7 +103,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
               control={form.control}
               name="rpm_limit"
               label={t("budgets.budgetModal.rpmLimitLabel", { defaultValue: "Max Requests per minute" })}
-              description={t("budgetsPage.budgetModal.tpmLimitHelp", { defaultValue: "Leave blank for no LiteLLM limit. Provider rate limits still apply." })}
+              description={t("budgetsPage.budgetModal.tpmLimitHelp", { defaultValue: "Leave blank for no 中安云科 AI 安全网关 limit. Provider rate limits still apply." })}
             >
               {({ ref, value, onChange, ...field }) => (
                 <Input

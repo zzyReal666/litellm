@@ -97,17 +97,17 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">{t("molecules.modelsColumns.litellmModelName", { defaultValue: "LiteLLM Model Name" })}</span>
+            <span className="text-xs text-muted-foreground">{t("molecules.modelsColumns.litellmModelName", { defaultValue: "网关模型名称" })}</span>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate font-mono text-sm text-foreground" title={litellmModelName}>
                 {litellmModelName}
               </span>
               <button
                 type="button"
-                aria-label={t("pages.modelsAndEndpoints.copyLitellmModelName", { defaultValue: "Copy LiteLLM model name" })}
+                aria-label={t("pages.modelsAndEndpoints.copyLitellmModelName", { defaultValue: "Copy 网关模型名称" })}
                 data-testid={`copy-litellm-model-name-${model.model_info.id}`}
                 className="shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
-                onClick={() => void copyToClipboard(litellmModelName, t("pages.modelsAndEndpoints.litellmModelNameCopied", { defaultValue: "LiteLLM model name copied" }))}
+                onClick={() => void copyToClipboard(litellmModelName, t("pages.modelsAndEndpoints.litellmModelNameCopied", { defaultValue: "网关模型名称 copied" }))}
               >
                 <Copy className="size-3.5" />
               </button>
@@ -146,7 +146,7 @@ function CredentialsHeader() {
                 {t("molecules.modelsColumns.reusable", { defaultValue: "Reusable" })}
               </span>
               <span className="text-xs text-muted-foreground">
-                {t("molecules.modelsColumns.reusableDescription", { defaultValue: "Credentials saved in LiteLLM that can be added to models repeatedly." })}
+                {t("molecules.modelsColumns.reusableDescription", { defaultValue: "Credentials saved in 中安云科 AI 安全网关 that can be added to models repeatedly." })}
               </span>
             </div>
             <div className="flex flex-col gap-1">

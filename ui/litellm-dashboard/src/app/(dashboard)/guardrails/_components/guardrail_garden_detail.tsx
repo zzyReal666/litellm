@@ -13,7 +13,7 @@ import { GuardrailCardInfo } from "./guardrail_garden_data";
 
 const getCategoryLabels = (t: TFunction): Record<GuardrailCardInfo["category"], { provider: string; type: string }> => ({
   litellm: {
-    provider: t("guardrails.guardrailGardenDetail.litellmContentFilter", { defaultValue: "LiteLLM Content Filter" }),
+    provider: t("guardrails.guardrailGardenDetail.litellmContentFilter", { defaultValue: "内容过滤器" }),
     type: t("guardrails.guardrailGardenDetail.typeContentFilter", { defaultValue: "Content Filter" }),
   },
   decision_model: {

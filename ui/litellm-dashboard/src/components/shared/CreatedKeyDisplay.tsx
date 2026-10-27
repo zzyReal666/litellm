@@ -27,7 +27,7 @@ const CreatedKeyDisplay: React.FC<CreatedKeyDisplayProps> = ({ apiKey }) => {
       <p className="mb-2">
         <Trans
           i18nKey="createdKeyDisplay.saveSecretKeyHint"
-          defaults="Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your LiteLLM account. If you lose this secret key, you will need to generate a new one."
+          defaults="Please save this secret key somewhere safe and accessible. For security reasons, <b>you will not be able to view it again</b> through your 中安云科 AI 安全网关 account. If you lose this secret key, you will need to generate a new one."
           components={{ b: <b /> }}
         />
       </p>

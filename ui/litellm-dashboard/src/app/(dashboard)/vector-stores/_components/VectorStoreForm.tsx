@@ -147,7 +147,7 @@ const VECTOR_STORE_ID_PLACEHOLDERS: Record<string, string> = {
   mongodb: i18n.t("vectorStores.vectorStoreForm.vectorStoreIdPlaceholderMongoDb", { defaultValue: "my-vector-index (MongoDB Vector Search index name)" }),
 };
 
-const VERTEX_SEARCH_API_WITH_ENGINE_PLACEHOLDER = i18n.t("vectorStores.vectorStoreForm.vectorStoreIdPlaceholderVertexSearchWithEngine", { defaultValue: "Any identifier you'll use to reference this in LiteLLM" });
+const VERTEX_SEARCH_API_WITH_ENGINE_PLACEHOLDER = i18n.t("vectorStores.vectorStoreForm.vectorStoreIdPlaceholderVertexSearchWithEngine", { defaultValue: "Any identifier you'll use to reference this in 中安云科 AI 安全网关" });
 
 const DEFAULT_VECTOR_STORE_ID_PLACEHOLDER = i18n.t("vectorStores.vectorStoreForm.vectorStoreIdPlaceholderDefault", { defaultValue: "Enter vector store ID from your provider" });
 
@@ -327,7 +327,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                   <Info />
                   <AlertTitle>{i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorAlertTitle", { defaultValue: "PG Vector Setup Required" })}</AlertTitle>
                   <AlertDescription>
-                    <p>{i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorAlertDescription", { defaultValue: "LiteLLM provides a server to connect to PG Vector. To use this provider:" })}</p>
+                    <p>{i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorAlertDescription", { defaultValue: "中安云科 AI 安全网关 provides a server to connect to PG Vector. To use this provider:" })}</p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
                       <li>
                         {i18n.t("vectorStoreManagement.vectorStoreForm.pgVectorStep1Deploy", { defaultValue: "Deploy the litellm-pgvector server from:" })}{" "}
@@ -349,7 +349,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                     <p>
                       {i18n.t("vectorStoreManagement.vectorStoreForm.valkeyIntro", {
                         defaultValue:
-                          "LiteLLM searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
+                          "中安云科 AI 安全网关 searches documents you have already stored in Valkey. It does not create the index or upload documents for you. Before creating this vector store, make sure:",
                       })}
                     </p>
                     <ol style={{ marginLeft: "16px", marginTop: "8px", listStyleType: "decimal" }}>
@@ -381,7 +381,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                     <p style={{ marginTop: "8px" }}>
                       {i18n.t("vectorStoreManagement.vectorStoreForm.valkeyQueryNote", {
                         defaultValue:
-                          "When a query comes in, LiteLLM converts it to an embedding with the model below and returns the closest matching documents from your index.",
+                          "When a query comes in, 中安云科 AI 安全网关 converts it to an embedding with the model below and returns the closest matching documents from your index.",
                       })}
                     </p>
                   </AlertDescription>
@@ -452,7 +452,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                         <strong>{i18n.t("vectorStoreManagement.vectorStoreForm.engineIdLabel", { defaultValue: "Engine ID" })}</strong>{" "}
                         {i18n.t("vectorStoreManagement.vectorStoreForm.vertexSearchEngineIdStepAfter", {
                           defaultValue:
-                            "and enter it in the Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
+                            "and enter it in the Engine ID field. The Vector Store ID is still required as the 中安云科 AI 安全网关-side name for this record, but it isn't used in the GCP URL when Engine ID is set.",
                         })}
                       </li>
                     </ol>
@@ -479,7 +479,7 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                 name="vector_store_name"
                 label={labelWithHint(
                   i18n.t("vectorStoreManagement.vectorStoreInfo.vectorStoreNameLabel", { defaultValue: i18n.t("vectorStoreManagement.vectorStoreForm.vectorStoreNameLabel", { defaultValue: "Vector Store Name" }) }),
-                  i18n.t("vectorStoreManagement.vectorStoreForm.vectorStoreNameTooltip", { defaultValue: "Custom name you want to give to the vector store, this name will be rendered on the LiteLLM UI" }),
+                  i18n.t("vectorStoreManagement.vectorStoreForm.vectorStoreNameTooltip", { defaultValue: "Custom name you want to give to the vector store, this name will be rendered on the 中安云科 AI 安全网关 UI" }),
                 )}
               >
                 {({ ref, value, ...field }) => <Input {...field} ref={ref} value={value ?? ""} />}

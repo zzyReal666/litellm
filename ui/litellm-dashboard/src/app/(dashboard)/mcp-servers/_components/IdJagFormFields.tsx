@@ -41,7 +41,7 @@ const IdJagFormFields: React.FC<IdJagFormFieldsProps> = ({ isEditing = false }) 
         label={
           <FieldLabel
             label={t("mcpTools.idJagFormFields.orgTokenEndpointLabel", { defaultValue: "Org Token Endpoint (leg 1)" })}
-            tooltip={t("mcpTools.idJagFormFields.orgTokenEndpointTooltip", { defaultValue: "Your IdP org authorization server's token endpoint. LiteLLM exchanges the user's identity assertion here for an ID-JAG assertion (RFC 8693 with requested_token_type=urn:ietf:params:oauth:token-type:id-jag)." })}
+            tooltip={t("mcpTools.idJagFormFields.orgTokenEndpointTooltip", { defaultValue: "Your IdP org authorization server's token endpoint. 中安云科 AI 安全网关 exchanges the user's identity assertion here for an ID-JAG assertion (RFC 8693 with requested_token_type=urn:ietf:params:oauth:token-type:id-jag)." })}
           />
         }
         name="token_exchange_endpoint"
@@ -60,7 +60,7 @@ const IdJagFormFields: React.FC<IdJagFormFieldsProps> = ({ isEditing = false }) 
         label={
           <FieldLabel
             label={t("mcpTools.idJagFormFields.resourceTokenEndpointLabel", { defaultValue: "Resource Token Endpoint (leg 2)" })}
-            tooltip={t("mcpTools.idJagFormFields.resourceTokenEndpointTooltip", { defaultValue: "The upstream resource authorization server's token endpoint. LiteLLM posts the ID-JAG assertion here as an RFC 7523 jwt-bearer grant to get the access token the MCP server accepts." })}
+            tooltip={t("mcpTools.idJagFormFields.resourceTokenEndpointTooltip", { defaultValue: "The upstream resource authorization server's token endpoint. 中安云科 AI 安全网关 posts the ID-JAG assertion here as an RFC 7523 jwt-bearer grant to get the access token the MCP server accepts." })}
           />
         }
         name={["credentials", "id_jag_resource_token_endpoint"]}
@@ -76,7 +76,7 @@ const IdJagFormFields: React.FC<IdJagFormFieldsProps> = ({ isEditing = false }) 
         )}
       </MountedFormField>
       <MountedFormField
-        label={<FieldLabel label={t("mcpTools.oAuthFormFields.clientIdLabel", { defaultValue: "Client ID" })} tooltip={t("mcpTools.idJagFormFields.clientIdTooltip", { defaultValue: "OAuth2 client ID LiteLLM authenticates as on both legs." })} />}
+        label={<FieldLabel label={t("mcpTools.oAuthFormFields.clientIdLabel", { defaultValue: "Client ID" })} tooltip={t("mcpTools.idJagFormFields.clientIdTooltip", { defaultValue: "OAuth2 client ID 中安云科 AI 安全网关 authenticates as on both legs." })} />}
         name={["credentials", "client_id"]}
         required={!isEditing}
         rules={requiredWhenCreating(t("mcpTools.idJagFormFields.clientIdRequired", { defaultValue: "Client ID is required for ID-JAG" }))}
@@ -93,7 +93,7 @@ const IdJagFormFields: React.FC<IdJagFormFieldsProps> = ({ isEditing = false }) 
         label={
           <FieldLabel
             label={t("mcpTools.oAuthFormFields.clientSecretLabel", { defaultValue: "Client Secret" })}
-            tooltip={t("mcpTools.idJagFormFields.clientSecretTooltip", { defaultValue: "Authenticates LiteLLM as the OAuth client via client_secret_post. Leave blank when using a private key instead; a private key takes precedence over this secret." })}
+            tooltip={t("mcpTools.idJagFormFields.clientSecretTooltip", { defaultValue: "Authenticates 中安云科 AI 安全网关 as the OAuth client via client_secret_post. Leave blank when using a private key instead; a private key takes precedence over this secret." })}
           />
         }
         name={["credentials", "client_secret"]}
