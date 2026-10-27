@@ -16,8 +16,12 @@ export function ReadinessBanner({ activityReady, className, ...props }: Readines
       className={cn("flex flex-wrap items-center gap-2 border-y py-3 text-sm text-muted-foreground", className)}
     >
       {activityReady
-        ? "Connect a worker to run new investigations. Saved results are still available."
-        : "Recorded activity is not ready. Saved results are still available."}
+        ? i18n.t("lens.readinessBanner.connectWorkerSavedResults", {
+            defaultValue: "Connect a worker to run new investigations. Saved results are still available.",
+          })
+        : i18n.t("lens.readinessBanner.recordedActivityNotReady", {
+            defaultValue: "Recorded activity is not ready. Saved results are still available.",
+          })}
       {!activityReady && (
         <a className="font-medium underline" href={uiHref("lens/?tab=traces")}>
           {i18n.t("readinessBanner.check-traces", { defaultValue: "Check traces" })}</a>

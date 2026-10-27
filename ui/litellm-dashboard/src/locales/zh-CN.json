@@ -13587,6 +13587,75 @@
     },
     "span": {
       "costNotMatched": "花费未匹配"
+    },
+    "tabs": {
+      "traces": "链路",
+      "findings": "发现项",
+      "investigations": "调查",
+      "datasets": "数据集",
+      "settings": "设置"
+    },
+    "modeSwitch": {
+      "investigationRunning": "有调查正在运行",
+      "investigationQueued": "有调查已排队",
+      "workerConnected": "分析器已连接",
+      "connectWorker": "连接分析器"
+    },
+    "onboardingSteps": {
+      "tracingNotEnabled": "链路追踪未启用",
+      "continueToInvestigation": "继续到调查",
+      "continueToWorker": "继续到分析器",
+      "continueWithRequestLogs": "继续使用请求日志",
+      "workerConnectedReady": "分析器已连接，可以创建调查了。",
+      "workerIntro": "分析器使用网关上的模型审查已记录的活动，你可以选择分析模型和花费上限。",
+      "connectWorkerButton": "连接分析器",
+      "installLens": "安装 Lens",
+      "installLensDescription": "在你的 Helm 或 Docker 部署中启用 Lens。",
+      "sendFirstTrace": "发送第一条链路",
+      "sendFirstTraceDescription": "采集 agent 的输入、输出和工具调用。",
+      "connectWorker": "连接分析器",
+      "connectWorkerDescription": "选择分析模型和花费上限。",
+      "runFirstInvestigation": "运行第一次调查",
+      "runFirstInvestigationDescription": "描述期望行为并抽查部分活动。"
+    },
+    "gettingStarted": {
+      "gatewayConfig": "访问其配置",
+      "traceStorage": "链路存储",
+      "traceStorageDetail": "内置，或使用你自己的 ClickHouse",
+      "deployment": "Docker 或 Kubernetes",
+      "deploymentDetail": "使用现有部署",
+      "analysisModel": "分析模型",
+      "analysisModelDetail": "链路连接后用于调查",
+      "viewTraces": "查看链路",
+      "viewInvestigations": "查看调查"
+    },
+    "settings": {
+      "tracing": "链路追踪",
+      "tracingEnabled": "链路追踪已启用",
+      "tracingDisabled": "链路追踪未启用",
+      "connectAgent": "连接 agent",
+      "enableTracing": "启用链路追踪",
+      "analysisWorker": "分析器"
+    },
+    "worker": {
+      "preparing": "准备中…",
+      "saveAnalysisAccess": "保存分析访问权限",
+      "enableInvestigations": "启用调查",
+      "analysisAccess": "分析访问权限",
+      "connectWorker": "连接分析器",
+      "chooseKeyPays": "选择由哪个密钥支付分析费用。",
+      "chooseModelAndLimit": "选择模型和花费上限。Lens 服务会自动运行调查。",
+      "cancel": "取消"
+    },
+    "investigationDetail": {
+      "findings": "发现项",
+      "criteria": "评判标准",
+      "history": "历史",
+      "retry": "重试"
+    },
+    "readinessBanner": {
+      "connectWorkerSavedResults": "连接分析器以运行新的调查，已保存的结果仍可查看。",
+      "recordedActivityNotReady": "已记录的活动尚未就绪，已保存的结果仍可查看。"
     }
   },
   "mcpServerCredentials": {

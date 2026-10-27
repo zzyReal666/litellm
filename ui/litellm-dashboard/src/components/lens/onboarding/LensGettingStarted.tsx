@@ -9,10 +9,10 @@ import { LensIntroduction } from "./LensIntroduction";
 import { OnboardingSetup } from "./OnboardingSetup";
 
 const PREREQUISITES = [
-  { title: "中安云科 AI 安全网关", detail: "Access to its configuration" },
-  { title: "Trace storage", detail: "Included, or use your own ClickHouse" },
-  { title: "Docker or Kubernetes", detail: "Use your existing deployment" },
-  { title: "An analysis model", detail: "For investigations, after tracing is connected" },
+  { title: "中安云科 AI 安全网关", detailKey: "gatewayConfig", detailDefault: "Access to its configuration" },
+  { titleKey: "traceStorage", titleDefault: "Trace storage", detailKey: "traceStorageDetail", detailDefault: "Included, or use your own ClickHouse" },
+  { titleKey: "deployment", titleDefault: "Docker or Kubernetes", detailKey: "deploymentDetail", detailDefault: "Use your existing deployment" },
+  { titleKey: "analysisModel", titleDefault: "An analysis model", detailKey: "analysisModelDetail", detailDefault: "For investigations, after tracing is connected" },
 ] as const;
 
 export interface LensGettingStartedProps {
@@ -41,7 +41,9 @@ export function LensGettingStarted({ state, onStart, onExit }: LensGettingStarte
           action={
             (state.activityReady || state.hasInvestigations) && (
               <Button variant="outline" size="sm" onClick={() => onExit(exitTo)}>
-                {exitTo === "traces" ? "View traces" : "View investigations"}
+                {exitTo === "traces"
+                  ? i18n.t("lens.gettingStarted.viewTraces", { defaultValue: "View traces" })
+                  : i18n.t("lens.gettingStarted.viewInvestigations", { defaultValue: "View investigations" })}
               </Button>
             )
           }
@@ -59,11 +61,17 @@ function Prerequisites() {
         {i18n.t("lensGettingStarted.before-you-start", { defaultValue: "Before you start" })}</h2>
       <ul className="mt-5 space-y-5 text-sm">
         {PREREQUISITES.map((item) => (
-          <li key={item.title} className="flex gap-3">
+          <li key={item.detailKey} className="flex gap-3">
             <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
             <div>
-              <p className="font-medium">{item.title}</p>
-              <p className="mt-1 leading-5 text-muted-foreground">{item.detail}</p>
+              <p className="font-medium">
+                {"titleKey" in item
+                  ? i18n.t(`lens.gettingStarted.${item.titleKey}`, { defaultValue: item.titleDefault })
+                  : item.title}
+              </p>
+              <p className="mt-1 leading-5 text-muted-foreground">
+                {i18n.t(`lens.gettingStarted.${item.detailKey}`, { defaultValue: item.detailDefault })}
+              </p>
             </div>
           </li>
         ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import i18n from "@/lib/i18n";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useZodForm } from "@/lib/forms/useZodForm";
@@ -33,8 +34,10 @@ function ErrorText({ message }: { message: string | undefined }) {
 }
 
 function submitLabel(editing: Worker | null, busy: boolean): string {
-  if (busy) return "Preparing…";
-  return editing ? "Save analysis access" : "Enable investigations";
+  if (busy) return i18n.t("lens.worker.preparing", { defaultValue: "Preparing…" });
+  return editing
+    ? i18n.t("lens.worker.saveAnalysisAccess", { defaultValue: "Save analysis access" })
+    : i18n.t("lens.worker.enableInvestigations", { defaultValue: "Enable investigations" });
 }
 
 function WorkerFormCard({
@@ -55,18 +58,22 @@ function WorkerFormCard({
   return (
     <SettingsCard className="flex flex-col gap-5">
       <header className="space-y-1">
-        <h3 className="text-base font-semibold">{editing ? "Analysis access" : "Connect a worker"}</h3>
+        <h3 className="text-base font-semibold">
+          {editing
+            ? i18n.t("lens.worker.analysisAccess", { defaultValue: "Analysis access" })
+            : i18n.t("lens.worker.connectWorker", { defaultValue: "Connect a worker" })}
+        </h3>
         <p className="text-sm text-muted-foreground">
           {editing
-            ? "Choose which key pays for analysis."
-            : "Choose a model and spending limit. Your Lens service runs investigations automatically."}
+            ? i18n.t("lens.worker.chooseKeyPays", { defaultValue: "Choose which key pays for analysis." })
+            : i18n.t("lens.worker.chooseModelAndLimit", { defaultValue: "Choose a model and spending limit. Your Lens service runs investigations automatically." })}
         </p>
       </header>
       <WorkerForm editingWorker={editing?.id ?? null} />
       <div className="flex justify-end gap-2">
         {editing && (
           <Button variant="outline" disabled={busy} onClick={onCancel}>
-            Cancel
+            {i18n.t("lens.worker.cancel", { defaultValue: "Cancel" })}
           </Button>
         )}
         <Button disabled={!valid || busy} onClick={onSubmit}>

@@ -112,17 +112,17 @@ export function InvestigationDetail({
         <Tabs value={section} onValueChange={setSection} key={lens.id}>
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b">
             <TabsList variant="line">
-              <TabsTrigger value="findings">Findings</TabsTrigger>
-              <TabsTrigger value="checks">Criteria</TabsTrigger>
+              <TabsTrigger value="findings">{i18n.t("lens.investigationDetail.findings", { defaultValue: "Findings" })}</TabsTrigger>
+              <TabsTrigger value="checks">{i18n.t("lens.investigationDetail.criteria", { defaultValue: "Criteria" })}</TabsTrigger>
               <TabsTrigger value="runs">{sourceLabels[batchSettings?.source ?? "traces"]}</TabsTrigger>
-              <TabsTrigger value="activity">History</TabsTrigger>
+              <TabsTrigger value="activity">{i18n.t("lens.investigationDetail.history", { defaultValue: "History" })}</TabsTrigger>
             </TabsList>
           </div>
           {snapshot.error && (
             <p role="alert" className="text-sm text-destructive">
               {i18n.t("investigationDetail.could-not-load-this-run", { defaultValue: "Could not load this run." })}{" "}
               <Button variant="link" onClick={snapshot.refetch}>
-                Retry
+                {i18n.t("lens.investigationDetail.retry", { defaultValue: "Retry" })}
               </Button>
             </p>
           )}

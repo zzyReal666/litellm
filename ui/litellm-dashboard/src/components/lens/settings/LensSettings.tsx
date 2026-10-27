@@ -14,19 +14,23 @@ const TRACING_DOCS = "https://docs.litellm.ai/docs/proxy/lens";
 
 function TracingSection({ enabled, onOpenTraces }: { enabled: boolean; onOpenTraces: () => void }) {
   return (
-    <SettingsSection heading="Tracing" description={i18n.t("lensSettings.where-your-agents-send-runs-so-lens-can-read", { defaultValue: "Where your agents send runs so Lens can read them." })}>
+    <SettingsSection heading={i18n.t("lens.settings.tracing", { defaultValue: "Tracing" })} description={i18n.t("lensSettings.where-your-agents-send-runs-so-lens-can-read", { defaultValue: "Where your agents send runs so Lens can read them." })}>
       <SettingsCard className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 text-sm">
           <Activity aria-hidden="true" className="size-4 text-muted-foreground" />
           <span role="status" className="inline-flex items-center gap-2">
             <StatusDot state={enabled ? "ok" : "off"} />
-            {enabled ? "Tracing enabled" : "Tracing is not enabled"}
+            {enabled
+              ? i18n.t("lens.settings.tracingEnabled", { defaultValue: "Tracing enabled" })
+              : i18n.t("lens.settings.tracingDisabled", { defaultValue: "Tracing is not enabled" })}
           </span>
         </div>
         <div className="flex items-center gap-3">
           
           <Button variant="outline" size="sm" onClick={onOpenTraces}>
-            {enabled ? "Connect an agent" : "Enable tracing"}
+            {enabled
+              ? i18n.t("lens.settings.connectAgent", { defaultValue: "Connect an agent" })
+              : i18n.t("lens.settings.enableTracing", { defaultValue: "Enable tracing" })}
           </Button>
         </div>
       </SettingsCard>
@@ -49,7 +53,7 @@ export function LensSettings({
       <TracingSection enabled={list.tracing_enabled} onOpenTraces={onOpenTraces} />
       <SignalSettings />
       <SettingsSection
-        heading="Analysis worker"
+        heading={i18n.t("lens.settings.analysisWorker", { defaultValue: "Analysis worker" })}
         description={i18n.t("lensSettings.runs-investigations-on-your-server-and-bills", { defaultValue: "Runs investigations on your server and bills model usage to an analysis key." })}
       >
         <WorkerSettings workers={list.workers} readyAction={workerReadyAction} />

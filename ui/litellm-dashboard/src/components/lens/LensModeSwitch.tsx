@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/lib/i18n";
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
 import { Settings } from "lucide-react";
 import { StatusDot } from "@/components/shared/StatusDot";
@@ -9,7 +10,10 @@ import { useWorkerConnected } from "./hooks/useWorkerConnected";
 import type { LensList } from "./model/types";
 import { LENS_TABS } from "./route";
 
-const ACTIVITY_LABEL = { running: "An investigation is running", queued: "An investigation is queued" };
+const activityLabel = (activity: InvestigationActivity) =>
+  activity === "running"
+    ? i18n.t("lens.modeSwitch.investigationRunning", { defaultValue: "An investigation is running" })
+    : i18n.t("lens.modeSwitch.investigationQueued", { defaultValue: "An investigation is queued" });
 
 export function LensModeSwitch({
   activity,
@@ -19,8 +23,13 @@ export function LensModeSwitch({
   workers: LensList["workers"] | null;
 }) {
   const connected = useWorkerConnected(workers);
-  const settingsTitle = connected ? "Worker connected" : "Connect worker";
-  const tabs = Object.entries(LENS_TABS).filter(([view]) => view !== "settings" || workers);
+  const settingsTitle = connected
+    ? i18n.t("lens.modeSwitch.workerConnected", { defaultValue: "Worker connected" })
+    : i18n.t("lens.modeSwitch.connectWorker", { defaultValue: "Connect worker" });
+  const labels = Object.fromEntries(
+    Object.entries(LENS_TABS).map(([view, label]) => [view, i18n.t(`lens.tabs.${view}`, { defaultValue: label })]),
+  );
+  const tabs = Object.entries(labels).filter(([view]) => view !== "settings" || workers);
   return (
     <TabsPrimitive.List
       aria-label="Lens"
@@ -32,7 +41,7 @@ export function LensModeSwitch({
           key={view}
           value={view}
           title={view === "settings" ? settingsTitle : undefined}
-          aria-description={view === "investigations" && activity !== "idle" ? ACTIVITY_LABEL[activity] : undefined}
+          aria-description={view === "investigations" && activity !== "idle" ? activityLabel(activity) : undefined}
           className={cn(
             "relative z-raised inline-flex h-full items-center gap-1.5 rounded-md text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 data-active:text-foreground sm:text-sm",
             view === "settings" ? "px-2" : "px-2.5 sm:px-3",

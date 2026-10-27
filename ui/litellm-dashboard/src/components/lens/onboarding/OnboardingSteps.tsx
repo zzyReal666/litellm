@@ -26,7 +26,7 @@ function StorageStep({ state, goTo, storageReady }: StepProps) {
     return (
       <>
         <TracingSetupFields
-          detail="Tracing is not enabled"
+          detail={i18n.t("lens.onboardingSteps.tracingNotEnabled", { defaultValue: "Tracing is not enabled" })}
           accessToken={accessToken}
           onOpenTrace={openTrace}
           onCheck={state.refresh}
@@ -49,8 +49,11 @@ function StorageStep({ state, goTo, storageReady }: StepProps) {
 }
 
 function continuationLabel(state: LensReadiness) {
-  if (state.connected) return "Continue to investigation";
-  return state.tracesReady ? "Continue to worker" : "Continue with request logs";
+  if (state.connected)
+    return i18n.t("lens.onboardingSteps.continueToInvestigation", { defaultValue: "Continue to investigation" });
+  return state.tracesReady
+    ? i18n.t("lens.onboardingSteps.continueToWorker", { defaultValue: "Continue to worker" })
+    : i18n.t("lens.onboardingSteps.continueWithRequestLogs", { defaultValue: "Continue with request logs" });
 }
 
 function ActivityContinuation({ state }: { state: LensReadiness }) {
@@ -106,14 +109,16 @@ function WorkerStep({ state }: StepProps) {
     <div className="space-y-4">
       <p role="status" className="text-sm text-muted-foreground">
         {state.connected
-          ? "Worker connected. You’re ready to create an investigation."
-          : "The worker reviews recorded activity using a model on your gateway. You choose its analysis model and spending limit."}
+          ? i18n.t("lens.onboardingSteps.workerConnectedReady", { defaultValue: "Worker connected. You’re ready to create an investigation." })
+          : i18n.t("lens.onboardingSteps.workerIntro", { defaultValue: "The worker reviews recorded activity using a model on your gateway. You choose its analysis model and spending limit." })}
       </p>
       {!state.activityReady && (
         <p className="text-sm text-muted-foreground">{i18n.t("onboardingSteps.recorded-activity-is-required-before-connect", { defaultValue: "Recorded activity is required before connecting a worker." })}</p>
       )}
       <Button onClick={state.connected ? create : connect} disabled={!state.activityReady || locked}>
-        {state.connected ? "Continue to investigation" : "Connect worker"}
+        {state.connected
+          ? i18n.t("lens.onboardingSteps.continueToInvestigation", { defaultValue: "Continue to investigation" })
+          : i18n.t("lens.onboardingSteps.connectWorkerButton", { defaultValue: "Connect worker" })}
         <ArrowRight aria-hidden="true" className="size-4" />
       </Button>
     </div>
@@ -139,34 +144,44 @@ function InvestigationStep({ state }: StepProps) {
 }
 
 interface StepDefinition {
-  readonly title: string;
-  readonly description: string;
+  readonly titleKey: string;
+  readonly titleDefault: string;
+  readonly descriptionKey: string;
+  readonly descriptionDefault: string;
   readonly complete: (state: LensReadiness, storageReady: boolean) => boolean;
   readonly Content: (props: StepProps) => ReactNode;
 }
 
 const STEPS: readonly StepDefinition[] = [
   {
-    title: "Install Lens",
-    description: "Enable Lens in your Helm or Docker deployment.",
+    titleKey: "installLens",
+    titleDefault: "Install Lens",
+    descriptionKey: "installLensDescription",
+    descriptionDefault: "Enable Lens in your Helm or Docker deployment.",
     complete: (_state, storageReady) => storageReady,
     Content: StorageStep,
   },
   {
-    title: "Send your first trace",
-    description: "Capture your agent’s inputs, outputs, and tool calls.",
+    titleKey: "sendFirstTrace",
+    titleDefault: "Send your first trace",
+    descriptionKey: "sendFirstTraceDescription",
+    descriptionDefault: "Capture your agent’s inputs, outputs, and tool calls.",
     complete: (state) => state.tracesReady,
     Content: AgentStep,
   },
   {
-    title: "Connect a worker",
-    description: "Choose an analysis model and spending limit.",
+    titleKey: "connectWorker",
+    titleDefault: "Connect a worker",
+    descriptionKey: "connectWorkerDescription",
+    descriptionDefault: "Choose an analysis model and spending limit.",
     complete: (state) => state.connected,
     Content: WorkerStep,
   },
   {
-    title: "Run your first investigation",
-    description: "Describe the expected behavior and review a sample of activity.",
+    titleKey: "runFirstInvestigation",
+    titleDefault: "Run your first investigation",
+    descriptionKey: "runFirstInvestigationDescription",
+    descriptionDefault: "Describe the expected behavior and review a sample of activity.",
     complete: (state) => state.hasInvestigations,
     Content: InvestigationStep,
   },
@@ -204,11 +219,13 @@ export function OnboardingSteps({
       data-slot="onboarding-steps"
       className={cn("divide-y overflow-hidden rounded-2xl border bg-card", className)}
     >
-      {STEPS.slice(offset).map(({ title, description, complete, Content }, index) => {
+      {STEPS.slice(offset).map(({ titleKey, titleDefault, descriptionKey, descriptionDefault, complete, Content }, index) => {
+        const title = i18n.t(`lens.onboardingSteps.${titleKey}`, { defaultValue: titleDefault });
+        const description = i18n.t(`lens.onboardingSteps.${descriptionKey}`, { defaultValue: descriptionDefault });
         const stepIndex = index + offset;
         const open = Math.max(offset, visibleStep) === stepIndex;
         return (
-          <li key={title}>
+          <li key={titleKey}>
             <h3>
               <button
                 type="button"

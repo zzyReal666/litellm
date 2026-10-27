@@ -13587,6 +13587,75 @@
     },
     "span": {
       "costNotMatched": "Cost not matched"
+    },
+    "tabs": {
+      "traces": "Traces",
+      "findings": "Findings",
+      "investigations": "Investigations",
+      "datasets": "Datasets",
+      "settings": "Settings"
+    },
+    "modeSwitch": {
+      "investigationRunning": "An investigation is running",
+      "investigationQueued": "An investigation is queued",
+      "workerConnected": "Worker connected",
+      "connectWorker": "Connect worker"
+    },
+    "onboardingSteps": {
+      "tracingNotEnabled": "Tracing is not enabled",
+      "continueToInvestigation": "Continue to investigation",
+      "continueToWorker": "Continue to worker",
+      "continueWithRequestLogs": "Continue with request logs",
+      "workerConnectedReady": "Worker connected. You’re ready to create an investigation.",
+      "workerIntro": "The worker reviews recorded activity using a model on your gateway. You choose its analysis model and spending limit.",
+      "connectWorkerButton": "Connect worker",
+      "installLens": "Install Lens",
+      "installLensDescription": "Enable Lens in your Helm or Docker deployment.",
+      "sendFirstTrace": "Send your first trace",
+      "sendFirstTraceDescription": "Capture your agent’s inputs, outputs, and tool calls.",
+      "connectWorker": "Connect a worker",
+      "connectWorkerDescription": "Choose an analysis model and spending limit.",
+      "runFirstInvestigation": "Run your first investigation",
+      "runFirstInvestigationDescription": "Describe the expected behavior and review a sample of activity."
+    },
+    "gettingStarted": {
+      "gatewayConfig": "Access to its configuration",
+      "traceStorage": "Trace storage",
+      "traceStorageDetail": "Included, or use your own ClickHouse",
+      "deployment": "Docker or Kubernetes",
+      "deploymentDetail": "Use your existing deployment",
+      "analysisModel": "An analysis model",
+      "analysisModelDetail": "For investigations, after tracing is connected",
+      "viewTraces": "View traces",
+      "viewInvestigations": "View investigations"
+    },
+    "settings": {
+      "tracing": "Tracing",
+      "tracingEnabled": "Tracing enabled",
+      "tracingDisabled": "Tracing is not enabled",
+      "connectAgent": "Connect an agent",
+      "enableTracing": "Enable tracing",
+      "analysisWorker": "Analysis worker"
+    },
+    "worker": {
+      "preparing": "Preparing…",
+      "saveAnalysisAccess": "Save analysis access",
+      "enableInvestigations": "Enable investigations",
+      "analysisAccess": "Analysis access",
+      "connectWorker": "Connect a worker",
+      "chooseKeyPays": "Choose which key pays for analysis.",
+      "chooseModelAndLimit": "Choose a model and spending limit. Your Lens service runs investigations automatically.",
+      "cancel": "Cancel"
+    },
+    "investigationDetail": {
+      "findings": "Findings",
+      "criteria": "Criteria",
+      "history": "History",
+      "retry": "Retry"
+    },
+    "readinessBanner": {
+      "connectWorkerSavedResults": "Connect a worker to run new investigations. Saved results are still available.",
+      "recordedActivityNotReady": "Recorded activity is not ready. Saved results are still available."
     }
   },
   "mcpServerCredentials": {
