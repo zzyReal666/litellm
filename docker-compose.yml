@@ -27,6 +27,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      # Software authorization: the gateway refuses to serve traffic until a
+      # license file signed for this machine has been imported.
+      LITELLM_PRODUCT_LICENSE_ENABLED: "True"
+      LITELLM_PRODUCT_LICENSE_FILE: "/app/data/product_license.lic"
+    volumes:
+      - product_license_data:/app/data
     env_file:
       - .env # Load local .env file
     depends_on:
@@ -117,3 +123,5 @@ volumes:
     name: litellm_postgres_data # Named volume for Postgres data persistence
   redis_data:
     name: litellm_redis_data # Named volume for Redis AOF persistence
+  product_license_data:
+    name: litellm_product_license_data # Persists the imported software license

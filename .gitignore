@@ -158,3 +158,6 @@ litellm.log
 # Internal docs kept local only
 Doc4zzy（文档for张忠源）/7.99按人限量方案.md
 Doc4zzy（文档for张忠源）/asyncio面试题-LiteLLM.md
+
+# Imported software license (machine-bound, generated at runtime)
+product_license.lic

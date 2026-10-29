@@ -42,6 +42,7 @@ export const pageDescriptions: Record<string, string> = {
   "router-settings": "Configure routing and load balancing settings",
   "logging-and-alerts": "Set up logging and alert configurations",
   "admin-panel": "Access admin panel and settings",
+  "product-license": "View software license and product serial number",
 };
 
 export interface PageMetadata {

@@ -631,6 +631,9 @@ from litellm.proxy.pass_through_endpoints.pass_through_endpoints import (
 from litellm.proxy.pass_through_endpoints.pass_through_endpoints import (
     router as pass_through_router,
 )
+from litellm.proxy.product_license.manager import get_product_license_manager
+from litellm.proxy.product_license.middleware import ProductLicenseGateMiddleware
+from litellm.proxy.product_license.router import router as product_license_router
 from litellm.proxy.public_endpoints import router as public_endpoints_router
 from litellm.proxy.public_endpoints.public_v1 import router as public_v1_router
 from litellm.proxy.rag_endpoints.endpoints import router as rag_router
@@ -1058,6 +1061,12 @@ async def proxy_startup_event(app: FastAPI) -> AsyncGenerator[None, None]:
     import json
 
     init_verbose_loggers()
+
+    ## PRODUCT SOFTWARE LICENSE ##
+    try:
+        get_product_license_manager().activate_from_disk()
+    except Exception:  # noqa: BLE001  # license init failures must never stop the proxy from booting
+        verbose_proxy_logger.exception("failed to initialize product license")
 
     ## RUN WORKER STARTUP HOOKS (e.g., gflags initialization) ##
     _startup_hooks_env: Final = os.environ.get("LITELLM_WORKER_STARTUP_HOOKS", "")
@@ -18379,6 +18388,7 @@ app.include_router(user_agent_analytics_router)
 app.include_router(gateway_request_router)
 app.include_router(enterprise_router)
 app.include_router(ui_discovery_endpoints_router)
+app.include_router(product_license_router)
 # Eager: /models/{name}:method overlaps with the OpenAI /models endpoint.
 app.include_router(google_router)
 
@@ -18393,6 +18403,9 @@ app.add_middleware(
     get_settings=lambda: get_admission_control_settings(general_settings),
     state=admission_control_state,
 )
+# Product license gate must run inside PerRequestRootPathMiddleware so the
+# request path it inspects is already root-path normalized.
+app.add_middleware(ProductLicenseGateMiddleware)
 # Added last on purpose - last-added is outermost, and the client-visible URL
 # prefix must be resolved into scope["root_path"] before any inner middleware
 # or the router inspects the path. Only added when SERVER_ROOT_PATHS is
