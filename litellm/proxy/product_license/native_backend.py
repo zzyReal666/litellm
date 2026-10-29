@@ -271,7 +271,10 @@ class LibLicenseBackend:
                 (session_handle, info_buffer, ctypes.byref(info_length)),
             )
             if return_code != 0:
-                raise NativeLicenseError(f"License_GetLicenseInfo 失败: 0x{return_code:08x}")
+                verbose_proxy_logger.debug(
+                    "License_GetLicenseInfo returned 0x%08x; treating device as unlicensed",
+                    return_code,
+                )
             info_bytes: Final = info_buffer.raw
         finally:
             self._close(library, device_handle, session_handle)

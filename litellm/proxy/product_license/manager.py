@@ -12,11 +12,11 @@ from litellm._logging import verbose_proxy_logger
 from litellm.proxy.product_license import fingerprint
 from litellm.proxy.product_license.native_backend import (
     DEFAULT_SERVER_TYPE,
-    LibLicenseBackend,
     NativeLicenseBackend,
     NativeLicenseError,
     NativeLicenseUnavailableError,
 )
+from litellm.proxy.product_license.subprocess_backend import SubprocessLicenseBackend
 from litellm.proxy.product_license.types import (
     NativeLicenseInfo,
     ProductLicenseState,
@@ -91,7 +91,7 @@ class ProductLicenseManager:
         serial_number: str | None = None,
         machine_fingerprint: str | None = None,
     ) -> None:
-        self._backend: Final = backend if backend is not None else LibLicenseBackend()
+        self._backend: Final = backend if backend is not None else SubprocessLicenseBackend()
         self._license_file: Final = (
             license_file
             or os.getenv("LITELLM_PRODUCT_LICENSE_FILE", "").strip()
