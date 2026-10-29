@@ -53,6 +53,10 @@ with `LITELLM_PRODUCT_SERIAL` when the purchase record has its own serial.
 ## Layout
 
 - `native_backend.py` - `ctypes` bindings for `liblicense.so` and the fixed-size license info struct.
+- `subprocess_backend.py` - request generation and license import run in an isolated worker process.
+  The vendor library can segfault when an invalid license response is imported after a request code
+  was generated in the same process; a worker keeps such a crash from taking the proxy down.
+- `native_worker.py` - the short-lived worker entrypoint (`python -m litellm.proxy.product_license.native_worker`).
 - `manager.py` - status evaluation, caching, request generation, import and persistence.
 - `middleware.py` - blocks product traffic until authorized, redirects UI traffic to the activation page.
 - `router.py` - the HTTP endpoints above.
