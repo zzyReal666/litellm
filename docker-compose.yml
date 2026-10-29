@@ -22,6 +22,12 @@ services:
       # is auto-refreshed alongside the writer.
       # DATABASE_URL_READ_REPLICA: "postgresql://llmproxy:dbpassword9090@db-reader:5432/litellm"
       STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
+      # Software authorization: the gateway refuses to serve traffic until a
+      # license file signed for this machine has been imported.
+      LITELLM_PRODUCT_LICENSE_ENABLED: "True"
+      LITELLM_PRODUCT_LICENSE_FILE: "/app/data/product_license.lic"
+    volumes:
+      - product_license_data:/app/data
     env_file:
       - .env # Load local .env file
     depends_on:
@@ -71,3 +77,5 @@ volumes:
     driver: local
   postgres_data:
     name: litellm_postgres_data # Named volume for Postgres data persistence
+  product_license_data:
+    name: litellm_product_license_data

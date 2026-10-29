@@ -4,7 +4,6 @@ tests/e2e/.fixtures/
 .venv-typecheck
 .venv_policy_test
 .venv-mutmut
-.venv-local
 mutants/
 .env
 .claude
@@ -59,7 +58,6 @@ litellm/proxy/tests/package-lock.json
 ui/litellm-dashboard/.next
 ui/litellm-dashboard/node_modules
 ui/litellm-dashboard/next-env.d.ts
-*.tsbuildinfo
 ui/litellm-dashboard/package.json
 ui/litellm-dashboard/package-lock.json
 helm/litellm-helm/*.tgz
@@ -106,7 +104,7 @@ litellm_config.yaml
 .cursor
 litellm/proxy/to_delete_loadtest_work/*
 update_model_cost_map.py
-tests/unit/proxy/_experimental/mcp_server/test_mcp_server_manager.py
+tests/test_litellm/proxy/_experimental/mcp_server/test_mcp_server_manager.py
 scripts/test_vertex_ai_search.py
 LAZY_LOADING_IMPROVEMENTS.md
 STABILIZATION_TODO.md
@@ -150,9 +148,16 @@ crash.*.log
 ui/litellm-dashboard/out/
 litellm.log
 
-.coverage-rust
-coverage-rust.xml
-
-# make lens-dev worker token, generated config and logs
-.lens-dev/
+# Local working directories: agent team state, build artifacts, git worktrees
+.agent-teams/
 .build-logs/
+.worktrees/
+
+.doc-work/
+
+# Internal docs kept local only
+Doc4zzy（文档for张忠源）/7.99按人限量方案.md
+Doc4zzy（文档for张忠源）/asyncio面试题-LiteLLM.md
+
+# Imported software license (machine-bound, generated at runtime)
+product_license.lic

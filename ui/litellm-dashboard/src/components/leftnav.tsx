@@ -452,6 +452,13 @@ const menuGroups: MenuGroup[] = [
             roles: all_admin_roles,
           },
           {
+            key: "product-license",
+            page: "product-license",
+            label: "授权信息",
+            icon: <ShieldCheck {...ICON} />,
+            roles: all_admin_roles,
+          },
+          {
             key: "cost-tracking",
             page: "cost-tracking",
             label: "Cost Tracking",

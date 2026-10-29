@@ -13178,6 +13178,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/product/license/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Import Product License */
+        post: operations["import_product_license_product_license_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/product/license/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Product License Info */
+        get: operations["get_product_license_info_product_license_info_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/product/license/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Product License Request */
+        get: operations["download_product_license_request_product_license_request_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/project/delete": {
         parameters: {
             query?: never;
@@ -27759,6 +27810,14 @@ export interface components {
             mask?: string[] | null;
             /** Mask[] */
             "mask[]"?: string[] | null;
+        };
+        /** Body_import_product_license_product_license_import_post */
+        Body_import_product_license_product_license_import_post: {
+            /**
+             * File
+             * @description 授权文件（十六进制文本）
+             */
+            file: string;
         };
         /** Body_introspect_endpoint_introspect_post */
         Body_introspect_endpoint_introspect_post: {
@@ -42360,6 +42419,44 @@ export interface components {
             review?: components["schemas"]["Review"] | null;
             /** Stage */
             stage?: string | null;
+        /** ProductLicenseImportResponse */
+        ProductLicenseImportResponse: {
+            license: components["schemas"]["ProductLicenseInfoResponse"];
+            /** Message */
+            message: string;
+        };
+        /** ProductLicenseInfoResponse */
+        ProductLicenseInfoResponse: {
+            /** Auth State */
+            auth_state: string;
+            /** Create Time */
+            create_time: string;
+            /** License File */
+            license_file: string;
+            /** License Version */
+            license_version: number | null;
+            /** Machine Code */
+            machine_code: string;
+            /** Message */
+            message: string;
+            /** Native Available */
+            native_available: boolean;
+            /** Product Name */
+            product_name: string;
+            /** Product Version */
+            product_version: string;
+            /** Serial Number */
+            serial_number: string;
+            /** Status */
+            status: string;
+            /** Thread Count */
+            thread_count: number | null;
+            /** Time */
+            time: string;
+            /** User Count */
+            user_count: number | null;
+            /** User Desc */
+            user_desc: string | null;
         };
         /** Prompt */
         Prompt: {
@@ -70686,6 +70783,79 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_product_license_product_license_import_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_import_product_license_product_license_import_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductLicenseImportResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_product_license_info_product_license_info_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductLicenseInfoResponse"];
+                };
+            };
+        };
+    };
+    download_product_license_request_product_license_request_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
                 };
             };
         };
