@@ -14,7 +14,7 @@ LICENSE_REQUEST_BUFFER_SIZE: Final = 3072
 LICENSE_INFO_MIN_SIZE: Final = 196
 LICENSE_INFO_STRUCT: Final = Struct("<i32siiqq64sii32s32s")
 RESERVED_FIELD_MAX_LENGTH: Final = 32
-DEFAULT_SERVER_TYPE: Final = "ai-token-gateway"
+DEFAULT_SERVER_TYPE: Final = "SC-AIG"
 
 PACKAGE_LIB_DIR: Final = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lib")
 COMMON_LIBRARY_PATHS: Final = (

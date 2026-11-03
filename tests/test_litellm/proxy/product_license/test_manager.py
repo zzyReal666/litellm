@@ -21,7 +21,7 @@ from tests.test_litellm.proxy.product_license._product_license_test_utils import
 def make_manager(
     tmp_path,
     info,
-    product_code="ai-token-gateway",
+    product_code=None,
     **backend_kwargs,
 ):
     backend = FakeNativeLicenseBackend(info, **backend_kwargs)
@@ -141,6 +141,23 @@ def test_request_code_is_lowercase_hex_and_uses_product_code(tmp_path):
     license_manager, backend = make_manager(tmp_path, build_info(), request=b"\x01\x02\xab", product_code="gateway")
     assert license_manager.get_request_code() == "0102ab"
     assert backend.requested_server_types == ["gateway"]
+
+
+def test_request_code_uses_sc_aig_by_default(tmp_path, monkeypatch):
+    monkeypatch.delenv("LITELLM_PRODUCT_CODE", raising=False)
+    license_manager, backend = make_manager(tmp_path, build_info(), request=b"\x01")
+
+    assert license_manager.get_request_code() == "01"
+    assert backend.requested_server_types == ["SC-AIG"]
+
+
+def test_request_code_reads_product_code_from_env(tmp_path, monkeypatch):
+    monkeypatch.setenv("LITELLM_PRODUCT_CODE", "SC-AIG-CUSTOM")
+    license_manager, backend = make_manager(tmp_path, build_info(), request=b"\x01")
+
+    license_manager.get_request_code()
+
+    assert backend.requested_server_types == ["SC-AIG-CUSTOM"]
 
 
 def test_import_persists_license_and_returns_authorized_status(tmp_path):

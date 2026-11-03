@@ -87,7 +87,7 @@ class ProductLicenseManager:
         license_file: str | None = None,
         product_name: str | None = None,
         product_version: str | None = None,
-        product_code: str = DEFAULT_SERVER_TYPE,
+        product_code: str | None = None,
         serial_number: str | None = None,
         machine_fingerprint: str | None = None,
     ) -> None:
@@ -101,7 +101,7 @@ class ProductLicenseManager:
             product_name or os.getenv("LITELLM_PRODUCT_NAME", "").strip() or DEFAULT_PRODUCT_NAME
         )
         self._product_version: Final = product_version or _detect_product_version()
-        self._product_code: Final = product_code or DEFAULT_SERVER_TYPE
+        self._product_code: Final = product_code or os.getenv("LITELLM_PRODUCT_CODE", "").strip() or DEFAULT_SERVER_TYPE
         detected_fingerprint: Final = machine_fingerprint or fingerprint.machine_fingerprint()
         self._machine_code: Final = fingerprint.format_serial(detected_fingerprint)
         self._serial_number: Final = serial_number or fingerprint.product_serial_number(detected_fingerprint)

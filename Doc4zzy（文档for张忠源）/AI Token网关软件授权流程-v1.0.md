@@ -106,7 +106,7 @@ flowchart LR
 | `LITELLM_PRODUCT_NAME` | `AI Token网关` | 授权信息中展示的产品名称 |
 | `LITELLM_PRODUCT_VERSION` | LiteLLM 包版本 | 授权信息中展示的产品版本 |
 | `LITELLM_PRODUCT_SERIAL` | 由机器指纹派生 | 覆盖展示的产品序列号，便于与采购记录对应 |
-| `LITELLM_PRODUCT_CODE` | `ai-token-gateway` | 生成申请码时上报的产品/服务类型，需与签发端约定一致 |
+| `LITELLM_PRODUCT_CODE` | `SC-AIG` | 生成申请码时上报的产品/服务类型，需与签发端约定一致 |
 
 ### 5.3 docker compose 参考配置
 
@@ -178,6 +178,7 @@ curl -s -o product_license_request.txt \
 申请码说明：
 
 - 纯十六进制文本，无文件头，不要手工修改
+- 申请码中包含产品类型，默认 `SC-AIG`，可通过 `LITELLM_PRODUCT_CODE` 修改，签发端必须使用相同产品类型
 - 单次典型长度约 1684 字节（3368 个十六进制字符），不同机器略有差异
 - 每次生成的内容不同（包含随机信息），但都对应同一台机器的签发请求
 - 拿到其他机器上签发无效，必须使用本机生成的申请码
@@ -355,7 +356,7 @@ LITELLM_PRODUCT_LICENSE_ENABLED=false
 | 测试容器 | `license-test`，`0.0.0.0:4010 -> 4000` |
 | 验证结果 | `/product/license/info` 200 未授权；`/v1/models` 403；`/ui/settings` 302 跳激活页；激活页 200；登录页 200；健康检查 200；申请码下载 200（3368 字符） |
 | 异常隔离 | 导入非法授权文件返回 400 `授权组件异常退出(signal 11)`，网关健康检查仍为 200 |
-| 申请码文件 | `/root/license-bundle/product_license_request.txt`，sha256 `c5d29d29085c7698ed80ce3d51433b8f056d31a2ef582021d0679c16834bc048` |
+| 申请码文件 | `/root/license-bundle/product_license_request.txt`，sha256 `dc0ed06561597f1e05bb3299153fd09b54a67785378ca3856aaf700183c81a9b`（产品类型 SC-AIG） |
 | 待验证项 | 使用签发端签发该申请码并导入，确认状态变为“正式授权”、门禁解除；生产切换时建议从生产容器重新生成申请码再签发 |
 
 构建说明：112 无法访问内网 GitLab，也无法从 Docker Hub 拉取构建镜像，因此完整多阶段镜像构建不可执行；验证镜像采用叠加方式构建。正式发布镜像仍应由 CI 从 `zayk-dev` 分支构建，构建时前端产物会随镜像一起生成。

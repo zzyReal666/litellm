@@ -41,7 +41,7 @@ license issuing tooling keeps working.
 | `LITELLM_PRODUCT_NAME` | `AI Token网关` | Product name shown in the license details. |
 | `LITELLM_PRODUCT_VERSION` | LiteLLM package version | Product version shown in the license details. |
 | `LITELLM_PRODUCT_SERIAL` | machine fingerprint | Override the displayed product serial number. |
-| `LITELLM_PRODUCT_CODE` | `ai-token-gateway` | Server type sent with the authorization request. |
+| `LITELLM_PRODUCT_CODE` | `SC-AIG` | Server type sent with the authorization request. |
 
 `liblicense.so` is bundled at `litellm/proxy/product_license/lib/liblicense.so` (Linux
 x86-64). Machine binding is enforced inside the library: the vendor signs the license against
