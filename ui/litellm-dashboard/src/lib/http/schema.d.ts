@@ -42419,6 +42419,7 @@ export interface components {
             review?: components["schemas"]["Review"] | null;
             /** Stage */
             stage?: string | null;
+        };
         /** ProductLicenseImportResponse */
         ProductLicenseImportResponse: {
             license: components["schemas"]["ProductLicenseInfoResponse"];
