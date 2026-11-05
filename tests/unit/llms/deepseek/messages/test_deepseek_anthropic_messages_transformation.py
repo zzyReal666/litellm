@@ -187,3 +187,70 @@ def test_deepseek_anthropic_messages_preserves_thinking_and_sanitizes_custom_too
         "input_schema": {"type": "object"},
     }
     assert request["tools"][1]["type"] == "web_search_20260209"
+
+
+def _transform_with_history(
+    config: DeepSeekAnthropicMessagesConfig,
+    messages: list,
+    optional_params: dict,
+) -> dict:
+    return config.transform_anthropic_messages_request(
+        model="deepseek-v4-pro",
+        messages=messages,
+        anthropic_messages_optional_request_params={"max_tokens": 100, **optional_params},
+        litellm_params=GenericLiteLLMParams(),
+        headers={},
+    )
+
+
+def test_deepseek_anthropic_messages_fills_thinking_before_tool_use_when_missing():
+    config = DeepSeekAnthropicMessagesConfig()
+    tool_use = {"type": "tool_use", "id": "toolu_1", "name": "read_file", "input": {"path": "/tmp/a.txt"}}
+    tool_result = {"type": "tool_result", "tool_use_id": "toolu_1", "content": "hello"}
+    messages = [
+        {"role": "user", "content": "Read the file."},
+        {"role": "assistant", "content": [tool_use]},
+        {"role": "user", "content": [tool_result]},
+    ]
+
+    request = _transform_with_history(config, messages, {"thinking": {"type": "enabled", "budget_tokens": 1024}})
+
+    assert request["messages"] == [
+        {"role": "user", "content": "Read the file."},
+        {"role": "assistant", "content": [{"type": "thinking", "thinking": " "}, tool_use]},
+        {"role": "user", "content": [tool_result]},
+    ]
+
+
+def test_deepseek_anthropic_messages_fills_thinking_when_thinking_param_absent():
+    config = DeepSeekAnthropicMessagesConfig()
+    tool_use = {"type": "tool_use", "id": "toolu_1", "name": "read_file", "input": {"path": "/tmp/a.txt"}}
+
+    request = _transform_with_history(config, [{"role": "assistant", "content": [tool_use]}], {})
+
+    assert request["messages"] == [
+        {"role": "assistant", "content": [{"type": "thinking", "thinking": " "}, tool_use]},
+    ]
+
+
+def test_deepseek_anthropic_messages_keeps_history_when_thinking_disabled():
+    config = DeepSeekAnthropicMessagesConfig()
+    tool_use = {"type": "tool_use", "id": "toolu_1", "name": "read_file", "input": {"path": "/tmp/a.txt"}}
+    messages = [{"role": "assistant", "content": [tool_use]}]
+
+    request = _transform_with_history(config, messages, {"thinking": {"type": "disabled"}})
+
+    assert request["messages"] == messages
+    assert request["thinking"] == {"type": "disabled"}
+
+
+def test_deepseek_anthropic_messages_does_not_fill_text_only_assistant_turns():
+    config = DeepSeekAnthropicMessagesConfig()
+    messages = [
+        {"role": "user", "content": "1+1=?"},
+        {"role": "assistant", "content": [{"type": "text", "text": "2"}]},
+    ]
+
+    request = _transform_with_history(config, messages, {"thinking": {"type": "enabled", "budget_tokens": 1024}})
+
+    assert request["messages"] == messages

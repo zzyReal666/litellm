@@ -22,6 +22,8 @@ class DeepSeekAnthropicMessagesConfig(AnthropicMessagesConfig):
     custom-tool discriminator (`{"type": "custom"}`).
     """
 
+    _THINKING_BLOCK_TYPES: Final[frozenset[str]] = frozenset({"thinking", "redacted_thinking"})
+
     @property
     def custom_llm_provider(self) -> str | None:
         return "deepseek"
@@ -108,6 +110,38 @@ class DeepSeekAnthropicMessagesConfig(AnthropicMessagesConfig):
                 sanitized_tools.append(tool)
         return sanitized_tools
 
+    @staticmethod
+    def _is_thinking_disabled(anthropic_messages_request: dict) -> bool:
+        thinking: Final = anthropic_messages_request.get("thinking")
+        return isinstance(thinking, dict) and thinking.get("type") == "disabled"
+
+    @classmethod
+    def _fill_missing_thinking_blocks(cls, messages: list) -> list:
+        """
+        DeepSeek rejects a thinking-mode request when an assistant turn carries a
+        tool_use block without a thinking block ("The `content[].thinking` in the
+        thinking mode must be passed back to the API"). The OpenAI-compatible
+        surface already backfills reasoning_content in DeepSeekConfig, but the
+        Anthropic-compatible surface forwarded history untouched, so a turn
+        produced by an upstream that omits thinking would poison the rest of the
+        conversation. A placeholder block is enough, the API accepts it without a
+        signature.
+        """
+        filled: Final[list] = []
+        for message in messages:
+            content: Final = message.get("content") if isinstance(message, dict) else None
+            if not isinstance(message, dict) or message.get("role") != "assistant" or not isinstance(content, list):
+                filled.append(message)
+                continue
+            block_types: Final[frozenset[object]] = frozenset(
+                block.get("type") for block in content if isinstance(block, dict)
+            )
+            if "tool_use" not in block_types or block_types & cls._THINKING_BLOCK_TYPES:
+                filled.append(message)
+                continue
+            filled.append({**message, "content": [{"type": "thinking", "thinking": " "}, *content]})
+        return filled
+
     def transform_anthropic_messages_request(
         self,
         model: str,
@@ -125,4 +159,8 @@ class DeepSeekAnthropicMessagesConfig(AnthropicMessagesConfig):
         )
         if "tools" in anthropic_messages_request:
             anthropic_messages_request["tools"] = self._sanitize_tools_for_deepseek(anthropic_messages_request["tools"])
+        if not self._is_thinking_disabled(anthropic_messages_request):
+            anthropic_messages_request["messages"] = self._fill_missing_thinking_blocks(
+                anthropic_messages_request["messages"]
+            )
         return anthropic_messages_request
