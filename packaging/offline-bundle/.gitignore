@@ -1,0 +1,6 @@
+images/
+vendor/
+data/
+backups/
+bin/docker-compose
+.env

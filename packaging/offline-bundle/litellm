@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+# 中安云科 AI 安全网关 运维入口。安装后位于安装目录下，例如 /opt/litellm/litellm。
+set -uo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ROOT
+
+usage() {
+  cat <<'EOF'
+用法: litellm <命令>
+
+  status     查看服务状态与存活探针
+  start      启动全部服务
+  stop       停止全部服务
+  restart    重启全部服务
+  logs [服务] 查看日志，默认 litellm，可跟 -f 持续跟踪
+  backup     备份数据库到 backups/
+  restore <文件>  从备份恢复数据库
+  install    首次安装或升级（等价于执行安装包内的 install.sh）
+  post-install  导入授权后补做：预算 Redis、模型初始化、压缩护栏
+  uninstall  卸载服务（默认保留数据）
+  info       显示访问地址与账号信息
+  version    显示版本
+  help       显示本帮助
+
+示例:
+  litellm status
+  litellm logs -f
+  litellm logs db
+  litellm backup
+  litellm uninstall
+EOF
+}
+
+require_install() {
+  [[ -f "${ROOT}/docker-compose.yml" ]] || { printf '错误: %s 不是安装目录\n' "${ROOT}" >&2; exit 1; }
+  [[ -f "${ROOT}/.env" ]] || { printf '错误: 缺少 .env，请先执行安装\n' >&2; exit 1; }
+  source "${ROOT}/scripts/_lib.sh"
+  litellm_load_env
+}
+
+cmd="${1:-help}"
+shift || true
+
+case "${cmd}" in
+  status)
+    require_install
+    bash "${ROOT}/scripts/status.sh"
+    ;;
+  start)
+    require_install
+    printf '==> 启动服务\n'
+    bash "${ROOT}/scripts/start.sh"
+    ;;
+  stop)
+    require_install
+    printf '==> 停止服务\n'
+    bash "${ROOT}/scripts/stop.sh"
+    ;;
+  restart)
+    require_install
+    printf '==> 重启服务\n'
+    bash "${ROOT}/scripts/restart.sh"
+    ;;
+  logs)
+    require_install
+    service="litellm"
+    follow=""
+    for arg in "$@"; do
+      case "${arg}" in
+        -f|--follow) follow="-f" ;;
+        *) service="${arg}" ;;
+      esac
+    done
+    litellm_compose logs ${follow} --tail=200 "${service}"
+    ;;
+  backup)
+    require_install
+    bash "${ROOT}/scripts/backup-db.sh"
+    ;;
+  restore)
+    require_install
+    target="${1:-}"
+    [[ -n "${target}" ]] || { printf '用法: litellm restore <备份文件>\n' >&2; exit 1; }
+    bash "${ROOT}/scripts/restore-db.sh" "${target}"
+    ;;
+  install)
+    installer="${ROOT}/install.sh"
+    if [[ ! -f "${installer}" ]]; then
+      printf '错误: 未找到 %s，请从安装包目录执行 install.sh\n' "${installer}" >&2
+      exit 1
+    fi
+    exec bash "${installer}" "$@"
+    ;;
+  post-install)
+    require_install
+    state="$(curl -s "http://127.0.0.1:${LITELLM_PORT:-4000}/product/license/info" 2>/dev/null || true)"
+    if ! printf '%s' "${state}" | grep -q '"auth_state":"authorized"'; then
+      printf '产品尚未授权，请先在管理界面导入授权文件\n' >&2
+      printf '授权页地址: http://127.0.0.1:%s/ui/license-activation/\n' "${LITELLM_PORT:-4000}" >&2
+      exit 1
+    fi
+    printf '==> 配置预算计数所需的 Redis\n'
+    bash "${ROOT}/scripts/enable-coordination-redis.sh" || printf '警告: Redis 配置失败，请确认已导入授权文件\n' >&2
+    printf '\n==> 初始化 DeepSeek 模型\n'
+    if [[ -z "${DEEPSEEK_API_KEY:-}" ]]; then
+      printf '    跳过：.env 中没有 DEEPSEEK_API_KEY，可到管理界面手动添加模型\n'
+    else
+      bash "${ROOT}/scripts/seed-models.sh" || printf '警告: 模型初始化失败\n' >&2
+    fi
+    printf '\n==> 启用提示词压缩\n'
+    bash "${ROOT}/scripts/setup-compression.sh" || printf '警告: 压缩护栏创建失败\n' >&2
+    printf '\n==> 完成，执行 litellm status 确认服务状态\n'
+    ;;
+  uninstall)
+    if [[ -f "${ROOT}/uninstall.sh" ]]; then
+      exec bash "${ROOT}/uninstall.sh" "$@"
+    fi
+    printf '错误: 未找到 uninstall.sh\n' >&2
+    exit 1
+    ;;
+  info)
+    require_install
+    host_ip="$(hostname -I 2>/dev/null | awk '{print $1}')"
+    [[ -n "${host_ip}" ]] || host_ip="<本机IP>"
+    printf '管理界面   http://%s:%s/ui\n' "${host_ip}" "${LITELLM_PORT:-4000}"
+    printf '管理账号   %s\n' "${UI_USERNAME:-admin}"
+    if [[ -n "${UI_PASSWORD:-}" ]]; then
+      printf '管理密码   %s\n' "${UI_PASSWORD}"
+    else
+      printf '管理密码   见 %s/.env 的 UI_PASSWORD\n' "${ROOT}"
+    fi
+    printf '监控指标   http://%s:%s\n' "${host_ip}" "${PROMETHEUS_HOST_PORT:-9090}"
+    printf '安装目录   %s\n' "${ROOT}"
+    printf '授权状态   %s/product/license/info\n' "http://127.0.0.1:${LITELLM_PORT:-4000}"
+    ;;
+  version)
+    image="$(grep -E '^\s*image: litellm-zhcn' "${ROOT}/docker-compose.yml" 2>/dev/null | head -1 | awk '{print $2}')"
+    printf 'AI 安全网关 %s\n' "${image:-未识别}"
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    printf '未知命令: %s\n\n' "${cmd}" >&2
+    usage
+    exit 1
+    ;;
+esac
