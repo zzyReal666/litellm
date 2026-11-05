@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -37,8 +39,35 @@ def make_manager(
     return license_manager, backend
 
 
+LICENSE_TZONE = ZoneInfo("Asia/Shanghai")
+
+
 def format_timestamp(timestamp: int) -> str:
-    return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp))
+    return datetime.fromtimestamp(timestamp, tz=LICENSE_TZONE).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def test_license_time_renders_in_product_timezone_not_process_timezone(tmp_path, monkeypatch):
+    monkeypatch.delenv("LITELLM_PRODUCT_TIMEZONE", raising=False)
+    monkeypatch.setenv("TZ", "UTC")
+    if hasattr(time, "tzset"):
+        time.tzset()
+    try:
+        known = 1793867587
+        license_manager, _ = make_manager(tmp_path, build_info(t_start=known, t_end=known))
+        status = license_manager.get_status()
+        assert status.create_time_text == "2026-11-05 16:33:07"
+    finally:
+        monkeypatch.undo()
+        if hasattr(time, "tzset"):
+            time.tzset()
+
+
+def test_license_timezone_is_configurable(tmp_path, monkeypatch):
+    monkeypatch.setenv("LITELLM_PRODUCT_TIMEZONE", "UTC")
+    known = 1793867587
+    license_manager, _ = make_manager(tmp_path, build_info(t_start=known, t_end=known))
+    status = license_manager.get_status()
+    assert status.create_time_text == "2026-11-05 08:33:07"
 
 
 def test_permanent_license_is_authorized(tmp_path):

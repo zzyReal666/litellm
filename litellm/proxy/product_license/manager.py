@@ -4,9 +4,11 @@ import binascii
 import os
 import threading
 import time
+from datetime import datetime, tzinfo
 from functools import lru_cache
 from pathlib import Path
 from typing import Final
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from litellm._logging import verbose_proxy_logger
 from litellm.proxy.product_license import fingerprint
@@ -28,6 +30,8 @@ DEFAULT_LICENSE_FILE_NAME: Final = "product_license.lic"
 STATUS_CACHE_TTL_SECONDS: Final = 30.0
 MAX_LICENSE_FILE_CHARS: Final = 1024 * 1024
 TIME_FORMAT: Final = "%Y-%m-%d %H:%M:%S"
+LICENSE_TIMEZONE_ENV: Final = "LITELLM_PRODUCT_TIMEZONE"
+DEFAULT_LICENSE_TIMEZONE: Final = "Asia/Shanghai"
 UNAVAILABLE_MESSAGE: Final = "授权组件不可用"
 
 
@@ -53,11 +57,25 @@ def _detect_product_version() -> str:
     return str(litellm_version)
 
 
+def _license_timezone() -> tzinfo | None:
+    name: Final = os.getenv(LICENSE_TIMEZONE_ENV, "").strip() or DEFAULT_LICENSE_TIMEZONE
+    try:
+        return ZoneInfo(name)
+    except (ZoneInfoNotFoundError, ValueError):
+        return None
+
+
 def _format_timestamp(timestamp: int) -> str:
     if timestamp <= 0:
         return "暂无信息"
+    zone: Final = _license_timezone()
     try:
-        return time.strftime(TIME_FORMAT, time.localtime(timestamp))
+        moment: Final = (
+            datetime.fromtimestamp(timestamp, tz=zone)
+            if zone is not None
+            else datetime.fromtimestamp(timestamp)
+        )
+        return moment.strftime(TIME_FORMAT)
     except (OSError, OverflowError, ValueError):
         return "暂无信息"
 
