@@ -126,6 +126,7 @@ class ProductLicenseManager:
         self._lock: Final = threading.RLock()
         self._cached_status: ProductLicenseStatus | None = None
         self._cache_deadline: float = 0.0
+        self._cached_request_code: str | None = None
 
     @property
     def license_file(self) -> str:
