@@ -154,8 +154,12 @@ class ProductLicenseManager:
 
     def get_request_code(self) -> str:
         with self._lock:
+            if self._cached_request_code is not None:
+                return self._cached_request_code
             request_bytes: Final = self._backend.generate_request(self._product_code)
-        return binascii.hexlify(request_bytes).decode("ascii").lower()
+            code: Final = binascii.hexlify(request_bytes).decode("ascii").lower()
+            self._cached_request_code = code
+            return code
 
     def import_license(self, raw_bytes: bytes) -> ProductLicenseStatus:
         compact: Final = b"".join(raw_bytes.split())
