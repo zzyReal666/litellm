@@ -12,7 +12,7 @@ REDIS_HOST_PORT="${REDIS_HOST_PORT:-6379}"
 HEADROOM_HOST_PORT="${HEADROOM_HOST_PORT:-8787}"
 POSTGRES_DB="${POSTGRES_DB:-litellm}"
 POSTGRES_USER="${POSTGRES_USER:-litellm}"
-UI_USERNAME="${UI_USERNAME:-admin}"
+UI_USERNAME="${UI_USERNAME:-admin@sinocipher.local}"
 UI_PASSWORD="${UI_PASSWORD:-}"
 LITELLM_PRODUCT_NAME="${LITELLM_PRODUCT_NAME:-中安云科 AI 安全网关}"
 LITELLM_PRODUCT_CODE="${LITELLM_PRODUCT_CODE:-SC-AIG}"
@@ -25,6 +25,7 @@ SEED_MODELS="${SEED_MODELS:-1}"
 SETUP_COMPRESSION="${SETUP_COMPRESSION:-1}"
 ASSUME_YES="${ASSUME_YES:-0}"
 SKIP_DOCKER="${SKIP_DOCKER:-0}"
+SKIP_ADMIN="${SKIP_ADMIN:-0}"
 ARGS_GIVEN=0
 
 log() { printf '%s\n' "$*"; }
@@ -49,7 +50,7 @@ usage() {
   --redis-port <端口>      Redis 宿主机端口，默认 6379
   --headroom-port <端口>   提示词压缩服务宿主机端口，默认 8787
   --project-name <名称>    容器项目名，同机多套部署时区分，默认 litellm
-  --ui-username <用户名>   管理界面用户名，默认 admin
+  --ui-email <邮箱>        管理界面管理员邮箱，默认 admin@sinocipher.local
   --ui-password <密码>     管理界面密码，默认随机生成
   --deepseek-key <key>     DeepSeek API Key，写入 .env 并初始化模型
   --deepseek-key-2 <key>   第二组上游 Key，用于 flash/pro 双 deployment 分流
@@ -57,6 +58,7 @@ usage() {
   --product-code <编码>    授权产品编码，默认 SC-AIG
   --skip-images            跳过镜像加载，镜像已在目标机
   --skip-docker            跳过 Docker 引擎安装（目标机已装 Docker）
+  --skip-admin             跳过管理员账号创建（保留环境变量登录）
   --no-seed                不初始化模型，部署后到界面自行配置
   --no-compression         不创建提示词压缩护栏（headroom 服务仍会启动）
   --yes                    非交互确认
@@ -125,7 +127,7 @@ while [[ $# -gt 0 ]]; do
     --redis-port) REDIS_HOST_PORT="$2"; shift 2 ;;
     --headroom-port) HEADROOM_HOST_PORT="$2"; shift 2 ;;
     --project-name) COMPOSE_PROJECT_NAME="$2"; shift 2 ;;
-    --ui-username) UI_USERNAME="$2"; shift 2 ;;
+    --ui-username|--ui-email) UI_USERNAME="$2"; shift 2 ;;
     --ui-password) UI_PASSWORD="$2"; shift 2 ;;
     --deepseek-key) DEEPSEEK_API_KEY_INPUT="$2"; shift 2 ;;
     --deepseek-key-2) DEEPSEEK_API_KEY_2_INPUT="$2"; shift 2 ;;
@@ -133,6 +135,7 @@ while [[ $# -gt 0 ]]; do
     --product-code) LITELLM_PRODUCT_CODE="$2"; shift 2 ;;
     --skip-images) SKIP_IMAGES=1; shift ;;
     --skip-docker) SKIP_DOCKER=1; shift ;;
+    --skip-admin) SKIP_ADMIN=1; shift ;;
     --no-seed) SEED_MODELS=0; shift ;;
     --no-compression) SETUP_COMPRESSION=0; shift ;;
     --yes) ASSUME_YES=1; shift ;;
@@ -167,15 +170,21 @@ if [[ "${ARGS_GIVEN}" -eq 0 ]] && [[ "${ASSUME_YES}" -eq 0 ]]; then
   ok "数据库 ${POSTGRES_HOST_PORT}，Redis ${REDIS_HOST_PORT}，压缩服务 ${HEADROOM_HOST_PORT}"
 
   step "3/6" "管理员账号"
-  UI_USERNAME="$(ask "管理界面用户名" "${UI_USERNAME}")"
+  while true; do
+    UI_USERNAME="$(ask "管理员邮箱（登录用户名）" "${UI_USERNAME}")"
+    case "${UI_USERNAME}" in
+      *@*.*) break ;;
+      *) warn "请填写邮箱格式，例如 admin@example.com" ;;
+    esac
+  done
   if ask_yes_no "自动生成随机密码？" "y"; then
     UI_PASSWORD="${UI_PASSWORD:-$(gen_secret)}"
     ok "已生成随机密码，安装结束后显示"
   else
     while true; do
-      UI_PASSWORD="$(ask "设置管理界面密码（至少 8 位）" "")"
-      [[ ${#UI_PASSWORD} -ge 8 ]] && break
-      warn "密码太短，请重新输入"
+      UI_PASSWORD="$(ask "设置管理界面密码（至少 12 位）" "")"
+      [[ ${#UI_PASSWORD} -ge 12 ]] && break
+      warn "密码至少 12 位（系统密码策略要求）"
     done
     ok "已设置自定义密码"
   fi
@@ -201,11 +210,11 @@ if [[ "${ARGS_GIVEN}" -eq 0 ]] && [[ "${ASSUME_YES}" -eq 0 ]]; then
   ask_yes_no "开始安装？" "y" || { log "已取消"; exit 0; }
   ASSUME_YES=1
   log ""
-  log "开始执行安装，共 9 个步骤"
+  log "开始执行安装，共 10 个步骤"
 fi
 
 log ""
-TOTAL_STEPS=9
+TOTAL_STEPS=10
 STEP_NO=0
 TTY=0
 [[ -t 1 ]] && TTY=1
@@ -466,6 +475,56 @@ if [[ "${code}" != "200" ]]; then
 fi
 step_ok
 
+begin_step "创建管理员账号"
+disable_env_login() {
+  local cfg="${INSTALL_DIR}/config/config.yaml"
+  if grep -q "disable_env_credential_login" "${cfg}"; then
+    sed -i 's/disable_env_credential_login: .*/disable_env_credential_login: true/' "${cfg}"
+  elif grep -q "^general_settings:" "${cfg}"; then
+    sed -i '/^general_settings:/a\  disable_env_credential_login: true' "${cfg}"
+  else
+    printf '\ngeneral_settings:\n  disable_env_credential_login: true\n' >> "${cfg}"
+  fi
+}
+
+admin_exists() {
+  local mk code
+  mk="$(grep '^LITELLM_MASTER_KEY=' "${INSTALL_DIR}/.env" | cut -d= -f2- | tr -d '"')"
+  curl -s "http://127.0.0.1:${LITELLM_PORT}/user/list" -H "Authorization: Bearer ${mk}" 2>/dev/null \
+    | grep -qiF "\"${UI_USERNAME}\""
+}
+
+if [[ "${SKIP_ADMIN}" -eq 1 ]]; then
+  printf '    已跳过（--skip-admin），环境变量登录保持启用\n'
+else
+  # 先用环境变量账号登录一次，确保代理管理员身份行存在，后续邀请才能建立
+  curl -s -o /dev/null -X POST "http://127.0.0.1:${LITELLM_PORT}/login" \
+    -d "username=${UI_USERNAME}&password=${UI_PASSWORD}" 2>/dev/null || true
+fi
+
+if [[ "${SKIP_ADMIN}" -eq 1 ]]; then
+  :
+elif admin_exists; then
+  printf '    管理员 %s 已存在，跳过创建\n' "${UI_USERNAME}"
+  disable_env_login
+  bash "${INSTALL_DIR}/scripts/restart.sh" litellm >/dev/null 2>&1 || true
+  for _ in $(seq 1 40); do
+    code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${LITELLM_PORT}/health/readiness" || true)"
+    [[ "${code}" == "200" ]] && break
+    sleep 4
+  done
+  printf '    环境变量登录已关闭\n'
+elif bash "${INSTALL_DIR}/scripts/create-ui-admin.sh" "${UI_USERNAME}" "${UI_PASSWORD}" --disable-env-login 2>/tmp/litellm_admin.err; then
+  printf '    账号 %s 已创建并验证登录\n' "${UI_USERNAME}"
+  printf '    环境变量登录已关闭\n'
+else
+  warn "管理员账号创建失败，环境变量登录保持启用作为兜底"
+  warn "排查后重新执行：${INSTALL_DIR}/litellm create-admin"
+  sed -n '1,4p' /tmp/litellm_admin.err >&2 2>/dev/null || true
+fi
+rm -f /tmp/litellm_admin.err
+step_ok
+
 begin_step "授权检查"
 license_authorized() {
   local body
@@ -503,6 +562,9 @@ log "=============================================="
 log "  管理界面   http://${host_ip}:${LITELLM_PORT}/ui"
 log "  管理账号   ${UI_USERNAME}"
 log "  管理密码   ${UI_PASSWORD}"
+if [[ "${SKIP_ADMIN}" -eq 0 ]]; then
+  log "  登录方式   使用上述邮箱与密码登录，环境变量登录已关闭"
+fi
 log "  主密钥     ${LITELLM_MASTER_KEY}"
 log "  安装目录   ${INSTALL_DIR}"
 if [[ "${post_install_needed}" -eq 1 ]]; then

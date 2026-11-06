@@ -18,6 +18,7 @@ usage() {
   restore <文件>  从备份恢复数据库
   install    首次安装或升级（等价于执行安装包内的 install.sh）
   post-install  导入授权后补做：预算 Redis、模型初始化、压缩护栏
+  create-admin  创建管理界面账号，默认用 .env 里的账号密码
   uninstall  卸载服务（默认保留数据）
   info       显示访问地址与账号信息
   version    显示版本
@@ -111,6 +112,14 @@ case "${cmd}" in
     printf '\n==> 启用提示词压缩\n'
     bash "${ROOT}/scripts/setup-compression.sh" || printf '警告: 压缩护栏创建失败\n' >&2
     printf '\n==> 完成，执行 litellm status 确认服务状态\n'
+    ;;
+  create-admin)
+    require_install
+    if [[ $# -gt 0 ]]; then
+      bash "${ROOT}/scripts/create-ui-admin.sh" "$@"
+    else
+      bash "${ROOT}/scripts/create-ui-admin.sh" "${UI_USERNAME:-admin@sinocipher.local}" "${UI_PASSWORD:-}" --disable-env-login
+    fi
     ;;
   uninstall)
     if [[ -f "${ROOT}/uninstall.sh" ]]; then
