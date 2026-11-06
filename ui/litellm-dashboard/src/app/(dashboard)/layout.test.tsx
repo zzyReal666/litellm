@@ -65,6 +65,12 @@ vi.mock("@/components/common_components/LoadingScreen", () => ({
   default: () => <div data-testid="loading-screen" />,
 }));
 
+const { authorizedState } = vi.hoisted(() => ({ authorizedState: { isAuthorized: true } }));
+
+vi.mock("@/app/(dashboard)/hooks/useAuthorized", () => ({
+  default: () => ({ isAuthorized: authorizedState.isAuthorized }),
+}));
+
 type Deferred = { promise: Promise<void>; resolve: () => void };
 
 const createDeferred = (): Deferred => {
@@ -89,6 +95,7 @@ vi.mock("@/components/networking", async (importOriginal) => {
 describe("(dashboard) Layout", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    authorizedState.isAuthorized = true;
     pendingUiConfig = createDeferred();
     searchParamsValue = new URLSearchParams();
     vi.mocked(usePathname).mockReturnValue("/ui/guardrails");
@@ -154,6 +161,21 @@ describe("(dashboard) Layout", () => {
     vi.mocked(usePathname).mockReturnValue("/ui/api-keys");
     rerender(dashboard());
     expect(screen.getByTestId("sidebar")).toHaveAttribute("data-collapsed", "false");
+  });
+
+  it("keeps route content unmounted while the session is unauthorized", async () => {
+    authorizedState.isAuthorized = false;
+    render(
+      <AuthProvider>
+        <Layout>
+          <div data-testid="page-content" />
+        </Layout>
+      </AuthProvider>,
+    );
+    pendingUiConfig.resolve();
+
+    expect(await screen.findByTestId("loading-screen")).toBeInTheDocument();
+    expect(screen.queryByTestId("page-content")).not.toBeInTheDocument();
   });
 
   it("does not mount route content until getUiConfig has resolved", async () => {

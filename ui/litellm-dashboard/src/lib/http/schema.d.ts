@@ -42410,16 +42410,6 @@ export interface components {
             offset: number;
             selection: components["schemas"]["ActivitySelection"];
         };
-        /** Progress */
-        Progress: {
-            activity?: components["schemas"]["Activity"] | null;
-            coverage?: components["schemas"]["Coverage"] | null;
-            /** Reading */
-            reading?: components["schemas"]["InFlight"][] | null;
-            review?: components["schemas"]["Review"] | null;
-            /** Stage */
-            stage?: string | null;
-        };
         /** ProductLicenseImportResponse */
         ProductLicenseImportResponse: {
             license: components["schemas"]["ProductLicenseInfoResponse"];
@@ -42430,10 +42420,10 @@ export interface components {
         ProductLicenseInfoResponse: {
             /** Auth State */
             auth_state: string;
-            /** Device Serial */
-            device_serial?: string | null;
             /** Create Time */
             create_time: string;
+            /** Device Serial */
+            device_serial: string | null;
             /** License File */
             license_file: string;
             /** License Version */
@@ -42460,6 +42450,16 @@ export interface components {
             user_count: number | null;
             /** User Desc */
             user_desc: string | null;
+        };
+        /** Progress */
+        Progress: {
+            activity?: components["schemas"]["Activity"] | null;
+            coverage?: components["schemas"]["Coverage"] | null;
+            /** Reading */
+            reading?: components["schemas"]["InFlight"][] | null;
+            review?: components["schemas"]["Review"] | null;
+            /** Stage */
+            stage?: string | null;
         };
         /** Prompt */
         Prompt: {

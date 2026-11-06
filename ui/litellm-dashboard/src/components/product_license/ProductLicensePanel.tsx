@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProductLicenseInfo } from "@/app/(dashboard)/hooks/productLicense/useProductLicenseInfo";
 import { ProductLicenseInfo, downloadProductLicenseRequest, importProductLicense } from "@/lib/http/productLicense";
 import { buildLicenseRows } from "@/components/product_license/productLicenseRows";
+import { getProxyBaseUrl } from "@/components/networking";
+import { consoleLoginUrl } from "@/components/product_license/consoleEntry";
 import { toast } from "@/lib/toast";
 
 interface ProductLicensePanelProps {
@@ -123,6 +125,7 @@ export default function ProductLicensePanel({ standalone = false }: ProductLicen
   };
 
   const pending = busy || importMutation.isPending;
+  const consoleLoginHref = consoleLoginUrl(getProxyBaseUrl());
 
   return (
     <div className="space-y-6">
@@ -193,9 +196,9 @@ export default function ProductLicensePanel({ standalone = false }: ProductLicen
 
       {authorized && standalone ? (
         <p className="text-sm text-muted-foreground">
-          授权已生效，可以访问{" "}
-          <a className="underline" href="./../">
-            管理控制台
+          授权已生效，{" "}
+          <a className="underline" href={consoleLoginHref}>
+            登录管理控制台
           </a>
           。
         </p>

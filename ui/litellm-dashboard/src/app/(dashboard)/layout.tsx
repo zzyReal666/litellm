@@ -20,6 +20,7 @@ import { UpgradeBanner } from "@/components/UpgradeBanner";
 import { routeSegmentForPathname, uiHref } from "@/utils/uiHref";
 import { PluginModeProvider, usePluginMode } from "@/contexts/PluginModeContext";
 import { createApiClient } from "@/lib/http/client";
+import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { getProxyBaseUrl } from "@/components/networking";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -210,6 +211,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { accessToken, authLoading, passwordResetRequired } = useAuth();
+  const { isAuthorized } = useAuthorized();
   const isInvitationFlow = Boolean(searchParams.get("invitation_id"));
 
   // Legacy invitation links point at /ui/?invitation_id=; the onboarding form now lives at its own
@@ -228,7 +230,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [authLoading, passwordResetRequired, pathname, router]);
 
-  if (authLoading || isInvitationFlow) {
+  const sessionPending = authLoading || isInvitationFlow || !isAuthorized;
+  if (sessionPending) {
     return <LoadingScreen />;
   }
 
