@@ -31,18 +31,30 @@ JSON="Content-Type: application/json"
 
 py() { python3 -c "$1"; }
 
-if curl -s "${BASE}/user/list" -H "${AUTH}" | py "
+EXISTING_ID="$(curl -s "${BASE}/user/list" -H "${AUTH}" | py "
 import json,sys
 users = json.load(sys.stdin).get('users', [])
-print(1 if any((u.get('user_email') or '').lower() == '${EMAIL}'.lower() for u in users) else 0)
-" | grep -q 1; then
-  echo "错误: 用户 ${EMAIL} 已存在" >&2
-  exit 1
+for u in users:
+    if (u.get('user_email') or '').lower() == '${EMAIL}'.lower():
+        print(u['user_id']); print('HAS_PASSWORD' if u.get('password') else 'NO_PASSWORD'); break
+")"
+EXISTING_UID="$(printf '%s' "${EXISTING_ID}" | head -1)"
+EXISTING_PW="$(printf '%s' "${EXISTING_ID}" | sed -n '2p')"
+SKIP_PROVISION=0
+if [[ "${EXISTING_PW}" == "HAS_PASSWORD" ]]; then
+  echo "ok: 用户 ${EMAIL} 已存在且已设置密码，跳过创建"
+  SKIP_PROVISION=1
 fi
 
+if [[ "${SKIP_PROVISION}" -eq 0 ]]; then
 echo "==> 创建管理员用户 ${EMAIL}"
-USER_ID="$(curl -s -X POST "${BASE}/user/new" -H "${AUTH}" -H "${JSON}" \
-  -d "{\"user_email\":\"${EMAIL}\",\"user_role\":\"proxy_admin\",\"auto_create_key\":false}" | py "import json,sys; print(json.load(sys.stdin)['user_id'])")"
+if [[ -n "${EXISTING_UID}" ]]; then
+  USER_ID="${EXISTING_UID}"
+  echo "==> 用户 ${EMAIL} 已存在但未设置密码，直接补设密码"
+else
+  USER_ID="$(curl -s -X POST "${BASE}/user/new" -H "${AUTH}" -H "${JSON}" \
+    -d "{\"user_email\":\"${EMAIL}\",\"user_role\":\"proxy_admin\",\"auto_create_key\":false}" | py "import json,sys; print(json.load(sys.stdin)['user_id'])")"
+fi
 
 echo "==> 生成邀请并设置密码"
 INVITATION_ID="$(curl -s -X POST "${BASE}/invitation/new" -H "${AUTH}" -H "${JSON}" \
@@ -56,9 +68,17 @@ payload += '=' * (-len(payload) % 4)
 print(json.loads(base64.urlsafe_b64decode(payload))['key'])
 ")"
 
-curl -s -o /dev/null -w "" -X POST "${BASE}/onboarding/claim_token" \
+CLAIM_CODE="$(curl -s -o /tmp/claim_resp.$$ -w "%{http_code}" -X POST "${BASE}/onboarding/claim_token" \
   -H "Authorization: Bearer ${ONBOARDING_JWT}" -H "${JSON}" \
-  -d "{\"invitation_link\":\"${INVITATION_ID}\",\"user_id\":\"${USER_ID}\",\"password\":\"${PASSWORD}\"}"
+  -d "{\"invitation_link\":\"${INVITATION_ID}\",\"user_id\":\"${USER_ID}\",\"password\":\"${PASSWORD}\"}")"
+if [[ "${CLAIM_CODE}" != "200" ]]; then
+  echo "错误: 设置密码失败 (HTTP ${CLAIM_CODE})" >&2
+  cat /tmp/claim_resp.$$ >&2
+  rm -f /tmp/claim_resp.$$
+  echo "提示: 密码策略要求至少 12 位" >&2
+  exit 1
+fi
+rm -f /tmp/claim_resp.$$
 
 LOGIN_CODE="$(curl -s -o /dev/null -w "%{http_code}" -X POST "${BASE}/v2/login" -H "${JSON}" \
   -d "{\"username\":\"${EMAIL}\",\"password\":\"${PASSWORD}\"}")"
@@ -67,11 +87,14 @@ if [[ "${LOGIN_CODE}" != "200" ]]; then
   exit 1
 fi
 echo "ok: 账号已创建且登录验证通过"
+fi
 
 if [[ "${DISABLE_ENV_LOGIN}" -eq 1 ]]; then
   CONFIG="${ROOT}/config/config.yaml"
   cp "${CONFIG}" "${CONFIG}.bak.$(date +%Y%m%d%H%M%S)"
-  if ! grep -q "disable_env_credential_login" "${CONFIG}"; then
+  if grep -q "disable_env_credential_login" "${CONFIG}"; then
+    sed -i 's/disable_env_credential_login: .*/disable_env_credential_login: true/' "${CONFIG}"
+  else
     python3 - "${CONFIG}" <<'PY'
 import io, sys
 path = sys.argv[1]

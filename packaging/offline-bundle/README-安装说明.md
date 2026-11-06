@@ -1,6 +1,6 @@
 # 中安云科 AI 安全网关 离线安装包（基于 LiteLLM 中文版）
 
-版本：v1.106.0-zh.15，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
+版本：v1.106.0-zh.13，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
 
 ## 包内容
 
@@ -30,8 +30,8 @@ Linux x86_64（systemd），root 权限，磁盘至少 20G，内存至少 6G。
 解压后用 root 执行安装脚本，不带参数即进入交互式向导：
 
 ```bash
-tar xzf litellm-offline-v1.106.0-zh.15.tar.gz
-cd litellm-offline-v1.106.0-zh.15
+tar xzf litellm-offline-v1.106.0-zh.13.tar.gz
+cd litellm-offline-v1.106.0-zh.13
 sudo ./install.sh
 ```
 
@@ -189,8 +189,8 @@ assets/favicon.png   浏览器标签图标（128x128）
 ==> 加载镜像
 ==> docker load -i /opt/litellm-b/images/headroom-offline-v1.106.0-zh.7.tar
 Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.15.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.15
+==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.13.tar
+Loaded image: litellm-zhcn:v1.106.0-zh.13
 ==> docker load -i /opt/litellm-b/images/postgres-16.4.tar
 Loaded image: postgres:16.4
 ==> docker load -i /opt/litellm-b/images/prometheus-v2.55.1.tar
@@ -201,7 +201,7 @@ Loaded image: redis:7.4.2-alpine
 REPOSITORY                                                          TAG                            IMAGE ID       SIZE
 litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   1.58GB
 litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   1.58GB
-litellm-zhcn                                                        v1.106.0-zh.15                 14a714523904   1.51GB
+litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   1.49GB
@@ -235,7 +235,7 @@ preflight ok: ROOT=/opt/litellm-b
 ---- compose ps ----
 NAME                     IMAGE                            COMMAND                  SERVICE      CREATED         STATUS                                     PORTS
 litellm-b-headroom-1     headroom-offline:v1.106.0-zh.7   "headroom proxy"         headroom     9 seconds ago   Created                                    
-litellm-b-litellm-1      litellm-zhcn:v1.106.0-zh.15      "docker/prod_entrypo…"   litellm      7 seconds ago   Created                                    
+litellm-b-litellm-1      litellm-zhcn:v1.106.0-zh.13      "docker/prod_entrypo…"   litellm      7 seconds ago   Created                                    
 litellm-b-prometheus-1   prom/prometheus:v2.55.1          "/bin/prometheus --c…"   prometheus   9 seconds ago   Up Less than a second                      0.0.0.0:9190->9090/tcp, [::]:9190->9090/tcp
 litellm-b_db             postgres:16.4                    "docker-entrypoint.s…"   db           9 seconds ago   Up Less than a second (health: starting)   127.0.0.1:55432->5432/tcp
 litellm-b_redis          redis:7.4.2-alpine               "docker-entrypoint.s…"   redis        9 seconds ago   Created                                    
@@ -244,21 +244,21 @@ litellm-b_redis          redis:7.4.2-alpine               "docker-entrypoint.s�
 
 ## 升级与回滚
 
-- 升级：停止服务，替换安装包里的镜像 tar 与 docker-compose.yml，执行 ==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.15/images/headroom-offline-v1.106.0-zh.7.tar
+- 升级：停止服务，替换安装包里的镜像 tar 与 docker-compose.yml，执行 ==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/headroom-offline-v1.106.0-zh.7.tar
 Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.15/images/litellm-zhcn-v1.106.0-zh.15.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.15
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.15/images/postgres-16.4.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/litellm-zhcn-v1.106.0-zh.13.tar
+Loaded image: litellm-zhcn:v1.106.0-zh.13
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/postgres-16.4.tar
 Loaded image: postgres:16.4
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.15/images/prometheus-v2.55.1.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/prometheus-v2.55.1.tar
 Loaded image: prom/prometheus:v2.55.1
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.15/images/redis-7.4.2-alpine.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/redis-7.4.2-alpine.tar
 Loaded image: redis:7.4.2-alpine
 ==> 已加载镜像列表（请与 docker-compose.yml 中 image 字段核对）
 REPOSITORY                                                          TAG                            IMAGE ID       SIZE
 litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   1.58GB
 litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   1.58GB
-litellm-zhcn                                                        v1.106.0-zh.15                 14a714523904   1.51GB
+litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   1.51GB
 litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   1.49GB
@@ -290,7 +290,7 @@ docker.m.daocloud.io/library/busybox                                latest      
 - 回滚：把 docker-compose.yml 里的 image 标签改回旧版本（镜像需仍在 REPOSITORY                                                          TAG                            IMAGE ID       CREATED         SIZE
 litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   5 hours ago     1.58GB
 litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   3 days ago      1.58GB
-litellm-zhcn                                                        v1.106.0-zh.15                 14a714523904   7 days ago      1.51GB
+litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   7 days ago      1.51GB
 litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   7 days ago      1.51GB
 litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   8 days ago      1.51GB
 litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   8 days ago      1.49GB

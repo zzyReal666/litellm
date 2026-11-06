@@ -1,0 +1,12 @@
+# 模型在管理 UI / 数据库中配置（docker-compose 已设 STORE_MODEL_IN_DB=True）
+# 勿删除本文件，勿留空或仅注释（yaml 解析为 null 会启动失败）
+model_list: []
+
+general_settings:
+  store_model_in_db: true
+  disable_env_credential_login: false
+
+litellm_settings:
+  require_auth_for_metrics_endpoint: false
+  callbacks: ["prometheus"]
+  drop_params: true

@@ -2,7 +2,7 @@ name: ${COMPOSE_PROJECT_NAME:-litellm}
 
 services:
   litellm:
-    image: litellm-zhcn:v1.106.0-zh.15
+    image: litellm-zhcn:v1.106.0-zh.16
     restart: unless-stopped
     cap_add: [ALL]
     ports:

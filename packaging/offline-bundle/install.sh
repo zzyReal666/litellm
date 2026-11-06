@@ -273,7 +273,7 @@ load_with_progress() {
 
 images_present() {
   local missing=0 img
-  for img in litellm-zhcn:v1.106.0-zh.15 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1; do
+  for img in litellm-zhcn:v1.106.0-zh.16 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1; do
     docker image inspect "${img}" >/dev/null 2>&1 || missing=1
   done
   return "${missing}"
@@ -501,7 +501,7 @@ log "=============================================="
 log " 安装完成，共 ${TOTAL_STEPS} 步"
 log "=============================================="
 log "  管理界面   http://${host_ip}:${LITELLM_PORT}/ui"
-log "  管理账号   ${UI_USERNAME}（登录用 .env 里的 UI_USERNAME / UI_PASSWORD）"
+log "  管理账号   ${UI_USERNAME}"
 log "  管理密码   ${UI_PASSWORD}"
 log "  主密钥     ${LITELLM_MASTER_KEY}"
 log "  安装目录   ${INSTALL_DIR}"
