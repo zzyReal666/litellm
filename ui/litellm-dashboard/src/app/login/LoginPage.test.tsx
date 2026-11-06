@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./LoginPage";
@@ -54,7 +54,7 @@ vi.mock("@/hooks/useWorker", () => ({
 }));
 
 import { useUIConfig } from "@/app/(dashboard)/hooks/uiConfig/useUIConfig";
-import { getCookieFromDocument } from "@/utils/cookieUtils";
+import { clearTokenCookies, getCookieFromDocument } from "@/utils/cookieUtils";
 import { isJwtExpired } from "@/utils/jwtUtils";
 
 const createQueryClient = () =>
@@ -289,6 +289,60 @@ describe("LoginPage", () => {
     const ssoButton = screen.getByRole("button", { name: "Login with SSO" });
     expect(ssoButton).toBeInTheDocument();
     expect(ssoButton).toBeDisabled();
+  });
+
+  describe("explicit login from the activation page", () => {
+    const originalLocation = window.location;
+
+    beforeEach(() => {
+      Object.defineProperty(window, "location", {
+        value: {
+          ...originalLocation,
+          href: "http://localhost:3000/ui/login/?redirect_to=%2Fui%2F&force_login=1",
+          pathname: "/ui/login/",
+          search: "?redirect_to=%2Fui%2F&force_login=1",
+        },
+        writable: true,
+      });
+    });
+
+    afterEach(() => {
+      Object.defineProperty(window, "location", {
+        value: originalLocation,
+        writable: true,
+      });
+    });
+
+    it("shows the login form instead of reusing a session cookie from a previous deployment", async () => {
+      (useUIConfig as ReturnType<typeof vi.fn>).mockReturnValue({
+        data: {
+          auto_redirect_to_sso: false,
+          server_root_path: "/",
+          proxy_base_url: null,
+          sso_configured: false,
+        },
+        isLoading: false,
+      });
+      let sessionPresent = true;
+      (clearTokenCookies as ReturnType<typeof vi.fn>).mockImplementation(() => {
+        sessionPresent = false;
+      });
+      (getCookieFromDocument as ReturnType<typeof vi.fn>).mockImplementation(() =>
+        sessionPresent ? "stale-token" : null,
+      );
+      (isJwtExpired as ReturnType<typeof vi.fn>).mockReturnValue(false);
+
+      const queryClient = createQueryClient();
+      render(
+        <QueryClientProvider client={queryClient}>
+          <LoginPage />
+        </QueryClientProvider>,
+      );
+
+      expect(await screen.findByRole("textbox")).toBeInTheDocument();
+      expect(clearTokenCookies).toHaveBeenCalled();
+      expect(mockReplace).not.toHaveBeenCalledWith("/ui");
+    });
   });
 
   describe("URL ?token= legacy path is rejected (security regression test)", () => {

@@ -73,7 +73,7 @@ describe("ProductLicensePanel console entry", () => {
 
     const link = consoleLink();
     expect(link).toBeInTheDocument();
-    expect(link?.getAttribute("href")).toBe("/ui/login/?redirect_to=%2Fui%2F");
+    expect(link?.getAttribute("href")).toBe("/ui/login/?redirect_to=%2Fui%2F&force_login=1");
   });
 
   it("hides the console entry before the product is licensed", () => {

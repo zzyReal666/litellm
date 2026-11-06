@@ -70,6 +70,16 @@ function SsoEnabledNotice() {
 }
 
 function LoginPageContent() {
+function dropSessionForForcedLogin(params: URLSearchParams): void {
+  if (params.get("force_login") !== "1") {
+    return;
+  }
+  clearTokenCookies();
+  params.delete("force_login");
+  const cleanSearch = params.toString();
+  window.history.replaceState(null, "", window.location.pathname + (cleanSearch ? `?${cleanSearch}` : ""));
+}
+
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
   const { data: uiConfig, isLoading: isConfigLoading } = useUIConfig();
@@ -103,6 +113,7 @@ function LoginPageContent() {
     // Cross-origin SSO: worker redirected back with a single-use code.
     // Exchange it for the JWT via the worker's /v3/login/exchange endpoint.
     const params = new URLSearchParams(window.location.search);
+    dropSessionForForcedLogin(params);
     const rawSsoCode = params.get("code");
     // Validate the SSO code is a plausible OAuth authorization code (alphanumeric
     // plus common URL-safe chars) so that arbitrary user input cannot trigger the
