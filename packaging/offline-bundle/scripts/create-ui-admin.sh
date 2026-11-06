@@ -36,7 +36,7 @@ import json,sys
 users = json.load(sys.stdin).get('users', [])
 for u in users:
     if (u.get('user_email') or '').lower() == '${EMAIL}'.lower():
-        print(u['user_id']); print('HAS_PASSWORD' if u.get('password') else 'NO_PASSWORD'); break
+        print(u.get('user_id') or ''); print('HAS_PASSWORD' if u.get('password') else 'NO_PASSWORD'); break
 ")"
 EXISTING_UID="$(printf '%s' "${EXISTING_ID}" | head -1)"
 EXISTING_PW="$(printf '%s' "${EXISTING_ID}" | sed -n '2p')"
@@ -52,8 +52,17 @@ if [[ -n "${EXISTING_UID}" ]]; then
   USER_ID="${EXISTING_UID}"
   echo "==> 用户 ${EMAIL} 已存在但未设置密码，直接补设密码"
 else
-  USER_ID="$(curl -s -X POST "${BASE}/user/new" -H "${AUTH}" -H "${JSON}" \
-    -d "{\"user_email\":\"${EMAIL}\",\"user_role\":\"proxy_admin\",\"auto_create_key\":false}" | py "import json,sys; print(json.load(sys.stdin)['user_id'])")"
+  USER_NEW_RESP="$(curl -s -X POST "${BASE}/user/new" -H "${AUTH}" -H "${JSON}" \
+    -d "{\"user_email\":\"${EMAIL}\",\"user_role\":\"proxy_admin\",\"auto_create_key\":false}")"
+  USER_ID="$(printf '%s' "${USER_NEW_RESP}" | py "import json,sys
+try:
+    print(json.load(sys.stdin).get('user_id') or '')
+except Exception:
+    print('')")"
+  if [[ -z "${USER_ID}" ]]; then
+    echo "错误: 创建用户失败，接口返回: ${USER_NEW_RESP}" >&2
+    exit 1
+  fi
 fi
 
 echo "==> 生成邀请并设置密码"

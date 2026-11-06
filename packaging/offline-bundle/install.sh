@@ -26,6 +26,7 @@ SETUP_COMPRESSION="${SETUP_COMPRESSION:-1}"
 ASSUME_YES="${ASSUME_YES:-0}"
 SKIP_DOCKER="${SKIP_DOCKER:-0}"
 SKIP_ADMIN="${SKIP_ADMIN:-0}"
+ADMIN_CREATED=0
 ARGS_GIVEN=0
 
 log() { printf '%s\n' "$*"; }
@@ -506,6 +507,7 @@ if [[ "${SKIP_ADMIN}" -eq 1 ]]; then
   :
 elif admin_exists; then
   printf '    管理员 %s 已存在，跳过创建\n' "${UI_USERNAME}"
+  ADMIN_CREATED=1
   disable_env_login
   bash "${INSTALL_DIR}/scripts/restart.sh" litellm >/dev/null 2>&1 || true
   for _ in $(seq 1 40); do
@@ -516,6 +518,7 @@ elif admin_exists; then
   printf '    环境变量登录已关闭\n'
 elif bash "${INSTALL_DIR}/scripts/create-ui-admin.sh" "${UI_USERNAME}" "${UI_PASSWORD}" --disable-env-login 2>/tmp/litellm_admin.err; then
   printf '    账号 %s 已创建并验证登录\n' "${UI_USERNAME}"
+  ADMIN_CREATED=1
   printf '    环境变量登录已关闭\n'
 else
   warn "管理员账号创建失败，环境变量登录保持启用作为兜底"
@@ -563,7 +566,11 @@ log "  管理界面   http://${host_ip}:${LITELLM_PORT}/ui"
 log "  管理账号   ${UI_USERNAME}"
 log "  管理密码   ${UI_PASSWORD}"
 if [[ "${SKIP_ADMIN}" -eq 0 ]]; then
-  log "  登录方式   使用上述邮箱与密码登录，环境变量登录已关闭"
+  if [[ "${ADMIN_CREATED}" -eq 1 ]]; then
+    log "  登录方式   使用上述邮箱与密码登录，环境变量登录已关闭"
+  else
+    log "  登录方式   管理员账号未建成，环境变量登录保持启用，仍可用上述邮箱密码登录"
+  fi
 fi
 log "  主密钥     ${LITELLM_MASTER_KEY}"
 log "  安装目录   ${INSTALL_DIR}"

@@ -37,6 +37,12 @@ ROUTES = (
     Route("/get_image", _ok),
     Route("/v1/evil.json", _ok),
     Route("/login", _ok, methods=["POST"]),
+    Route("/user/list", _ok),
+    Route("/user/new", _ok, methods=["POST"]),
+    Route("/user/info", _ok),
+    Route("/invitation/new", _ok, methods=["POST"]),
+    Route("/onboarding/get_token", _ok),
+    Route("/onboarding/claim_token", _ok, methods=["POST"]),
     WebSocketRoute("/v1/realtime", _ws_endpoint),
 )
 
@@ -97,6 +103,17 @@ def test_unlicensed_login_activation_and_assets_remain_available(enforcement_ena
         "/get_image",
     ):
         assert client.get(path).status_code == 200, path
+
+
+def test_unlicensed_admin_bootstrap_endpoints_pass_but_user_admin_stays_blocked(enforcement_enabled):
+    client = build_client(authorized=False)
+
+    assert client.get("/user/list").status_code == 200
+    assert client.post("/user/new", json={}).status_code == 200
+    assert client.post("/invitation/new", json={}).status_code == 200
+    assert client.get("/onboarding/get_token").status_code == 200
+    assert client.post("/onboarding/claim_token", json={}).status_code == 200
+    assert client.get("/user/info").status_code == 403
 
 
 def test_static_suffix_outside_ui_is_not_treated_as_asset(enforcement_enabled):
