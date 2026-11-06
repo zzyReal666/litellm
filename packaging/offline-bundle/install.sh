@@ -117,6 +117,10 @@ gen_secret() {
   fi
 }
 
+gen_password() {
+  printf 'Zayk%s!A' "$(gen_secret | cut -c1-14)"
+}
+
 ARGS_GIVEN="$#"
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -179,7 +183,7 @@ if [[ "${ARGS_GIVEN}" -eq 0 ]] && [[ "${ASSUME_YES}" -eq 0 ]]; then
     esac
   done
   if ask_yes_no "自动生成随机密码？" "y"; then
-    UI_PASSWORD="${UI_PASSWORD:-$(gen_secret)}"
+    UI_PASSWORD="${UI_PASSWORD:-$(gen_password)}"
     ok "已生成随机密码，安装结束后显示"
   else
     while true; do
@@ -396,7 +400,7 @@ else
   LITELLM_SALT_KEY="sk-$(gen_secret)"
   REDIS_PASSWORD="$(gen_secret)"
   HEADROOM_PROXY_TOKEN="$(gen_secret)"
-  UI_PASSWORD="${UI_PASSWORD:-$(gen_secret)}"
+  UI_PASSWORD="${UI_PASSWORD:-$(gen_password)}"
   cat > "${INSTALL_DIR}/.env" <<EOF
 COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
 POSTGRES_USER=${POSTGRES_USER}
