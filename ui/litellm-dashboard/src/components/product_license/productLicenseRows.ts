@@ -15,8 +15,10 @@ export const formatLicenseValue = (value: string | number | null | undefined): s
 export const buildLicenseRows = (info: ProductLicenseInfo): LicenseRow[] => [
   { label: "产品名称", value: formatLicenseValue(info.product_name) },
   { label: "产品版本", value: formatLicenseValue(info.product_version) },
-  { label: "产品序列号", value: formatLicenseValue(info.serial_number) },
   { label: "机器码", value: formatLicenseValue(info.machine_code) },
+  ...(info.device_serial
+    ? [{ label: "设备序列号", value: formatLicenseValue(info.device_serial) }]
+    : []),
   { label: "授权状态", value: formatLicenseValue(info.status) },
   { label: "有效期", value: formatLicenseValue(info.time) },
   { label: "授权日期", value: formatLicenseValue(info.create_time) },

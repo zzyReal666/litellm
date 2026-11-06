@@ -13,7 +13,6 @@ from litellm.proxy.product_license.types import NativeLicenseInfo
 LICENSE_REQUEST_BUFFER_SIZE: Final = 3072
 LICENSE_INFO_MIN_SIZE: Final = 196
 LICENSE_INFO_STRUCT: Final = Struct("<i32siiqq64sii32s32s")
-RESERVED_FIELD_MAX_LENGTH: Final = 32
 DEFAULT_SERVER_TYPE: Final = "SC-AIG"
 
 PACKAGE_LIB_DIR: Final = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lib")
@@ -64,6 +63,14 @@ def _bounded_length(length: int, limit: int) -> int:
     return min(max(length, 0), limit)
 
 
+def decode_reserved_field(raw: bytes, declared_length: int) -> str:
+    """Vendor tooling writes the text into the slot but does not always fill the length."""
+    text: Final = decode_fixed_string(raw)
+    if declared_length <= 0 or declared_length >= len(text):
+        return text
+    return text[:declared_length]
+
+
 def parse_license_info(payload: bytes) -> NativeLicenseInfo:
     if len(payload) < LICENSE_INFO_MIN_SIZE:
         raise NativeLicenseError(f"授权信息长度不足: {len(payload)} < {LICENSE_INFO_MIN_SIZE}")
@@ -76,12 +83,8 @@ def parse_license_info(payload: bytes) -> NativeLicenseInfo:
         t_start=_as_int(fields[4]),
         t_end=_as_int(fields[5]),
         user_desc=decode_fixed_string(_as_bytes(fields[6])),
-        reserved1=decode_fixed_string(
-            _as_bytes(fields[9])[: _bounded_length(_as_int(fields[7]), RESERVED_FIELD_MAX_LENGTH)]
-        ),
-        reserved2=decode_fixed_string(
-            _as_bytes(fields[10])[: _bounded_length(_as_int(fields[8]), RESERVED_FIELD_MAX_LENGTH)]
-        ),
+        reserved1=decode_reserved_field(_as_bytes(fields[9]), _as_int(fields[7])),
+        reserved2=decode_reserved_field(_as_bytes(fields[10]), _as_int(fields[8])),
     )
 
 

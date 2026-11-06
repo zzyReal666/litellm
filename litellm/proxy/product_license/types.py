@@ -52,6 +52,7 @@ class ProductLicenseStatus:
     product_version: str
     serial_number: str
     machine_code: str
+    device_serial: str
     native_available: bool
     license_file: str
     time_text: str
@@ -75,6 +76,7 @@ class ProductLicenseInfoResponse(BaseModel):
     create_time: str
     auth_state: str
     machine_code: str
+    device_serial: str | None
     user_count: int | None
     thread_count: int | None
     user_desc: str | None
@@ -100,6 +102,7 @@ def status_to_response(status: ProductLicenseStatus) -> ProductLicenseInfoRespon
         create_time=status.create_time_text,
         auth_state=status.state.value,
         machine_code=status.machine_code,
+        device_serial=status.device_serial or None,
         user_count=native_info.user_count if native_info is not None else None,
         thread_count=native_info.thread_count if native_info is not None else None,
         user_desc=native_info.user_desc if native_info is not None else None,

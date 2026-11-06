@@ -12,6 +12,7 @@ const licenseInfo: ProductLicenseInfo = {
   create_time: "2026-01-01 00:00:00",
   auth_state: "authorized",
   machine_code: "0000-0000-0000-0000",
+  device_serial: "DEV-0001",
   user_count: 100,
   thread_count: 50,
   user_desc: "授权用户",
@@ -40,8 +41,8 @@ describe("buildLicenseRows", () => {
     expect(rows.map((row) => row.label)).toEqual([
       "产品名称",
       "产品版本",
-      "产品序列号",
       "机器码",
+      "设备序列号",
       "授权状态",
       "有效期",
       "授权日期",
@@ -51,7 +52,9 @@ describe("buildLicenseRows", () => {
       "用户描述",
       "授权文件",
     ]);
-    expect(rows.find((row) => row.label === "产品序列号")?.value).toBe("AAAA-BBBB-CCCC-DDDD");
+    expect(rows.map((row) => row.label)).not.toContain("产品序列号");
+    expect(rows.find((row) => row.label === "机器码")?.value).toBe("0000-0000-0000-0000");
+    expect(rows.find((row) => row.label === "设备序列号")?.value).toBe("DEV-0001");
     expect(rows.find((row) => row.label === "有效期")?.value).toBe("长期有效");
   });
 
@@ -66,5 +69,19 @@ describe("buildLicenseRows", () => {
     expect(rows.find((row) => row.label === "用户描述")?.value).toBe("暂无信息");
     expect(rows.find((row) => row.label === "授权用户数")?.value).toBe("暂无信息");
     expect(rows.find((row) => row.label === "授权版本")?.value).toBe("暂无信息");
+  });
+});
+
+describe("buildLicenseRows device serial", () => {
+  it("omits the device serial row when the license carries none", () => {
+    const rows = buildLicenseRows({ ...licenseInfo, device_serial: null });
+    expect(rows.map((row) => row.label)).not.toContain("设备序列号");
+    expect(rows.map((row) => row.label)).toEqual(expect.arrayContaining(["机器码"]));
+  });
+
+  it("shows the device serial from the license when present", () => {
+    const rows = buildLicenseRows({ ...licenseInfo, device_serial: "DEV-0001" });
+    const row = rows.find((item) => item.label === "设备序列号");
+    expect(row?.value).toBe("DEV-0001");
   });
 });

@@ -42430,6 +42430,8 @@ export interface components {
         ProductLicenseInfoResponse: {
             /** Auth State */
             auth_state: string;
+            /** Device Serial */
+            device_serial?: string | null;
             /** Create Time */
             create_time: string;
             /** License File */

@@ -91,6 +91,12 @@ def _time_text(state: ProductLicenseState, info: NativeLicenseInfo | None) -> st
     return f"{_format_timestamp(info.t_start)} 至 {_format_timestamp(info.t_end)}"
 
 
+def _device_serial(info: NativeLicenseInfo | None) -> str:
+    if info is None or info.version_int == 0:
+        return ""
+    return info.reserved1.strip()
+
+
 def _create_time_text(info: NativeLicenseInfo | None) -> str:
     licensed: Final = info is not None and info.version_int != 0
     if not licensed or info is None:
@@ -225,6 +231,7 @@ class ProductLicenseManager:
             product_version=self._product_version,
             serial_number=self._serial_number,
             machine_code=self._machine_code,
+            device_serial=_device_serial(info),
             native_available=native_available,
             license_file=self._license_file,
             time_text=_time_text(state, info),

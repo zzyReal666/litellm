@@ -19,6 +19,7 @@ export interface ProductLicenseInfo {
   create_time: string;
   auth_state: string;
   machine_code: string;
+  device_serial: string | null;
   user_count: number | null;
   thread_count: number | null;
   user_desc: string | null;
