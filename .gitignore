@@ -169,3 +169,6 @@ ui/litellm-dashboard/tsconfig.tsbuildinfo
 
 # Imported software license (machine-bound, generated at runtime)
 product_license.lic
+
+# 测试交付压缩包（本地生成）
+qa/*.zip

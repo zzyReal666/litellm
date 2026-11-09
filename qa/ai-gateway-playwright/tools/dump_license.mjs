@@ -1,0 +1,17 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const base = "http://192.168.7.112:4000";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1600, height: 1100 } });
+await page.goto(`${base}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL(/login=success/);
+await page.goto(`${base}/ui/product-license/`, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(4000);
+const text = await page.locator("main, body").first().innerText();
+console.log(text.split("\n").filter(Boolean).slice(0, 60).join("\n"));
+await page.screenshot({ path: "/tmp/license-page.png", fullPage: true });
+await browser.close();
