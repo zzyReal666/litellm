@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 import { BASE_URL, gotoRoute, login, waitForToast } from "./helpers.js";
 
@@ -174,6 +175,36 @@ test("内部用户管理：页面结构与默认表格列", async ({ page }) => 
   });
 });
 
+test("内部用户管理：邀请用户时邮箱必填且校验格式", async ({ page }) => {
+  await test.step("1. 登录并打开邀请对话框", async () => {
+    await login(page);
+    await openUsers(page);
+    await openInviteDialog(page);
+  });
+
+  await test.step("2. 邮箱留空提交被拦截且不创建用户", async () => {
+    const dialog = page.getByRole("dialog");
+    await dialog.getByRole("button", { name: "邀请用户", exact: true }).click();
+    await expect(dialog.getByText("请填写用户邮箱")).toBeVisible();
+    await expect(dialog).toBeVisible();
+    await expect(page.getByText(/邀请链接|Invitation Link/)).toHaveCount(0);
+  });
+
+  await test.step("3. 邮箱格式非法提交被拦截", async () => {
+    const dialog = page.getByRole("dialog");
+    await dialog.getByLabel("用户邮箱").fill("not-an-email");
+    await dialog.getByRole("button", { name: "邀请用户", exact: true }).click();
+    await expect(dialog.getByText("请输入有效的邮箱地址")).toBeVisible();
+    await expect(dialog).toBeVisible();
+    await expect(page.getByText(/邀请链接|Invitation Link/)).toHaveCount(0);
+  });
+
+  await test.step("4. 关闭对话框", async () => {
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
+});
+
 test("内部用户管理：邀请用户后出现在用户列表", async ({ page }) => {
   const email = `qa+${Date.now()}@example.com`;
   let userId;
@@ -303,7 +334,21 @@ test("内部用户管理：批量邀请对话框与非法文件拦截", async ({
     await expect(dialog).toContainText("budget_duration");
   });
 
-  await test.step("2. 上传非 CSV 文件被拒绝", async () => {
+  await test.step("2. 下载 CSV 模板并校验文件名与表头", async () => {
+    const dialog = page.getByRole("dialog");
+    const downloadPromise = page.waitForEvent("download", { timeout: 20000 });
+    await dialog.getByRole("button", { name: "下载 CSV 模板" }).click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe("bulk_users_template.csv");
+    const filePath = await download.path();
+    expect(filePath).toBeTruthy();
+    const content = readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
+    const [header, exampleRow] = content.trim().split("\n");
+    expect(header).toBe("user_email,user_role,teams,max_budget,budget_duration,models");
+    expect(exampleRow.split(",")[0]).toContain("@");
+  });
+
+  await test.step("3. 上传非 CSV 文件被拒绝", async () => {
     const dialog = page.getByRole("dialog");
     const fileInput = dialog.locator('input[type="file"]');
     await expect(fileInput).toHaveCount(1);
@@ -316,7 +361,7 @@ test("内部用户管理：批量邀请对话框与非法文件拦截", async ({
     await expect(dialog.getByText(/文件类型无效|请上传 CSV 文件/)).toBeVisible();
   });
 
-  await test.step("3. 关闭对话框", async () => {
+  await test.step("4. 关闭对话框", async () => {
     await page.getByRole("dialog").getByRole("button", { name: "关闭", exact: true }).click();
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });

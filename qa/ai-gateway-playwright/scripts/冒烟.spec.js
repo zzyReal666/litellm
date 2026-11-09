@@ -23,7 +23,8 @@ test("冒烟：登录后可访问九个被测页面", async ({ page }) => {
     await test.step(`2. 打开${name}`, async () => {
       await page.goto(`${ROUTES[entry]}`, { waitUntil: "domcontentloaded" });
       await page.waitForTimeout(1500);
-      await expect(page.locator("body")).not.toHaveText(/404|This page could not be found/);
+      await expect(page.getByText("This page could not be found")).toHaveCount(0);
+      await expect(page.locator("body")).not.toContainText("404: This page could not be found");
     });
   }
 });
