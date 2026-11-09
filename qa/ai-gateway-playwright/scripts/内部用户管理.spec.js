@@ -47,7 +47,7 @@ test.afterEach(async ({ page }) => {
 
 const openUsers = async (page) => {
   await gotoRoute(page, "users");
-  await expect(page.getByText("Internal Users", { exact: true })).toBeVisible();
+  await expect(page.getByText(/内部用户|Internal Users/).first()).toBeVisible();
   await expect(page.getByRole("tab", { name: "用户", exact: true })).toBeVisible();
 };
 
@@ -252,6 +252,15 @@ test("内部用户管理：邀请用户后出现在用户列表", async ({ page 
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
+  await test.step("3.1 再次打开邀请表单时字段已清空", async () => {
+    const reopened = await openInviteDialog(page);
+    await expect(reopened.getByLabel("用户邮箱")).toHaveValue("");
+    await reopened.getByRole("button", { name: "取消", exact: true }).click().catch(async () => {
+      await page.keyboard.press("Escape");
+    });
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
+
   await test.step("4. 搜索邮箱并校验列表行信息", async () => {
     await searchUsers(page, email);
     const row = userRow(page, email);
@@ -334,7 +343,9 @@ test("内部用户管理：默认用户设置摘要与编辑态", async ({ page 
     for (const text of ["默认角色", "最大预算（元）", "重置预算", "默认模型", "默认团队"]) {
       await expect(page.getByText(text, { exact: true })).toBeVisible();
     }
-    await expect(page.getByText("Internal User (View Only)")).toBeVisible();
+    await expect(
+      page.getByRole("tabpanel", { name: "默认用户设置" }).getByText("Internal User (View Only)"),
+    ).toBeVisible();
     await expect(page.getByRole("button", { name: "编辑设置" })).toBeVisible();
   });
 

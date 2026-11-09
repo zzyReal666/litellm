@@ -40,6 +40,9 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
   await test.step("3. 按请求 ID 检索日志", async () => {
     const panel = page.getByRole("tabpanel", { name: "请求日志" });
     const table = panel.locator("table:visible").first();
+    const timeColumn = REQUEST_LOG_COLUMNS.indexOf("时间");
+    const timeCell = (await panel.locator("table:visible").first().locator("tbody tr:visible").first().locator("td").allInnerTexts())[timeColumn].trim();
+    expect(timeCell).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
     const idColumn = REQUEST_LOG_COLUMNS.indexOf("请求 ID");
     const firstRowCells = (await table.locator("tbody tr:visible").first().locator("td").allInnerTexts()).map((text) => text.trim());
     const requestId = firstRowCells[idColumn];
@@ -85,6 +88,7 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
     await panel.locator('[data-testid="datatable-filters-trigger"]:visible').click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
+    await expect(dialog.getByText(/^筛选$/)).toBeVisible();
     for (const label of ["团队 ID", "密钥别名", "用户 ID", "终端用户", "错误码", "错误信息", "密钥哈希", "会话 ID", "模型", "公共模型 / 搜索工具"]) {
       await expect(dialog.getByText(label, { exact: true })).toBeVisible();
     }

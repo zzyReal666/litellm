@@ -8,9 +8,9 @@ test("用量：总览与四类活动标签页、日期范围、导出入口", as
 
   await test.step("1. 登录并打开用量页面", async () => {
     await login(page);
-    await gotoRoute(page, "usage", page.getByRole("heading", { level: 1, name: "Usage" }));
+    await gotoRoute(page, "usage", page.getByRole("heading", { level: 1, name: /用量|Usage/ }));
     await expect(page.getByText("选择时间范围")).toBeVisible();
-    await expect(page.getByRole("combobox", { name: "选择您要查看的用量数据" })).toHaveText(/Global Usage/);
+    await expect(page.getByRole("combobox", { name: "选择您要查看的用量数据" })).toHaveText(/全局用量|Global Usage/);
   });
 
   await test.step("2. 校验总览统计卡片与看板分区", async () => {
@@ -72,11 +72,11 @@ test("用量：总览与四类活动标签页、日期范围、导出入口", as
 
   await test.step("6. 切换 Global 用量视图下拉", async () => {
     await page.getByRole("combobox", { name: "选择您要查看的用量数据" }).click();
-    for (const option of ["Global Usage", "Your Usage", "Team Usage", "User Usage"]) {
-      await expect(page.getByRole("option", { name: new RegExp(`^${option}`) })).toBeVisible();
+    for (const option of [/^全局用量|^Global Usage/, /^我的用量|^Your Usage/, /^团队用量|^Team Usage/, /^用户用量|^User Usage/]) {
+      await expect(page.getByRole("option", { name: option })).toBeVisible();
     }
-    await page.getByRole("option", { name: /^Global Usage/ }).click();
-    await expect(page.getByRole("combobox", { name: "选择您要查看的用量数据" })).toHaveText(/Global Usage/);
+    await page.getByRole("option", { name: /^全局用量|^Global Usage/ }).click();
+    await expect(page.getByRole("combobox", { name: "选择您要查看的用量数据" })).toHaveText(/全局用量|Global Usage/);
   });
 
   await test.step("7. 校验日期范围选择与应用", async () => {

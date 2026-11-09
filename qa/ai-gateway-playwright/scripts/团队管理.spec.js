@@ -158,7 +158,7 @@ test("团队管理：创建团队并展示在我的团队列表", async ({ page 
 
   await test.step("2. 校验关键表单字段", async () => {
     const dialog = page.getByRole("dialog");
-    for (const label of [/团队名称/, /Organization/, /选择模型/, /最大预算/, /TPM/, /RPM/]) {
+    for (const label of [/团队名称/, /组织|Organization/, /选择模型/, /最大预算/, /TPM/, /RPM/]) {
       await expect(dialog.getByLabel(label)).toBeVisible();
     }
   });

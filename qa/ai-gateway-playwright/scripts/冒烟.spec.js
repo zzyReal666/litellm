@@ -9,6 +9,12 @@ test("冒烟：登录后可访问九个被测页面", async ({ page }) => {
     await expect(page).toHaveURL(/login=success/);
   });
 
+  await test.step("1.1 面包屑标题为中文", async () => {
+    await page.goto(`${ROUTES.users}`, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(1500);
+    await expect(page.locator('[data-slot="breadcrumb-page"]')).toContainText(/内部用户|Internal Users/);
+  });
+
   for (const [name, entry] of Object.entries({
     模型端点管理: "models",
     压缩护栏管理: "guardrails",

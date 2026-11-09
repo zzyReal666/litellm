@@ -43,6 +43,7 @@ test("授权管理：已授权状态、授权信息字段与北京时间显示",
       ["产品名称", license.product_name],
       ["产品版本", license.product_version],
       ["机器码", license.machine_code],
+      ["产品序列号", license.serial_number],
       ["授权状态", license.status],
       ["有效期", license.time],
       ["授权日期", license.create_time],
@@ -58,6 +59,7 @@ test("授权管理：已授权状态、授权信息字段与北京时间显示",
     await expect(value("产品名称")).toHaveText(PRODUCT_NAME);
     await expect(value("机器码")).toHaveText(/^[0-9A-F]{4}(-[0-9A-F]{4}){3}$/);
     await expect(value("机器码")).toHaveText(license.serial_number);
+    await expect(value("产品序列号")).toHaveText(license.serial_number);
     await expect(value("授权状态")).toHaveText("正式授权");
     await expect(value("有效期")).toHaveText("长期有效");
     await expect(value("授权文件")).toHaveText(/\.lic$/);
@@ -82,7 +84,7 @@ test("授权管理：已授权状态、授权信息字段与北京时间显示",
     await expect(refresh).toBeEnabled();
     const [response] = await Promise.all([
       page.waitForResponse((item) => item.url().includes("/product/license/info") && item.status() === 200),
-      refresh.press("Enter"),
+      refresh.click(),
     ]);
     expect(response.url()).toContain("/product/license/info");
     await expect(page.getByTestId("product-license-status")).toHaveText("正式授权");

@@ -62,6 +62,7 @@ test("压缩护栏管理：内置护栏展示与自定义护栏增删闭环", as
       await expect(dialog.locator("textarea")).toHaveValue(/async def apply_guardrail/);
       await dialog.getByPlaceholder("例如：block-pii-custom").fill(guardrailName);
       await dialog.getByRole("button", { name: "保存护栏", exact: true }).click();
+      await expect(page.getByText("自定义代码护栏创建成功")).toBeVisible();
       await expect(dialog).toBeHidden();
 
       const row = page.locator("tbody tr").filter({ hasText: guardrailName }).first();
@@ -70,6 +71,7 @@ test("压缩护栏管理：内置护栏展示与自定义护栏增删闭环", as
       await expect(row).toContainText("pre_call");
       await expect(row).toContainText("默认关闭");
       await expect(row).toContainText(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
+      await expect(row).toContainText(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/);
     });
 
     await test.step("5. 删除自定义护栏并校验列表清除", async () => {
@@ -79,7 +81,9 @@ test("压缩护栏管理：内置护栏展示与自定义护栏增删闭环", as
       const dialog = page.getByRole("dialog").filter({ hasText: "删除护栏" });
       await expect(dialog).toBeVisible();
       await expect(dialog).toContainText(guardrailName);
+      await expect(dialog).toContainText(/确定删除护栏|Are you sure you want to delete guardrail/);
       await dialog.getByRole("button", { name: "删除", exact: true }).click();
+      await expect(page.getByText(new RegExp(`护栏「${guardrailName}」已删除|deleted successfully`))).toBeVisible();
       await expect(page.locator("tbody tr").filter({ hasText: guardrailName })).toHaveCount(0);
     });
   } finally {

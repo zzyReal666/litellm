@@ -48,6 +48,7 @@ test("虚拟密钥管理：创建、列表校验与删除闭环", async ({ page 
     await test.step("3. 密钥名称为空时不创建密钥", async () => {
       await createDialog.getByRole("button", { name: "创建密钥", exact: true }).click();
       await expect(createDialog).toBeVisible();
+      await expect(createDialog.getByText("请输入密钥名称")).toBeVisible();
       await expect(page.getByRole("dialog").filter({ hasText: "保存你的密钥" })).toBeHidden();
     });
 

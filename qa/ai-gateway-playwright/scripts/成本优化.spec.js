@@ -39,8 +39,8 @@ test("成本优化：总览节省看板与压缩、缓存、自动路由标签�
     await expect(panel.locator('[data-slot="advanced-date-picker-trigger"]')).toHaveText(DATE_RANGE);
     await expect(panel.getByText("节省", { exact: true })).toBeVisible();
     await expect(panel.getByText(/累计节省/)).toBeVisible();
-    await expect(panel.getByText("Compression", { exact: true })).toBeVisible();
-    await expect(panel.getByText("Auto-router", { exact: true })).toBeVisible();
+    await expect(panel.getByText(/提示词压缩|Compression/).first()).toBeVisible();
+    await expect(panel.getByText(/自动路由|Auto-router/).first()).toBeVisible();
     await expect(panel.getByText("按来源统计的节省", { exact: true })).toBeVisible();
     await expect(panel.getByText("按工具统计的花费", { exact: true })).toBeVisible();
     await expect(panel.getByText(/仅声明而未调用工具不计入/)).toBeVisible();
