@@ -159,5 +159,13 @@ litellm.log
 Doc4zzy（文档for张忠源）/7.99按人限量方案.md
 Doc4zzy（文档for张忠源）/asyncio面试题-LiteLLM.md
 
+# Doc binary artifacts — regenerable from the .md sources + screenshots
+# The .md and screenshots/ ARE tracked; docx/pdf are build outputs, do not commit.
+Doc4zzy（文档for张忠源）/*.docx
+Doc4zzy（文档for张忠源）/*.pdf
+
+# Build artifacts
+ui/litellm-dashboard/tsconfig.tsbuildinfo
+
 # Imported software license (machine-bound, generated at runtime)
 product_license.lic
