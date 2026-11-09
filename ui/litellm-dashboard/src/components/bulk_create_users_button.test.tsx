@@ -14,6 +14,14 @@ vi.mock("./networking", () => ({
   }),
 }));
 
+const readBlobText = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(blob);
+  });
+
 const csvFile = () =>
   new File(["user_email,user_role\nnew.hire@example.com,internal_user\n"], "users.csv", { type: "text/csv" });
 
@@ -64,5 +72,25 @@ describe("BulkCreateUsersButton", () => {
       (label) => document.getElementById(label.getAttribute("for") as string) === null,
     );
     expect(danglingLabels).toEqual([]);
+  });
+
+  it("downloads a CSV template that matches the documented columns", async () => {
+    const createObjectURL = vi.fn().mockReturnValue("blob:template");
+    const revokeObjectURL = vi.fn();
+    URL.createObjectURL = createObjectURL;
+    URL.revokeObjectURL = revokeObjectURL;
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+    const user = await openUploadStep();
+
+    await user.click(screen.getByRole("button", { name: /download csv template/i }));
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:template");
+    const blob = createObjectURL.mock.calls[0][0] as Blob;
+    const lines = (await readBlobText(blob)).replace(/^\uFEFF/, "").trim().split("\n");
+    expect(lines[0]).toBe("user_email,user_role,teams,max_budget,budget_duration,models");
+    expect(lines).toHaveLength(2);
+    expect(lines[1].split(",")[0]).toContain("@");
+    clickSpy.mockRestore();
   });
 });

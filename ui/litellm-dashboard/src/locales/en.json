@@ -685,7 +685,9 @@
       "makingApiCall": "Making API Call",
       "userCreated": "API user Created",
       "errorCreatingUser": "Error creating the user"
-    }
+    },
+    "userEmailRequired": "User email is required",
+    "userEmailInvalid": "Enter a valid email address"
   },
   "debugWarningBanner": {
     "message": "Performance Warning: Detailed Debug Mode Active",
@@ -1365,7 +1367,8 @@
     "parseFileFailed": "Failed to parse CSV file: {{error}}",
     "invitationLinkFailed": "User created but failed to generate invitation link",
     "failedToCreateUser": "Failed to create user",
-    "fileSizeKb": "{{size}} KB • {{date}}"
+    "fileSizeKb": "{{size}} KB • {{date}}",
+    "templateDownloaded": "CSV template downloaded"
   },
   "cacheDashboard": {
     "tabAnalytics": "Cache Analytics",

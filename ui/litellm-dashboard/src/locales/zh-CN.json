@@ -685,7 +685,9 @@
       "makingApiCall": "正在调用 API",
       "userCreated": "API 用户已创建",
       "errorCreatingUser": "创建用户时出错"
-    }
+    },
+    "userEmailRequired": "请填写用户邮箱",
+    "userEmailInvalid": "请输入有效的邮箱地址"
   },
   "debugWarningBanner": {
     "message": "性能警告：详细调试模式已启用",
@@ -1365,7 +1367,8 @@
     "parseFileFailed": "解析 CSV 文件失败：{{error}}",
     "invitationLinkFailed": "用户已创建，但生成邀请链接失败",
     "failedToCreateUser": "创建用户失败",
-    "fileSizeKb": "{{size}} KB • {{date}}"
+    "fileSizeKb": "{{size}} KB • {{date}}",
+    "templateDownloaded": "CSV 模板已下载"
   },
   "cacheDashboard": {
     "tabAnalytics": "缓存分析",

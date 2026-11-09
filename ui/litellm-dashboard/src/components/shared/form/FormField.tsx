@@ -7,6 +7,7 @@ import {
   type ControllerRenderProps,
   type FieldPath,
   type FieldValues,
+  type RegisterOptions,
 } from "react-hook-form";
 
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
@@ -27,6 +28,7 @@ export interface FormFieldProps<TFieldValues extends FieldValues, TName extends 
   description?: React.ReactNode;
   orientation?: "vertical" | "horizontal" | "responsive";
   className?: string;
+  rules?: RegisterOptions<TFieldValues, TName>;
   children: (control: FormFieldControlProps<TFieldValues, TName>) => React.ReactNode;
 }
 
@@ -37,6 +39,7 @@ export const FormField = <TFieldValues extends FieldValues, TName extends FieldP
   description,
   orientation,
   className,
+  rules,
   children,
 }: FormFieldProps<TFieldValues, TName>) => {
   const reactId = React.useId();
@@ -48,6 +51,7 @@ export const FormField = <TFieldValues extends FieldValues, TName extends FieldP
     <Controller
       control={control}
       name={name}
+      rules={rules}
       render={({ field, fieldState }) => {
         const invalid = fieldState.error !== undefined;
         const describedBy =

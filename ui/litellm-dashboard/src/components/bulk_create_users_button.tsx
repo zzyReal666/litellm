@@ -35,6 +35,13 @@ interface UserData {
 
 const PREVIEW_PAGE_SIZE = 5;
 
+const TEMPLATE_COLUMNS = ["user_email", "user_role", "teams", "max_budget", "budget_duration", "models"];
+const TEMPLATE_EXAMPLE_ROW = ["user@example.com", "internal_user", "", "100", "30d", ""];
+const TEMPLATE_FILE_NAME = "bulk_users_template.csv";
+
+const buildTemplateCsv = () =>
+  [TEMPLATE_COLUMNS.join(","), TEMPLATE_EXAMPLE_ROW.join(",")].join("\n") + "\n";
+
 // Define an interface for the UI settings
 interface UISettings {
   PROXY_BASE_URL: string | null;
@@ -80,6 +87,21 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
     const base = new URL("/", window.location.href);
     setBaseUrl(base.toString());
   }, [accessToken]);
+
+  const downloadTemplate = () => {
+    const blob = new Blob([`\uFEFF${buildTemplateCsv()}`], { type: "text/csv;charset=utf-8;" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = TEMPLATE_FILE_NAME;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(objectUrl);
+    toast.success(
+      t("bulkCreateUsers.templateDownloaded", { defaultValue: "CSV template downloaded" }),
+    );
+  };
 
   const handleFileUpload = (file: File) => {
     // Reset all error states
@@ -727,7 +749,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     </div>
                   </div>
 
-                  <Button size="lg" className="w-full md:w-auto">
+                  <Button size="lg" className="w-full md:w-auto" onClick={downloadTemplate}>
                     <Download className="size-4" />
                     {t("bulkCreateUsers.downloadTemplateButton", { defaultValue: "Download CSV Template" })}
                   </Button>

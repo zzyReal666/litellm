@@ -107,6 +107,8 @@ const buildCreatePayload = (values: CreateUserFormValues): CreateUserFormValues 
   return { ...rest, organizations: organization_ids };
 };
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const SSO_INVITE_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
 
 const buildSsoInvitationLink = (userId: string, createdBy: string): InvitationLink => {
@@ -201,11 +203,22 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
   const handleCreate = async (formValues: CreateUserFormValues) => {
     try {
+      const userEmail = formValues.user_email?.trim();
+      if (!userEmail) {
+        toast.fromError(i18n.t("createUserButton.userEmailRequired", { defaultValue: "User email is required" }));
+        return;
+      }
+      if (!EMAIL_PATTERN.test(userEmail)) {
+        toast.fromError(i18n.t("createUserButton.userEmailInvalid", { defaultValue: "Enter a valid email address" }));
+        return;
+      }
       toast.info(i18n.t("createUserButton.notifications.makingApiCall", { defaultValue: "Making API Call" }));
       if (!isEmbedded) {
         setIsModalVisible(true);
       }
-      const payload = buildCreatePayload(withoutCollapsedModels(formValues, isPersonalKeyOpen));
+      const payload = buildCreatePayload(
+        withoutCollapsedModels({ ...formValues, user_email: userEmail }, isPersonalKeyOpen),
+      );
       const response = await userCreateCall(accessToken, null, payload);
       await queryClient.invalidateQueries({ queryKey: ["userList"] });
       setApiuser(true);
@@ -245,7 +258,18 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   }));
 
   const userEmailField = (
-    <FormField control={form.control} name="user_email" label={i18n.t("createUserButton.userEmailLabel", { defaultValue: "User Email" })}>
+    <FormField
+      control={form.control}
+      name="user_email"
+      label={i18n.t("createUserButton.userEmailLabel", { defaultValue: "User Email" })}
+      rules={{
+        required: i18n.t("createUserButton.userEmailRequired", { defaultValue: "User email is required" }),
+        pattern: {
+          value: EMAIL_PATTERN,
+          message: i18n.t("createUserButton.userEmailInvalid", { defaultValue: "Enter a valid email address" }),
+        },
+      }}
+    >
       {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
     </FormField>
   );

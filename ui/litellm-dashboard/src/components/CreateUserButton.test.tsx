@@ -123,6 +123,33 @@ describe("CreateUserButton", () => {
     });
   });
 
+  describe("email validation", () => {
+    it("does not create a user when the email is empty", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
+      renderWithProviders(
+        <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} isEmbedded />,
+      );
+
+      await user.click(screen.getByRole("button", { name: /create user/i }));
+
+      expect(await screen.findByText(/user email is required/i)).toBeInTheDocument();
+      expect(mockUserCreateCall).not.toHaveBeenCalled();
+    });
+
+    it("does not create a user when the email format is invalid", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
+      renderWithProviders(
+        <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} isEmbedded />,
+      );
+
+      await user.type(screen.getByLabelText(/user email/i), "not-an-email");
+      await user.click(screen.getByRole("button", { name: /create user/i }));
+
+      expect(await screen.findByText(/valid email address/i)).toBeInTheDocument();
+      expect(mockUserCreateCall).not.toHaveBeenCalled();
+    });
+  });
+
   describe("embedded mode submission", () => {
     it("should call userCreateCall when form is submitted in embedded mode", async () => {
       const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
