@@ -241,6 +241,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
         setIsInvitationLinkModalVisible(true);
       }
 
+      setIsModalVisible(false);
       toast.success(i18n.t("createUserButton.notifications.userCreated", { defaultValue: "API user Created" }));
       form.reset(defaultValues);
       localStorage.removeItem("userData" + userID);

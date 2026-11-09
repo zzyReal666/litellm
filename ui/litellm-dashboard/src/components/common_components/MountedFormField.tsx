@@ -141,10 +141,17 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
   useMountedName(name);
 
   const helpId = `${path}_help`;
+  const errorId = `${path}_error`;
   const hasHelp = help !== undefined && help !== null;
 
   const renderField: ControllerProps<MountedFormValues, string>["render"] = ({ field, fieldState }) => {
     const invalid = fieldState.error !== undefined;
+    let describeBy: string | undefined;
+    if (invalid) {
+      describeBy = errorId;
+    } else if (hasHelp) {
+      describeBy = helpId;
+    }
     const controlProps: MountedFieldControlProps = {
       id: path,
       name: field.name,
@@ -153,7 +160,7 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
       onBlur: field.onBlur,
       "aria-required": required ? "true" : undefined,
       "aria-invalid": invalid ? "true" : undefined,
-      "aria-describedby": hasHelp || invalid ? helpId : undefined,
+      "aria-describedby": describeBy,
     };
 
     if (bare) {
@@ -164,11 +171,8 @@ export const MountedFormField: React.FC<MountedFormFieldProps> = ({
       <Field data-invalid={invalid || undefined} className={className}>
         {label !== undefined && <FieldLabel htmlFor={path}>{label}</FieldLabel>}
         {children(controlProps)}
-        {hasHelp ? (
-          <FieldDescription id={helpId}>{help}</FieldDescription>
-        ) : (
-          <FieldError id={helpId} errors={[fieldState.error]} />
-        )}
+        {hasHelp && <FieldDescription id={helpId}>{help}</FieldDescription>}
+        <FieldError id={errorId} errors={[fieldState.error]} />
       </Field>
     );
   };
