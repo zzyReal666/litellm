@@ -16,6 +16,9 @@ export const buildLicenseRows = (info: ProductLicenseInfo): LicenseRow[] => [
   { label: "产品名称", value: formatLicenseValue(info.product_name) },
   { label: "产品版本", value: formatLicenseValue(info.product_version) },
   { label: "机器码", value: formatLicenseValue(info.machine_code) },
+  ...(info.serial_number
+    ? [{ label: "产品序列号", value: formatLicenseValue(info.serial_number) }]
+    : []),
   ...(info.device_serial
     ? [{ label: "设备序列号", value: formatLicenseValue(info.device_serial) }]
     : []),

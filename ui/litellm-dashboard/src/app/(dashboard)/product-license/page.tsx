@@ -11,7 +11,7 @@ export default function ProductLicensePage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 pb-24">
       <ProductLicensePanel />
     </div>
   );
