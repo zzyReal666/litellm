@@ -1526,7 +1526,7 @@ describe("Teams - the exact bytes the create call sends", () => {
     const buttons = screen.getAllByRole("button", { name: /create team/i });
     fireEvent.click(buttons[buttons.length - 1]);
 
-    expect(await screen.findByText("Please input a team name")).toBeInTheDocument();
+    expect(await screen.findByText(/请输入团队名称|Please input team name/)).toBeInTheDocument();
     expect(teamCreateCall).not.toHaveBeenCalled();
   });
 

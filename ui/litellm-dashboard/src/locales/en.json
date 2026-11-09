@@ -2881,6 +2881,12 @@
     },
     "streamScopeFields": {
       "appliesTo": "{{mode}} applies to"
+    },
+    "deleteConfirmMessage": "Are you sure you want to delete guardrail: {{name}}? This action cannot be undone.",
+    "deleteSuccessMessage": "Guardrail \"{{name}}\" deleted successfully",
+    "addGuardrailForm.createSuccess": "Guardrail created successfully",
+    "customCode": {
+      "createSuccess": "Custom code guardrail created successfully"
     }
   },
   "keyValueInput": {
@@ -8246,32 +8252,7 @@
     }
   },
   "usagePage": {
-    "usageViewSelect": {
-      "title": "Usage View",
-      "description": "Select the usage data you want to view",
-      "globalUsageLabel": "Global Usage",
-      "globalUsageDesc": "View usage across all resources",
-      "yourUsageLabel": "Your Usage",
-      "yourUsageDesc": "View your usage",
-      "myUsageDesc": "View your own usage",
-      "organizationUsageLabel": "Organization Usage",
-      "yourOrganizationUsageLabel": "Your Organization Usage",
-      "organizationUsageDesc": "View organization-level usage",
-      "organizationUsageAdminDesc": "View usage across all organizations",
-      "organizationUsageNonAdminDesc": "View your organization's usage",
-      "teamUsageLabel": "Team Usage",
-      "teamUsageDesc": "View usage by team",
-      "customerUsageLabel": "Customer Usage",
-      "customerUsageDesc": "View usage by customer accounts",
-      "tagUsageLabel": "Tag Usage",
-      "tagUsageDesc": "View usage grouped by tags",
-      "agentUsageLabel": "Agent Usage (A2A)",
-      "agentUsageDesc": "View usage by AI agents",
-      "userUsageLabel": "User Usage",
-      "userUsageDesc": "View usage by individual users",
-      "userAgentActivityLabel": "User Agent Activity",
-      "userAgentActivityDesc": "View detailed user agent activity logs"
-    },
+    "usageViewSelect": {},
     "usageAiChatPanel": {
       "title": "Ask AI",
       "subtitle": "Ask about your spend, models, keys, and trends",
@@ -8525,7 +8506,8 @@
       "couldNotSearchAllKeys": "Could not search all keys.",
       "loadingMoreKeys": "Loading more keys...",
       "couldNotLoadMoreKeys": "Could not load more keys."
-    }
+    },
+    "title": "Usage"
   },
   "vectorStoreProviders": {
     "pgVector": {
@@ -12358,6 +12340,11 @@
       "noAutoRouters": "No auto-routers in this range",
       "unavailable": "Unavailable",
       "savingsFootnote": "Savings are estimated against each router's premium baseline. Token totals and unit costs are unavailable for usage recorded before token tracking; unit cost also requires nonzero tokens."
+    },
+    "savingsDriver": {
+      "compression": "Compression",
+      "promptCaching": "Prompt caching",
+      "autoRouter": "Auto-router"
     }
   },
   "budgetsPage": {
@@ -14402,7 +14389,10 @@
     "copy-code": "Copy code"
   },
   "commandPaletteHint": {
-    "dismiss-search-hint": "Dismiss search hint"
+    "dismiss-search-hint": "Dismiss search hint",
+    "press": "Press",
+    "searchKeys": "to search keys",
+    "searchOrJump": "to search or jump to a page"
   },
   "exportTypeSelector": {
     "export-type": "Export type"
@@ -14501,7 +14491,8 @@
     "custom-range": "Custom Range"
   },
   "requestLogsTable": {
-    "narrow-down-request-logs": "Narrow down request logs"
+    "narrow-down-request-logs": "Narrow down request logs",
+    "filters": "Filters"
   },
   "searchToolSelector": {
     "clear-all-search-tools": "Clear all search tools"
@@ -14730,7 +14721,14 @@
     "max-budget-cny": "Max Budget (CNY)",
     "id-of-the-team-you-want-to-create-if-not-pro": "ID of the team you want to create. If not provided, it will be generated automatically.",
     "create-custom-aliases-for-models-that-can-be": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models.",
-    "metadataValuesHelp": "Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {\"region\": \"us\"}."
+    "metadataValuesHelp": "Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {\"region\": \"us\"}.",
+    "teamNameRequired": "Please input team name",
+    "organizationLabel": "Organization",
+    "organizationHint": "Organizations can have multiple teams. Learn more about the user management hierarchy",
+    "modelsLabel": "Models",
+    "modelsHint": "These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups",
+    "onlyCreateInOrgHint": "You can only create teams within this organization",
+    "selectOrganizationPlaceholder": "Search or select an Organization"
   },
   "logsPage": {
     "request-logs": "Request Logs",
@@ -14790,5 +14788,11 @@
     "drawerHeader": {
       "backTo": "Back to {{label}}"
     }
+  },
+  "teamsPage": {
+    "searchPlaceholder": "Search teams by name or ID…",
+    "filterOrganization": "Organization",
+    "filterTeamAlias": "Team alias",
+    "filterTeamId": "Team ID"
   }
 }

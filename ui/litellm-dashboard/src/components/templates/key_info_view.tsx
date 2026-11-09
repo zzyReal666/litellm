@@ -5,6 +5,7 @@ import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings"
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { formatDateTime } from "@/utils/dateFormat";
 import { mapEmptyStringToNull } from "@/utils/keyUpdateUtils";
 import { ArrowLeft } from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
@@ -406,7 +407,7 @@ export default function KeyInfoView({
         ...prevData,
         ...updatedKeyData, // This should include the new token (key-id)
         // Update the created_at to show when it was regenerated
-        created_at: regeneratedAt.toLocaleString(),
+        created_at: regeneratedAt.toISOString(),
       };
       return newData;
     });
@@ -417,7 +418,7 @@ export default function KeyInfoView({
 
     setKeyDataUpdateHeldUntilModalClose({
       ...updatedKeyData,
-      created_at: regeneratedAt.toLocaleString(),
+      created_at: regeneratedAt.toISOString(),
     });
   };
 
@@ -429,21 +430,8 @@ export default function KeyInfoView({
     }
   };
 
-  // Update the formatTimestamp function to use the desired date format
-  const formatTimestamp = (timestamp: string | Date) => {
-    const date = new Date(timestamp);
-    const dateStr = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const timeStr = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return `${dateStr} at ${timeStr}`;
-  };
+  const formatTimestamp = (timestamp: string | Date) =>
+    formatDateTime(timestamp) ?? i18n.t("common.unknown", { defaultValue: "Unknown" });
 
   const canModifyKey =
     isProxyAdminRole(userRole || "") ||

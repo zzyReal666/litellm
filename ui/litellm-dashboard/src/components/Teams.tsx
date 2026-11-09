@@ -75,7 +75,7 @@ const SUPPRESSED_BY_DESCRIPTION = "";
 const numericInputSchema = z.union([z.string(), z.number()]).optional();
 
 const teamCreateFieldsSchema = z.object({
-  team_alias: z.string().min(1, "Please input a team name"),
+  team_alias: z.string().min(1, i18n.t("teams.teamNameRequired", { defaultValue: "Please input team name" })),
   organization_id: z.string().nullish(),
   models: z.array(z.string()).optional(),
   max_budget: numericInputSchema,
@@ -737,12 +737,17 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           name="organization_id"
                           className="mt-8"
                           label={labelWithDocsHint(
-                            "Organization",
-                            "Organizations can have multiple teams. Learn more about the user management hierarchy",
+                            i18n.t("teams.organizationLabel", { defaultValue: "Organization" }),
+                            i18n.t("teams.organizationHint", {
+                              defaultValue:
+                                "Organizations can have multiple teams. Learn more about the user management hierarchy",
+                            }),
                           )}
                           description={
                             isOrgAdmin && isSingleOrg
-                              ? "You can only create teams within this organization"
+                              ? i18n.t("teams.onlyCreateInOrgHint", {
+                                  defaultValue: "You can only create teams within this organization",
+                                })
                               : isOrgAdmin
                                 ? "required"
                                 : undefined
@@ -760,7 +765,9 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                               disabled={isOrgAdmin && soleOrganizationId !== null && value === soleOrganizationId}
                               allowClear={!isOrgAdmin}
                               placeholder={
-                                hasNoOrgs ? t("oldTeams.form.noOrganizationsAvailable", { defaultValue: "No organizations available" }) : "Search or select an Organization"
+                                hasNoOrgs
+                                  ? t("oldTeams.form.noOrganizationsAvailable", { defaultValue: "No organizations available" })
+                                  : t("teams.selectOrganizationPlaceholder", { defaultValue: "Search or select an Organization" })
                               }
                               emptyText={t("oldTeams.form.noOrganizationsAvailable", { defaultValue: "No organizations available" })}
                               onValueChange={(next) => selectCreateTeamOrganization(next, value ?? null, onChange)}
@@ -781,8 +788,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     control={form.control}
                     name="models"
                     label={labelWithHint(
-                      "Models",
-                      "These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups",
+                      i18n.t("teams.modelsLabel", { defaultValue: "Models" }),
+                      i18n.t("teams.modelsHint", {
+                        defaultValue:
+                          "These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups",
+                      }),
                     )}
                   >
                     {({ id, value, onChange }) => (

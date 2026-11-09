@@ -10,6 +10,7 @@ import {
 import { ToolbarSeparator } from "@/components/shared/ToolbarSeparator";
 import i18n from "@/lib/i18n";
 import { getBreadcrumb } from "@/components/leftnav";
+import { useTranslation } from "react-i18next";
 import ViewSwitcher from "@/components/Navbar/ViewSwitcher";
 import LiteAdmin from "@/components/liteadmin/LiteAdmin";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
@@ -28,7 +29,8 @@ import { CommandPaletteTrigger } from "@/components/CommandPalette/CommandPalett
 // Top bar for the dashboard shell. Sits only over the content column (the brand
 // lives in the sidebar header); mirrors the design's breadcrumb-left / tools-right layout.
 export function DashboardHeader({ navigationTrigger }: { navigationTrigger?: ReactNode }) {
-  const { title } = getBreadcrumb(usePathname());
+  const { t } = useTranslation();
+  const { title } = getBreadcrumb(usePathname(), t);
   const isDesktop = useMediaQuery("(min-width: 768px)", { initializeWithValue: false });
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   if (isDesktop && mobileToolsOpen) setMobileToolsOpen(false);

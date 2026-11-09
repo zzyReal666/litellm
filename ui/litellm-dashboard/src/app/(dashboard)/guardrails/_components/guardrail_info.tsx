@@ -1,4 +1,5 @@
 import i18n from "@/lib/i18n";
+import { formatDateTime } from "@/utils/dateFormat";
 import { useTranslation } from "react-i18next";
 import {
   getGuardrailInfo,
@@ -526,7 +527,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
     return <div className="p-4">{backButton}{i18n.t("guardrailInfo.guardrail-not-found", { defaultValue: "Guardrail not found" })}</div>;
   }
 
-  const formatDate = (dateString?: string) => (dateString ? new Date(dateString).toLocaleString() : "-");
+  const formatDate = (dateString?: string) => formatDateTime(dateString) ?? "-";
 
   // Format the provider display name and logo
   const { logo, displayName } = getGuardrailLogoAndName(guardrailData.litellm_params?.guardrail || "");

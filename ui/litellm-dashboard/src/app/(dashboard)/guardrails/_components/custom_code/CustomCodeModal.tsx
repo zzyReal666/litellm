@@ -31,7 +31,6 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -338,7 +337,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         };
 
         await createGuardrailCall(accessToken, guardrailData);
-        toast.success("Custom code guardrail created successfully");
+        toast.success(i18n.t("guardrails.customCode.createSuccess", { defaultValue: "Custom code guardrail created successfully" }));
       }
       onSuccess();
       onClose();

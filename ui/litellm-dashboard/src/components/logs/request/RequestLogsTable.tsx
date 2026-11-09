@@ -137,7 +137,7 @@ export function RequestLogsTable({
             table={table}
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
-            title="Filters"
+            title={i18n.t("requestLogsTable.filters", { defaultValue: "Filters" })}
             description={i18n.t("requestLogsTable.narrow-down-request-logs", { defaultValue: "Narrow down request logs" })}
           >
             {({ get, set }) => <RequestLogsFilters get={get} set={set} teams={teams} logsWindow={logsWindow} />}

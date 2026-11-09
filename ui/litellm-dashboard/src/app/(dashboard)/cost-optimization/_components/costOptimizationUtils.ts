@@ -1,4 +1,5 @@
 import type { KeySpendActivityRow } from "@/components/UsagePage/dailyActivityApi";
+import { formatShortDay } from "@/utils/dateFormat";
 import { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { ToolSpendDailyEntry, ToolSpendEntry } from "@/components/networking";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -20,8 +21,7 @@ export const classificationRatePer1kTurns = (classifierCost: number, turns: numb
 
 export const pct = (ratio: number): string => `${formatNumberWithCommas(ratio * 100, 1)}%`;
 
-export const shortDate = (iso: string): string =>
-  new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+export const shortDate = (iso: string): string => formatShortDay(`${iso}T00:00:00`);
 
 export const compressionOf = (m: SpendMetrics): number => m.compression_savings_spend ?? 0;
 export const cachingOf = (m: SpendMetrics): number => m.prompt_caching_savings_spend ?? 0;
@@ -224,6 +224,7 @@ const seedPoint = (date: string, toolNames: readonly string[]): DailyToolSpendPo
 export const topToolsBySpend = (byTool: readonly ToolSpendEntry[], limit = 8): ToolSpendEntry[] =>
   [...byTool].sort((a, b) => b.spend - a.spend).slice(0, limit);
 
+
 export const localIsoDay = (d: Date): string =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
@@ -253,6 +254,12 @@ export const SAVINGS_DRIVERS = [
   { name: "Prompt caching", color: "blue", of: gatewayAttributedCachingOf },
   { name: "Auto-router", color: "amber", of: autorouterOf },
 ] as const;
+
+export const SAVINGS_DRIVER_KEYS: Readonly<Record<string, string>> = {
+  Compression: "compression",
+  "Prompt caching": "promptCaching",
+  "Auto-router": "autoRouter",
+};
 
 export const SAVINGS_SERIES = SAVINGS_DRIVERS.map((d) => d.name);
 export const SAVINGS_COLORS = SAVINGS_DRIVERS.map((d) => d.color);

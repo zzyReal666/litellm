@@ -39,14 +39,15 @@ const toSortOrder = (sorting: SortingState): "asc" | "desc" | undefined => {
   return active.desc ? "desc" : "asc";
 };
 
-const FILTER_LABELS: Record<string, string> = {
-  org_id: "Organization",
-  alias: "Team alias",
-  team_id: "Team ID",
-};
+const buildFilterLabels = (t: (key: string, options?: Record<string, unknown>) => string): Record<string, string> => ({
+  org_id: t("teamsPage.filterOrganization", { defaultValue: "Organization" }),
+  alias: t("teamsPage.filterTeamAlias", { defaultValue: "Team alias" }),
+  team_id: t("teamsPage.filterTeamId", { defaultValue: "Team ID" }),
+});
 
 export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDeleteTeam }: TeamsTableProps) {
   const { t } = useTranslation();
+  const FILTER_LABELS = buildFilterLabels(t);
   const { data: fetchedOrganizations } = useOrganizations();
   const organizations = useMemo(() => fetchedOrganizations ?? [], [fetchedOrganizations]);
 
@@ -175,7 +176,7 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
             table={table}
             searchValue={searchInput}
             onSearchChange={handleSearchChange}
-            searchPlaceholder="Search teams by name or ID…"
+            searchPlaceholder={t("teamsPage.searchPlaceholder", { defaultValue: "Search teams by name or ID…" })}
             onRefresh={() => refetch?.()}
             isRefreshing={isFetching}
             onOpenFilters={() => setFiltersOpen(true)}

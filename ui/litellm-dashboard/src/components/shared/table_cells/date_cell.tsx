@@ -1,8 +1,9 @@
 "use client";
 
+import { formatDateOnly, formatDateTime, formatTableDateTime } from "@/utils/dateFormat";
 import { CellTooltip } from "./cell_tooltip";
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
+
 
 export type DatePrecision = "datetime" | "date";
 
@@ -15,15 +16,11 @@ interface DateCellProps {
 const pad = (n: number): string => String(n).padStart(2, "0");
 
 export const formatCellDate = (date: Date, precision: DatePrecision): string =>
-  precision === "date"
-    ? `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-    : `${MONTHS[date.getMonth()]} ${date.getDate()}, ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  (precision === "date" ? formatDateOnly(date) : formatTableDateTime(date)) ?? "-";
 
 export const formatFullTimestamp = (date: Date): string => {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const day = `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-  const time = `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-  return `${day}, ${time} (${timeZone})`;
+  return `${formatDateTime(date)} (${timeZone})`;
 };
 
 export function DateCell({ value, precision = "datetime", fallback = "-" }: DateCellProps) {

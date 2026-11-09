@@ -111,7 +111,12 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
     setIsDeleting(true);
     try {
       await deleteGuardrailCall(accessToken, guardrailToDelete.guardrail_id);
-      toast.success(`Guardrail "${guardrailToDelete.guardrail_name}" deleted successfully`);
+      toast.success(
+        t("guardrails.deleteSuccessMessage", {
+          name: guardrailToDelete.guardrail_name,
+          defaultValue: `Guardrail "${guardrailToDelete.guardrail_name}" deleted successfully`,
+        }),
+      );
       await fetchGuardrails();
     } catch (error) {
       console.error("Error deleting guardrail:", error);
@@ -215,7 +220,10 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
               <DeleteResourceModal
                 isOpen={isDeleteModalOpen}
                 title={t("guardrails.deleteGuardrailTitle", { defaultValue: "Delete Guardrail" })}
-                message={`Are you sure you want to delete guardrail: ${guardrailToDelete?.guardrail_name}? This action cannot be undone.`}
+                message={t("guardrails.deleteConfirmMessage", {
+                  name: guardrailToDelete?.guardrail_name,
+                  defaultValue: `Are you sure you want to delete guardrail: ${guardrailToDelete?.guardrail_name}? This action cannot be undone.`,
+                })}
                 resourceInformationTitle={t("guardrails.guardrailInfoTitle", { defaultValue: "Guardrail Information" })}
                 resourceInformation={[
                   { label: t("common.name", { defaultValue: "Name" }), value: guardrailToDelete?.guardrail_name },

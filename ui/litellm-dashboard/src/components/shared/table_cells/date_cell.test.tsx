@@ -1,7 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import i18n from "@/lib/i18n";
 import { DateCell, formatCellDate, formatFullTimestamp } from "./date_cell";
+
+beforeAll(async () => {
+  await i18n.changeLanguage("en");
+});
 
 const localIso = new Date(2026, 6, 7, 9, 50, 13).toISOString();
 

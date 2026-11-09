@@ -26,11 +26,15 @@ export function CommandPaletteHint({ scope, onDismiss }: CommandPaletteHintProps
     <div className="fixed bottom-4 left-1/2 z-overlay hidden -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur animate-in fade-in slide-in-from-bottom-2 duration-300 md:flex">
       <button type="button" className="flex items-center gap-1.5 hover:text-foreground" onClick={() => setOpen(true)}>
         <Search className="size-3.5" aria-hidden="true" />
-        <span>Press</span>
+        <span>{i18n.t("commandPaletteHint.press", { defaultValue: "Press" })}</span>
         <kbd className="rounded-sm border border-border border-b-2 bg-muted px-[3px] font-mono text-xs text-muted-foreground">
           {shortcut}
         </kbd>
-        <span>{scope === "keys" ? "to search keys" : "to search or jump to a page"}</span>
+        <span>
+          {scope === "keys"
+            ? i18n.t("commandPaletteHint.searchKeys", { defaultValue: "to search keys" })
+            : i18n.t("commandPaletteHint.searchOrJump", { defaultValue: "to search or jump to a page" })}
+        </span>
       </button>
       <button
         type="button"

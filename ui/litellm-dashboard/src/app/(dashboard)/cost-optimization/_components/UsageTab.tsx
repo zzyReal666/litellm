@@ -17,6 +17,7 @@ import {
   SAVINGS_COLORS,
   SAVINGS_DRIVERS,
   SAVINGS_SERIES,
+  SAVINGS_DRIVER_KEYS,
   SavingsAccumulation,
   SavingsPoint,
   savingsSeriesOf,
@@ -124,6 +125,13 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
     [toolSpend, topToolNames],
   );
   const toolColors = useMemo(() => SEQUENTIAL_COLOR_RAMP.slice(0, Math.max(topToolNames.length, 1)), [topToolNames]);
+  const savingsLegendLabels = useMemo(
+    () =>
+      SAVINGS_DRIVERS.map(({ name }) =>
+        t(`costOptimization.savingsDriver.${SAVINGS_DRIVER_KEYS[name]}`, { defaultValue: name }),
+      ),
+    [t],
+  );
 
   return (
     <div className="w-full space-y-6">
@@ -144,7 +152,7 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
             <CardTitle>{t("templates.keyInfoView.tabSavings", { defaultValue: "Savings" })}</CardTitle>
             <CardDescription>{savingsSubtitle}</CardDescription>
             <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-              <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
+              <CustomLegend categories={savingsLegendLabels} colors={SAVINGS_COLORS} />
               <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
                 <TabsList>
                   <TabsTrigger value="cumulative">{t("costOptimization.usageTab.cumulative", { defaultValue: "Cumulative" })}</TabsTrigger>

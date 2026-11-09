@@ -2881,6 +2881,12 @@
     },
     "streamScopeFields": {
       "appliesTo": "{{mode}} 适用于"
+    },
+    "deleteConfirmMessage": "确定删除护栏「{{name}}」吗？此操作不可撤销",
+    "deleteSuccessMessage": "护栏「{{name}}」已删除",
+    "addGuardrailForm.createSuccess": "护栏创建成功",
+    "customCode": {
+      "createSuccess": "自定义代码护栏创建成功"
     }
   },
   "keyValueInput": {
@@ -8525,7 +8531,8 @@
       "couldNotSearchAllKeys": "无法搜索全部密钥。",
       "loadingMoreKeys": "正在加载更多密钥...",
       "couldNotLoadMoreKeys": "无法加载更多密钥。"
-    }
+    },
+    "title": "用量"
   },
   "vectorStoreProviders": {
     "pgVector": {
@@ -12358,6 +12365,11 @@
       "noAutoRouters": "此范围内没有自动路由",
       "unavailable": "不可用",
       "savingsFootnote": "节省金额是按每个路由的高级基线估算的。令牌总数与单位成本在启用令牌追踪之前记录的用量中不可用；单位成本还要求令牌数非零。"
+    },
+    "savingsDriver": {
+      "compression": "提示词压缩",
+      "promptCaching": "提示词缓存",
+      "autoRouter": "自动路由"
     }
   },
   "budgetsPage": {
@@ -14402,7 +14414,10 @@
     "copy-code": "复制代码"
   },
   "commandPaletteHint": {
-    "dismiss-search-hint": "关闭搜索提示"
+    "dismiss-search-hint": "关闭搜索提示",
+    "press": "按",
+    "searchKeys": "搜索密钥",
+    "searchOrJump": "搜索或跳转页面"
   },
   "exportTypeSelector": {
     "export-type": "导出类型"
@@ -14501,7 +14516,8 @@
     "custom-range": "自定义范围"
   },
   "requestLogsTable": {
-    "narrow-down-request-logs": "缩小请求日志范围"
+    "narrow-down-request-logs": "缩小请求日志范围",
+    "filters": "筛选"
   },
   "searchToolSelector": {
     "clear-all-search-tools": "清除全部搜索工具"
@@ -14730,7 +14746,14 @@
     "max-budget-cny": "最大预算（人民币）",
     "id-of-the-team-you-want-to-create-if-not-pro": "要创建的团队 ID。如果不填，将自动生成。",
     "create-custom-aliases-for-models-that-can-be": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样可以为核心模型创建快捷方式。",
-    "metadataValuesHelp": "值按文本保存。类型化值请输入 JSON，例如 3、true 或 {\"region\": \"us\"}。"
+    "metadataValuesHelp": "值按文本保存。类型化值请输入 JSON，例如 3、true 或 {\"region\": \"us\"}。",
+    "teamNameRequired": "请输入团队名称",
+    "organizationLabel": "组织",
+    "organizationHint": "组织下可以有多个团队，点击查看用户管理层级说明",
+    "modelsLabel": "模型",
+    "modelsHint": "所选团队可访问的模型。留空表示不直接授予模型，例如团队通过访问组获得模型",
+    "onlyCreateInOrgHint": "只能在该组织下创建团队",
+    "selectOrganizationPlaceholder": "搜索或选择组织"
   },
   "logsPage": {
     "request-logs": "请求日志",
@@ -14790,5 +14813,11 @@
     "drawerHeader": {
       "backTo": "返回 {{label}}"
     }
+  },
+  "teamsPage": {
+    "searchPlaceholder": "按名称或 ID 搜索团队…",
+    "filterOrganization": "组织",
+    "filterTeamAlias": "团队别名",
+    "filterTeamId": "团队 ID"
   }
 }

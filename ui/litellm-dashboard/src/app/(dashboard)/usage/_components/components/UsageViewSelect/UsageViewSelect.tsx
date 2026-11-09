@@ -38,69 +38,77 @@ interface OptionConfig {
   descriptionForNonAdmin?: string;
   badgeText?: string;
 }
-const OPTIONS: OptionConfig[] = [
+const buildOptions = (): OptionConfig[] => [
   {
     value: "global",
-    label: "Global Usage",
-    showForAdmin: "Global Usage",
-    showForNonAdmin: "Your Usage",
-    description: "View usage across all resources",
-    descriptionForAdmin: "View usage across all resources",
-    descriptionForNonAdmin: "View your usage",
+    label: i18n.t("usagePage.usageViewSelect.globalUsageLabel", { defaultValue: "Global Usage" }),
+    showForAdmin: i18n.t("usagePage.usageViewSelect.globalUsageLabel", { defaultValue: "Global Usage" }),
+    showForNonAdmin: i18n.t("usagePage.usageViewSelect.yourUsageLabel", { defaultValue: "Your Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.globalUsageDesc", {
+      defaultValue: "View usage across all resources",
+    }),
+    descriptionForAdmin: i18n.t("usagePage.usageViewSelect.globalUsageDesc", {
+      defaultValue: "View usage across all resources",
+    }),
+    descriptionForNonAdmin: i18n.t("usagePage.usageViewSelect.yourUsageDesc", { defaultValue: "View your usage" }),
     icon: <Globe className="size-4" />,
   },
   {
     value: "my-usage",
-    label: "Your Usage",
-    description: "View your own usage",
+    label: i18n.t("usagePage.usageViewSelect.yourUsageLabel", { defaultValue: "Your Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.myUsageDesc", { defaultValue: "View your own usage" }),
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "organization",
-    label: "Organization Usage",
-    description: "View usage across all organizations",
+    label: i18n.t("usagePage.usageViewSelect.organizationUsageLabel", { defaultValue: "Organization Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.organizationUsageAdminDesc", {
+      defaultValue: "View usage across all organizations",
+    }),
     icon: <Building2 className="size-4" />,
     capability: "viewOrganizationUsage",
   },
   {
     value: "team",
-    label: "Team Usage",
-    description: "View usage by team",
+    label: i18n.t("usagePage.usageViewSelect.teamUsageLabel", { defaultValue: "Team Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.teamUsageDesc", { defaultValue: "View usage by team" }),
     icon: <Users className="size-4" />,
   },
   {
     value: "customer",
-    label: "Customer Usage",
-    description: "View usage by customer accounts",
+    label: i18n.t("usagePage.usageViewSelect.customerUsageLabel", { defaultValue: "Customer Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.customerUsageDesc", { defaultValue: "View usage by customer accounts" }),
     icon: <ShoppingCart className="size-4" />,
     adminOnly: true,
   },
   {
     value: "tag",
-    label: "Tag Usage",
-    description: "View usage grouped by tags",
+    label: i18n.t("usagePage.usageViewSelect.tagUsageLabel", { defaultValue: "Tag Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.tagUsageDesc", { defaultValue: "View usage grouped by tags" }),
     icon: <Tags className="size-4" />,
     adminOnly: true,
   },
   {
     value: "agent",
-    label: "Agent Usage (A2A)",
-    description: "View usage by AI agents",
+    label: i18n.t("usagePage.usageViewSelect.agentUsageLabel", { defaultValue: "Agent Usage (A2A)" }),
+    description: i18n.t("usagePage.usageViewSelect.agentUsageDesc", { defaultValue: "View usage by AI agents" }),
     icon: <Bot className="size-4" />,
     capability: "viewAgentUsage",
   },
   {
     value: "user",
-    label: "User Usage",
-    description: "View usage by individual users",
+    label: i18n.t("usagePage.usageViewSelect.userUsageLabel", { defaultValue: "User Usage" }),
+    description: i18n.t("usagePage.usageViewSelect.userUsageDesc", { defaultValue: "View usage by individual users" }),
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "user-agent-activity",
-    label: "User Agent Activity",
-    description: "View detailed user agent activity logs",
+    label: i18n.t("usagePage.usageViewSelect.userAgentActivityLabel", { defaultValue: "User Agent Activity" }),
+    description: i18n.t("usagePage.usageViewSelect.userAgentActivityDesc", {
+      defaultValue: "View detailed user agent activity logs",
+    }),
     icon: <LineChart className="size-4" />,
     adminOnly: true,
   },
@@ -111,13 +119,13 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
   userRole,
   canViewTagUsage = false,
   isOrgAdmin = false,
-  title = "Usage",
+  title = i18n.t("usagePage.title", { defaultValue: "Usage" }),
   description = i18n.t("usagePage.usageViewSelect.description", { defaultValue: "Select the usage data you want to view" }),
   "data-id": dataId,
 }) => {
   const isAdmin = all_admin_roles.includes(userRole ?? "");
   const getFilteredOptions = () => {
-    return OPTIONS.filter((option) => {
+    return buildOptions().filter((option) => {
       if (option.capability) {
         return hasCapability(userRole, option.capability, isOrgAdmin);
       }
