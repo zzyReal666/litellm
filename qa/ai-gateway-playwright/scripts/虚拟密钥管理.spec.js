@@ -97,11 +97,24 @@ test("虚拟密钥管理：创建、列表校验与删除闭环", async ({ page 
       await dialog.getByRole("textbox").fill(alias);
       const deleteButton = dialog.getByRole("button", { name: "删除", exact: true });
       await expect(deleteButton).toBeEnabled();
+      const deleteResponsePromise = page.waitForResponse(
+        (response) => response.url().includes("/key/delete") && response.request().method() === "POST",
+        { timeout: 30000 },
+      );
       await deleteButton.click();
-      await expect(page.getByRole("button", { name: "更多密钥操作" })).toBeHidden();
+      const deleteResponse = await deleteResponsePromise;
+      expect(deleteResponse.ok()).toBeTruthy();
+      await expect(page.getByRole("button", { name: "更多密钥操作" })).toBeHidden({ timeout: 30000 });
 
-      await gotoPage(page, `/ui/api-keys/?key_search=${encodeURIComponent(alias)}`);
-      await expect(page.locator("tbody tr").filter({ hasText: alias })).toHaveCount(0);
+      await expect
+        .poll(
+          async () => {
+            await gotoPage(page, `/ui/api-keys/?key_search=${encodeURIComponent(alias)}`);
+            return page.locator("tbody tr").filter({ hasText: alias }).count();
+          },
+          { timeout: 45000, intervals: [2000, 3000, 5000] },
+        )
+        .toBe(0);
     });
   } finally {
     await deleteKeyIfPresent(page, alias).catch(() => {});

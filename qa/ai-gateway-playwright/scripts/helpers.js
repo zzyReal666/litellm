@@ -60,6 +60,10 @@ export async function gotoRoute(page, name, marker) {
   await gotoPage(page, path, marker);
 }
 
+export async function waitForToastsToClear(page) {
+  await expect(page.locator("[data-sonner-toast]")).toHaveCount(0, { timeout: 20000 });
+}
+
 export async function waitForToast(page, text) {
   const toast = page.locator("[data-sonner-toast], [role='status'], [role='alert']").filter({ hasText: text }).first();
   await expect(toast).toBeVisible({ timeout: 30000 });

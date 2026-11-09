@@ -18,6 +18,8 @@ export default defineConfig({
     video: process.env.AIG_VIDEO === "on" ? "on" : "off",
     screenshot: "only-on-failure",
     ignoreHTTPSErrors: true,
+    actionTimeout: 20000,
+    navigationTimeout: 45000,
     viewport: { width: 1600, height: 1000 },
     locale: "zh-CN",
     timezoneId: "Asia/Shanghai",

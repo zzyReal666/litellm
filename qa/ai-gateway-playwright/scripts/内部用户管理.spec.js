@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
-import { BASE_URL, gotoRoute, login, waitForToast } from "./helpers.js";
+import { BASE_URL, gotoRoute, login, waitForToast, waitForToastsToClear } from "./helpers.js";
 
 const createdUsers = [];
 
@@ -101,22 +101,45 @@ const submitInvite = async (page, dialog, email) => {
   expect(userId, "邀请成功对话框应展示新用户 ID").toBeTruthy();
 
   await closeAllDialogs(page);
+  await waitForToastsToClear(page);
   return userId;
+};
+
+const clickDeleteMenuItem = async (page, row) => {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    await row.getByRole("button", { name: "打开用户操作菜单" }).click();
+    const menuItem = page.getByRole("menuitem", { name: "删除用户" });
+    try {
+      await menuItem.waitFor({ state: "visible", timeout: 5000 });
+      await menuItem.click({ timeout: 5000 });
+      return;
+    } catch {
+      await page.keyboard.press("Escape").catch(() => {});
+      await page.waitForTimeout(500);
+    }
+  }
+  throw new Error("删除用户菜单项始终无法点击");
 };
 
 const deleteUser = async (page, email, userId) => {
   await searchUsers(page, email);
   const row = userRow(page, email);
   await expect(row).toBeVisible();
-  await row.getByRole("button", { name: "打开用户操作菜单" }).click();
-  await page.getByRole("menuitem", { name: "删除用户" }).click();
+  await clickDeleteMenuItem(page, row);
   const dialog = page.getByRole("dialog");
   await expect(dialog).toContainText("确定要删除此用户吗");
   await expect(dialog).toContainText(email);
   await expect(dialog).toContainText(userId);
+  const deleteResponsePromise = page.waitForResponse(
+    (response) => response.url().includes("/user/delete") && response.request().method() === "POST",
+    { timeout: 30000 },
+  );
   await dialog.getByRole("button", { name: "删除", exact: true }).click();
+  const deleteResponse = await deleteResponsePromise;
+  expect(deleteResponse.ok()).toBeTruthy();
   await waitForToast(page, "用户已成功删除");
-  await expect(dialog).toBeHidden();
+  await expect(dialog).toBeHidden({ timeout: 30000 });
+  await waitForToastsToClear(page);
   const tracked = createdUsers.indexOf(email);
   if (tracked >= 0) createdUsers.splice(tracked, 1);
 };
@@ -284,8 +307,16 @@ test("内部用户管理：删除用户需二次确认", async ({ page }) => {
   });
 
   await test.step("3. 删除后搜索不到该用户", async () => {
-    await searchUsers(page, email);
-    await expect(userRow(page, email)).toHaveCount(0);
+    await expect
+      .poll(
+        async () => {
+          await gotoRoute(page, "users");
+          await searchUsers(page, email);
+          return userRow(page, email).count();
+        },
+        { timeout: 45000, intervals: [2000, 3000, 5000] },
+      )
+      .toBe(0);
     await expect(page.getByText("未找到用户")).toBeVisible();
   });
 });
