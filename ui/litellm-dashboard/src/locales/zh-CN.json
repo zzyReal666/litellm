@@ -3154,7 +3154,8 @@
     "updatedAt": "更新时间",
     "comingSoon": "即将推出",
     "copyField": "复制{{field}}",
-    "removing": "正在移除…"
+    "removing": "正在移除…",
+    "emptyValue": "暂无"
   },
   "publicModelHub": {
     "copiedToClipboard": "已复制到剪贴板！",
@@ -11936,7 +11937,8 @@
       "moreCount": "另有 {{count}} 个",
       "refreshModels": "刷新模型",
       "tabAutoRouters": "自动路由",
-      "tabModelAccessGroupBudgets": "模型访问组预算"
+      "tabModelAccessGroupBudgets": "模型访问组预算",
+      "tabDeployedModels": "已部署模型"
     },
     "allModelsTab": {
       "currentTeam": "当前团队：",

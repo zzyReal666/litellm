@@ -9,6 +9,7 @@ import { Copy, KeyRound, Layers, MoreHorizontal, Pencil, Trash2, Users } from "l
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell, SpendBudgetCell } from "@/components/shared/table_cells";
 import { buttonVariants } from "@/components/ui/button";
+import { NO_DEFAULT_MODELS } from "@/components/team/teamModelAccess";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,7 +41,10 @@ const RESOURCE_TONES: Record<"members" | "models" | "keys", ResourceTone> = {
 };
 
 const teamMemberCount = (team: Team): number => team.members_count ?? team.members_with_roles?.length ?? 0;
-const teamModelCount = (team: Team): number => team.models?.length ?? 0;
+export const effectiveTeamModels = (team: Team): string[] =>
+  (team.models ?? []).filter((model) => model !== NO_DEFAULT_MODELS);
+
+const teamModelCount = (team: Team): number => effectiveTeamModels(team).length;
 const teamKeyCount = (team: Team): number => team.keys_count ?? team.keys?.length ?? 0;
 
 function ResourcesCell({ team }: { team: Team }) {

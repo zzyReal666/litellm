@@ -447,3 +447,12 @@ describe("Request outcome", () => {
     expect(screen.queryByText("Failure")).not.toBeInTheDocument();
   });
 });
+
+describe("Empty text columns", () => {
+  it("renders a readable placeholder instead of a bare dash when metadata is missing", () => {
+    renderRows([logEntry({ request_id: "req-empty", metadata: undefined, end_user: undefined })]);
+
+    expect(screen.getAllByText(/暂无|None/).length).toBeGreaterThan(0);
+    expect(screen.queryByText("未知日期")).not.toBeInTheDocument();
+  });
+});

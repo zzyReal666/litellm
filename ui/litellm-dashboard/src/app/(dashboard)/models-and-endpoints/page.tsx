@@ -42,17 +42,19 @@ type ModelTabSlug =
 
 const BASE_TAB_KEY = "all-models";
 
-const TAB_LABELS: Record<ModelTabSlug, string> = {
-  add: "Add Model",
-  "auto-routers": "Auto-Routers",
-  "llm-credentials": "LLM Credentials",
-  "pass-through": "Pass-Through Endpoints",
-  health: "Health Status",
-  "retry-settings": "Model Retry Settings",
-  "model-group-alias": "Model Group Alias",
-  "access-group-budgets": "Model Access Group Budgets",
-  "price-data": "Price Data Reload",
-};
+const buildTabLabels = (t: (key: string, options?: Record<string, unknown>) => string): Record<ModelTabSlug, string> => ({
+  add: t("pages.modelsAndEndpoints.tabAddModel", { defaultValue: "Add Model" }),
+  "auto-routers": t("pages.modelsAndEndpoints.tabAutoRouters", { defaultValue: "Auto-Routers" }),
+  "llm-credentials": t("pages.modelsAndEndpoints.tabLLMCredentials", { defaultValue: "LLM Credentials" }),
+  "pass-through": t("pages.modelsAndEndpoints.tabPassThrough", { defaultValue: "Pass-Through Endpoints" }),
+  health: t("pages.modelsAndEndpoints.tabHealthStatus", { defaultValue: "Health Status" }),
+  "retry-settings": t("pages.modelsAndEndpoints.tabModelRetrySettings", { defaultValue: "Model Retry Settings" }),
+  "model-group-alias": t("pages.modelsAndEndpoints.tabModelGroupAlias", { defaultValue: "Model Group Alias" }),
+  "access-group-budgets": t("pages.modelsAndEndpoints.tabModelAccessGroupBudgets", {
+    defaultValue: "Model Access Group Budgets",
+  }),
+  "price-data": t("pages.modelsAndEndpoints.tabPriceDataReload", { defaultValue: "Price Data Reload" }),
+});
 
 const renderPanel = (key: string) => {
   switch (key) {
@@ -126,7 +128,10 @@ export default function ModelsAndEndpointsPage() {
     [canCreate, canViewAutoRouters, isAdmin, isViewOnly],
   );
 
-  const allModelsLabel = isAdmin ? "Deployed Models" : t("pages.modelsAndEndpoints.tabYourModels", { defaultValue: "Your Models" });
+  const TAB_LABELS = buildTabLabels(t);
+  const allModelsLabel = isAdmin
+    ? t("pages.modelsAndEndpoints.tabDeployedModels", { defaultValue: "Deployed Models" })
+    : t("pages.modelsAndEndpoints.tabYourModels", { defaultValue: "Your Models" });
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
     if (!slug) return allModelsLabel;
     if (slug === "auto-routers" || slug === "access-group-budgets") {

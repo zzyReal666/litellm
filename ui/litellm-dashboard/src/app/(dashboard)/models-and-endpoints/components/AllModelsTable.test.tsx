@@ -560,3 +560,16 @@ describe("AllModelsTable", () => {
     });
   });
 });
+
+describe("Model timestamps", () => {
+  it("falls back to a readable placeholder when neither updated nor created time is known", () => {
+    const model = makeModel({
+      model_name: "config-only-model",
+      model_info: { id: "model-config", created_at: undefined, updated_at: undefined, db_model: true },
+    });
+    render(<AllModelsTable {...baseProps} data={[model]} rowCount={1} />);
+
+    expect(screen.getAllByText(/暂无|None/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/未知日期|Unknown date/)).not.toBeInTheDocument();
+  });
+});

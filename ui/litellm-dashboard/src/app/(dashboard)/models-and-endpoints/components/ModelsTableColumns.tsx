@@ -191,7 +191,7 @@ function CreatedByCell({ model }: { model: ModelData }) {
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
   const primary = isConfigModel ? t("molecules.modelsColumns.definedInConfig", { defaultValue: "Defined in config" }) : model.model_info.created_by || t("common.unknown", { defaultValue: "Unknown" });
-  const secondaryForDbModel = createdAt ?? t("molecules.modelsColumns.unknownDate", { defaultValue: "Unknown date" });
+  const secondaryForDbModel = createdAt ?? t("common.emptyValue", { defaultValue: "暂无" });
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
@@ -452,7 +452,13 @@ export const getModelsTableColumns = ({
     enableSorting: true,
     size: 140,
     minSize: 100,
-    cell: ({ row }) => <DateCell value={row.original.model_info.updated_at} precision="date" />,
+    cell: ({ row }) => (
+    <DateCell
+      value={row.original.model_info.updated_at ?? row.original.model_info.created_at}
+      precision="date"
+      fallback={i18n.t("common.emptyValue", { defaultValue: "暂无" })}
+    />
+  ),
   },
   {
     id: COSTS_COLUMN_ID,

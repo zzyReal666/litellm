@@ -57,8 +57,12 @@ function RequestIdWithCallIdTooltip({ requestId, callId }: { requestId: string; 
 const getLogoUrl = (row: LogEntry, provider: string): string =>
   readMcpLogoUrl(row.metadata) ?? (provider ? getProviderLogoAndName(provider).logo : "");
 
+function emptyValue(): string {
+  return i18n.t("common.emptyValue", { defaultValue: "暂无" });
+}
+
 function TruncatedText({ value, tooltip }: { value: string | undefined; tooltip?: string }) {
-  const display = value ?? "-";
+  const display = value || emptyValue();
   return (
     <CellTooltip
       content={tooltip ?? display}
@@ -387,7 +391,7 @@ export const getRequestLogsTableColumns = ({
     meta: { skeleton: "chips" },
     cell: ({ row }) => {
       const tags = row.original.request_tags;
-      if (!tags || Object.keys(tags).length === 0) return "-";
+      if (!tags || Object.keys(tags).length === 0) return emptyValue();
 
       const tagEntries = Object.entries(tags);
       const [firstTagKey, firstTagValue] = tagEntries[0];

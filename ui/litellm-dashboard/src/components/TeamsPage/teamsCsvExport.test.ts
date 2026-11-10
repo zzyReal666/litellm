@@ -10,6 +10,7 @@ import {
   fetchAllTeams,
   TEAMS_EXPORT_PAGE_SIZE,
 } from "./teamsCsvExport";
+import { effectiveTeamModels } from "./teamTableColumns";
 
 const makeTeam = (overrides: Partial<Team>): Team =>
   ({
@@ -159,5 +160,17 @@ describe("buildTeamsCsv", () => {
     const [, row] = csv.split("\r\n");
     expect(row).toContain('"\'=SUM(A1:A9)"');
     expect(row).not.toContain("=SUM(A1:A9),");
+  });
+});
+
+describe("team models with no defaults", () => {
+  it("drops the no-default-models sentinel from the CSV models column", () => {
+    const [row] = buildTeamsCsvRows([makeTeam({ team_id: "team-empty", models: ["no-default-models"] })], []);
+    expect(row["Models"]).toBe("");
+  });
+
+  it("counts only real models for the resource column", () => {
+    expect(effectiveTeamModels(makeTeam({ models: ["no-default-models"] }))).toEqual([]);
+    expect(effectiveTeamModels(makeTeam({ models: ["no-default-models", "gpt-4o"] }))).toEqual(["gpt-4o"]);
   });
 });

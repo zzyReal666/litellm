@@ -3154,7 +3154,8 @@
     "updatedAt": "Updated At",
     "comingSoon": "Coming soon",
     "copyField": "Copy {{field}}",
-    "removing": "Removing…"
+    "removing": "Removing…",
+    "emptyValue": "None"
   },
   "publicModelHub": {
     "copiedToClipboard": "Copied to clipboard!",
@@ -11911,7 +11912,8 @@
       "moreCount": "+{{count}} more",
       "refreshModels": "Refresh models",
       "tabAutoRouters": "Auto-Routers",
-      "tabModelAccessGroupBudgets": "Model Access Group Budgets"
+      "tabModelAccessGroupBudgets": "Model Access Group Budgets",
+      "tabDeployedModels": "Deployed Models"
     },
     "allModelsTab": {
       "currentTeam": "Current Team:",

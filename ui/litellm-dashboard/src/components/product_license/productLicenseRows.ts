@@ -20,7 +20,7 @@ export const buildLicenseRows = (info: ProductLicenseInfo): LicenseRow[] => [
     ? [{ label: "产品序列号", value: formatLicenseValue(info.serial_number) }]
     : []),
   ...(info.device_serial
-    ? [{ label: "设备序列号", value: formatLicenseValue(info.device_serial) }]
+    ? [{ label: "设备序列号（授权文件）", value: formatLicenseValue(info.device_serial) }]
     : []),
   { label: "授权状态", value: formatLicenseValue(info.status) },
   { label: "有效期", value: formatLicenseValue(info.time) },

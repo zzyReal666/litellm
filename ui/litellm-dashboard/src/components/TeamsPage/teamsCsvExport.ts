@@ -3,6 +3,7 @@ import Papa from "papaparse";
 import { TeamListCallOptions, TeamsResponse, teamListCall } from "@/app/(dashboard)/hooks/teams/useTeams";
 
 import { Team } from "../key_team_helpers/key_list";
+import { effectiveTeamModels } from "./teamTableColumns";
 import { apiClient } from "../networking";
 
 export interface TeamMemberBudget {
@@ -50,7 +51,7 @@ export const buildTeamsCsvRows = (
       "Team Alias": cell(team.team_alias),
       "Team ID": cell(team.team_id),
       "Organization ID": cell(team.organization_id),
-      Models: (team.models ?? []).join(", "),
+      Models: effectiveTeamModels(team).join(", "),
       "Max Budget (CNY)": cell(team.max_budget),
       "Budget Duration": cell(team.budget_duration),
       "Budget Reset At": cell(team.budget_reset_at),
