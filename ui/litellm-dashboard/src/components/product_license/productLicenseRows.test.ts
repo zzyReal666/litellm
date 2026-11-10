@@ -42,7 +42,6 @@ describe("buildLicenseRows", () => {
       "产品名称",
       "产品版本",
       "机器码",
-      "产品序列号",
       "设备序列号",
       "授权状态",
       "有效期",
@@ -53,15 +52,9 @@ describe("buildLicenseRows", () => {
       "用户描述",
       "授权文件",
     ]);
-    expect(rows.find((row) => row.label === "产品序列号")?.value).toBe("AAAA-BBBB-CCCC-DDDD");
     expect(rows.find((row) => row.label === "机器码")?.value).toBe("0000-0000-0000-0000");
     expect(rows.find((row) => row.label === "设备序列号")?.value).toBe("DEV-0001");
     expect(rows.find((row) => row.label === "有效期")?.value).toBe("长期有效");
-  });
-
-  it("omits the serial number row when the response carries none", () => {
-    const rows = buildLicenseRows({ ...licenseInfo, serial_number: null as unknown as string });
-    expect(rows.map((row) => row.label)).not.toContain("产品序列号");
   });
 
   it("falls back to 暂无信息 for missing optional fields", () => {
