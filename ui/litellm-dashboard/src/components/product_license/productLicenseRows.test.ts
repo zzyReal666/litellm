@@ -43,7 +43,7 @@ describe("buildLicenseRows", () => {
       "产品版本",
       "机器码",
       "产品序列号",
-      "设备序列号（授权文件）",
+      "设备序列号",
       "授权状态",
       "有效期",
       "授权日期",
@@ -55,7 +55,7 @@ describe("buildLicenseRows", () => {
     ]);
     expect(rows.find((row) => row.label === "产品序列号")?.value).toBe("AAAA-BBBB-CCCC-DDDD");
     expect(rows.find((row) => row.label === "机器码")?.value).toBe("0000-0000-0000-0000");
-    expect(rows.find((row) => row.label === "设备序列号（授权文件）")?.value).toBe("DEV-0001");
+    expect(rows.find((row) => row.label === "设备序列号")?.value).toBe("DEV-0001");
     expect(rows.find((row) => row.label === "有效期")?.value).toBe("长期有效");
   });
 
@@ -81,13 +81,13 @@ describe("buildLicenseRows", () => {
 describe("buildLicenseRows device serial", () => {
   it("omits the device serial row when the license carries none", () => {
     const rows = buildLicenseRows({ ...licenseInfo, device_serial: null });
-    expect(rows.map((row) => row.label)).not.toContain("设备序列号（授权文件）");
+    expect(rows.map((row) => row.label)).not.toContain("设备序列号");
     expect(rows.map((row) => row.label)).toEqual(expect.arrayContaining(["机器码"]));
   });
 
   it("shows the device serial from the license when present", () => {
     const rows = buildLicenseRows({ ...licenseInfo, device_serial: "DEV-0001" });
-    const row = rows.find((item) => item.label === "设备序列号（授权文件）");
+    const row = rows.find((item) => item.label === "设备序列号");
     expect(row?.value).toBe("DEV-0001");
   });
 });

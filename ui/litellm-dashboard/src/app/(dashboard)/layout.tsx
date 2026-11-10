@@ -16,7 +16,6 @@ import { EnvCredentialLoginWarningBanner } from "@/components/EnvCredentialLogin
 import { LicenseExpiryBanner } from "@/components/LicenseExpiryBanner";
 import { UserBanner } from "@/components/UserBanner";
 import { LiteAdminFrame } from "@/components/liteadmin/LiteAdmin";
-import { UpgradeBanner } from "@/components/UpgradeBanner";
 import { routeSegmentForPathname, uiHref } from "@/utils/uiHref";
 import { PluginModeProvider, usePluginMode } from "@/contexts/PluginModeContext";
 import { createApiClient } from "@/lib/http/client";
@@ -144,7 +143,6 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         <EnvCredentialLoginWarningBanner accessToken={accessToken} />
         <LicenseExpiryBanner accessToken={accessToken} />
         <UserBanner accessToken={accessToken} />
-        <UpgradeBanner accessToken={accessToken} />
         <main className="flex min-h-0 flex-1 overflow-hidden">
           <AgentControlPlaneView />
         </main>
@@ -197,8 +195,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
             <EnvCredentialLoginWarningBanner accessToken={accessToken} />
             <LicenseExpiryBanner accessToken={accessToken} />
             <UserBanner accessToken={accessToken} />
-            <UpgradeBanner accessToken={accessToken} />
-            <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">{children}</main>
+                <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">{children}</main>
           </div>
         </CommandPaletteProvider>
       </LiteAdminFrame>
