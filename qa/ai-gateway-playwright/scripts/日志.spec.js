@@ -31,6 +31,10 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
 
   await test.step("2. 校验请求日志表格列", async () => {
     const panel = page.getByRole("tabpanel", { name: "请求日志" });
+    await panel.getByRole("button", { name: /^最近 24 小时$/ }).click();
+    const rangePopover = page.locator("[data-slot='popover-content']");
+    await rangePopover.getByRole("button", { name: "最近 7 天", exact: true }).click();
+    await expect(panel.getByRole("button", { name: /^最近 7 天$/ })).toBeVisible();
     await expect(panel.locator("table:visible").first().locator("tbody tr:visible").first()).toBeVisible();
     const headers = (await panel.locator("thead th:visible").allInnerTexts()).map((text) => text.trim());
     expect(headers).toEqual(REQUEST_LOG_COLUMNS);
@@ -61,7 +65,7 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
 
   await test.step("4. 校验时间范围快捷筛选", async () => {
     const panel = page.getByRole("tabpanel", { name: "请求日志" });
-    const rangeButton = panel.getByRole("button", { name: /^最近 24 小时$/ });
+    const rangeButton = panel.getByRole("button", { name: /^最近 7 天$/ });
     await rangeButton.click();
     const popover = page.locator("[data-slot='popover-content']");
     await expect(popover).toBeVisible();
