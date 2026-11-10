@@ -179,6 +179,10 @@ test("团队管理：创建团队并展示在我的团队列表", async ({ page 
 
   await test.step("5. 搜索命中并校验列表行展示团队名称与 ID", async () => {
     await searchTeams(page, alias);
+    const resourceRow = teamRow(page, alias);
+    await expect(resourceRow).toBeVisible();
+    await expect(resourceRow.locator('[title$="个模型"]')).toHaveAttribute("title", /^0 /);
+    await searchTeams(page, alias);
     const row = teamRow(page, alias);
     await expect(row).toBeVisible();
     await expect(row).toContainText(alias);

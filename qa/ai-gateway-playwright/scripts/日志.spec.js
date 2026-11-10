@@ -41,10 +41,13 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
     const panel = page.getByRole("tabpanel", { name: "请求日志" });
     const table = panel.locator("table:visible").first();
     const timeColumn = REQUEST_LOG_COLUMNS.indexOf("时间");
-    const timeCell = (await panel.locator("table:visible").first().locator("tbody tr:visible").first().locator("td").allInnerTexts())[timeColumn].trim();
-    expect(timeCell).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
-    const idColumn = REQUEST_LOG_COLUMNS.indexOf("请求 ID");
     const firstRowCells = (await table.locator("tbody tr:visible").first().locator("td").allInnerTexts()).map((text) => text.trim());
+    expect(firstRowCells[timeColumn]).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
+    for (const column of ["团队名称", "内部用户", "终端用户", "标签"]) {
+      const index = REQUEST_LOG_COLUMNS.indexOf(column);
+      expect(firstRowCells[index], `${column}列不应显示裸短横线`).not.toBe("-");
+    }
+    const idColumn = REQUEST_LOG_COLUMNS.indexOf("请求 ID");
     const requestId = firstRowCells[idColumn];
     expect(requestId).toMatch(/^[0-9a-f-]{8,}$/);
     const search = panel.getByPlaceholder("Search logs by ID…");

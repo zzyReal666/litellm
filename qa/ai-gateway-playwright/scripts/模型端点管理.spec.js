@@ -2,21 +2,21 @@ import { expect, test } from "@playwright/test";
 import { gotoRoute, login, uniqueName, waitForToast } from "./helpers.js";
 
 const MODEL_TABS = [
-  "Deployed Models",
-  "Add Model",
-  "LLM Credentials",
-  "Pass-Through Endpoints",
-  "Health Status",
-  "Model Retry Settings",
-  "Model Group Alias",
+  "已部署模型",
+  "添加模型",
+  "LLM 凭证",
+  "透传端点",
+  "健康状态",
+  "模型重试设置",
+  "模型组别名",
 ];
 
 const MODEL_HEADERS = ["模型 ID", "模型信息", "凭据", "创建者", "更新时间", "费用", "团队 ID", "模型访问组", "操作"];
 
 const SUB_PAGE_MARKERS = {
-  "LLM Credentials": "添加凭据",
-  "Health Status": "运行所有检查",
-  "Model Group Alias": "添加别名",
+  "LLM 凭证": "添加凭据",
+  "健康状态": "运行所有检查",
+  "模型组别名": "添加别名",
 };
 
 async function deleteModelIfPresent(page, modelName) {
@@ -44,14 +44,14 @@ test("模型端点管理：列表展示、添加自定义模型与删除闭环",
       }
     });
 
-    await test.step("2. 校验 Deployed Models 表格列头", async () => {
+    await test.step("2. 校验已部署模型表格列头", async () => {
       for (const header of MODEL_HEADERS) {
         await expect(page.getByRole("columnheader", { name: header })).toBeVisible();
       }
     });
 
-    await test.step("3. 打开 Add Model 并校验空表单提示", async () => {
-      await page.getByRole("tab", { name: "Add Model", exact: true }).click();
+    await test.step("3. 打开添加模型并校验空表单提示", async () => {
+      await page.getByRole("tab", { name: "添加模型", exact: true }).click();
       await expect(page.getByRole("combobox", { name: "提供商" })).toBeVisible();
       await expect(page.locator("label").filter({ hasText: "网关模型名称" })).toBeVisible();
       await expect(page.locator("label").filter({ hasText: "模型映射" })).toBeVisible();
@@ -83,13 +83,14 @@ test("模型端点管理：列表展示、添加自定义模型与删除闭环",
       await page.getByRole("button", { name: "添加模型", exact: true }).click();
 
       await waitForToast(page, modelName);
-      await page.getByRole("tab", { name: "Deployed Models", exact: true }).click();
+      await page.getByRole("tab", { name: "已部署模型", exact: true }).click();
       const row = page.locator("tbody tr").filter({ hasText: modelName }).first();
       await expect(row).toBeVisible();
       await expect(row).toContainText(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
+    await expect(row).not.toContainText("未知日期");
     });
 
-    await test.step("5. 切换 LLM Credentials、Health Status、Model Group Alias 子页签", async () => {
+    await test.step("5. 切换 LLM 凭证、健康状态、模型组别名子页签", async () => {
       for (const [tab, marker] of Object.entries(SUB_PAGE_MARKERS)) {
         await page.getByRole("tab", { name: tab, exact: true }).click();
         await expect(page.getByRole("button", { name: marker, exact: true })).toBeVisible();
@@ -97,7 +98,7 @@ test("模型端点管理：列表展示、添加自定义模型与删除闭环",
     });
 
     await test.step("6. 删除模型并校验列表清除", async () => {
-      await page.getByRole("tab", { name: "Deployed Models", exact: true }).click();
+      await page.getByRole("tab", { name: "已部署模型", exact: true }).click();
       const row = page.locator("tbody tr").filter({ hasText: modelName }).first();
       await expect(row).toBeVisible();
       await row.getByRole("button", { name: "删除模型" }).click();
