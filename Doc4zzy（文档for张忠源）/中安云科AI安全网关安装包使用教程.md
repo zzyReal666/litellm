@@ -16,7 +16,7 @@
 | --- | --- |
 | 操作系统 | Linux x86_64，使用 systemd（麒麟 V10、CentOS 7 以上、Ubuntu 18.04 以上均可） |
 | CPU 与内存 | 2 核 4 GiB 起，建议 4 核 8 GiB |
-| 磁盘 | 至少 20 GiB 可用空间，安装包约 1.3 GiB，镜像展开约 3.5 GiB |
+| 磁盘 | 至少 20 GiB 可用空间，安装包约 1.4 GiB，解压后约 3.8 GiB，镜像加载占用约 2.3 GiB |
 | 权限 | root，或具备 sudo 权限的账号 |
 | 网络 | 无需外网，管理界面与模型调用走内网即可 |
 | 端口 | 默认占用 443 HTTPS 管理界面、80 HTTP 跳转、9090 监控；4000 网关、5432、6379、8787 仅本机回环 |
@@ -25,20 +25,44 @@
 
 ### 1.2 安装包结构
 
+解压后的安装包目录如下，文件名与层级和实际包一致。
+
 | 路径 | 说明 |
 | --- | --- |
 | `install.sh` | 安装入口，不带参数为交互式向导 |
-| `litellm` | 安装后的运维入口，提供启停、状态、日志、备份等命令 |
+| `litellm` | 安装完成后的运维入口，提供启停、状态、日志、备份等命令 |
 | `uninstall.sh` | 卸载脚本，支持保留数据、清空数据、完全卸载三种模式 |
-| `docker-compose.yml` | 容器编排定义，含授权状态持久化挂载 |
-| `images/*.tar` | 六个容器镜像（网关、nginx、压缩服务、数据库、缓存、监控），docker load 即可 |
-| `config/nginx.conf` | HTTPS 反向代理配置，启用 HTTPS 时使用 |
-| `vendor/docker/` | Docker 26.0.1 静态二进制与 systemd 配置 |
-| `bin/docker-compose` | Compose v2 静态二进制，目标机无需安装插件 |
+| `docker-compose.yml` | 容器编排定义，含授权状态与证书目录挂载 |
+| `prometheus.yml` | Prometheus 指标采集配置 |
 | `config/config.yaml` | 模型存库模式的配置 |
-| `scripts/` | 启动、停止、状态、备份恢复、模型初始化等脚本 |
-| `certs/` | 启用 HTTPS 后存放证书与私钥，安装时自动生成或按参数导入 |
+| `config/nginx.conf` | HTTPS 反向代理配置，启用 HTTPS 时挂载给 nginx 容器 |
+| `images/` | 六个容器镜像 tar 包：网关、nginx、压缩服务、数据库、缓存、监控 |
+| `scripts/` | 启动、停止、状态、备份恢复、模型初始化、创建管理员等运维脚本 |
+| `bin/docker-compose` | Compose v2 静态二进制，目标机无需安装插件 |
+| `vendor/docker/` | Docker 26.0.1 静态二进制与 systemd 配置 |
+| `assets/` | 界面 Logo 与浏览器图标，含 `logo.png` 与 `favicon.png` |
+| `.env.example` | 环境变量模板，安装时据此生成 `.env` |
 | `README-安装说明.md` | 随包说明，与本教程互为补充 |
+
+安装包里没有 `certs` 目录，这是正常的。证书在安装过程中启用 HTTPS 时才生成，位置在安装目录下，见下一节。
+
+### 1.3 安装后的目录结构
+
+安装完成后，安装目录（默认 `/opt/litellm`）比安装包多出运行所需的数据与配置。
+
+| 路径 | 说明 |
+| --- | --- |
+| `.env` | 运行配置与密钥，权限 600，含管理员账号、主密钥、数据库密码、HTTPS 端口 |
+| `certs/` | 启用 HTTPS 时的证书与私钥，`server.crt` 与 `server.key`；未启用 HTTPS 时不生成 |
+| `config/` | `config.yaml` 与 `nginx.conf` |
+| `data/` | 持久化数据，含 `postgres`、`redis`、`prometheus`、`headroom`、`license` 五个子目录 |
+| `backups/` | `litellm backup` 生成的数据库备份 |
+| `assets/` | 界面 Logo，可替换为自己的图片后重启生效 |
+| `images/` | 空目录，镜像加载后不保留 tar 文件 |
+| `scripts/`、`bin/`、`vendor/` | 运维脚本与内置工具，与安装包一致 |
+| `litellm`、`uninstall.sh`、`docker-compose.yml` | 运维、卸载与编排入口，与安装包一致 |
+
+卸载时 `--purge` 与 `--all` 会删除 `data/`、`certs/` 与 `.env`，需要保留授权与证书时请先备份。
 
 ## 2 安装前准备
 
@@ -60,7 +84,7 @@ cd /opt/litellm-offline-v1.106.0-zh.*
 
 ![解压安装包并查看目录结构](./安装包使用教程-截图/01-extract.png)
 
-如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar xzf litellm-offline-v1.106.0-zh.25.tar.gz -C /data`。解压后的目录约 3.5 GiB，请确认目标分区有足够空间。
+如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar xzf litellm-offline-v1.106.0-zh.25.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
 
 ### 2.1 端口占用检查
 
