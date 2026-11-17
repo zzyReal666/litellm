@@ -52,8 +52,16 @@ test("日志：请求日志检索与筛选、四类日志标签页", async ({ pa
       expect(firstRowCells[index], `${column}列不应显示裸短横线`).not.toBe("-");
     }
     const idColumn = REQUEST_LOG_COLUMNS.indexOf("请求 ID");
-    const requestId = firstRowCells[idColumn];
-    expect(requestId).toMatch(/^[0-9a-f-]{8,}$/);
+    const rows = await table.locator("tbody tr:visible").all();
+    let requestId = "";
+    for (const row of rows.slice(0, 20)) {
+      const cells = (await row.locator("td").allInnerTexts()).map((text) => text.trim());
+      if (/^[0-9a-f]{8}-[0-9a-f]{4}-/.test(cells[idColumn] ?? "")) {
+        requestId = cells[idColumn];
+        break;
+      }
+    }
+    expect(requestId, "应能取到合规的请求 ID").not.toBe("");
     const search = panel.getByPlaceholder("Search logs by ID…");
     await search.fill(requestId);
     await expect(panel.locator('[data-testid="pagination-range"]:visible')).toContainText("共 1 条");

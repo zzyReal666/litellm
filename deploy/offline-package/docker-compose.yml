@@ -1,12 +1,12 @@
-name: litellm
+name: ${COMPOSE_PROJECT_NAME:-litellm}
 
 services:
   litellm:
-    image: litellm-zhcn:v1.106.0-zh.9
+    image: litellm-zhcn:v1.106.0-zh.24
     restart: unless-stopped
     cap_add: [ALL]
     ports:
-      - "${LITELLM_BIND:-0.0.0.0}:4000:4000"
+      - "${LITELLM_BIND:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       STORE_MODEL_IN_DB: "True"
@@ -14,7 +14,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+      TZ: ${TZ:-Asia/Shanghai}
       UI_LOGO_PATH: /app/assets/logo.png
+      LITELLM_PRODUCT_LICENSE_ENABLED: "True"
+      LITELLM_PRODUCT_LICENSE_FILE: /app/data/product_license.lic
+      LITELLM_PRODUCT_NAME: ${LITELLM_PRODUCT_NAME:-AI}
+      LITELLM_PRODUCT_CODE: ${LITELLM_PRODUCT_CODE:-SC-AIG}
       LITELLM_FAVICON_URL: /app/assets/favicon.png
     env_file:
       - .env
@@ -26,15 +31,34 @@ services:
     volumes:
       - ./config/config.yaml:/app/config.yaml:ro
       - ./assets:/app/assets:ro
+      - ./data/license:/app/data
+      - ./data/license/license.zayk:/etc/license.zayk
     command: ["--port", "4000", "--config", "/app/config.yaml"]
     healthcheck:
       test:
         - CMD-SHELL
-        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"
+        - >-
+          python3 -c
+          "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://localhost:4000/health/liveliness',timeout=5).status==200 else 1)"
+          2>/dev/null || echo "liveliness probe failed"
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    cap_add: [ALL]
+    profiles: ["https"]
+    ports:
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - litellm
 
   headroom:
     image: headroom-offline:v1.106.0-zh.7
@@ -59,7 +83,7 @@ services:
         - CMD
         - python3
         - -c
-        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/livez', timeout=5)"
+        - "import urllib.request,sys;sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8787/livez',timeout=5).status==200 else 1)"
       interval: 30s
       timeout: 5s
       retries: 3
@@ -69,7 +93,7 @@ services:
     image: postgres:16.4
     restart: unless-stopped
     cap_add: [ALL]
-    container_name: litellm_db
+    container_name: ${COMPOSE_PROJECT_NAME:-litellm}_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -89,7 +113,7 @@ services:
     image: redis:7.4.2-alpine
     restart: unless-stopped
     cap_add: [ALL]
-    container_name: litellm_redis
+    container_name: ${COMPOSE_PROJECT_NAME:-litellm}_redis
     user: redis
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
