@@ -263,7 +263,7 @@ if [[ "${ARGS_GIVEN}" -eq 0 ]] && [[ "${ASSUME_YES}" -eq 0 ]]; then
   else
     log "  管理界面     http://<本机IP>:${LITELLM_PORT}/ui"
   fi
-  log "  HTTPS 访问   $([[ "${ENABLE_HTTPS}" -eq 1 ]] && echo "启用（443 端口，80 跳转）" || echo "未启用")"
+  log "  HTTPS 访问   $([[ "${ENABLE_HTTPS}" -eq 1 ]] && echo "启用（${HTTPS_PORT} 端口，${HTTP_PORT} 跳转）" || echo "未启用")"
   log "  管理账号     ${UI_USERNAME}"
   log "  监控指标     http://<本机IP>:${PROMETHEUS_PORT}"
   log "  加载镜像     $([[ "${SKIP_IMAGES}" -eq 1 ]] && echo 跳过 || echo 从安装包加载)"
