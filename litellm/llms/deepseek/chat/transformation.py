@@ -213,16 +213,20 @@ class DeepSeekChatConfig(OpenAIGPTConfig):
 
     def _thinking_mode_active(self, model: str, optional_params: dict) -> bool:
         """
-        Returns True only when thinking mode is actually active for this request:
+        Returns True when thinking mode can be active for this request:
           - model supports reasoning (capability check)
-          - user explicitly passed thinking={"type": "enabled"} (opt-in check)
+          - the request did not explicitly disable thinking
+
+        Omitting the `thinking` param leaves thinking on for DeepSeek models
+        that default to it, so absence must be treated as active. Clients that
+        send `{"type": "disabled"}` opt out and never get placeholders.
         """
         thinking: Final = optional_params.get("thinking")
-        return (
-            supports_reasoning(model=model, custom_llm_provider="deepseek")
-            and isinstance(thinking, dict)
-            and thinking.get("type") == "enabled"
-        )
+        if not supports_reasoning(model=model, custom_llm_provider="deepseek"):
+            return False
+        if isinstance(thinking, dict):
+            return thinking.get("type") != "disabled"
+        return True
 
     @staticmethod
     def _drop_unsupported_tools(optional_params: dict) -> dict:
@@ -305,10 +309,10 @@ class DeepSeekChatConfig(OpenAIGPTConfig):
         Ensures `reasoning_content` is forwarded on assistant messages for
         multi-turn thinking-mode conversations (issue #28045).
 
-        Only runs when thinking mode is actually active - guarded by both
-        supports_reasoning() (model capability) and optional_params["thinking"]
-        (user explicitly enabled it), preventing spurious injection on models
-        like deepseek-v3.2 that support thinking as opt-in but not always-on.
+        Runs whenever thinking can be active: the model supports reasoning and
+        the request did not send thinking={"type": "disabled"}. Omitting the
+        param keeps thinking on for DeepSeek models that default to it, so the
+        fill must not require an explicit opt-in.
         """
         optional_params = self._drop_unsupported_tools(optional_params)
         if self._thinking_mode_active(model=model, optional_params=optional_params):
