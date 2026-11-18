@@ -30,10 +30,14 @@ export default function UsageStatStrip({
     <div className="grid grid-cols-1 overflow-hidden rounded-xl border bg-card sm:grid-cols-2 lg:grid-cols-4 lg:divide-x">
       <StatCell trend={<Sparkline data={daily} dataKey="spend" color={BRAND} className="h-14" />}>
         <Stat
-          label="Spend"
+          label={i18n.t("usageStatStrip.spend", { defaultValue: "Spend" })}
           value={formatUsd(totals.spend)}
           pending={loading}
-          hint={budget ? `of ${formatUsd(budget)} budget` : "No budget set"}
+          hint={
+            budget
+              ? i18n.t("usageStatStrip.ofBudget", { defaultValue: "of {{amount}} budget", amount: formatUsd(budget) })
+              : i18n.t("usageStatStrip.noBudget", { defaultValue: "No budget set" })
+          }
         />
       </StatCell>
       <StatCell trend={<Sparkline data={daily} dataKey="requests" color={BRAND} className="h-14" />}>
@@ -41,13 +45,14 @@ export default function UsageStatStrip({
         {!requestCountsPending && (
           <div className="mt-0.5 flex gap-3 text-xs leading-4 text-muted-foreground">
             <span>
-              <span className="text-success tabular-nums">{totals.successful.toLocaleString()}</span> ok
+              <span className="text-success tabular-nums">{totals.successful.toLocaleString()}</span>{" "}
+              {i18n.t("usageStatStrip.ok", { defaultValue: "ok" })}
             </span>
             <span>
               <span className={totals.failed > 0 ? "text-destructive tabular-nums" : "tabular-nums"}>
                 {totals.failed.toLocaleString()}
               </span>{" "}
-              failed
+              {i18n.t("usageStatStrip.failed", { defaultValue: "failed" })}
             </span>
           </div>
         )}
@@ -56,9 +61,16 @@ export default function UsageStatStrip({
         <Stat
           label={i18n.t("usageStatStrip.total-tokens", { defaultValue: "Total Tokens" })}
           value={loading ? null : formatCompact(totals.tokens)}
-          exact={`${totals.tokens.toLocaleString()} tokens`}
+          exact={i18n.t("usageStatStrip.tokensExact", { defaultValue: "{{count}} tokens", count: totals.tokens.toLocaleString() })}
           pending={loading}
-          hint={loading ? undefined : `${formatCompact(totals.cacheReadTokens)} cache read`}
+          hint={
+            loading
+              ? undefined
+              : i18n.t("usageStatStrip.cacheRead", {
+                  defaultValue: "{{count}} cache read",
+                  count: formatCompact(totals.cacheReadTokens),
+                })
+          }
         />
       </StatCell>
       <StatCell>
@@ -68,7 +80,14 @@ export default function UsageStatStrip({
             label={i18n.t("usageStatStrip.avg-latency", { defaultValue: "Avg latency" })}
             value={totals.avgLatencyMs === null ? "—" : formatLatency(totals.avgLatencyMs)}
             pending={loading}
-            hint={totals.successRate === null ? undefined : `${totals.successRate.toFixed(1)}% success rate`}
+            hint={
+              totals.successRate === null
+                ? undefined
+                : i18n.t("usageStatStrip.successRate", {
+                    defaultValue: "{{rate}}% success rate",
+                    rate: totals.successRate.toFixed(1),
+                  })
+            }
           />
         </div>
       </StatCell>

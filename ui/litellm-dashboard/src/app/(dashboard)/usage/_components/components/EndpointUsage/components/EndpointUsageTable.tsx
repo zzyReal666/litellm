@@ -123,7 +123,10 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       title={t("usagePage.endpointUsageTable.colEndpoint", { defaultValue: "Endpoints" })}
       action={
         <span className="text-xs text-muted-foreground tabular-nums">
-          {dataSource.length.toLocaleString()} {dataSource.length === 1 ? "endpoint" : "endpoints"}
+          {t("usagePage.endpointUsageTable.countEndpoints", {
+            defaultValue: "{{count}} endpoints",
+            count: dataSource.length.toLocaleString(),
+          })}
         </span>
       }
     >

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import i18n from "@/lib/i18n";
 import type { TooltipContentProps, TooltipValueType } from "recharts";
 
 export type ChartTooltipProps = Pick<
@@ -10,13 +11,29 @@ export type ChartTooltipProps = Pick<
 
 export type ChartTooltipComponent = React.ComponentType<ChartTooltipProps>;
 
-export const formatCategoryName = (name: string): string =>
-  name
+const CATEGORY_KEYS: Readonly<Record<string, string>> = {
+  "metrics.prompt_tokens": "chartsCategory.promptTokens",
+  "metrics.completion_tokens": "chartsCategory.completionTokens",
+  "metrics.total_tokens": "chartsCategory.totalTokens",
+  "metrics.successful_requests": "chartsCategory.successfulRequests",
+  "metrics.failed_requests": "chartsCategory.failedRequests",
+  "metrics.cache_read_input_tokens": "chartsCategory.cacheReadInputTokens",
+  "metrics.cache_creation_input_tokens": "chartsCategory.cacheCreationInputTokens",
+  "metrics.spend": "chartsCategory.spend",
+  "metrics.api_requests": "chartsCategory.apiRequests",
+  "metrics.avg_response_time_ms": "chartsCategory.avgResponseTimeMs",
+};
+
+export const formatCategoryName = (name: string): string => {
+  const humanized = name
     .replace("metrics.", "")
     .replace(/_/g, " ")
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+  const key = CATEGORY_KEYS[name];
+  return key ? i18n.t(key, { defaultValue: humanized }) : humanized;
+};
 
 export const ValueTooltip = ({
   active,

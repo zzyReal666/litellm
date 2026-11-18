@@ -37,14 +37,15 @@ interface UsageOverviewProps {
   providerBreakdown: ReactNode;
 }
 
-const METRIC_NOUN: Record<UsageMetric, string> = { spend: "spend", tokens: "tokens", requests: "requests" };
+const metricNoun = (metric: UsageMetric): string =>
+  i18n.t(`usageCommon.${metric}`, { defaultValue: metric });
 const GRANULARITY_OPTIONS = [
-  { value: "day", label: "Daily" },
-  { value: "week", label: "Weekly" },
+  { value: "day", label: i18n.t("usageCommon.daily", { defaultValue: "Daily" }) },
+  { value: "week", label: i18n.t("usageCommon.weekly", { defaultValue: "Weekly" }) },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
-  { value: "linear", label: "Linear" },
-  { value: "log", label: "Log" },
+  { value: "linear", label: i18n.t("usageCommon.linear", { defaultValue: "Linear" }) },
+  { value: "log", label: i18n.t("usageCommon.log", { defaultValue: "Log" }) },
 ] as const satisfies readonly { value: StackedUsageScale; label: string }[];
 
 export default function UsageOverview({
@@ -78,7 +79,14 @@ export default function UsageOverview({
 
       <Panel
         title={i18n.t("usageOverview.top-models", { defaultValue: "Top models" })}
-        subtitle={`${granularity === "day" ? "Daily" : "Weekly"} ${METRIC_NOUN[state.metric]}, top 8 stacked`}
+        subtitle={i18n.t("usageOverview.stackedSubtitle", {
+          defaultValue: "{{granularity}} {{metric}}, top 8 stacked",
+          granularity:
+            granularity === "day"
+              ? i18n.t("usageCommon.daily", { defaultValue: "Daily" })
+              : i18n.t("usageCommon.weekly", { defaultValue: "Weekly" }),
+          metric: metricNoun(state.metric),
+        })}
         action={
           <>
             <BreakdownControls state={state} onChange={setState} showDimension={false} />
@@ -88,7 +96,12 @@ export default function UsageOverview({
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
             />
-            <Segmented label="Scale" value={scale} options={SCALE_OPTIONS} onChange={setScale} />
+            <Segmented
+              label={i18n.t("usageCommon.scale", { defaultValue: "Scale" })}
+              value={scale}
+              options={SCALE_OPTIONS}
+              onChange={setScale}
+            />
           </>
         }
         bodyClassName="px-0 pt-4 pb-0"

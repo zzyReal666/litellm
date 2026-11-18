@@ -50,9 +50,13 @@ import TeamUserSpendCard from "./TeamUserSpendCard";
 import { ProviderSpendBreakdown } from "./SpendByProvider";
 
 const BRAND = "#2b3fd6";
-const FLAT_COST_SERIES = "Flat cost";
+const flatCostSeriesLabel = (): string => i18n.t("usageCommon.flatCost", { defaultValue: "Flat cost" });
 const FLAT_COST_COLOR = "#8b5cf6";
-const METRIC_TITLE: Record<UsageMetric, string> = { spend: i18n.t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }), tokens: i18n.t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }), requests: "Requests" };
+const METRIC_TITLE: Record<UsageMetric, string> = {
+  spend: i18n.t("usagePage.entityUsage.colSpend", { defaultValue: "Spend" }),
+  tokens: i18n.t("usagePage.entityUsage.colTokens", { defaultValue: "Tokens" }),
+  requests: i18n.t("usagePage.entityUsage.colRequests", { defaultValue: "Requests" }),
+};
 /** Summary tiles that carry a sparkline, keyed by tile title, valued by the dailyTotals field. */
 const TILE_TRENDS: Readonly<Record<string, string>> = {
   "Total Spend": "spend",
@@ -61,12 +65,12 @@ const TILE_TRENDS: Readonly<Record<string, string>> = {
   "Total Tokens": "tokens",
 };
 const GRANULARITY_OPTIONS = [
-  { value: "day", label: "Daily" },
-  { value: "week", label: "Weekly" },
+  { value: "day", label: i18n.t("usageCommon.daily", { defaultValue: "Daily" }) },
+  { value: "week", label: i18n.t("usageCommon.weekly", { defaultValue: "Weekly" }) },
 ] as const satisfies readonly { value: Granularity; label: string }[];
 const SCALE_OPTIONS = [
-  { value: "linear", label: "Linear" },
-  { value: "log", label: "Log" },
+  { value: "linear", label: i18n.t("usageCommon.linear", { defaultValue: "Linear" }) },
+  { value: "log", label: i18n.t("usageCommon.log", { defaultValue: "Log" }) },
 ] as const satisfies readonly { value: StackedUsageScale; label: string }[];
 const QUIET_HEADER = { headerClassName: "font-normal" };
 const FLAT_COST_KEY = "flat_cost";
@@ -77,7 +81,7 @@ const withFlatCost = (series: Series, results: readonly DailyData[]): Series => 
   return {
     data: series.data.map((day) => ({ ...day, [FLAT_COST_KEY]: flatByDate.get(day.date) ?? 0 })),
     keys: [...series.keys, FLAT_COST_KEY],
-    labels: [...series.labels, FLAT_COST_SERIES],
+    labels: [...series.labels, flatCostSeriesLabel()],
     colors: [...series.colors, FLAT_COST_COLOR],
   };
 };
@@ -366,7 +370,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         cell: ({ row }) => <span className="font-medium text-foreground">{row.original.metadata.alias}</span>,
       },
       {
-        header: "Share",
+        header: i18n.t("usagePage.entityUsage.colShare", { defaultValue: "Share" }),
         id: "share",
         meta: { ...QUIET_HEADER, className: "w-40" },
         cell: ({ row }) => <ShareBar value={row.original.metrics.spend} max={maxEntitySpend} />,
@@ -402,13 +406,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const chev = "size-3 text-muted-foreground";
   const expandIcon = showCostBreakdown ? <ChevronDown className={chev} /> : <ChevronRight className={chev} />;
 
-  const tileLabel = ({ title, tooltip, expandable }: SummaryTile) => (
+  const tileLabel = ({ title, titleKey, tooltip, tooltipKey, expandable }: SummaryTile) => (
     <>
-      <span>{title}</span>
+      <span>{i18n.t(titleKey, { defaultValue: title })}</span>
       {tooltip ? (
         <Tooltip>
           <TooltipTrigger render={<Info className="size-3.5 text-muted-foreground hover:text-foreground" />} />
-          <TooltipContent>{tooltip}</TooltipContent>
+          <TooltipContent>{i18n.t(tooltipKey ?? "", { defaultValue: tooltip })}</TooltipContent>
         </Tooltip>
       ) : null}
       {expandable ? expandIcon : null}
@@ -479,7 +483,14 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <header className="flex flex-wrap items-start justify-between gap-3 px-5 pt-4">
           <div>
             <h3 className="text-sm font-medium text-foreground">
-              {METRIC_TITLE[breakdown.metric]} by {modelViewType === "groups" ? "model" : "deployment"}
+              {i18n.t("usagePage.entityUsage.metricByDimension", {
+                defaultValue: "{{metric}} by {{dimension}}",
+                metric: METRIC_TITLE[breakdown.metric],
+                dimension:
+                  modelViewType === "groups"
+                    ? i18n.t("usageCommon.model", { defaultValue: "model" })
+                    : i18n.t("usageCommon.deployment", { defaultValue: "deployment" }),
+              })}
             </h3>
             <p className="text-xs text-muted-foreground">
               {i18n.t("entityUsage.breakdownSubtitle", {
@@ -488,7 +499,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                   granularity === "day"
                     ? i18n.t("entityUsage.daily", { defaultValue: "Daily" })
                     : i18n.t("entityUsage.weekly", { defaultValue: "Weekly" }),
-                metric: breakdown.metric,
+                metric: METRIC_TITLE[breakdown.metric],
               })}
               {stackFlatCost ? i18n.t("entityUsage.flatCostOnTop", { defaultValue: ", flat cost on top" }) : ""}
             </p>
@@ -501,7 +512,12 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
               options={GRANULARITY_OPTIONS}
               onChange={setGranularity}
             />
-            <Segmented label="Scale" value={scale} options={SCALE_OPTIONS} onChange={setScale} />
+            <Segmented
+              label={i18n.t("usageCommon.scale", { defaultValue: "Scale" })}
+              value={scale}
+              options={SCALE_OPTIONS}
+              onChange={setScale}
+            />
           </div>
         </header>
         <div className="px-3 pt-4 pb-2">
@@ -665,7 +681,13 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           onExport={(exportType, format) =>
             request
               ? api.exportRows(request, exportType, format)
-              : Promise.reject(new Error("Select a date range to export"))
+              : Promise.reject(
+                  new Error(
+                    i18n.t("usagePage.entityUsage.exportNeedsDateRange", {
+                      defaultValue: "Select a date range to export",
+                    }),
+                  ),
+                )
           }
           showFilters={filterSlot === undefined && entityList !== null}
           filterSlot={filterSlot}

@@ -8253,7 +8253,32 @@
     }
   },
   "usagePage": {
-    "usageViewSelect": {},
+    "usageViewSelect": {
+      "title": "Usage view",
+      "description": "Select the usage data you want to view",
+      "globalUsageLabel": "Global Usage",
+      "globalUsageDesc": "View usage across all resources",
+      "yourUsageLabel": "Your Usage",
+      "yourUsageDesc": "View your usage",
+      "myUsageDesc": "View your own usage",
+      "organizationUsageLabel": "Organization Usage",
+      "yourOrganizationUsageLabel": "Your Organization Usage",
+      "organizationUsageDesc": "View usage at the organization level",
+      "organizationUsageAdminDesc": "View usage across all organizations",
+      "organizationUsageNonAdminDesc": "View usage for your organization",
+      "teamUsageLabel": "Team Usage",
+      "teamUsageDesc": "View usage by team",
+      "customerUsageLabel": "Customer Usage",
+      "customerUsageDesc": "View usage by customer accounts",
+      "tagUsageLabel": "Tag Usage",
+      "tagUsageDesc": "View usage grouped by tags",
+      "agentUsageLabel": "Agent Usage (A2A)",
+      "agentUsageDesc": "View usage by AI agents",
+      "userUsageLabel": "User Usage",
+      "userUsageDesc": "View usage by individual users",
+      "userAgentActivityLabel": "User Agent Activity",
+      "userAgentActivityDesc": "View detailed user agent activity logs"
+    },
     "usageAiChatPanel": {
       "title": "Ask AI",
       "subtitle": "Ask about your spend, models, keys, and trends",
@@ -8321,7 +8346,9 @@
       "searchByModelNamePlaceholder": "Search by model name",
       "clearModelSearchAria": "Clear model search",
       "noModelsMatch": "No models match \"{{query}}\" in this date range",
-      "credentialTagNote": "When a reusable credential is used, it will appear as a tag prefixed with <code>Credential: </code>in this view."
+      "credentialTagNote": "When a reusable credential is used, it will appear as a tag prefixed with <code>Credential: </code>in this view.",
+      "tabOverview": "Overview",
+      "missingTokenOrRange": "Missing access token or date range"
     },
     "endpointUsageBarChart": {
       "title": "Success vs Failed Requests by Endpoint"
@@ -8397,7 +8424,12 @@
       "tooltipRequestCost": "Request cost: ¥{{amount}}",
       "tooltipFlatCost": "Flat cost: ¥{{amount}}",
       "tooltipTotalCost": "Total cost: ¥{{amount}}",
-      "noSpendData": "No {{entity}} spend data"
+      "noSpendData": "No {{entity}} spend data",
+      "colRequests": "Requests",
+      "colShare": "Share",
+      "metricByDimension": "{{metric}} by {{dimension}}",
+      "exportNeedsDateRange": "Select a date range to export",
+      "flatCostSeries": "Flat cost"
     },
     "spendByProvider": {
       "title": "Spend by Provider",
@@ -8459,7 +8491,8 @@
       "colTotalTokens": "Total Tokens",
       "colSpend": "Spend",
       "successfulRequestsAria": "Successful requests",
-      "noData": "No endpoint usage data"
+      "noData": "No endpoint usage data",
+      "countEndpoints": "{{count}} endpoints"
     },
     "teamUserSpend": {
       "title": "Spend Per User Within Team",
@@ -14060,7 +14093,9 @@
     "view-activity": "View activity",
     "no-agent-traffic-in-this-range": "No agent traffic in this range",
     "top-agents": "Top agents",
-    "agent-metric": "Agent metric"
+    "agent-metric": "Agent metric",
+    "subtitleAttributed": "Daily usage by agent. {{percent}}% of tokens came with a User-Agent; the rest is unattributed",
+    "subtitle": "Daily usage by agent, from each request's User-Agent"
   },
   "uIAccessControlForm": {
     "configure-who-can-access-the-ui-interface-an": "Configure who can access the UI interface and how group information is extracted from JWT tokens.",
@@ -14072,7 +14107,15 @@
     "total-requests": "Total Requests",
     "total-tokens": "Total Tokens",
     "avg-cost-request": "Avg cost / request",
-    "avg-latency": "Avg latency"
+    "avg-latency": "Avg latency",
+    "spend": "Spend",
+    "ofBudget": "of {{amount}} budget",
+    "noBudget": "No budget set",
+    "ok": "ok",
+    "tokensExact": "{{count}} tokens",
+    "cacheRead": "{{count}} cache read",
+    "successRate": "{{rate}}% success rate",
+    "failed": "failed"
   },
   "findingsView": {
     "findings-list": "Findings list",
@@ -14203,7 +14246,8 @@
   "usageOverview": {
     "top-models": "Top models",
     "bucket-size": "Bucket size",
-    "top-virtual-keys": "Top Virtual Keys"
+    "top-virtual-keys": "Top Virtual Keys",
+    "stackedSubtitle": "{{granularity}} {{metric}}, top 8 stacked"
   },
   "userInfoView": {
     "auto-router-usage": "Auto-router usage",
@@ -14796,5 +14840,59 @@
     "filterOrganization": "Organization",
     "filterTeamAlias": "Team alias",
     "filterTeamId": "Team ID"
+  },
+  "usageCommon": {
+    "spend": "Spend",
+    "tokens": "Tokens",
+    "requests": "Requests",
+    "successful": "Successful",
+    "failed": "Failed",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "linear": "Linear",
+    "log": "Log",
+    "scale": "Scale",
+    "metric": "Metric",
+    "share": "Share",
+    "model": "Model",
+    "deployment": "Deployment",
+    "provider": "Provider",
+    "flatCost": "Flat cost",
+    "other": "Other"
+  },
+  "usageAgentCatalog": {
+    "claudeCode": "Anthropic's coding agent",
+    "codex": "OpenAI's coding agent",
+    "opencode": "Open-source terminal coding agent",
+    "cursor": "AI code editor",
+    "copilot": "GitHub's coding assistant",
+    "hermes": "Open-source agent",
+    "grok": "xAI's assistant",
+    "cline": "Open-source coding agent",
+    "kiloCode": "Open-source coding agent",
+    "aider": "AI pair programming in the terminal",
+    "openaiAgents": "OpenAI Agents SDK",
+    "langchain": "Agent framework",
+    "pydanticAi": "Agent framework",
+    "githubActions": "CI workflows",
+    "litellmSdk": "litellm Python SDK",
+    "openaiSdk": "OpenAI client library",
+    "anthropicSdk": "Anthropic client library",
+    "python": "Scripts and HTTP clients",
+    "node": "Scripts and HTTP clients",
+    "curl": "Command line",
+    "customClient": "Custom client"
+  },
+  "chartsCategory": {
+    "promptTokens": "Prompt Tokens",
+    "completionTokens": "Completion Tokens",
+    "totalTokens": "Total Tokens",
+    "successfulRequests": "Successful Requests",
+    "failedRequests": "Failed Requests",
+    "cacheReadInputTokens": "Cache Read Input Tokens",
+    "cacheCreationInputTokens": "Cache Creation Input Tokens",
+    "spend": "Spend",
+    "apiRequests": "Api Requests",
+    "avgResponseTimeMs": "Avg Response Time Ms"
   }
 }

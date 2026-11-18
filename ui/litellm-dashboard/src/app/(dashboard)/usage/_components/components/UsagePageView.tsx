@@ -354,7 +354,7 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <TabsList variant="line">
                     <TabsTrigger value="cost" className="flex-none px-3">
-                      Overview
+                      {t("usagePage.usagePageView.tabOverview", { defaultValue: "Overview" })}
                     </TabsTrigger>
                     <TabsTrigger value="models" className="flex-none px-3">
                       {t("usagePage.usagePageView.tabModelActivity", { defaultValue: "Model Activity" })}
@@ -410,6 +410,10 @@ const UsagePage: React.FC<UsagePageProps> = ({ teams, organizations }) => {
                               Failed: row.failed_requests,
                             }))}
                             series={["Successful", "Failed"]}
+                            labels={[
+                              t("usageCommon.successful", { defaultValue: "Successful" }),
+                              t("usageCommon.failed", { defaultValue: "Failed" }),
+                            ]}
                             colors={["#2b3fd6", "#ef4444"]}
                             xKey="route"
                             format={(value) => value.toLocaleString()}

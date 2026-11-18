@@ -21,7 +21,7 @@ export type AgentKind = "agent" | "sdk";
 export interface AgentRow {
   id: string;
   label: string;
-  description: string;
+  descriptionKey: string;
   kind: AgentKind;
   logo: string | null;
   spend: number;
@@ -35,7 +35,7 @@ export interface AgentRow {
 interface AgentFamily {
   id: string;
   label: string;
-  description: string;
+  descriptionKey: string;
   kind: AgentKind;
   logo: string | null;
   /** Matched against the user-agent with its `User-Agent: ` prefix removed, case-insensitively. */
@@ -51,7 +51,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "claude-code",
     label: "Claude Code",
-    description: "Anthropic's coding agent",
+    descriptionKey: "usageAgentCatalog.claudeCode",
     kind: "agent",
     // No Claude asset ships in the repo, so TopAgents draws the spark tile itself.
     logo: null,
@@ -60,7 +60,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "codex",
     label: "Codex",
-    description: "OpenAI's coding agent",
+    descriptionKey: "usageAgentCatalog.codex",
     kind: "agent",
     logo: openaiLogo.src,
     match: /^(codex[ _-]|codex$)/i,
@@ -68,7 +68,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "opencode",
     label: "OpenCode",
-    description: "Open-source terminal coding agent",
+    descriptionKey: "usageAgentCatalog.opencode",
     kind: "agent",
     logo: opencodeLogo.src,
     match: /^opencode\b/i,
@@ -76,7 +76,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "cursor",
     label: "Cursor",
-    description: "AI code editor",
+    descriptionKey: "usageAgentCatalog.cursor",
     kind: "agent",
     logo: cursorLogo.src,
     match: /^cursor\b/i,
@@ -84,7 +84,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "copilot",
     label: "GitHub Copilot",
-    description: "GitHub's coding assistant",
+    descriptionKey: "usageAgentCatalog.copilot",
     kind: "agent",
     logo: copilotLogo.src,
     match: /^(github-?copilot|copilot)\b/i,
@@ -92,16 +92,16 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "hermes",
     label: "Hermes Agent",
-    description: "Open-source agent",
+    descriptionKey: "usageAgentCatalog.hermes",
     kind: "agent",
     logo: hermesLogo.src,
     match: /^hermes\b/i,
   },
-  { id: "grok", label: "Grok", description: "xAI's assistant", kind: "agent", logo: xaiLogo.src, match: /^grok\b/i },
+  { id: "grok", label: "Grok", descriptionKey: "usageAgentCatalog.grok", kind: "agent", logo: xaiLogo.src, match: /^grok\b/i },
   {
     id: "cline",
     label: "Cline",
-    description: "Open-source coding agent",
+    descriptionKey: "usageAgentCatalog.cline",
     kind: "agent",
     logo: null,
     match: /^cline\b/i,
@@ -109,7 +109,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "kilo-code",
     label: "Kilo Code",
-    description: "Open-source coding agent",
+    descriptionKey: "usageAgentCatalog.kiloCode",
     kind: "agent",
     logo: null,
     match: /^kilo[- ]?code\b/i,
@@ -117,7 +117,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "aider",
     label: "Aider",
-    description: "AI pair programming in the terminal",
+    descriptionKey: "usageAgentCatalog.aider",
     kind: "agent",
     logo: null,
     match: /^aider\b/i,
@@ -125,7 +125,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "openai-agents",
     label: "OpenAI Agents",
-    description: "OpenAI Agents SDK",
+    descriptionKey: "usageAgentCatalog.openaiAgents",
     kind: "sdk",
     logo: openaiAgentsLogo.src,
     match: /^agents$/i,
@@ -133,7 +133,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "langchain",
     label: "LangChain",
-    description: "Agent framework",
+    descriptionKey: "usageAgentCatalog.langchain",
     kind: "sdk",
     logo: langchainLogo.src,
     match: /^(langchain|langgraph|deepagents)/i,
@@ -141,7 +141,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "pydantic-ai",
     label: "Pydantic AI",
-    description: "Agent framework",
+    descriptionKey: "usageAgentCatalog.langchain",
     kind: "sdk",
     logo: pydanticAiLogo.src,
     match: /^pydantic-ai\b/i,
@@ -149,7 +149,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "github-actions",
     label: "GitHub Actions",
-    description: "CI workflows",
+    descriptionKey: "usageAgentCatalog.githubActions",
     kind: "sdk",
     logo: githubLogo.src,
     match: /^github-actions\b/i,
@@ -157,7 +157,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "litellm",
     label: "中安云科 AI 安全网关 SDK",
-    description: "litellm Python SDK",
+    descriptionKey: "usageAgentCatalog.litellmSdk",
     kind: "sdk",
     logo: litellmLogo.src,
     match: /^litellm\b/i,
@@ -165,7 +165,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "openai-sdk",
     label: "OpenAI SDK",
-    description: "OpenAI client library",
+    descriptionKey: "usageAgentCatalog.openaiSdk",
     kind: "sdk",
     logo: openaiLogo.src,
     match: /^(openai|asyncopenai)\b/i,
@@ -173,7 +173,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "anthropic-sdk",
     label: "Anthropic SDK",
-    description: "Anthropic client library",
+    descriptionKey: "usageAgentCatalog.anthropicSdk",
     kind: "sdk",
     logo: anthropicLogo.src,
     match: /^anthropic\b/i,
@@ -181,7 +181,7 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "python",
     label: "Python",
-    description: "Scripts and HTTP clients",
+    descriptionKey: "usageAgentCatalog.python",
     kind: "sdk",
     logo: null,
     match: /^(python|httpx|aiohttp|urllib|requests)/i,
@@ -189,12 +189,12 @@ const FAMILIES: readonly AgentFamily[] = [
   {
     id: "node",
     label: "Node.js",
-    description: "Scripts and HTTP clients",
+    descriptionKey: "usageAgentCatalog.node",
     kind: "sdk",
     logo: null,
     match: /^(node|bun|deno|axios|undici)\b/i,
   },
-  { id: "curl", label: "curl", description: "Command line", kind: "sdk", logo: null, match: /^curl\b/i },
+  { id: "curl", label: "curl", descriptionKey: "usageAgentCatalog.curl", kind: "sdk", logo: null, match: /^curl\b/i },
 ];
 
 const USER_AGENT_PREFIX = /^user[- ]agent:\s*/i;
@@ -228,7 +228,7 @@ const agentFor = (product: string, rows: readonly TagSummaryRow[]): AgentRow => 
   return {
     id: family?.id ?? `ua:${product.toLowerCase()}`,
     label: family?.label ?? product,
-    description: family?.description ?? "Custom client",
+    descriptionKey: family?.descriptionKey ?? "usageAgentCatalog.customClient",
     kind: family?.kind ?? "sdk",
     logo: family?.logo ?? null,
     spend: rows.reduce((sum, row) => sum + (row.total_spend || 0), 0),

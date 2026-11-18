@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React from "react";
+import React, { useMemo } from "react";
 import { ChartColumnStacked } from "lucide-react";
 import { BarChart, CustomTooltip } from "@/components/shared/charts";
 import { MetricWithMetadata } from "@/components/UsagePage/types";
@@ -18,6 +18,13 @@ const valueFormatter = (value: number) => value.toLocaleString();
 
 const EndpointUsageBarChart: React.FC<EndpointUsageBarChartProps> = ({ endpointData }) => {
   const { t } = useTranslation();
+  const categoryLabels = useMemo(
+    () => [
+      t("usageCommon.successful", { defaultValue: "Successful" }),
+      t("usageCommon.failed", { defaultValue: "Failed" }),
+    ],
+    [t],
+  );
   // Transform endpoint data into chart format
   const chartData = React.useMemo(() => {
     return Object.entries(endpointData || {}).map(([endpoint, data]) => ({
@@ -45,7 +52,7 @@ const EndpointUsageBarChart: React.FC<EndpointUsageBarChartProps> = ({ endpointD
           {CATEGORIES.map((category, i) => (
             <span key={category} className="flex items-center gap-1.5">
               <span aria-hidden="true" className="size-2 rounded-[2px]" style={{ backgroundColor: COLORS[i] }} />
-              <span>{category}</span>
+              <span>{categoryLabels[i]}</span>
               <span className="tabular-nums text-foreground">{totals[category].toLocaleString()}</span>
             </span>
           ))}
@@ -57,6 +64,7 @@ const EndpointUsageBarChart: React.FC<EndpointUsageBarChartProps> = ({ endpointD
         data={chartData}
         index="endpoint"
         categories={CATEGORIES}
+        categoryLabels={categoryLabels}
         colors={COLORS}
         valueFormatter={valueFormatter}
         customTooltip={CustomTooltip}

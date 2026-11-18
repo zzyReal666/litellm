@@ -18,7 +18,7 @@ const COMPACT_TABLE_ROW_HEIGHT = 32;
 
 const columns: ColumnDef<TopModelData>[] = [
   {
-    header: "Model",
+    header: i18n.t("usageCommon.model", { defaultValue: "Model" }),
     accessorKey: "model",
     cell: ({ row }) => row.original.model || "-",
   },
@@ -29,19 +29,19 @@ const columns: ColumnDef<TopModelData>[] = [
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
   },
   {
-    header: "Successful",
+    header: i18n.t("usageCommon.successful", { defaultValue: "Successful" }),
     accessorKey: "successful_requests",
     meta: { numeric: true },
     cell: ({ row }) => <span className="text-success">{row.original.successful_requests?.toLocaleString() || 0}</span>,
   },
   {
-    header: "Failed",
+    header: i18n.t("usageCommon.failed", { defaultValue: "Failed" }),
     accessorKey: "failed_requests",
     meta: { numeric: true },
     cell: ({ row }) => <span className="text-destructive">{row.original.failed_requests?.toLocaleString() || 0}</span>,
   },
   {
-    header: "Tokens",
+    header: i18n.t("usageCommon.tokens", { defaultValue: "Tokens" }),
     accessorKey: "tokens",
     meta: { numeric: true },
     cell: ({ row }) => row.original.tokens?.toLocaleString() || 0,

@@ -87,7 +87,8 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
   showTimeRange = true,
   align = "right",
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isZh = i18n.language?.toLowerCase().startsWith("zh");
   const resolvedLabel = label ?? t("shared.advancedDatePicker.selectTimeRange", { defaultValue: "Select Time Range" });
   const [isOpen, setIsOpen] = useState(false);
   const [tempValue, setTempValue] = useState<DateRangePickerValue>(value);
@@ -189,12 +190,17 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
       }
 
       const formatDateTime = (date: Date) => {
-        return moment(date).format("D MMM, HH:mm");
+        return moment(date).format(isZh ? "M月D日 HH:mm" : "D MMM, HH:mm");
       };
 
       return `${formatDateTime(from)} - ${formatDateTime(to)}`;
     },
-    [t],
+    [t, isZh],
+  );
+
+  const formatFullDateTime = React.useCallback(
+    (date: Date) => moment(date).format(isZh ? "YYYY年M月D日 HH:mm:ss" : "MMM D, YYYY [at] HH:mm:ss"),
+    [isZh],
   );
 
   // CRITICAL: Apply the same date adjustment logic as the original component
@@ -451,13 +457,13 @@ const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
                         <span className="font-medium">
                           {t("shared.advancedDatePicker.from", { defaultValue: "From:" })}
                         </span>{" "}
-                        {moment(tempValue.from).format("MMM D, YYYY [at] HH:mm:ss")}
+                        {formatFullDateTime(tempValue.from)}
                       </div>
                       <div className="text-xs text-info">
                         <span className="font-medium">
                           {t("shared.advancedDatePicker.to", { defaultValue: "To:" })}
                         </span>{" "}
-                        {moment(tempValue.to).format("MMM D, YYYY [at] HH:mm:ss")}
+                        {formatFullDateTime(tempValue.to)}
                       </div>
                     </div>
                   )}

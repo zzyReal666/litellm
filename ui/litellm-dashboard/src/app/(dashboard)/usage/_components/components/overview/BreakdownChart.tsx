@@ -21,15 +21,15 @@ import { Segmented } from "./Primitives";
 import { providerForModel } from "./modelProvider";
 
 const METRIC_OPTIONS = [
-  { value: "spend", label: "Spend" },
-  { value: "tokens", label: "Tokens" },
-  { value: "requests", label: "Requests" },
+  { value: "spend", label: i18n.t("usageCommon.spend", { defaultValue: "Spend" }) },
+  { value: "tokens", label: i18n.t("usageCommon.tokens", { defaultValue: "Tokens" }) },
+  { value: "requests", label: i18n.t("usageCommon.requests", { defaultValue: "Requests" }) },
 ] as const satisfies readonly { value: UsageMetric; label: string }[];
 
 const DIMENSION_OPTIONS = [
-  { value: "model_groups", label: "Model" },
-  { value: "models", label: "Deployment" },
-  { value: "providers", label: "Provider" },
+  { value: "model_groups", label: i18n.t("usageCommon.model", { defaultValue: "Model" }) },
+  { value: "models", label: i18n.t("usageCommon.deployment", { defaultValue: "Deployment" }) },
+  { value: "providers", label: i18n.t("usageCommon.provider", { defaultValue: "Provider" }) },
 ] as const satisfies readonly { value: BreakdownDimension; label: string }[];
 
 export interface BreakdownState {
@@ -55,7 +55,7 @@ export function BreakdownControls({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Segmented
-        label="Metric"
+        label={i18n.t("usageCommon.metric", { defaultValue: "Metric" })}
         value={state.metric}
         options={METRIC_OPTIONS}
         onChange={(metric) => onChange({ ...state, metric })}

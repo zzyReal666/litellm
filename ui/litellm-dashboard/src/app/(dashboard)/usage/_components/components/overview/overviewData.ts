@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import type { DailyData, SpendMetrics } from "@/components/UsagePage/types";
 import { stackedUsageColor } from "@/components/shared/charts";
 import { EMPTY_DAILY_ACTIVITY_METADATA, type DailyActivityMetadata } from "@/components/UsagePage/dailyActivityApi";
@@ -41,7 +42,7 @@ export const rollUpBreakdown = (results: readonly DailyData[], dimension: Breakd
 };
 
 export const OTHER_COLOR = "#94a3b8";
-const OTHER_SERIES = "Other";
+const otherSeriesLabel = (): string => i18n.t("usageCommon.other", { defaultValue: "Other" });
 
 export interface SeriesDay extends Record<string, unknown> {
   /** ISO date, the chart's category key: unique across years, unlike its display label. */
@@ -65,7 +66,8 @@ const seriesKey = (index: number) => `s${index}`;
 const formatDayLabel = (date: string): string => {
   const parsed = new Date(`${date}T00:00:00`);
   if (Number.isNaN(parsed.getTime())) return date;
-  return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const locale = i18n.language?.toLowerCase().startsWith("zh") ? "zh-CN" : "en-US";
+  return parsed.toLocaleDateString(locale, { month: "short", day: "numeric" });
 };
 
 const sortByDate = (results: readonly DailyData[]) =>
@@ -111,7 +113,7 @@ export const seriesBy = (
     return { day, values, other: remainder > 1e-6 ? remainder : 0 };
   });
   const hasOther = days.some(({ other }) => other > 0) || leaders.length === 0;
-  const labels = hasOther ? [...leaders, OTHER_SERIES] : leaders;
+  const labels = hasOther ? [...leaders, otherSeriesLabel()] : leaders;
   const keys = labels.map((_, index) => seriesKey(index));
   const data = days.map(({ day, values, other }) => ({
     date: day.date,
@@ -141,7 +143,7 @@ export const bucketSeries = (series: Series, granularity: Granularity): Series =
     const members = series.data.filter((day) => bucketStart(day.date) === start);
     return {
       date: start,
-      label: `Wk of ${formatDayLabel(start)}`,
+      label: i18n.language?.toLowerCase().startsWith("zh") ? `${formatDayLabel(start)} 当周` : `Wk of ${formatDayLabel(start)}`,
       ...Object.fromEntries(
         series.keys.map((key) => [key, members.reduce((sum, day) => sum + Number(day[key] ?? 0), 0)]),
       ),

@@ -257,7 +257,7 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
           </h3>
           <p className="mt-0.5 text-xs text-muted-foreground">{t("usagePage.usageAiChatPanel.subtitle", { defaultValue: "Ask about your spend, models, keys, and trends" })}</p>
         </div>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={handleClose}>
+        <Button variant="ghost" size="icon-sm" aria-label={t("common.close", { defaultValue: "Close" })} onClick={handleClose}>
           <X />
         </Button>
       </div>

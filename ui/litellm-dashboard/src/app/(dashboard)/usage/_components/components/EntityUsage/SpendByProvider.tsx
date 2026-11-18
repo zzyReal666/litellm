@@ -1,4 +1,3 @@
-import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 import { STACKED_USAGE_PALETTE } from "@/components/shared/charts";
 import { DataTable } from "@/components/shared/DataTable";
@@ -30,9 +29,9 @@ interface SpendByProviderProps {
 
 const QUIET_HEADER = { headerClassName: "font-normal" };
 
-const columns: ColumnDef<ProviderSpendData>[] = [
+const buildColumns = (t: (key: string, options?: Record<string, unknown>) => string): ColumnDef<ProviderSpendData>[] => [
   {
-    header: i18n.t("usagePage.spendByProvider.colProvider", { defaultValue: "Provider" }),
+    header: t("usagePage.spendByProvider.colProvider", { defaultValue: "Provider" }),
     accessorKey: "provider",
     meta: QUIET_HEADER,
     cell: ({ row }) => (
@@ -47,25 +46,25 @@ const columns: ColumnDef<ProviderSpendData>[] = [
     ),
   },
   {
-    header: i18n.t("usagePage.spendByProvider.colSpend", { defaultValue: "Spend" }),
+    header: t("usagePage.spendByProvider.colSpend", { defaultValue: "Spend" }),
     accessorKey: "spend",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
   },
   {
-    header: i18n.t("usagePage.spendByProvider.colSuccessful", { defaultValue: "Successful" }),
+    header: t("usagePage.spendByProvider.colSuccessful", { defaultValue: "Successful" }),
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-success", ...QUIET_HEADER },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: i18n.t("usagePage.spendByProvider.colFailed", { defaultValue: "Failed" }),
+    header: t("usagePage.spendByProvider.colFailed", { defaultValue: "Failed" }),
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-destructive", ...QUIET_HEADER },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: i18n.t("usagePage.spendByProvider.colTokens", { defaultValue: "Tokens" }),
+    header: t("usagePage.spendByProvider.colTokens", { defaultValue: "Tokens" }),
     accessorKey: "tokens",
     meta: { numeric: true, ...QUIET_HEADER },
     cell: ({ row }) => row.original.tokens.toLocaleString(),
@@ -79,6 +78,7 @@ const columns: ColumnDef<ProviderSpendData>[] = [
  */
 export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendData[] }) {
   const { t } = useTranslation();
+  const columns = React.useMemo(() => buildColumns(t), [t]);
   const sorted = [...rows].sort((a, b) => b.spend - a.spend);
   const total = sorted.reduce((sum, row) => sum + row.spend, 0);
   const shareOf = (spend: number) => (total > 0 ? (spend / total) * 100 : 0);
@@ -89,7 +89,7 @@ export function ProviderSpendBreakdown({ rows }: { rows: readonly ProviderSpendD
       {visible.length > 0 && (
         <div className="grid gap-2.5">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="text-xs text-muted-foreground">{i18n.t("spendByProvider.total-provider-spend", { defaultValue: "Total provider spend" })}</span>
+            <span className="text-xs text-muted-foreground">{t("spendByProvider.total-provider-spend", { defaultValue: "Total provider spend" })}</span>
             <span data-testid="provider-spend-total" className="text-sm font-semibold tabular-nums">
               ¥{formatNumberWithCommas(total, 2)}
             </span>

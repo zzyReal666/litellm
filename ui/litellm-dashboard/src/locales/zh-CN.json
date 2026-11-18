@@ -8346,7 +8346,9 @@
       "searchByModelNamePlaceholder": "按模型名称搜索",
       "clearModelSearchAria": "清除模型搜索",
       "noModelsMatch": "该日期范围内没有匹配「{{query}}」的模型",
-      "credentialTagNote": "使用可复用凭据时，它会在本视图中显示为以 <code>Credential: </code>为前缀的标签。"
+      "credentialTagNote": "使用可复用凭据时，它会在本视图中显示为以 <code>Credential: </code>为前缀的标签。",
+      "tabOverview": "总览",
+      "missingTokenOrRange": "缺少访问令牌或时间范围"
     },
     "endpointUsageBarChart": {
       "title": "按端点统计成功与失败请求"
@@ -8422,7 +8424,12 @@
       "tooltipRequestCost": "请求花费：¥{{amount}}",
       "tooltipFlatCost": "固定花费：¥{{amount}}",
       "tooltipTotalCost": "总花费：¥{{amount}}",
-      "noSpendData": "没有{{entity}}消费数据"
+      "noSpendData": "没有{{entity}}消费数据",
+      "colRequests": "请求数",
+      "colShare": "占比",
+      "metricByDimension": "{{metric}} · 按{{dimension}}",
+      "exportNeedsDateRange": "请选择日期范围后再导出",
+      "flatCostSeries": "固定成本"
     },
     "spendByProvider": {
       "title": "按提供商统计花费",
@@ -8484,7 +8491,8 @@
       "colTotalTokens": "总令牌数",
       "colSpend": "花费",
       "successfulRequestsAria": "成功请求数",
-      "noData": "没有端点用量数据"
+      "noData": "没有端点用量数据",
+      "countEndpoints": "{{count}} 个端点"
     },
     "teamUserSpend": {
       "title": "团队内按用户统计花费",
@@ -14085,7 +14093,9 @@
     "view-activity": "查看活动",
     "no-agent-traffic-in-this-range": "该时间范围内没有 agent 流量",
     "top-agents": "热门 agent",
-    "agent-metric": "Agent 指标"
+    "agent-metric": "Agent 指标",
+    "subtitleAttributed": "按 agent 的每日用量。{{percent}}% 的 Token 带有 User-Agent，其余未归属",
+    "subtitle": "按每个请求的 User-Agent 统计的每日 agent 用量"
   },
   "uIAccessControlForm": {
     "configure-who-can-access-the-ui-interface-an": "配置谁可以访问 UI 界面，以及如何从 JWT Token 中提取用户组信息。",
@@ -14097,7 +14107,15 @@
     "total-requests": "总请求数",
     "total-tokens": "总 Token 数",
     "avg-cost-request": "平均成本 / 请求",
-    "avg-latency": "平均延迟"
+    "avg-latency": "平均延迟",
+    "spend": "花费",
+    "ofBudget": "预算 {{amount}}",
+    "noBudget": "未设置预算",
+    "ok": "成功",
+    "tokensExact": "{{count}} 个 Token",
+    "cacheRead": "缓存读取 {{count}}",
+    "successRate": "成功率 {{rate}}%",
+    "failed": "失败"
   },
   "findingsView": {
     "findings-list": "发现项列表",
@@ -14228,7 +14246,8 @@
   "usageOverview": {
     "top-models": "热门模型",
     "bucket-size": "分桶粒度",
-    "top-virtual-keys": "热门虚拟密钥"
+    "top-virtual-keys": "热门虚拟密钥",
+    "stackedSubtitle": "{{granularity}}{{metric}}，前 8 项堆叠"
   },
   "userInfoView": {
     "auto-router-usage": "自动路由用量",
@@ -14821,5 +14840,59 @@
     "filterOrganization": "组织",
     "filterTeamAlias": "团队别名",
     "filterTeamId": "团队 ID"
+  },
+  "usageCommon": {
+    "spend": "花费",
+    "tokens": "Token",
+    "requests": "请求数",
+    "successful": "成功",
+    "failed": "失败",
+    "daily": "每日",
+    "weekly": "每周",
+    "linear": "线性",
+    "log": "对数",
+    "scale": "刻度",
+    "metric": "指标",
+    "share": "占比",
+    "model": "模型",
+    "deployment": "部署",
+    "provider": "提供商",
+    "flatCost": "固定成本",
+    "other": "其他"
+  },
+  "usageAgentCatalog": {
+    "claudeCode": "Anthropic 出品的编码智能体",
+    "codex": "OpenAI 出品的编码智能体",
+    "opencode": "开源终端编码智能体",
+    "cursor": "AI 代码编辑器",
+    "copilot": "GitHub 的编码助手",
+    "hermes": "开源智能体",
+    "grok": "xAI 的助手",
+    "cline": "开源编码智能体",
+    "kiloCode": "开源编码智能体",
+    "aider": "终端内的 AI 结对编程工具",
+    "openaiAgents": "OpenAI Agents SDK",
+    "langchain": "Agent 框架",
+    "pydanticAi": "Agent 框架",
+    "githubActions": "CI 工作流",
+    "litellmSdk": "litellm Python SDK",
+    "openaiSdk": "OpenAI 客户端库",
+    "anthropicSdk": "Anthropic 客户端库",
+    "python": "脚本与 HTTP 客户端",
+    "node": "脚本与 HTTP 客户端",
+    "curl": "命令行工具",
+    "customClient": "自定义客户端"
+  },
+  "chartsCategory": {
+    "promptTokens": "输入 Token",
+    "completionTokens": "输出 Token",
+    "totalTokens": "总 Token 数",
+    "successfulRequests": "成功请求",
+    "failedRequests": "失败请求",
+    "cacheReadInputTokens": "缓存读取输入 Token",
+    "cacheCreationInputTokens": "缓存写入输入 Token",
+    "spend": "花费",
+    "apiRequests": "请求数",
+    "avgResponseTimeMs": "平均响应时间"
   }
 }

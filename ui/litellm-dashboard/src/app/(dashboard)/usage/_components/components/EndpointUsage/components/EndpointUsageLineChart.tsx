@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { useMemo } from "react";
 import { ChartLine } from "lucide-react";
 import { LineChart, stackedUsageColor } from "@/components/shared/charts";
@@ -23,10 +24,10 @@ function transformDailyDataToChart(dailyData: DailyData[]): Array<Record<string,
 
   dailyData.forEach((day) => {
     const date = new Date(day.date);
-    const dateStr = date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
+    const dateStr = date.toLocaleDateString(
+      i18n.language?.toLowerCase().startsWith("zh") ? "zh-CN" : "en-US",
+      { month: "short", day: "numeric" },
+    );
 
     const dataPoint: Record<string, string | number> = {
       date: dateStr,

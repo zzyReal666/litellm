@@ -24,9 +24,9 @@ const CHART_SERIES = 6;
 /** Below this share of tokens carrying a User-Agent, say so rather than imply the list is the whole picture. */
 const COVERAGE_NOTE_BELOW = 0.5;
 const METRICS = [
-  { value: "tokens", label: "Tokens" },
-  { value: "spend", label: "Spend" },
-  { value: "requests", label: "Requests" },
+  { value: "tokens", label: i18n.t("usageCommon.tokens", { defaultValue: "Tokens" }) },
+  { value: "spend", label: i18n.t("usageCommon.spend", { defaultValue: "Spend" }) },
+  { value: "requests", label: i18n.t("usageCommon.requests", { defaultValue: "Requests" }) },
 ] as const satisfies readonly { value: UsageMetric; label: string }[];
 
 /** Brand-tinted monograms for runtimes that have no logo file, so a top spender never shows a blank tile. */
@@ -123,7 +123,9 @@ function AgentItem({
             {i18n.t("topAgents.view-activity", { defaultValue: "View activity" })}{" "}<ArrowRight aria-hidden="true" className="size-3 transition-transform group-hover:translate-x-0.5" />
           </button>
         ) : (
-          <span className="block truncate text-xs text-muted-foreground">{agent.description}</span>
+          <span className="block truncate text-xs text-muted-foreground">
+            {i18n.t(agent.descriptionKey, { defaultValue: agent.descriptionKey })}
+          </span>
         )}
       </span>
       <span className="text-right">
@@ -185,8 +187,12 @@ export default function TopAgents({
   const coverage = totalTokens > 0 ? Math.min(attributedTokens / totalTokens, 1) : 1;
   const subtitle =
     coverage < COVERAGE_NOTE_BELOW
-      ? `Daily usage by agent. ${Math.round(coverage * 100)}% of tokens came with a User-Agent; the rest is unattributed`
-      : "Daily usage by agent, from each request's User-Agent";
+      ? i18n.t("topAgents.subtitleAttributed", {
+          defaultValue:
+            "Daily usage by agent. {{percent}}% of tokens came with a User-Agent; the rest is unattributed",
+          percent: Math.round(coverage * 100),
+        })
+      : i18n.t("topAgents.subtitle", { defaultValue: "Daily usage by agent, from each request's User-Agent" });
   const half = Math.ceil(agents.length / 2);
 
   return (
