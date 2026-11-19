@@ -88,10 +88,9 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
       // Iterate through the key-value pairs in formValues
       litellmParamsObj["model"] = mapping.litellm_model;
       for (const [key, value] of Object.entries(formValues)) {
-        if (value === "") {
-          continue;
-        }
-        if (key === "litellm_credential_name" && value == null) {
+        // Null and empty form fields are unset: sending them would shadow the
+        // values a selected credential provides.
+        if (value === "" || value === null || value === undefined) {
           continue;
         }
         // Skip the custom_pricing and pricing_model fields as they're only used for UI control

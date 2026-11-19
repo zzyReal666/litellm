@@ -78,6 +78,27 @@ describe("prepareModelAddRequest", () => {
     expect(deployment.litellmParamsObj.timeout).toBe(5);
   });
 
+  it("drops null fields left by hidden provider inputs so they cannot shadow a selected credential", async () => {
+    const formValues = {
+      model_mappings: [
+        {
+          public_name: "Public Model",
+          litellm_model: "dashscope/qwen-plus",
+        },
+      ],
+      litellm_credential_name: "selected-credential",
+      api_key: null,
+      api_base: undefined,
+    };
+
+    const deployments = await prepareModelAddRequest({ ...formValues }, "token", null);
+
+    const [deployment] = deployments!;
+    expect(deployment.litellmParamsObj.litellm_credential_name).toBe("selected-credential");
+    expect(deployment.litellmParamsObj).not.toHaveProperty("api_key");
+    expect(deployment.litellmParamsObj).not.toHaveProperty("api_base");
+  });
+
   it("keeps litellm_credential_name from LiteLLM Params JSON when no credential is selected", async () => {
     const formValues = {
       model_mappings: [

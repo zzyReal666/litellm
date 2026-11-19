@@ -165,7 +165,7 @@ Doc4zzy（文档for张忠源）/*.docx
 Doc4zzy（文档for张忠源）/*.pdf
 
 # Build artifacts
-ui/litellm-dashboard/tsconfig.tsbuildinfo
+ui/litellm-dashboard/tsconfig*.tsbuildinfo
 
 # Imported software license (machine-bound, generated at runtime)
 product_license.lic

@@ -717,7 +717,9 @@ def load_credentials_from_list(kwargs: dict):
         )
         return
     for key, value in credential.credential_values.items():
-        if key not in kwargs:
+        # A None-valued key is unset, not an override: request builders often carry
+        # empty form fields as null, and those must not shadow the stored credential.
+        if key not in kwargs or kwargs[key] is None:
             kwargs[key] = value
 
 
