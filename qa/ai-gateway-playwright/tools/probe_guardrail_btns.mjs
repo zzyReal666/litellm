@@ -1,0 +1,17 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1500, height: 950 }, ignoreHTTPSErrors: true });
+await page.goto(`${env.AIG_BASE_URL}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL(/login=success/);
+await page.goto(`${env.AIG_BASE_URL}/ui/guardrails/?guardrail=2f0eabf7-7596-4e55-8230-59ccd7fae11b`, { waitUntil: "networkidle" });
+await page.waitForTimeout(2000);
+const btns = await page.evaluate(() => Array.from(document.querySelectorAll("button")).map(b => ((b.innerText||"").trim() || b.getAttribute("aria-label") || b.getAttribute("title") || b.getAttribute("data-testid") || "").slice(0,30)).filter(Boolean));
+console.log(JSON.stringify(btns, null, 1));
+const tabs = await page.evaluate(() => Array.from(document.querySelectorAll("[role=tab]")).map(t => (t.innerText||"").trim()));
+console.log("tabs:", JSON.stringify(tabs));
+await browser.close();

@@ -1,0 +1,21 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1500, height: 950 }, ignoreHTTPSErrors: true });
+await page.goto(`${env.AIG_BASE_URL}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL(/login=success/);
+await page.goto(`${env.AIG_BASE_URL}/ui/guardrails/`, { waitUntil: "networkidle" });
+await page.waitForTimeout(2000);
+await page.getByRole("button", { name: "打开护栏操作" }).first().click();
+await page.waitForTimeout(1200);
+const items = await page.evaluate(() => Array.from(document.querySelectorAll("[role=menuitem]")).map(e => (e.innerText||"").trim()));
+const out = { items };
+const del = page.getByRole("menuitem", { name: /删除/ }).first();
+if (await del.count()) { await del.click(); await page.waitForTimeout(1500); out.dialog = (await page.evaluate(() => document.body.innerText)).slice(-800); }
+fs.writeFileSync("/tmp/guardrail_menu.json", JSON.stringify(out, null, 1));
+console.log(JSON.stringify(out).slice(0, 900));
+await browser.close();
