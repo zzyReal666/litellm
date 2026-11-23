@@ -58,14 +58,22 @@ const getApiVersionFromApiBase = (apiBase: string): string | null => {
   return searchParams.get("api_version") || searchParams.get("api-version");
 };
 
-const PROVIDER_FIELD_LABEL_KEYS: Readonly<Record<string, string>> = {
-  api_base: "addModel.providerSpecificFields.apiBaseLabel",
-  api_key: "addModel.providerSpecificFields.apiKeyLabel",
-};
+const API_KEY_SUFFIX = " API Key";
 
 const fieldLabel = (field: ProviderCredentialField): string => {
-  const key = PROVIDER_FIELD_LABEL_KEYS[field.key];
-  return key ? i18n.t(key, { defaultValue: field.label }) : field.label;
+  if (field.label === "Upstream API Base") {
+    return i18n.t("addModel.providerSpecificFields.apiBaseLabel", { defaultValue: field.label });
+  }
+  if (field.label === "API Key") {
+    return i18n.t("addModel.providerSpecificFields.apiKeyLabel", { defaultValue: field.label });
+  }
+  if (field.label.endsWith(API_KEY_SUFFIX)) {
+    return `${field.label.slice(0, -API_KEY_SUFFIX.length)}${i18n.t(
+      "addModel.providerSpecificFields.apiKeySuffix",
+      { defaultValue: API_KEY_SUFFIX },
+    )}`;
+  }
+  return field.label;
 };
 
 const mapFieldMetadataToUiField = (field: ProviderCredentialFieldMetadata): ProviderCredentialField => {

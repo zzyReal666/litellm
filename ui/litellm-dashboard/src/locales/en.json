@@ -7858,7 +7858,8 @@
       "baseModelHelpLink": "here",
       "azureBaseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select the name from the options below.",
       "apiBaseLabel": "Upstream API Base",
-      "apiKeyLabel": "API Key"
+      "apiKeyLabel": "API Key",
+      "apiKeySuffix": " API Key"
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "All tiers (soft floor)",

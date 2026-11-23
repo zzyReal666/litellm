@@ -7858,7 +7858,8 @@
       "baseModelHelpLink": "此处",
       "azureBaseModelHelp": "Azure 部署实际使用的模型，用于准确计算成本。请从下方选项中选择名称。",
       "apiBaseLabel": "上游 API 地址",
-      "apiKeyLabel": "API 密钥"
+      "apiKeyLabel": "API 密钥",
+      "apiKeySuffix": " API 密钥"
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "所有层级（软下限）",
