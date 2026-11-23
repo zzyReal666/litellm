@@ -1,0 +1,18 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const BASE = "http://192.168.6.253:8081/zentao";
+const browser = await chromium.launch({ channel: "chrome", headless: true, proxy: { server: "socks5://127.0.0.1:1087" } });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto(`${BASE}/user-login.html`, { waitUntil: "domcontentloaded" });
+await page.fill("#account", "zhongyuanzhang");
+await page.fill("#password", "zzy@7856325A");
+await page.click("#submit");
+await page.waitForURL(/my\.html/, { timeout: 30000 });
+await page.goto(`${BASE}/product-all.html`, { waitUntil: "networkidle", timeout: 30000 });
+await page.waitForTimeout(2500);
+fs.writeFileSync("/tmp/zentao_products.txt", await page.evaluate(() => document.body.innerText));
+const links = await page.evaluate(() => Array.from(document.querySelectorAll("a")).map((a) => `${(a.innerText || "").trim().slice(0, 30)} => ${a.getAttribute("href")}`).filter((x) => /product|bug|project/.test(x)));
+fs.writeFileSync("/tmp/zentao_product_links.txt", links.join("\n"));
+console.log("products page chars:", (await page.evaluate(() => document.body.innerText)).length);
+await page.screenshot({ path: "/tmp/zentao_products.png" });
+await browser.close();

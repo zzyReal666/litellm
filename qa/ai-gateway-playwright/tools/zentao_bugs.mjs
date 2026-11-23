@@ -1,0 +1,18 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const BASE = "http://192.168.6.253:8081/zentao";
+const browser = await chromium.launch({ channel: "chrome", headless: true, proxy: { server: "socks5://127.0.0.1:1087" } });
+const page = await browser.newPage({ viewport: { width: 1500, height: 950 } });
+await page.goto(`${BASE}/user-login.html`, { waitUntil: "domcontentloaded" });
+await page.fill("#account", "zhongyuanzhang");
+await page.fill("#password", "zzy@7856325A");
+await page.click("#submit");
+await page.waitForURL(/my\.html/, { timeout: 30000 });
+await page.goto(`${BASE}/qa.html`, { waitUntil: "networkidle" });
+await page.waitForTimeout(3000);
+const qa = page.frames().find((f) => f !== page.mainFrame() && f.url().includes("qa")) || page.frames()[page.frames().length - 1];
+await qa.waitForTimeout(1000);
+const links = await qa.evaluate(() => Array.from(document.querySelectorAll("a")).map((a) => `${(a.innerText || "").trim().slice(0, 20)} => ${a.getAttribute("href")}`).filter((x) => /bug|product|qa/.test(x)));
+console.log("QA 帧链接:\n" + links.slice(0, 40).join("\n"));
+fs.writeFileSync("/tmp/zentao_qa_links.txt", links.join("\n"));
+await browser.close();

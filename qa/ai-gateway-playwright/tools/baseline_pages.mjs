@@ -1,0 +1,15 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1500, height: 950 }, ignoreHTTPSErrors: true });
+await page.goto(`${env.AIG_BASE_URL}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL(/login=success/);
+await page.waitForTimeout(1500);
+const links = await page.evaluate(() => Array.from(document.querySelectorAll('a[href*="/ui/"]')).map(a => `${(a.innerText||"").trim().slice(0,16)} => ${a.getAttribute("href")}`));
+fs.writeFileSync("/tmp/ui_links.txt", links.join("\n"));
+console.log(links.slice(0, 45).join("\n"));
+await browser.close();

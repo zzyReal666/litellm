@@ -1,0 +1,24 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map((l)=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const base = env.AIG_BASE_URL;
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1600, height: 1500 }, ignoreHTTPSErrors: true });
+await page.goto(`${base}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL(/login=success/);
+await page.goto(`${base}/ui/api-keys`, { waitUntil: "networkidle" });
+await page.waitForTimeout(2500);
+await page.getByRole("button", { name: /新建密钥/ }).first().click();
+await page.waitForTimeout(1800);
+const opt = page.getByText("可选设置", { exact: true }).first();
+if (await opt.count()) { await opt.click(); await page.waitForTimeout(1200); }
+const text = await page.evaluate(() => document.body.innerText);
+fs.writeFileSync("/tmp/createkey_optional.txt", text);
+const placeholders = await page.evaluate(() => Array.from(document.querySelectorAll("input,textarea")).map((e) => e.getAttribute("placeholder")).filter(Boolean));
+const labels = await page.evaluate(() => Array.from(document.querySelectorAll("label, [data-slot=label]")).map((e) => (e.innerText || "").trim()).filter(Boolean));
+fs.writeFileSync("/tmp/createkey_fields.json", JSON.stringify({ placeholders, labels }, null, 1));
+console.log("placeholders:", JSON.stringify(placeholders));
+await browser.close();
