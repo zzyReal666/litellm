@@ -53,6 +53,7 @@ import {
   TEMPLATE_ITEMS,
   type ModeOption,
 } from "./custom_code_catalog";
+import { TEST_INPUT_EXAMPLES } from "./testInputExamples";
 
 // Data for editing an existing guardrail
 
@@ -91,96 +92,6 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   const [isSaving, setIsSaving] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const [testExpanded, setTestExpanded] = useState(false);
-
-  // Test input examples for pre_call and post_call
-  const TEST_INPUT_EXAMPLES = {
-    pre_call: {
-      name: "Pre-call (Request)",
-      data: {
-        texts: ["Hello, my SSN is 123-45-6789"],
-        images: [],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "get_weather",
-              description: "Get the current weather in a location",
-              parameters: {
-                type: "object",
-                properties: {
-                  location: { type: "string", description: "City name" },
-                },
-                required: ["location"],
-              },
-            },
-          },
-        ],
-        tool_calls: [],
-        structured_messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: "Hello, my SSN is 123-45-6789" },
-        ],
-        model: "gpt-4",
-      },
-    },
-    post_call: {
-      name: "Post-call (Response)",
-      data: {
-        texts: ["The weather in San Francisco is 72°F and sunny."],
-        images: [],
-        tools: [],
-        tool_calls: [
-          {
-            id: "call_abc123",
-            type: "function",
-            function: {
-              name: "get_weather",
-              arguments: '{"location": "San Francisco"}',
-            },
-          },
-        ],
-        structured_messages: [],
-        model: "gpt-4",
-      },
-    },
-    pre_mcp_call: {
-      name: "Pre MCP (MCP tool as OpenAI tool)",
-      data: {
-        texts: ['Tool: read_wiki_structure\nArguments: {"repoName": "BerriAI/litellm"}'],
-        images: [],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "read_wiki_structure",
-              description: "Read the structure of a GitHub repository (MCP tool passed as OpenAI tool)",
-              parameters: {
-                type: "object",
-                properties: {
-                  repoName: { type: "string", description: "Repository name, e.g. BerriAI/litellm" },
-                },
-                required: ["repoName"],
-              },
-            },
-          },
-        ],
-        tool_calls: [
-          {
-            id: "call_mcp_001",
-            type: "function",
-            function: {
-              name: "read_wiki_structure",
-              arguments: '{"repoName": "BerriAI/litellm"}',
-            },
-          },
-        ],
-        structured_messages: [
-          { role: "user", content: 'Tool: read_wiki_structure\nArguments: {"repoName": "BerriAI/litellm"}' },
-        ],
-        model: "mcp-tool-call",
-      },
-    },
-  };
 
   const [testInput, setTestInput] = useState(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2));
   const [testResult, setTestResult] = useState<any>(null);
@@ -268,15 +179,19 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   // Save guardrail (create or update)
   const handleSave = async () => {
     if (!guardrailName.trim()) {
-      toast.fromError("Please enter a guardrail name");
+      toast.fromError(
+        i18n.t("guardrails.customCodeModal.noGuardrailName", { defaultValue: "Please enter a guardrail name" }),
+      );
       return;
     }
     if (!code.trim()) {
-      toast.fromError("Please enter custom code");
+      toast.fromError(i18n.t("guardrails.customCodeModal.noCustomCode", { defaultValue: "Please enter custom code" }));
       return;
     }
     if (!accessToken) {
-      toast.fromError("No access token available");
+      toast.fromError(
+        i18n.t("guardrails.customCodeModal.noAccessToken", { defaultValue: "No access token available" }),
+      );
       return;
     }
 
@@ -319,7 +234,11 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         }
 
         await updateGuardrailCall(accessToken, editData.guardrail_id, updateData);
-        toast.success("Custom code guardrail updated successfully");
+        toast.success(
+          i18n.t("guardrails.customCodeModal.updateSuccess", {
+            defaultValue: "Custom code guardrail updated successfully",
+          }),
+        );
       } else {
         // Create new guardrail
         const streamScope = streamScopePayload(mode, streamScopeByMode);
@@ -337,15 +256,22 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         };
 
         await createGuardrailCall(accessToken, guardrailData);
-        toast.success(i18n.t("guardrails.customCode.createSuccess", { defaultValue: "Custom code guardrail created successfully" }));
+        toast.success(
+          i18n.t("guardrails.customCode.createSuccess", { defaultValue: "Custom code guardrail created successfully" }),
+        );
       }
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Failed to save guardrail:", error);
       toast.fromError(
-        `Failed to ${isEditMode ? "update" : "create"} guardrail: ` +
-          (error instanceof Error ? error.message : String(error)),
+        i18n.t("guardrails.customCodeModal.saveFailed", {
+          defaultValue: "Failed to {{action}} guardrail: {{error}}",
+          action: isEditMode
+            ? i18n.t("guardrails.customCodeModal.actionUpdate", { defaultValue: "update" })
+            : i18n.t("guardrails.customCodeModal.actionCreate", { defaultValue: "create" }),
+          error: error instanceof Error ? error.message : String(error),
+        }),
       );
     } finally {
       setIsSaving(false);
@@ -355,7 +281,9 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   // Test guardrail using backend endpoint
   const handleTest = async () => {
     if (!accessToken) {
-      setTestResult({ error: "No access token available" });
+      setTestResult({
+        error: i18n.t("guardrails.customCodeModal.noAccessToken", { defaultValue: "No access token available" }),
+      });
       return;
     }
 
@@ -368,7 +296,9 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
       try {
         parsedInput = JSON.parse(testInput);
       } catch (e) {
-        setTestResult({ error: "Invalid test input JSON" });
+        setTestResult({
+          error: i18n.t("guardrails.customCodeModal.invalidTestJson", { defaultValue: "Invalid test input JSON" }),
+        });
         setIsTesting(false);
         return;
       }
@@ -405,12 +335,17 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           error_type: response.error_type,
         });
       } else {
-        setTestResult({ error: "Unknown error occurred" });
+        setTestResult({
+          error: i18n.t("guardrails.customCodeModal.unknownError", { defaultValue: "Unknown error occurred" }),
+        });
       }
     } catch (error) {
       console.error("Failed to test custom code:", error);
       setTestResult({
-        error: error instanceof Error ? error.message : "Failed to test custom code",
+        error:
+          error instanceof Error
+            ? error.message
+            : i18n.t("guardrails.customCodeModal.testFailed", { defaultValue: "Failed to test custom code" }),
       });
     } finally {
       setIsTesting(false);
@@ -434,27 +369,43 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
               ? i18n.t("guardrails.customCodeModal.editTitle", { defaultValue: "Edit Custom Guardrail" })
               : i18n.t("guardrails.customCodeModal.createTitle", { defaultValue: "Create Custom Guardrail" })}
           </DialogTitle>
-          <DialogDescription>{i18n.t("guardrails.customCodeModal.subtitle", { defaultValue: "Define custom logic using Python-like syntax" })}</DialogDescription>
+          <DialogDescription>
+            {i18n.t("guardrails.customCodeModal.subtitle", {
+              defaultValue: "Define custom logic using Python-like syntax",
+            })}
+          </DialogDescription>
         </DialogHeader>
 
         {/* Top Controls */}
         <div className="flex flex-wrap items-center gap-4 border-b border-border py-4">
           <div className="min-w-[160px] max-w-[200px] flex-1">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">{i18n.t("guardrails.customCodeModal.guardrailNameLabel", { defaultValue: "Guardrail Name" })}</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">
+              {i18n.t("guardrails.customCodeModal.guardrailNameLabel", { defaultValue: "Guardrail Name" })}
+            </label>
             <Input
               value={guardrailName}
               onChange={(e) => setGuardrailName(e.target.value)}
-              placeholder={i18n.t("guardrails.customCodeModal.guardrailNamePlaceholder", { defaultValue: "e.g., block-pii-custom" })}
+              placeholder={i18n.t("guardrails.customCodeModal.guardrailNamePlaceholder", {
+                defaultValue: "e.g., block-pii-custom",
+              })}
             />
           </div>
           <div className="w-[280px]">
             <label className="mb-1 block text-xs font-medium text-muted-foreground">
               {tagScopedModeLabel
-                ? i18n.t("guardrails.customCodeModal.modeTagScopedLabel", { defaultValue: "Mode (tag-scoped, read-only)" })
+                ? i18n.t("guardrails.customCodeModal.modeTagScopedLabel", {
+                    defaultValue: "Mode (tag-scoped, read-only)",
+                  })
                 : i18n.t("guardrails.customCodeModal.modeLabel", { defaultValue: "Mode (can select multiple)" })}
             </label>
             {tagScopedModeLabel ? (
-              <Input value={tagScopedModeLabel} disabled aria-label={i18n.t("guardrails.customCodeModal.modeTagScopedAria", { defaultValue: "Mode (tag-scoped)" })} />
+              <Input
+                value={tagScopedModeLabel}
+                disabled
+                aria-label={i18n.t("guardrails.customCodeModal.modeTagScopedAria", {
+                  defaultValue: "Mode (tag-scoped)",
+                })}
+              />
             ) : (
               <Combobox
                 items={MODE_OPTIONS}
@@ -468,10 +419,18 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                       {option.label}
                     </ComboboxChip>
                   ))}
-                  <ComboboxChipsInput placeholder={mode.length === 0 ? i18n.t("guardrails.customCodeModal.modePlaceholder", { defaultValue: "Select modes" }) : undefined} />
+                  <ComboboxChipsInput
+                    placeholder={
+                      mode.length === 0
+                        ? i18n.t("guardrails.customCodeModal.modePlaceholder", { defaultValue: "Select modes" })
+                        : undefined
+                    }
+                  />
                 </ComboboxChips>
                 <ComboboxContent anchor={anchor}>
-                  <ComboboxEmpty>{i18n.t("guardrails.customCodeModal.noMatchingModes", { defaultValue: "No matching modes" })}</ComboboxEmpty>
+                  <ComboboxEmpty>
+                    {i18n.t("guardrails.customCodeModal.noMatchingModes", { defaultValue: "No matching modes" })}
+                  </ComboboxEmpty>
                   <ComboboxList>
                     {(option: ModeOption) => (
                       <ComboboxItem key={option.value} value={option}>
@@ -489,29 +448,40 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           {mode.includes("logging_only") && (
             <div className="flex shrink-0 items-center gap-2 pt-5">
               <span className="text-sm text-muted-foreground">
-                {i18n.t("guardrails.customCodeModal.loggingOnlyContinueLabel", { defaultValue: "Continue observing the response after a flagged request" })}
+                {i18n.t("guardrails.customCodeModal.loggingOnlyContinueLabel", {
+                  defaultValue: "Continue observing the response after a flagged request",
+                })}
               </span>
               <Switch
                 checked={loggingOnlyScopeChoice === "default" && loggingOnlyContinue}
                 disabled={loggingOnlyScopeChoice !== "default"}
                 onCheckedChange={setLoggingOnlyContinue}
-                aria-label={i18n.t("guardrails.customCodeModal.loggingOnlyContinueLabel", { defaultValue: "Continue observing the response after a flagged request" })}
+                aria-label={i18n.t("guardrails.customCodeModal.loggingOnlyContinueLabel", {
+                  defaultValue: "Continue observing the response after a flagged request",
+                })}
               />
             </div>
           )}
           <div className="w-[180px]">
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">{i18n.t("guardrails.customCodeModal.templateLabel", { defaultValue: "Template" })}</label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">
+              {i18n.t("guardrails.customCodeModal.templateLabel", { defaultValue: "Template" })}
+            </label>
             <Select
               items={TEMPLATE_ITEMS}
               value={selectedTemplate}
               onValueChange={(value: string | null) => value && handleTemplateChange(value)}
             >
-              <SelectTrigger className="w-full" aria-label={i18n.t("guardrails.customCodeModal.templateLabel", { defaultValue: "Template" })}>
+              <SelectTrigger
+                className="w-full"
+                aria-label={i18n.t("guardrails.customCodeModal.templateLabel", { defaultValue: "Template" })}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>{i18n.t("guardrails.customCodeModal.templateGroupStandard", { defaultValue: "STANDARD" })}</SelectLabel>
+                  <SelectLabel>
+                    {i18n.t("guardrails.customCodeModal.templateGroupStandard", { defaultValue: "STANDARD" })}
+                  </SelectLabel>
                   {TEMPLATE_ITEMS.map((template) => (
                     <SelectItem key={template.value} value={template.value}>
                       {template.label}
@@ -522,8 +492,14 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
             </Select>
           </div>
           <div className="flex items-center gap-2 pt-5">
-            <span className="text-sm text-muted-foreground">{i18n.t("guardrails.customCodeModal.defaultOnLabel", { defaultValue: "Default On" })}</span>
-            <Switch checked={defaultOn} onCheckedChange={setDefaultOn} aria-label={i18n.t("guardrails.customCodeModal.defaultOnLabel", { defaultValue: "Default On" })} />
+            <span className="text-sm text-muted-foreground">
+              {i18n.t("guardrails.customCodeModal.defaultOnLabel", { defaultValue: "Default On" })}
+            </span>
+            <Switch
+              checked={defaultOn}
+              onCheckedChange={setDefaultOn}
+              aria-label={i18n.t("guardrails.customCodeModal.defaultOnLabel", { defaultValue: "Default On" })}
+            />
           </div>
         </div>
         {mode.length > 0 && (
@@ -537,8 +513,14 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           {/* Code Editor */}
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="mb-2 flex shrink-0 items-center justify-between">
-              <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{i18n.t("guardrails.customCodeModal.pythonLogicLabel", { defaultValue: "Python Logic" })}</span>
-              <span className="text-xs text-muted-foreground">{i18n.t("guardrails.customCodeModal.restrictedEnv", { defaultValue: "Restricted environment (no imports)" })}</span>
+              <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                {i18n.t("guardrails.customCodeModal.pythonLogicLabel", { defaultValue: "Python Logic" })}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {i18n.t("guardrails.customCodeModal.restrictedEnv", {
+                  defaultValue: "Restricted environment (no imports)",
+                })}
+              </span>
             </div>
             <div
               className="relative rounded-lg overflow-hidden border border-gray-700 bg-[#1e1e1e] shrink-0"
@@ -591,9 +573,13 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                 <div className="space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-xs font-medium text-muted-foreground">{i18n.t("guardrails.customCodeModal.testInputLabel", { defaultValue: "Test Input (JSON)" })}</label>
+                      <label className="block text-xs font-medium text-muted-foreground">
+                        {i18n.t("guardrails.customCodeModal.testInputLabel", { defaultValue: "Test Input (JSON)" })}
+                      </label>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">{i18n.t("guardrails.customCodeModal.loadExampleLabel", { defaultValue: "Load example:" })}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {i18n.t("guardrails.customCodeModal.loadExampleLabel", { defaultValue: "Load example:" })}
+                        </span>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2))}
@@ -620,24 +606,41 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                     <div className="mb-2 rounded-sm border border-border bg-muted/40 p-2 text-xs text-muted-foreground">
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                         <div>
-                          <strong>texts</strong>: {i18n.t("guardrails.customCodeModal.fieldTextsDesc", { defaultValue: "Message content (always)" })}
+                          <strong>texts</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldTextsDesc", {
+                            defaultValue: "Message content (always)",
+                          })}
                         </div>
                         <div>
-                          <strong>images</strong>: {i18n.t("guardrails.customCodeModal.fieldImagesDesc", { defaultValue: "Base64 images (vision)" })}
+                          <strong>images</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldImagesDesc", {
+                            defaultValue: "Base64 images (vision)",
+                          })}
                         </div>
                         <div>
-                          <strong>tools</strong>: {i18n.t("guardrails.customCodeModal.fieldToolsDesc", { defaultValue: "Tool definitions" })} <span className="text-warning">(pre_call)</span>,{" "}
-                          {i18n.t("guardrails.customCodeModal.fieldToolsMcpDesc", { defaultValue: "MCP as OpenAI tool" })} <span className="text-purple-600">(pre_mcp_call)</span>
+                          <strong>tools</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldToolsDesc", { defaultValue: "Tool definitions" })}{" "}
+                          <span className="text-warning">(pre_call)</span>,{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldToolsMcpDesc", {
+                            defaultValue: "MCP as OpenAI tool",
+                          })}{" "}
+                          <span className="text-purple-600">(pre_mcp_call)</span>
                         </div>
                         <div>
-                          <strong>tool_calls</strong>: {i18n.t("guardrails.customCodeModal.fieldToolCallsDesc", { defaultValue: "LLM tool calls" })} <span className="text-success">(post_call)</span>
+                          <strong>tool_calls</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldToolCallsDesc", { defaultValue: "LLM tool calls" })}{" "}
+                          <span className="text-success">(post_call)</span>
                         </div>
                         <div>
-                          <strong>structured_messages</strong>: {i18n.t("guardrails.customCodeModal.fieldStructuredMessagesDesc", { defaultValue: "Full messages" })}{" "}
+                          <strong>structured_messages</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldStructuredMessagesDesc", {
+                            defaultValue: "Full messages",
+                          })}{" "}
                           <span className="text-warning">(pre_call)</span>
                         </div>
                         <div>
-                          <strong>model</strong>: {i18n.t("guardrails.customCodeModal.fieldModelDesc", { defaultValue: "Model name (always)" })}
+                          <strong>model</strong>:{" "}
+                          {i18n.t("guardrails.customCodeModal.fieldModelDesc", { defaultValue: "Model name (always)" })}
                         </div>
                       </div>
                     </div>
@@ -646,7 +649,9 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                       onChange={(e) => setTestInput(e.target.value)}
                       rows={8}
                       className="font-mono text-xs field-sizing-fixed"
-                      placeholder={i18n.t("guardrails.customCodeModal.testInputPlaceholder", { defaultValue: '{"texts": ["test message"], ...}' })}
+                      placeholder={i18n.t("guardrails.customCodeModal.testInputPlaceholder", {
+                        defaultValue: '{"texts": ["test message"], ...}',
+                      })}
                     />
                   </div>
                   <div className="flex items-center gap-3">
@@ -678,15 +683,21 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                           </>
                         ) : testResult.action === "allow" ? (
                           <>
-                            <CheckCircle2 className="size-4" /> {i18n.t("guardrails.customCodeModal.testResultAllowed", { defaultValue: "Allowed" })}
+                            <CheckCircle2 className="size-4" />{" "}
+                            {i18n.t("guardrails.customCodeModal.testResultAllowed", { defaultValue: "Allowed" })}
                           </>
                         ) : testResult.action === "block" ? (
                           <>
-                            <XCircle className="size-4" /> {i18n.t("guardrails.customCodeModal.testResultBlocked", { reason: testResult.reason, defaultValue: `Blocked: ${testResult.reason}` })}
+                            <XCircle className="size-4" />{" "}
+                            {i18n.t("guardrails.customCodeModal.testResultBlocked", {
+                              reason: testResult.reason,
+                              defaultValue: `Blocked: ${testResult.reason}`,
+                            })}
                           </>
                         ) : testResult.action === "modify" ? (
                           <>
-                            <CheckCircle2 className="size-4" /> {i18n.t("guardrails.customCodeModal.testResultModified", { defaultValue: "Modified" })}
+                            <CheckCircle2 className="size-4" />{" "}
+                            {i18n.t("guardrails.customCodeModal.testResultModified", { defaultValue: "Modified" })}
                             {testResult.texts && testResult.texts.length > 0 && (
                               <span className="ml-1 text-xs text-muted-foreground">
                                 -&gt; {testResult.texts[0].substring(0, 50)}
@@ -696,7 +707,8 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                           </>
                         ) : (
                           <>
-                            <CheckCircle2 className="size-4" /> {testResult.action || i18n.t("common.unknown", { defaultValue: "Unknown" })}
+                            <CheckCircle2 className="size-4" />{" "}
+                            {testResult.action || i18n.t("common.unknown", { defaultValue: "Unknown" })}
                           </>
                         )}
                       </div>
@@ -712,9 +724,17 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           <div className="w-[300px] shrink-0 overflow-auto border-l border-border pl-6">
             <div className="mb-3 flex items-center gap-2">
               <Code className="size-4 text-muted-foreground" />
-              <span className="font-semibold">{i18n.t("guardrails.customCodeModal.availablePrimitivesTitle", { defaultValue: "Available Primitives" })}</span>
+              <span className="font-semibold">
+                {i18n.t("guardrails.customCodeModal.availablePrimitivesTitle", {
+                  defaultValue: "Available Primitives",
+                })}
+              </span>
             </div>
-            <p className="mb-3 text-xs text-muted-foreground">{i18n.t("guardrails.customCodeModal.availablePrimitivesDesc", { defaultValue: "Click to copy functions to clipboard" })}</p>
+            <p className="mb-3 text-xs text-muted-foreground">
+              {i18n.t("guardrails.customCodeModal.availablePrimitivesDesc", {
+                defaultValue: "Click to copy functions to clipboard",
+              })}
+            </p>
 
             <div className="space-y-2">
               {Object.entries(PRIMITIVES).map(([category, primitives]) => (
@@ -739,7 +759,8 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                         >
                           {copiedPrimitive === p.name ? (
                             <span className="flex items-center gap-1 font-mono text-xs">
-                              <CheckCircle2 className="size-3.5" /> {i18n.t("guardrails.customCodeModal.copied", { defaultValue: "Copied!" })}
+                              <CheckCircle2 className="size-3.5" />{" "}
+                              {i18n.t("guardrails.customCodeModal.copied", { defaultValue: "Copied!" })}
                             </span>
                           ) : (
                             <>
@@ -759,7 +780,11 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
 
         {/* Footer */}
         <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-          <span className="text-xs text-muted-foreground">{i18n.t("guardrails.customCodeModal.autoSaveNotice", { defaultValue: "Changes are auto-saved to local draft" })}</span>
+          <span className="text-xs text-muted-foreground">
+            {i18n.t("guardrails.customCodeModal.autoSaveNotice", {
+              defaultValue: "Changes are auto-saved to local draft",
+            })}
+          </span>
           <div className="flex items-center gap-3">
             <Button variant="secondary" onClick={onClose}>
               {i18n.t("common.cancel", { defaultValue: "Cancel" })}

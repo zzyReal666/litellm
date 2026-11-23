@@ -16,7 +16,6 @@ import {
   MAX_POINTS_WITH_DOTS,
   SAVINGS_COLORS,
   SAVINGS_DRIVERS,
-  SAVINGS_SERIES,
   SAVINGS_DRIVER_KEYS,
   SavingsAccumulation,
   SavingsPoint,
@@ -90,7 +89,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
   const intervalLabel = t("costOptimization.usageTab.perDay", { defaultValue: "Per day" });
   const rangeLabel = formatRangeLabel(startTime ?? undefined, endTime ?? undefined);
   const savingsSubtitle = [
-    accumulation === "cumulative" ? t("costOptimization.usageTab.runningTotalSaved", { defaultValue: "Running total saved" }) : `Saved ${intervalLabel.toLowerCase()}`,
+    accumulation === "cumulative"
+      ? t("costOptimization.usageTab.runningTotalSaved", { defaultValue: "Running total saved" })
+      : `Saved ${intervalLabel.toLowerCase()}`,
     rangeLabel && `${rangeLabel} (UTC)`,
   ]
     .filter(Boolean)
@@ -99,14 +100,22 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
   // A driver can come out negative (auto-router pays a cold-cache write on every
   // model switch), and a negative slice has no meaning in a donut, so only drivers
   // that actually saved are plotted; the range total keeps the signed truth.
+  const savingsLegendLabels = useMemo(
+    () =>
+      SAVINGS_DRIVERS.map(({ name }) =>
+        t(`costOptimization.savingsDriver.${SAVINGS_DRIVER_KEYS[name]}`, { defaultValue: name }),
+      ),
+    [t],
+  );
+
   const byDriver = useMemo(
     () =>
-      SAVINGS_DRIVERS.map(({ name, color, of }) => ({
-        driver: name,
+      SAVINGS_DRIVERS.map(({ color, of }, index) => ({
+        driver: savingsLegendLabels[index],
         color,
         usd: sumOverDays(results, of),
       })).filter((d) => d.usd > 0),
-    [results],
+    [results, savingsLegendLabels],
   );
   const plottedDriverTotal = useMemo(() => byDriver.reduce((sum, d) => sum + d.usd, 0), [byDriver]);
 
@@ -125,18 +134,23 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
     [toolSpend, topToolNames],
   );
   const toolColors = useMemo(() => SEQUENTIAL_COLOR_RAMP.slice(0, Math.max(topToolNames.length, 1)), [topToolNames]);
-  const savingsLegendLabels = useMemo(
+  const chartPoints = useMemo(
     () =>
-      SAVINGS_DRIVERS.map(({ name }) =>
-        t(`costOptimization.savingsDriver.${SAVINGS_DRIVER_KEYS[name]}`, { defaultValue: name }),
-      ),
-    [t],
+      overTime.map((point) => ({
+        date: point.date,
+        [savingsLegendLabels[0]]: point.Compression,
+        [savingsLegendLabels[1]]: point["Prompt caching"],
+        [savingsLegendLabels[2]]: point["Auto-router"],
+      })),
+    [overTime, savingsLegendLabels],
   );
 
   return (
     <div className="w-full space-y-6">
       <div className="flex flex-wrap items-center justify-end gap-4">
-        <span className="text-sm text-muted-foreground">{t("costOptimization.usageTab.spendBucketedByUtcDay", { defaultValue: "Spend is bucketed by UTC day" })}</span>
+        <span className="text-sm text-muted-foreground">
+          {t("costOptimization.usageTab.spendBucketedByUtcDay", { defaultValue: "Spend is bucketed by UTC day" })}
+        </span>
         <AdvancedDatePicker value={dateValue} onValueChange={onDateChange} />
       </div>
 
@@ -155,7 +169,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
               <CustomLegend categories={savingsLegendLabels} colors={SAVINGS_COLORS} />
               <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
                 <TabsList>
-                  <TabsTrigger value="cumulative">{t("costOptimization.usageTab.cumulative", { defaultValue: "Cumulative" })}</TabsTrigger>
+                  <TabsTrigger value="cumulative">
+                    {t("costOptimization.usageTab.cumulative", { defaultValue: "Cumulative" })}
+                  </TabsTrigger>
                   <TabsTrigger value="per-interval">{intervalLabel}</TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -164,9 +180,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
           <CardContent>
             {accumulation === "cumulative" ? (
               <AreaChart
-                data={overTime}
+                data={chartPoints}
                 index="date"
-                categories={SAVINGS_SERIES}
+                categories={savingsLegendLabels}
                 colors={SAVINGS_COLORS}
                 valueFormatter={usd}
                 showLegend={false}
@@ -177,9 +193,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
               // for its cold cache, and stacking would draw that segment below the axis
               // while the remaining bar still read as the day's total
               <BarChart
-                data={overTime}
+                data={chartPoints}
                 index="date"
-                categories={SAVINGS_SERIES}
+                categories={savingsLegendLabels}
                 colors={SAVINGS_COLORS}
                 valueFormatter={usd}
                 showLegend={false}
@@ -189,7 +205,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>{t("costOptimization.usageTab.savingsByDriver", { defaultValue: "Savings by driver" })}</CardTitle>
+            <CardTitle>
+              {t("costOptimization.usageTab.savingsByDriver", { defaultValue: "Savings by driver" })}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <DonutChart
@@ -220,12 +238,16 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
           <CardContent>
             {topTools.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
-                {toolSpendLoading ? t("costOptimization.usageTab.loading", { defaultValue: "Loading..." }) : t("costOptimization.usageTab.noToolUsage", { defaultValue: "No tool usage in this range." })}
+                {toolSpendLoading
+                  ? t("costOptimization.usageTab.loading", { defaultValue: "Loading..." })
+                  : t("costOptimization.usageTab.noToolUsage", { defaultValue: "No tool usage in this range." })}
               </p>
             ) : (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div>
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">{t("costOptimization.usageTab.totalByTool", { defaultValue: "Total by tool" })}</p>
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">
+                    {t("costOptimization.usageTab.totalByTool", { defaultValue: "Total by tool" })}
+                  </p>
                   <BarChart
                     data={topToolsChart}
                     index="tool_name"
@@ -240,7 +262,9 @@ const UsageTab: React.FC<UsageTabProps> = ({ accessToken, activity }) => {
                   />
                 </div>
                 <div>
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">{t("costOptimization.usageTab.dailySpendByTool", { defaultValue: "Daily spend by tool" })}</p>
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">
+                    {t("costOptimization.usageTab.dailySpendByTool", { defaultValue: "Daily spend by tool" })}
+                  </p>
                   <CustomLegend categories={topToolNames} colors={toolColors} />
                   <BarChart
                     data={dailyToolSeries}

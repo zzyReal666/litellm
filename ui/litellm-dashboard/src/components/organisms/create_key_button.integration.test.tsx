@@ -1324,6 +1324,56 @@ describe("CreateKey", () => {
     });
   });
 
+  describe("required marker", () => {
+    it("marks the key name as required in the label", async () => {
+      await openModal();
+
+      const label = screen.getByText(/Key Name/).closest("label");
+      expect(label).toHaveTextContent("*");
+    });
+  });
+
+  describe("numeric field copy", () => {
+    it("uses the localized numeric placeholder instead of the English default", async () => {
+      await openModal();
+      await openSection(/Optional Settings/i);
+
+      expect(await screen.findByLabelText(/Max Budget/)).toHaveAttribute("placeholder", "Enter a number");
+    });
+  });
+
+  describe("premium-only budget settings", () => {
+    it("hides per-model budgets and budget fallbacks for non-premium users", async () => {
+      await openModal();
+      await openSection(/Optional Settings/i);
+
+      expect(screen.getByText("Per-Model Budgets")).not.toBeVisible();
+      expect(screen.getByText("Budget Fallbacks")).not.toBeVisible();
+    });
+
+    it("shows per-model budgets for premium users", async () => {
+      state.authorized = { ...state.authorized, premiumUser: true };
+      await openModal();
+      await openSection(/Optional Settings/i);
+
+      expect(await screen.findByText("Per-Model Budgets")).toBeVisible();
+    });
+  });
+
+  describe("duplicate key names", () => {
+    it("names the duplicated field and suggests a different key name", async () => {
+      await openModal({ data: [{ key_alias: "contract-key", team_id: null }] });
+      await nameTheKey();
+      await submit();
+
+      await waitFor(() => expect(toast.fromError).toHaveBeenCalled());
+      const message = String(vi.mocked(toast.fromError).mock.calls.at(-1)?.[0]);
+      expect(message).toContain("contract-key");
+      expect(message).toMatch(/key name \(alias\)/i);
+      expect(vi.mocked(keyCreateCall)).not.toHaveBeenCalled();
+    });
+  });
+
   describe("localization", () => {
     it("shows the modal's section headings, field label and submit button in Simplified Chinese", async () => {
       await i18n.changeLanguage("zh-CN");

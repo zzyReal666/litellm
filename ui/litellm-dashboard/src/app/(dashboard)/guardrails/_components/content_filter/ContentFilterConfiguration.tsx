@@ -120,7 +120,11 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddPrebuiltPattern = () => {
     if (!selectedPatternName) {
-      toast.error("Please select a pattern");
+      toast.error(
+        i18n.t("guardrails.contentFilterConfiguration.pleaseSelectPattern", {
+          defaultValue: "Please select a pattern",
+        }),
+      );
       return;
     }
 
@@ -141,7 +145,11 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddCustomPattern = () => {
     if (!customPatternName || !customPatternRegex) {
-      toast.error("Please provide pattern name and regex");
+      toast.error(
+        i18n.t("guardrails.contentFilterConfiguration.pleaseProvidePatternNameAndRegex", {
+          defaultValue: "Please provide pattern name and regex",
+        }),
+      );
       return;
     }
 
@@ -161,7 +169,9 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddKeyword = () => {
     if (!newKeyword) {
-      toast.error("Please enter a keyword");
+      toast.error(
+        i18n.t("guardrails.contentFilterConfiguration.pleaseEnterKeyword", { defaultValue: "Please enter a keyword" }),
+      );
       return;
     }
 
@@ -189,14 +199,32 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           if (onFileUpload) {
             onFileUpload(content);
           }
-          toast.success(result.message || "File uploaded successfully");
+          toast.success(
+            result.message ||
+              i18n.t("guardrails.contentFilterConfiguration.fileUploadedSuccessfully", {
+                defaultValue: "File uploaded successfully",
+              }),
+          );
         } else {
-          const errorMessage = result.error || (result.errors && result.errors.join(", ")) || "Invalid file";
-          toast.error(`Validation failed: ${errorMessage}`);
+          const errorMessage =
+            result.error ||
+            (result.errors && result.errors.join(", ")) ||
+            i18n.t("guardrails.contentFilterConfiguration.invalidFile", { defaultValue: "Invalid file" });
+          toast.error(
+            i18n.t("guardrails.contentFilterConfiguration.validationFailed", {
+              defaultValue: "Validation failed: {{error}}",
+              error: errorMessage,
+            }),
+          );
         }
       }
     } catch (error) {
-      toast.error(`Failed to upload file: ${error}`);
+      toast.error(
+        i18n.t("guardrails.contentFilterConfiguration.failedToUploadFile", {
+          defaultValue: "Failed to upload file: {{error}}",
+          error: String(error),
+        }),
+      );
     } finally {
       setUploadValidating(false);
     }
@@ -221,7 +249,11 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
       {!showStep && (
         <div>
           <p className="text-muted-foreground">
-            {i18n.t("contentFilterConfiguration.configure-patterns-keywords-and-content-cate", { defaultValue: "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses." })}{" "}</p>
+            {i18n.t("contentFilterConfiguration.configure-patterns-keywords-and-content-cate", {
+              defaultValue:
+                "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses.",
+            })}{" "}
+          </p>
         </div>
       )}
 
@@ -229,19 +261,28 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>{i18n.t("contentFilterConfiguration.pattern-detection", { defaultValue: "Pattern Detection" })}</CardTitle>
+              <CardTitle>
+                {i18n.t("contentFilterConfiguration.pattern-detection", { defaultValue: "Pattern Detection" })}
+              </CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                {i18n.t("contentFilterConfiguration.detect-sensitive-information-using-regex-pat", { defaultValue: "Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)" })}{" "}</p>
+                {i18n.t("contentFilterConfiguration.detect-sensitive-information-using-regex-pat", {
+                  defaultValue: "Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)",
+                })}{" "}
+              </p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setPatternModalVisible(true)}>
                 <Plus />
-                {i18n.t("contentFilterConfiguration.add-prebuilt-pattern", { defaultValue: "Add prebuilt pattern" })}{" "}</Button>
+                {i18n.t("contentFilterConfiguration.add-prebuilt-pattern", {
+                  defaultValue: "Add prebuilt pattern",
+                })}{" "}
+              </Button>
               <Button variant="outline" onClick={() => setCustomPatternModalVisible(true)}>
                 <Plus />
-                {i18n.t("contentFilterConfiguration.add-custom-regex", { defaultValue: "Add custom regex" })}{" "}</Button>
+                {i18n.t("contentFilterConfiguration.add-custom-regex", { defaultValue: "Add custom regex" })}{" "}
+              </Button>
             </div>
             <PatternTable
               patterns={selectedPatterns}
@@ -256,16 +297,22 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>{i18n.t("contentFilterConfiguration.blocked-keywords", { defaultValue: "Blocked Keywords" })}</CardTitle>
+              <CardTitle>
+                {i18n.t("contentFilterConfiguration.blocked-keywords", { defaultValue: "Blocked Keywords" })}
+              </CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                {i18n.t("contentFilterConfiguration.block-or-mask-specific-sensitive-terms-and-p", { defaultValue: "Block or mask specific sensitive terms and phrases" })}{" "}</p>
+                {i18n.t("contentFilterConfiguration.block-or-mask-specific-sensitive-terms-and-p", {
+                  defaultValue: "Block or mask specific sensitive terms and phrases",
+                })}{" "}
+              </p>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setKeywordModalVisible(true)}>
                 <Plus />
-                {i18n.t("contentFilterConfiguration.add-keyword", { defaultValue: "Add keyword" })}{" "}</Button>
+                {i18n.t("contentFilterConfiguration.add-keyword", { defaultValue: "Add keyword" })}{" "}
+              </Button>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -280,7 +327,8 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 {uploadValidating ? <UiLoadingSpinner className="size-4" /> : <Upload />}
-                {i18n.t("contentFilterConfiguration.upload-yaml-file", { defaultValue: "Upload YAML file" })}{" "}</Button>
+                {i18n.t("contentFilterConfiguration.upload-yaml-file", { defaultValue: "Upload YAML file" })}{" "}
+              </Button>
             </div>
             <KeywordTable keywords={blockedWords} onActionChange={onBlockedWordUpdate} onRemove={onBlockedWordRemove} />
           </CardContent>

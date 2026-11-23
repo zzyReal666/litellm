@@ -36,9 +36,18 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
 
   const runnableQuestions = runnableDecisionQuestions(checks);
   let disabledReason: string | null = null;
-  if (!model) disabledReason = "Select a decision model to run a test";
-  else if (!input.trim()) disabledReason = "Type an input to run a test";
-  else if (runnableQuestions.length === 0) disabledReason = "Add a question to run a test";
+  if (!model)
+    disabledReason = i18n.t("decisionTestSection.disabledSelectModel", {
+      defaultValue: "Select a decision model to run a test",
+    });
+  else if (!input.trim())
+    disabledReason = i18n.t("decisionTestSection.disabledEnterInput", {
+      defaultValue: "Type an input to run a test",
+    });
+  else if (runnableQuestions.length === 0)
+    disabledReason = i18n.t("decisionTestSection.disabledAddQuestion", {
+      defaultValue: "Add a question to run a test",
+    });
   const canRun = !disabledReason && !running;
 
   const runTest = async () => {
@@ -82,12 +91,18 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       <div className="space-y-1">
         <FieldLabel>Test</FieldLabel>
         <p className="m-0 text-xs text-muted-foreground">
-          {i18n.t("decisionTestSection.try-your-questions-on-a-sample-input-before", { defaultValue: "Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision model call, so it is billed and shows up in Logs." })}{" "}</p>
+          {i18n.t("decisionTestSection.try-your-questions-on-a-sample-input-before", {
+            defaultValue:
+              "Try your questions on a sample input before you save. Uses the thresholds above. Each run is a real decision model call, so it is billed and shows up in Logs.",
+          })}{" "}
+        </p>
       </div>
       <Textarea
         aria-label={i18n.t("decisionTestSection.test-input", { defaultValue: "Test input" })}
         rows={3}
-        placeholder={i18n.t("decisionTestSection.paste-a-sample-input-to-score-against-your-q", { defaultValue: "Paste a sample input to score against your questions" })}
+        placeholder={i18n.t("decisionTestSection.paste-a-sample-input-to-score-against-your-q", {
+          defaultValue: "Paste a sample input to score against your questions",
+        })}
         className="w-full resize-none"
         value={input}
         onChange={(event) => setInput(event.target.value)}
@@ -100,7 +115,9 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       />
       <div className="flex items-center gap-2">
         <Button type="button" onClick={runTest} disabled={!canRun}>
-          {running ? "Running…" : "Run test"}
+          {running
+            ? i18n.t("decisionTestSection.running", { defaultValue: "Running…" })
+            : i18n.t("decisionTestSection.runTest", { defaultValue: "Run test" })}
         </Button>
         {!running && disabledReason && <p className="m-0 text-xs text-muted-foreground">{disabledReason}</p>}
         {!running && !disabledReason && <p className="m-0 text-xs text-muted-foreground">{runTestShortcutLabel()}</p>}
@@ -108,7 +125,10 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
       {runs.length > 0 && (
         <>
           <p className="m-0 text-xs text-muted-foreground">
-            {i18n.t("decisionTestSection.latest-first-each-run-keeps-its-input-so-you", { defaultValue: "Latest first. Each run keeps its input so you can compare." })}{" "}</p>
+            {i18n.t("decisionTestSection.latest-first-each-run-keeps-its-input-so-you", {
+              defaultValue: "Latest first. Each run keeps its input so you can compare.",
+            })}{" "}
+          </p>
           <div className="space-y-2" data-slot="decision-test-history">
             {runs.map((run) => {
               const visible = "error" in run ? [] : visibleTestResults(run, checks, model);
@@ -121,24 +141,39 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
                     {visible.length > 0 && (
                       <StatusBadge
                         tone={DECISION_TEST_CHIP_TONE[decisionTestOverall(visible)]}
-                        label={decisionTestOverall(visible) === "block" ? "Block" : "Pass"}
+                        label={
+                          decisionTestOverall(visible) === "block"
+                            ? i18n.t("decisionTestSection.resultBlock", { defaultValue: "Block" })
+                            : i18n.t("decisionTestSection.resultPass", { defaultValue: "Pass" })
+                        }
                       />
                     )}
                   </div>
                   {"error" in run && <p className="m-0 mt-1.5 text-xs text-destructive">{run.error}</p>}
                   {!("error" in run) && visible.length === 0 && (
                     <p className="m-0 mt-1.5 text-xs text-muted-foreground">
-                      {i18n.t("decisionTestSection.the-model-or-questions-changed-since-this-ru", { defaultValue: "The model or questions changed since this run. Run it again to score them." })}{" "}</p>
+                      {i18n.t("decisionTestSection.the-model-or-questions-changed-since-this-ru", {
+                        defaultValue: "The model or questions changed since this run. Run it again to score them.",
+                      })}{" "}
+                    </p>
                   )}
                   {visible.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                       {visible.map(({ check, result }) => {
                         const chip = decisionTestChip(result, check);
-                        const score = result.kind === "probability" ? result.probability.toFixed(2) : "No answer";
+                        const score =
+                          result.kind === "probability"
+                            ? result.probability.toFixed(2)
+                            : i18n.t("decisionTestSection.noAnswer", { defaultValue: "No answer" });
                         let label = "";
-                        if (chip === "block") label = "Block";
-                        else if (chip === "logged") label = "Pass · logged";
-                        else if (chip === "pass") label = "Pass";
+                        if (chip === "block")
+                          label = i18n.t("decisionTestSection.resultBlock", { defaultValue: "Block" });
+                        else if (chip === "logged")
+                          label = i18n.t("decisionTestSection.resultPassLogged", {
+                            defaultValue: "Pass · logged",
+                          });
+                        else if (chip === "pass")
+                          label = i18n.t("decisionTestSection.resultPass", { defaultValue: "Pass" });
                         return (
                           <StatusBadge
                             key={check.name}

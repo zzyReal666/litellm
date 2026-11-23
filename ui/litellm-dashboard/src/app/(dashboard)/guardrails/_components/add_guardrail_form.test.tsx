@@ -42,6 +42,22 @@ describe("AddGuardrailForm close behavior", () => {
   });
 });
 
+describe("AddGuardrailForm required-field validation", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("blocks the next step and shows per-field messages for empty required fields", async () => {
+    renderForm();
+
+    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(await screen.findByText("Please enter a guardrail name")).toBeInTheDocument();
+    expect(screen.getByText("Please select a provider")).toBeInTheDocument();
+    expect(screen.getByLabelText("Guardrail Provider")).toBeInTheDocument();
+  });
+});
+
 describe("AddGuardrailForm provider options", () => {
   beforeEach(() => {
     vi.clearAllMocks();

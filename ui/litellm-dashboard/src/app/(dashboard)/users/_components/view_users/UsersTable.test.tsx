@@ -40,6 +40,7 @@ interface HarnessOverrides {
   onDeleteUser?: (user: UserInfo) => void;
   onResetPassword?: (userId: string) => void;
   onSortingChange?: Mock;
+  teams?: Array<{ team_id: string; team_alias?: string | null }>;
 }
 
 /**
@@ -55,6 +56,7 @@ function Harness({
   onDeleteUser = vi.fn(),
   onResetPassword = vi.fn(),
   onSortingChange,
+  teams = [],
 }: HarnessOverrides) {
   const [sorting, setSorting] = useState<SortingState>([{ id: "created_at", desc: true }]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 25 });
@@ -73,7 +75,7 @@ function Harness({
         rowCount={rowCount}
         isLoading={isLoading}
         possibleUIRoles={possibleUIRoles}
-        teams={[]}
+        teams={teams}
         sorting={sorting}
         onSortingChange={(updater) => {
           setSorting(updater);
@@ -121,6 +123,22 @@ describe("UsersTable", () => {
     ].forEach((header) => {
       expect(headerRow).toHaveTextContent(header);
     });
+  });
+
+  it("shows the team alias with the team ID, not the raw ID alone", () => {
+    render(
+      <Harness
+        teams={[
+          { team_id: "team-1", team_alias: "Platform" },
+          { team_id: "team-2", team_alias: null },
+        ]}
+        data={[makeUser({ teams: ["team-1", "team-2"] } as Partial<UserInfo>)]}
+      />,
+    );
+
+    expect(screen.getByText("Platform")).toBeInTheDocument();
+    expect(screen.getByText("team-1")).toBeInTheDocument();
+    expect(screen.getByText("team-2")).toBeInTheDocument();
   });
 
   it("renders spend with two decimal places", () => {

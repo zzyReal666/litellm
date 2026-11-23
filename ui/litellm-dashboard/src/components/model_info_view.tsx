@@ -14,8 +14,8 @@ import { ArrowLeft, CheckIcon, CopyIcon, Info } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { copyToClipboard as utilCopyToClipboard } from "../utils/dataUtils";
 import { stripMaskedSecrets } from "../utils/maskedSecretUtils";
-import { truncateString } from "../utils/textUtils";
 import AutoRouterConnectionTest from "./add_model/auto_router_connection_test";
+import ModelConnectionTest from "./add_model/model_connection_test";
 import { buildSavedJevConnectionTestRequest } from "./add_model/build_auto_router_routing_test_request";
 import { AutoRouterTestTarget, buildComplexityRouterTestTargets } from "./add_model/build_auto_router_test_targets";
 import {
@@ -42,7 +42,6 @@ import {
   modelInfoV1Call,
   modelPatchUpdateCall,
   tagListCall,
-  testConnectionRequest,
 } from "./networking";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { ModelPricingSummary } from "@/components/molecules/models/ModelPricingSummary";
@@ -88,6 +87,8 @@ export default function ModelInfoView({
   const [isAutoRouterTestModalOpen, setIsAutoRouterTestModalOpen] = useState(false);
   const [autoRouterTestId, setAutoRouterTestId] = useState(0);
   const [autoRouterTestTargets, setAutoRouterTestTargets] = useState<AutoRouterTestTarget[]>([]);
+  const [isConnectionTestOpen, setIsConnectionTestOpen] = useState(false);
+  const [connectionTestId, setConnectionTestId] = useState(0);
   const [guardrailsList, setGuardrailsList] = useState<string[]>([]);
   const [tagsList, setTagsList] = useState<Record<string, Tag>>({});
   const [credentialsList, setCredentialsList] = useState<CredentialItem[]>([]);
@@ -119,6 +120,7 @@ export default function ModelInfoView({
 
   // Keep modelData variable name for backwards compatibility
   const modelData = transformedModelData;
+  const auditModelInfo = localModelData?.model_info ?? modelData?.model_info;
 
   const aliasForTeam = (teamId: string | null | undefined): string | null =>
     teams?.find((team) => team.team_id === teamId)?.team_alias || null;
@@ -390,7 +392,13 @@ export default function ModelInfoView({
             health_check_model: values.health_check_model,
           };
         }
-        if (values.team_id) updatedModelInfo = { ...updatedModelInfo, team_id: values.team_id };
+        if (values.team_id !== undefined) {
+          const storedTeamId = modelData?.model_info?.team_id ?? null;
+          const nextTeamId = values.team_id || null;
+          if (nextTeamId !== storedTeamId) {
+            updatedModelInfo = { ...updatedModelInfo, team_id: nextTeamId };
+          }
+        }
         updatedModelInfo = applyPtuModelInfo(updatedModelInfo, values, ptuCostAttributionEnabled);
       } catch (e) {
         toast.fromError(i18n.t("modelInfoView.invalidJsonModelInfo", { defaultValue: "Invalid JSON in Model Info" }));
@@ -411,6 +419,7 @@ export default function ModelInfoView({
       };
 
       await modelPatchUpdateCall(accessToken, updateData, modelId);
+      const updatedAt = new Date().toISOString();
 
       const updatedModelData = {
         ...localModelData,
@@ -420,7 +429,7 @@ export default function ModelInfoView({
           selectedCredentialName === null
             ? localLitellmParams
             : { ...localLitellmParams, litellm_credential_name: selectedCredentialName },
-        model_info: updatedModelInfo,
+        model_info: { ...updatedModelInfo, updated_at: updatedAt, updated_by: userID },
       };
 
       setLocalModelData(updatedModelData);
@@ -433,7 +442,7 @@ export default function ModelInfoView({
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating model:", error);
-      toast.fromError(i18n.t("modelInfoView.modelSettingsUpdateFailed", { defaultValue: "Failed to update model settings" }));
+      toast.fromError(error);
     } finally {
       setIsSaving(false);
     }
@@ -478,37 +487,8 @@ export default function ModelInfoView({
       setIsAutoRouterTestModalOpen(true);
       return;
     }
-    try {
-      toast.info(i18n.t("modelInfoView.testingConnection", { defaultValue: "Testing connection..." }));
-      const response = await testConnectionRequest(
-        accessToken,
-        {
-          custom_llm_provider: localModelData.litellm_params.custom_llm_provider,
-          litellm_credential_name: localModelData.litellm_params.litellm_credential_name,
-          model: localModelData.litellm_model_name,
-        },
-        {
-          // `id` is required to disambiguate when multiple deployments
-          // share the same model_name (e.g. wildcard `openai/*` with two
-          // different `api_base` values for failover). Without it the
-          // backend silently falls back to deployments[0] and probes
-          // the wrong endpoint.
-          id: localModelData.model_info?.id,
-        },
-      );
-
-      if (response.status === "success") {
-        toast.success(i18n.t("modelInfoView.connectionTestSuccess", { defaultValue: "Connection test successful!" }));
-      } else {
-        throw new Error(response?.result?.error || response?.message || i18n.t("addModel.modelConnectionTest.unknownError", { defaultValue: "Unknown error" }));
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error("Error testing connection: " + truncateString(error.message, 100));
-      } else {
-        toast.error("Error testing connection: " + String(error));
-      }
-    }
+    setConnectionTestId((id) => id + 1);
+    setIsConnectionTestOpen(true);
   };
 
   const handleDelete = async () => {
@@ -687,8 +667,8 @@ export default function ModelInfoView({
                   />
                 </svg>
                 {i18n.t("modelInfoView.created-at", { defaultValue: "Created At" })}{" "}
-                {modelData.model_info.created_at
-                  ? new Date(modelData.model_info.created_at).toLocaleDateString("en-US", {
+                {auditModelInfo?.created_at
+                  ? new Date(auditModelInfo.created_at).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
@@ -704,7 +684,28 @@ export default function ModelInfoView({
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                {i18n.t("modelInfoView.created-by", { defaultValue: "Created By" })}{" "}{modelData.model_info.created_by || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
+                {i18n.t("modelInfoView.created-by", { defaultValue: "Created By" })}{" "}
+                {auditModelInfo?.created_by ||
+                  (auditModelInfo as (typeof auditModelInfo & { updated_by?: string | null }) | undefined)?.updated_by ||
+                  i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
+              </div>
+              <div data-testid="model-updated-at" className="flex items-center gap-x-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                {i18n.t("modelInfoView.updated-at", { defaultValue: "Updated At" })}{" "}
+                {auditModelInfo?.updated_at
+                  ? new Date(auditModelInfo.updated_at).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  : i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
               </div>
             </div>
 
@@ -772,7 +773,13 @@ export default function ModelInfoView({
         isOpen={isDeleteModalOpen}
         title={deleteLabel}
         alertMessage={i18n.t("modelInfoView.deleteModalAlert", { defaultValue: "This action cannot be undone." })}
-        message={`Are you sure you want to delete this ${isAnyAutoRouter ? "auto-router" : "model"}?`}
+        message={
+          isAnyAutoRouter
+            ? i18n.t("modelInfoView.deleteAutoRouterMessage", {
+                defaultValue: "Are you sure you want to delete this auto-router?",
+              })
+            : i18n.t("modelInfoView.deleteModalMessage", { defaultValue: "Are you sure you want to delete this model?" })
+        }
         resourceInformationTitle={i18n.t("modelInfoView.deleteModalResourceTitle", { defaultValue: "Model Information" })}
         resourceInformation={[
           {
@@ -869,6 +876,46 @@ export default function ModelInfoView({
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAutoRouterTestModalOpen(false)}>
+              {i18n.t("common.close", { defaultValue: "Close" })}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isConnectionTestOpen} onOpenChange={setIsConnectionTestOpen}>
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[700px]">
+          <DialogHeader>
+            <DialogTitle>
+              {i18n.t("addModel.addModelForm.connectionTestResultsTitle", {
+                defaultValue: "Connection Test Results",
+              })}
+            </DialogTitle>
+          </DialogHeader>
+          {isConnectionTestOpen && accessToken && localModelData && (
+            <ModelConnectionTest
+              key={connectionTestId}
+              accessToken={accessToken}
+              testMode="chat"
+              modelName={localModelData.litellm_model_name}
+              preparedRequest={{
+                litellmParamsObj: {
+                  custom_llm_provider: localModelData.litellm_params?.custom_llm_provider,
+                  litellm_credential_name: localModelData.litellm_params?.litellm_credential_name,
+                  model: localModelData.litellm_model_name,
+                },
+                modelInfoObj: { id: localModelData.model_info?.id },
+              }}
+              credentialName={
+                credentialLabelsByName(credentialsList).get(
+                  localModelData.litellm_params?.litellm_credential_name ?? "",
+                ) ??
+                localModelData.litellm_params?.litellm_credential_name ??
+                i18n.t("molecules.modelsColumns.manual", { defaultValue: "Manual" })
+              }
+            />
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsConnectionTestOpen(false)}>
               {i18n.t("common.close", { defaultValue: "Close" })}
             </Button>
           </DialogFooter>

@@ -84,15 +84,23 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
   const classifierCost = stats.baseline_spend == null ? null : stats.savings_estimated_classifier_cost ?? null;
   const comparedAll = stats.savings_estimated_turns === stats.turns;
   return (
-    <Card className="overflow-hidden py-0" role="region" aria-label={i18n.t("costOptimization.autoRouterBenchmarks.savingsAria", { defaultValue: "Auto-router savings" })}>
+    <Card
+      className="overflow-hidden py-0"
+      role="region"
+      aria-label={i18n.t("costOptimization.autoRouterBenchmarks.savingsAria", { defaultValue: "Auto-router savings" })}
+    >
       <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="flex flex-col items-center justify-center gap-2 p-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("costOptimization.autoRouterBenchmarks.totalEstimatedSavings", { defaultValue: "Total estimated savings" })}
+            {t("costOptimization.autoRouterBenchmarks.totalEstimatedSavings", {
+              defaultValue: "Total estimated savings",
+            })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <p className="min-w-0 break-all text-center text-4xl font-semibold tracking-tight text-foreground xl:text-6xl">
-              {stats.saved_spend == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.saved_spend)}
+              {stats.saved_spend == null
+                ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+                : usd(stats.saved_spend)}
             </p>
             {stats.saved_pct != null && (
               <Badge
@@ -126,8 +134,14 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
 
         <div className="flex flex-col justify-center border-t p-6 md:border-t-0 md:border-l">
           <SpendRow
-            label={t("costOptimization.autoRouterBenchmarks.actualAutoRouterSpend", { defaultValue: "Actual auto-router spend" })}
-            value={stats.baseline_spend == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.savings_estimated_actual_spend)}
+            label={t("costOptimization.autoRouterBenchmarks.actualAutoRouterSpend", {
+              defaultValue: "Actual auto-router spend",
+            })}
+            value={
+              stats.baseline_spend == null
+                ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+                : usd(stats.savings_estimated_actual_spend)
+            }
             tooltip={i18n.t("costOptimization.autoRouterBenchmarks.actualSpendTooltip", {
               defaultValue:
                 "Auto-routed spend in the range, including classification costs, for complexity routers. Adaptive and quality routers are excluded. Baseline is this spend plus recorded savings.",
@@ -138,29 +152,45 @@ const HeroCard: React.FC<{ view: BenchmarkView }> = ({ view }) => {
               subdued
               label={t("costOptimization.autoRouterBenchmarks.llmSpend", { defaultValue: "LLM spend" })}
               value={
-                classifierCost == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.savings_estimated_actual_spend - classifierCost)
+                classifierCost == null
+                  ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+                  : usd(stats.savings_estimated_actual_spend - classifierCost)
               }
             />
             <SpendRow
               subdued
-              label={t("costOptimization.autoRouterBenchmarks.classificationCost", { defaultValue: "Classification cost" })}
-              value={classifierCost == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(classifierCost)}
+              label={t("costOptimization.autoRouterBenchmarks.classificationCost", {
+                defaultValue: "Classification cost",
+              })}
+              value={
+                classifierCost == null
+                  ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+                  : usd(classifierCost)
+              }
               hint={
                 classifierCost == null
                   ? undefined
-                  : classificationRatePer1kTurns(classifierCost, stats.savings_estimated_turns)
+                  : classificationRatePer1kTurns(classifierCost, stats.savings_estimated_turns, t)
               }
             />
           </div>
           {stats.baseline_spend != null && classifierCost == null && (
             <p className="mb-3 text-xs text-muted-foreground">
-              {t("costOptimization.autoRouterBenchmarks.breakdownUnavailable", { defaultValue: "Breakdown unavailable because some usage predates classification-cost tracking." })}
+              {t("costOptimization.autoRouterBenchmarks.breakdownUnavailable", {
+                defaultValue: "Breakdown unavailable because some usage predates classification-cost tracking.",
+              })}
             </p>
           )}
           <Separator />
           <SpendRow
-            label={i18n.t("costOptimization.autoRouterBenchmarks.estimatedBaselineSpend", { defaultValue: "Estimated baseline spend" })}
-            value={stats.baseline_spend == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : usd(stats.baseline_spend)}
+            label={i18n.t("costOptimization.autoRouterBenchmarks.estimatedBaselineSpend", {
+              defaultValue: "Estimated baseline spend",
+            })}
+            value={
+              stats.baseline_spend == null
+                ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+                : usd(stats.baseline_spend)
+            }
           />
         </div>
       </div>
@@ -176,14 +206,20 @@ const StackedTurnBar: React.FC<{ buckets: BucketRow[] }> = ({ buckets }) => {
       <div
         className={`flex h-2.5 w-full gap-0.5 overflow-hidden rounded-sm ${segments.length === 0 ? "bg-muted" : ""}`}
         role="img"
-        aria-label={t("costOptimization.autoRouterBenchmarks.shareOfTurnsByBucket", { defaultValue: "Share of turns by bucket" })}
+        aria-label={t("costOptimization.autoRouterBenchmarks.shareOfTurnsByBucket", {
+          defaultValue: "Share of turns by bucket",
+        })}
       >
         {segments.map((b) => (
           <div
             key={b.key}
             className={`${b.fill} first:rounded-l-sm last:rounded-r-sm`}
             style={{ width: `${b.sharePct}%` }}
-            title={`${b.label}: ${b.turns.toLocaleString()} turns`}
+            title={i18n.t("costOptimization.autoRouterBenchmarks.bucketTurnsTitle", {
+              defaultValue: "{{label}}: {{turns}} turns",
+              label: i18n.t(b.labelKey, { defaultValue: b.label }),
+              turns: b.turns.toLocaleString(),
+            })}
           />
         ))}
       </div>
@@ -202,10 +238,16 @@ const BucketTable: React.FC<{ buckets: BucketRow[] }> = ({ buckets }) => (
   <Table className="border-b">
     <TableHeader>
       <TableRow className="hover:bg-transparent">
-        <TableHead className="text-[11px] uppercase tracking-wide">{i18n.t("costOptimization.autoRouterBenchmarks.colBucket", { defaultValue: "Bucket" })}</TableHead>
-        <TableHead className="text-right text-[11px] uppercase tracking-wide">{i18n.t("costOptimization.autoRouterBenchmarks.colTurns", { defaultValue: "Turns" })}</TableHead>
+        <TableHead className="text-[11px] uppercase tracking-wide">
+          {i18n.t("costOptimization.autoRouterBenchmarks.colBucket", { defaultValue: "Bucket" })}
+        </TableHead>
+        <TableHead className="text-right text-[11px] uppercase tracking-wide">
+          {i18n.t("costOptimization.autoRouterBenchmarks.colTurns", { defaultValue: "Turns" })}
+        </TableHead>
         <TableHead className="w-1/2" />
-        <TableHead className="text-right text-[11px] uppercase tracking-wide">{i18n.t("costOptimization.autoRouterBenchmarks.colHitRate", { defaultValue: "Hit rate" })}</TableHead>
+        <TableHead className="text-right text-[11px] uppercase tracking-wide">
+          {i18n.t("costOptimization.autoRouterBenchmarks.colHitRate", { defaultValue: "Hit rate" })}
+        </TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -215,8 +257,10 @@ const BucketTable: React.FC<{ buckets: BucketRow[] }> = ({ buckets }) => (
             <span className="flex items-center gap-2">
               <span className={`inline-block size-2 shrink-0 rounded-sm ${b.fill}`} aria-hidden />
               <span>
-                {b.label}
-                <span className="block text-xs font-normal text-muted-foreground">{b.sublabel}</span>
+                {i18n.t(b.labelKey, { defaultValue: b.label })}
+                <span className="block text-xs font-normal text-muted-foreground">
+                  {i18n.t(b.sublabelKey, { defaultValue: b.sublabel })}
+                </span>
               </span>
             </span>
           </TableCell>
@@ -247,7 +291,9 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
       <div className="grid lg:grid-cols-[1fr_3fr]">
         <div className="flex flex-col border-b p-6 lg:border-b-0 lg:border-r">
           <div className="flex flex-1 flex-col justify-center gap-3">
-            <p className="text-sm text-muted-foreground">{t("costOptimization.autoRouterBenchmarks.cacheHitRate", { defaultValue: "Cache hit rate" })}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("costOptimization.autoRouterBenchmarks.cacheHitRate", { defaultValue: "Cache hit rate" })}
+            </p>
             <p className="text-5xl font-semibold tracking-tight text-foreground">{pctLabel(cache.hit_rate_pct)}</p>
           </div>
           {expiredMissPct === null ? null : (
@@ -279,7 +325,9 @@ const CachingCard: React.FC<{ cache: AutoRouterCacheStats }> = ({ cache }) => {
 
         <div className="flex flex-col gap-3 p-6">
           <div className="flex items-baseline justify-between">
-            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{t("costOptimization.autoRouterBenchmarks.shareOfTurns", { defaultValue: "Share of turns" })}</p>
+            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+              {t("costOptimization.autoRouterBenchmarks.shareOfTurns", { defaultValue: "Share of turns" })}
+            </p>
             <p className="text-xs text-muted-foreground">
               <span className="text-lg font-semibold tabular-nums text-foreground">{total.toLocaleString()}</span>{" "}
               {i18n.t("costOptimization.autoRouterBenchmarks.turnsMeasuredSuffix", { defaultValue: "turns measured" })}
@@ -311,11 +359,29 @@ interface BenchmarksBodyProps {
 
 const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data, selectedKey, autoRouters }) => {
   const { t } = useTranslation();
-  if (isPending) return <Message>{t("costOptimization.autoRouterBenchmarks.loadingUsage", { defaultValue: "Loading auto-router usage..." })}</Message>;
+  if (isPending)
+    return (
+      <Message>
+        {t("costOptimization.autoRouterBenchmarks.loadingUsage", { defaultValue: "Loading auto-router usage..." })}
+      </Message>
+    );
   if (error instanceof ApiError && error.status === 403) {
-    return <Message>{t("costOptimization.autoRouterBenchmarks.adminOnly", { defaultValue: "Auto-router usage is visible to proxy admin roles only" })}</Message>;
+    return (
+      <Message>
+        {t("costOptimization.autoRouterBenchmarks.adminOnly", {
+          defaultValue: "Auto-router usage is visible to proxy admin roles only",
+        })}
+      </Message>
+    );
   }
-  if (error || !data) return <Message>{t("costOptimization.autoRouterBenchmarks.unavailableNow", { defaultValue: "Auto-router usage is unavailable right now" })}</Message>;
+  if (error || !data)
+    return (
+      <Message>
+        {t("costOptimization.autoRouterBenchmarks.unavailableNow", {
+          defaultValue: "Auto-router usage is unavailable right now",
+        })}
+      </Message>
+    );
 
   const view = viewFor(data, selectedKey);
   const stats = view.stats;
@@ -334,21 +400,37 @@ const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data,
 
       <p className="text-xs text-muted-foreground">
         {i18n.t("costOptimization.autoRouterBenchmarks.sessionMetricsNote", {
-          defaultValue: "Session metrics cover every session that overlaps the range, including its turns outside the range.",
+          defaultValue:
+            "Session metrics cover every session that overlaps the range, including its turns outside the range.",
         })}
       </p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Metric
-          label={t("costOptimization.autoRouterBenchmarks.avgTurnsPerSession", { defaultValue: "Avg turns per session" })}
-          value={stats.avg_turns_per_session == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : stats.avg_turns_per_session.toFixed(1)}
-          hint={i18n.t("costOptimization.autoRouterBenchmarks.sessionsSuffix", { defaultValue: "· {{sessions}} sessions", sessions: stats.sessions.toLocaleString() })}
+          label={t("costOptimization.autoRouterBenchmarks.avgTurnsPerSession", {
+            defaultValue: "Avg turns per session",
+          })}
+          value={
+            stats.avg_turns_per_session == null
+              ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+              : stats.avg_turns_per_session.toFixed(1)
+          }
+          hint={i18n.t("costOptimization.autoRouterBenchmarks.sessionsSuffix", {
+            defaultValue: "· {{sessions}} sessions",
+            sessions: stats.sessions.toLocaleString(),
+          })}
         />
         <Metric
           label={t("costOptimization.autoRouterBenchmarks.avgSessionLength", { defaultValue: "Avg session length" })}
-          value={stats.avg_session_seconds == null ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" }) : durationLabel(stats.avg_session_seconds)}
+          value={
+            stats.avg_session_seconds == null
+              ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
+              : durationLabel(stats.avg_session_seconds)
+          }
         />
         <Metric
-          label={t("costOptimization.autoRouterBenchmarks.avgTokensPerSession", { defaultValue: "Avg tokens per session" })}
+          label={t("costOptimization.autoRouterBenchmarks.avgTokensPerSession", {
+            defaultValue: "Avg tokens per session",
+          })}
           value={
             stats.avg_tokens_per_session == null
               ? t("costOptimization.autoRouterBenchmarks.unavailable", { defaultValue: "Unavailable" })
@@ -361,9 +443,15 @@ const BenchmarksBody: React.FC<BenchmarksBodyProps> = ({ isPending, error, data,
 
       <div className="space-y-4">
         <div className="flex flex-wrap items-baseline gap-2">
-          <h3 className="text-lg font-semibold text-foreground">{t("costOptimization.autoRouterBenchmarks.autoRouterPromptCaching", { defaultValue: "Auto-router prompt caching" })}</h3>
+          <h3 className="text-lg font-semibold text-foreground">
+            {t("costOptimization.autoRouterBenchmarks.autoRouterPromptCaching", {
+              defaultValue: "Auto-router prompt caching",
+            })}
+          </h3>
           <p className="text-xs text-muted-foreground">
-            {t("costOptimization.autoRouterBenchmarks.bucketRule", { defaultValue: "every turn falls in exactly one bucket, by what the router did" })}
+            {t("costOptimization.autoRouterBenchmarks.bucketRule", {
+              defaultValue: "every turn falls in exactly one bucket, by what the router did",
+            })}
           </p>
         </div>
         <CachingCard cache={stats.cache} />
@@ -391,14 +479,20 @@ export const AutoRouterUsageView: React.FC<AutoRouterBenchmarksTabProps> = ({
   const { data: autoRouters } = useAutoRouters();
 
   const groups = data?.groups ?? [];
-  const selectedLabel = data ? viewFor(data, selectedKey).label: i18n.t("costOptimization.autoRouterBenchmarks.allAutoRouters", { defaultValue: "All auto-routers" });
+  const selectedView = data ? viewFor(data, selectedKey) : null;
+  const selectedLabel = selectedView?.labelKey
+    ? i18n.t(selectedView.labelKey, { defaultValue: selectedView.label })
+    : selectedView?.label ??
+      i18n.t("costOptimization.autoRouterBenchmarks.allAutoRouters", { defaultValue: "All auto-routers" });
   const rangeLabel = formatRangeLabel(dateValue.from, dateValue.to);
 
   return (
     <div className="w-full space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-foreground">{i18n.t("templates.keyInfoView.tabAutoRouterUsage", { defaultValue: "Auto-router usage" })}</h2>
+          <h2 className="text-xl font-semibold text-foreground">
+            {i18n.t("templates.keyInfoView.tabAutoRouterUsage", { defaultValue: "Auto-router usage" })}
+          </h2>
           {rangeLabel && <p className="mt-1 text-sm text-muted-foreground">{rangeLabel} (UTC)</p>}
         </div>
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
@@ -409,7 +503,9 @@ export const AutoRouterUsageView: React.FC<AutoRouterBenchmarksTabProps> = ({
                 <SelectValue>{selectedLabel}</SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={ALL_ROUTERS}>{i18n.t("costOptimization.autoRouterBenchmarks.allAutoRouters", { defaultValue: "All auto-routers" })}</SelectItem>
+                <SelectItem value={ALL_ROUTERS}>
+                  {i18n.t("costOptimization.autoRouterBenchmarks.allAutoRouters", { defaultValue: "All auto-routers" })}
+                </SelectItem>
                 {groups.map((g) => (
                   <SelectItem key={groupKey(g)} value={groupKey(g)}>
                     {groupLabel(g, groups)}

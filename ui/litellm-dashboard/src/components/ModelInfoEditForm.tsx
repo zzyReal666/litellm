@@ -10,6 +10,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { z } from "zod";
 
 import { TagsInput } from "@/app/(dashboard)/guardrails/_components/content_filter/TagsInput";
+import { withRequirement } from "./add_model/FieldRequirements";
 import { FormField } from "@/components/shared/form/FormField";
 import { UtcDateTimeInput } from "@/components/shared/form/UtcDateTimeInput";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,6 @@ import type { Team } from "./key_team_helpers/key_list";
 import type { CredentialItem } from "./networking";
 import NumericalInput from "./shared/numerical_input";
 import type { Tag } from "./tag_management/types";
-import { ModelTeamSelect } from "./view_model/ModelTeamSelect";
 import VectorStoreSelector from "./vector_store_management/VectorStoreSelector";
 import { formatPtuUtcDisplay, utcIsoToPickerValue } from "../utils/ptuDatetime";
 import { isMaskedSecret } from "../utils/maskedSecretUtils";
@@ -58,11 +58,32 @@ interface PtuEditField {
   isCount?: boolean;
 }
 
+const ptuFieldLabel = (key: string, fallback: string): string => i18n.t(key, { defaultValue: fallback });
+
 const PTU_EDIT_FIELDS: PtuEditField[] = [
-  { name: PTU_COUNT_FIELD, label: "PTU Count", input: "number", placeholder: "e.g. 15", isCount: true },
-  { name: PTU_RATE_FIELD, label: "Cost per PTU / Hour (CNY)", input: "number", placeholder: "e.g. 2.00" },
-  { name: PTU_START_FIELD, label: "PTU Effective From (UTC)", input: "datetime" },
-  { name: PTU_END_FIELD, label: "PTU Effective To (UTC)", input: "datetime" },
+  {
+    name: PTU_COUNT_FIELD,
+    label: ptuFieldLabel("modelInfoEditForm.fieldPtuCount", "PTU Count"),
+    input: "number",
+    placeholder: ptuFieldLabel("modelInfoEditForm.placeholderPtuCount", "e.g. 15"),
+    isCount: true,
+  },
+  {
+    name: PTU_RATE_FIELD,
+    label: ptuFieldLabel("modelInfoEditForm.fieldPtuRate", "Cost per PTU / Hour (CNY)"),
+    input: "number",
+    placeholder: ptuFieldLabel("modelInfoEditForm.placeholderPtuRate", "e.g. 2.00"),
+  },
+  {
+    name: PTU_START_FIELD,
+    label: ptuFieldLabel("modelInfoEditForm.fieldPtuStart", "PTU Effective From (UTC)"),
+    input: "datetime",
+  },
+  {
+    name: PTU_END_FIELD,
+    label: ptuFieldLabel("modelInfoEditForm.fieldPtuEnd", "PTU Effective To (UTC)"),
+    input: "datetime",
+  },
 ];
 
 export type TouchedPricingField = "input_cost" | "output_cost" | "cache_read_cost" | "cache_write_cost";
@@ -164,6 +185,15 @@ const buildSchema = (ptuEnabled: boolean, isFieldTouched: (field: TouchedPricing
     const reject = (path: ModelEditFieldName, message: string) =>
       ctx.addIssue({ code: "custom", path: [path], message });
 
+    if (!values.model_name?.trim()) {
+      reject("model_name", i18n.t("modelInfoEditForm.modelNameRequired", { defaultValue: "Model name is required" }));
+    }
+    if (!values.litellm_model_name?.trim()) {
+      reject(
+        "litellm_model_name",
+        i18n.t("modelInfoEditForm.litellmModelNameRequired", { defaultValue: "LiteLLM model name is required" }),
+      );
+    }
     if (values.litellm_extra_params && !isJson(values.litellm_extra_params)) {
       reject("litellm_extra_params", i18n.t("modelInfoEditForm.invalidJson", { defaultValue: "Please enter valid JSON" }));
     }
@@ -174,12 +204,21 @@ const buildSchema = (ptuEnabled: boolean, isFieldTouched: (field: TouchedPricing
     }
 
     if (!isPositiveWholePtuCount(values.ptu_count)) {
-      reject("ptu_count", `PTU Count must be a whole number between 1 and ${MAX_PTU_COUNT.toLocaleString()}`);
+      reject(
+        "ptu_count",
+        i18n.t("modelInfoEditForm.ptuCountRange", {
+          defaultValue: "PTU Count must be a whole number between 1 and {{max}}",
+          max: MAX_PTU_COUNT.toLocaleString(),
+        }),
+      );
     }
     if (!isNonNegativePtuRate(values.cost_per_ptu_per_hour)) {
       reject(
         "cost_per_ptu_per_hour",
-        `Cost per PTU / Hour must be between 0 and ${MAX_COST_PER_PTU_PER_HOUR.toLocaleString()}`,
+        i18n.t("modelInfoEditForm.ptuRateRange", {
+          defaultValue: "Cost per PTU / Hour must be between 0 and {{max}}",
+          max: MAX_COST_PER_PTU_PER_HOUR.toLocaleString(),
+        }),
       );
     }
     if (isFilledPtuValue(values.ptu_count) !== isFilledPtuValue(values.cost_per_ptu_per_hour)) {
@@ -216,7 +255,7 @@ const perMillionTokens = (...rates: (number | null | undefined)[]): number | nul
 
 export const toModelEditFormValues = (localModelData: any, isWildcardModel: boolean): ModelEditFormValues => ({
   model_name: localModelData.model_name,
-  litellm_model_name: localModelData.litellm_model_name,
+  litellm_model_name: localModelData.litellm_model_name ?? localModelData.litellm_params?.model,
   api_base: localModelData.litellm_params.api_base,
   custom_llm_provider: localModelData.litellm_params.custom_llm_provider,
   organization: localModelData.litellm_params.organization,
@@ -304,6 +343,8 @@ const Display: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const FIELD_LABEL_CLASS = "text-sm font-medium text-foreground";
+const NO_TEAM_VALUE = "__no_team__";
+const REQUIRED_EDIT_FIELDS: ReadonlySet<ModelEditFieldName> = new Set(["model_name", "litellm_model_name"]);
 
 const FieldLabel: React.FC<{ htmlFor?: string; children: React.ReactNode }> = ({ htmlFor, children }) =>
   htmlFor === undefined ? (
@@ -380,13 +421,23 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
   const form = useForm<ModelEditFormValues>({
     resolver,
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: toModelEditFormValues(localModelData, isWildcardModel),
   });
 
   const submit = (event: React.FormEvent<HTMLFormElement>) =>
-    form.handleSubmit(async (values) => {
-      await onSubmit(values, isFieldTouched);
-    })(event);
+    form.handleSubmit(
+      async (values) => {
+        await onSubmit(values, isFieldTouched);
+      },
+      (errors) => {
+        const firstInvalid = Object.keys(errors)[0];
+        if (firstInvalid !== undefined) {
+          form.setFocus(firstInvalid as ModelEditFieldName);
+        }
+      },
+    )(event);
 
   const cancel = () => {
     form.reset(toModelEditFormValues(localModelData, isWildcardModel));
@@ -394,35 +445,60 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
     onCancel();
   };
 
-  const textField = (name: ModelEditFieldName, label: string, placeholder: string, stored: unknown) => (
-    <div>
-      <FieldLabel>{label}</FieldLabel>
-      {isEditing ? (
-        <FormField control={form.control} name={name}>
-          {({ value, ...control }) => <Input {...control} value={(value as string) ?? ""} placeholder={placeholder} />}
-        </FormField>
-      ) : (
-        <Display>{(stored as string) || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}</Display>
-      )}
-    </div>
-  );
+  const textField = (name: ModelEditFieldName, label: React.ReactNode, placeholder: string, stored: unknown) => {
+    const required = REQUIRED_EDIT_FIELDS.has(name);
+    return (
+      <div>
+        <FieldLabel>{required ? withRequirement(label, true) : label}</FieldLabel>
+        {isEditing ? (
+          <FormField control={form.control} name={name} rules={required ? { required: true } : undefined}>
+            {({ value, ...control }) => (
+              <Input
+                {...control}
+                aria-required={required ? "true" : undefined}
+                value={(value as string) ?? ""}
+                placeholder={placeholder}
+              />
+            )}
+          </FormField>
+        ) : (
+          <Display>{(stored as string) || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}</Display>
+        )}
+      </div>
+    );
+  };
 
-  const numberField = (name: ModelEditFieldName, label: string, placeholder: string, stored: unknown) => (
-    <div>
-      <FieldLabel>{label}</FieldLabel>
-      {isEditing ? (
-        <FormField control={form.control} name={name}>
-          {({ value, ...control }) => <NumericalInput {...control} value={value ?? ""} placeholder={placeholder} />}
-        </FormField>
-      ) : (
-        <Display>{(stored as string) || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}</Display>
-      )}
-    </div>
-  );
+  const numberField = (name: ModelEditFieldName, label: React.ReactNode, placeholder: string, stored: unknown) => {
+    const required = REQUIRED_EDIT_FIELDS.has(name);
+    return (
+      <div>
+        <FieldLabel>{label}</FieldLabel>
+        {isEditing ? (
+          <FormField control={form.control} name={name}>
+            {({ value, ...control }) => (
+              <NumericalInput
+                {...control}
+                aria-required={required ? "true" : undefined}
+                value={value ?? ""}
+                placeholder={placeholder}
+              />
+            )}
+          </FormField>
+        ) : (
+          <Display>{(stored as string) || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}</Display>
+        )}
+      </div>
+    );
+  };
 
-  const pricingField = (name: TouchedPricingField, label: string, placeholder: string, description?: string) =>
+  const pricingField = (
+    name: TouchedPricingField,
+    label: string,
+    placeholder: string,
+    description?: string,
+  ) =>
     isEditing ? (
-      <FormField control={form.control} name={name} label={label} description={description}>
+      <FormField control={form.control} name={name} label={withRequirement(label, false)} description={description}>
         {({ value, onChange, ...control }) => (
           <NumericalInput
             {...control}
@@ -437,7 +513,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
       </FormField>
     ) : (
       <div>
-        <FieldLabel>{label}</FieldLabel>
+        <FieldLabel>{withRequirement(label, false)}</FieldLabel>
         <Display>{displayCost(localModelData, name)}</Display>
       </div>
     );
@@ -466,7 +542,12 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
       <form onSubmit={submit}>
         <div className="space-y-4">
           <div className="space-y-4">
-            {textField("model_name", i18n.t("modelInfoView.fieldModelName", { defaultValue: "Model Name" }), i18n.t("modelInfoView.placeholderModelName", { defaultValue: "Enter model name" }), localModelData.model_name)}
+            {textField(
+              "model_name",
+              i18n.t("modelInfoView.fieldModelName", { defaultValue: "Model Name" }),
+              i18n.t("modelInfoView.placeholderModelName", { defaultValue: "Enter model name" }),
+              localModelData.model_name,
+            )}
             {textField(
               "litellm_model_name",
               i18n.t("modelInfoView.fieldLitellmModelName", { defaultValue: "网关模型名称" }),
@@ -527,16 +608,21 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
               i18n.t("modelInfoView.tooltipCacheWriteCost", { defaultValue: "If left blank on save, defaults to Input Cost (backend falls back to input_cost_per_token)." }),
             )}
 
-            {textField("api_base", "API Base", i18n.t("modelInfoView.placeholderApiBase", { defaultValue: "Enter API base" }), localModelData.litellm_params?.api_base)}
+            {textField(
+              "api_base",
+              i18n.t("modelInfoView.fieldApiBase", { defaultValue: "API Base" }),
+              i18n.t("modelInfoView.placeholderApiBase", { defaultValue: "Enter API base" }),
+              localModelData.litellm_params?.api_base,
+            )}
             {textField(
               "custom_llm_provider",
-              "Custom LLM Provider",
+              i18n.t("modelInfoView.fieldCustomLlmProvider", { defaultValue: "Custom LLM Provider" }),
               i18n.t("modelInfoView.placeholderCustomLlmProvider", { defaultValue: "Enter custom LLM provider" }),
               localModelData.litellm_params?.custom_llm_provider,
             )}
             {textField(
               "organization",
-              "Organization",
+              withRequirement(i18n.t("modelInfoView.fieldOrganization", { defaultValue: "Organization" }), false),
               i18n.t("modelInfoView.placeholderOrganization", { defaultValue: "Enter organization" }),
               localModelData.litellm_params?.organization,
             )}
@@ -569,7 +655,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
             <div>
               <FieldLabel>
-                Guardrails
+                {i18n.t("modelInfoView.fieldGuardrails", { defaultValue: "Guardrails" })}
                 <DocsHint
                   text={i18n.t("modelInfoView.tooltipGuardrails", { defaultValue: "Apply safety guardrails to this model to filter content or enforce policies" })}
                 />
@@ -739,8 +825,28 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
                       <div className="mt-2">
                         {localModelData.litellm_params.cache_control_injection_points.map((point: any, i: number) => (
                           <div key={i} className="mb-1 text-sm text-muted-foreground">
-                            Location: {point.location},{point.role && <span> Role: {point.role}</span>}
-                            {point.index !== undefined && <span> Index: {point.index}</span>}
+                            {i18n.t("modelInfoView.cacheControlLocation", {
+                              defaultValue: "Location: {{location}},",
+                              location: point.location,
+                            })}
+                            {point.role && (
+                              <span>
+                                {" "}
+                                {i18n.t("modelInfoView.cacheControlRole", {
+                                  defaultValue: "Role: {{role}}",
+                                  role: point.role,
+                                })}
+                              </span>
+                            )}
+                            {point.index !== undefined && (
+                              <span>
+                                {" "}
+                                {i18n.t("modelInfoView.cacheControlIndex", {
+                                  defaultValue: "Index: {{index}}",
+                                  index: point.index,
+                                })}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -801,18 +907,45 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
             </div>
 
             <div>
-              <FieldLabel>Team</FieldLabel>
+              <FieldLabel>{withRequirement(i18n.t("modelInfoView.fieldTeam", { defaultValue: "Team" }), false)}</FieldLabel>
               {isEditing ? (
                 <FormField control={form.control} name="team_id">
-                  {({ id, value, onChange, onBlur }) => (
-                    <ModelTeamSelect id={id} value={value} onChange={onChange} onBlur={onBlur} teams={teams} />
-                  )}
+                  {({ id, value, onChange, onBlur }) => {
+                    const selected = value as string | undefined;
+                    const items = (teams ?? []).map((team) => ({
+                      value: team.team_id,
+                      label: team.team_alias ? `${team.team_alias} (${team.team_id})` : team.team_id,
+                    }));
+                    const noTeam = i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" });
+                    return (
+                      <Select
+                        items={[{ value: NO_TEAM_VALUE, label: noTeam }, ...items]}
+                        value={selected === undefined ? null : selected || NO_TEAM_VALUE}
+                        onValueChange={(next: string | null) => onChange(next === NO_TEAM_VALUE ? "" : next ?? "")}
+                      >
+                        <SelectTrigger id={id} className="w-full" onBlur={onBlur}>
+                          <SelectValue
+                            placeholder={i18n.t("modelTeamSelect.select-a-team", { defaultValue: "Select a team" })}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NO_TEAM_VALUE}>{noTeam}</SelectItem>
+                          {items.map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    );
+                  }}
                 </FormField>
               ) : (
                 <Display>
                   {teamAlias
                     ? `${teamAlias} (${localModelData.model_info?.team_id})`
-                    : localModelData.model_info?.team_id || i18n.t("modelInfoView.notSet", { defaultValue: "Not Set" })}
+                    : localModelData.model_info?.team_id ||
+                      i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" })}
                 </Display>
               )}
             </div>
@@ -820,7 +953,7 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
 
           {isEditing && (
             <div className="mt-6 flex justify-end gap-2">
-              <Button type="submit" variant="secondary" onClick={cancel} disabled={isSaving}>
+              <Button type="button" variant="secondary" onClick={cancel} disabled={isSaving}>
                 {i18n.t("common.cancel", { defaultValue: "Cancel" })}
               </Button>
               <Button type="submit" disabled={isSaving} aria-busy={isSaving}>

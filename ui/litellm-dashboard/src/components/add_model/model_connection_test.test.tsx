@@ -89,8 +89,79 @@ describe("ModelConnectionTest", () => {
     expect(screen.getByText("Troubleshooting Details")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Copy to Clipboard/ }));
 
-    expect(writeText).toHaveBeenCalledWith(expect.stringContaining("https://api.example.test/v1/chat/completions"));
+    await vi.waitFor(() =>
+      expect(writeText).toHaveBeenCalledWith(expect.stringContaining("https://api.example.test/v1/chat/completions")),
+    );
+    const copiedCurl = writeText.mock.calls[0][0] as string;
+    expect(copiedCurl).not.toContain("Bearer test");
+    expect(copiedCurl).toContain("Authorization: ***");
     expect(toast.success).toHaveBeenCalledWith("Copied to clipboard");
+  });
+
+  it("falls back to execCommand when the async clipboard API rejects (HTTP deployments)", async () => {
+    const writeText = vi.fn().mockRejectedValue(new Error("Clipboard API unavailable"));
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    const execCommand = vi.fn().mockReturnValue(true);
+    Object.defineProperty(document, "execCommand", { configurable: true, value: execCommand });
+    vi.mocked(testConnectionRequest).mockResolvedValue({
+      status: "error",
+      result: {
+        error: "404 model not found",
+        raw_request_typed_dict: {
+          raw_request_api_base: "http://proxy.local/v1/chat/completions",
+          raw_request_body: { model: "gpt-4o-mini" },
+          raw_request_headers: {},
+        },
+      },
+    } as never);
+
+    render(<ModelConnectionTest formValues={{ model: "gpt-4o-mini" }} accessToken="sk-test" testMode="chat" />);
+    await finishConnectionTest();
+
+    fireEvent.click(screen.getByRole("button", { name: /Copy to Clipboard/ }));
+
+    await vi.waitFor(() => expect(execCommand).toHaveBeenCalledWith("copy"));
+    expect(toast.success).toHaveBeenCalledWith("Copied to clipboard");
+  });
+
+  it.each([
+    ["401 invalid api key", "Authentication failed", /API key or credential is correct/],
+    ["404 model not found", "Endpoint or model not found", /provider deploys this model name/],
+    ["Request timed out after 30s", "Request timed out", /network connectivity/],
+    ["429 rate limit exceeded", "Rate limited or quota exceeded", /account quota/],
+  ])("explains a %s failure with a matching suggestion", async (providerError, title, suggestion) => {
+    vi.mocked(testConnectionRequest).mockResolvedValue({
+      status: "error",
+      result: { error: providerError },
+    } as never);
+
+    render(<ModelConnectionTest formValues={{ model: "gpt-4o-mini" }} accessToken="sk-test" testMode="chat" />);
+    await finishConnectionTest();
+
+    expect(screen.getByTestId("connection-issue-title")).toHaveTextContent(title);
+    expect(screen.getByTestId("connection-troubleshooting")).toHaveTextContent(suggestion);
+  });
+
+  it("shows the credential and duration for a prepared saved-model request", async () => {
+    vi.mocked(testConnectionRequest).mockResolvedValue({ status: "success" } as never);
+
+    render(
+      <ModelConnectionTest
+        accessToken="sk-test"
+        testMode="chat"
+        preparedRequest={{ litellmParamsObj: { model: "openai/gpt-4o-mini" }, modelInfoObj: { id: "model-1" } }}
+        credentialName="prod-openai"
+      />,
+    );
+    await finishConnectionTest();
+
+    expect(testConnectionRequest).toHaveBeenCalledWith(
+      "sk-test",
+      { model: "openai/gpt-4o-mini" },
+      { id: "model-1" },
+      undefined,
+    );
+    expect(screen.getByTestId("connection-duration")).toBeInTheDocument();
   });
 
   it("shows a preparation failure without sending a connection request", async () => {

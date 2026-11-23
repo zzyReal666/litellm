@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import aimSecurityLogo from "../../../../../public/assets/logos/aim_security.jpeg";
 import aktoLogo from "../../../../../public/assets/logos/akto.svg";
 import aliceLogo from "../../../../../public/assets/logos/alice.svg";
@@ -131,10 +132,14 @@ export const normalizeLoggingOnlyScopeChoice = (
   directionalScopeSupported: boolean,
 ): LoggingOnlyScopeChoice => (directionalScopeSupported || choice === "default" ? choice : "default");
 
-const LOGGING_ONLY_SCOPE_OPTIONS: LoggingOnlyScopeOption[] = [
-  { label: "Default (request and response)", value: "default" },
-  { label: "Input only (request)", value: "input" },
-  { label: "Output only (response)", value: "output" },
+const LOGGING_ONLY_SCOPE_OPTIONS: { labelKey: string; defaultLabel: string; value: LoggingOnlyScopeChoice }[] = [
+  {
+    labelKey: "guardrails.loggingOnlyScope.default",
+    defaultLabel: "Default (request and response)",
+    value: "default",
+  },
+  { labelKey: "guardrails.loggingOnlyScope.inputOnly", defaultLabel: "Input only (request)", value: "input" },
+  { labelKey: "guardrails.loggingOnlyScope.outputOnly", defaultLabel: "Output only (response)", value: "output" },
 ];
 
 export const loggingOnlyScopeToChoice = (v: string | null | undefined): LoggingOnlyScopeChoice =>
@@ -183,10 +188,13 @@ export const getLoggingOnlyScopeUpdate = (
   };
 };
 
-export const formatLoggingOnlyScope = (v: string | null | undefined): string => {
-  if (v === "input") return "Input only (request)";
-  if (v === "output") return "Output only (response)";
-  return "Default (request and response)";
+export const formatLoggingOnlyScope = (
+  v: string | null | undefined,
+  t: (key: string, options?: { defaultValue?: string }) => string = i18n.t.bind(i18n),
+): string => {
+  if (v === "input") return t("guardrails.loggingOnlyScope.inputOnly", { defaultValue: "Input only (request)" });
+  if (v === "output") return t("guardrails.loggingOnlyScope.outputOnly", { defaultValue: "Output only (response)" });
+  return t("guardrails.loggingOnlyScope.default", { defaultValue: "Default (request and response)" });
 };
 
 export const modeIncludesLoggingOnly = (raw: unknown): boolean => {
@@ -202,9 +210,12 @@ export const modeIncludesLoggingOnly = (raw: unknown): boolean => {
 };
 
 export const getLoggingOnlyScopeOptions = (directionalScopeSupported: boolean): LoggingOnlyScopeOption[] =>
-  directionalScopeSupported
-    ? LOGGING_ONLY_SCOPE_OPTIONS
-    : LOGGING_ONLY_SCOPE_OPTIONS.filter((option) => option.value === "default");
+  LOGGING_ONLY_SCOPE_OPTIONS.filter((option) => directionalScopeSupported || option.value === "default").map(
+    ({ labelKey, defaultLabel, value }) => ({
+      label: i18n.t(labelKey, { defaultValue: defaultLabel }),
+      value,
+    }),
+  );
 
 export const supportsDirectionalLoggingOnlyScope = (
   settings: { providers_without_directional_logging_only_scope?: string[] } | null,
@@ -219,7 +230,10 @@ export const supportsDirectionalLoggingOnlyScope = (
   return !providerKey || !settings?.providers_without_directional_logging_only_scope?.includes(providerKey);
 };
 
-export const formatGuardrailMode = (raw: unknown): string => {
+export const formatGuardrailMode = (
+  raw: unknown,
+  t: (key: string, options?: { defaultValue?: string }) => string = i18n.t.bind(i18n),
+): string => {
   const flat: string[] = toModeArray(raw);
   if (flat.length > 0) return flat.join(", ");
   if (raw === null || typeof raw !== "object") return "";
@@ -227,7 +241,8 @@ export const formatGuardrailMode = (raw: unknown): string => {
   const { tags, default: fallback } = raw as { tags?: Record<string, unknown>; default?: unknown };
   const tagged: string[] = tags && typeof tags === "object" ? Object.values(tags).flatMap(toModeArray) : [];
   const modes: string[] = Array.from(new Set([...toModeArray(fallback), ...tagged]));
-  return modes.length > 0 ? `${modes.join(", ")} (tag-based)` : "";
+  if (modes.length === 0) return "";
+  return `${modes.join(", ")} ${t("guardrails.guardrailMode.tagBased", { defaultValue: "(tag-based)" })}`;
 };
 
 // Resolves the supported modes for the selected provider, falling back to the global list
@@ -267,14 +282,24 @@ export const shouldRenderAzureTextModerationConfigSettings = (provider: string |
 };
 
 // Decides if we should render the Content Filter config settings for a given provider
-export const shouldRenderContentFilterConfigSettings = (provider: string | null) => {
+const CONTENT_FILTER_PROVIDER = "litellm_content_filter";
+const CONTENT_FILTER_LABELS = new Set(["litellmcontentfilter", "内容过滤器"]);
+
+const normalizeProviderLabel = (value: string): string => value.toLowerCase().replace(/[\s_\-().]/g, "");
+
+export const shouldRenderContentFilterConfigSettings = (provider: string | null): boolean => {
   if (!provider) {
     return false;
   }
-  // Check both dynamic and legacy providers
+  if (guardrail_provider_map[provider] === CONTENT_FILTER_PROVIDER) {
+    return true;
+  }
+  if (CONTENT_FILTER_LABELS.has(normalizeProviderLabel(provider))) {
+    return true;
+  }
   const currentProviders = getGuardrailProviders();
-  const providerEnum = currentProviders[provider as keyof typeof currentProviders];
-  return providerEnum === "内容过滤器";
+  const providerLabel = currentProviders[provider as keyof typeof currentProviders];
+  return typeof providerLabel === "string" && CONTENT_FILTER_LABELS.has(normalizeProviderLabel(providerLabel));
 };
 
 export const shouldRenderLLMJudgeFields = (provider: string | null) => {
@@ -311,7 +336,7 @@ export const guardrailLogoMap = {
   "Prompt Security": promptSecurityLogo.src,
   PromptGuard: promptguardLogo.src,
   XecGuard: xecguardLogo.src,
-  "内容过滤器": litellmLogo.src,
+  内容过滤器: litellmLogo.src,
   "LLM as a Judge": litellmLogo.src,
   "Hide Secrets": litellmLogo.src,
   Akto: aktoLogo.src,
@@ -388,11 +413,25 @@ export function choiceToSkipToolForCreate(choice: SkipToolMessageChoice | undefi
 export const GUARDRAIL_STREAM_SCOPES = ["both", "streaming", "non_streaming"] as const;
 export type GuardrailStreamScope = (typeof GUARDRAIL_STREAM_SCOPES)[number];
 
-export const STREAM_SCOPE_OPTIONS: { value: GuardrailStreamScope; label: string }[] = [
-  { value: "both", label: "Streaming and non-streaming" },
-  { value: "streaming", label: "Streaming only" },
-  { value: "non_streaming", label: "Non-streaming only" },
+export const STREAM_SCOPE_OPTIONS: { value: GuardrailStreamScope; labelKey: string; defaultLabel: string }[] = [
+  {
+    value: "both",
+    labelKey: "guardrails.streamScopeFields.streamingAndNonStreaming",
+    defaultLabel: "Streaming and non-streaming",
+  },
+  { value: "streaming", labelKey: "guardrails.streamScopeFields.streamingOnly", defaultLabel: "Streaming only" },
+  {
+    value: "non_streaming",
+    labelKey: "guardrails.streamScopeFields.nonStreamingOnly",
+    defaultLabel: "Non-streaming only",
+  },
 ];
+
+export const getStreamScopeOptions = (): { value: GuardrailStreamScope; label: string }[] =>
+  STREAM_SCOPE_OPTIONS.map(({ value, labelKey, defaultLabel }) => ({
+    value,
+    label: i18n.t(labelKey, { defaultValue: defaultLabel }),
+  }));
 
 export const isGuardrailStreamScope = (value: unknown): value is GuardrailStreamScope =>
   value === "both" || value === "streaming" || value === "non_streaming";
@@ -425,7 +464,7 @@ export const streamScopePayload = (
 
 export const formatGuardrailStreamScope = (raw: unknown): string => {
   if (isGuardrailStreamScope(raw)) {
-    return STREAM_SCOPE_OPTIONS.find((option) => option.value === raw)?.label ?? raw;
+    return getStreamScopeOptions().find((option) => option.value === raw)?.label ?? raw;
   }
   if (raw !== null && typeof raw === "object" && !Array.isArray(raw)) {
     const entries = Object.entries(raw as Record<string, unknown>).filter(

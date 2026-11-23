@@ -31,6 +31,7 @@ interface UserData {
   isValid?: boolean;
   key?: string;
   invitation_link?: string;
+  missingBudget?: boolean;
 }
 
 const PREVIEW_PAGE_SIZE = 5;
@@ -59,6 +60,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [parsedData, setParsedData] = useState<UserData[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isParsing, setIsParsing] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
   const [csvStructureError, setCsvStructureError] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -108,12 +110,15 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
     setParseError(null);
     setCsvStructureError(null);
     setFileError(null);
+    setParsedData([]);
+    setIsParsing(false);
 
     // Set the selected file - always show the file even if it's invalid
     setSelectedFile(file);
 
     // Check file type
     if (file.type !== "text/csv" && !file.name.endsWith(".csv")) {
+      setIsParsing(false);
       setFileError(
         t("bulkCreateUsers.invalidFileType", {
           name: file.name,
@@ -137,8 +142,10 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
       return;
     }
 
+    setIsParsing(true);
     Papa.parse(file, {
       complete: (results) => {
+        setIsParsing(false);
         // Check if file is empty
         if (!results.data || results.data.length === 0) {
           setCsvStructureError(
@@ -225,6 +232,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                 isValid: true,
                 error: "",
               };
+              user.missingBudget = !user.max_budget || user.max_budget.toString().trim() === "";
 
               // Validate the row
               const errors: string[] = [];
@@ -312,6 +320,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
             .filter(Boolean) as UserData[]; // Filter out null values (empty rows)
 
           const validData = userData.filter((user) => user.isValid);
+          const invalidRows = userData.filter((user) => !user.isValid);
           setParsedData(userData);
 
           if (userData.length === 0) {
@@ -322,17 +331,20 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
             );
           } else if (validData.length === 0) {
             setParseError(
-              t("bulkCreateUsers.noValidUsers", {
-                defaultValue: "No valid users found in the CSV. Please check the errors below and fix your CSV file.",
+              t("bulkCreateUsers.noValidUsersInRows", {
+                rows: invalidRows.map((user) => user.rowNumber).join(", "),
+                defaultValue:
+                  "No valid users found. Rows with errors: {{rows}}. Check the errors below and fix your CSV file.",
               }),
             );
           } else if (validData.length < userData.length) {
             setParseError(
-              t("bulkCreateUsers.someRowsHaveErrors", {
+              t("bulkCreateUsers.someRowsHaveErrorsInRows", {
                 errorCount: userData.length - validData.length,
                 total: userData.length,
+                rows: invalidRows.map((user) => user.rowNumber).join(", "),
                 defaultValue:
-                  "Found {{errorCount}} row(s) with errors out of {{total}} total rows. Please correct them before proceeding.",
+                  "Found {{errorCount}} row(s) with errors out of {{total}} total rows (rows: {{rows}}). Correct them before proceeding.",
               }),
             );
           } else {
@@ -356,6 +368,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
         }
       },
       error: (error) => {
+        setIsParsing(false);
         setParseError(
           t("bulkCreateUsers.parseFileFailed", {
             error: error.message,
@@ -395,12 +408,33 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
     setParseError(null);
     setCsvStructureError(null);
     setFileError(null);
+    setIsParsing(false);
+    setIsProcessing(false);
   };
 
   const resetParsedData = () => {
     setParsedData([]);
     setParseError(null);
     setPageIndex(0);
+    setSelectedFile(null);
+    setIsParsing(false);
+    setIsProcessing(false);
+  };
+
+  const handleModalOpenChange = (open: boolean) => {
+    if (open) {
+      setIsModalVisible(true);
+      return;
+    }
+    setIsModalVisible(false);
+    setSelectedFile(null);
+    setParsedData([]);
+    setParseError(null);
+    setCsvStructureError(null);
+    setFileError(null);
+    setPageIndex(0);
+    setIsParsing(false);
+    setIsProcessing(false);
   };
 
   const handleBulkCreate = async () => {
@@ -443,10 +477,11 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
           }
         }
 
-        // Only add max_budget if it's a valid number
-        if (user.max_budget && user.max_budget.toString().trim() !== "") {
+        // An empty budget must stay empty: omit the key instead of sending a
+        // default. Mark the row so the result can call out what was skipped.
+        if (user.max_budget !== undefined && user.max_budget.toString().trim() !== "") {
           const budgetValue = parseFloat(user.max_budget.toString());
-          if (!isNaN(budgetValue) && budgetValue > 0) {
+          if (!isNaN(budgetValue) && budgetValue >= 0) {
             cleanUser.max_budget = budgetValue;
           }
         }
@@ -547,9 +582,15 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
 
   const downloadResults = () => {
     const results = parsedData.map((user) => ({
+      row_number: user.rowNumber ?? "",
       user_email: user.user_email,
       user_role: user.user_role,
-      status: user.status,
+      teams: Array.isArray(user.teams) ? user.teams.join(", ") : user.teams || "",
+      max_budget: user.max_budget ?? "",
+      budget_note: user.missingBudget
+        ? t("bulkCreateUsers.budgetNotProvided", { defaultValue: "No budget provided; left empty" })
+        : "",
+      status: user.status || "",
       key: user.key || "",
       invitation_link: user.invitation_link || "",
       error: user.error || "",
@@ -561,6 +602,27 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
     const a = document.createElement("a");
     a.href = url;
     a.download = "bulk_users_results.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
+  const downloadErrorRows = () => {
+    const failed = parsedData.filter((user) => !user.isValid || user.status === "failed");
+    const csv = Papa.unparse(
+      failed.map((user) => ({
+        row_number: user.rowNumber ?? "",
+        user_email: user.user_email,
+        user_role: user.user_role,
+        error: user.error || "",
+      })),
+    );
+    const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "bulk_users_errors.csv";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -621,10 +683,20 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
           <XCircleIcon className="h-5 w-5 text-destructive mr-2" />
           <span className="text-destructive">{t("bulkCreateUsers.statusFailed", { defaultValue: "Failed" })}</span>
         </div>
-        {record.error && <span className="text-sm text-destructive ml-7">{JSON.stringify(record.error)}</span>}
+        {record.error && <span className="text-sm text-destructive ml-7 break-words">{String(record.error)}</span>}
       </div>
     );
   };
+
+  const missingBudgetRows = parsedData
+    .filter(
+      (user) =>
+        user.isValid &&
+        (user.missingBudget || !user.max_budget || user.max_budget.toString().trim() === ""),
+    )
+    .map((user) => user.rowNumber)
+    .filter((row): row is number => row !== undefined);
+  const failedRows = parsedData.filter((user) => !user.isValid || user.status === "failed");
 
   const pageCount = Math.max(1, Math.ceil(parsedData.length / PREVIEW_PAGE_SIZE));
   const currentPage = Math.min(pageIndex, pageCount - 1);
@@ -636,11 +708,16 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
         {t("bulkCreateUsers.openButton", { defaultValue: "+ Bulk Invite Users" })}
       </Button>
 
-      <Dialog open={isModalVisible} onOpenChange={(open) => !open && setIsModalVisible(false)}>
+      <Dialog open={isModalVisible} onOpenChange={handleModalOpenChange}>
         <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px]">
           <DialogHeader>
             <DialogTitle>{t("bulkCreateUsers.modalTitle", { defaultValue: "Bulk Invite Users" })}</DialogTitle>
           </DialogHeader>
+          <div className="flex justify-end">
+            <Button type="button" variant="ghost" size="sm" onClick={() => handleModalOpenChange(false)}>
+              {t("common.cancel", { defaultValue: "Cancel" })}
+            </Button>
+          </div>
           <div className="flex flex-col">
             {/* Step indicator */}
             {parsedData.length === 0 ? (
@@ -797,7 +874,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                           <span className="min-w-0 break-words">{fileError}</span>
                         </div>
                       ) : (
-                        !csvStructureError && (
+                        !csvStructureError &&
+                        isParsing && (
                           <div className="mt-3 flex items-center">
                             <div className="w-full bg-border rounded-full h-1.5">
                               <div className="bg-info h-1.5 rounded-full w-full animate-pulse"></div>
@@ -909,6 +987,23 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                   </div>
                 )}
 
+
+                {missingBudgetRows.length > 0 && (
+                  <div className="ml-11 mb-4 p-4 bg-warning/10 border border-warning/20 rounded-md">
+                    <div className="flex items-start">
+                      <ExclamationIcon className="size-4 shrink-0 text-warning mr-2 mt-1" />
+                      <p className="min-w-0 break-words text-sm text-warning">
+                        {t("bulkCreateUsers.missingBudgetRows", {
+                          rows: missingBudgetRows.join(", "),
+                          count: missingBudgetRows.length,
+                          defaultValue:
+                            "Rows {{rows}} have no max_budget. Those users will be created without a budget limit.",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="ml-11">
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex items-center">
@@ -992,7 +1087,29 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     </div>
                   )}
 
-                  <div className="max-h-[300px] overflow-y-auto">
+
+                  {failedRows.length > 0 && parsedData.some((user) => user.status === "success" || user.status === "failed") && (
+                    <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-md">
+                      <div className="flex items-start">
+                        <TriangleAlert className="size-4 shrink-0 text-destructive mr-2 mt-1" />
+                        <div className="min-w-0">
+                          <p className="text-sm text-destructive break-words">
+                            {t("bulkCreateUsers.failedRowsSummary", {
+                              count: failedRows.length,
+                              rows: failedRows.map((user) => user.rowNumber).filter(Boolean).join(", "),
+                              defaultValue: "{{count}} row(s) failed: {{rows}}. Export the error details below to fix them.",
+                            })}
+                          </p>
+                          <Button variant="outline" size="sm" className="mt-2" onClick={downloadErrorRows}>
+                            <Download className="size-4" />
+                            {t("bulkCreateUsers.downloadErrors", { defaultValue: "Download Error Details" })}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="max-h-[300px] overflow-x-auto overflow-y-auto">
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -1011,7 +1128,17 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                             <TableCell className="whitespace-normal break-words">{record.user_email}</TableCell>
                             <TableCell className="whitespace-normal break-words">{record.user_role}</TableCell>
                             <TableCell className="whitespace-normal break-words">{record.teams}</TableCell>
-                            <TableCell>{record.max_budget}</TableCell>
+                            <TableCell className="whitespace-normal break-words">
+                              {record.max_budget !== undefined && record.max_budget.toString().trim() !== "" ? (
+                                record.max_budget
+                              ) : (
+                                <span className="text-muted-foreground">
+                                  {t("bulkCreateUsers.budgetNotProvided", {
+                                    defaultValue: "No budget provided; left empty",
+                                  })}
+                                </span>
+                              )}
+                            </TableCell>
                             <TableCell className="whitespace-normal break-words">{renderStatusCell(record)}</TableCell>
                           </TableRow>
                         ))}
@@ -1071,6 +1198,12 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       <Button variant="outline" onClick={resetParsedData} className="mr-3">
                         {t("bulkCreateUsers.startNewImport", { defaultValue: "Start New Bulk Import" })}
                       </Button>
+                      {failedRows.length > 0 && (
+                        <Button variant="outline" onClick={downloadErrorRows} className="mr-3">
+                          <Download className="size-4" />
+                          {t("bulkCreateUsers.downloadErrors", { defaultValue: "Download Error Details" })}
+                        </Button>
+                      )}
                       <Button onClick={downloadResults}>
                         <Download className="size-4" />
                         {t("bulkCreateUsers.downloadCredentials", { defaultValue: "Download User Credentials" })}

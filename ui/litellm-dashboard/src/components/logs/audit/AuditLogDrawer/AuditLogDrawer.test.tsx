@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
-import moment from "moment";
 import { AuditLogDrawer } from "./AuditLogDrawer";
-import { AuditLogEntry } from "../AuditLogsTableColumns";
+import { AuditLogEntry, auditActionLabel } from "../AuditLogsTableColumns";
+import { formatDateTime } from "@/utils/dateFormat";
 
 vi.mock("../../../common_components/DefaultProxyAdminTag", () => ({
   default: ({ userId }: { userId: string }) => <span>{userId}</span>,
@@ -43,8 +43,8 @@ describe("AuditLogDrawer", () => {
 
   it("should show the action and the local timestamp in the header", () => {
     render(<AuditLogDrawer {...defaultProps} />);
-    expect(screen.getByText("updated")).toBeInTheDocument();
-    expect(screen.getByText(moment.utc(baseLog.updated_at).local().format("MMM D, YYYY HH:mm:ss"))).toBeInTheDocument();
+    expect(screen.getByText(auditActionLabel("updated"))).toBeInTheDocument();
+    expect(screen.getByText(formatDateTime(baseLog.updated_at) ?? "")).toBeInTheDocument();
   });
 
   it("should show the friendly table name for a known table", () => {

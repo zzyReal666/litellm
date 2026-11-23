@@ -79,6 +79,16 @@ vi.mock("@/components/networking", () => ({
   getGuardrailsList: vi.fn(async () => ({ guardrails })),
   createGuardrailCall: vi.fn(async () => ({})),
   getGeneralSettingsCall: vi.fn(async () => promptCachingSettings),
+  formatDate: (date: Date) => date.toISOString().slice(0, 10),
+  cacheLeakageKeysCall: vi.fn(async () => ({
+    api_keys: [
+      {
+        api_key: "hash-alpha",
+        metadata: { key_alias: "prod-alpha", team_id: null },
+        metrics: { prompt_tokens: 1000, cache_read_input_tokens: 100, cache_creation_input_tokens: 0 },
+      },
+    ],
+  })),
   organizationListCall: vi.fn(async () => []),
 }));
 
@@ -168,6 +178,7 @@ const dayWithKeys = (date: string, apiKeys: Record<string, KeyMetricWithMetadata
 const activity = (): DailyActivityRange => ({
   dateValue: { from: new Date(2026, 6, 1), to: new Date(2026, 6, 14) },
   onDateChange: vi.fn(),
+  scope: { accessToken: "test-token", startTime: new Date(2026, 6, 1), endTime: new Date(2026, 6, 14) },
   results: [
     dayWithKeys("2026-07-01", {
       "hash-alpha": keyWith("prod-alpha", {
@@ -211,10 +222,13 @@ const benchmarksResponse = () =>
       avg_tokens_per_session: 5_300_000,
       spend: 359.86,
       classifier_cost: 6.146,
+      savings_estimated_classifier_cost: 6.146,
+      savings_estimated_actual_spend: 353.714,
       saved_spend: 2174.59,
       baseline_spend: 2534.45,
       saved_pct: 85.8,
       saved_per_session: 23.13,
+      savings_estimated_turns: 2624,
       cache: cacheStats(),
     },
     groups: [],
@@ -380,9 +394,9 @@ describe("Cost Optimization tabs in Chinese", () => {
     expect(screen.getByTestId("chart-legend")).toHaveTextContent("压缩,提示词缓存,自动路由");
     const area = screen.getByTestId("area-chart");
     expect(area).toHaveAttribute("data-categories", "压缩,提示词缓存,自动路由");
-    expect(area.getAttribute("data-series")).toContain("压缩");
-    expect(area.getAttribute("data-series")).not.toContain("Compression");
-    expect(screen.getByTestId("donut-chart").getAttribute("data-slices")).toContain("压缩");
+    expect(area).toHaveAttribute("data-series", expect.stringContaining("压缩"));
+    expect(area).not.toHaveAttribute("data-series", expect.stringContaining("Compression"));
+    expect(screen.getByTestId("donut-chart")).toHaveAttribute("data-slices", expect.stringContaining("压缩"));
   });
 
   it("renders the compression tab, its labels and its badges in Chinese", async () => {
@@ -393,7 +407,7 @@ describe("Cost Optimization tabs in Chinese", () => {
     expect(screen.getByText("按需启用")).toBeInTheDocument();
     expect(screen.getByLabelText("Headroom API 地址")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "添加护栏" })).toBeInTheDocument();
-    expect(screen.getByText(/Headroom 是 LiteLLM 原生的护栏/)).toBeInTheDocument();
+    expect(screen.getByText(/Headroom 是中安云科 AI 安全网关原生的护栏/)).toBeInTheDocument();
     expectNoEnglishLeftovers(container);
   });
 
@@ -404,7 +418,7 @@ describe("Cost Optimization tabs in Chinese", () => {
     expect(await screen.findByText("Anthropic 自动提示词缓存")).toBeInTheDocument();
     expect(screen.getByText("缓存存活时间（TTL）")).toBeInTheDocument();
     expect(screen.getAllByText("5m（默认）").length).toBeGreaterThan(0);
-    expect(screen.getByText("未缓存输入 Token")).toBeInTheDocument();
+    expect(await screen.findByText("未缓存输入 Token")).toBeInTheDocument();
     expectNoEnglishLeftovers(container);
   });
 
@@ -412,7 +426,7 @@ describe("Cost Optimization tabs in Chinese", () => {
     await i18n.changeLanguage("zh-CN");
     const { container } = renderWithQuery(<CacheLeakageCard activity={activity()} />);
 
-    expect(screen.getByText("未缓存输入 Token")).toBeInTheDocument();
+    expect(await screen.findByText("未缓存输入 Token")).toBeInTheDocument();
     expect(screen.getByText("缓存命中率")).toBeInTheDocument();
     expect(screen.getByText("潜在节省")).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "按虚拟密钥" })).toBeInTheDocument();
@@ -433,8 +447,8 @@ describe("Cost Optimization tabs in Chinese", () => {
 
     expect(screen.getByText("自动路由用量")).toBeInTheDocument();
     expect(screen.getByText("全部自动路由")).toBeInTheDocument();
-    expect(screen.getByText("按最高层级模型估算的花费")).toBeInTheDocument();
-    expect(screen.getByText("每会话平均节省")).toBeInTheDocument();
+    expect(screen.getByText("估算基线花费")).toBeInTheDocument();
+    expect(screen.getByText("平均会话时长")).toBeInTheDocument();
     expect(screen.getAllByText(/每 1K 轮/).length).toBeGreaterThan(0);
     expect(screen.getByText("自动路由提示词缓存")).toBeInTheDocument();
     expect(screen.getByText("每一轮都按其路由行为归入唯一的分桶")).toBeInTheDocument();

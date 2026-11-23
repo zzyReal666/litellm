@@ -19,7 +19,7 @@ import { buildDecisionCatalog } from "@/lib/decisionModels";
 
 const INITIAL_VALUES: MountedFormValues = { litellm_credential_name: null };
 
-export default function AddModelPanel() {
+export default function AddModelPanel({ onAdded }: { onAdded?: () => void }) {
   const { accessToken } = useAuthorized();
   const form = useForm<MountedFormValues>({ mode: "onChange", defaultValues: INITIAL_VALUES });
   const registry = useMountRegistry();
@@ -43,15 +43,22 @@ export default function AddModelPanel() {
   const handleOk = async (): Promise<boolean> => {
     const isValid = await form.trigger(registry.mountedNames() as string[]);
     if (!isValid) {
+      const firstInvalid = Object.keys(form.formState.errors)[0];
+      if (firstInvalid !== undefined) {
+        form.setFocus(firstInvalid);
+      }
       return false;
     }
-    await handleAddModelSubmit(
+    const added = await handleAddModelSubmit(
       mountedValues(),
       accessToken,
       { resetFields: () => form.reset(INITIAL_VALUES) },
       refresh,
     );
-    return true;
+    if (added) {
+      onAdded?.();
+    }
+    return added;
   };
 
   return (

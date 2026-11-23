@@ -56,14 +56,14 @@ const buildTabLabels = (t: (key: string, options?: Record<string, unknown>) => s
   "price-data": t("pages.modelsAndEndpoints.tabPriceDataReload", { defaultValue: "Price Data Reload" }),
 });
 
-const renderPanel = (key: string) => {
+const renderPanel = (key: string, onModelAdded: () => void) => {
   switch (key) {
     case BASE_TAB_KEY:
       return <AllModelsPanel />;
     case "auto-routers":
       return <AutoRoutersTabPanel />;
     case "add":
-      return <AddModelPanel />;
+      return <AddModelPanel onAdded={onModelAdded} />;
     case "llm-credentials":
       return <LlmCredentialsPanel />;
     case "pass-through":
@@ -226,7 +226,7 @@ export default function ModelsAndEndpointsPage() {
               const key = slug || BASE_TAB_KEY;
               return (
                 <TabsContent key={key} value={key} className="pt-4">
-                  {renderPanel(key)}
+                  {renderPanel(key, () => setActiveKey(BASE_TAB_KEY))}
                 </TabsContent>
               );
             })}

@@ -66,7 +66,12 @@ export function GuardrailTestPanel({
     const { metadata, error } = parseMetadata(metadataText);
     if (error) {
       setMetadataError(error);
-      toast.fromError(`Metadata: ${error}`);
+      toast.fromError(
+        t("guardrails.guardrailTestPanel.metadataError", {
+          defaultValue: "Metadata: {{error}}",
+          error,
+        }),
+      );
       return;
     }
     setMetadataError(null);

@@ -32,6 +32,7 @@ import { federatedProviderOf } from "../model_add/credential_federation";
 import { buildCredential, type CredentialSubmission } from "../model_add/credential_form_helpers";
 import { ProviderLogo } from "../molecules/models/ProviderLogo";
 import AccessGroupTagsCombobox from "./AccessGroupTagsCombobox";
+import { withRequirement } from "./FieldRequirements";
 import AdvancedSettings from "./advanced_settings";
 import ConditionalPublicModelName from "./conditional_public_model_name";
 import LiteLLMModelNameField from "./litellm_model_name";
@@ -117,7 +118,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
       toast.error(extractProxyErrorMessage(error));
       return;
     }
-    toast.success("Credential added successfully");
+    toast.success(i18n.t("addModel.addModelForm.credentialAdded", { defaultValue: "Credential added successfully" }));
     setIsFederatedCredentialModalOpen(false);
     await queryClient.invalidateQueries({ queryKey: credentialsKeys.all });
     form.setValue("litellm_credential_name", credential.credential_name, { shouldDirty: true });
@@ -209,7 +210,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                   {requiresTeamScope && (
                     <>
                       <MountedFormField
-                        label={labelWithHint(i18n.t("addModel.addModelForm.selectTeamByokLabel", { defaultValue: "Select Team" }), i18n.t("addModel.addModelForm.selectTeamTooltip", { defaultValue: "Select the team for which you want to add this model" }))}
+                        label={withRequirement(labelWithHint(i18n.t("addModel.addModelForm.selectTeamByokLabel", { defaultValue: "Select Team" }), i18n.t("addModel.addModelForm.selectTeamTooltip", { defaultValue: "Select the team for which you want to add this model" })), true)}
                         name="team_id"
                         required
                         rules={{ validate: { required: requiredRule(i18n.t("addModel.addModelForm.selectTeamRequired", { defaultValue: "Please select a team to continue" })) } }}
@@ -239,7 +240,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                   {(isAdmin || (isTeamAdmin && teamAdminSelectedTeam)) && (
                     <>
                       <MountedFormField
-                        label={labelWithHint(i18n.t("modelInfoView.provider", { defaultValue: "Provider" }), i18n.t("addModel.addModelForm.providerTooltip", { defaultValue: "E.g. OpenAI, Azure OpenAI, Anthropic, Bedrock, etc." }))}
+                        label={withRequirement(labelWithHint(i18n.t("modelInfoView.provider", { defaultValue: "Provider" }), i18n.t("addModel.addModelForm.providerTooltip", { defaultValue: "E.g. OpenAI, Azure OpenAI, Anthropic, Bedrock, etc." })), true)}
                         name="custom_llm_provider"
                         required
                         rules={{ validate: { required: requiredRule(i18n.t("addModel.addModelForm.providerRequired", { defaultValue: "Required" })) } }}
@@ -311,7 +312,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                       </div>
 
                       <MountedFormField
-                        label={i18n.t("addModel.addModelForm.existingCredentialsLabel", { defaultValue: "Existing Credentials" })}
+                        label={withRequirement(i18n.t("addModel.addModelForm.existingCredentialsLabel", { defaultValue: "Existing Credentials" }), false)}
                         name="litellm_credential_name"
                         defaultValue={null}
                         className="mb-4"
@@ -419,10 +420,10 @@ const AddModelForm: React.FC<AddModelFormProps> = ({
                       {isAdmin && (
                         <>
                           <MountedFormField
-                            label={labelWithHint(
+                            label={withRequirement(labelWithHint(
                               i18n.t("addModel.addModelForm.modelAccessGroupLabel", { defaultValue: "Model Access Group" }),
                               i18n.t("addModel.addModelForm.modelAccessGroupTooltip", { defaultValue: "Use model access groups to give users access to select models, and add new ones to the group over time." }),
-                            )}
+                            ), false)}
                             name="model_access_group"
                             className="mb-4"
                           >

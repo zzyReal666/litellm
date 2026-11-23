@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
 import { simplifyKeyGenerateError } from "./utils";
 
 describe("simplifyKeyGenerateError", () => {
@@ -71,6 +72,31 @@ describe("simplifyKeyGenerateError", () => {
         'Some prefix {"error":{"type":"team_member_permission_error","message":"Team member does not have permissions for endpoint: KeyManagementRoutes.KEY_GENERATE"}} some suffix';
       const result = simplifyKeyGenerateError(error);
       expect(result).toBe(expectedSimplifiedMessage);
+    });
+  });
+
+  describe("duplicate key alias errors", () => {
+    it("names the duplicated field and the alias for a backend duplicate error", () => {
+      const error = JSON.stringify({
+        error: {
+          message: "Key alias 'contract-key' already exists. Unique key aliases across all keys required.",
+          type: "bad_request",
+        },
+      });
+      const result = simplifyKeyGenerateError(error);
+      expect(result).toBe(
+        i18n.t("organisms.createKeyButton.duplicateKeyAliasGlobal", {
+          alias: "contract-key",
+          defaultValue:
+            "The key name (alias) {{alias}} is already used by another key. Choose a different name and try again.",
+        }),
+      );
+    });
+
+    it("recognises a duplicate alias in an Error object", () => {
+      const error = new Error("Key alias 'contract-key' already exists. Unique key aliases across all keys required.");
+      expect(simplifyKeyGenerateError(error)).toContain("contract-key");
+      expect(simplifyKeyGenerateError(error)).not.toContain("Error creating the key");
     });
   });
 

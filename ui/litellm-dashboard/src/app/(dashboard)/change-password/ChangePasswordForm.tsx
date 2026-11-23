@@ -29,6 +29,12 @@ const changePasswordSchema = z
   .refine((values) => values.newPassword === values.confirmNewPassword, {
     message: i18n.t("changePassword.passwordsDoNotMatch", { defaultValue: "New passwords do not match" }),
     path: ["confirmNewPassword"],
+  })
+  .refine((values) => values.newPassword !== values.currentPassword, {
+    message: i18n.t("changePassword.newPasswordDifferent", {
+      defaultValue: "New password must be different from the current password",
+    }),
+    path: ["newPassword"],
   });
 
 type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
@@ -57,10 +63,21 @@ export function ChangePasswordForm() {
         window.location.replace(getLoginUrl(getProxyBaseUrl()));
         return;
       }
-      toast.success(t("changePassword.passwordUpdated", { defaultValue: "Password updated" }));
+      toast.success(
+        t("changePassword.passwordUpdatedReloginHint", {
+          defaultValue: "Password updated. Please sign in again with your new password.",
+        }),
+      );
       form.reset();
     } catch (error) {
-      setSubmitError(extractProxyErrorMessage(error));
+      const message = extractProxyErrorMessage(error);
+      if (/current password/i.test(message)) {
+        form.setError("currentPassword", { type: "server", message });
+      } else if (/new password|password/i.test(message)) {
+        form.setError("newPassword", { type: "server", message });
+      } else {
+        setSubmitError(message);
+      }
     } finally {
       setIsPending(false);
     }
@@ -92,15 +109,37 @@ export function ChangePasswordForm() {
 
           <form className="mb-2 mt-8" onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
-              <FormField control={form.control} name="currentPassword" label={t("changePassword.currentPassword", { defaultValue: "Current Password" })}>
+              <FormField
+                control={form.control}
+                name="currentPassword"
+                label={t("changePassword.currentPassword", { defaultValue: "Current Password" })}
+                description={t("changePassword.currentPasswordHint", {
+                  defaultValue: "Enter the password you use to sign in today.",
+                })}
+              >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="current-password" />}
               </FormField>
 
-              <FormField control={form.control} name="newPassword" label={t("changePassword.newPassword", { defaultValue: "New Password" })}>
+              <FormField
+                control={form.control}
+                name="newPassword"
+                label={t("changePassword.newPassword", { defaultValue: "New Password" })}
+                description={t("changePassword.passwordPolicyHint", {
+                  defaultValue:
+                    "Use a strong password that meets this proxy's password policy. It must differ from your current password.",
+                })}
+              >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="new-password" />}
               </FormField>
 
-              <FormField control={form.control} name="confirmNewPassword" label={t("changePassword.confirmNewPassword", { defaultValue: "Confirm New Password" })}>
+              <FormField
+                control={form.control}
+                name="confirmNewPassword"
+                label={t("changePassword.confirmNewPassword", { defaultValue: "Confirm New Password" })}
+                description={t("changePassword.confirmPasswordHint", {
+                  defaultValue: "Re-enter the new password so we can catch typos.",
+                })}
+              >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} autoComplete="new-password" />}
               </FormField>
             </FieldGroup>

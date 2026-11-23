@@ -72,7 +72,7 @@ const MonoValue: React.FC<{ value: string | null; copyLabel: string }> = ({ valu
     <span className="max-w-[150px] truncate font-mono text-[13px] font-medium text-foreground" title={value || "-"}>
       {value || "-"}
     </span>
-    <CopyButton value={value} label={copyLabel} />
+    <CopyButton value={value} label={copyLabel} variant="action" iconOnly />
   </span>
 );
 
@@ -92,6 +92,13 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
   const disableBlogPosts = useDisableBlogPosts();
   const disableBouncingIcon = useDisableBouncingIcon();
   const disableShowNewBadge = useDisableShowNewBadge();
+
+  const handleLogout = () => {
+    // Signing out should land on the home page. Rewriting the URL first means
+    // the post-logout login redirect stores home, not the page being left.
+    window.history.replaceState(null, "", uiHref("/"));
+    onLogout();
+  };
 
   const setFlag = (key: string, checked: boolean) => {
     if (checked) {
@@ -267,7 +274,7 @@ const SidebarAccountMenu: React.FC<SidebarAccountMenuProps> = ({ onLogout, colla
 
         <Button
           variant="ghost"
-          onClick={onLogout}
+          onClick={handleLogout}
           className="h-[42px] w-full justify-start gap-2.5 rounded-none px-3 text-sm font-medium text-foreground"
         >
           <LogOut className="size-[19px] text-muted-foreground" />

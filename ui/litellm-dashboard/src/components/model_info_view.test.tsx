@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React, { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -340,6 +340,99 @@ describe("ModelInfoView", () => {
     await waitFor(() => {
       expect(mockToast.error).toHaveBeenCalled();
     });
+  });
+
+  it("shows the connection result in a dialog and names the credential used", async () => {
+    const user = userEvent.setup();
+    render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
+
+    await user.click(await screen.findByTestId("test-connection-button"));
+
+    const dialog = await screen.findByRole("dialog", { name: "Connection Test Results" });
+    expect(await within(dialog).findByTestId("connection-success-msg")).toHaveTextContent(
+      "Connection to gpt-4 successful!",
+    );
+    expect(within(dialog).getByTestId("connection-duration")).toBeInTheDocument();
+    expect(within(dialog).getByTestId("connection-credential")).toHaveTextContent("Credential used: selected-credential");
+  });
+
+  it("surfaces the credential used when the connection test fails", async () => {
+    const user = userEvent.setup();
+    mockTestConnectionRequest.mockResolvedValue({
+      status: "error",
+      result: { error: "401 invalid api key" },
+    });
+    render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
+
+    await user.click(await screen.findByTestId("test-connection-button"));
+
+    const dialog = await screen.findByRole("dialog", { name: "Connection Test Results" });
+    expect(await within(dialog).findByTestId("connection-failure-msg")).toHaveTextContent(
+      "Connection to gpt-4 failed",
+    );
+    expect(within(dialog).getByTestId("connection-issue-title")).toHaveTextContent("Authentication failed");
+  });
+
+  it("shows the updated time and refreshes it in the detail after a save", async () => {
+    const user = userEvent.setup();
+    const updatedModel = {
+      ...defaultModelData,
+      model_info: { ...defaultModelData.model_info, updated_at: "2024-05-06T00:00:00Z" },
+    };
+    mockUseModelsInfo.mockReturnValue({ data: { data: [updatedModel] }, isLoading: false, error: null });
+    mockModelInfoV1Call.mockResolvedValue({ data: [updatedModel] });
+    const onModelUpdate = vi.fn();
+    render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} onModelUpdate={onModelUpdate} />, { wrapper });
+
+    expect(await screen.findByText(/Updated At/)).toBeInTheDocument();
+    await user.click(await screen.findByRole("button", { name: /edit settings/i }));
+    await user.click(await screen.findByRole("button", { name: /save changes/i }));
+
+    await waitFor(() => expect(onModelUpdate).toHaveBeenCalled());
+    const saved = onModelUpdate.mock.calls.at(-1)?.[0];
+    expect(saved.model_info.updated_at).toEqual(expect.any(String));
+    expect(saved.model_info.updated_at).not.toBe("2024-05-06T00:00:00Z");
+    expect(screen.getByTestId("model-updated-at")).not.toHaveTextContent("May 6, 2024");
+  });
+
+  it("clears the bound team when No Team is picked and saved", async () => {
+    mockUseTeams.mockReturnValue({
+      data: [{ team_id: "team-1", team_alias: "alpha" }],
+      isLoading: false,
+      error: null,
+    });
+    const teamModel = {
+      ...defaultModelData,
+      model_info: { ...defaultModelData.model_info, team_id: "team-1" },
+    };
+    mockUseModelsInfo.mockReturnValue({ data: { data: [teamModel] }, isLoading: false, error: null });
+    mockModelInfoV1Call.mockResolvedValue({ data: [teamModel] });
+    const user = userEvent.setup();
+    render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
+
+    await user.click(await screen.findByRole("button", { name: /edit settings/i }));
+    await user.click(await screen.findByText("alpha (team-1)"));
+    await user.click(await screen.findByRole("option", { name: "No Team" }));
+    await user.click(screen.getByRole("button", { name: /save changes/i }));
+
+    await waitFor(() => expect(mockModelPatchUpdateCall).toHaveBeenCalled());
+    expect(mockModelPatchUpdateCall.mock.calls[0][1].model_info.team_id).toBeNull();
+    expect(await screen.findByText("No Team")).toBeInTheDocument();
+  });
+
+  it("shows the provider's reason when saving a team assignment fails", async () => {
+    mockModelPatchUpdateCall.mockRejectedValueOnce(new Error("403 Only a proxy admin can assign this team"));
+    const user = userEvent.setup();
+    render(<ModelInfoView {...DEFAULT_ADMIN_PROPS} />, { wrapper });
+
+    await user.click(await screen.findByRole("button", { name: /edit settings/i }));
+    await user.click(await screen.findByRole("button", { name: /save changes/i }));
+
+    await waitFor(() =>
+      expect(mockToast.fromError).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "403 Only a proxy admin can assign this team" }),
+      ),
+    );
   });
 
   it("should display reuse credentials button for admin users", async () => {

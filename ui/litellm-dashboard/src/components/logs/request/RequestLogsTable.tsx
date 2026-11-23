@@ -53,11 +53,19 @@ function RequestLogsEmptyState({ filtered }: { filtered: boolean }) {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <ScrollText className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">{filtered ? "No matching requests" : "No requests yet"}</div>
+      <div className="text-sm font-medium text-foreground">
+        {filtered
+          ? i18n.t("requestLogsTable.noMatchingRequests", { defaultValue: "No matching requests" })
+          : i18n.t("requestLogsTable.noRequestsYet", { defaultValue: "No requests yet" })}
+      </div>
       <div className="max-w-xs text-center text-sm text-muted-foreground">
         {filtered
-          ? "No requests match your filters for this time range."
-          : "Requests proxied through 中安云科 AI 安全网关 will appear here."}
+          ? i18n.t("requestLogsTable.noMatchingRequestsHint", {
+              defaultValue: "No requests match your filters for this time range.",
+            })
+          : i18n.t("requestLogsTable.noRequestsYetHint", {
+              defaultValue: "Requests proxied through 中安云科 AI 安全网关 will appear here.",
+            })}
       </div>
     </div>
   );
@@ -113,7 +121,7 @@ export function RequestLogsTable({
       columnFilters={columnFilters}
       onColumnFiltersChange={onColumnFiltersChange}
       isLoading={isLoading}
-      loadingMessage="Loading request logs…"
+      loadingMessage={i18n.t("requestLogsTable.loading", { defaultValue: "Loading request logs…" })}
       noDataMessage={<RequestLogsEmptyState filtered={isFiltered} />}
       size="compact"
       onRowClick={onRowClick}
@@ -123,7 +131,7 @@ export function RequestLogsTable({
             table={table}
             searchValue={searchValue}
             onSearchChange={onSearchChange}
-            searchPlaceholder="Search logs by ID…"
+            searchPlaceholder={i18n.t("requestLogsTable.searchPlaceholder", { defaultValue: "Search logs by ID…" })}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
             onOpenFilters={() => setFiltersOpen(true)}
@@ -138,7 +146,9 @@ export function RequestLogsTable({
             open={filtersOpen}
             onOpenChange={setFiltersOpen}
             title={i18n.t("requestLogsTable.filters", { defaultValue: "Filters" })}
-            description={i18n.t("requestLogsTable.narrow-down-request-logs", { defaultValue: "Narrow down request logs" })}
+            description={i18n.t("requestLogsTable.narrow-down-request-logs", {
+              defaultValue: "Narrow down request logs",
+            })}
           >
             {({ get, set }) => <RequestLogsFilters get={get} set={set} teams={teams} logsWindow={logsWindow} />}
           </DataTableFilterDrawer>

@@ -32,10 +32,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { hasProxyWideSpendView, rolesWithWriteAccess } from "@/utils/roles";
 import { teamDetailHref } from "@/utils/entityLinks";
 import { BadgeLink } from "@/components/shared/BadgeLink";
+import CopyButton from "@/components/shared/CopyButton";
 import { UserEditView } from "../user_edit_view";
 import OnboardingModal, { InvitationLink } from "@/components/onboarding_link";
-import { formatNumberWithCommas, copyToClipboard as utilCopyToClipboard } from "@/utils/dataUtils";
-import { ArrowLeft, CheckIcon, CopyIcon, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { ArrowLeft, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { toast } from "@/lib/toast";
 import { getBudgetDurationLabel } from "@/components/common_components/budget_duration_dropdown";
 import DeleteResourceModal from "@/components/common_components/DeleteResourceModal";
@@ -106,7 +107,6 @@ export default function UserInfoView({
   const [activeTab, setActiveTab] = useState<string>(initialTab === 1 ? "details" : "overview");
   const hiddenSavingsTab = activeTab === "savings" && !canViewSavings;
   const hiddenRouterTab = activeTab === "auto-router-usage" && !canViewAutoRouterUsage;
-  const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
   const [isTeamsExpanded, setIsTeamsExpanded] = useState(false);
   const [isAddTeamModalOpen, setIsAddTeamModalOpen] = useState(false);
   const [isRemoveTeamModalOpen, setIsRemoveTeamModalOpen] = useState(false);
@@ -385,16 +385,6 @@ export default function UserInfoView({
     );
   }
 
-  const copyToClipboard = async (text: string, key: string) => {
-    const success = await utilCopyToClipboard(text);
-    if (success) {
-      setCopiedStates((prev) => ({ ...prev, [key]: true }));
-      setTimeout(() => {
-        setCopiedStates((prev) => ({ ...prev, [key]: false }));
-      }, 2000);
-    }
-  };
-
   // Build a legacy-compatible shape for UserEditView
   const userDataForEdit = {
     user_id: userData.user_id,
@@ -423,21 +413,25 @@ export default function UserInfoView({
             <ArrowLeft />
             {i18n.t("viewUsers.userInfoView.backToUsers", { defaultValue: "Back to Users" })}
           </Button>
-          <h2 className="text-xl font-semibold">{userData.user_email || i18n.t("viewUsers.userInfoView.userFallbackTitle", { defaultValue: "User" })}</h2>
+          <div className="flex items-center gap-1">
+            <h2 className="text-xl font-semibold">{userData.user_email || i18n.t("viewUsers.userInfoView.userFallbackTitle", { defaultValue: "User" })}</h2>
+            {userData.user_email && (
+              <CopyButton
+                value={userData.user_email}
+                label={i18n.t("user.copyEmail", { defaultValue: "Copy email" })}
+                variant="action"
+                iconOnly
+              />
+            )}
+          </div>
           <div className="flex items-center cursor-pointer">
             <span className="text-sm text-muted-foreground font-mono">{userData.user_id}</span>
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={() => copyToClipboard(userData.user_id, "user-id")}
-              className={`left-2 z-raised transition-all duration-200 ${
-                copiedStates["user-id"]
-                  ? "text-success bg-success/10 border-success/20"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
-              }`}
-            >
-              {copiedStates["user-id"] ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
-            </Button>
+            <CopyButton
+              value={userData.user_id}
+              label={i18n.t("user.copyUserId", { defaultValue: "Copy user ID" })}
+              variant="action"
+              iconOnly
+            />
           </div>
         </div>
         {userRole && rolesWithWriteAccess.includes(userRole) && (
@@ -471,7 +465,7 @@ export default function UserInfoView({
             value: (userData.user_role && possibleUIRoles?.[userData.user_role]?.ui_label) || userData.user_role || "-",
           },
           {
-            label: "Total Spend (CNY)",
+            label: i18n.t("viewUsers.deleteModal.labelTotalSpend", { defaultValue: "Total Spend (CNY)" }),
             value: userData.spend !== null && userData.spend !== undefined ? userData.spend.toFixed(2) : undefined,
           },
         ]}
@@ -494,7 +488,7 @@ export default function UserInfoView({
           </TabsTrigger>
           {canViewSavings && (
             <TabsTrigger value="savings" className="flex-none data-active:text-primary after:bg-primary">
-              Savings
+              {i18n.t("viewUsers.userInfoView.savingsTab", { defaultValue: "Savings" })}
             </TabsTrigger>
           )}
           {canViewAutoRouterUsage && (
@@ -546,16 +540,21 @@ export default function UserInfoView({
                         {teamDetails.slice(0, isTeamsExpanded ? teamDetails.length : 20).map((team) => (
                           <TableRow key={team.team_id}>
                             <TableCell>
-                              <BadgeLink href={teamDetailHref(team.team_id)}>
-                                {team.team_alias || team.team_id}
-                              </BadgeLink>
+                              <div className="flex flex-col">
+                                <BadgeLink href={teamDetailHref(team.team_id)}>
+                                  {team.team_alias || team.team_id}
+                                </BadgeLink>
+                                {team.team_alias && (
+                                  <span className="font-mono text-xs text-muted-foreground break-all">{team.team_id}</span>
+                                )}
+                              </div>
                             </TableCell>
                             {isProxyAdmin && (
                               <TableCell className="text-right">
                                 <Button
                                   variant="ghost"
                                   size="icon-sm"
-                                  aria-label={`Remove from ${team.team_alias || team.team_id}`}
+                                  aria-label={i18n.t("viewUsers.userInfoView.removeFromTeamAria", { team: team.team_alias || team.team_id, defaultValue: "Remove from {{team}}" })}
                                   onClick={() => handleOpenRemoveTeamModal(team)}
                                   className="text-destructive"
                                 >
@@ -573,7 +572,10 @@ export default function UserInfoView({
                 )}
                 {!isTeamsExpanded && teamDetails.length > 20 && (
                   <Button variant="ghost" size="sm" className="mt-2" onClick={() => setIsTeamsExpanded(true)}>
-                    +{teamDetails.length - 20} more
+                    {i18n.t("viewUsers.userInfoView.moreTeams", {
+                      count: teamDetails.length - 20,
+                      defaultValue: "+{{count}} more",
+                    })}
                   </Button>
                 )}
                 {isTeamsExpanded && teamDetails.length > 20 && (
@@ -627,44 +629,48 @@ export default function UserInfoView({
                   <p className="font-medium">{i18n.t("viewUsers.userInfoView.userIdLabel", { defaultValue: "User ID" })}</p>
                   <div className="flex items-center cursor-pointer">
                     <span className="font-mono">{userData.user_id}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => copyToClipboard(userData.user_id, "user-id")}
-                      className={`left-2 z-raised transition-all duration-200 ${
-                        copiedStates["user-id"]
-                          ? "text-success bg-success/10 border-success/20"
-                          : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                      }`}
-                    >
-                      {copiedStates["user-id"] ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
-                    </Button>
+                    <CopyButton
+                      value={userData.user_id}
+                      label={i18n.t("user.copyUserId", { defaultValue: "Copy user ID" })}
+                      variant="action"
+                      iconOnly
+                    />
                   </div>
                 </div>
 
                 <div>
                   <p className="font-medium">{i18n.t("viewUsers.userInfoView.emailLabel", { defaultValue: "Email" })}</p>
-                  <p>{userData.user_email || "Not Set"}</p>
+                  <div className="flex items-center">
+                    <p>{userData.user_email || i18n.t("viewUsers.userInfoView.notSet", { defaultValue: "Not Set" })}</p>
+                    {userData.user_email && (
+                      <CopyButton
+                        value={userData.user_email}
+                        label={i18n.t("user.copyEmail", { defaultValue: "Copy email" })}
+                        variant="action"
+                        iconOnly
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <div>
                   <p className="font-medium">{i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}</p>
-                  <p>{userData.user_alias || "Not Set"}</p>
+                  <p>{userData.user_alias || i18n.t("viewUsers.userInfoView.notSet", { defaultValue: "Not Set" })}</p>
                 </div>
 
                 <div>
                   <p className="font-medium">{i18n.t("viewUsers.deleteModal.labelGlobalProxyRole", { defaultValue: "Global Proxy Role" })}</p>
-                  <p>{userData.user_role || "Not Set"}</p>
+                  <p>{userData.user_role || i18n.t("viewUsers.userInfoView.notSet", { defaultValue: "Not Set" })}</p>
                 </div>
 
                 <div>
                   <p className="font-medium">{i18n.t("viewUsers.userInfoView.createdLabel", { defaultValue: "Created" })}</p>
-                  <p>{userData.created_at ? new Date(userData.created_at).toLocaleString() : "Unknown"}</p>
+                  <p>{userData.created_at ? new Date(userData.created_at).toLocaleString() : i18n.t("viewUsers.userInfoView.unknown", { defaultValue: "Unknown" })}</p>
                 </div>
 
                 <div>
                   <p className="font-medium">{i18n.t("viewUsers.userInfoView.lastUpdatedLabel", { defaultValue: "Last Updated" })}</p>
-                  <p>{userData.updated_at ? new Date(userData.updated_at).toLocaleString() : "Unknown"}</p>
+                  <p>{userData.updated_at ? new Date(userData.updated_at).toLocaleString() : i18n.t("viewUsers.userInfoView.unknown", { defaultValue: "Unknown" })}</p>
                 </div>
 
                 <div>

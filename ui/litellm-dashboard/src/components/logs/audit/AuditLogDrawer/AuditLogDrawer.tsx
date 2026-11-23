@@ -1,7 +1,6 @@
 import { Check, Copy } from "lucide-react";
 import { useState, useCallback } from "react";
-import moment from "moment";
-import { AuditLogEntry, AUDIT_TABLE_NAME_DISPLAY } from "../AuditLogsTableColumns";
+import { AuditLogEntry, AUDIT_TABLE_NAME_DISPLAY, auditActionLabel } from "../AuditLogsTableColumns";
 import DefaultProxyAdminTag from "../../../common_components/DefaultProxyAdminTag";
 import CopyButton from "@/components/shared/CopyButton";
 import { StatusBadge, type StatusTone } from "@/components/shared/table_cells/status_badge";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetTitle } from "@/components/ui/sheet";
 import { ResizableSheetContent } from "@/components/ui/ResizableSheetContent";
 import i18n from "@/lib/i18n";
+import { formatDateTime } from "@/utils/dateFormat";
 
 interface AuditLogDrawerProps {
   open: boolean;
@@ -54,7 +54,13 @@ function CopyableJsonBlock({ label, value }: { label: string; value: Record<stri
     <div className="overflow-hidden rounded-sm border border-border bg-card">
       <div className="flex items-center justify-between border-b border-border bg-muted px-3 py-2">
         <span className="text-xs font-semibold text-muted-foreground">{label}</span>
-        <Button variant="ghost" size="icon-xs" onClick={handleCopy} title={i18n.t("viewLogs.auditLogDrawer.copyJson", { defaultValue: "Copy JSON" })} aria-label={i18n.t("viewLogs.auditLogDrawer.copyJson", { defaultValue: "Copy JSON" })}>
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          onClick={handleCopy}
+          title={i18n.t("viewLogs.auditLogDrawer.copyJson", { defaultValue: "Copy JSON" })}
+          aria-label={i18n.t("viewLogs.auditLogDrawer.copyJson", { defaultValue: "Copy JSON" })}
+        >
           {copied ? <Check className="text-success" /> : <Copy />}
         </Button>
       </div>
@@ -112,8 +118,18 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
       }
     });
 
-    displayBefore = Object.keys(changedBefore).length > 0 ? changedBefore : { note: i18n.t("viewLogs.auditLogDrawer.noDifferingFields", { defaultValue: "No differing fields detected" }) };
-    displayAfter = Object.keys(changedAfter).length > 0 ? changedAfter : { note: i18n.t("viewLogs.auditLogDrawer.noDifferingFields", { defaultValue: "No differing fields detected" }) };
+    displayBefore =
+      Object.keys(changedBefore).length > 0
+        ? changedBefore
+        : {
+            note: i18n.t("viewLogs.auditLogDrawer.noDifferingFields", { defaultValue: "No differing fields detected" }),
+          };
+    displayAfter =
+      Object.keys(changedAfter).length > 0
+        ? changedAfter
+        : {
+            note: i18n.t("viewLogs.auditLogDrawer.noDifferingFields", { defaultValue: "No differing fields detected" }),
+          };
   }
 
   const renderValue = (label: string, value: Record<string, any> | null | undefined) => {
@@ -123,7 +139,9 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
           <div className="flex items-center border-b border-border bg-muted px-3 py-2">
             <span className="text-xs font-semibold text-muted-foreground">{label}</span>
           </div>
-          <p className="m-0 px-3 py-3 text-xs text-muted-foreground italic">{i18n.t("viewLogs.auditLogDrawer.notAvailable", { defaultValue: "N/A" })}</p>
+          <p className="m-0 px-3 py-3 text-xs text-muted-foreground italic">
+            {i18n.t("viewLogs.auditLogDrawer.notAvailable", { defaultValue: "N/A" })}
+          </p>
         </div>
       );
     }
@@ -141,17 +159,26 @@ function DiffSection({ log }: { log: AuditLogEntry }) {
             <div className="space-y-1 px-3 py-3 text-xs">
               {value.token !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">{i18n.t("viewLogs.auditLogDrawer.tokenLabel", { defaultValue: "Token:" })}</span> {value.token ?? i18n.t("viewLogs.auditLogDrawer.notAvailable", { defaultValue: "N/A" })}
+                  <span className="text-muted-foreground">
+                    {i18n.t("viewLogs.auditLogDrawer.tokenLabel", { defaultValue: "Token:" })}
+                  </span>{" "}
+                  {value.token ?? i18n.t("viewLogs.auditLogDrawer.notAvailable", { defaultValue: "N/A" })}
                 </p>
               )}
               {value.spend !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">{i18n.t("viewLogs.auditLogDrawer.spendLabel", { defaultValue: "Spend:" })}</span> ¥{Number(value.spend).toFixed(6)}
+                  <span className="text-muted-foreground">
+                    {i18n.t("viewLogs.auditLogDrawer.spendLabel", { defaultValue: "Spend:" })}
+                  </span>{" "}
+                  ¥{Number(value.spend).toFixed(6)}
                 </p>
               )}
               {value.max_budget !== undefined && (
                 <p>
-                  <span className="text-muted-foreground">{i18n.t("viewLogs.auditLogDrawer.maxBudgetLabel", { defaultValue: "Max Budget:" })}</span> ¥{Number(value.max_budget).toFixed(6)}
+                  <span className="text-muted-foreground">
+                    {i18n.t("viewLogs.auditLogDrawer.maxBudgetLabel", { defaultValue: "Max Budget:" })}
+                  </span>{" "}
+                  ¥{Number(value.max_budget).toFixed(6)}
                 </p>
               )}
             </div>
@@ -179,36 +206,50 @@ export function AuditLogDrawer({ open, onClose, log }: AuditLogDrawerProps) {
   return (
     <Sheet open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
       <ResizableSheetContent storageKey="litellm:auditLogDrawerWidth" className="gap-0 p-0">
-        <SheetTitle className="sr-only">{i18n.t("viewLogs.auditLogDrawer.title", { defaultValue: "Audit log details" })}</SheetTitle>
+        <SheetTitle className="sr-only">
+          {i18n.t("viewLogs.auditLogDrawer.title", { defaultValue: "Audit log details" })}
+        </SheetTitle>
 
         <div className="flex shrink-0 items-center gap-3 border-b border-border bg-card px-6 py-4">
-          <StatusBadge tone={ACTION_TONE[log.action] ?? "neutral"} label={log.action} />
-          <span className="text-sm text-muted-foreground">
-            {moment.utc(log.updated_at).local().format("MMM D, YYYY HH:mm:ss")}
-          </span>
+          <StatusBadge tone={ACTION_TONE[log.action] ?? "neutral"} label={auditActionLabel(log.action)} />
+          <span className="text-sm text-muted-foreground">{formatDateTime(log.updated_at) ?? log.updated_at}</span>
         </div>
 
         <div className="px-6 py-5">
           <div className="mb-5 rounded-lg border border-border bg-muted p-4">
-            <p className="mb-2 text-xs font-semibold tracking-wide text-foreground uppercase">{i18n.t("viewLogs.auditLogDrawer.details", { defaultValue: "Details" })}</p>
-            <MetadataRow label={i18n.t("viewLogs.auditLogDrawer.labelTable", { defaultValue: "Table" })} value={tableDisplay} />
+            <p className="mb-2 text-xs font-semibold tracking-wide text-foreground uppercase">
+              {i18n.t("viewLogs.auditLogDrawer.details", { defaultValue: "Details" })}
+            </p>
+            <MetadataRow
+              label={i18n.t("viewLogs.auditLogDrawer.labelTable", { defaultValue: "Table" })}
+              value={tableDisplay}
+            />
             <MetadataRow
               label={i18n.t("viewLogs.auditLogDrawer.labelObjectId", { defaultValue: "Object ID" })}
               value={
                 <span className="inline-flex items-center gap-1 font-mono text-xs">
                   {log.object_id}
-                  <CopyButton value={log.object_id} label={i18n.t("viewLogs.auditLogDrawer.copyObjectId", { defaultValue: "Copy object ID" })} />
+                  <CopyButton
+                    value={log.object_id}
+                    label={i18n.t("viewLogs.auditLogDrawer.copyObjectId", { defaultValue: "Copy object ID" })}
+                  />
                 </span>
               }
             />
-            <MetadataRow label={i18n.t("viewLogs.auditLogDrawer.labelChangedBy", { defaultValue: "Changed By" })} value={<DefaultProxyAdminTag userId={log.changed_by} />} />
+            <MetadataRow
+              label={i18n.t("viewLogs.auditLogDrawer.labelChangedBy", { defaultValue: "Changed By" })}
+              value={<DefaultProxyAdminTag userId={log.changed_by} />}
+            />
             <MetadataRow
               label={i18n.t("viewLogs.auditLogDrawer.labelApiKeyHash", { defaultValue: "API Key (Hash)" })}
               value={
                 log.changed_by_api_key ? (
                   <span className="inline-flex items-center gap-1 font-mono text-xs break-all">
                     {log.changed_by_api_key}
-                    <CopyButton value={log.changed_by_api_key} label={i18n.t("viewLogs.auditLogDrawer.copyApiKeyHash", { defaultValue: "Copy API key hash" })} />
+                    <CopyButton
+                      value={log.changed_by_api_key}
+                      label={i18n.t("viewLogs.auditLogDrawer.copyApiKeyHash", { defaultValue: "Copy API key hash" })}
+                    />
                   </span>
                 ) : (
                   "—"

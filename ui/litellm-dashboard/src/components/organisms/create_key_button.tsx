@@ -471,14 +471,21 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
       };
       const built = buildKeyCreatePayload(input);
       if (built.kind === "duplicate_alias") {
-        throw new Error(
-          t("organisms.createKeyButton.duplicateKeyAliasError", {
-            defaultValue:
-              "Key alias {{alias}} already exists for team with ID {{teamId}}, please provide another key alias",
-            alias: built.alias,
-            teamId: built.teamId,
-          }),
+        toast.fromError(
+          t(
+            built.teamId
+              ? "organisms.createKeyButton.duplicateKeyAliasDetail"
+              : "organisms.createKeyButton.duplicateKeyAliasGlobal",
+            {
+              alias: built.alias,
+              teamId: built.teamId,
+              defaultValue: built.teamId
+                ? "The key name (alias) {{alias}} already exists in team {{teamId}}. Choose a different name, or select another team and try again."
+                : "The key name (alias) {{alias}} is already used by another key. Choose a different name and try again.",
+            },
+          ),
         );
+        return;
       }
 
       toast.info(t("organisms.createKeyButton.notificationMakingApiCall", { defaultValue: "Making API Call" }));
@@ -764,6 +771,9 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                     label={
                       <span>
                         {t("organisms.createKeyButton.userIdLabel", { defaultValue: "User ID" })}{" "}
+                        <span className="text-destructive" aria-hidden="true">
+                          *
+                        </span>
                         <SimpleTooltip
                           content={t("organisms.createKeyButton.userIdTooltip", {
                             defaultValue: "The user who will own this key and be responsible for its usage",
@@ -838,7 +848,8 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                     />
                     <div className="text-xs text-muted-foreground mt-2">
                       {t("organisms.createKeyButton.agentKeyDescription", {
-                        defaultValue: "This key will be used by the selected agent to make requests to 中安云科 AI 安全网关",
+                        defaultValue:
+                          "This key will be used by the selected agent to make requests to 中安云科 AI 安全网关",
                       })}
                     </div>
                   </div>
@@ -969,6 +980,9 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                           : t("organisms.createKeyButton.serviceAccountIdLabel", {
                               defaultValue: "Service Account ID",
                             })}{" "}
+                        <span className="text-destructive" aria-hidden="true">
+                          *
+                        </span>
                         <SimpleTooltip
                           content={
                             keyOwner === "you" || keyOwner === "another_user"
@@ -1149,6 +1163,9 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                             step={0.01}
                             precision={2}
                             width={200}
+                            placeholder={t("organisms.createKeyButton.numericalPlaceholder", {
+                              defaultValue: "Enter a number",
+                            })}
                           />
                         )}
                       </MountedFormField>
@@ -1204,48 +1221,54 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                         </FieldLabel>
                         <BudgetWindowsEditor value={budgetLimits} onChange={setBudgetLimits} />
                       </Field>
-                      <Field className="mt-4">
-                        <FieldLabel>
-                          <span>
-                            {t("organisms.createKeyButton.perModelBudgetsLabel", { defaultValue: "Per-Model Budgets" })}{" "}
-                            <SimpleTooltip
-                              content={t("organisms.createKeyButton.perModelBudgetsTooltip", {
-                                defaultValue:
-                                  "Cap spend on individual models, each with its own reset window. Enforced across every request this key makes; usage is reported on the key's info page.",
-                              })}
-                            >
-                              <Info className="ml-1 inline size-3.5 align-text-bottom" />
-                            </SimpleTooltip>
-                          </span>
-                        </FieldLabel>
-                        <ModelMaxBudgetEditor
-                          value={modelMaxBudget}
-                          onChange={setModelMaxBudget}
-                          availableModels={modelsToPick}
-                          premiumUser={premiumUser === true}
-                        />
-                      </Field>
-                      <Field className="mt-4">
-                        <FieldLabel>
-                          <span>
-                            {t("organisms.createKeyButton.budgetFallbacksLabel", { defaultValue: "Budget Fallbacks" })}{" "}
-                            <SimpleTooltip
-                              content={t("organisms.createKeyButton.budgetFallbacksTooltip", {
-                                defaultValue:
-                                  "When a model exceeds its per-model budget (model_max_budget), requests automatically reroute to fallback models instead of failing. Configure per-model budgets in Advanced Settings.",
-                              })}
-                            >
-                              <Info className="ml-1 inline size-3.5 align-text-bottom" />
-                            </SimpleTooltip>
-                          </span>
-                        </FieldLabel>
-                        <BudgetFallbacksEditor
-                          key={budgetFallbacksKey}
-                          value={budgetFallbacks}
-                          onChange={setBudgetFallbacks}
-                          availableModels={modelsToPick}
-                        />
-                      </Field>
+                      <div hidden={!premiumUser}>
+                        <Field className="mt-4">
+                          <FieldLabel>
+                            <span>
+                              {t("organisms.createKeyButton.perModelBudgetsLabel", {
+                                defaultValue: "Per-Model Budgets",
+                              })}{" "}
+                              <SimpleTooltip
+                                content={t("organisms.createKeyButton.perModelBudgetsTooltip", {
+                                  defaultValue:
+                                    "Cap spend on individual models, each with its own reset window. Enforced across every request this key makes; usage is reported on the key's info page.",
+                                })}
+                              >
+                                <Info className="ml-1 inline size-3.5 align-text-bottom" />
+                              </SimpleTooltip>
+                            </span>
+                          </FieldLabel>
+                          <ModelMaxBudgetEditor
+                            value={modelMaxBudget}
+                            onChange={setModelMaxBudget}
+                            availableModels={modelsToPick}
+                            premiumUser={premiumUser === true}
+                          />
+                        </Field>
+                        <Field className="mt-4">
+                          <FieldLabel>
+                            <span>
+                              {t("organisms.createKeyButton.budgetFallbacksLabel", {
+                                defaultValue: "Budget Fallbacks",
+                              })}{" "}
+                              <SimpleTooltip
+                                content={t("organisms.createKeyButton.budgetFallbacksTooltip", {
+                                  defaultValue:
+                                    "When a model exceeds its per-model budget (model_max_budget), requests automatically reroute to fallback models instead of failing. Configure per-model budgets in Advanced Settings.",
+                                })}
+                              >
+                                <Info className="ml-1 inline size-3.5 align-text-bottom" />
+                              </SimpleTooltip>
+                            </span>
+                          </FieldLabel>
+                          <BudgetFallbacksEditor
+                            key={budgetFallbacksKey}
+                            value={budgetFallbacks}
+                            onChange={setBudgetFallbacks}
+                            availableModels={modelsToPick}
+                          />
+                        </Field>
+                      </div>
                       <MountedFormField
                         className="mt-4"
                         label={
@@ -1282,6 +1305,9 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                             value={control.value as number | string | undefined}
                             step={1}
                             width={400}
+                            placeholder={t("organisms.createKeyButton.numericalPlaceholder", {
+                              defaultValue: "Enter a number",
+                            })}
                           />
                         )}
                       </MountedFormField>
@@ -1338,6 +1364,9 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                             value={control.value as number | string | undefined}
                             step={1}
                             width={400}
+                            placeholder={t("organisms.createKeyButton.numericalPlaceholder", {
+                              defaultValue: "Enter a number",
+                            })}
                           />
                         )}
                       </MountedFormField>
@@ -1439,9 +1468,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                                 defaultValue:
                                   "Apply safety guardrails to this key to filter content or enforce policies",
                               })}
-                            >
-                              
-                            </SimpleTooltip>
+                            ></SimpleTooltip>
                           </span>
                         }
                         name="guardrails"
@@ -1486,9 +1513,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                                 defaultValue:
                                   "When enabled, this key will bypass any guardrails configured to run on every request (global guardrails)",
                               })}
-                            >
-                              
-                            </SimpleTooltip>
+                            ></SimpleTooltip>
                           </span>
                         }
                         name="disable_global_guardrails"
@@ -1522,9 +1547,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                                 content={t("organisms.createKeyButton.policiesTooltip", {
                                   defaultValue: "Apply policies to this key to control guardrails and other settings",
                                 })}
-                              >
-                                
-                              </SimpleTooltip>
+                              ></SimpleTooltip>
                             </span>
                           }
                           name="policies"
@@ -1568,9 +1591,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                                 content={t("organisms.createKeyButton.promptsTooltip", {
                                   defaultValue: "Allow this key to use specific prompt templates",
                                 })}
-                              >
-                                
-                              </SimpleTooltip>
+                              ></SimpleTooltip>
                             </span>
                           }
                           name="prompts"
@@ -1645,9 +1666,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
                               content={t("organisms.createKeyButton.passThroughRoutesTooltip", {
                                 defaultValue: "Allow this key to use specific pass through routes",
                               })}
-                            >
-                              
-                            </SimpleTooltip>
+                            ></SimpleTooltip>
                           </span>
                         }
                         name="allowed_passthrough_routes"

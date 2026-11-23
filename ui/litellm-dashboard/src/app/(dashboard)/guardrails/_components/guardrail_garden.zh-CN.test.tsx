@@ -35,6 +35,13 @@ describe("GuardrailGarden 中文界面", () => {
     expect(screen.getByText("来自领先 AI 安全提供商的第三方护栏集成。")).toBeInTheDocument();
   });
 
+  it("renders the decision-model cards from the Chinese catalog", () => {
+    renderGarden();
+
+    expect(screen.getByText("Perplexity 决策模型")).toBeInTheDocument();
+    expect(screen.getByText(i18n.t("guardrails.guardrailGardenCards.dmPerplexity.desc"))).toBeInTheDocument();
+  });
+
   it("把卡片名称与描述渲染成中文，并保留提供商品牌名", () => {
     renderGarden();
 

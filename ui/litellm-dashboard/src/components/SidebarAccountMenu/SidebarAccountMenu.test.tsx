@@ -199,6 +199,37 @@ describe("SidebarAccountMenu", () => {
     await waitFor(() => expect(copyButton.querySelector(".lucide-check")).toBeInTheDocument());
   });
 
+  it("falls back to the legacy copy path when the Clipboard API is unavailable (HTTP)", async () => {
+    const user = userEvent.setup();
+    Object.defineProperty(navigator, "clipboard", { value: undefined, configurable: true });
+    const execCommand = vi.fn().mockReturnValue(true);
+    Object.defineProperty(document, "execCommand", { value: execCommand, configurable: true });
+
+    renderWithProviders(<SidebarAccountMenu onLogout={mockOnLogout} />);
+    await openMenu(user);
+
+    const copyButton = screen.getByRole("button", { name: "Copy email" });
+    await user.click(copyButton);
+
+    await waitFor(() => expect(execCommand).toHaveBeenCalledWith("copy"));
+    await waitFor(() => expect(copyButton.querySelector(".lucide-check")).toBeInTheDocument());
+  });
+
+  it("resets the remembered page to home before signing out", async () => {
+    const user = userEvent.setup();
+    const originalUrl = window.location.href;
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    renderWithProviders(<SidebarAccountMenu onLogout={mockOnLogout} />);
+
+    await openMenu(user);
+    await user.click(screen.getByRole("button", { name: /logout/i }));
+
+    expect(replaceState).toHaveBeenCalledWith(null, "", expect.stringMatching(/\/ui\/$/));
+    expect(mockOnLogout).toHaveBeenCalledTimes(1);
+    window.history.replaceState(null, "", originalUrl);
+    replaceState.mockRestore();
+  });
+
   it("should call onLogout when logout is clicked", async () => {
     const user = userEvent.setup();
     renderWithProviders(<SidebarAccountMenu onLogout={mockOnLogout} />);

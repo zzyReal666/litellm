@@ -193,6 +193,20 @@ describe("ViewUserDashboard", () => {
     expect(screen.getAllByText("user-1").length).toBeGreaterThan(0);
   });
 
+  it("refetches the user list after a confirmed delete", async () => {
+    const user = userEvent.setup();
+    renderDashboard();
+
+    await screen.findByText("test@example.com");
+    const callsBeforeDelete = userListCall.mock.calls.length;
+
+    await user.click(screen.getByTestId("user-actions-user-1"));
+    await user.click(await screen.findByTestId("user-action-delete"));
+    await user.click(await screen.findByRole("button", { name: "Delete" }));
+
+    await waitFor(() => expect(userListCall.mock.calls.length).toBeGreaterThan(callsBeforeDelete));
+  });
+
   it("should swap to the detail view when the identity cell is clicked", async () => {
     const user = userEvent.setup();
     renderDashboard();

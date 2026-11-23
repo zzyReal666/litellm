@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 import { Model, modelCreateCall } from "../networking";
 import { provider_map } from "../provider_info_helpers";
@@ -127,7 +128,7 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
             try {
               litellmExtraParams = JSON.parse(value);
             } catch (error) {
-              toast.fromError("Failed to parse 中安云科 AI 安全网关 Extra Params: " + error);
+              toast.fromError(i18n.t("addModel.handleAddModelSubmit.invalidExtraParams", { defaultValue: "Failed to parse LiteLLM extra params: {{error}}", error: String(error) }));
               throw new Error("Failed to parse litellm_extra_params: " + error);
             }
             if ("litellm_credential_name" in litellmExtraParams && formValues.litellm_credential_name) {
@@ -143,7 +144,7 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
             try {
               modelInfoParams = JSON.parse(value);
             } catch (error) {
-              toast.fromError("Failed to parse 中安云科 AI 安全网关 Extra Params: " + error);
+              toast.fromError(i18n.t("addModel.handleAddModelSubmit.invalidExtraParams", { defaultValue: "Failed to parse LiteLLM extra params: {{error}}", error: String(error) }));
               throw new Error("Failed to parse litellm_extra_params: " + error);
             }
             for (const [key, value] of Object.entries(modelInfoParams)) {
@@ -199,12 +200,17 @@ export const prepareModelAddRequest = async (formValues: Record<string, any>, ac
   }
 };
 
-export const handleAddModelSubmit = async (values: any, accessToken: string, form: any, callback?: () => void) => {
+export const handleAddModelSubmit = async (
+  values: any,
+  accessToken: string,
+  form: any,
+  callback?: () => void,
+): Promise<boolean> => {
   try {
     const deployments = await prepareModelAddRequest(values, accessToken, form);
 
     if (!deployments || deployments.length === 0) {
-      return; // Exit if preparation failed or no deployments
+      return false;
     }
 
     // Create each deployment
@@ -222,7 +228,10 @@ export const handleAddModelSubmit = async (values: any, accessToken: string, for
 
     callback && callback();
     form.resetFields();
+    toast.success(i18n.t("addModel.addModelForm.addModelSuccess", { defaultValue: "Model added successfully" }));
+    return true;
   } catch (error) {
-    toast.fromError("Failed to add model: " + error);
+    toast.fromError(error);
+    return false;
   }
 };

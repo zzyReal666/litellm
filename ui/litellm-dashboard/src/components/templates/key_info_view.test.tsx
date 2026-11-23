@@ -464,6 +464,28 @@ describe("KeyInfoView", () => {
     expect(await screen.findByRole("menuitem", { name: /delete key/i })).toBeInTheDocument();
   });
 
+  it("keeps Regenerate Key enabled when the user has no premium license", async () => {
+    vi.mocked(useTeams).mockReturnValue({ teams: [], setTeams: vi.fn() });
+    vi.mocked(useAuthorized).mockReturnValue({
+      ...baseUseAuthorizedMock,
+      userId: "proxy-admin-user",
+      userRole: "proxy_admin",
+      premiumUser: false,
+    });
+
+    renderWithProviders(
+      <KeyInfoView
+        keyData={MOCK_KEY_DATA}
+        onClose={() => {}}
+        keyId={"test-key-id"}
+        onKeyDataUpdate={() => {}}
+        teams={[]}
+      />,
+    );
+
+    expect(await screen.findByRole("button", { name: /regenerate key/i })).toBeEnabled();
+  });
+
   it("should allow team admin to modify key", async () => {
     const teamId = "test-team-id";
     const teamAdminUserId = "team-admin-user";

@@ -5,6 +5,12 @@ import { KeyInfoHeader, KeyInfoData } from "./KeyInfoHeader";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
+const { copyToClipboardMock } = vi.hoisted(() => ({ copyToClipboardMock: vi.fn() }));
+vi.mock("@/utils/dataUtils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/utils/dataUtils")>();
+  return { ...actual, copyToClipboard: copyToClipboardMock };
+});
+
 const MOCK_DATA: KeyInfoData = {
   keyName: "My Test Key",
   keyId: "sk-9876543210fedcba",
@@ -24,6 +30,10 @@ const MOCK_DATA: KeyInfoData = {
 };
 
 describe("KeyInfoHeader", () => {
+  beforeEach(() => {
+    copyToClipboardMock.mockReset().mockResolvedValue(true);
+  });
+
   it("should render", () => {
     render(<KeyInfoHeader data={MOCK_DATA} />);
     expect(screen.getByText("My Test Key")).toBeInTheDocument();
@@ -111,6 +121,25 @@ describe("KeyInfoHeader", () => {
       render(<KeyInfoHeader data={{ ...MOCK_DATA, createdBy: "default_user_id", createdById: "default_user_id" }} />);
       expect(screen.getByText("Default Proxy Admin")).toBeInTheDocument();
       expect(screen.queryByRole("link", { name: /default/i })).not.toBeInTheDocument();
+    });
+  });
+
+  describe("copy controls", () => {
+    it("copies the key ID through the clipboard helper and confirms success", async () => {
+      render(<KeyInfoHeader data={MOCK_DATA} />);
+
+      await userEvent.click(screen.getByRole("button", { name: "Copy Key ID" }));
+
+      expect(copyToClipboardMock).toHaveBeenCalledWith("sk-9876543210fedcba", "Copied");
+      expect(await screen.findByRole("button", { name: "Copy Key ID" })).toBeInTheDocument();
+    });
+
+    it("copies the key alias through the clipboard helper", async () => {
+      render(<KeyInfoHeader data={MOCK_DATA} />);
+
+      await userEvent.click(screen.getByRole("button", { name: "Copy Key Alias" }));
+
+      expect(copyToClipboardMock).toHaveBeenCalledWith("My Test Key", "Copied");
     });
   });
 

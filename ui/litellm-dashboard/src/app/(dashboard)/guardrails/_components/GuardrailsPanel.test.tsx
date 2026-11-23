@@ -38,10 +38,19 @@ vi.mock("./guardrail_table", () => ({
 
 vi.mock("./guardrail_info", () => ({
   __esModule: true,
-  default: ({ guardrailId, onClose }: { guardrailId: string; onClose: () => void }) => (
+  default: ({
+    guardrailId,
+    onClose,
+    onGuardrailUpdated,
+  }: {
+    guardrailId: string;
+    onClose: () => void;
+    onGuardrailUpdated?: () => void;
+  }) => (
     <div>
       <div data-testid="guardrail-info-view">Mock Guardrail Info View {guardrailId}</div>
       <button onClick={onClose}>Close Guardrail Info</button>
+      <button onClick={onGuardrailUpdated}>Save Guardrail</button>
     </div>
   ),
 }));
@@ -141,6 +150,7 @@ describe("GuardrailsPanel", () => {
     expect(modal.getByText("test-guardrail-1")).toBeInTheDocument();
     expect(modal.getByText("Test Provider")).toBeInTheDocument();
 
+    fireEvent.change(modal.getByPlaceholderText("Test Guardrail"), { target: { value: "Test Guardrail" } });
     fireEvent.click(modal.getByRole("button", { name: "Delete" }));
 
     await waitFor(() => {
@@ -169,6 +179,39 @@ describe("GuardrailsPanel", () => {
     fireEvent.click(screen.getByText("Test Playground"));
 
     expect(await screen.findByLabelText("playground draft")).toHaveValue("keep me");
+  });
+
+  it("refreshes the guardrail list after the detail view reports an update", async () => {
+    renderWithProviders(<GuardrailsPanel {...defaultProps} />, { searchParams: "?guardrail=test-guardrail-1" });
+
+    await screen.findByTestId("guardrail-info-view");
+    expect(mockGetGuardrailsList).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Save Guardrail" }));
+
+    await waitFor(() => expect(mockGetGuardrailsList).toHaveBeenCalledTimes(2));
+  });
+
+  it("refreshes the guardrail list when the detail view is closed", async () => {
+    renderWithProviders(<GuardrailsPanel {...defaultProps} />, { searchParams: "?guardrail=test-guardrail-1" });
+
+    fireEvent.click(await screen.findByRole("button", { name: "Close Guardrail Info" }));
+
+    await waitFor(() => expect(mockGetGuardrailsList).toHaveBeenCalledTimes(2));
+  });
+
+  it("explains the impact and requires the guardrail name before deleting", async () => {
+    renderWithProviders(<GuardrailsPanel {...defaultProps} />);
+    fireEvent.click(screen.getByText("Guardrails"));
+    fireEvent.click(await screen.findByTestId("delete-button"));
+
+    const modal = within(await screen.findByRole("dialog"));
+    expect(modal.getByText(/virtual key, team and model/)).toBeInTheDocument();
+    expect(modal.getByRole("button", { name: "Delete" })).toBeDisabled();
+
+    fireEvent.change(modal.getByPlaceholderText("Test Guardrail"), { target: { value: "Test Guardrail" } });
+
+    expect(modal.getByRole("button", { name: "Delete" })).toBeEnabled();
   });
 
   it("should not delete anything when the modal is cancelled", async () => {

@@ -113,6 +113,16 @@ describe("AuditLogsPanel", () => {
     expect(sentIdParams()).toEqual([]);
   });
 
+  it("refreshes the table from the toolbar button", async () => {
+    const user = userEvent.setup();
+    renderPanel();
+    await waitFor(() => expect(uiAuditLogsCall).toHaveBeenCalledTimes(1));
+
+    await user.click(screen.getByTestId("datatable-refresh"));
+
+    await waitFor(() => expect(uiAuditLogsCall).toHaveBeenCalledTimes(2));
+  });
+
   it.each(TEXT_FILTERS)("maps the $filterId drawer filter to params.$paramKey", async ({ placeholder, paramKey }) => {
     const user = userEvent.setup();
     renderPanel();

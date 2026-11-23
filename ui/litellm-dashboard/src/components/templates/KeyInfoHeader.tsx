@@ -6,8 +6,10 @@ import {
   Ban,
   Building2,
   Calendar,
+  Check,
   CircleCheck,
   Clock,
+  Copy,
   MoreVertical,
   Plus,
   RefreshCw,
@@ -29,11 +31,54 @@ import {
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import CopyButton from "@/components/shared/CopyButton";
 import { EntityLink } from "@/components/shared/EntityLink";
 import { orgDetailHref, teamDetailHref, userDetailHref } from "@/utils/entityLinks";
+import { copyToClipboard } from "@/utils/dataUtils";
+import i18n from "@/lib/i18n";
 import LabeledField from "../common_components/LabeledField";
 import DefaultProxyAdminTag from "../common_components/DefaultProxyAdminTag";
+
+interface KeyCopyButtonProps {
+  value: string | null | undefined;
+  label: string;
+  iconClassName?: string;
+}
+
+function KeyCopyButton({ value, label, iconClassName = "size-[15px]" }: KeyCopyButtonProps) {
+  const [copied, setCopied] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 1200);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  if (!value) return null;
+
+  const button = (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-xs"
+      aria-label={label}
+      className="text-muted-foreground hover:text-primary"
+      onClick={() => {
+        void copyToClipboard(value, i18n.t("common.copied", { defaultValue: "Copied" })).then(setCopied);
+      }}
+    >
+      {copied ? <Check className={iconClassName} /> : <Copy className={iconClassName} />}
+    </Button>
+  );
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger render={button} />
+        <TooltipContent>{copied ? i18n.t("common.copied", { defaultValue: "Copied" }) : label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 export interface KeyInfoData {
   keyName: string;
@@ -110,7 +155,7 @@ function UserField({ userAlias, userEmail, userId }: { userAlias?: string | null
               <span className="min-w-0 flex-1 truncate font-mono text-xs" title={value}>
                 {value}
               </span>
-              <CopyButton
+              <KeyCopyButton
                 value={value}
                 label={t("common.copyField", { field: label, defaultValue: `Copy ${label}` })}
                 iconClassName="size-3.5"
@@ -214,7 +259,7 @@ export function KeyInfoHeader({
           <div className="flex items-center gap-2">
             <h3 className="m-0 flex items-center gap-1 text-2xl font-semibold">
               {data.keyName}
-              <CopyButton
+              <KeyCopyButton
                 value={data.keyName}
                 label={t("templates.keyInfoHeader.copyKeyAlias", { defaultValue: "Copy Key Alias" })}
                 iconClassName="size-4"
@@ -231,7 +276,7 @@ export function KeyInfoHeader({
             <span className="min-w-0 break-words text-muted-foreground">
               {t("templates.keyInfoHeader.keyId", { keyId: data.keyId, defaultValue: `Key ID: ${data.keyId}` })}
             </span>
-            <CopyButton
+            <KeyCopyButton
               value={data.keyId}
               label={t("templates.keyInfoHeader.copyKeyId", { defaultValue: "Copy Key ID" })}
               iconClassName="size-3.5"

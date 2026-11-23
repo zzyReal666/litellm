@@ -55,6 +55,31 @@ const renderForm = ({
     />,
   );
 
+describe("required and optional markers", () => {
+  it("marks required fields for assistive tech and labels optional fields", () => {
+    renderForm();
+
+    const modelName = screen.getByPlaceholderText("Enter model name");
+    const litellmModelName = screen.getByPlaceholderText("Enter LiteLLM model name");
+    expect(modelName).toHaveAttribute("aria-required", "true");
+    expect(litellmModelName).toHaveAttribute("aria-required", "true");
+
+    expect(screen.getByText("Model Name").closest("p,label")).toHaveTextContent("*");
+    expect(screen.getAllByText("Optional").length).toBeGreaterThan(0);
+  });
+
+  it("focuses the first invalid field when submit is blocked", async () => {
+    const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
+    renderForm();
+
+    const modelName = screen.getByPlaceholderText("Enter model name");
+    await user.clear(modelName);
+    await user.click(screen.getByRole("button", { name: /save changes/i }));
+
+    await vi.waitFor(() => expect(modelName).toHaveFocus());
+  });
+});
+
 describe("ModelInfoEditForm existing-credentials picker", () => {
   it("shows the display name beside the credential name, searches by it, and submits the name", async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);

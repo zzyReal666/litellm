@@ -5,9 +5,14 @@ import type { TFunction } from "i18next";
 import { formatContentFilterDataForAPI } from "./content_filter/ContentFilterManager";
 import { asText, type GuardrailFormValues } from "./GuardrailFormField";
 import {
+  getLoggingOnlyScopeUpdate,
   guardrail_provider_map,
   skipSystemMessageToChoice,
   skipToolMessageToChoice,
+  streamScopeForUpdate,
+  toModeArray,
+  type GuardrailStreamScope,
+  type LoggingOnlyScopeChoice,
   type SkipSystemMessageChoice,
   type SkipToolMessageChoice,
 } from "./guardrail_info_helpers";
@@ -50,7 +55,11 @@ export const buildGuardrailUpdateData = ({
   toolPermissionDirty,
 }: GuardrailUpdateContext): Record<string, any> | null => {
   const updateData: any = {
-    litellm_params: {},
+    litellm_params: getLoggingOnlyScopeUpdate(
+      guardrailData.litellm_params,
+      values.logging_only_scope_choice as LoggingOnlyScopeChoice | undefined,
+      values.logging_only_continue_on_input_failure as boolean | undefined,
+    ),
   };
 
   if (values.guardrail_name !== guardrailData.guardrail_name) {
@@ -59,6 +68,16 @@ export const buildGuardrailUpdateData = ({
 
   if (values.default_on !== guardrailData.litellm_params?.default_on) {
     updateData.litellm_params.default_on = values.default_on;
+  }
+
+  const modes = toModeArray(guardrailData.litellm_params?.mode);
+  const nextStreamScope = streamScopeForUpdate(
+    modes,
+    (values.stream_scope_by_mode as Record<string, GuardrailStreamScope> | undefined) ?? {},
+    guardrailData.litellm_params?.stream_scope,
+  );
+  if (nextStreamScope !== undefined) {
+    updateData.litellm_params.stream_scope = nextStreamScope;
   }
 
   const prevSkipChoice = skipSystemMessageToChoice(guardrailData.litellm_params?.skip_system_message_in_guardrail);
@@ -165,9 +184,14 @@ export const buildGuardrailUpdateData = ({
   return Object.keys(updateData).length === 0 ? null : updateData;
 };
 
-export const submitGuardrailUpdate = async (context: GuardrailUpdateContext): Promise<{ updated: boolean }> => {
+export interface GuardrailUpdateResult {
+  updated: boolean;
+  failed?: boolean;
+}
+
+export const submitGuardrailUpdate = async (context: GuardrailUpdateContext): Promise<GuardrailUpdateResult> => {
   const { accessToken, guardrailId, t } = context;
-  const noUpdate = { updated: false };
+  const noUpdate: GuardrailUpdateResult = { updated: false };
 
   try {
     const updateData = buildGuardrailUpdateData(context);
@@ -186,6 +210,6 @@ export const submitGuardrailUpdate = async (context: GuardrailUpdateContext): Pr
   } catch (error) {
     console.error("Error updating guardrail:", error);
     toast.fromError(t("guardrails.guardrailInfo.updateFailed", { defaultValue: "Failed to update guardrail" }));
-    return noUpdate;
+    return { updated: false, failed: true };
   }
 };

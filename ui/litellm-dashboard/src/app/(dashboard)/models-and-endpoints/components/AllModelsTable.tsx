@@ -33,17 +33,6 @@ export const ALL_MODEL_GROUPS_VALUE = "all";
 export const WILDCARD_MODEL_GROUP_VALUE = "wildcard";
 
 const MODEL_TABLE_BODY_HEIGHT = 600;
-const ALL_PROXY_MODELS_LABEL = "All Proxy Models";
-
-const FILTER_LABELS: Record<string, string> = {
-  [MODEL_NAME_COLUMN_ID]: i18n.t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" }),
-  [ACCESS_GROUPS_COLUMN_ID]: i18n.t("molecules.modelsColumns.modelAccessGroup", { defaultValue: "Model Access Group" }),
-};
-
-const VIEW_MODE_LABELS: Record<ModelViewMode, string> = {
-  current_team: i18n.t("pages.allModelsTab.currentTeamModels", { defaultValue: "Current Team Models" }),
-  all: ALL_PROXY_MODELS_LABEL,
-};
 
 export interface ModelsTableTeamOption {
   value: string;
@@ -134,7 +123,25 @@ export function AllModelsTable({
   pausingModelId,
   credentialLabels,
 }: AllModelsTableProps) {
+  const { t } = useTranslation();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const allProxyModelsLabel = t("pages.allModelsTab.allProxyModels", { defaultValue: "All Proxy Models" });
+  const filterLabels = useMemo(
+    (): Record<string, string> => ({
+      [MODEL_NAME_COLUMN_ID]: t("molecules.modelsColumns.publicModelName", { defaultValue: "Public Model Name" }),
+      [ACCESS_GROUPS_COLUMN_ID]: t("molecules.modelsColumns.modelAccessGroup", {
+        defaultValue: "Model Access Group",
+      }),
+    }),
+    [t],
+  );
+  const viewModeLabels = useMemo(
+    (): Record<ModelViewMode, string> => ({
+      current_team: t("pages.allModelsTab.currentTeamModels", { defaultValue: "Current Team Models" }),
+      all: allProxyModelsLabel,
+    }),
+    [t, allProxyModelsLabel],
+  );
 
   const columns = useMemo(() => {
     const columnDeps = {
@@ -163,11 +170,11 @@ export function AllModelsTable({
 
   const modelGroupOptions = useMemo(
     () => [
-      { label: ALL_PROXY_MODELS_LABEL, value: ALL_MODEL_GROUPS_VALUE },
+      { label: allProxyModelsLabel, value: ALL_MODEL_GROUPS_VALUE },
       { label: i18n.t("pages.allModelsTab.wildcardModels", { defaultValue: "Wildcard Models (*)" }), value: WILDCARD_MODEL_GROUP_VALUE },
       ...availableModelGroups.map((group) => ({ label: group, value: group })),
     ],
-    [availableModelGroups],
+    [availableModelGroups, allProxyModelsLabel],
   );
 
   const accessGroupOptions = useMemo(
@@ -223,7 +230,7 @@ export function AllModelsTable({
             onOpenFilters={() => setFiltersOpen(true)}
             onRefresh={onRefresh}
             isRefreshing={isRefreshing}
-            filterLabels={FILTER_LABELS}
+            filterLabels={filterLabels}
             formatFilterValue={formatFilterValue}
           >
             <Select value={selectedTeamValue} onValueChange={(value) => onTeamChange(String(value))}>
@@ -261,11 +268,11 @@ export function AllModelsTable({
             <Select value={viewMode} onValueChange={(value) => onViewModeChange(value as ModelViewMode)}>
               <SelectTrigger size="sm" aria-label={i18n.t("common.view", { defaultValue: "View" })} data-testid="models-view-select" className="gap-2">
                 <span className="text-muted-foreground">{i18n.t("common.view", { defaultValue: "View" })}</span>
-                <span className="truncate">{VIEW_MODE_LABELS[viewMode]}</span>
+                <span className="truncate">{viewModeLabels[viewMode]}</span>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="current_team">{VIEW_MODE_LABELS.current_team}</SelectItem>
-                <SelectItem value="all">{VIEW_MODE_LABELS.all}</SelectItem>
+                <SelectItem value="current_team">{viewModeLabels.current_team}</SelectItem>
+                <SelectItem value="all">{viewModeLabels.all}</SelectItem>
               </SelectContent>
             </Select>
 

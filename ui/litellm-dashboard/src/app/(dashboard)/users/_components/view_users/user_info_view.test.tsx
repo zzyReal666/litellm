@@ -186,6 +186,8 @@ describe("UserInfoView", () => {
       expect(screen.getByText("Alpha Team")).toBeInTheDocument();
       expect(screen.getByText("Beta Team")).toBeInTheDocument();
     });
+    expect(screen.getByText("team-1")).toBeInTheDocument();
+    expect(screen.getByText("team-2")).toBeInTheDocument();
   });
 
   it("should link each team name to its team page", async () => {

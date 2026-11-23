@@ -28,7 +28,7 @@ describe("ToolPermissionRulesEditor in zh-CN", () => {
     await i18n.changeLanguage("zh-CN");
     render(<StatefulEditor initial={configWithRule} />);
 
-    expect(screen.getByText("LiteLLM 工具权限护栏")).toBeInTheDocument();
+    expect(screen.getByText("中安云科 AI 安全网关工具权限护栏")).toBeInTheDocument();
     expect(
       screen.getByText("为工具名称或类型提供正则表达式模式（例如 ^mcp__github_.*$），并可选择性地约束载荷字段。"),
     ).toBeInTheDocument();

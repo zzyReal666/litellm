@@ -547,14 +547,6 @@ export default function KeyInfoView({
         isBlocked={isBlocked}
         canModifyKey={canModifyKey}
         backButtonText={backButtonText}
-        regenerateDisabled={!premiumUser}
-        regenerateTooltip={
-          !premiumUser
-            ? t("templates.keyInfoView.enterpriseFeatureTooltip", {
-                defaultValue: "This is a 企业版 feature, and requires a valid key to use.",
-              })
-            : undefined
-        }
       />
 
       {/* Add RegenerateKeyModal */}

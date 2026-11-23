@@ -13,7 +13,6 @@ import {
   getProxyBaseUrl,
   invitationCreateCall,
   userListCall,
-  UserListResponse,
 } from "@/components/networking";
 import OnboardingModal, { InvitationLink } from "@/components/onboarding_link";
 
@@ -190,12 +189,9 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         setIsDeletingUser(true);
         await userDeleteCall(accessToken, [userToDelete.user_id]);
 
-        // Update the user list after deletion
-        queryClient.setQueriesData<UserListResponse>({ queryKey: ["userList"] }, (previousData) => {
-          if (previousData === undefined) return previousData;
-          const updatedUsers = previousData.users.filter((user) => user.user_id !== userToDelete.user_id);
-          return { ...previousData, users: updatedUsers };
-        });
+        // Refetch instead of patching the cached page, so pagination, totals and
+        // the current filters all reflect the deletion without a manual refresh.
+        await queryClient.invalidateQueries({ queryKey: ["userList"] });
 
         toast.success(t("viewUsers.notifications.userDeletedSuccess", { defaultValue: "User deleted successfully" }));
       } catch (error) {
@@ -294,6 +290,9 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
       <UserInfoView
         userId={selectedUserId}
         onClose={handleCloseUserInfo}
+        onDelete={() => {
+          void queryClient.invalidateQueries({ queryKey: ["userList"] });
+        }}
         accessToken={accessToken}
         userRole={userRole}
         possibleUIRoles={possibleUIRoles}
@@ -341,7 +340,14 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           {!userListQuery.isLoading && userID && accessToken && (
             <>
               {isProxyAdmin && (
-                <CreateUserButton userID={userID} accessToken={accessToken} possibleUIRoles={possibleUIRoles} />
+                <CreateUserButton
+                  userID={userID}
+                  accessToken={accessToken}
+                  possibleUIRoles={possibleUIRoles}
+                  onUserCreated={() => {
+                    void queryClient.invalidateQueries({ queryKey: ["userList"] });
+                  }}
+                />
               )}
 
               {isProxyAdmin && (

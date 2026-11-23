@@ -123,23 +123,39 @@ export const GuardrailField: React.FC<GuardrailFieldProps> = ({
   );
 };
 
-const SKIP_MESSAGE_ITEMS = [
-  { label: "Use global default", value: "inherit" },
-  { label: "Yes — exclude from guardrail scan", value: "yes" },
-  { label: "No — always include in scan", value: "no" },
+const skipMessageItems = (
+  t: (key: string, options?: { defaultValue?: string }) => string,
+): { label: string; value: string }[] => [
+  {
+    label: t("guardrails.editGuardrailForm.useGlobalDefault", { defaultValue: "Use global default" }),
+    value: "inherit",
+  },
+  {
+    label: t("guardrails.editGuardrailForm.yesExcludeFromScan", {
+      defaultValue: "Yes — exclude from guardrail scan",
+    }),
+    value: "yes",
+  },
+  {
+    label: t("guardrails.editGuardrailForm.noAlwaysInclude", { defaultValue: "No — always include in scan" }),
+    value: "no",
+  },
 ];
 
 export const SkipMessageSelect: React.FC<{ control: GuardrailFieldControlProps }> = ({ control }) => {
   const { t } = useTranslation();
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
+  const items = skipMessageItems(t);
 
   return (
-    <Select items={SKIP_MESSAGE_ITEMS} value={asText(value) || null} onValueChange={onChange}>
+    <Select items={items} value={asText(value) || null} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder={t("guardrails.guardrailProviderFields.selectPlaceholder", { defaultValue: "Select an option" })} />
+        <SelectValue
+          placeholder={t("guardrails.guardrailProviderFields.selectPlaceholder", { defaultValue: "Select an option" })}
+        />
       </SelectTrigger>
       <SelectContent>
-        {SKIP_MESSAGE_ITEMS.map((item) => (
+        {items.map((item) => (
           <SelectItem key={item.value} value={item.value}>
             {item.label}
           </SelectItem>
@@ -165,7 +181,11 @@ export const LoggingOnlyScopeSelect: React.FC<{
   return (
     <Select items={items} value={asText(value) || "default"} onValueChange={onChange}>
       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy} className="w-full">
-        <SelectValue placeholder={i18n.t("guardrails.guardrailProviderFields.selectPlaceholder", { defaultValue: "Select an option" })} />
+        <SelectValue
+          placeholder={i18n.t("guardrails.guardrailProviderFields.selectPlaceholder", {
+            defaultValue: "Select an option",
+          })}
+        />
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (
@@ -193,8 +213,11 @@ export const LoggingOnlyScopeField: React.FC<{
         control={control}
         name="logging_only_scope_choice"
         label={labelWithHint(
-          "Logging only scope",
-          "Which direction a logging_only scan observes. Observe-only scans never block; pre_call and post_call on this guardrail still block.",
+          i18n.t("guardrails.loggingOnlyScope.label", { defaultValue: "Logging only scope" }),
+          i18n.t("guardrails.loggingOnlyScope.labelHint", {
+            defaultValue:
+              "Which direction a logging_only scan observes. Observe-only scans never block; pre_call and post_call on this guardrail still block.",
+          }),
         )}
       >
         {(fieldControl) => (
@@ -205,8 +228,13 @@ export const LoggingOnlyScopeField: React.FC<{
         control={control}
         name="logging_only_continue_on_input_failure"
         label={labelWithHint(
-          "Continue observing the response after a flagged request",
-          "When on, a flagged or failing request scan is logged and the response is still scanned, so both verdicts land.",
+          i18n.t("guardrails.loggingOnlyScope.continueLabel", {
+            defaultValue: "Continue observing the response after a flagged request",
+          }),
+          i18n.t("guardrails.loggingOnlyScope.continueHint", {
+            defaultValue:
+              "When on, a flagged or failing request scan is logged and the response is still scanned, so both verdicts land.",
+          }),
         )}
       >
         {(fieldControl) => (
@@ -217,7 +245,9 @@ export const LoggingOnlyScopeField: React.FC<{
             onCheckedChange={fieldControl.onChange}
             aria-invalid={fieldControl["aria-invalid"]}
             aria-describedby={fieldControl["aria-describedby"]}
-            aria-label={i18n.t("guardrailFormField.continue-observing-the-response-after-a-flag", { defaultValue: "Continue observing the response after a flagged request" })}
+            aria-label={i18n.t("guardrailFormField.continue-observing-the-response-after-a-flag", {
+              defaultValue: "Continue observing the response after a flagged request",
+            })}
           />
         )}
       </GuardrailField>

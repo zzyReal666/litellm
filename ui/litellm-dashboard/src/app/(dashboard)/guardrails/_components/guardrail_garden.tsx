@@ -63,7 +63,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
       <section className="mb-10" aria-labelledby="guardrail-garden-litellm">
         <div className="mb-1 flex items-center justify-between">
           <h2 id="guardrail-garden-litellm" className="m-0 text-xl font-semibold text-foreground">
-            {t("guardrails.guardrailGarden.litellmSectionTitle", { defaultValue: "内容过滤器" })}
+            {t("guardrails.guardrailGarden.litellmSectionTitle", { defaultValue: "LiteLLM Content Filter" })}
           </h2>
           <span
             className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-primary"
@@ -74,13 +74,19 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
             ) : (
               <>
                 <ArrowRight className="size-3" />
-                {t("guardrails.guardrailGarden.showAll", { count: litellmCards.length, defaultValue: "Show all ({{count}})" })}
+                {t("guardrails.guardrailGarden.showAll", {
+                  count: litellmCards.length,
+                  defaultValue: "Show all ({{count}})",
+                })}
               </>
             )}
           </span>
         </div>
         <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          {t("guardrails.guardrailGarden.litellmSectionDesc", { defaultValue: "Built-in guardrails powered by 中安云科 AI 安全网关. Zero latency, no external dependencies, no additional cost." })}
+          {t("guardrails.guardrailGarden.litellmSectionDesc", {
+            defaultValue:
+              "Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.",
+          })}
         </p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {(showAllLitellm ? litellmCards : litellmCards.slice(0, CARDS_PER_ROW * VISIBLE_ROWS)).map((card) => (
@@ -91,9 +97,14 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
 
       <section className="mb-10" aria-labelledby="guardrail-garden-decision-model">
         <h2 id="guardrail-garden-decision-model" className="mt-0 mb-1 text-xl font-semibold text-foreground">
-          {i18n.t("guardrailGarden.decision-model", { defaultValue: "Decision Model" })}</h2>
+          {i18n.t("guardrailGarden.decision-model", { defaultValue: "Decision Model" })}
+        </h2>
         <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          {i18n.t("guardrailGarden.ask-a-decision-model-yes-no-questions-about", { defaultValue: "Ask a decision model yes/no questions about each request or response, and block or log when a score reaches its threshold." })}</p>
+          {i18n.t("guardrailGarden.ask-a-decision-model-yes-no-questions-about", {
+            defaultValue:
+              "Ask a decision model yes/no questions about each request or response, and block or log when a score reaches its threshold.",
+          })}
+        </p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {decisionModelCards.map((card) => (
             <GuardrailCard key={card.id} card={card} onClick={() => setSelectedCard(card)} />
@@ -106,7 +117,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
           {t("guardrails.guardrailGarden.partnerSectionTitle", { defaultValue: "Partner Guardrails" })}
         </h2>
         <p className="mt-1 mb-5 text-[13px] text-muted-foreground">
-          {t("guardrails.guardrailGarden.partnerSectionDesc", { defaultValue: "Third-party guardrail integrations from leading AI security providers." })}
+          {t("guardrails.guardrailGarden.partnerSectionDesc", {
+            defaultValue: "Third-party guardrail integrations from leading AI security providers.",
+          })}
         </p>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
           {partnerCards.map((card) => (

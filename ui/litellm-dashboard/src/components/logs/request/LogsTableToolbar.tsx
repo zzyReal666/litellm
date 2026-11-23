@@ -85,7 +85,8 @@ export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePicke
               className="w-full justify-start font-normal"
               onClick={() => onValueChange({ ...value, isCustomDate: !value.isCustomDate })}
             >
-              {i18n.t("logsTableToolbar.custom-range", { defaultValue: "Custom Range" })}</Button>
+              {i18n.t("logsTableToolbar.custom-range", { defaultValue: "Custom Range" })}
+            </Button>
           </div>
         </PopoverContent>
       </Popover>
@@ -98,7 +99,7 @@ export function LogsTimeRangePicker({ value, onValueChange }: LogsTimeRangePicke
             value={value.startTime}
             onChange={(event) => onValueChange({ ...value, startTime: event.target.value })}
           />
-          <span className="text-sm text-muted-foreground">to</span>
+          <span className="text-sm text-muted-foreground">{i18n.t("logsTableToolbar.to", { defaultValue: "to" })}</span>
           <Input
             type="datetime-local"
             className="w-auto"

@@ -9,6 +9,12 @@ vi.mock("../networking", () => ({
   regenerateKeyCall: (...args: unknown[]) => mockRegenerateKeyCall(...args),
 }));
 
+const { copyToClipboardMock } = vi.hoisted(() => ({ copyToClipboardMock: vi.fn() }));
+vi.mock("@/utils/dataUtils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/utils/dataUtils")>();
+  return { ...actual, copyToClipboard: copyToClipboardMock };
+});
+
 const makeToken = (overrides: Partial<KeyResponse> = {}): KeyResponse =>
   ({
     token: "token-hash-123",
@@ -38,6 +44,7 @@ const submittedPayload = (): Record<string, unknown> =>
 describe("RegenerateKeyModal submit payload", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    copyToClipboardMock.mockReset().mockResolvedValue(true);
     mockRegenerateKeyCall.mockResolvedValue({ key: "sk-new-regenerated-key", token: "new-token-hash" });
   });
 
@@ -276,6 +283,38 @@ describe("RegenerateKeyModal submit payload", () => {
       rpm_limit: 500,
       expires: "2026-12-31T00:00:00Z",
     });
+  });
+
+  it("warns that the old key is invalidated before the user confirms", () => {
+    renderModal();
+
+    expect(screen.getByText(/old key stops working immediately/i)).toBeInTheDocument();
+  });
+
+  it("copies the new key through the clipboard helper after regeneration", async () => {
+    const user = userEvent.setup();
+    renderModal();
+
+    await regenerate(user);
+    await screen.findByText("sk-new-regenerated-key");
+    await user.click(screen.getByRole("button", { name: /copy key/i }));
+
+    expect(copyToClipboardMock).toHaveBeenCalledWith("sk-new-regenerated-key", "New key copied to clipboard");
+    expect(await screen.findByRole("button", { name: /copied/i })).toBeInTheDocument();
+  });
+
+  it("does not claim the key was copied when the clipboard write fails", async () => {
+    const user = userEvent.setup();
+    copyToClipboardMock.mockResolvedValue(false);
+    renderModal();
+
+    await regenerate(user);
+    await screen.findByText("sk-new-regenerated-key");
+    await user.click(screen.getByRole("button", { name: /copy key/i }));
+
+    expect(copyToClipboardMock).toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /copy key/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /copied/i })).not.toBeInTheDocument();
   });
 
   it("never persists the regenerated key to web storage", async () => {

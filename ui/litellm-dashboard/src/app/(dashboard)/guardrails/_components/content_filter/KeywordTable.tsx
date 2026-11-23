@@ -23,11 +23,11 @@ interface KeywordTableProps {
 const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, onRemove }) => {
   const columns: ColumnDef<BlockedWord>[] = [
     {
-      header: "Keyword",
+      header: i18n.t("guardrails.keywordTable.colKeyword", { defaultValue: "Keyword" }),
       accessorKey: "keyword",
     },
     {
-      header: "Action",
+      header: i18n.t("guardrails.keywordTable.colAction", { defaultValue: "Action" }),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -36,7 +36,11 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, "action", value)}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger
+            size="sm"
+            className="w-[120px]"
+            aria-label={i18n.t("guardrails.keywordTable.colAction", { defaultValue: "Action" })}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -50,7 +54,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       ),
     },
     {
-      header: "Description",
+      header: i18n.t("guardrails.keywordTable.colDescription", { defaultValue: "Description" }),
       accessorKey: "description",
       cell: ({ row }) => row.original.description || "-",
     },
@@ -68,7 +72,11 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
   ];
 
   if (keywords.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">{i18n.t("keywordTable.no-keywords-added", { defaultValue: "No keywords added." })}</div>;
+    return (
+      <div className="py-10 text-center text-muted-foreground">
+        {i18n.t("keywordTable.no-keywords-added", { defaultValue: "No keywords added." })}
+      </div>
+    );
   }
 
   return <DataTable data={keywords} columns={columns} getRowId={(row) => row.id} size="compact" />;

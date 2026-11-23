@@ -75,7 +75,11 @@ const SUPPRESSED_BY_DESCRIPTION = "";
 const numericInputSchema = z.union([z.string(), z.number()]).optional();
 
 const teamCreateFieldsSchema = z.object({
-  team_alias: z.string().min(1, i18n.t("teams.teamNameRequired", { defaultValue: "Please input team name" })),
+  team_alias: z
+    .string()
+    .trim()
+    .min(1, i18n.t("teams.teamNameRequired", { defaultValue: "Please enter a team name" }))
+    .max(255, i18n.t("teams.teamNameTooLong", { defaultValue: "Team name must be 255 characters or fewer" })),
   organization_id: z.string().nullish(),
   models: z.array(z.string()).optional(),
   max_budget: numericInputSchema,
@@ -211,6 +215,15 @@ const getAdminOrganizations = (
   return [];
 };
 
+const requiredLabel = (label: React.ReactNode): React.ReactNode => (
+  <>
+    {label}
+    <span aria-hidden="true" className="ml-0.5 text-destructive">
+      *
+    </span>
+  </>
+);
+
 // @deprecated
 const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser = false }) => {
   const { t } = useTranslation();
@@ -252,6 +265,63 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
         }
         if (additionalSettingsOpen && !isParsableJson(values.secret_manager_settings)) {
           ctx.addIssue({ code: "custom", message: SUPPRESSED_BY_DESCRIPTION, path: ["secret_manager_settings"] });
+        }
+        const numericFields: Array<{ key: keyof TeamCreateFormValues; label: string }> = [
+          { key: "max_budget", label: t("teams.maxBudgetFieldLabel", { defaultValue: "Max Budget" }) },
+          { key: "tpm_limit", label: t("teams.tpmFieldLabel", { defaultValue: "TPM Limit" }) },
+          { key: "rpm_limit", label: t("teams.rpmFieldLabel", { defaultValue: "RPM Limit" }) },
+          { key: "tpd_limit", label: t("teams.tpdFieldLabel", { defaultValue: "TPD Limit" }) },
+          {
+            key: "team_member_budget",
+            label: t("teams.teamMemberBudgetFieldLabel", { defaultValue: "Team Member Budget" }),
+          },
+          {
+            key: "team_member_rpm_limit",
+            label: t("teams.teamMemberRpmFieldLabel", { defaultValue: "Team Member RPM Limit" }),
+          },
+          {
+            key: "team_member_tpm_limit",
+            label: t("teams.teamMemberTpmFieldLabel", { defaultValue: "Team Member TPM Limit" }),
+          },
+        ];
+        for (const field of numericFields) {
+          const raw = values[field.key];
+          if (raw === undefined || raw === null || String(raw).trim() === "") {
+            continue;
+          }
+          const parsed = Number(raw);
+          if (!Number.isFinite(parsed)) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("teams.numericFieldInvalid", {
+                field: field.label,
+                defaultValue: "{{field}} must be a number",
+              }),
+              path: [field.key],
+            });
+          } else if (parsed < 0) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("teams.numericFieldNegative", {
+                field: field.label,
+                defaultValue: "{{field}} must be 0 or greater",
+              }),
+              path: [field.key],
+            });
+          }
+        }
+        if (
+          values.budget_duration &&
+          values.budget_duration !== NEVER_RESETS_BUDGET_DURATION &&
+          !/^\d+[smhdw]$|^\d+mo$/.test(values.budget_duration)
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("teams.budgetDurationFormat", {
+              defaultValue: 'Use a duration like "30d", "12h", or "1mo"',
+            }),
+            path: ["budget_duration"],
+          });
         }
       }),
     [isOrgAdmin, additionalSettingsOpen, adminOrgs, organizations],
@@ -574,6 +644,13 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
   const onCreateSubmit = (values: TeamCreateFormValues) => handleCreate(mountedCreateValues(values));
 
+  const focusFirstInvalidField = (errors: Record<string, unknown>) => {
+    const firstField = Object.keys(errors)[0];
+    if (firstField) {
+      form.setFocus(firstField as keyof TeamCreateFormValues);
+    }
+  };
+
   const is_team_admin = (team: any) => {
     if (team == null || team.members_with_roles == null) {
       return false;
@@ -718,11 +795,24 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
               <DialogTitle>{t("oldTeams.createTeam", { defaultValue: "Create Team" })}</DialogTitle>
             </DialogHeader>
             <TooltipProvider>
-              <form onSubmit={form.handleSubmit(onCreateSubmit)}>
+              <form onSubmit={form.handleSubmit(onCreateSubmit, focusFirstInvalidField)}>
                 <FieldGroup>
-                  <FormField control={form.control} name="team_alias" label={t("oldTeams.form.teamName", { defaultValue: "Team Name" })}>
+                  <FormField
+                    control={form.control}
+                    name="team_alias"
+                    label={requiredLabel(t("oldTeams.form.teamName", { defaultValue: "Team Name" }))}
+                    description={t("teams.teamNameHint", {
+                      defaultValue: "Required. Use a name your team members will recognize.",
+                    })}
+                  >
                     {({ ref, value, ...field }) => (
-                      <UIInput {...field} ref={ref} value={value ?? ""} data-testid="team-name-input" />
+                      <UIInput
+                        {...field}
+                        ref={ref}
+                        value={value ?? ""}
+                        placeholder={t("teams.teamNamePlaceholder", { defaultValue: "e.g., Platform Engineering" })}
+                        data-testid="team-name-input"
+                      />
                     )}
                   </FormField>
                   {(() => {
@@ -736,20 +826,32 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           control={form.control}
                           name="organization_id"
                           className="mt-8"
-                          label={labelWithDocsHint(
-                            i18n.t("teams.organizationLabel", { defaultValue: "Organization" }),
-                            i18n.t("teams.organizationHint", {
-                              defaultValue:
-                                "Organizations can have multiple teams. Learn more about the user management hierarchy",
-                            }),
-                          )}
+                          label={
+                            isOrgAdmin
+                              ? requiredLabel(
+                                  labelWithDocsHint(
+                                    i18n.t("teams.organizationLabel", { defaultValue: "Organization" }),
+                                    i18n.t("teams.organizationHint", {
+                                      defaultValue:
+                                        "Organizations can have multiple teams. Learn more about the user management hierarchy",
+                                    }),
+                                  ),
+                                )
+                              : labelWithDocsHint(
+                                  i18n.t("teams.organizationLabel", { defaultValue: "Organization" }),
+                                  i18n.t("teams.organizationHint", {
+                                    defaultValue:
+                                      "Organizations can have multiple teams. Learn more about the user management hierarchy",
+                                  }),
+                                )
+                          }
                           description={
                             isOrgAdmin && isSingleOrg
                               ? i18n.t("teams.onlyCreateInOrgHint", {
                                   defaultValue: "You can only create teams within this organization",
                                 })
                               : isOrgAdmin
-                                ? "required"
+                                ? t("common.required", { defaultValue: "Required" })
                                 : undefined
                           }
                         >
@@ -811,12 +913,27 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     )}
                   </FormField>
 
-                  <FormField control={form.control} name="max_budget" label={i18n.t("teams.max-budget-cny", { defaultValue: "Max Budget (CNY)" })}>
+                  <FormField
+                    control={form.control}
+                    name="max_budget"
+                    label={i18n.t("teams.max-budget-cny", { defaultValue: "Max Budget (CNY)" })}
+                    description={t("teams.maxBudgetHint", {
+                      defaultValue: "Leave empty for no budget limit. Spend is capped at this amount per reset period.",
+                    })}
+                  >
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={0.01} precision={2} width={200} />
                     )}
                   </FormField>
-                  <FormField control={form.control} name="budget_duration" className="mt-8" label={t("oldTeams.form.resetBudget", { defaultValue: "Reset Budget" })}>
+                  <FormField
+                    control={form.control}
+                    name="budget_duration"
+                    className="mt-8"
+                    label={t("oldTeams.form.resetBudget", { defaultValue: "Reset Budget" })}
+                    description={t("teams.budgetDurationHint", {
+                      defaultValue: "How often the team's spend counter resets. Leave empty to use the server default.",
+                    })}
+                  >
                     {({ id, value, onChange }) => (
                       <BudgetDurationDropdown
                         id={id}
@@ -833,14 +950,31 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     value={modelMaxBudget}
                     onChange={setModelMaxBudget}
                     availableModels={userModels}
-                    hint="Cap this team's spend on individual models, each with its own reset window. Every key on the team shares the cap unless the key sets its own budget for that model."
+                    hint={t("oldTeams.form.modelMaxBudgetHint", {
+                      defaultValue:
+                        "Cap this team's spend on individual models, each with its own reset window. Every key on the team shares the cap unless the key sets its own budget for that model.",
+                    })}
                   />
-                  <FormField control={form.control} name="tpm_limit" label={t("oldTeams.form.tpmLimit", { defaultValue: "Tokens per minute Limit (TPM)" })}>
+                  <FormField
+                    control={form.control}
+                    name="tpm_limit"
+                    label={t("oldTeams.form.tpmLimit", { defaultValue: "Tokens per minute Limit (TPM)" })}
+                    description={t("teams.tpmHint", {
+                      defaultValue: "Leave empty for no limit. Applies to every request made by the team each minute.",
+                    })}
+                  >
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={1} width={400} />
                     )}
                   </FormField>
-                  <FormField control={form.control} name="rpm_limit" label={t("oldTeams.form.rpmLimit", { defaultValue: "Requests per minute Limit (RPM)" })}>
+                  <FormField
+                    control={form.control}
+                    name="rpm_limit"
+                    label={t("oldTeams.form.rpmLimit", { defaultValue: "Requests per minute Limit (RPM)" })}
+                    description={t("teams.rpmHint", {
+                      defaultValue: "Leave empty for no limit. Applies to every request made by the team each minute.",
+                    })}
+                  >
                     {({ ref, value, ...field }) => (
                       <NumericalInput {...field} ref={ref} value={value ?? ""} step={1} width={400} />
                     )}
@@ -849,8 +983,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     control={form.control}
                     name="tpd_limit"
                     label={labelWithHint(
-                      "Tokens per day Limit (TPD)",
-                      "Daily token budget for batch submissions (/v1/batches). When set, batch input files are charged against this 24h window instead of the team's TPM/RPM limits. Online requests keep using TPM/RPM.",
+                      t("teams.tpdLabel", { defaultValue: "Tokens per day Limit (TPD)" }),
+                      t("teams.tpdHint", {
+                        defaultValue:
+                          "Daily token budget for batch submissions (/v1/batches). When set, batch input files are charged against this 24h window instead of the team's TPM/RPM limits. Online requests keep using TPM/RPM.",
+                      }),
                     )}
                   >
                     {({ ref, value, ...field }) => (
@@ -891,14 +1028,23 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           label={t("oldTeams.form.teamId", { defaultValue: "Team ID" })}
                           description={i18n.t("teams.id-of-the-team-you-want-to-create-if-not-pro", { defaultValue: "ID of the team you want to create. If not provided, it will be generated automatically." })}
                         >
-                          {({ ref, value, ...field }) => <UIInput {...field} ref={ref} value={value ?? ""} />}
+                          {({ ref, value, ...field }) => (
+                            <UIInput
+                              {...field}
+                              ref={ref}
+                              value={value ?? ""}
+                              placeholder={t("teams.teamIdPlaceholder", { defaultValue: "Auto-generated if left empty" })}
+                            />
+                          )}
                         </FormField>
                         <FormField
                           control={form.control}
                           name="team_member_budget"
                           label={labelWithHint(
-                            "Team Member Budget (CNY)",
-                            "This is the individual budget for a user in the team.",
+                            t("oldTeams.form.teamMemberBudget", { defaultValue: "Team Member Budget (CNY)" }),
+                            t("oldTeams.form.teamMemberBudgetTooltip", {
+                              defaultValue: "This is the individual budget for a user in the team.",
+                            }),
                           )}
                         >
                           {({ ref, value, onChange, ...field }) => (
@@ -919,20 +1065,34 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           control={form.control}
                           name="team_member_key_duration"
                           label={labelWithHint(
-                            "Team Member Key Duration (eg: 1d, 1mo)",
-                            "Set a limit to the duration of a team member's key. Format: 30s (seconds), 30m (minutes), 30h (hours), 30d (days), 1mo (month)",
+                            t("oldTeams.form.teamMemberKeyDuration", {
+                              defaultValue: "Team Member Key Duration (eg: 1d, 1mo)",
+                            }),
+                            t("oldTeams.form.teamMemberKeyDurationTooltip", {
+                              defaultValue:
+                                "Set a limit to the duration of a team member's key. Format: 30s (seconds), 30m (minutes), 30h (hours), 30d (days), 1mo (month)",
+                            }),
                           )}
                         >
                           {({ ref, value, ...field }) => (
-                            <UIInput {...field} ref={ref} value={value ?? ""} placeholder="e.g., 30d" />
+                            <UIInput
+                              {...field}
+                              ref={ref}
+                              value={value ?? ""}
+                              placeholder={t("oldTeams.form.teamMemberKeyDurationPlaceholder", {
+                                defaultValue: "e.g., 30d",
+                              })}
+                            />
                           )}
                         </FormField>
                         <FormField
                           control={form.control}
                           name="team_member_rpm_limit"
                           label={labelWithHint(
-                            "Team Member RPM Limit",
-                            "The RPM (Requests Per Minute) limit for individual team members",
+                            t("oldTeams.form.teamMemberRpmLimit", { defaultValue: "Team Member RPM Limit" }),
+                            t("oldTeams.form.teamMemberRpmLimitTooltip", {
+                              defaultValue: "The RPM (Requests Per Minute) limit for individual team members",
+                            }),
                           )}
                         >
                           {({ ref, value, ...field }) => (
@@ -943,8 +1103,10 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           control={form.control}
                           name="team_member_tpm_limit"
                           label={labelWithHint(
-                            "Team Member TPM Limit",
-                            "The TPM (Tokens Per Minute) limit for individual team members",
+                            t("oldTeams.form.teamMemberTpmLimit", { defaultValue: "Team Member TPM Limit" }),
+                            t("oldTeams.form.teamMemberTpmLimitTooltip", {
+                              defaultValue: "The TPM (Tokens Per Minute) limit for individual team members",
+                            }),
                           )}
                         >
                           {({ ref, value, ...field }) => (
@@ -967,7 +1129,9 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                               ref={ref}
                               value={value ?? ""}
                               rows={4}
-                              placeholder='{"namespace": "admin", "mount": "secret", "path_prefix": "litellm"}'
+                              placeholder={t("oldTeams.form.secretManagerSettingsPlaceholder", {
+                                defaultValue: '{"namespace": "admin", "mount": "secret", "path_prefix": "litellm"}',
+                              })}
                               disabled={!premiumUser}
                             />
                           )}
@@ -977,8 +1141,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           name="guardrails"
                           className="mt-8"
                           label={labelWithDocsHint(
-                            "Guardrails",
-                            "Setup your first guardrail",
+                            t("oldTeams.form.guardrails", { defaultValue: "Guardrails" }),
+                            t("oldTeams.form.guardrailsTooltip", { defaultValue: "Setup your first guardrail" }),
                           )}
                           description={t("oldTeams.form.guardrailsHelp", { defaultValue: "Select existing guardrails or enter new ones" })}
                         >
@@ -998,13 +1162,20 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                             name="disable_global_guardrails"
                             className="mt-4"
                             label={labelWithHint(
-                              "Disable Global Guardrails",
-                              "When enabled, this team will bypass any guardrails configured to run on every request (global guardrails)",
+                              t("oldTeams.form.disableGlobalGuardrails", { defaultValue: "Disable Global Guardrails" }),
+                              t("oldTeams.form.disableGlobalGuardrailsTooltip", {
+                                defaultValue:
+                                  "When enabled, this team will bypass any guardrails configured to run on every request (global guardrails)",
+                              }),
                             )}
                             description={
                               premiumUser
-                                ? "Bypass global guardrails for this team"
-                                : "Premium feature - Upgrade to disable global guardrails by team"
+                                ? t("oldTeams.form.disableGlobalGuardrailsHelp", {
+                                    defaultValue: "Bypass global guardrails for this team",
+                                  })
+                                : t("oldTeams.form.disableGlobalGuardrailsPremium", {
+                                    defaultValue: "Premium feature - Upgrade to disable global guardrails by team",
+                                  })
                             }
                           >
                             {({ id, value, onChange }) => (
@@ -1023,8 +1194,10 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                             name="policies"
                             className="mt-8"
                             label={labelWithDocsHint(
-                              "Policies",
-                              "Apply policies to this team to control guardrails and other settings",
+                              t("oldTeams.form.policies", { defaultValue: "Policies" }),
+                              t("oldTeams.form.policiesTooltip", {
+                                defaultValue: "Apply policies to this team to control guardrails and other settings",
+                              }),
                             )}
                             description={t("oldTeams.form.policiesHelp", { defaultValue: "Select existing policies or enter new ones" })}
                           >
@@ -1044,8 +1217,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           name="access_group_ids"
                           className="mt-8"
                           label={labelWithHint(
-                            "Access Groups",
-                            "Assign access groups to this team. Access groups control which models, MCP servers, and agents this team can use",
+                            t("oldTeams.form.accessGroups", { defaultValue: "Access Groups" }),
+                            t("oldTeams.form.accessGroupsTooltip", {
+                              defaultValue:
+                                "Assign access groups to this team. Access groups control which models, MCP servers, and agents this team can use",
+                            }),
                           )}
                           description={t("oldTeams.form.accessGroupsHelp", { defaultValue: "Select access groups to assign to this team" })}
                         >
@@ -1062,7 +1238,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           name="allowed_vector_store_ids"
                           className="mt-8"
                           label={labelWithHint(
-                            "Allowed Vector Stores",
+                            t("oldTeams.form.allowedVectorStores", { defaultValue: "Allowed Vector Stores" }),
                             t("oldTeams.form.allowedVectorStoresHelp", { defaultValue: "Select which vector stores this team can access by default. Leave empty for access to all vector stores" }),
                           )}
                           description={t("oldTeams.form.allowedVectorStoresHelp", { defaultValue: "Select vector stores this team can access. Leave empty for access to all vector stores" })}
@@ -1083,15 +1259,25 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           label={
                             !premiumUser
                               ? labelWithHint(
-                                  "Allowed Pass Through Routes",
-                                  "Premium feature - Upgrade to set allowed pass through routes",
+                                  t("oldTeams.form.allowedPassThroughRoutes", {
+                                    defaultValue: "Allowed Pass Through Routes",
+                                  }),
+                                  t("oldTeams.form.allowedPassThroughRoutesPremiumTooltip", {
+                                    defaultValue: "Premium feature - Upgrade to set allowed pass through routes",
+                                  }),
                                 )
                               : !isProxyAdminRole(userRole || "")
                                 ? labelWithHint(
-                                    "Allowed Pass Through Routes",
-                                    "Only proxy admins can set allowed pass through routes",
+                                    t("oldTeams.form.allowedPassThroughRoutes", {
+                                      defaultValue: "Allowed Pass Through Routes",
+                                    }),
+                                    t("oldTeams.form.allowedPassThroughRoutesAdminTooltip", {
+                                      defaultValue: "Only proxy admins can set allowed pass through routes",
+                                    }),
                                   )
-                                : "Allowed Pass Through Routes"
+                                : t("oldTeams.form.allowedPassThroughRoutes", {
+                                    defaultValue: "Allowed Pass Through Routes",
+                                  })
                           }
                         >
                           {({ value, onChange }) => (
@@ -1123,7 +1309,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         name="allowed_mcp_servers_and_groups"
                         className="mt-4"
                         label={labelWithHint(
-                          "Allowed MCP Servers",
+                          t("oldTeams.form.allowedMcpServers", { defaultValue: "Allowed MCP Servers" }),
                           t("oldTeams.form.allowedMcpServersHelp", { defaultValue: "Select which MCP servers or access groups this team can access" }),
                         )}
                         description={t("oldTeams.form.allowedMcpServersHelp", { defaultValue: "Select MCP servers or access groups this team can access" })}
@@ -1167,7 +1353,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         name="allowed_agents_and_groups"
                         className="mt-4"
                         label={labelWithHint(
-                          "Allowed Agents",
+                          t("oldTeams.form.allowedAgents", { defaultValue: "Allowed Agents" }),
                           t("oldTeams.form.allowedAgentsHelp", { defaultValue: "Select which agents or access groups this team can access" }),
                         )}
                         description={t("oldTeams.form.allowedAgentsHelp", { defaultValue: "Select agents or access groups this team can access" })}
@@ -1199,8 +1385,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         name="object_permission_search_tools"
                         className="mt-4"
                         label={labelWithHint(
-                          "Allowed Search Tools",
-                          "Select which search tools this team can access. Leave empty to allow all search tools.",
+                          t("oldTeams.form.allowedSearchTools", { defaultValue: "Allowed Search Tools" }),
+                          t("oldTeams.form.allowedSearchToolsTooltip", {
+                            defaultValue:
+                              "Select which search tools this team can access. Leave empty to allow all search tools.",
+                          }),
                         )}
                         description={t("oldTeams.form.allowedSearchToolsHelp", { defaultValue: "Restrict which configured search tools keys on this team may call." })}
                       >
@@ -1231,8 +1420,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         name="object_permission_skills"
                         className="mt-4"
                         label={labelWithHint(
-                          "Allowed Skills",
-                          "Enabled skills are visible to every team. Grant disabled (private) Claude Code plugins to this team here.",
+                          t("oldTeams.form.allowedSkills", { defaultValue: "Allowed Skills" }),
+                          t("oldTeams.form.allowedSkillsTooltip", {
+                            defaultValue:
+                              "Enabled skills are visible to every team. Grant disabled (private) Claude Code plugins to this team here.",
+                          }),
                         )}
                         description={t("oldTeams.form.allowedSkillsHelp", { defaultValue: "Private skills keys on this team may see in the Claude Code marketplace." })}
                       >

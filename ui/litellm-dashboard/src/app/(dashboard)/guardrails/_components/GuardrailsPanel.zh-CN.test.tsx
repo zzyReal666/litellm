@@ -94,10 +94,13 @@ describe("GuardrailsPanel zh-CN", () => {
 
     const modal = within(await screen.findByRole("dialog"));
     expect(modal.getByText("删除护栏")).toBeInTheDocument();
-    expect(modal.getByText("Test Guardrail")).toBeInTheDocument();
+    expect(modal.getAllByText("Test Guardrail").length).toBeGreaterThan(0);
+    expect(modal.getByText(/虚拟密钥、团队和模型/)).toBeInTheDocument();
+    fireEvent.change(modal.getByPlaceholderText("Test Guardrail"), { target: { value: "Test Guardrail" } });
     expect(modal.getByText("Test Provider")).toBeInTheDocument();
     expect(modal.getByText("默认启用")).toBeInTheDocument();
 
+    expect(modal.getByRole("button", { name: "删除" })).toBeEnabled();
     fireEvent.click(modal.getByRole("button", { name: "删除" }));
 
     await vi.waitFor(() => {

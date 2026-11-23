@@ -190,8 +190,15 @@ function CreatedByCell({ model }: { model: ModelData }) {
   const { t } = useTranslation();
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
-  const primary = isConfigModel ? t("molecules.modelsColumns.definedInConfig", { defaultValue: "Defined in config" }) : model.model_info.created_by || t("common.unknown", { defaultValue: "Unknown" });
-  const secondaryForDbModel = createdAt ?? t("common.emptyValue", { defaultValue: "暂无" });
+  const updatedBy = (model.model_info as ModelData["model_info"] & { updated_by?: string | null }).updated_by;
+  const actor = model.model_info.created_by || updatedBy;
+  const primary = isConfigModel
+    ? t("molecules.modelsColumns.definedInConfig", { defaultValue: "Defined in config" })
+    : actor === "default_user_id" || actor === "litellm_proxy_admin"
+      ? t("molecules.modelsColumns.adminActor", { defaultValue: "Administrator" })
+      : actor || t("common.unknown", { defaultValue: "Unknown" });
+  const secondaryForDbModel =
+    createdAt ?? formatShortDate(model.model_info.updated_at ?? null) ?? t("common.emptyValue", { defaultValue: "None" });
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">

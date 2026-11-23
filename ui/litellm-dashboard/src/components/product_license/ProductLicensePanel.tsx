@@ -146,9 +146,6 @@ export default function ProductLicensePanel({ standalone = false }: ProductLicen
       <LicenseStatusAlerts info={info} error={queryError} />
 
       <Card>
-        <CardHeader>
-          <CardTitle>授权信息</CardTitle>
-        </CardHeader>
         <CardContent>
           <LicenseDetailsCard info={info} loading={licenseQuery.isLoading} />
         </CardContent>

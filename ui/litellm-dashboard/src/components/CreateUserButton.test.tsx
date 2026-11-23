@@ -319,6 +319,45 @@ describe("CreateUserButton", () => {
       await waitFor(() => {
         expect(mockToast.success).toHaveBeenCalledWith("API user Created");
       });
+
+      expect(await screen.findByText("User invited")).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /create an api key/i })).toHaveAttribute(
+        "href",
+        expect.stringContaining("api-keys"),
+      );
+      expect(screen.getByRole("button", { name: /done/i })).toBeInTheDocument();
+    });
+
+    it("reports the new user so the user list can refresh", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
+      const onUserCreated = vi.fn();
+      mockUserCreateCall.mockResolvedValue({ data: { user_id: "new-user-1" } });
+      mockInvitationCreateCall.mockResolvedValue({
+        id: "inv-new-user",
+        user_id: "new-user-1",
+        has_user_setup_sso: false,
+      } as any);
+
+      renderWithProviders(
+        <CreateUserButton
+          {...defaultProps}
+          onUserCreated={onUserCreated}
+          possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /\+ invite user/i })).toBeInTheDocument();
+      });
+      await user.click(screen.getByRole("button", { name: /\+ invite user/i }));
+
+      const dialog = screen.getByRole("dialog", { name: /invite user/i });
+      await user.type(within(dialog).getByLabelText(/user email/i), "new-user@example.com");
+      await user.click(within(dialog).getByRole("combobox", { name: /global proxy role/i }));
+      await user.click(screen.getByText("User"));
+      await user.click(within(dialog).getByRole("button", { name: /invite user/i }));
+
+      await waitFor(() => expect(onUserCreated).toHaveBeenCalledWith("new-user-1"));
     });
   });
 

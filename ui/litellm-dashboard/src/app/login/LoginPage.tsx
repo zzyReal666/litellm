@@ -25,6 +25,7 @@ import { useEffect, useId, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useWorker } from "@/hooks/useWorker";
+import { describeLoginError } from "./loginError";
 
 const loginSchema = z.object({
   username: z.string().min(1, {
@@ -70,15 +71,15 @@ function SsoEnabledNotice() {
 }
 
 function LoginPageContent() {
-function dropSessionForForcedLogin(params: URLSearchParams): void {
-  if (params.get("force_login") !== "1") {
-    return;
+  function dropSessionForForcedLogin(params: URLSearchParams): void {
+    if (params.get("force_login") !== "1") {
+      return;
+    }
+    clearTokenCookies();
+    params.delete("force_login");
+    const cleanSearch = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (cleanSearch ? `?${cleanSearch}` : ""));
   }
-  clearTokenCookies();
-  params.delete("force_login");
-  const cleanSearch = params.toString();
-  window.history.replaceState(null, "", window.location.pathname + (cleanSearch ? `?${cleanSearch}` : ""));
-}
 
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
@@ -202,7 +203,7 @@ function dropSessionForForcedLogin(params: URLSearchParams): void {
     );
   };
 
-  const error = loginMutation.error instanceof Error ? loginMutation.error.message : null;
+  const error = describeLoginError(loginMutation.error instanceof Error ? loginMutation.error.message : null);
   const isLoginLoading = loginMutation.isPending;
 
   if (isConfigLoading || isLoading) {
@@ -278,9 +279,7 @@ function dropSessionForForcedLogin(params: URLSearchParams): void {
                         i18nKey="login.docsHint"
                         defaults="Need to set UI credentials or SSO? <docsLink>Check the documentation</docsLink>."
                         components={{
-                          docsLink: (
-                            <span />
-                          ),
+                          docsLink: <span />,
                         }}
                       />
                     </p>

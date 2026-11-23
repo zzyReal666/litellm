@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { prepareModelAddRequest } from "./handle_add_model_submit";
+import { handleAddModelSubmit, prepareModelAddRequest } from "./handle_add_model_submit";
+import { modelCreateCall } from "../networking";
 
 vi.mock("../networking", () => ({
   modelCreateCall: vi.fn(),
@@ -154,5 +155,37 @@ describe("prepareModelAddRequest", () => {
     const [deployment] = deployments!;
     expect(deployment.modelName).toBe(wildcardModel);
     expect(deployment.litellmParamsObj.model).toBe(wildcardModel);
+  });
+});
+
+describe("handleAddModelSubmit", () => {
+  it("returns true and refreshes the list after the deployment is created", async () => {
+    const callback = vi.fn();
+    const form = { resetFields: vi.fn() };
+    const values = {
+      model_mappings: [{ public_name: "Public Model", litellm_model: "openai/gpt-4o" }],
+    };
+
+    const created = await handleAddModelSubmit(values, "token", form, callback);
+
+    expect(created).toBe(true);
+    expect(modelCreateCall).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(form.resetFields).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns false so the add form can stay open when creation fails", async () => {
+    vi.mocked(modelCreateCall).mockRejectedValueOnce(new Error("403 no permission"));
+    const callback = vi.fn();
+    const form = { resetFields: vi.fn() };
+    const values = {
+      model_mappings: [{ public_name: "Public Model", litellm_model: "openai/gpt-4o" }],
+    };
+
+    const created = await handleAddModelSubmit(values, "token", form, callback);
+
+    expect(created).toBe(false);
+    expect(callback).not.toHaveBeenCalled();
+    expect(form.resetFields).not.toHaveBeenCalled();
   });
 });

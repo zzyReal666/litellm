@@ -71,6 +71,7 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
 
   const closeGuardrailDetail = () => {
     void setSelectedGuardrailId(null, { history: "replace" });
+    void fetchGuardrails();
   };
 
   const handleAddGuardrail = () => {
@@ -193,6 +194,7 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
                   onClose={closeGuardrailDetail}
                   accessToken={accessToken}
                   isAdmin={isAdmin}
+                  onGuardrailUpdated={fetchGuardrails}
                 />
               ) : (
                 <GuardrailTable
@@ -220,6 +222,10 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
               <DeleteResourceModal
                 isOpen={isDeleteModalOpen}
                 title={t("guardrails.deleteGuardrailTitle", { defaultValue: "Delete Guardrail" })}
+                alertMessage={t("guardrails.deleteImpact", {
+                  defaultValue:
+                    "Once deleted, every virtual key, team and model that references this guardrail loses this protection immediately, and the related call policies stop applying. This cannot be undone.",
+                })}
                 message={t("guardrails.deleteConfirmMessage", {
                   name: guardrailToDelete?.guardrail_name,
                   defaultValue: `Are you sure you want to delete guardrail: ${guardrailToDelete?.guardrail_name}? This action cannot be undone.`,
@@ -227,17 +233,30 @@ const GuardrailsPanel: React.FC<GuardrailsPanelProps> = ({ accessToken, userRole
                 resourceInformationTitle={t("guardrails.guardrailInfoTitle", { defaultValue: "Guardrail Information" })}
                 resourceInformation={[
                   { label: t("common.name", { defaultValue: "Name" }), value: guardrailToDelete?.guardrail_name },
-                  { label: t("guardrails.labelId", { defaultValue: "ID" }), value: guardrailToDelete?.guardrail_id, code: true },
-                  { label: t("guardrails.guardrailInfo.provider", { defaultValue: "Provider" }), value: providerDisplayName },
-                  { label: t("guardrails.labelMode", { defaultValue: "Mode" }), value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode) },
+                  {
+                    label: t("guardrails.labelId", { defaultValue: "ID" }),
+                    value: guardrailToDelete?.guardrail_id,
+                    code: true,
+                  },
+                  {
+                    label: t("guardrails.guardrailInfo.provider", { defaultValue: "Provider" }),
+                    value: providerDisplayName,
+                  },
+                  {
+                    label: t("guardrails.labelMode", { defaultValue: "Mode" }),
+                    value: formatGuardrailMode(guardrailToDelete?.litellm_params.mode),
+                  },
                   {
                     label: t("guardrails.labelDefaultOn", { defaultValue: "Default On" }),
-                    value: guardrailToDelete?.litellm_params.default_on ? t("common.yes", { defaultValue: "Yes" }) : t("common.no", { defaultValue: "No" }),
+                    value: guardrailToDelete?.litellm_params.default_on
+                      ? t("common.yes", { defaultValue: "Yes" })
+                      : t("common.no", { defaultValue: "No" }),
                   },
                 ]}
                 onCancel={handleDeleteCancel}
                 onOk={handleDeleteConfirm}
                 confirmLoading={isDeleting}
+                requiredConfirmation={guardrailToDelete?.guardrail_name ?? undefined}
               />
             </TabsContent>
 

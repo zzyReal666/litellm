@@ -131,7 +131,11 @@
     "ssoNotConfigured": "Please configure SSO to log in with SSO.",
     "adminUiDisabledTitle": "Admin UI Disabled",
     "adminUiDisabledBody": "The Admin UI has been disabled by the administrator. To re-enable it, please update the following environment variable:",
-    "ssoEnabledNotice": "Single Sign-On (SSO) is enabled. The AI gateway no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration."
+    "ssoEnabledNotice": "Single Sign-On (SSO) is enabled. The AI gateway no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code> in your environment configuration.",
+    "invalidCredentials": "Incorrect username or password. Try again, or ask an administrator to reset your password.",
+    "tooManyAttempts": "Too many login attempts. Wait a moment and try again.",
+    "networkError": "Cannot reach the gateway. Check your network or gateway address and try again.",
+    "unexpectedError": "Login failed. Try again later or contact an administrator."
   },
   "shared": {
     "createdKeyDisplay": {
@@ -249,7 +253,7 @@
       "credentials": "Credentials",
       "credentialTypes": "Credential types",
       "reusable": "Reusable",
-      "reusableDescription": "Credentials saved in 中安云科 AI 安全网关 that can be added to models repeatedly.",
+      "reusableDescription": "Credentials saved in the gateway that can be added to models repeatedly.",
       "manual": "Manual",
       "manualDescription": "Credentials added directly during model creation or defined in the config file.",
       "createdBy": "Created By",
@@ -258,7 +262,7 @@
       "modelAccessGroup": "Model Access Group",
       "unknownProvider": "Unknown provider",
       "publicModelName": "Public Model Name",
-      "litellmModelName": "网关模型名称",
+      "litellmModelName": "LiteLLM Model Name",
       "definedInConfig": "Defined in config",
       "unknownDate": "Unknown date",
       "costPerMTokens": "Cost per 1M tokens",
@@ -274,7 +278,8 @@
       "pauseTooltip": "Pause model — stop routing requests until resumed.",
       "configNoDelete": "Config model cannot be deleted on the dashboard. Please delete it from the config file.",
       "deleteModel": "Delete model",
-      "source": "Source"
+      "source": "Source",
+      "adminActor": "Administrator"
     },
     "notificationsManager": {
       "authenticationError": "Authentication Error",
@@ -687,7 +692,11 @@
       "errorCreatingUser": "Error creating the user"
     },
     "userEmailRequired": "User email is required",
-    "userEmailInvalid": "Enter a valid email address"
+    "userEmailInvalid": "Enter a valid email address",
+    "inviteSuccessTitle": "User invited",
+    "inviteSuccessMessage": "{{email}} was invited. Share the invitation link below so they can set a password.",
+    "generatedKeyLabel": "API Key",
+    "createApiKeyForUser": "Create an API key"
   },
   "debugWarningBanner": {
     "message": "Performance Warning: Detailed Debug Mode Active",
@@ -874,7 +883,11 @@
       "modelAliasesDescription": "Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models.",
       "organizationNoLongerAvailable": "You can no longer create teams in this organization",
       "allowedSkillsHelp": "Private skills keys on this team may see in the Claude Code marketplace.",
-      "allowedSkillsPlaceholder": "Select skills (optional)"
+      "allowedSkillsPlaceholder": "Select skills (optional)",
+      "modelMaxBudgetHint": "Cap this team's spend on individual models, each with its own reset window. Every key on the team shares the cap unless the key sets its own budget for that model.",
+      "secretManagerSettingsPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+      "allowedSkills": "Allowed Skills",
+      "allowedSkillsTooltip": "Enabled skills are visible to every team. Grant disabled (private) Claude Code plugins to this team here."
     },
     "accordions": {
       "additionalSettings": "Additional Settings",
@@ -1368,7 +1381,13 @@
     "invitationLinkFailed": "User created but failed to generate invitation link",
     "failedToCreateUser": "Failed to create user",
     "fileSizeKb": "{{size}} KB • {{date}}",
-    "templateDownloaded": "CSV template downloaded"
+    "templateDownloaded": "CSV template downloaded",
+    "noValidUsersInRows": "No valid users found. Rows with errors: {{rows}}. Check the errors below and fix your CSV file.",
+    "someRowsHaveErrorsInRows": "Found {{errorCount}} row(s) with errors out of {{total}} total rows (rows: {{rows}}). Correct them before proceeding.",
+    "missingBudgetRows": "Rows {{rows}} have no max_budget. Those users will be created without a budget limit.",
+    "failedRowsSummary": "{{count}} row(s) failed: {{rows}}. Export the error details below to fix them.",
+    "downloadErrors": "Download Error Details",
+    "budgetNotProvided": "No budget provided; left empty"
   },
   "cacheDashboard": {
     "tabAnalytics": "Cache Analytics",
@@ -1655,7 +1674,8 @@
       "invalidJson": "Invalid JSON",
       "subtitle": "Test guardrails and compare results",
       "testingButton": "Testing {{count}} guardrails...",
-      "testButton": "Test {{count}} guardrails"
+      "testButton": "Test {{count}} guardrails",
+      "metadataError": "Metadata: {{error}}"
     },
     "guardrailTestPlayground": {
       "pageTitle": "Guardrail Testing Playground",
@@ -1931,7 +1951,10 @@
       "templateRedactEmails": "Redact Emails",
       "templateBlockSql": "Block SQL Injection",
       "templateValidateJson": "Validate JSON",
-      "templateExternalApi": "External API Check (async)"
+      "templateExternalApi": "External API Check (async)",
+      "actionUpdate": "update",
+      "actionCreate": "create",
+      "testFailed": "Failed to test custom code"
     },
     "editGuardrailForm": {
       "modalTitle": "Edit Guardrail",
@@ -1977,10 +2000,10 @@
     },
     "guardrailGarden": {
       "searchPlaceholder": "Search guardrails",
-      "litellmSectionTitle": "内容过滤器",
+      "litellmSectionTitle": "LiteLLM Content Filter",
       "showLess": "Show less",
       "showAll": "Show all ({{count}})",
-      "litellmSectionDesc": "Built-in guardrails powered by 中安云科 AI 安全网关. Zero latency, no external dependencies, no additional cost.",
+      "litellmSectionDesc": "Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.",
       "partnerSectionTitle": "Partner Guardrails",
       "partnerSectionDesc": "Third-party guardrail integrations from leading AI security providers.",
       "aim": {
@@ -2257,7 +2280,8 @@
       "tagsLabel": "Tags",
       "metricHeader": "Metric",
       "valueHeader": "Value",
-      "externalDepsNone": "None"
+      "externalDepsNone": "None",
+      "decisionModel": "Decision Model"
     },
     "guardrailInfo": {
       "backToGuardrails": "Back to Guardrails",
@@ -2479,7 +2503,34 @@
       "modePreMcpCall": "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
       "modeDuringMcpCall": "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
       "validationFailed": "Failed to create guardrail: please fix the highlighted fields",
-      "endpointSettingsHint": "Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like <code>/v1/realtime</code>."
+      "endpointSettingsHint": "Configure settings for a specific call type. Most guardrails don't need this — skip it unless you're using a specific endpoint like <code>/v1/realtime</code>.",
+      "createErrorSummary": "Failed to create guardrail. {{details}}",
+      "createErrorDetail": "{{field}}: {{reason}}. Suggestion: {{suggestion}}",
+      "createErrorGeneric": "Failed to create guardrail: {{reason}}. Check the form fields and try again",
+      "createErrorUnknown": "Failed to create guardrail. Check the network and the form fields, then try again",
+      "errorField": {
+        "guardrailName": "Guardrail name",
+        "mode": "Mode",
+        "provider": "Provider",
+        "defaultOn": "Default on",
+        "apiBase": "API base",
+        "apiKey": "API key",
+        "apiVersion": "API version",
+        "litellmParams": "Guardrail parameters",
+        "field": "Field"
+      },
+      "errorSuggestion": {
+        "required": "fill in this field before submitting",
+        "tooLong": "shorten the value to fit the maximum length",
+        "invalidUrl": "enter a valid URL starting with http:// or https://",
+        "invalidJson": "check the JSON syntax and try again",
+        "invalidValue": "pick one of the supported values",
+        "duplicate": "choose a unique name",
+        "generic": "correct this field and try again"
+      },
+      "stepDecisionModelConfig": "Decision Model Configuration",
+      "endSessionPlaceholder": "e.g. 3",
+      "noAccessToken": "No access token available"
     },
     "guardrailOptionalParams": {
       "title": "Optional Parameters",
@@ -2837,6 +2888,34 @@
       "zscaler": {
         "desc": "Enterprise AI security from Zscaler for monitoring and protecting AI/ML workloads.",
         "name": "Zscaler AI Guard"
+      },
+      "dmTypesafeJev": {
+        "name": "TypeSafe Jev",
+        "desc": "TypeSafe's Jev decision model answers your yes/no questions about each request, such as prompt injection or policy checks."
+      },
+      "dmPerplexity": {
+        "name": "Perplexity Decision",
+        "desc": "Perplexity's pplx-decider model answers your yes/no questions about each request or response."
+      },
+      "dmMicrosoft": {
+        "name": "Microsoft Decision Model",
+        "desc": "Microsoft Foundry decision models, such as Microsoft-Decision-1, answer your yes/no questions about each request or response."
+      },
+      "dmOpenai": {
+        "name": "OpenAI Decision Model",
+        "desc": "OpenAI decision models, such as gpt-6-luna, answer your yes/no questions about each request or response."
+      },
+      "dmDatabricks": {
+        "name": "Databricks Decision Model",
+        "desc": "Decision models served on Databricks, such as OpenJev, answer your yes/no questions about each request or response."
+      },
+      "microsoftAgent365": {
+        "name": "Microsoft Agent 365",
+        "desc": "Microsoft Agent 365 tool-call governance: Defender threat evaluation and observability for MCP tool calls, acting on behalf of the signed-in user"
+      },
+      "llmShieldProxy": {
+        "name": "LLM Shield Proxy",
+        "desc": "Self-hosted PII redaction that puts the original values back into the model's response, so the provider never receives personal data while the end user still sees it."
       }
     },
     "guardrailGardenPresets": {
@@ -2880,14 +2959,30 @@
       "check": "Check"
     },
     "streamScopeFields": {
-      "appliesTo": "{{mode}} applies to"
+      "appliesTo": "{{mode}} applies to",
+      "streamingOnly": "Streaming only",
+      "nonStreamingOnly": "Non-streaming only",
+      "streamingAndNonStreaming": "Streaming and non-streaming",
+      "requestShape": "Request shape",
+      "requestShapeHint": "Run this guardrail on streaming requests, non-streaming requests, or both, for each selected mode."
     },
     "deleteConfirmMessage": "Are you sure you want to delete guardrail: {{name}}? This action cannot be undone.",
     "deleteSuccessMessage": "Guardrail \"{{name}}\" deleted successfully",
     "addGuardrailForm.createSuccess": "Guardrail created successfully",
     "customCode": {
       "createSuccess": "Custom code guardrail created successfully"
-    }
+    },
+    "loggingOnlyScope": {
+      "default": "Default (request and response)",
+      "inputOnly": "Input only (request)",
+      "outputOnly": "Output only (response)",
+      "label": "Logging only scope",
+      "labelHint": "Which direction a logging_only scan observes. Observe-only scans never block; pre_call and post_call on this guardrail still block.",
+      "continueLabel": "Continue observing the response after a flagged request",
+      "continueHint": "When on, a flagged or failing request scan is logged and the response is still scanned, so both verdicts land."
+    },
+    "deleteImpact": "Once deleted, every virtual key, team and model that references this guardrail loses this protection immediately, and the related call policies stop applying. This cannot be undone.",
+    "deleteConfirmName": "Type the guardrail name to confirm deletion"
   },
   "keyValueInput": {
     "headerNamePlaceholder": "Header Name",
@@ -2986,7 +3081,7 @@
     "provider": "Provider",
     "providerLogoAlt": "{{provider}} logo",
     "notSet": "Not Set",
-    "litellmModel": "中安云科 AI 安全网关模型",
+    "litellmModel": "LiteLLM Model",
     "pricing": "Pricing",
     "pricingInput": "Input: ¥{{cost}}/1M tokens",
     "pricingOutput": "Output: ¥{{cost}}/1M tokens",
@@ -2999,8 +3094,8 @@
     "editTooltip": "Only DB models can be edited. You must be an admin or the creator of the model to edit it.",
     "fieldModelName": "Model Name",
     "placeholderModelName": "Enter model name",
-    "fieldLitellmModelName": "网关模型名称",
-    "placeholderLitellmModelName": "Enter 网关模型名称",
+    "fieldLitellmModelName": "LiteLLM Model Name",
+    "placeholderLitellmModelName": "Enter LiteLLM model name",
     "fieldInputCost": "Input Cost (per 1M tokens)",
     "placeholderInputCost": "Enter input cost",
     "fieldOutputCost": "Output Cost (per 1M tokens)",
@@ -3051,8 +3146,8 @@
     "cacheControlRole": "Role: {{role}}",
     "cacheControlIndex": "Index: {{index}}",
     "fieldModelInfo": "Model Info",
-    "fieldLitellmParams": "网关参数",
-    "tooltipLitellmParams": "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by 中安云科 AI 安全网关.",
+    "fieldLitellmParams": "LiteLLM Params",
+    "tooltipLitellmParams": "Optional litellm params used for making a litellm.completion() call. Some params are automatically added by LiteLLM.",
     "fieldTeamId": "Team ID",
     "saveChanges": "Save Changes",
     "deleteModalTitle": "Delete Model",
@@ -3062,7 +3157,7 @@
     "usingExistingCredentialTitle": "Using Existing Credential",
     "storingCredential": "Storing credential..",
     "credentialStoredSuccess": "Credential stored successfully",
-    "invalidJsonLitellmParams": "Invalid JSON in 网关参数",
+    "invalidJsonLitellmParams": "Invalid JSON in LiteLLM Params",
     "invalidJsonModelInfo": "Invalid JSON in Model Info",
     "modelSettingsUpdateSuccess": "Model settings updated successfully",
     "modelSettingsUpdateFailed": "Failed to update model settings",
@@ -3080,7 +3175,10 @@
     "deleteAutoRouterMessage": "Are you sure you want to delete this auto-router?",
     "public-model-name": "Public Model Name:",
     "created-at": "Created At",
-    "created-by": "Created By"
+    "created-by": "Created By",
+    "updated-at": "Updated At",
+    "fieldTeam": "Team",
+    "noTeam": "No Team"
   },
   "common": {
     "neverExpires": "Never",
@@ -3155,7 +3253,10 @@
     "comingSoon": "Coming soon",
     "copyField": "Copy {{field}}",
     "removing": "Removing…",
-    "emptyValue": "None"
+    "emptyValue": "None",
+    "on": "On",
+    "off": "Off",
+    "copyFailed": "Failed to copy to clipboard"
   },
   "publicModelHub": {
     "copiedToClipboard": "Copied to clipboard!",
@@ -3824,7 +3925,9 @@
       "userFallbackTitle": "User",
       "mcpPermissionsLabel": "MCP Permissions",
       "removeUserFromTeam": "Remove {{team}}",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "savingsTab": "Savings",
+      "removeFromTeamAria": "Remove from {{team}}"
     },
     "loadingDefaultUserSettings": "Loading default user settings"
   },
@@ -7395,7 +7498,7 @@
       "providerLoadFailed": "Failed to load providers",
       "providerSelectPlaceholder": "Select a provider",
       "modeLabel": "Mode",
-      "modeHelp": "<strong>Optional</strong> - 中安云科 AI 安全网关 endpoint to use when health checking this model <learnMoreLink>Learn more</learnMoreLink>",
+      "modeHelp": "<strong>Optional</strong> - LiteLLM endpoint to use when health checking this model <learnMoreLink>Learn more</learnMoreLink>",
       "credentialsSectionDesc": "Either select existing credentials OR enter new provider credentials below",
       "existingCredentialsLabel": "Existing Credentials",
       "existingCredentialsPlaceholder": "Select or search for existing credentials",
@@ -7415,7 +7518,9 @@
       "testConnectButton": "Test Connect",
       "addModelButton": "Add Model",
       "connectionTestResultsTitle": "Connection Test Results",
-      "noProvidersFound": "No providers found"
+      "noProvidersFound": "No providers found",
+      "addModelSuccess": "Model added successfully",
+      "credentialAdded": "Credential added successfully"
     },
     "addModelModes": {
       "chatLabel": "Chat - /chat/completions",
@@ -7496,7 +7601,8 @@
       "selectTeamTooltip": "Select the team this auto router belongs to. Only keys for this team will be able to call it.",
       "templatePlaceholder": "Choose a template or select Custom to define your own",
       "templatesLoadFailed": "Could not load templates, so only Custom Configuration is shown.",
-      "testRouting": "Test Routing"
+      "testRouting": "Test Routing",
+      "defaultModelConfigAria": "Default model configuration"
     },
     "complexityRouterConfig": {
       "title": "Complexity Tier Configuration",
@@ -7570,7 +7676,8 @@
       "tierPosition": "Tier {{index}} of {{count}} · {{origin}}",
       "tierRequired": "The {{label}} tier is required",
       "tierMappingTooltip": "Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.",
-      "defaultModelHint": "Used when the tier the request lands in has no model, and when the classifier fails with \"Route to the default model\" selected."
+      "defaultModelHint": "Used when the tier the request lands in has no model, and when the classifier fails with \"Route to the default model\" selected.",
+      "nonReasoningTierLabel": "Non-reasoning"
     },
     "routerConfigBuilder": {
       "title": "Routes Configuration",
@@ -7623,7 +7730,7 @@
       "validateNumberError": "Please enter a valid positive number",
       "useInPassThroughLabel": "Use in pass through routes",
       "useInPassThroughTooltip": "Allow using these credentials in pass through routes. <learnMoreLink>Learn more</learnMoreLink>",
-      "litellmParamsLabel": "网关参数",
+      "litellmParamsLabel": "LiteLLM Params",
       "litellmParamsTooltip": "Optional litellm params used for making a litellm.completion() call.",
       "litellmParamsHelpText": "Pass JSON of litellm supported params",
       "litellmParamsHelpLink": "litellm.completion() call",
@@ -7647,7 +7754,7 @@
       "helpText": "Providers like Anthropic, Bedrock API require users to specify where to inject cache control checkpoints, litellm can automatically add them for you as a cost saving feature.",
       "typeLabel": "Type",
       "roleLabel": "Role",
-      "roleTooltip": "The AI gateway will mark all messages of this role as cacheable",
+      "roleTooltip": "LiteLLM will mark all messages of this role as cacheable",
       "rolePlaceholder": "Select a role",
       "roleUser": "User",
       "roleSystem": "System",
@@ -7662,24 +7769,24 @@
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "Public Model Name",
-      "publicModelNameTooltip": "The name you specify in your API calls to AI 安全网关",
-      "tooltipExample": "<strong>Example:</strong> If you name your public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the 中安云科 AI 安全网关 model",
-      "tooltipUsage": "Usage: You make an API call to the AI 安全网关 with",
+      "publicModelNameTooltip": "The name you specify in API calls, which the gateway forwards to the backing model",
+      "tooltipExample": "<strong>Example:</strong> name the public model <publicName>example-name</publicName>, and choose <modelName>openai/qwen-plus-latest</modelName> as the LiteLLM model",
+      "tooltipUsage": "Usage: You make an API call to the gateway with",
       "tooltipUsageCode": "model = \"example-name\"",
-      "tooltipResult": "Result: 中安云科 AI 安全网关 sends",
+      "tooltipResult": "Result: the gateway sends",
       "tooltipResultCode": "qwen-plus-latest",
       "tooltipResultSuffix": "to the provider",
-      "litellmModelNameColumn": "网关模型名称",
+      "litellmModelNameColumn": "LiteLLM Model Name",
       "litellmModelNameTooltip": "The model name The AI gateway will send to the LLM API",
       "modelMappingsLabel": "Model Mappings",
-      "modelMappingsTooltip": "Map public model names to 网关模型名称s for load balancing",
+      "modelMappingsTooltip": "Map public model names to LiteLLM model names for load balancing",
       "mappingRequired": "At least one model mapping is required",
       "publicNameRequired": "All model mappings must have valid public names",
-      "tooltipUsageWithLabel": "<strongLabel>Usage:</strongLabel> You make an API call to the AI 安全网关 with",
-      "tooltipResultWithLabel": "<strongLabel>Result:</strongLabel> 中安云科 AI 安全网关 sends"
+      "tooltipUsageWithLabel": "<strongLabel>Usage:</strongLabel> You make an API call to the gateway with",
+      "tooltipResultWithLabel": "<strongLabel>Result:</strongLabel> The gateway sends"
     },
     "litellmModelName": {
-      "fieldLabel": "网关模型名称",
+      "fieldLabel": "LiteLLM Model Name(s)",
       "fieldTooltip": "The model name The AI gateway will send to the LLM API",
       "deploymentNameRequired": "Please enter a deployment name.",
       "modelRequired": "Please enter at least one model.",
@@ -7708,7 +7815,38 @@
       "viewDocumentation": "View Documentation",
       "connectionTestSuccessful": "Connection test successful!",
       "prepareFailed": "Failed to prepare model data. Please check your form inputs.",
-      "unknownError": "Unknown error"
+      "unknownError": "Unknown error",
+      "troubleshooting": {
+        "suggestionsTitle": "Suggestions",
+        "authTitle": "Authentication failed",
+        "authCheckKey": "Check that the API key or credential is correct and still active.",
+        "authCheckProvider": "Confirm the provider and API base match the key.",
+        "authCheckPermission": "Verify the key has permission to call the selected model.",
+        "notFoundTitle": "Endpoint or model not found",
+        "notFoundCheckApiBase": "Check the API base URL for missing or extra path segments.",
+        "notFoundCheckModel": "Confirm the provider deploys this model name.",
+        "notFoundCheckProvider": "Ensure the provider route matches the endpoint.",
+        "timeoutTitle": "Request timed out",
+        "timeoutCheckNetwork": "Check network connectivity from the proxy to the provider.",
+        "timeoutCheckProxy": "Check whether a proxy, firewall or egress policy blocks the request.",
+        "timeoutCheckLimit": "Increase the timeout, or retry with a smaller test request.",
+        "rateLimitTitle": "Rate limited or quota exceeded",
+        "rateLimitWait": "Wait and retry instead of testing repeatedly in a short window.",
+        "rateLimitCheckQuota": "Check the account quota, balance and billing status.",
+        "rateLimitCheckLimits": "Check whether the RPM or TPM limits are set too low.",
+        "networkTitle": "Network connection failed",
+        "networkCheckUrl": "Confirm the API base uses the correct scheme, host and port.",
+        "networkCheckProxy": "Check the TLS certificate, proxy and egress allowlist.",
+        "networkCheckDns": "Confirm the hostname resolves and the service is running.",
+        "unknownTitle": "Connection test failed",
+        "unknownCheckDetails": "Expand the details to inspect the raw provider error.",
+        "unknownCheckParams": "Verify the model name, API base and provider parameters.",
+        "unknownCheckCredential": "Confirm the selected credential contains the fields this provider needs.",
+        "title": "Troubleshooting"
+      },
+      "duration": "Duration: {{duration}}s",
+      "usingCredential": "Credential used: {{credentialName}}",
+      "connectionFailedToast": "Connection test failed"
     },
     "providerSpecificFields": {
       "loadingFields": "Loading provider fields...",
@@ -8018,6 +8156,9 @@
       "tierDefinitionRequired": "Every custom tier needs a definition: it is the rubric the classifier routes on",
       "tierNameRequired": "Name every tier",
       "tierNamesUnique": "Tier names must be unique, ignoring case"
+    },
+    "handleAddModelSubmit": {
+      "invalidExtraParams": "Failed to parse LiteLLM extra params: {{error}}"
     }
   },
   "costTracking": {
@@ -11418,7 +11559,10 @@
       "gracePeriodPlaceholder": "e.g. 24h, 2d",
       "durationRuleMessage": "Must be a duration like 30s, 30m, 24h, 2d, 1w, or 1mo",
       "expirationRequired": "Expiration is required for expired keys",
-      "regenerateSuccess": "Virtual Key regenerated successfully"
+      "regenerateSuccess": "Virtual Key regenerated successfully",
+      "oldKeyInvalidated": "After you confirm, the old key stops working immediately. Copy and save the new key before closing this dialog.",
+      "regenerateDescription": "Generates a new secret for this key. You can copy the new key in the next step.",
+      "copiedKey": "New key copied to clipboard"
     },
     "createKeyButton": {
       "createNewKeyTitle": "Create New Key",
@@ -11582,7 +11726,10 @@
       "saveKeyTitle": "Save your Key",
       "keyBeingCreated": "Key being created, this might take 30s",
       "createUserModalTitle": "Create New User",
-      "createKeyButton": "Create Key"
+      "createKeyButton": "Create Key",
+      "duplicateKeyAliasDetail": "The key name (alias) {{alias}} already exists in team {{teamId}}. Choose a different name, or select another team and try again.",
+      "duplicateKeyAliasGlobal": "The key name (alias) {{alias}} is already used by another key. Choose a different name and try again.",
+      "numericalPlaceholder": "Enter a number"
     }
   },
   "alerting": {
@@ -11899,7 +12046,7 @@
       "addAndManageModels": "Add and manage models for the proxy",
       "requestProvider": "Request Provider",
       "missingProviderTitle": "Missing a provider?",
-      "missingProviderDesc": "The 中安云科 AI 安全网关 engineering team is constantly adding support for new LLM models, providers, endpoints. If you don't see the one you need, let us know and we'll prioritize it.",
+      "missingProviderDesc": "The gateway engineering team is constantly adding support for new LLM models, providers and endpoints. If you don't see the one you need, let us know and we'll prioritize it.",
       "dismissBanner": "Dismiss banner",
       "tabAllModels": "All Models",
       "tabYourModels": "Your Models",
@@ -11937,8 +12084,8 @@
       "routesTo": "Routes to",
       "defaultModel": "Default model",
       "created": "Created",
-      "copyLitellmModelName": "Copy 网关模型名称",
-      "litellmModelNameCopied": "网关模型名称 copied",
+      "copyLitellmModelName": "Copy LiteLLM model name",
+      "litellmModelNameCopied": "LiteLLM model name copied",
       "aboutCredentialTypes": "About credential types",
       "costInShort": "IN",
       "costOutShort": "OUT",
@@ -11972,7 +12119,7 @@
       "deleteMessage": "Are you sure you want to delete this model?",
       "modelInformation": "Model Information",
       "modelName": "Model Name",
-      "litellmModelName": "网关模型名称",
+      "litellmModelName": "LiteLLM Model Name",
       "provider": "Provider",
       "createdBy": "Created By",
       "notSet": "Not Set",
@@ -11987,7 +12134,8 @@
       "teamLabel": "Team",
       "noModelAccessGroups": "No model access groups found",
       "accessWithoutTeam": "To access these models, create a Virtual Key without selecting a team on the <keysLink>Virtual Keys page</keysLink>.",
-      "accessWithTeam": "To access these models, create a Virtual Key and select Team as \"{{team}}\" on the <keysLink>Virtual Keys page</keysLink>."
+      "accessWithTeam": "To access these models, create a Virtual Key and select Team as \"{{team}}\" on the <keysLink>Virtual Keys page</keysLink>.",
+      "allProxyModels": "All Proxy Models"
     },
     "modelRetrySettings": {
       "retryScopeLabel": "Retry Policy Scope:",
@@ -12210,7 +12358,10 @@
       "optIn": "Opt-in",
       "apiBaseLabel": "Headroom API base",
       "apiBaseHint": "Base URL of your Headroom compression service (中安云科 AI 安全网关 calls its /v1/compress endpoint)",
-      "addGuardrail": "Add guardrail"
+      "addGuardrail": "Add guardrail",
+      "nameTooLong": "Name must be 64 characters or fewer",
+      "apiBaseInvalid": "Enter a valid URL, for example https://headroom.example.com",
+      "apiBaseTooLong": "API base must be 200 characters or fewer"
     },
     "shadowEvalSection": {
       "armBaseline": "Baseline",
@@ -12556,7 +12707,12 @@
     "ptuWindowOrder": "PTU Effective To must be after PTU Effective From",
     "ptuCostMustBeZero": "A PTU deployment bills by reserved capacity, so this cost must be 0 or blank",
     "attached-knowledge-bases-rag": "Attached Knowledge Bases (RAG)",
-    "litellm-params": "网关参数"
+    "litellm-params": "LiteLLM Params",
+    "fieldPtuCount": "PTU Count",
+    "fieldPtuStart": "PTU Effective From (UTC)",
+    "fieldPtuEnd": "PTU Effective To (UTC)",
+    "modelNameRequired": "Model name is required",
+    "litellmModelNameRequired": "LiteLLM model name is required"
   },
   "noRedisWarning": {
     "title": "No Redis configured. Redis is highly recommended",
@@ -13810,7 +13966,12 @@
     "confirmPasswordRequired": "Confirm your new password",
     "passwordsDoNotMatch": "New passwords do not match",
     "passwordUpdatedRelogin": "Password updated. Please log in with your new password.",
-    "passwordUpdated": "Password updated"
+    "passwordUpdated": "Password updated",
+    "currentPasswordHint": "Enter the password you use to sign in today.",
+    "passwordPolicyHint": "Use a strong password that meets this proxy's password policy. It must differ from your current password.",
+    "confirmPasswordHint": "Re-enter the new password so we can catch typos.",
+    "newPasswordDifferent": "New password must be different from the current password",
+    "passwordUpdatedReloginHint": "Password updated. Please sign in again with your new password."
   },
   "webSearchInterception": {
     "toastSaved": "Settings updated successfully. Changes will be applied across all pods within 10 seconds.",
@@ -14030,7 +14191,16 @@
     "test-input": "Test input",
     "paste-a-sample-input-to-score-against-your-q": "Paste a sample input to score against your questions",
     "latest-first-each-run-keeps-its-input-so-you": "Latest first. Each run keeps its input so you can compare.",
-    "the-model-or-questions-changed-since-this-ru": "The model or questions changed since this run. Run it again to score them."
+    "the-model-or-questions-changed-since-this-ru": "The model or questions changed since this run. Run it again to score them.",
+    "disabledSelectModel": "Select a decision model to run a test",
+    "disabledEnterInput": "Type an input to run a test",
+    "disabledAddQuestion": "Add a question to run a test",
+    "running": "Running…",
+    "runTest": "Run test",
+    "resultBlock": "Block",
+    "resultPass": "Pass",
+    "resultPassLogged": "Pass · logged",
+    "noAnswer": "No answer"
   },
   "investigationActions": {
     "investigation-actions": "Investigation actions",
@@ -14534,11 +14704,18 @@
     "filter-traces-by-status": "Filter traces by status"
   },
   "logsTableToolbar": {
-    "custom-range": "Custom Range"
+    "custom-range": "Custom Range",
+    "to": "to"
   },
   "requestLogsTable": {
     "narrow-down-request-logs": "Narrow down request logs",
-    "filters": "Filters"
+    "filters": "Filters",
+    "noMatchingRequests": "No matching requests",
+    "noRequestsYet": "No requests yet",
+    "noMatchingRequestsHint": "No requests match your filters for this time range.",
+    "noRequestsYetHint": "Requests proxied through 中安云科 AI 安全网关 will appear here.",
+    "loading": "Loading request logs…",
+    "searchPlaceholder": "Search logs by ID…"
   },
   "searchToolSelector": {
     "clear-all-search-tools": "Clear all search tools"
@@ -14774,7 +14951,27 @@
     "modelsLabel": "Models",
     "modelsHint": "These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups",
     "onlyCreateInOrgHint": "You can only create teams within this organization",
-    "selectOrganizationPlaceholder": "Search or select an Organization"
+    "selectOrganizationPlaceholder": "Search or select an Organization",
+    "teamNameTooLong": "Team name must be 255 characters or fewer",
+    "maxBudgetFieldLabel": "Max Budget",
+    "tpmFieldLabel": "TPM Limit",
+    "rpmFieldLabel": "RPM Limit",
+    "tpdFieldLabel": "TPD Limit",
+    "teamMemberBudgetFieldLabel": "Team Member Budget",
+    "teamMemberRpmFieldLabel": "Team Member RPM Limit",
+    "teamMemberTpmFieldLabel": "Team Member TPM Limit",
+    "numericFieldInvalid": "{{field}} must be a number",
+    "numericFieldNegative": "{{field}} must be 0 or greater",
+    "budgetDurationFormat": "Use a duration like \"30d\", \"12h\", or \"1mo\"",
+    "teamNameHint": "Required. Use a name your team members will recognize.",
+    "teamNamePlaceholder": "e.g., Platform Engineering",
+    "maxBudgetHint": "Leave empty for no budget limit. Spend is capped at this amount per reset period.",
+    "tpdLabel": "Tokens per day Limit (TPD)",
+    "tpdHint": "Daily token budget for batch submissions (/v1/batches). When set, batch input files are charged against this 24h window instead of the team's TPM/RPM limits. Online requests keep using TPM/RPM.",
+    "teamIdPlaceholder": "Auto-generated if left empty",
+    "tpmHint": "Leave empty for no limit. Applies to every request made by the team each minute.",
+    "rpmHint": "Leave empty for no limit. Applies to every request made by the team each minute.",
+    "budgetDurationHint": "How often the team's spend counter resets. Leave empty to use the server default."
   },
   "logsPage": {
     "request-logs": "Request Logs",
@@ -14894,5 +15091,10 @@
     "spend": "Spend",
     "apiRequests": "Api Requests",
     "avgResponseTimeMs": "Avg Response Time Ms"
+  },
+  "productLicense": {
+    "licenseTypeLabel": "License type",
+    "licenseTypePermanent": "Permanent",
+    "licenseTypeTemporary": "Temporary"
   }
 }

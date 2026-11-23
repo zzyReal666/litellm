@@ -3,11 +3,12 @@ import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrgan
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { FieldGroup } from "@/components/ui/field";
 import { FormField } from "@/components/shared/form/FormField";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -26,7 +27,9 @@ import {
   modelAvailableCall,
   userCreateCall,
 } from "./networking";
-import OnboardingModal, { InvitationLink } from "./onboarding_link";
+import { buildOnboardingUrl, type InvitationLink } from "./onboarding_link";
+import { copyToClipboard } from "@/utils/dataUtils";
+import { uiHref } from "@/utils/uiHref";
 
 // Helper function to generate UUID compatible across all environments
 const generateUUID = (): string => {
@@ -161,10 +164,9 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   const defaultValues = isEmbedded ? EMBEDDED_DEFAULTS : STANDALONE_DEFAULTS;
   const form = useForm<CreateUserFormValues>({ defaultValues });
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [apiuser, setApiuser] = useState<boolean>(false);
   const [userModels, setUserModels] = useState<string[]>([]);
   const [isPersonalKeyOpen, setIsPersonalKeyOpen] = useState(false);
-  const [isInvitationLinkModalVisible, setIsInvitationLinkModalVisible] = useState(false);
+  const [createdUser, setCreatedUser] = useState<{ id: string; email: string; key?: string } | null>(null);
   const [invitationLinkData, setInvitationLinkData] = useState<InvitationLink | null>(null);
   const [baseUrl, setBaseUrl] = useState<string | null>(null);
   const { data: organizations = [] } = useOrganizations();
@@ -197,8 +199,12 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setApiuser(false);
     form.reset(defaultValues);
+  };
+
+  const closeInviteSuccess = () => {
+    setCreatedUser(null);
+    setInvitationLinkData(null);
   };
 
   const handleCreate = async (formValues: CreateUserFormValues) => {
@@ -221,30 +227,34 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
       );
       const response = await userCreateCall(accessToken, null, payload);
       await queryClient.invalidateQueries({ queryKey: ["userList"] });
-      setApiuser(true);
       const user_id = response.data?.user_id || response.user_id;
 
-      if (onUserCreated && isEmbedded) {
+      if (onUserCreated) {
         onUserCreated(user_id);
+      }
+
+      if (isEmbedded) {
         form.reset(defaultValues);
         return;
       }
 
+      const finishInvite = (data: InvitationLink) => {
+        setInvitationLinkData(data);
+        setCreatedUser({ id: user_id, email: userEmail, key: response.key });
+        setIsModalVisible(false);
+        form.reset(defaultValues);
+        localStorage.removeItem("userData" + userID);
+        toast.success(i18n.t("createUserButton.notifications.userCreated", { defaultValue: "API user Created" }));
+      };
+
       if (!uiSettings?.SSO_ENABLED) {
         invitationCreateCall(accessToken, user_id).then((data) => {
           data.has_user_setup_sso = false;
-          setInvitationLinkData(data);
-          setIsInvitationLinkModalVisible(true);
+          finishInvite(data);
         });
       } else {
-        setInvitationLinkData(buildSsoInvitationLink(user_id, userID));
-        setIsInvitationLinkModalVisible(true);
+        finishInvite(buildSsoInvitationLink(user_id, userID));
       }
-
-      setIsModalVisible(false);
-      toast.success(i18n.t("createUserButton.notifications.userCreated", { defaultValue: "API user Created" }));
-      form.reset(defaultValues);
-      localStorage.removeItem("userData" + userID);
     } catch (error: any) {
       const errorMessage = error.response?.data?.detail || error?.message || i18n.t("createUserButton.notifications.errorCreatingUser", { defaultValue: "Error creating the user" });
       toast.fromError(errorMessage);
@@ -346,6 +356,16 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
       </TooltipProvider>
     );
   }
+
+  const invitationUrl =
+    createdUser !== null
+      ? buildOnboardingUrl({
+          baseUrl: baseUrl ?? "",
+          invitationId: invitationLinkData?.id,
+          hasUserSetupSso: invitationLinkData?.has_user_setup_sso ?? false,
+          resetPassword: false,
+        })
+      : "";
 
   // Original return for standalone mode
   return (
@@ -457,14 +477,68 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
           </TooltipProvider>
         </DialogContent>
       </Dialog>
-      {apiuser && (
-        <OnboardingModal
-          isInvitationLinkModalVisible={isInvitationLinkModalVisible}
-          setIsInvitationLinkModalVisible={setIsInvitationLinkModalVisible}
-          baseUrl={baseUrl || ""}
-          invitationLinkData={invitationLinkData}
-        />
-      )}
+      <Dialog open={createdUser !== null} onOpenChange={(open) => !open && closeInviteSuccess()}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>
+              {i18n.t("createUserButton.inviteSuccessTitle", { defaultValue: "User invited" })}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4">
+            <p className="text-sm">
+              {i18n.t("createUserButton.inviteSuccessMessage", {
+                email: createdUser?.email ?? "",
+                defaultValue: "{{email}} was invited. Share the invitation link below so they can set a password.",
+              })}
+            </p>
+            {invitationUrl && (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="invite-success-link" className="text-xs font-normal text-muted-foreground">
+                  {i18n.t("onboardingLink.invitationLinkTitle", { defaultValue: "Invitation Link" })}
+                </Label>
+                <div className="flex gap-2">
+                  <Input id="invite-success-link" readOnly value={invitationUrl} className="font-mono text-xs" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      void copyToClipboard(
+                        invitationUrl,
+                        i18n.t("bulkCreateUsers.invitationLinkCopied", {
+                          defaultValue: "Invitation link copied!",
+                        }),
+                      )
+                    }
+                  >
+                    {i18n.t("common.copy", { defaultValue: "Copy" })}
+                  </Button>
+                </div>
+              </div>
+            )}
+            {createdUser?.key && (
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-xs font-normal text-muted-foreground">
+                  {i18n.t("createUserButton.generatedKeyLabel", { defaultValue: "API Key" })}
+                </Label>
+                <code className="break-all rounded-md bg-muted p-2 font-mono text-xs">{createdUser.key}</code>
+              </div>
+            )}
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button type="button" variant="outline" onClick={closeInviteSuccess}>
+                {i18n.t("common.done", { defaultValue: "Done" })}
+              </Button>
+              <a
+                href={`${uiHref("api-keys")}?create=true`}
+                className={buttonVariants()}
+                onClick={closeInviteSuccess}
+              >
+                {i18n.t("createUserButton.createApiKeyForUser", { defaultValue: "Create an API key" })}
+              </a>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

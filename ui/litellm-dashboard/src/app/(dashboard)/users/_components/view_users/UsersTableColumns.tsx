@@ -8,6 +8,7 @@ import { Copy, Info, KeyRound, MoreHorizontal, Pencil, Trash2 } from "lucide-rea
 import { UserInfo } from "@/components/networking";
 import { createSelectionColumn, DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, IdentityCell, MoneyCell, StatusBadge } from "@/components/shared/table_cells";
+import type { UsersTableTeamOption } from "./UsersTable";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -70,6 +71,7 @@ function UserRowActions({ user, onUserClick, onDeleteUser, onResetPassword, t }:
 
 export interface UsersTableColumnsDeps {
   possibleUIRoles: Record<string, Record<string, string>> | null;
+  teams: UsersTableTeamOption[] | null;
   includeSelection: boolean;
   onUserClick: (userId: string, openInEditMode?: boolean) => void;
   onDeleteUser: (user: UserInfo) => void;
@@ -79,6 +81,7 @@ export interface UsersTableColumnsDeps {
 
 export const getUsersTableColumns = ({
   possibleUIRoles,
+  teams,
   includeSelection,
   onUserClick,
   onDeleteUser,
@@ -151,6 +154,36 @@ export const getUsersTableColumns = ({
             label={t("viewUsers.columns.active", { defaultValue: i18n.t("teamPage.teamInfo.activeStatus", { defaultValue: "Active" }) })}
             dataTestId={`user-status-${row.original.user_id}`}
           />
+        );
+      },
+    },
+    {
+      id: "team",
+      meta: { title: t("createUserButton.teamLabel", { defaultValue: "Team" }) },
+      header: t("createUserButton.teamLabel", { defaultValue: "Team" }),
+      size: 180,
+      enableSorting: false,
+      cell: ({ row }) => {
+        const userTeams = Array.isArray(row.original.teams) ? row.original.teams : [];
+        if (userTeams.length === 0) {
+          return <span className="text-sm text-muted-foreground">-</span>;
+        }
+        const resolved = userTeams.map((teamId) => {
+          const team = teams?.find((option) => option.team_id === teamId);
+          const alias = team?.team_alias || null;
+          return { id: teamId, label: alias || teamId, alias };
+        });
+        return (
+          <div className="flex max-w-56 flex-col gap-0.5">
+            {resolved.map((team) => (
+              <span key={team.id} className="min-w-0">
+                <span className="block truncate text-sm" title={team.alias ? `${team.label} (${team.id})` : team.label}>
+                  {team.label}
+                </span>
+                {team.alias && <span className="block truncate font-mono text-xs text-muted-foreground">{team.id}</span>}
+              </span>
+            ))}
+          </div>
         );
       },
     },

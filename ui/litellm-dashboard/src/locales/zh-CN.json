@@ -131,7 +131,11 @@
     "adminUiDisabledTitle": "管理界面已禁用",
     "adminUiDisabledBody": "管理员已禁用管理界面。如需重新启用，请更新以下环境变量：",
     "ssoEnabledNotice": "单点登录（SSO）已启用。中安云科 AI 安全网关不再在加载此页面时自动跳转到 SSO 登录流程。如需重新启用自动跳转，请在环境配置中设置 <code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</code>。",
-    "title": "登录"
+    "title": "登录",
+    "invalidCredentials": "用户名或密码错误，请重新输入。忘记密码请联系管理员重置。",
+    "tooManyAttempts": "登录尝试过于频繁，请稍后再试。",
+    "networkError": "无法连接网关，请检查网络或网关地址后重试。",
+    "unexpectedError": "登录失败，请稍后重试或联系管理员。"
   },
   "shared": {
     "createdKeyDisplay": {
@@ -249,7 +253,7 @@
       "credentials": "凭据",
       "credentialTypes": "凭据类型",
       "reusable": "可复用",
-      "reusableDescription": "保存在中安云科 AI 安全网关中可被多次添加到模型的凭据。",
+      "reusableDescription": "保存在中安云科 AI 安全网关中的凭据，可以重复添加到模型中。",
       "manual": "手动",
       "manualDescription": "在创建模型时直接添加或在配置文件中定义的凭据。",
       "createdBy": "创建者",
@@ -274,7 +278,8 @@
       "pauseTooltip": "暂停模型 — 停止路由请求直到恢复。",
       "configNoDelete": "配置模型无法在仪表盘上删除。请从配置文件中删除。",
       "deleteModel": "删除模型",
-      "source": "来源"
+      "source": "来源",
+      "adminActor": "管理员"
     },
     "notificationsManager": {
       "authenticationError": "认证错误",
@@ -687,7 +692,11 @@
       "errorCreatingUser": "创建用户时出错"
     },
     "userEmailRequired": "请填写用户邮箱",
-    "userEmailInvalid": "请输入有效的邮箱地址"
+    "userEmailInvalid": "请输入有效的邮箱地址",
+    "inviteSuccessTitle": "用户已邀请",
+    "inviteSuccessMessage": "已邀请 {{email}}。请分享下方邀请链接，让对方设置密码。",
+    "generatedKeyLabel": "API 密钥",
+    "createApiKeyForUser": "为该用户创建 API 密钥"
   },
   "debugWarningBanner": {
     "message": "性能警告：详细调试模式已启用",
@@ -874,7 +883,11 @@
       "modelAliasesDescription": "为模型创建自定义别名，供团队成员在 API 调用中使用。这样您可以为特定模型创建快捷方式。",
       "organizationNoLongerAvailable": "该组织已不能再创建团队",
       "allowedSkillsHelp": "此团队上的密钥在 Claude Code 市场中可以看到的私有技能。",
-      "allowedSkillsPlaceholder": "选择技能（可选）"
+      "allowedSkillsPlaceholder": "选择技能（可选）",
+      "modelMaxBudgetHint": "按模型限制该团队的支出，每个模型可设置独立的重置周期。除非密钥为某模型单独设置了预算，否则团队内所有密钥共享该上限。",
+      "secretManagerSettingsPlaceholder": "{\"namespace\": \"admin\", \"mount\": \"secret\", \"path_prefix\": \"litellm\"}",
+      "allowedSkills": "允许的技能",
+      "allowedSkillsTooltip": "启用的技能对所有团队可见。可在此为团队授予已禁用的（私有）Claude Code 插件。"
     },
     "accordions": {
       "additionalSettings": "附加设置",
@@ -1368,7 +1381,13 @@
     "invitationLinkFailed": "用户已创建，但生成邀请链接失败",
     "failedToCreateUser": "创建用户失败",
     "fileSizeKb": "{{size}} KB • {{date}}",
-    "templateDownloaded": "CSV 模板已下载"
+    "templateDownloaded": "CSV 模板已下载",
+    "noValidUsersInRows": "没有有效用户。出错行：{{rows}}。请查看下方错误并修正 CSV 文件。",
+    "someRowsHaveErrorsInRows": "共 {{total}} 行中有 {{errorCount}} 行出错（行号：{{rows}}）。请先修正后再继续。",
+    "missingBudgetRows": "第 {{rows}} 行未填写预算，这些用户创建后不限制预算。",
+    "failedRowsSummary": "{{count}} 行失败：{{rows}}。可下载错误明细后修正。",
+    "downloadErrors": "下载错误明细",
+    "budgetNotProvided": "未填写，保持为空"
   },
   "cacheDashboard": {
     "tabAnalytics": "缓存分析",
@@ -1655,7 +1674,8 @@
       "invalidJson": "JSON 格式无效",
       "subtitle": "测试护栏并对比结果",
       "testingButton": "正在测试 {{count}} 个护栏...",
-      "testButton": "测试 {{count}} 个护栏"
+      "testButton": "测试 {{count}} 个护栏",
+      "metadataError": "元数据有误：{{error}}"
     },
     "guardrailTestPlayground": {
       "pageTitle": "护栏测试 Playground",
@@ -1931,7 +1951,10 @@
       "templateRedactEmails": "脱敏邮箱",
       "templateBlockSql": "拦截 SQL 注入",
       "templateValidateJson": "校验 JSON",
-      "templateExternalApi": "外部 API 校验（异步）"
+      "templateExternalApi": "外部 API 校验（异步）",
+      "actionUpdate": "更新",
+      "actionCreate": "创建",
+      "testFailed": "测试自定义代码失败"
     },
     "editGuardrailForm": {
       "modalTitle": "编辑护栏",
@@ -1977,10 +2000,10 @@
     },
     "guardrailGarden": {
       "searchPlaceholder": "搜索护栏",
-      "litellmSectionTitle": "内容过滤器",
+      "litellmSectionTitle": "LiteLLM 内容过滤器",
       "showLess": "收起",
       "showAll": "显示全部（{{count}}）",
-      "litellmSectionDesc": "由中安云科 AI 安全网关内置的护栏，零延迟，无外部依赖，无额外费用。",
+      "litellmSectionDesc": "由 LiteLLM 内置的护栏，零延迟，无外部依赖，无额外费用。",
       "partnerSectionTitle": "合作伙伴护栏",
       "partnerSectionDesc": "来自领先 AI 安全提供商的第三方护栏集成。",
       "aim": {
@@ -2257,7 +2280,8 @@
       "tagsLabel": "标签",
       "metricHeader": "指标",
       "valueHeader": "值",
-      "externalDepsNone": "无"
+      "externalDepsNone": "无",
+      "decisionModel": "决策模型"
     },
     "guardrailInfo": {
       "backToGuardrails": "返回护栏列表",
@@ -2479,7 +2503,34 @@
       "modePreMcpCall": "MCP 工具调用前 - 在 MCP 工具执行前运行并验证工具调用",
       "modeDuringMcpCall": "MCP 工具调用中 - 与 MCP 工具执行并行运行用于监控",
       "validationFailed": "创建护栏失败：请修正高亮显示的字段",
-      "endpointSettingsHint": "为特定调用类型配置设置。大多数护栏不需要此项，除非你在使用 <code>/v1/realtime</code> 这类特定端点，否则可以跳过。"
+      "endpointSettingsHint": "为特定调用类型配置设置。大多数护栏不需要此项，除非你在使用 <code>/v1/realtime</code> 这类特定端点，否则可以跳过。",
+      "createErrorSummary": "创建护栏失败。{{details}}",
+      "createErrorDetail": "{{field}}：{{reason}}；建议：{{suggestion}}",
+      "createErrorGeneric": "创建护栏失败：{{reason}}。请检查相关字段后重试",
+      "createErrorUnknown": "创建护栏失败。请检查网络和表单内容后重试",
+      "errorField": {
+        "guardrailName": "护栏名称",
+        "mode": "模式",
+        "provider": "护栏提供商",
+        "defaultOn": "默认启用",
+        "apiBase": "API 基础地址",
+        "apiKey": "API 密钥",
+        "apiVersion": "API 版本",
+        "litellmParams": "护栏参数",
+        "field": "字段"
+      },
+      "errorSuggestion": {
+        "required": "请填写该字段后再提交",
+        "tooLong": "请缩短内容至最大长度以内",
+        "invalidUrl": "请输入以 http:// 或 https:// 开头的有效地址",
+        "invalidJson": "请检查 JSON 格式后重试",
+        "invalidValue": "请从支持的选项中选择",
+        "duplicate": "请更换一个未被使用的名称",
+        "generic": "请修正该字段后重试"
+      },
+      "stepDecisionModelConfig": "决策模型配置",
+      "endSessionPlaceholder": "例如 3",
+      "noAccessToken": "无可用访问令牌"
     },
     "guardrailOptionalParams": {
       "title": "可选参数",
@@ -2837,6 +2888,34 @@
       "zscaler": {
         "desc": "Zscaler 的企业级 AI 安全，监控和保护 AI/ML 工作负载。",
         "name": "Zscaler AI 防护"
+      },
+      "dmTypesafeJev": {
+        "name": "TypeSafe Jev",
+        "desc": "TypeSafe 的 Jev 决策模型针对每个请求回答是/否问题，例如提示词注入或策略检查。"
+      },
+      "dmPerplexity": {
+        "name": "Perplexity 决策模型",
+        "desc": "Perplexity 的 pplx-decider 模型针对每个请求或响应回答是/否问题。"
+      },
+      "dmMicrosoft": {
+        "name": "Microsoft 决策模型",
+        "desc": "Microsoft Foundry 决策模型（如 Microsoft-Decision-1）针对每个请求或响应回答是/否问题。"
+      },
+      "dmOpenai": {
+        "name": "OpenAI 决策模型",
+        "desc": "OpenAI 决策模型（如 gpt-6-luna）针对每个请求或响应回答是/否问题。"
+      },
+      "dmDatabricks": {
+        "name": "Databricks 决策模型",
+        "desc": "由 Databricks 托管的决策模型（如 OpenJev）针对每个请求或响应回答是/否问题。"
+      },
+      "microsoftAgent365": {
+        "name": "Microsoft Agent 365",
+        "desc": "Microsoft Agent 365 工具调用治理：对 MCP 工具调用进行 Defender 威胁评估与可观测性，并以登录用户身份执行操作"
+      },
+      "llmShieldProxy": {
+        "name": "LLM Shield Proxy",
+        "desc": "自托管 PII 脱敏会把原始值写回模型响应，因此提供商始终收不到个人数据，而终端用户仍能看到原值。"
       }
     },
     "guardrailGardenPresets": {
@@ -2880,14 +2959,30 @@
       "check": "检查项"
     },
     "streamScopeFields": {
-      "appliesTo": "{{mode}} 适用于"
+      "appliesTo": "{{mode}} 适用于",
+      "streamingOnly": "仅流式",
+      "nonStreamingOnly": "仅非流式",
+      "streamingAndNonStreaming": "流式与非流式",
+      "requestShape": "请求形态",
+      "requestShapeHint": "对每种选定模式，决定护栏作用于流式请求、非流式请求还是两者。"
     },
     "deleteConfirmMessage": "确定删除护栏「{{name}}」吗？此操作不可撤销",
     "deleteSuccessMessage": "护栏「{{name}}」已删除",
     "addGuardrailForm.createSuccess": "护栏创建成功",
     "customCode": {
       "createSuccess": "自定义代码护栏创建成功"
-    }
+    },
+    "loggingOnlyScope": {
+      "default": "默认（请求和响应）",
+      "inputOnly": "仅输入（请求）",
+      "outputOnly": "仅输出（响应）",
+      "label": "仅记录范围",
+      "labelHint": "logging_only 扫描观察的方向。仅观察的扫描不会拦截；该护栏上的 pre_call 和 post_call 仍会拦截。",
+      "continueLabel": "请求被标记后继续观察响应",
+      "continueHint": "开启后，被标记或失败的请求扫描会记录日志，并继续扫描响应，两条判定都会保留。"
+    },
+    "deleteImpact": "删除后，所有引用该护栏的虚拟密钥、团队和模型都会立即失去这层保护，相关调用策略也随之失效。此操作不可撤销。",
+    "deleteConfirmName": "输入护栏名称以确认删除"
   },
   "keyValueInput": {
     "headerNamePlaceholder": "请求头名称",
@@ -3000,7 +3095,7 @@
     "fieldModelName": "模型名称",
     "placeholderModelName": "输入模型名称",
     "fieldLitellmModelName": "网关模型名称",
-    "placeholderLitellmModelName": "输入 网关模型名称",
+    "placeholderLitellmModelName": "输入网关模型名称",
     "fieldInputCost": "输入费用（每百万 Token）",
     "placeholderInputCost": "输入输入费用",
     "fieldOutputCost": "输出费用（每百万 Token）",
@@ -3051,8 +3146,8 @@
     "cacheControlRole": "角色：{{role}}",
     "cacheControlIndex": "索引：{{index}}",
     "fieldModelInfo": "模型信息",
-    "fieldLitellmParams": "中安云科 AI 安全网关参数",
-    "tooltipLitellmParams": "用于调用 litellm.completion() 的可选参数，部分参数由中安云科 AI 安全网关自动添加。",
+    "fieldLitellmParams": "网关参数",
+    "tooltipLitellmParams": "可选的 litellm 参数，用于发起 litellm.completion() 调用。部分参数由 LiteLLM 自动添加。",
     "fieldTeamId": "团队 ID",
     "saveChanges": "保存更改",
     "deleteModalTitle": "删除模型",
@@ -3062,7 +3157,7 @@
     "usingExistingCredentialTitle": "使用现有凭据",
     "storingCredential": "正在存储凭据...",
     "credentialStoredSuccess": "凭据已成功存储",
-    "invalidJsonLitellmParams": "中安云科 AI 安全网关参数中存在无效的 JSON",
+    "invalidJsonLitellmParams": "网关参数中的 JSON 无效",
     "invalidJsonModelInfo": "模型信息中存在无效的 JSON",
     "modelSettingsUpdateSuccess": "模型设置已成功更新",
     "modelSettingsUpdateFailed": "更新模型设置失败",
@@ -3080,7 +3175,10 @@
     "deleteAutoRouterMessage": "确定要删除这个自动路由吗？",
     "public-model-name": "公开模型名称：",
     "created-at": "创建时间",
-    "created-by": "创建人"
+    "created-by": "创建人",
+    "updated-at": "更新时间",
+    "fieldTeam": "团队",
+    "noTeam": "无团队"
   },
   "common": {
     "neverExpires": "永不过期",
@@ -3155,7 +3253,10 @@
     "comingSoon": "即将推出",
     "copyField": "复制{{field}}",
     "removing": "正在移除…",
-    "emptyValue": "暂无"
+    "emptyValue": "暂无",
+    "on": "开启",
+    "off": "关闭",
+    "copyFailed": "复制到剪贴板失败"
   },
   "publicModelHub": {
     "copiedToClipboard": "已复制到剪贴板！",
@@ -3824,7 +3925,9 @@
       "userFallbackTitle": "用户",
       "mcpPermissionsLabel": "MCP 权限",
       "removeUserFromTeam": "移除 {{team}}",
-      "unknown": "未知"
+      "unknown": "未知",
+      "savingsTab": "节省",
+      "removeFromTeamAria": "将 {{team}} 从团队移除"
     },
     "loadingDefaultUserSettings": "正在加载默认用户设置"
   },
@@ -7395,7 +7498,7 @@
       "providerLoadFailed": "加载提供商失败",
       "providerSelectPlaceholder": "选择提供商",
       "modeLabel": "模式",
-      "modeHelp": "<strong>可选</strong> - 对此模型进行健康检查时使用的中安云科 AI 安全网关端点 <learnMoreLink>了解更多</learnMoreLink>",
+      "modeHelp": "<strong>可选</strong> - 对此模型进行健康检查时使用的端点 <learnMoreLink>了解更多</learnMoreLink>",
       "credentialsSectionDesc": "选择已有凭据或在下方输入新的提供商凭据",
       "existingCredentialsLabel": "已有凭据",
       "existingCredentialsPlaceholder": "选择或搜索已有凭据",
@@ -7415,7 +7518,9 @@
       "testConnectButton": "测试连接",
       "addModelButton": "添加模型",
       "connectionTestResultsTitle": "连接测试结果",
-      "noProvidersFound": "未找到提供方"
+      "noProvidersFound": "未找到提供方",
+      "addModelSuccess": "模型添加成功",
+      "credentialAdded": "凭据添加成功"
     },
     "addModelModes": {
       "chatLabel": "聊天 - /chat/completions",
@@ -7496,7 +7601,8 @@
       "selectTeamTooltip": "选择此自动路由器所属的团队。只有该团队的密钥才能调用它。",
       "templatePlaceholder": "选择模板，或选择自定义来定义您自己的模板",
       "templatesLoadFailed": "无法加载模板，因此仅显示自定义配置。",
-      "testRouting": "测试路由"
+      "testRouting": "测试路由",
+      "defaultModelConfigAria": "默认模型配置"
     },
     "complexityRouterConfig": {
       "title": "复杂度层级配置",
@@ -7570,7 +7676,8 @@
       "tierPosition": "第 {{index}} 个层级，共 {{count}} 个 · {{origin}}",
       "tierRequired": "{{label}}层级为必填项",
       "tierMappingTooltip": "为每个复杂度层级映射一个或多个模型。简单查询使用更便宜、更快的模型，复杂查询使用能力更强的模型。",
-      "defaultModelHint": "在请求落入的层级没有模型时使用，以及在选择了「路由到默认模型」且分类器失败时使用。"
+      "defaultModelHint": "在请求落入的层级没有模型时使用，以及在选择了「路由到默认模型」且分类器失败时使用。",
+      "nonReasoningTierLabel": "非推理"
     },
     "routerConfigBuilder": {
       "title": "路由配置",
@@ -7623,7 +7730,7 @@
       "validateNumberError": "请输入有效的正数",
       "useInPassThroughLabel": "在透传路由中使用",
       "useInPassThroughTooltip": "允许在透传路由中使用这些凭据。<learnMoreLink>了解更多</learnMoreLink>",
-      "litellmParamsLabel": "中安云科 AI 安全网关参数",
+      "litellmParamsLabel": "网关参数",
       "litellmParamsTooltip": "用于调用 litellm.completion() 的可选 litellm 参数。",
       "litellmParamsHelpText": "传入 litellm 支持的参数 JSON",
       "litellmParamsHelpLink": "litellm.completion() 调用",
@@ -7647,7 +7754,7 @@
       "helpText": "Anthropic、Bedrock API 等提供商要求用户指定注入缓存控制检查点的位置，litellm 可作为节省成本的功能自动为您添加。",
       "typeLabel": "类型",
       "roleLabel": "角色",
-      "roleTooltip": "中安云科 AI 安全网关将把该角色的所有消息标记为可缓存",
+      "roleTooltip": "LiteLLM 会把该角色的所有消息标记为可缓存",
       "rolePlaceholder": "选择角色",
       "roleUser": "用户",
       "roleSystem": "系统",
@@ -7662,21 +7769,21 @@
     },
     "conditionalPublicModelName": {
       "publicModelNameColumn": "公开模型名称",
-      "publicModelNameTooltip": "您在 API 调用中向 AI 安全网关 指定的名称",
-      "tooltipExample": "<strong>示例：</strong>如果您将公开模型命名为 <publicName>example-name</publicName>，并选择 <modelName>openai/qwen-plus-latest</modelName> 作为中安云科 AI 安全网关模型",
-      "tooltipUsage": "用法：您使用以下参数向中安云科 AI 安全网关代理发起 API 调用",
+      "publicModelNameTooltip": "你在 API 调用中指定的名称，由网关转发到后端模型",
+      "tooltipExample": "<strong>示例：</strong>把公开模型命名为 <publicName>example-name</publicName>，并选择 <modelName>openai/qwen-plus-latest</modelName> 作为中安云科 AI 安全网关模型",
+      "tooltipUsage": "用法：你向中安云科 AI 安全网关发起 API 调用，使用",
       "tooltipUsageCode": "model = \"example-name\"",
-      "tooltipResult": "结果：中安云科 AI 安全网关向提供商发送",
+      "tooltipResult": "结果：中安云科 AI 安全网关会发送",
       "tooltipResultCode": "qwen-plus-latest",
       "tooltipResultSuffix": "到提供商",
       "litellmModelNameColumn": "网关模型名称",
       "litellmModelNameTooltip": "中安云科 AI 安全网关将发送给 LLM API 的模型名称",
       "modelMappingsLabel": "模型映射",
-      "modelMappingsTooltip": "将公开模型名称映射到 网关模型名称以实现负载均衡",
+      "modelMappingsTooltip": "将公开模型名称映射到网关模型名称，用于负载均衡",
       "mappingRequired": "至少需要一个模型映射",
       "publicNameRequired": "所有模型映射必须具有有效的公开名称",
-      "tooltipUsageWithLabel": "<strongLabel>用法：</strongLabel>您向中安云科 AI 安全网关代理发起 API 调用，其中",
-      "tooltipResultWithLabel": "<strongLabel>结果：</strongLabel>中安云科 AI 安全网关会把"
+      "tooltipUsageWithLabel": "<strongLabel>用法：</strongLabel>你向中安云科 AI 安全网关发起 API 调用，使用",
+      "tooltipResultWithLabel": "<strongLabel>结果：</strongLabel>中安云科 AI 安全网关会发送"
     },
     "litellmModelName": {
       "fieldLabel": "网关模型名称",
@@ -7708,7 +7815,38 @@
       "viewDocumentation": "查看文档",
       "connectionTestSuccessful": "连接测试成功！",
       "prepareFailed": "准备模型数据失败，请检查表单输入。",
-      "unknownError": "未知错误"
+      "unknownError": "未知错误",
+      "troubleshooting": {
+        "suggestionsTitle": "排查建议",
+        "authTitle": "认证失败",
+        "authCheckKey": "确认 API Key 或凭据正确且未过期。",
+        "authCheckProvider": "确认提供商与 API Base 和该密钥匹配。",
+        "authCheckPermission": "确认该密钥有权调用所选模型。",
+        "notFoundTitle": "端点或模型不存在",
+        "notFoundCheckApiBase": "检查 API Base 地址，路径不能多写或漏写。",
+        "notFoundCheckModel": "确认提供商已部署该模型名称。",
+        "notFoundCheckProvider": "确认提供商路由与端点一致。",
+        "timeoutTitle": "请求超时",
+        "timeoutCheckNetwork": "检查服务器到提供商的网络连通性。",
+        "timeoutCheckProxy": "检查代理、防火墙或出网策略是否阻断请求。",
+        "timeoutCheckLimit": "适当调大超时时间，或改用更小的测试请求。",
+        "rateLimitTitle": "请求被限流或配额不足",
+        "rateLimitWait": "稍后重试，避免短时间内频繁测试。",
+        "rateLimitCheckQuota": "检查账户配额、余额与计费状态。",
+        "rateLimitCheckLimits": "检查 RPM/TPM 限制是否过低。",
+        "networkTitle": "网络连接失败",
+        "networkCheckUrl": "确认 API Base 使用正确的协议、域名和端口。",
+        "networkCheckProxy": "检查 TLS 证书、代理和出网白名单。",
+        "networkCheckDns": "确认域名可解析且服务已启动。",
+        "unknownTitle": "连接测试失败",
+        "unknownCheckDetails": "展开详情查看提供商返回的原始错误。",
+        "unknownCheckParams": "核对模型名称、API Base 与提供商参数。",
+        "unknownCheckCredential": "确认所选凭据包含该提供商所需的字段。",
+        "title": "排查建议"
+      },
+      "duration": "耗时：{{duration}} 秒",
+      "usingCredential": "使用的凭据：{{credentialName}}",
+      "connectionFailedToast": "连接测试失败"
     },
     "providerSpecificFields": {
       "loadingFields": "正在加载提供商字段...",
@@ -8018,6 +8156,9 @@
       "tierDefinitionRequired": "每个自定义层级都需要定义：它是分类器路由所依据的评分标准",
       "tierNameRequired": "请为每个层级命名",
       "tierNamesUnique": "层级名称必须唯一（不区分大小写）"
+    },
+    "handleAddModelSubmit": {
+      "invalidExtraParams": "网关参数解析失败：{{error}}"
     }
   },
   "costTracking": {
@@ -11418,7 +11559,10 @@
       "gracePeriodPlaceholder": "例如 24h、2d",
       "durationRuleMessage": "请输入有效时长，如 30s、30m、24h、2d、1w 或 1mo",
       "expirationRequired": "已过期的密钥必须设置新的过期时间",
-      "regenerateSuccess": "虚拟密钥重新生成成功"
+      "regenerateSuccess": "虚拟密钥重新生成成功",
+      "oldKeyInvalidated": "确认后旧密钥将立即失效，请复制并保存新密钥后再关闭此窗口。",
+      "regenerateDescription": "将生成新的密钥值并更新当前密钥；你可以在下一步复制新密钥。",
+      "copiedKey": "新密钥已复制到剪贴板"
     },
     "createKeyButton": {
       "createNewKeyTitle": "创建新密钥",
@@ -11582,7 +11726,10 @@
       "saveKeyTitle": "保存你的密钥",
       "keyBeingCreated": "密钥正在创建中，可能需要 30 秒",
       "createUserModalTitle": "创建新用户",
-      "createKeyButton": "创建密钥"
+      "createKeyButton": "创建密钥",
+      "duplicateKeyAliasDetail": "密钥名称（别名）{{alias}} 在团队 ID {{teamId}} 下已存在，请更换一个名称，或选择其他团队后再试。",
+      "duplicateKeyAliasGlobal": "密钥名称（别名）{{alias}} 已被其他密钥使用，请更换一个名称后再试。",
+      "numericalPlaceholder": "请输入数值"
     }
   },
   "alerting": {
@@ -11937,8 +12084,8 @@
       "routesTo": "路由到",
       "defaultModel": "默认模型",
       "created": "创建于",
-      "copyLitellmModelName": "复制中安云科 AI 安全网关模型名",
-      "litellmModelNameCopied": "已复制中安云科 AI 安全网关模型名",
+      "copyLitellmModelName": "复制网关模型名称",
+      "litellmModelNameCopied": "已复制网关模型名称",
       "aboutCredentialTypes": "关于凭证类型",
       "costInShort": "输入",
       "costOutShort": "输出",
@@ -11946,7 +12093,7 @@
       "refreshModels": "刷新模型",
       "tabAutoRouters": "自动路由",
       "tabModelAccessGroupBudgets": "模型访问组预算",
-      "tabDeployedModels": "已部署模型"
+      "tabDeployedModels": "全部模型"
     },
     "allModelsTab": {
       "currentTeam": "当前团队：",
@@ -11987,7 +12134,8 @@
       "teamLabel": "团队",
       "noModelAccessGroups": "未找到模型访问组",
       "accessWithoutTeam": "要访问这些模型，请在不选择团队的情况下创建虚拟密钥，入口在 <keysLink>虚拟密钥页面</keysLink>。",
-      "accessWithTeam": "要访问这些模型，请创建虚拟密钥并将团队选择为 “{{team}}”，入口在 <keysLink>虚拟密钥页面</keysLink>。"
+      "accessWithTeam": "要访问这些模型，请创建虚拟密钥并将团队选择为 “{{team}}”，入口在 <keysLink>虚拟密钥页面</keysLink>。",
+      "allProxyModels": "全部代理模型"
     },
     "modelRetrySettings": {
       "retryScopeLabel": "重试策略范围：",
@@ -12210,7 +12358,10 @@
       "optIn": "按需启用",
       "apiBaseLabel": "Headroom API 地址",
       "apiBaseHint": "你的 Headroom 压缩服务的基础 URL（中安云科 AI 安全网关会调用它的 /v1/compress 端点）",
-      "addGuardrail": "添加护栏"
+      "addGuardrail": "添加护栏",
+      "nameTooLong": "名称不能超过 64 个字符",
+      "apiBaseInvalid": "请输入有效的 URL，例如 https://headroom.example.com",
+      "apiBaseTooLong": "API 地址不能超过 200 个字符"
     },
     "shadowEvalSection": {
       "armBaseline": "基线",
@@ -12377,7 +12528,7 @@
       "savingsFootnote": "节省金额是按每个路由的高级基线估算的。令牌总数与单位成本在启用令牌追踪之前记录的用量中不可用；单位成本还要求令牌数非零。"
     },
     "savingsDriver": {
-      "compression": "提示词压缩",
+      "compression": "压缩",
       "promptCaching": "提示词缓存",
       "autoRouter": "自动路由"
     }
@@ -12556,7 +12707,12 @@
     "ptuWindowOrder": "PTU 生效结束时间必须晚于 PTU 生效开始时间",
     "ptuCostMustBeZero": "PTU 部署按预留容量计费，因此该成本必须为 0 或留空",
     "attached-knowledge-bases-rag": "关联知识库（RAG）",
-    "litellm-params": "中安云科 AI 安全网关参数"
+    "litellm-params": "网关参数",
+    "fieldPtuCount": "PTU 数量",
+    "fieldPtuStart": "PTU 生效开始时间（UTC）",
+    "fieldPtuEnd": "PTU 生效结束时间（UTC）",
+    "modelNameRequired": "模型名称为必填项",
+    "litellmModelNameRequired": "网关模型名称为必填项"
   },
   "noRedisWarning": {
     "title": "未配置 Redis，强烈建议配置",
@@ -13810,7 +13966,12 @@
     "confirmPasswordRequired": "请确认新密码",
     "passwordsDoNotMatch": "两次输入的新密码不一致",
     "passwordUpdatedRelogin": "密码已更新，请用新密码重新登录。",
-    "passwordUpdated": "密码已更新"
+    "passwordUpdated": "密码已更新",
+    "currentPasswordHint": "请输入当前登录使用的密码。",
+    "passwordPolicyHint": "请使用符合代理密码策略的强密码，且不能与当前密码相同。",
+    "confirmPasswordHint": "请再次输入新密码，以避免输入错误。",
+    "newPasswordDifferent": "新密码不能与当前密码相同",
+    "passwordUpdatedReloginHint": "密码已修改，请使用新密码重新登录。"
   },
   "webSearchInterception": {
     "toastSaved": "设置已保存。更改将在 10 秒内同步到所有 Pod。",
@@ -14030,7 +14191,16 @@
     "test-input": "测试输入",
     "paste-a-sample-input-to-score-against-your-q": "粘贴一段示例输入，用你的问题对其进行打分",
     "latest-first-each-run-keeps-its-input-so-you": "最新在前。每次运行都会保留其输入，便于对比。",
-    "the-model-or-questions-changed-since-this-ru": "模型或问题在此次运行后发生了变更。请重新运行以打分。"
+    "the-model-or-questions-changed-since-this-ru": "模型或问题在此次运行后发生了变更。请重新运行以打分。",
+    "disabledSelectModel": "请选择决策模型后再运行测试",
+    "disabledEnterInput": "请输入内容后再运行测试",
+    "disabledAddQuestion": "请添加问题后再运行测试",
+    "running": "运行中…",
+    "runTest": "运行测试",
+    "resultBlock": "拦截",
+    "resultPass": "通过",
+    "resultPassLogged": "通过 · 已记录",
+    "noAnswer": "无答案"
   },
   "investigationActions": {
     "investigation-actions": "调查操作",
@@ -14534,11 +14704,18 @@
     "filter-traces-by-status": "按状态筛选链路"
   },
   "logsTableToolbar": {
-    "custom-range": "自定义范围"
+    "custom-range": "自定义范围",
+    "to": "至"
   },
   "requestLogsTable": {
     "narrow-down-request-logs": "缩小请求日志范围",
-    "filters": "筛选"
+    "filters": "筛选",
+    "noMatchingRequests": "没有匹配的请求",
+    "noRequestsYet": "暂无请求",
+    "noMatchingRequestsHint": "当前时间范围内没有符合筛选条件的请求。",
+    "noRequestsYetHint": "通过中安云科 AI 安全网关的请求将显示在这里。",
+    "loading": "正在加载请求日志…",
+    "searchPlaceholder": "按 ID 搜索日志…"
   },
   "searchToolSelector": {
     "clear-all-search-tools": "清除全部搜索工具"
@@ -14774,7 +14951,27 @@
     "modelsLabel": "模型",
     "modelsHint": "所选团队可访问的模型。留空表示不直接授予模型，例如团队通过访问组获得模型",
     "onlyCreateInOrgHint": "只能在该组织下创建团队",
-    "selectOrganizationPlaceholder": "搜索或选择组织"
+    "selectOrganizationPlaceholder": "搜索或选择组织",
+    "teamNameTooLong": "团队名称不能超过 255 个字符",
+    "maxBudgetFieldLabel": "最大预算",
+    "tpmFieldLabel": "TPM 限制",
+    "rpmFieldLabel": "RPM 限制",
+    "tpdFieldLabel": "TPD 限制",
+    "teamMemberBudgetFieldLabel": "团队成员预算",
+    "teamMemberRpmFieldLabel": "团队成员 RPM 限制",
+    "teamMemberTpmFieldLabel": "团队成员 TPM 限制",
+    "numericFieldInvalid": "{{field}} 必须是数字",
+    "numericFieldNegative": "{{field}} 必须大于等于 0",
+    "budgetDurationFormat": "请使用类似 30d、12h 或 1mo 的格式",
+    "teamNameHint": "必填。请使用团队成员容易识别的名称。",
+    "teamNamePlaceholder": "例如：平台工程组",
+    "maxBudgetHint": "留空表示不限制预算。每个重置周期内的花费不超过此金额。",
+    "tpdLabel": "每日 Token 上限（TPD）",
+    "tpdHint": "批量提交（/v1/batches）的每日 Token 预算。设置后，批量输入文件按 24 小时窗口计入此额度，而不是团队的 TPM/RPM 限制；在线请求仍使用 TPM/RPM。",
+    "teamIdPlaceholder": "留空则自动生成",
+    "tpmHint": "留空表示不限制。限制团队每分钟所有请求的总 Token 数。",
+    "rpmHint": "留空表示不限制。限制团队每分钟的请求数。",
+    "budgetDurationHint": "团队花费额度的重置周期。留空则使用服务端默认值。"
   },
   "logsPage": {
     "request-logs": "请求日志",
@@ -14894,5 +15091,10 @@
     "spend": "花费",
     "apiRequests": "请求数",
     "avgResponseTimeMs": "平均响应时间"
+  },
+  "productLicense": {
+    "licenseTypeLabel": "授权类型",
+    "licenseTypePermanent": "永久授权",
+    "licenseTypeTemporary": "临时授权"
   }
 }

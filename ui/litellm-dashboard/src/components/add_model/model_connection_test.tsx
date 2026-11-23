@@ -7,23 +7,36 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { toast } from "@/lib/toast";
+import { copyToClipboard } from "../../utils/dataUtils";
 import { testConnectionRequest } from "../networking";
+import { connectionAdvice } from "./connection_troubleshooting";
 import { prepareModelAddRequest } from "./handle_add_model_submit";
 
+interface PreparedConnectionRequest {
+  litellmParamsObj: Record<string, any>;
+  modelInfoObj: Record<string, any>;
+}
+
 interface ModelConnectionTestProps {
-  formValues: Record<string, any>;
+  formValues?: Record<string, any>;
   accessToken: string;
   testMode: string;
   modelName?: string;
+  preparedRequest?: PreparedConnectionRequest;
+  credentialName?: string | null;
   onClose?: () => void;
   onTestComplete?: () => void;
 }
 
+const SENSITIVE_HEADER = /authorization|api[-_]?key|token|secret/i;
+
 const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
-  formValues,
+  formValues = {},
   accessToken,
-  testMode: _testMode,
+  testMode,
   modelName = "this model",
+  preparedRequest,
+  credentialName,
   onClose: _onClose,
   onTestComplete,
 }) => {
@@ -33,20 +46,23 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [showDetails, setShowDetails] = React.useState(false);
+  const [durationMs, setDurationMs] = React.useState<number | null>(null);
 
   const testModelConnection = async () => {
+    const startedAt = Date.now();
     setIsLoading(true);
     setShowDetails(false);
     setError(null);
     setRawResponse(null);
     setIsSuccess(false);
+    setDurationMs(null);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     try {
-      const result = await prepareModelAddRequest(formValues, accessToken, null);
+      const prepared = preparedRequest ?? (await prepareModelAddRequest(formValues, accessToken, null))?.[0];
 
-      if (!result) {
+      if (!prepared) {
         setError(
           t("addModel.modelConnectionTest.prepareFailed", {
             defaultValue: "Failed to prepare model data. Please check your form inputs.",
@@ -57,14 +73,20 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
         return;
       }
 
-      const { litellmParamsObj, modelInfoObj } = result[0];
-      const response = await testConnectionRequest(accessToken, litellmParamsObj, modelInfoObj, modelInfoObj?.mode);
+      const { litellmParamsObj, modelInfoObj } = prepared;
+      const response = await testConnectionRequest(
+        accessToken,
+        litellmParamsObj,
+        modelInfoObj,
+        preparedRequest ? undefined : testMode,
+      );
 
       if (response.status === "success") {
         toast.success(
           t("addModel.modelConnectionTest.connectionTestSuccessful", { defaultValue: "Connection test successful!" }),
         );
         setError(null);
+        setRawResponse(response.result?.raw_request_typed_dict ?? null);
         setIsSuccess(true);
       } else {
         const errorMessage =
@@ -74,12 +96,19 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
         setError(errorMessage);
         setRawResponse(response.result?.raw_request_typed_dict);
         setIsSuccess(false);
+        toast.error(
+          t("addModel.modelConnectionTest.connectionFailedToast", { defaultValue: "Connection test failed" }),
+        );
       }
     } catch (connectionError) {
       console.error("Test connection error:", connectionError);
       setError(connectionError instanceof Error ? connectionError.message : String(connectionError));
       setIsSuccess(false);
+      toast.error(
+        t("addModel.modelConnectionTest.connectionFailedToast", { defaultValue: "Connection test failed" }),
+      );
     } finally {
+      setDurationMs(Date.now() - startedAt);
       setIsLoading(false);
       onTestComplete?.();
     }
@@ -121,7 +150,7 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
       .join("\n");
 
     const headerString = Object.entries(requestHeaders)
-      .map(([key, value]) => `-H '${key}: ${value}'`)
+      .map(([key, value]) => `-H '${key}: ${SENSITIVE_HEADER.test(key) ? "***" : value}'`)
       .join(" \\\n  ");
 
     return `curl -X POST \\
@@ -144,6 +173,7 @@ ${formattedBody}
         rawResponse.raw_request_headers || {},
       )
     : "";
+  const advice = connectionAdvice(errorMessage);
 
   return (
     <div className="rounded-lg bg-background p-6">
@@ -158,14 +188,32 @@ ${formattedBody}
           </p>
         </div>
       ) : isSuccess ? (
-        <div className="flex items-center justify-center gap-2.5 px-5 py-8">
-          <CircleCheck className="size-6 text-primary" />
-          <p data-testid="connection-success-msg" className="text-lg font-medium">
-            {t("addModel.modelConnectionTest.connectionSuccess", {
-              defaultValue: "Connection to {{modelName}} successful!",
-              modelName,
-            })}
-          </p>
+        <div className="flex flex-col items-center justify-center gap-2.5 px-5 py-8">
+          <div className="flex items-center gap-2.5">
+            <CircleCheck className="size-6 text-primary" />
+            <p data-testid="connection-success-msg" className="text-lg font-medium">
+              {t("addModel.modelConnectionTest.connectionSuccess", {
+                defaultValue: "Connection to {{modelName}} successful!",
+                modelName,
+              })}
+            </p>
+          </div>
+          {credentialName ? (
+            <p data-testid="connection-credential" className="text-sm text-muted-foreground">
+              {t("addModel.modelConnectionTest.usingCredential", {
+                defaultValue: "Credential used: {{credentialName}}",
+                credentialName,
+              })}
+            </p>
+          ) : null}
+          {durationMs !== null && (
+            <p data-testid="connection-duration" className="text-xs text-muted-foreground">
+              {t("addModel.modelConnectionTest.duration", {
+                defaultValue: "Duration: {{duration}}s",
+                duration: (durationMs / 1000).toFixed(2),
+              })}
+            </p>
+          )}
         </div>
       ) : (
         <div>
@@ -179,11 +227,28 @@ ${formattedBody}
             </p>
           </div>
 
+          {credentialName ? (
+            <p data-testid="connection-credential" className="mb-4 text-sm text-muted-foreground">
+              {t("addModel.modelConnectionTest.usingCredential", {
+                defaultValue: "Credential used: {{credentialName}}",
+                credentialName,
+              })}
+            </p>
+          ) : null}
+
           <div className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 p-4 shadow-xs">
             <p className="mb-2 font-medium">
               {t("commonComponents.checkOpenapiSchema.errorPrefix", { defaultValue: "Error:" })}
             </p>
             <p className="text-sm leading-relaxed text-destructive">{errorMessage}</p>
+            {durationMs !== null && (
+              <p data-testid="connection-duration" className="mt-2 text-xs text-muted-foreground">
+                {t("addModel.modelConnectionTest.duration", {
+                  defaultValue: "Duration: {{duration}}s",
+                  duration: (durationMs / 1000).toFixed(2),
+                })}
+              </p>
+            )}
 
             {error && (
               <Button
@@ -199,6 +264,20 @@ ${formattedBody}
             )}
           </div>
 
+          <div data-testid="connection-troubleshooting" className="mb-5 rounded-lg border bg-muted/30 p-4">
+            <p className="mb-1 text-sm font-medium">
+              {t("addModel.modelConnectionTest.troubleshooting.title", { defaultValue: "Troubleshooting" })}
+            </p>
+            <p data-testid="connection-issue-title" className="mb-2 text-sm text-foreground">
+              {t(advice.titleKey)}
+            </p>
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {advice.suggestionKeys.map((key) => (
+                <li key={key}>{t(key)}</li>
+              ))}
+            </ul>
+          </div>
+
           {showDetails && (
             <div className="mb-5">
               <p className="mb-2 text-sm font-medium">
@@ -212,29 +291,32 @@ ${formattedBody}
             </div>
           )}
 
-          <div>
-            <p className="mb-2 text-sm font-medium">
-              {t("addModel.modelConnectionTest.apiRequest", { defaultValue: "API Request" })}
-            </p>
-            <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/50 p-4 text-xs leading-relaxed">
-              {curlCommand ||
-                t("addModel.modelConnectionTest.noRequestData", { defaultValue: "No request data available" })}
-            </pre>
-            <Button
-              type="button"
-              variant="outline"
-              className="mt-2"
-              onClick={() => {
-                navigator.clipboard.writeText(curlCommand || "");
-                toast.success(
-                  t("addModel.modelConnectionTest.copiedToClipboard", { defaultValue: "Copied to clipboard" }),
-                );
-              }}
-            >
-              <Copy data-icon="inline-start" />
-              {t("addModel.modelConnectionTest.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
-            </Button>
-          </div>
+        </div>
+      )}
+
+      {!isLoading && (curlCommand || !isSuccess) && (
+        <div className="mt-5">
+          <p className="mb-2 text-sm font-medium">
+            {t("addModel.modelConnectionTest.apiRequest", { defaultValue: "API Request" })}
+          </p>
+          <pre className="max-h-64 overflow-auto rounded-lg border bg-muted/50 p-4 text-xs leading-relaxed">
+            {curlCommand ||
+              t("addModel.modelConnectionTest.noRequestData", { defaultValue: "No request data available" })}
+          </pre>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-2"
+            onClick={() =>
+              void copyToClipboard(
+                curlCommand,
+                t("addModel.modelConnectionTest.copiedToClipboard", { defaultValue: "Copied to clipboard" }),
+              )
+            }
+          >
+            <Copy data-icon="inline-start" />
+            {t("addModel.modelConnectionTest.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
+          </Button>
         </div>
       )}
 

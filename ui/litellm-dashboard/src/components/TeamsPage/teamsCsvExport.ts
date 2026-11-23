@@ -3,8 +3,8 @@ import Papa from "papaparse";
 import { TeamListCallOptions, TeamsResponse, teamListCall } from "@/app/(dashboard)/hooks/teams/useTeams";
 
 import { Team } from "../key_team_helpers/key_list";
+import { organizationListCall } from "../networking";
 import { effectiveTeamModels } from "./teamTableColumns";
-import { apiClient } from "../networking";
 
 export interface TeamMemberBudget {
   budget_id: string;
@@ -41,37 +41,31 @@ const cell = (value: string | number | boolean | null | undefined): string | num
 
 export const buildTeamsCsvRows = (
   teams: Team[],
-  budgets: TeamMemberBudget[],
-): Record<string, string | number | boolean>[] => {
-  const budgetsById = new Map(budgets.map((budget) => [budget.budget_id, budget]));
-  return teams.map((team) => {
-    const budgetId = teamMemberBudgetId(team);
-    const memberBudget = budgetId ? budgetsById.get(budgetId) : undefined;
-    return {
-      "Team Alias": cell(team.team_alias),
-      "Team ID": cell(team.team_id),
-      "Organization ID": cell(team.organization_id),
-      Models: effectiveTeamModels(team).join(", "),
-      "Max Budget (CNY)": cell(team.max_budget),
-      "Budget Duration": cell(team.budget_duration),
-      "Budget Reset At": cell(team.budget_reset_at),
-      "Spend (CNY)": cell(team.spend),
-      "TPM Limit": cell(team.tpm_limit),
-      "RPM Limit": cell(team.rpm_limit),
-      "Team Member Budget (CNY)": cell(memberBudget?.max_budget),
-      "Team Member Budget Duration": cell(memberBudget?.budget_duration),
-      "Team Member TPM Limit": cell(memberBudget?.tpm_limit),
-      "Team Member RPM Limit": cell(memberBudget?.rpm_limit),
-      Members: cell(team.members_count ?? team.members_with_roles?.length),
-      Keys: cell(team.keys_count ?? team.keys?.length),
-      Blocked: cell(team.blocked),
-      "Created At": cell(team.created_at),
-    };
-  });
-};
+  _budgets: TeamMemberBudget[] = [],
+  organizationAliases: Record<string, string> = {},
+): Record<string, string | number | boolean>[] =>
+  teams.map((team) => ({
+    Team: cell(team.team_alias || team.team_id),
+    "Team ID": cell(team.team_id),
+    Organization: cell(
+      team.organization_id ? organizationAliases[team.organization_id] || team.organization_id : "",
+    ),
+    Models: effectiveTeamModels(team).join(", "),
+    Members: cell(team.members_count ?? team.members_with_roles?.length),
+    Keys: cell(team.keys_count ?? team.keys?.length),
+    "Spend (CNY)": cell(team.spend),
+    "Max Budget (CNY)": cell(team.max_budget),
+    "Budget Duration": cell(team.budget_duration),
+    "TPM Limit": cell(team.tpm_limit),
+    "RPM Limit": cell(team.rpm_limit),
+    "Created At": cell(team.created_at),
+  }));
 
-export const buildTeamsCsv = (teams: Team[], budgets: TeamMemberBudget[]): string =>
-  Papa.unparse(buildTeamsCsvRows(teams, budgets), { escapeFormulae: true });
+export const buildTeamsCsv = (
+  teams: Team[],
+  budgets: TeamMemberBudget[] = [],
+  organizationAliases: Record<string, string> = {},
+): string => Papa.unparse(buildTeamsCsvRows(teams, budgets, organizationAliases), { escapeFormulae: true });
 
 const downloadCsv = (csv: string, fileName: string): void => {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -85,12 +79,28 @@ const downloadCsv = (csv: string, fileName: string): void => {
   window.URL.revokeObjectURL(url);
 };
 
+const fetchOrganizationAliases = async (accessToken: string): Promise<Record<string, string>> => {
+  try {
+    const organizations: Array<{ organization_id?: string | null; organization_alias?: string | null }> =
+      await organizationListCall(accessToken, null, null);
+    return Object.fromEntries(
+      organizations
+        .filter((org) => org.organization_id)
+        .map((org) => [org.organization_id as string, org.organization_alias || (org.organization_id as string)]),
+    );
+  } catch {
+    return {};
+  }
+};
+
 export const exportTeamsToCsv = async (accessToken: string, options: TeamListCallOptions): Promise<number> => {
-  const teams = await fetchAllTeams((page, pageSize) => teamListCall(accessToken, page, pageSize, options));
-  const budgetIds = collectTeamMemberBudgetIds(teams);
-  const budgets = budgetIds.length
-    ? await apiClient.post<TeamMemberBudget[]>("/budget/info", { accessToken, body: { budgets: budgetIds } })
-    : [];
-  downloadCsv(buildTeamsCsv(teams, budgets), `teams_export_${new Date().toISOString().split("T")[0]}.csv`);
+  const [teams, organizationAliases] = await Promise.all([
+    fetchAllTeams((page, pageSize) => teamListCall(accessToken, page, pageSize, options)),
+    fetchOrganizationAliases(accessToken),
+  ]);
+  downloadCsv(
+    buildTeamsCsv(teams, [], organizationAliases),
+    `teams_export_${new Date().toISOString().split("T")[0]}.csv`,
+  );
   return teams.length;
 };

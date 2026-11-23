@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { ProductLicenseInfo } from "@/lib/http/productLicense";
-import { buildLicenseRows, formatLicenseValue } from "./productLicenseRows";
+import { buildLicenseRows, formatLicenseValue, licenseTermOf } from "./productLicenseRows";
 
 const licenseInfo: ProductLicenseInfo = {
   product_name: "AI Token网关",
@@ -36,25 +37,62 @@ describe("formatLicenseValue", () => {
 });
 
 describe("buildLicenseRows", () => {
-  it("shows every authorization field in display order", () => {
-    const rows = buildLicenseRows(licenseInfo);
-    expect(rows.map((row) => row.label)).toEqual([
-      "产品名称",
-      "产品版本",
+  beforeEach(async () => {
+    await i18n.changeLanguage("zh-CN");
+  });
+
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
+  it("lists each distinct licence fact once, in display order", () => {
+    const labels = buildLicenseRows(licenseInfo).map((row) => row.label);
+    expect(labels).toEqual([
       "机器码",
       "设备序列号",
-      "授权状态",
+      "授权类型",
       "有效期",
       "授权日期",
       "授权版本",
       "授权用户数",
       "授权线程数",
       "用户描述",
-      "授权文件",
     ]);
-    expect(rows.find((row) => row.label === "机器码")?.value).toBe("0000-0000-0000-0000");
-    expect(rows.find((row) => row.label === "设备序列号")?.value).toBe("DEV-0001");
-    expect(rows.find((row) => row.label === "有效期")?.value).toBe("长期有效");
+  });
+
+  it("does not repeat facts already shown in the page header and status badge", () => {
+    const labels = buildLicenseRows(licenseInfo).map((row) => row.label);
+    expect(labels).not.toContain("产品名称");
+    expect(labels).not.toContain("产品版本");
+    expect(labels).not.toContain("授权状态");
+  });
+
+  it("never renders the licence file or its path", () => {
+    const values = buildLicenseRows(licenseInfo).map((row) => row.value);
+    expect(buildLicenseRows(licenseInfo).map((row) => row.label)).not.toContain("授权文件");
+    expect(values.join(" ")).not.toContain(licenseInfo.license_file);
+  });
+
+  it("distinguishes a permanent licence from a temporary one", () => {
+    expect(licenseTermOf(licenseInfo)).toBe("permanent");
+    expect(buildLicenseRows(licenseInfo).find((row) => row.label === "授权类型")?.value).toBe("永久授权");
+
+    const temporary: ProductLicenseInfo = {
+      ...licenseInfo,
+      time: "2026-01-01 00:00:00 至 2027-01-01 00:00:00",
+    };
+    expect(licenseTermOf(temporary)).toBe("temporary");
+    expect(buildLicenseRows(temporary).find((row) => row.label === "授权类型")?.value).toBe("临时授权");
+  });
+
+  it("does not claim a licence term before the product is authorized", () => {
+    const unauthorized: ProductLicenseInfo = {
+      ...licenseInfo,
+      auth_state: "unauthorized",
+      time: "暂无信息",
+    };
+    expect(licenseTermOf(unauthorized)).toBe("unknown");
+    expect(buildLicenseRows(unauthorized).find((row) => row.label === "授权类型")?.value).toBe("暂无信息");
   });
 
   it("falls back to 暂无信息 for missing optional fields", () => {

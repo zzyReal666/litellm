@@ -2,19 +2,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import i18n from "@/lib/i18n";
 import { GuardrailField, labelWithHint, type GuardrailFormControl } from "./GuardrailFormField";
 import {
-  STREAM_SCOPE_OPTIONS,
   formatGuardrailStreamScope,
+  getStreamScopeOptions,
   type GuardrailStreamScope,
   isGuardrailStreamScope,
 } from "./guardrail_info_helpers";
 
-const STREAM_SCOPE_ITEMS = STREAM_SCOPE_OPTIONS.map((option) => ({
-  label: option.label,
-  value: option.value,
-}));
-
-const REQUEST_SHAPE_HINT =
-  "Run this guardrail on streaming requests, non-streaming requests, or both, for each selected mode.";
+const REQUEST_SHAPE_HINT = () =>
+  i18n.t("guardrails.streamScopeFields.requestShapeHint", {
+    defaultValue: "Run this guardrail on streaming requests, non-streaming requests, or both, for each selected mode.",
+  });
 
 export const StreamScopeFields = ({
   modes,
@@ -26,6 +23,7 @@ export const StreamScopeFields = ({
   onChange: (next: Record<string, GuardrailStreamScope>) => void;
 }) => {
   if (modes.length === 0) return null;
+  const streamScopeOptions = getStreamScopeOptions();
 
   return (
     <div className="space-y-3">
@@ -37,7 +35,7 @@ export const StreamScopeFields = ({
               {i18n.t("guardrails.streamScopeFields.appliesTo", { defaultValue: "{{mode}} applies to", mode })}
             </label>
             <Select
-              items={STREAM_SCOPE_ITEMS}
+              items={streamScopeOptions}
               value={selected}
               onValueChange={(next: GuardrailStreamScope | null) => {
                 if (!isGuardrailStreamScope(next)) return;
@@ -45,10 +43,14 @@ export const StreamScopeFields = ({
               }}
             >
               <SelectTrigger id={`stream-scope-${mode}`} className="w-full">
-                <SelectValue placeholder={i18n.t("streamScopeFields.streaming-and-non-streaming", { defaultValue: "Streaming and non-streaming" })} />
+                <SelectValue
+                  placeholder={i18n.t("guardrails.streamScopeFields.streamingAndNonStreaming", {
+                    defaultValue: "Streaming and non-streaming",
+                  })}
+                />
               </SelectTrigger>
               <SelectContent>
-                {STREAM_SCOPE_OPTIONS.map((option) => (
+                {streamScopeOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -66,7 +68,10 @@ export const StreamScopeFormField = ({ control, modes }: { control: GuardrailFor
   <GuardrailField
     control={control}
     name="stream_scope_by_mode"
-    label={labelWithHint("Request shape", REQUEST_SHAPE_HINT)}
+    label={labelWithHint(
+      i18n.t("guardrails.streamScopeFields.requestShape", { defaultValue: "Request shape" }),
+      REQUEST_SHAPE_HINT(),
+    )}
   >
     {({ value, onChange }) => (
       <StreamScopeFields
@@ -89,7 +94,9 @@ export const GuardrailStreamScopeDetail = ({ raw }: { raw: unknown }) => {
   if (!label) return null;
   return (
     <div>
-      <p className="font-medium">{i18n.t("streamScopeFields.request-shape", { defaultValue: "Request shape" })}</p>
+      <p className="font-medium">
+        {i18n.t("guardrails.streamScopeFields.requestShape", { defaultValue: "Request shape" })}
+      </p>
       <div>{label}</div>
     </div>
   );

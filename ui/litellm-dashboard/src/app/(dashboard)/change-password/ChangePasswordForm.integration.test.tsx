@@ -63,6 +63,32 @@ describe("ChangePasswordForm", () => {
     expect(mockChangePasswordCall).not.toHaveBeenCalled();
   });
 
+  it("shows the password rules and rejects reusing the current password", async () => {
+    render(<ChangePasswordForm />);
+
+    expect(screen.getByText(/meets this proxy's password policy/)).toBeInTheDocument();
+
+    fillForm({ current: "SameP@ssw0rd-2026", next: "SameP@ssw0rd-2026", confirm: "SameP@ssw0rd-2026" });
+    submit();
+
+    expect(await screen.findByText("New password must be different from the current password")).toBeInTheDocument();
+    expect(mockChangePasswordCall).not.toHaveBeenCalled();
+  });
+
+  it("tells the user to sign in again after a successful change", async () => {
+    mockChangePasswordCall.mockResolvedValue({ user_id: "user-123", message: "Password updated successfully." });
+    render(<ChangePasswordForm />);
+
+    fillForm({ current: "OldP@ssw0rd-2026", next: "NewP@ssw0rd-2026", confirm: "NewP@ssw0rd-2026" });
+    submit();
+
+    await waitFor(() =>
+      expect(mockToastSuccess).toHaveBeenCalledWith(
+        "Password updated. Please sign in again with your new password.",
+      ),
+    );
+  });
+
   it("shows the proxy's rejection message unwrapped", async () => {
     mockChangePasswordCall.mockRejectedValue(new Error("{'error': 'Current password is incorrect.'}"));
     render(<ChangePasswordForm />);

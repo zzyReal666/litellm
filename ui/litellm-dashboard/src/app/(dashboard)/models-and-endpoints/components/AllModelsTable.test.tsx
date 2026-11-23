@@ -194,6 +194,28 @@ describe("AllModelsTable", () => {
     expect(screen.getByText("openai-prod")).toBeInTheDocument();
   });
 
+  it("shows a clear creator fallback and the updated date for a DB model missing creator metadata", () => {
+    render(
+      <AllModelsTable
+        {...baseProps}
+        data={[
+          makeModel({
+            model_info: {
+              id: "model-2",
+              created_at: "2024-01-02T00:00:00Z",
+              updated_at: "2024-03-04T00:00:00Z",
+              created_by: "",
+              db_model: true,
+            } as ModelData["model_info"],
+          }),
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Unknown")).toBeInTheDocument();
+    expect(screen.getByText("Mar 4, 2024")).toBeInTheDocument();
+  });
+
   it("shows 'Defined in config' for a config model and the creator for a DB model", () => {
     const { rerender } = render(<AllModelsTable {...baseProps} />);
     expect(screen.getByText("alice")).toBeInTheDocument();
@@ -209,13 +231,13 @@ describe("AllModelsTable", () => {
 
   it("renders input and output costs and a dash when both are missing", () => {
     const { rerender } = render(<AllModelsTable {...baseProps} />);
-    expect(screen.getByText("$30")).toBeInTheDocument();
-    expect(screen.getByText("$60")).toBeInTheDocument();
-    expect(screen.getByRole("cell", { name: /\$30/ })).toHaveClass("text-right");
+    expect(screen.getByText("¥30")).toBeInTheDocument();
+    expect(screen.getByText("¥60")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: /¥30/ })).toHaveClass("text-right");
     expect(screen.getByRole("columnheader", { name: /costs/i })).toHaveClass("text-right");
 
     rerender(<AllModelsTable {...baseProps} data={[makeModel({ input_cost: null, output_cost: null })]} />);
-    expect(screen.queryByText(/^\$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^¥/)).not.toBeInTheDocument();
   });
 
   it("renders the per-second rate instead of $0.00 token costs for a video model priced per second", () => {
@@ -231,8 +253,8 @@ describe("AllModelsTable", () => {
         ]}
       />,
     );
-    expect(screen.getByText("$0.40/s")).toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.getByText("¥0.40/s")).toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
 
     rerender(
       <AllModelsTable
@@ -246,9 +268,9 @@ describe("AllModelsTable", () => {
         ]}
       />,
     );
-    expect(screen.getByText("$0.60")).toBeInTheDocument();
-    expect(screen.getByText("$0.015/s")).toBeInTheDocument();
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    expect(screen.getByText("¥0.60")).toBeInTheDocument();
+    expect(screen.getByText("¥0.015/s")).toBeInTheDocument();
+    expect(screen.queryByText("¥0.00")).not.toBeInTheDocument();
   });
 
   it("collapses extra access groups behind a +N more badge", () => {

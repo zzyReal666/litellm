@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./LoginPage";
 
@@ -54,6 +55,7 @@ vi.mock("@/hooks/useWorker", () => ({
 }));
 
 import { useUIConfig } from "@/app/(dashboard)/hooks/uiConfig/useUIConfig";
+import { useLogin } from "@/app/(dashboard)/hooks/login/useLogin";
 import { clearTokenCookies, getCookieFromDocument } from "@/utils/cookieUtils";
 import { isJwtExpired } from "@/utils/jwtUtils";
 
@@ -423,5 +425,64 @@ describe("LoginPage", () => {
       expect(document.cookie).not.toContain("token=attacker.jwt.value");
       expect(mockReplace).not.toHaveBeenCalledWith("/ui/?login=success");
     });
+  });
+});
+
+describe("LoginPage password field and errors", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (useUIConfig as ReturnType<typeof vi.fn>).mockReturnValue({
+      data: {
+        auto_redirect_to_sso: false,
+        server_root_path: "/",
+        proxy_base_url: null,
+        sso_configured: false,
+      },
+      isLoading: false,
+    });
+    (getCookieFromDocument as ReturnType<typeof vi.fn>).mockReturnValue(null);
+    (isJwtExpired as ReturnType<typeof vi.fn>).mockReturnValue(true);
+    vi.mocked(useLogin).mockReturnValue({ mutate: vi.fn(), isPending: false, error: null } as ReturnType<
+      typeof useLogin
+    >);
+  });
+
+  it("reveals the password and updates the eye control semantics", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider client={createQueryClient()}>
+        <LoginPage />
+      </QueryClientProvider>,
+    );
+
+    const input = await screen.findByPlaceholderText("Enter your password");
+    expect(input).toHaveAttribute("type", "password");
+    await user.type(input, "secret");
+
+    await user.click(screen.getByRole("button", { name: "Show password" }));
+
+    expect(input).toHaveAttribute("type", "text");
+    expect(screen.getByRole("button", { name: "Hide password" })).toBeInTheDocument();
+  });
+
+  it("shows a clear localized message for invalid credentials", async () => {
+    vi.mocked(useLogin).mockReturnValue({
+      mutate: vi.fn(),
+      isPending: false,
+      error: new Error("Invalid credentials used to access UI. Check password for user"),
+    } as ReturnType<typeof useLogin>);
+
+    render(
+      <QueryClientProvider client={createQueryClient()}>
+        <LoginPage />
+      </QueryClientProvider>,
+    );
+
+    expect(
+      await screen.findByText(
+        "Incorrect username or password. Try again, or ask an administrator to reset your password.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Invalid credentials used to access UI/)).not.toBeInTheDocument();
   });
 });

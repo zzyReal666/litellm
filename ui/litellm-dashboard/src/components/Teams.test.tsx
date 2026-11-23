@@ -1530,6 +1530,17 @@ describe("Teams - the exact bytes the create call sends", () => {
     expect(teamCreateCall).not.toHaveBeenCalled();
   });
 
+  it("marks the required team name and explains the field", async () => {
+    renderWithQueryClient(<Teams accessToken="test-token" userID="user-123" userRole="Admin" />);
+    act(() => {
+      fireEvent.click(screen.getAllByRole("button", { name: /create team/i })[0]);
+    });
+    await screen.findByLabelText(/team name/i);
+
+    expect(screen.getByText("Team Name").closest("label")).toHaveTextContent("*");
+    expect(screen.getByText(/Required\. Use a name your team members will recognize\./)).toBeInTheDocument();
+  });
+
   it("locks the per-model budget editor and says why when the proxy has no enterprise license", async () => {
     await openCreateModal({ premiumUser: false });
 

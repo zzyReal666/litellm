@@ -18,19 +18,29 @@ type GuardrailModeParams = {
 
 export const GuardrailModeCard: React.FC<{ litellmParams: GuardrailModeParams }> = ({ litellmParams }) => (
   <Card className="block p-6">
-    <p>Mode</p>
+    <p>{i18n.t("guardrails.guardrailInfo.mode", { defaultValue: "Mode" })}</p>
     <div className="mt-2">
       <h3 className="text-lg font-medium">{formatGuardrailMode(litellmParams.mode) || "-"}</h3>
       <Badge variant={litellmParams.default_on ? "secondary" : "outline"}>
-        {litellmParams.default_on ? "Default On" : "Default Off"}
+        {litellmParams.default_on
+          ? i18n.t("guardrails.guardrailInfo.defaultOn", { defaultValue: "Default On" })
+          : i18n.t("guardrails.guardrailInfo.defaultOff", { defaultValue: "Default Off" })}
       </Badge>
     </div>
     {modeIncludesLoggingOnly(litellmParams.mode) && (
       <div className="mt-4">
         <p>{i18n.t("guardrailModeDisplay.logging-only-scope", { defaultValue: "Logging only scope" })}</p>
         <h3 className="text-lg font-medium">{formatLoggingOnlyScope(litellmParams.logging_only_scope)}</h3>
-        <p className="mt-2">{i18n.t("guardrailModeDisplay.continue-after-a-flagged-request", { defaultValue: "Continue after a flagged request" })}</p>
-        <h3 className="text-lg font-medium">{loggingOnlyContinueFromParams(litellmParams) ? "On" : "Off"}</h3>
+        <p className="mt-2">
+          {i18n.t("guardrailModeDisplay.continue-after-a-flagged-request", {
+            defaultValue: "Continue after a flagged request",
+          })}
+        </p>
+        <h3 className="text-lg font-medium">
+          {loggingOnlyContinueFromParams(litellmParams)
+            ? i18n.t("common.on", { defaultValue: "On" })
+            : i18n.t("common.off", { defaultValue: "Off" })}
+        </h3>
       </div>
     )}
   </Card>
@@ -39,15 +49,25 @@ export const GuardrailModeCard: React.FC<{ litellmParams: GuardrailModeParams }>
 export const GuardrailModeRows: React.FC<{ litellmParams: GuardrailModeParams }> = ({ litellmParams }) => (
   <>
     <div>
-      <p className="font-medium">Mode</p>
+      <p className="font-medium">{i18n.t("guardrails.guardrailInfo.mode", { defaultValue: "Mode" })}</p>
       <div>{formatGuardrailMode(litellmParams.mode) || "-"}</div>
     </div>
     {modeIncludesLoggingOnly(litellmParams.mode) && (
       <div>
-        <p className="font-medium">{i18n.t("guardrailModeDisplay.logging-only-scope-2", { defaultValue: "Logging only scope" })}</p>
+        <p className="font-medium">
+          {i18n.t("guardrailModeDisplay.logging-only-scope-2", { defaultValue: "Logging only scope" })}
+        </p>
         <div>{formatLoggingOnlyScope(litellmParams.logging_only_scope)}</div>
-        <p className="font-medium">{i18n.t("guardrailModeDisplay.continue-after-a-flagged-request-2", { defaultValue: "Continue after a flagged request" })}</p>
-        <div>{loggingOnlyContinueFromParams(litellmParams) ? "On" : "Off"}</div>
+        <p className="font-medium">
+          {i18n.t("guardrailModeDisplay.continue-after-a-flagged-request-2", {
+            defaultValue: "Continue after a flagged request",
+          })}
+        </p>
+        <div>
+          {loggingOnlyContinueFromParams(litellmParams)
+            ? i18n.t("common.on", { defaultValue: "On" })
+            : i18n.t("common.off", { defaultValue: "Off" })}
+        </div>
       </div>
     )}
   </>

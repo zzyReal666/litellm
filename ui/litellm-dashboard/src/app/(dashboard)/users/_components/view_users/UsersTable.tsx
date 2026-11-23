@@ -95,6 +95,7 @@ export function UsersTable({
   const columns = useMemo(() => {
     const columnDeps = {
       possibleUIRoles,
+      teams,
       includeSelection: selectionEnabled,
       onUserClick,
       onDeleteUser,
@@ -102,7 +103,7 @@ export function UsersTable({
       t,
     };
     return getUsersTableColumns(columnDeps);
-  }, [possibleUIRoles, selectionEnabled, onUserClick, onDeleteUser, onResetPassword, t]);
+  }, [possibleUIRoles, teams, selectionEnabled, onUserClick, onDeleteUser, onResetPassword, t]);
 
   const roleOptions = useMemo(
     () =>

@@ -26,18 +26,24 @@ interface PatternTableProps {
 const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, onRemove }) => {
   const columns: ColumnDef<Pattern>[] = [
     {
-      header: "Type",
+      header: i18n.t("guardrails.patternTable.colType", { defaultValue: "Type" }),
       accessorKey: "type",
       size: 100,
-      cell: ({ row }) => <Badge variant="secondary">{row.original.type === "prebuilt" ? "Prebuilt" : "Custom"}</Badge>,
+      cell: ({ row }) => (
+        <Badge variant="secondary">
+          {row.original.type === "prebuilt"
+            ? i18n.t("guardrails.patternTable.typePrebuilt", { defaultValue: "Prebuilt" })
+            : i18n.t("guardrails.patternTable.typeCustom", { defaultValue: "Custom" })}
+        </Badge>
+      ),
     },
     {
-      header: "Pattern name",
+      header: i18n.t("guardrails.patternTable.colPatternName", { defaultValue: "Pattern name" }),
       accessorKey: "name",
       cell: ({ row }) => row.original.display_name || row.original.name,
     },
     {
-      header: "Regex pattern",
+      header: i18n.t("guardrails.patternTable.colRegexPattern", { defaultValue: "Regex pattern" }),
       accessorKey: "pattern",
       cell: ({ row }) =>
         row.original.pattern ? (
@@ -47,7 +53,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
         ),
     },
     {
-      header: "Action",
+      header: i18n.t("guardrails.patternTable.colAction", { defaultValue: "Action" }),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -56,7 +62,11 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, value as "BLOCK" | "MASK")}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger
+            size="sm"
+            className="w-[120px]"
+            aria-label={i18n.t("guardrails.patternTable.colAction", { defaultValue: "Action" })}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -83,7 +93,11 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
   ];
 
   if (patterns.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">{i18n.t("patternTable.no-patterns-added", { defaultValue: "No patterns added." })}</div>;
+    return (
+      <div className="py-10 text-center text-muted-foreground">
+        {i18n.t("patternTable.no-patterns-added", { defaultValue: "No patterns added." })}
+      </div>
+    );
   }
 
   return <DataTable data={patterns} columns={columns} getRowId={(row) => row.id} size="compact" />;

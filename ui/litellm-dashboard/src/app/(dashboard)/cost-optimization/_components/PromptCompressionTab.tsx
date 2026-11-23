@@ -32,10 +32,27 @@ const compressionSchema = (t: TFunction) =>
   z.object({
     name: z
       .string()
-      .min(1, t("costOptimization.promptCompressionTab.nameRequired", { defaultValue: "Name is required" })),
+      .trim()
+      .min(1, t("costOptimization.promptCompressionTab.nameRequired", { defaultValue: "Name is required" }))
+      .max(
+        64,
+        t("costOptimization.promptCompressionTab.nameTooLong", { defaultValue: "Name must be 64 characters or fewer" }),
+      ),
     apiBase: z
       .string()
-      .min(1, t("costOptimization.promptCompressionTab.apiBaseRequired", { defaultValue: "API base is required" })),
+      .trim()
+      .min(1, t("costOptimization.promptCompressionTab.apiBaseRequired", { defaultValue: "API base is required" }))
+      .max(
+        200,
+        t("costOptimization.promptCompressionTab.apiBaseTooLong", {
+          defaultValue: "API base must be 200 characters or fewer",
+        }),
+      )
+      .url(
+        t("costOptimization.promptCompressionTab.apiBaseInvalid", {
+          defaultValue: "Enter a valid URL, for example https://headroom.example.com",
+        }),
+      ),
     defaultOn: z.boolean(),
   });
 
@@ -133,9 +150,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
               i18nKey="costOptimization.promptCompressionTab.description"
               defaults="Headroom is a native 中安云科 AI 安全网关 guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>"
               components={{
-                a: (
-                  <span />
-                ),
+                a: <span />,
               }}
             />
           </p>
@@ -153,13 +168,15 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
           {!isLoading && guardrails.length > 0 && (
             <ul className="divide-y divide-border">
               {guardrails.map((guardrail) => (
-                <li key={guardrail.guardrail_id} className="flex items-center justify-between py-3">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{guardrail.guardrail_name}</p>
-                    <p className="text-xs text-muted-foreground">{guardrail.litellm_params?.api_base ?? ""}</p>
+                <li key={guardrail.guardrail_id} className="flex items-center justify-between gap-3 py-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="break-all text-sm font-medium text-foreground">{guardrail.guardrail_name}</p>
+                    <p className="break-all text-xs text-muted-foreground">
+                      {guardrail.litellm_params?.api_base ?? ""}
+                    </p>
                   </div>
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
                       guardrail.litellm_params?.default_on
                         ? "bg-success/15 text-success"
                         : "bg-muted text-muted-foreground"
@@ -235,9 +252,7 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                     i18nKey="costOptimization.promptCompressionTab.enterpriseNotice"
                     defaults="Applying compression to all requests is available to all users. Enabling it selectively per key or team is a 企业版 feature. Get a trial key <a>here</a>"
                     components={{
-                      a: (
-                        <span />
-                      ),
+                      a: <span />,
                     }}
                   />
                 </p>

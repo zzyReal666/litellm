@@ -1,4 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { renderWithProviders, screen } from "../../../tests/test-utils";
 import { ProductLicenseInfo } from "@/lib/http/productLicense";
 import ProductLicensePanel from "./ProductLicensePanel";
@@ -88,5 +90,48 @@ describe("ProductLicensePanel console entry", () => {
     renderWithProviders(<ProductLicensePanel />);
 
     expect(consoleLink()).not.toBeInTheDocument();
+  });
+});
+
+describe("ProductLicensePanel licence details", () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("zh-CN");
+  });
+
+  afterEach(async () => {
+    cleanup();
+    await i18n.changeLanguage("en");
+  });
+
+  const renderPanel = (info: ProductLicenseInfo) => {
+    licenseInfo.current = info;
+    renderWithProviders(<ProductLicensePanel />);
+  };
+
+  it("shows the product identity and status once, without repeating them as detail rows", async () => {
+    renderPanel(licensedInfo);
+
+    expect(screen.getByText("中安云科 AI 安全网关 · 版本 1.106.0")).toBeInTheDocument();
+    expect(screen.getByTestId("product-license-status")).toHaveTextContent("正式授权");
+    expect(screen.queryByText("产品名称")).not.toBeInTheDocument();
+    expect(screen.queryByText("产品版本")).not.toBeInTheDocument();
+    expect(screen.queryByText("授权状态")).not.toBeInTheDocument();
+  });
+
+  it("never exposes the licence file path", async () => {
+    renderPanel(licensedInfo);
+
+    expect(screen.queryByText("授权文件")).not.toBeInTheDocument();
+    expect(screen.queryByText(licensedInfo.license_file)).not.toBeInTheDocument();
+  });
+
+  it("labels a permanent licence as 永久授权 and a temporary one as 临时授权", async () => {
+    renderPanel(licensedInfo);
+    expect(screen.getByText("授权类型")).toBeInTheDocument();
+    expect(screen.getByText("永久授权")).toBeInTheDocument();
+
+    cleanup();
+    renderPanel({ ...licensedInfo, time: "2026-01-01 00:00:00 至 2027-01-01 00:00:00" });
+    expect(screen.getByText("临时授权")).toBeInTheDocument();
   });
 });

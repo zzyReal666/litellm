@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { requiredRule } from "../common_components/formRules";
 import { labelWithHint } from "@/components/shared/form/LabelWithHint";
+import { withRequirement } from "./FieldRequirements";
 import { MountedFormField, type MountedFormValues } from "../common_components/MountedFormField";
 import { Providers } from "../provider_info_helpers";
 
@@ -105,7 +106,7 @@ const LiteLLMModelNameField: React.FC<LiteLLMModelNameFieldProps> = ({
     <>
       <MountedFormField
         name="model"
-        label={labelWithHint(i18n.t("addModel.litellmModelName.fieldLabel", { defaultValue: "网关模型名称" }), i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name 中安云科 AI 安全网关 will send to the LLM API" }))}
+        label={withRequirement(labelWithHint(i18n.t("addModel.litellmModelName.fieldLabel", { defaultValue: "网关模型名称" }), i18n.t("addModel.litellmModelName.modelDescription", { defaultValue: "The model name 中安云科 AI 安全网关 will send to the LLM API" })), true)}
         required
         rules={{
           validate: {

@@ -126,4 +126,30 @@ describe("PromptCompressionTab submit payload", () => {
     expect(screen.getByText("Opt-in")).toBeInTheDocument();
     expect(screen.getByText("https://a.example.com")).toBeInTheDocument();
   });
+
+  it("rejects an over-long guardrail name before calling the proxy", async () => {
+    const user = userEvent.setup();
+    render(<PromptCompressionTab accessToken="test-token" />);
+
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "x".repeat(65) } });
+    fireEvent.change(screen.getByLabelText("Headroom API base"), {
+      target: { value: "https://headroom.example.com" },
+    });
+    await user.click(screen.getByRole("button", { name: "Add guardrail" }));
+
+    expect(await screen.findByText("Name must be 64 characters or fewer")).toBeInTheDocument();
+    expect(createGuardrailCall).not.toHaveBeenCalled();
+  });
+
+  it("rejects an API base that is not a URL before calling the proxy", async () => {
+    const user = userEvent.setup();
+    render(<PromptCompressionTab accessToken="test-token" />);
+
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "headroom-compression" } });
+    fireEvent.change(screen.getByLabelText("Headroom API base"), { target: { value: "not-a-url" } });
+    await user.click(screen.getByRole("button", { name: "Add guardrail" }));
+
+    expect(await screen.findByText("Enter a valid URL, for example https://headroom.example.com")).toBeInTheDocument();
+    expect(createGuardrailCall).not.toHaveBeenCalled();
+  });
 });

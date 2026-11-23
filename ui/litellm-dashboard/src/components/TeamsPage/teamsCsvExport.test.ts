@@ -73,7 +73,7 @@ describe("collectTeamMemberBudgetIds", () => {
 });
 
 describe("buildTeamsCsvRows", () => {
-  it("maps configured limits, spend, models, and rate limits", () => {
+  it("exports only the fields the teams page shows", () => {
     const teamFields: Partial<Team> = {
       team_id: "team-42",
       team_alias: "finance",
@@ -90,42 +90,39 @@ describe("buildTeamsCsvRows", () => {
       blocked: false,
     };
     const [row] = buildTeamsCsvRows([makeTeam(teamFields)], []);
-    const expectedRow = {
-      "Team Alias": "finance",
+    expect(row).toEqual({
+      Team: "finance",
       "Team ID": "team-42",
-      "Organization ID": "org-9",
+      Organization: "org-9",
       Models: "gpt-4o, claude-sonnet-4-5",
-      "Max Budget (CNY)": 250,
-      "Budget Duration": "30d",
-      "Budget Reset At": "2026-02-01T00:00:00Z",
-      "Spend (CNY)": 12.5,
-      "TPM Limit": 1000,
-      "RPM Limit": 50,
-      "Team Member Budget (CNY)": "",
-      "Team Member Budget Duration": "",
-      "Team Member TPM Limit": "",
-      "Team Member RPM Limit": "",
       Members: 7,
       Keys: 3,
-      Blocked: false,
+      "Spend (CNY)": 12.5,
+      "Max Budget (CNY)": 250,
+      "Budget Duration": "30d",
+      "TPM Limit": 1000,
+      "RPM Limit": 50,
       "Created At": "2026-01-01T00:00:00Z",
-    };
-    expect(row).toEqual(expectedRow);
+    });
   });
 
-  it("joins team member budget rows by budget id from metadata", () => {
-    const teams = [
-      makeTeam({ team_id: "a", metadata: { team_member_budget_id: "bud-1" } }),
-      makeTeam({ team_id: "b" }),
-    ];
-    const rows = buildTeamsCsvRows(teams, [
+  it("uses the organization alias when one is available", () => {
+    const [row] = buildTeamsCsvRows(
+      [makeTeam({ organization_id: "org-9" })],
+      [],
+      { "org-9": "Finance Org" },
+    );
+    expect(row.Organization).toBe("Finance Org");
+  });
+
+  it("omits internal fields that the teams page does not display", () => {
+    const [row] = buildTeamsCsvRows([makeTeam({ team_id: "a" })], [
       { budget_id: "bud-1", max_budget: 25, budget_duration: "7d", tpm_limit: 200, rpm_limit: 10 },
     ]);
-    expect(rows[0]["Team Member Budget (CNY)"]).toBe(25);
-    expect(rows[0]["Team Member Budget Duration"]).toBe("7d");
-    expect(rows[0]["Team Member TPM Limit"]).toBe(200);
-    expect(rows[0]["Team Member RPM Limit"]).toBe(10);
-    expect(rows[1]["Team Member Budget (CNY)"]).toBe("");
+    expect(Object.keys(row)).not.toContain("Budget Reset At");
+    expect(Object.keys(row)).not.toContain("Team Member Budget (CNY)");
+    expect(Object.keys(row)).not.toContain("Blocked");
+    expect(Object.keys(row)).not.toContain("Organization ID");
   });
 
   it("falls back to members_with_roles and keys lengths when counts are absent", () => {
@@ -147,9 +144,7 @@ describe("buildTeamsCsv", () => {
     const csv = buildTeamsCsv([makeTeam({ team_alias: "sales, emea", models: ["m1", "m2"] })], []);
     const [header, row] = csv.split("\r\n");
     expect(header).toBe(
-      "Team Alias,Team ID,Organization ID,Models,Max Budget (CNY),Budget Duration,Budget Reset At,Spend (CNY)," +
-        "TPM Limit,RPM Limit,Team Member Budget (CNY),Team Member Budget Duration,Team Member TPM Limit," +
-        "Team Member RPM Limit,Members,Keys,Blocked,Created At",
+      "Team,Team ID,Organization,Models,Members,Keys,Spend (CNY),Max Budget (CNY),Budget Duration,TPM Limit,RPM Limit,Created At",
     );
     expect(row).toContain('"sales, emea"');
     expect(row).toContain('"m1, m2"');
