@@ -184,13 +184,10 @@ function LoginPageContent() {
             // Stay on the CP's UI — proxyBaseUrl already points at the worker
             router.push("/ui/?login=success");
           } else {
-            // Normal (non-control-plane) login — follow the server's redirect
+            // Normal (non-control-plane) login. An explicit return URL wins; otherwise
+            // always land on the home page so a previous session's last page is not resumed.
             const returnUrl = consumeReturnUrl();
-            if (returnUrl) {
-              router.push(returnUrl);
-            } else {
-              router.push(data.redirect_url);
-            }
+            router.push(returnUrl ?? "/ui/");
           }
         },
         onError: () => {

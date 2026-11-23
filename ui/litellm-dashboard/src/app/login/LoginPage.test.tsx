@@ -485,4 +485,25 @@ describe("LoginPage password field and errors", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText(/Invalid credentials used to access UI/)).not.toBeInTheDocument();
   });
+
+  it("lands on the home page after a normal login instead of the previous page", async () => {
+    const user = userEvent.setup();
+    const mutate = vi.fn((_values: unknown, options?: { onSuccess?: (data: { redirect_url: string }) => void }) => {
+      options?.onSuccess?.({ redirect_url: "/ui/usage/" });
+    });
+    vi.mocked(useLogin).mockReturnValue({ mutate, isPending: false, error: null } as ReturnType<typeof useLogin>);
+
+    render(
+      <QueryClientProvider client={createQueryClient()}>
+        <LoginPage />
+      </QueryClientProvider>,
+    );
+
+    await user.type(await screen.findByPlaceholderText("Enter your username"), "admin@example.com");
+    await user.type(screen.getByPlaceholderText("Enter your password"), "secret-password");
+    await user.click(screen.getByRole("button", { name: "Login" }));
+
+    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/ui/"));
+    expect(mockPush).not.toHaveBeenCalledWith("/ui/usage/");
+  });
 });

@@ -58,6 +58,16 @@ const getApiVersionFromApiBase = (apiBase: string): string | null => {
   return searchParams.get("api_version") || searchParams.get("api-version");
 };
 
+const PROVIDER_FIELD_LABEL_KEYS: Readonly<Record<string, string>> = {
+  api_base: "addModel.providerSpecificFields.apiBaseLabel",
+  api_key: "addModel.providerSpecificFields.apiKeyLabel",
+};
+
+const fieldLabel = (field: ProviderCredentialField): string => {
+  const key = PROVIDER_FIELD_LABEL_KEYS[field.key];
+  return key ? i18n.t(key, { defaultValue: field.label }) : field.label;
+};
+
 const mapFieldMetadataToUiField = (field: ProviderCredentialFieldMetadata): ProviderCredentialField => {
   const type: ProviderCredentialField["type"] =
     field.field_type === "password"
@@ -301,7 +311,7 @@ const ProviderSpecificFields: React.FC<ProviderSpecificFieldsProps> = ({
       {allFields.map((field) => (
         <React.Fragment key={`${selectedProvider}:${field.key}`}>
           <MountedFormField
-            label={field.tooltip ? labelWithHint(field.label, field.tooltip) : field.label}
+            label={field.tooltip ? labelWithHint(fieldLabel(field), field.tooltip) : fieldLabel(field)}
             name={field.key}
             required={field.required}
             rules={{

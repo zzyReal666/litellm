@@ -7856,7 +7856,9 @@
       "vertexCredentialsHelp": "提供 GCP 服务账号（.json 文件）",
       "baseModelHelp": "您的 Azure 部署实际使用的模型。用于精确的成本追踪。请从",
       "baseModelHelpLink": "此处",
-      "azureBaseModelHelp": "Azure 部署实际使用的模型，用于准确计算成本。请从下方选项中选择名称。"
+      "azureBaseModelHelp": "Azure 部署实际使用的模型，用于准确计算成本。请从下方选项中选择名称。",
+      "apiBaseLabel": "上游 API 地址",
+      "apiKeyLabel": "API 密钥"
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "所有层级（软下限）",
@@ -14971,7 +14973,10 @@
     "teamIdPlaceholder": "留空则自动生成",
     "tpmHint": "留空表示不限制。限制团队每分钟所有请求的总 Token 数。",
     "rpmHint": "留空表示不限制。限制团队每分钟的请求数。",
-    "budgetDurationHint": "团队花费额度的重置周期。留空则使用服务端默认值。"
+    "budgetDurationHint": "团队花费额度的重置周期。留空则使用服务端默认值。",
+    "perModelBudgetPremiumHint": "企业版功能，授权后可设置单模型预算",
+    "defaultBudgetDurationPlaceholder": "默认值：{{label}}（{{value}}）",
+    "noDefaultBudgetDuration": "无默认值"
   },
   "logsPage": {
     "request-logs": "请求日志",

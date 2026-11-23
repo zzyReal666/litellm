@@ -1032,6 +1032,7 @@ def update_db_model(
     db_model: Deployment,
     updated_patch: updateDeployment,
     loaded_catalog: LoadedCatalog = GetModelCostMap.loaded_model_cost_map,
+    allow_team_clear: bool = False,
 ) -> PrismaCompatibleUpdateDBModel:
     if updated_patch.model_info is not None:
         _raise_if_ptu_cost_attribution_disabled(updated_patch.model_info.model_dump(exclude_none=True))
@@ -1105,6 +1106,17 @@ def update_db_model(
             if field in SPECIAL_MODEL_INFO_PARAMS and getattr(updated_patch.model_info, field) is None:
                 merged_model_info.pop(field, None)
                 merged_litellm_params.pop(field, None)
+            elif (
+                allow_team_clear
+                and field == "team_id"
+                and getattr(updated_patch.model_info, field) is None
+            ):
+                # Clearing the team binding is a supported proxy-admin edit; without this
+                # the exclude_none merge above would keep the stored team_id forever.
+                # Team admins may edit a team model, so the caller passes this flag only
+                # for proxy admins to keep a team model from being ungated.
+                merged_model_info.pop("team_id", None)
+                merged_litellm_params.pop("team_id", None)
         for field in _explicitly_cleared_ptu_fields(updated_patch.model_info):
             merged_model_info.pop(field, None)
 
@@ -1701,7 +1713,13 @@ async def _update_team_model_in_db(
 
     # No team_id in patch, proceed with standard update
     if patch_team_id is None:
-        return await write_row(update_db_model(db_model=db_model, updated_patch=patch_data))
+        return await write_row(
+            update_db_model(
+                db_model=db_model,
+                updated_patch=patch_data,
+                allow_team_clear=user_api_key_dict.user_role == LitellmUserRoles.PROXY_ADMIN,
+            )
+        )
 
     # Determine public model name
     public_model_name: Final = _get_public_model_name(
@@ -1722,7 +1740,13 @@ async def _update_team_model_in_db(
 
     # Team rows keep their internal UUID-based model_name; the public name lives in model_info
     patch_data.model_name = f"model_name_{patch_team_id}_{uuid.uuid4()}" if is_new_team_assignment else None
-    row: Final = await write_row(update_db_model(db_model=db_model, updated_patch=patch_data))
+    row: Final = await write_row(
+        update_db_model(
+            db_model=db_model,
+            updated_patch=patch_data,
+            allow_team_clear=user_api_key_dict.user_role == LitellmUserRoles.PROXY_ADMIN,
+        )
+    )
 
     if is_new_team_assignment:
         await _setup_new_team_model_assignment(

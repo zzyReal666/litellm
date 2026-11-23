@@ -3648,6 +3648,50 @@ class TestUpdateDBModelClearPricing:
         # team_id must survive
         assert info.get("team_id") == "team-keep-me"
 
+    def test_proxy_admin_can_clear_team_id(self):
+        """A proxy admin clearing the team binding must actually remove team_id."""
+        from litellm.proxy.management_endpoints.model_management_endpoints import (
+            update_db_model,
+        )
+        from litellm.types.router import Deployment, LiteLLM_Params, ModelInfo, updateDeployment
+
+        db_model = Deployment(
+            model_name="model_name_team-1_abc",
+            litellm_params=LiteLLM_Params(model="openai/gpt-4o-mini"),
+            model_info=ModelInfo(id="dep-team-1", team_id="team-1"),
+        )
+
+        result = update_db_model(
+            db_model=db_model,
+            updated_patch=updateDeployment(model_info=ModelInfo(id="dep-team-1", team_id=None)),
+            allow_team_clear=True,
+        )
+
+        info = json.loads(result["model_info"])
+        assert "team_id" not in info
+
+    def test_team_admin_cannot_clear_team_id(self):
+        """A non-proxy-admin edit must not ungate a team-scoped model."""
+        from litellm.proxy.management_endpoints.model_management_endpoints import (
+            update_db_model,
+        )
+        from litellm.types.router import Deployment, LiteLLM_Params, ModelInfo, updateDeployment
+
+        db_model = Deployment(
+            model_name="model_name_team-1_abc",
+            litellm_params=LiteLLM_Params(model="openai/gpt-4o-mini"),
+            model_info=ModelInfo(id="dep-team-1", team_id="team-1"),
+        )
+
+        result = update_db_model(
+            db_model=db_model,
+            updated_patch=updateDeployment(model_info=ModelInfo(id="dep-team-1", team_id=None)),
+            allow_team_clear=False,
+        )
+
+        info = json.loads(result["model_info"])
+        assert info.get("team_id") == "team-1"
+
     def test_clear_survives_model_info_passthrough_with_old_pricing(self):
         """Realistic UI submit shape: the patch carries BOTH blobs. The
         model_info portion still has the old pricing because the form

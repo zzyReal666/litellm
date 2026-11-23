@@ -112,13 +112,16 @@ export function ModelMaxBudgetEditor({
     emitChange(entries.map((entry) => (entry.id === id ? { ...entry, ...patch } : entry)));
 
   const usedModels = new Set(entries.map((entry) => entry.model).filter(Boolean));
-  const hintWhenLocked = premiumUser ? undefined : MODEL_MAX_BUDGET_PREMIUM_HINT;
+  const premiumHint = i18n.t("teams.perModelBudgetPremiumHint", {
+    defaultValue: MODEL_MAX_BUDGET_PREMIUM_HINT,
+  });
+  const hintWhenLocked = premiumUser ? undefined : premiumHint;
 
   const blurb = (
     <div className="text-xs text-muted-foreground">
       {premiumUser
         ? "Cap spend per model over its own window. A budget set on the bare model name also covers the provider-prefixed spelling of that model."
-        : MODEL_MAX_BUDGET_PREMIUM_HINT}
+        : premiumHint}
     </div>
   );
 

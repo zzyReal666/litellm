@@ -7856,7 +7856,9 @@
       "vertexCredentialsHelp": "Give a gcp service account(.json file)",
       "baseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select name from",
       "baseModelHelpLink": "here",
-      "azureBaseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select the name from the options below."
+      "azureBaseModelHelp": "The actual model your azure deployment uses. Used for accurate cost tracking. Select the name from the options below.",
+      "apiBaseLabel": "Upstream API Base",
+      "apiKeyLabel": "API Key"
     },
     "adaptiveRouting": {
       "allTiersSoftFloor": "All tiers (soft floor)",
@@ -14971,7 +14973,10 @@
     "teamIdPlaceholder": "Auto-generated if left empty",
     "tpmHint": "Leave empty for no limit. Applies to every request made by the team each minute.",
     "rpmHint": "Leave empty for no limit. Applies to every request made by the team each minute.",
-    "budgetDurationHint": "How often the team's spend counter resets. Leave empty to use the server default."
+    "budgetDurationHint": "How often the team's spend counter resets. Leave empty to use the server default.",
+    "perModelBudgetPremiumHint": "Premium feature - Upgrade to set per-model budgets",
+    "defaultBudgetDurationPlaceholder": "Default: {{label}} ({{value}})",
+    "noDefaultBudgetDuration": "n/a"
   },
   "logsPage": {
     "request-logs": "Request Logs",
