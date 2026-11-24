@@ -690,7 +690,6 @@
     "inviteUserSubmitButton": "邀请用户",
     "createUserSubmitButton": "创建用户",
     "notifications": {
-      "makingApiCall": "正在调用 API",
       "userCreated": "API 用户已创建",
       "errorCreatingUser": "创建用户时出错"
     },
@@ -760,7 +759,6 @@
     "failedToFetchTeams": "获取团队失败",
     "failedToLoadTeams": "加载团队失败",
     "teamDeletedSuccess": "团队已成功删除",
-    "creatingTeam": "正在创建团队",
     "teamCreatedSuccess": "团队已创建",
     "noTeamsYet": "暂无团队",
     "createFirstTeamHint": "创建您的第一个团队，以便组织成员并管理对模型的访问权限。",
@@ -3203,7 +3201,6 @@
     "deleteModalMessage": "确定要删除此模型吗？",
     "deleteModalResourceTitle": "模型信息",
     "usingExistingCredentialTitle": "使用现有凭据",
-    "storingCredential": "正在存储凭据...",
     "credentialStoredSuccess": "凭据已成功存储",
     "invalidJsonLitellmParams": "网关参数中的 JSON 无效",
     "invalidJsonModelInfo": "模型信息中存在无效的 JSON",
@@ -3844,7 +3841,8 @@
     "tpmLimitTooltip": "作用于该用户持有的所有密钥。团队和密钥限制仍作为上限生效。",
     "rpmLimitLabel": "RPM 限制",
     "rpmLimitTooltip": "作用于该用户持有的所有密钥。团队和密钥限制仍作为上限生效。",
-    "unlimitedPlaceholder": "无限制"
+    "unlimitedPlaceholder": "无限制",
+    "rateLimitValidationMessage": "请输入非负整数，留空表示不限制"
   },
   "viewUserSpend": {
     "totalSpend": "总花费",
@@ -8505,7 +8503,7 @@
     "usageAiChatPanel": {
       "title": "询问 AI",
       "subtitle": "询问您的花费、模型、密钥及趋势",
-      "modelPlaceholder": "选择模型（可选，默认使用 gpt-4o-mini）",
+      "modelPlaceholder": "选择模型（可选，默认使用第一个可用模型）",
       "emptyStateTitle": "就您的用量提问",
       "emptyStateExample": "例如：\"哪个模型花费最多？\"",
       "thinking": "思考中...",
@@ -8521,7 +8519,8 @@
       "errorProviderCredentialsMissing": "AI 助手所用模型没有配置 API Key。请先在「模型与端点」中为该模型配置凭据，或在提问时选择一个已有凭据的模型。",
       "errorModelNotCallable": "所选模型无法直接调用，请选择一个已配置凭据的模型分组。",
       "errorRateLimited": "AI 模型当前被限流，请稍后重试。",
-      "errorInternal": "AI 助手暂时不可用，请稍后重试。"
+      "errorInternal": "AI 助手暂时不可用，请稍后重试。",
+      "errorModelNotAvailable": "所选模型当前没有可用的部署或凭据。请换一个模型，或在「模型与端点」中确认该模型的部署与凭据配置。"
     },
     "usagePageView": {
       "filterByUser": "按用户筛选",
@@ -11101,7 +11100,6 @@
   "budgets": {
     "budgetModal": {
       "title": "创建预算",
-      "makingApiCall": "正在调用 API",
       "budgetCreated": "预算已创建",
       "errorCreating": "创建预算时出错：{{error}}",
       "budgetIdLabel": "预算 ID",
@@ -11141,7 +11139,6 @@
     },
     "editBudgetModal": {
       "title": "编辑预算",
-      "makingApiCall": "正在调用 API",
       "budgetUpdated": "预算已更新",
       "errorUpdating": "更新预算时出错：{{error}}",
       "budgetIdLabel": "预算 ID",
@@ -11810,7 +11807,6 @@
       "advancedSettingsHeader": "高级设置",
       "advancedSettingsTooltip": "在我们的<link>文档</link>中了解更多高级设置",
       "notificationFailedToSearchUsers": "搜索用户失败",
-      "notificationMakingApiCall": "正在发起 API 调用",
       "notificationPleaseSelectAgent": "请选择一个 Agent",
       "notificationVirtualKeyCreated": "虚拟密钥已创建",
       "notificationVirtualKeyCopied": "虚拟密钥已复制到剪贴板",

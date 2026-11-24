@@ -379,7 +379,7 @@ class TestStreamUsageAiChat:
                 events.append(json.loads(event.replace("data: ", "").strip()))
 
             error_events = [e for e in events if e["type"] == "error"]
-            assert error_events[0]["code"] == "model_not_callable"
+            assert error_events[0]["code"] == "model_not_available"
 
     @pytest.mark.asyncio
     async def test_non_admin_enforces_user_id(self):
@@ -571,3 +571,54 @@ class TestUsageAiChatKeepalive:
         assert b": ping\n\n" not in chunks
         assert chunks[0].startswith(b'data: {"type": "status"')
         assert chunks[-1] == b'data: {"type": "done"}\n\n'
+
+    @pytest.mark.asyncio
+    async def test_routes_through_proxy_router_when_available(self):
+        router = MagicMock()
+        response = MagicMock()
+        response.choices = [MagicMock()]
+        response.choices[0].message.tool_calls = None
+        response.choices[0].message.content = "answer"
+        router.acompletion = AsyncMock(return_value=response)
+        router.get_model_names.return_value = ["deepseek-v4-flash", "other-model"]
+
+        events = []
+        async for event in stream_usage_ai_chat(
+            messages=[{"role": "user", "content": "which model spends most?"}],
+            router=router,
+        ):
+            events.append(json.loads(event.replace("data: ", "").strip()))
+
+        assert router.acompletion.await_args.kwargs["model"] == "deepseek-v4-flash"
+        chunk_events = [e for e in events if e["type"] == "chunk"]
+        assert chunk_events and chunk_events[0]["content"] == "answer"
+
+        async for _ in stream_usage_ai_chat(messages=[{"role": "user", "content": "hi"}], model="my-group", router=router):
+            pass
+        assert router.acompletion.await_args.kwargs["model"] == "my-group"
+
+    @pytest.mark.asyncio
+    async def test_reports_unavailable_model_when_router_has_no_deployment(self):
+        from litellm.exceptions import BadRequestError
+
+        with patch(
+            "litellm.proxy.management_endpoints.usage_endpoints.ai_usage_chat.litellm"
+        ) as mock_litellm:
+            mock_litellm.acompletion = AsyncMock(
+                side_effect=BadRequestError(
+                    message="No deployments available for selected model",
+                    llm_provider="openai",
+                    model="missing-group",
+                )
+            )
+
+            events = []
+            async for event in stream_usage_ai_chat(
+                messages=[{"role": "user", "content": "test"}],
+                model="missing-group",
+            ):
+                events.append(json.loads(event.replace("data: ", "").strip()))
+
+            error_events = [e for e in events if e["type"] == "error"]
+            assert error_events[0]["code"] == "model_not_available"
+

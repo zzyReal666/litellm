@@ -53,6 +53,7 @@ async def usage_ai_chat(
     from litellm.proxy.management_endpoints.usage_endpoints.ai_usage_chat import (
         stream_usage_ai_chat,
     )
+    from litellm.proxy.proxy_server import llm_router
 
     is_admin: Final = user_api_key_has_admin_view(user_api_key_dict)
     if is_admin:
@@ -68,6 +69,7 @@ async def usage_ai_chat(
                 model=data.model,
                 user_id=user_id,
                 is_admin=is_admin,
+                router=llm_router,
             ),
             ping_interval_seconds=litellm.sse_keepalive_ping_interval_seconds,
             ping_chunk=SSE_COMMENT_PING,

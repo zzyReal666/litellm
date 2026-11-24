@@ -690,7 +690,6 @@
     "inviteUserSubmitButton": "Invite User",
     "createUserSubmitButton": "Create User",
     "notifications": {
-      "makingApiCall": "Making API Call",
       "userCreated": "API user Created",
       "errorCreatingUser": "Error creating the user"
     },
@@ -760,7 +759,6 @@
     "failedToFetchTeams": "Failed to fetch teams",
     "failedToLoadTeams": "Failed to load teams",
     "teamDeletedSuccess": "Team deleted successfully",
-    "creatingTeam": "Creating Team",
     "teamCreatedSuccess": "Team created",
     "noTeamsYet": "No teams yet",
     "createFirstTeamHint": "Create your first team to organize members and manage access to models.",
@@ -3203,7 +3201,6 @@
     "deleteModalMessage": "Are you sure you want to delete this model?",
     "deleteModalResourceTitle": "Model Information",
     "usingExistingCredentialTitle": "Using Existing Credential",
-    "storingCredential": "Storing credential..",
     "credentialStoredSuccess": "Credential stored successfully",
     "invalidJsonLitellmParams": "Invalid JSON in LiteLLM Params",
     "invalidJsonModelInfo": "Invalid JSON in Model Info",
@@ -3844,7 +3841,8 @@
     "tpmLimitTooltip": "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
     "rpmLimitLabel": "RPM Limit",
     "rpmLimitTooltip": "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
-    "unlimitedPlaceholder": "Unlimited"
+    "unlimitedPlaceholder": "Unlimited",
+    "rateLimitValidationMessage": "Enter a non-negative whole number, or leave empty for unlimited"
   },
   "viewUserSpend": {
     "totalSpend": "Total Spend",
@@ -8505,7 +8503,7 @@
     "usageAiChatPanel": {
       "title": "Ask AI",
       "subtitle": "Ask about your spend, models, keys, and trends",
-      "modelPlaceholder": "Select a model (optional, defaults to gpt-4o-mini)",
+      "modelPlaceholder": "Select a model (optional, defaults to the first available model)",
       "emptyStateTitle": "Ask a question about your usage",
       "emptyStateExample": "e.g. \"Which model costs me the most?\"",
       "thinking": "Thinking...",
@@ -8521,7 +8519,8 @@
       "errorProviderCredentialsMissing": "The model used by the AI assistant has no API key configured. Configure credentials under Models + Endpoints, or pick a model that already has credentials.",
       "errorModelNotCallable": "The selected model cannot be called directly. Pick a model group with configured credentials.",
       "errorRateLimited": "The AI model is rate limited. Please try again shortly.",
-      "errorInternal": "The AI assistant is temporarily unavailable. Please try again later."
+      "errorInternal": "The AI assistant is temporarily unavailable. Please try again later.",
+      "errorModelNotAvailable": "The selected model has no available deployment or credentials. Pick another model, or check the model deployment and credentials under Models + Endpoints."
     },
     "usagePageView": {
       "filterByUser": "Filter by user",
@@ -11101,7 +11100,6 @@
   "budgets": {
     "budgetModal": {
       "title": "Create Budget",
-      "makingApiCall": "Making API Call",
       "budgetCreated": "Budget Created",
       "errorCreating": "Error creating the budget: {{error}}",
       "budgetIdLabel": "Budget ID",
@@ -11141,7 +11139,6 @@
     },
     "editBudgetModal": {
       "title": "Edit Budget",
-      "makingApiCall": "Making API Call",
       "budgetUpdated": "Budget Updated",
       "errorUpdating": "Error updating the budget: {{error}}",
       "budgetIdLabel": "Budget ID",
@@ -11810,7 +11807,6 @@
       "advancedSettingsHeader": "Advanced Settings",
       "advancedSettingsTooltip": "Learn more about advanced settings in our <link>documentation</link>",
       "notificationFailedToSearchUsers": "Failed to search for users",
-      "notificationMakingApiCall": "Making API Call",
       "notificationPleaseSelectAgent": "Please select an agent",
       "notificationVirtualKeyCreated": "Virtual Key Created",
       "notificationVirtualKeyCopied": "Virtual Key copied to clipboard",

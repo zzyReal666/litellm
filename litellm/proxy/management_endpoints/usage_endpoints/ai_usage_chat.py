@@ -6,7 +6,7 @@ usage/spend data by querying the aggregated daily activity endpoints.
 import json
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable, Mapping, Sequence
 from datetime import date
-from typing import Final, Literal, NamedTuple, Protocol, cast, overload
+from typing import TYPE_CHECKING, Final, Literal, NamedTuple, Protocol, cast, overload
 
 from fastapi import HTTPException
 from typing_extensions import ReadOnly, TypedDict
@@ -18,7 +18,12 @@ from litellm.proxy._types import CommonProxyErrors
 from litellm.types.proxy.management_endpoints.common_daily_activity import (
     SpendAnalyticsPaginatedResponse,
 )
-from litellm.types.utils import ChatCompletionMessageToolCall
+from litellm.types.llms.openai import AllMessageValues
+from litellm.types.utils import ChatCompletionMessageToolCall, ModelResponse
+from litellm.litellm_core_utils.streaming_handler import CustomStreamWrapper
+
+if TYPE_CHECKING:
+    from litellm.router import Router
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -550,6 +555,17 @@ class _UsageAiError(NamedTuple):
     message: str
 
 
+_MODEL_UNAVAILABLE_MARKERS: Final = (
+    "llm provider not provided",
+    "no deployments available",
+    "invalid model name",
+    "model not found",
+    "does not exist",
+    "no healthy deployment",
+    "model is not available",
+)
+
+
 def _classify_usage_ai_error(error: Exception) -> _UsageAiError:
     name: Final = type(error).__name__
     text: Final = str(error).lower()
@@ -558,25 +574,65 @@ def _classify_usage_ai_error(error: Exception) -> _UsageAiError:
             code="provider_credentials_missing",
             message="The AI model has no credentials configured.",
         )
-    if "llm provider not provided" in text or name == "BadRequestError":
-        return _UsageAiError(
-            code="model_not_callable",
-            message="The selected model is not a callable model group.",
-        )
     if name == "RateLimitError":
         return _UsageAiError(code="rate_limited", message="The AI model is rate limited. Try again shortly.")
+    if any(marker in text for marker in _MODEL_UNAVAILABLE_MARKERS):
+        return _UsageAiError(
+            code="model_not_available",
+            message="The selected model has no available deployment or credentials.",
+        )
     return _UsageAiError(code="internal_error", message="An internal error occurred. Please try again.")
 
 
-async def _stream_final_response(model: str, chat_messages: list[Mapping[str, object]]) -> AsyncIterator[str]:
+async def _usage_ai_completion(
+    model: str,
+    chat_messages: list[Mapping[str, object]],
+    router: "Router | None",
+    *,
+    stream: bool,
+    **kwargs: object,
+) -> object:
+    """Call the selected model group through the proxy router when available.
+
+    The usage chat receives model group names (the same names the UI lists).
+    Raw ``litellm.acompletion`` cannot resolve those groups, which made a
+    valid, playable model look like a non-callable one. The proxy router
+    resolves the group to a deployment with credentials.
+    """
+    messages: Final = cast(list[AllMessageValues], list(chat_messages))
+    if router is not None:
+        return await router.acompletion(model=model, messages=messages, stream=stream, **kwargs)
+    return await litellm.acompletion(model=model, messages=messages, stream=stream, **kwargs)
+
+
+def _resolve_usage_ai_model(model: str | None, router: "Router | None") -> str:
+    requested: Final = (model or "").strip()
+    if requested:
+        return requested
+    if router is not None:
+        model_names: Final = router.get_model_names()
+        if model_names:
+            return model_names[0]
+    return DEFAULT_COMPETITOR_DISCOVERY_MODEL
+
+
+async def _stream_final_response(
+    model: str,
+    chat_messages: list[Mapping[str, object]],
+    router: "Router | None",
+) -> AsyncIterator[str]:
     """Stream the final LLM response after tool results are appended."""
     yield _sse({"type": "status", "message": "Analyzing results..."})
 
-    response: Final = await litellm.acompletion(
-        model=model,
-        messages=chat_messages,
-        stream=True,
-        temperature=USAGE_AI_TEMPERATURE,
+    response: Final = cast(
+        CustomStreamWrapper,
+        await _usage_ai_completion(
+            model=model,
+            chat_messages=chat_messages,
+            router=router,
+            stream=True,
+            temperature=USAGE_AI_TEMPERATURE,
+        ),
     )
     async for chunk in response:
         delta = chunk.choices[0].delta.content
@@ -589,9 +645,10 @@ async def stream_usage_ai_chat(
     model: str | None = None,
     user_id: str | None = None,
     is_admin: bool = False,
+    router: "Router | None" = None,
 ) -> AsyncGenerator[str, None]:
     """Stream SSE events: status → tool_call → chunk → done."""
-    resolved_model: Final = (model or "").strip() or DEFAULT_COMPETITOR_DISCOVERY_MODEL
+    resolved_model: Final = _resolve_usage_ai_model(model, router)
     truncated: Final = messages[-MAX_CHAT_MESSAGES:] if len(messages) > MAX_CHAT_MESSAGES else messages
     chat_messages: Final[list[Mapping[str, object]]] = [
         {"role": "system", "content": _build_system_prompt(is_admin)},
@@ -601,11 +658,16 @@ async def stream_usage_ai_chat(
     try:
         yield _sse({"type": "status", "message": "Thinking..."})
         tools: Final = get_tools_for_role(is_admin)
-        response: Final = await litellm.acompletion(
-            model=resolved_model,
-            messages=chat_messages,
-            tools=tools,
-            temperature=USAGE_AI_TEMPERATURE,
+        response: Final = cast(
+            ModelResponse,
+            await _usage_ai_completion(
+                model=resolved_model,
+                chat_messages=chat_messages,
+                router=router,
+                stream=False,
+                tools=tools,
+                temperature=USAGE_AI_TEMPERATURE,
+            ),
         )
         choice: Final = response.choices[0]
 
@@ -619,7 +681,7 @@ async def stream_usage_ai_chat(
         for tc in choice.message.tool_calls:
             async for event in _process_tool_call(tc, chat_messages, user_id, is_admin):
                 yield event
-        async for event in _stream_final_response(resolved_model, chat_messages):
+        async for event in _stream_final_response(resolved_model, chat_messages, router):
             yield event
         yield _sse({"type": "done"})
 

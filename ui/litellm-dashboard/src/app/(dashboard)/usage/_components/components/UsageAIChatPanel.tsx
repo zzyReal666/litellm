@@ -45,6 +45,11 @@ const usageAiErrorText = (
       return t("usagePage.usageAiChatPanel.errorModelNotCallable", {
         defaultValue: "The selected model cannot be called directly. Pick a model group with configured credentials.",
       });
+    case "model_not_available":
+      return t("usagePage.usageAiChatPanel.errorModelNotAvailable", {
+        defaultValue:
+          "The selected model has no available deployment or credentials. Pick another model, or check the model deployment and credentials under Models + Endpoints.",
+      });
     case "rate_limited":
       return t("usagePage.usageAiChatPanel.errorRateLimited", {
         defaultValue: "The AI model is rate limited. Please try again shortly.",

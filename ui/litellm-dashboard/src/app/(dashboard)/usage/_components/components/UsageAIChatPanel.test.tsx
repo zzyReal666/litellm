@@ -39,7 +39,7 @@ describe("UsageAIChatPanel", () => {
 
     // One library paints the prompt as its own text node and the other leaves it on the input's
     // placeholder attribute, so either one means the user is being told what to pick.
-    const prompt = "Select a model (optional, defaults to gpt-4o-mini)";
+    const prompt = "Select a model (optional, defaults to the first available model)";
     expect(screen.queryAllByText(prompt).length + screen.queryAllByPlaceholderText(prompt).length).toBeGreaterThan(0);
   });
 
