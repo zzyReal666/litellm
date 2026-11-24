@@ -55,11 +55,14 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
     return withStartAnchor(toCumulative(perInterval), startLabel);
   }, [accumulation, perInterval, startTime]);
 
-  const intervalLabel = "Per day";
+  const intervalLabel = i18n.t("scopedSavingsTab.perDay", { defaultValue: "Per day" });
   const rangeLabel = formatRangeLabel(startTime, endTime);
   const savingsSubtitle = [
-    accumulation === "cumulative" ? "Running total saved" : `Saved ${intervalLabel.toLowerCase()}`,
-    rangeLabel && `${rangeLabel} (UTC)`,
+    accumulation === "cumulative"
+      ? i18n.t("scopedSavingsTab.runningTotalSaved", { defaultValue: "Running total saved" })
+      : i18n.t("scopedSavingsTab.savedPerDay", { defaultValue: "Saved per day" }),
+    rangeLabel &&
+      i18n.t("scopedSavingsTab.rangeUtc", { defaultValue: "{{range}} (UTC)", range: rangeLabel }),
   ]
     .filter(Boolean)
     .join(" · ");
@@ -100,13 +103,15 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
 
       <Card>
         <CardHeader>
-          <CardTitle>Savings</CardTitle>
+          <CardTitle>{i18n.t("scopedSavingsTab.title", { defaultValue: "Savings" })}</CardTitle>
           <CardDescription>{savingsSubtitle}</CardDescription>
           <CardAction className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
             <CustomLegend categories={SAVINGS_SERIES} colors={SAVINGS_COLORS} />
             <Tabs value={accumulation} onValueChange={(value) => setAccumulation(value as SavingsAccumulation)}>
               <TabsList>
-                <TabsTrigger value="cumulative">Cumulative</TabsTrigger>
+                <TabsTrigger value="cumulative">
+                  {i18n.t("scopedSavingsTab.cumulative", { defaultValue: "Cumulative" })}
+                </TabsTrigger>
                 <TabsTrigger value="per-interval">{intervalLabel}</TabsTrigger>
               </TabsList>
             </Tabs>
@@ -115,7 +120,14 @@ const ScopedSavingsTab = ({ accessToken, scope, activity, entityType, scopeNote 
         <CardContent>
           {showEmpty && (
             <p className="py-12 text-center text-sm text-muted-foreground" data-testid={`${entityType}-savings-empty`}>
-              {isLoading ? "Loading savings..." : `No usage recorded for this ${entityType} in this range.`}
+              {isLoading
+                ? i18n.t("scopedSavingsTab.loading", { defaultValue: "Loading savings..." })
+                : i18n.t("scopedSavingsTab.noUsage", {
+                    defaultValue: "No usage recorded for this {{entity}} in this range.",
+                    entity: i18n.t(`scopedSavingsTab.entity.${entityType}`, {
+                      defaultValue: entityType === "key" ? "key" : "user",
+                    }),
+                  })}
             </p>
           )}
           {showChart &&

@@ -14905,7 +14905,18 @@
   },
   "scopedSavingsTab": {
     "spend-is-bucketed-by-utc-day": "Spend is bucketed by UTC day",
-    "savings-are-unavailable-for-this-range-try-a": "Savings are unavailable for this range. Try another date range or reopen this tab."
+    "savings-are-unavailable-for-this-range-try-a": "Savings are unavailable for this range. Try another date range or reopen this tab.",
+    "entity": {
+      "key": "key",
+      "user": "user"
+    },
+    "title": "Savings",
+    "runningTotalSaved": "Running total saved",
+    "savedPerDay": "Saved per day",
+    "perDay": "Per day",
+    "cumulative": "Cumulative",
+    "loading": "Loading savings...",
+    "noUsage": "No usage recorded for this {{entity}} in this range."
   },
   "timeline": {
     "clear-time-zoom": "Clear time zoom",
@@ -15096,7 +15107,10 @@
     "cacheCreationInputTokens": "Cache Creation Input Tokens",
     "spend": "Spend",
     "apiRequests": "Api Requests",
-    "avgResponseTimeMs": "Avg Response Time Ms"
+    "avgResponseTimeMs": "Avg Response Time Ms",
+    "compression": "Compression",
+    "promptCaching": "Prompt caching",
+    "autoRouter": "Auto-router"
   },
   "productLicense": {
     "licenseTypeLabel": "License type",

@@ -22,6 +22,9 @@ const CATEGORY_KEYS: Readonly<Record<string, string>> = {
   "metrics.spend": "chartsCategory.spend",
   "metrics.api_requests": "chartsCategory.apiRequests",
   "metrics.avg_response_time_ms": "chartsCategory.avgResponseTimeMs",
+  Compression: "chartsCategory.compression",
+  "Prompt caching": "chartsCategory.promptCaching",
+  "Auto-router": "chartsCategory.autoRouter",
 };
 
 export const formatCategoryName = (name: string): string => {

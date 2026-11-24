@@ -14905,7 +14905,18 @@
   },
   "scopedSavingsTab": {
     "spend-is-bucketed-by-utc-day": "花费按 UTC 日期分桶",
-    "savings-are-unavailable-for-this-range-try-a": "该时间范围无法提供节省数据。请尝试其他日期范围或重新打开此标签页。"
+    "savings-are-unavailable-for-this-range-try-a": "该时间范围无法提供节省数据。请尝试其他日期范围或重新打开此标签页。",
+    "entity": {
+      "key": "密钥",
+      "user": "用户"
+    },
+    "title": "节省",
+    "runningTotalSaved": "累计节省",
+    "savedPerDay": "每日节省",
+    "perDay": "每日",
+    "cumulative": "累计",
+    "loading": "正在加载节省数据…",
+    "noUsage": "该时间范围内没有此{{entity}}的用量记录。"
   },
   "timeline": {
     "clear-time-zoom": "清除时间缩放",
@@ -15096,7 +15107,10 @@
     "cacheCreationInputTokens": "缓存写入输入 Token",
     "spend": "花费",
     "apiRequests": "请求数",
-    "avgResponseTimeMs": "平均响应时间"
+    "avgResponseTimeMs": "平均响应时间",
+    "compression": "压缩",
+    "promptCaching": "提示词缓存",
+    "autoRouter": "自动路由"
   },
   "productLicense": {
     "licenseTypeLabel": "授权类型",
