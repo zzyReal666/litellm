@@ -12,6 +12,18 @@ Linux aarch64（麒麟、统信、Ubuntu ARM、鲲鹏/飞腾）与 Apple Silicon
 
 x86 包里的 `scripts/_lib.sh` 提示语提到 x86_64，组装脚本会替换成 aarch64。
 
+## 外部二进制（校验值）
+
+```text
+docker-26.0.1.tgz   https://download.docker.com/linux/static/stable/aarch64/docker-26.0.1.tgz
+                    66780916 字节  sha256 ffb86d77f764e544fe9dcf1c10296adebb7db01a18a5b9bce7d41814d852a8f4
+                    2026-11-24 下载；Docker 在该目录不发布 .sha256 旁文件，校验值按下载结果记录
+
+docker-compose      https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-aarch64
+                    62095190 字节  sha256 6e9fbd5daa20dca5d7d89145081ae8155d68ef2928b497d9f85b54fe0f9dbb2c
+                    与同版本 checksums.txt 中的 linux-aarch64 行一致
+```
+
 ## 构建
 
 前置：能访问 ghcr.io、docker.io、pkg 源；headroom 压缩模型缓存从现有 x86 包的 headroom 镜像层解出。
@@ -33,7 +45,11 @@ cd deploy/arm64
   --out ~/Downloads
 ```
 
-产物：`~/Downloads/litellm-offline-v1.106.0-zh.28-arm64.tar.gz`
+产物：`dist/litellm-offline-v1.106.0-zh.28-arm64.tar.gz`（`dist/` 已在 .gitignore 内）
+
+2026-11-24 在本机（Apple M5，OrbStack arm64）产出的包：
+1.5G，sha256 `9332c278849c272362cfa59ac3eebd6abe3002f5088564500498d659a63e7c8d`，
+六个镜像与 `bin/docker-compose`、`vendor/docker/docker-26.0.1.tgz` 均为 aarch64
 
 ## macOS 本机验证
 
