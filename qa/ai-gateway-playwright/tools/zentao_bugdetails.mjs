@@ -12,7 +12,7 @@ await page.goto(`${BASE}/qa.html`, { waitUntil: "networkidle" });
 await page.waitForTimeout(2500);
 const qa = page.frames()[page.frames().length - 1];
 
-const ids = JSON.parse(fs.readFileSync("/tmp/bugs45c.json", "utf8")).rows.map((r) => r[0]);
+const ids = JSON.parse(fs.readFileSync("/tmp/bugs45c.json", "utf8")).rows.map((r) => r[0]).filter((id) => Number(id) >= 1615);
 const out = {};
 for (const id of ids) {
   try {
