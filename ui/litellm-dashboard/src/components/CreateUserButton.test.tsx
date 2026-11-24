@@ -231,7 +231,7 @@ describe("CreateUserButton", () => {
       });
     });
 
-    it("should show info notification when making API call", async () => {
+    it("does not show a transient progress toast while creating a user", async () => {
       const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
       mockUserCreateCall.mockResolvedValue({ data: { user_id: "new-user" } });
       mockInvitationCreateCall.mockResolvedValue({
@@ -254,8 +254,9 @@ describe("CreateUserButton", () => {
       await user.click(screen.getByRole("button", { name: /create user/i }));
 
       await waitFor(() => {
-        expect(mockToast.info).toHaveBeenCalledWith("Making API Call");
+        expect(mockUserCreateCall).toHaveBeenCalled();
       });
+      expect(mockToast.info).not.toHaveBeenCalled();
     });
   });
 

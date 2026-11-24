@@ -220,7 +220,6 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
         toast.fromError(i18n.t("createUserButton.userEmailInvalid", { defaultValue: "Enter a valid email address" }));
         return;
       }
-      toast.info(i18n.t("createUserButton.notifications.makingApiCall", { defaultValue: "Making API Call" }));
       if (!isEmbedded) {
         setIsModalVisible(true);
       }

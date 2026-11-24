@@ -51,7 +51,6 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
 
   const handleCreate = async (formValues: BudgetFormValues) => {
     try {
-      toast.info(t("budgets.budgetModal.makingApiCall", { defaultValue: "Making API Call" }));
       await createBudget.mutateAsync(
         applyBudgetPrecision(
           optionalSettingsOpen ? formValues : { ...formValues, max_budget: undefined, budget_duration: undefined },

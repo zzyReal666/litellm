@@ -259,7 +259,6 @@ export default function ModelInfoView({
         custom_llm_provider: localModelData.litellm_params?.custom_llm_provider,
       },
     };
-    toast.info(i18n.t("modelInfoView.storingCredential", { defaultValue: "Storing credential.." }));
     let credentialResponse = await credentialCreateCall(accessToken, credentialItem);
     toast.success(i18n.t("modelInfoView.credentialStoredSuccess", { defaultValue: "Credential stored successfully" }));
   };

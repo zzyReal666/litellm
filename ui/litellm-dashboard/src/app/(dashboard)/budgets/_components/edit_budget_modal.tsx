@@ -57,7 +57,6 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
 
   const handleUpdate = async (formValues: EditBudgetFormValues) => {
     try {
-      toast.info(t("budgets.editBudgetModal.makingApiCall", { defaultValue: "Making API Call" }));
       await updateBudget.mutateAsync(
         applyBudgetPrecision(
           optionalSettingsOpen ? formValues : { ...formValues, max_budget: undefined, budget_duration: undefined },

@@ -488,7 +488,6 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
         return;
       }
 
-      toast.info(t("organisms.createKeyButton.notificationMakingApiCall", { defaultValue: "Making API Call" }));
       setIsModalVisible(true);
 
       if (built.kind === "agent_not_selected") {

@@ -501,8 +501,6 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
           formValues.budget_duration = null;
         }
 
-        toast.info(t("oldTeams.creatingTeam", { defaultValue: "Creating Team" }));
-
         const metadataObject = {
           ...metadataPairsToObject(formValues.metadata),
           ...(loggingSettings.length > 0 ? { logging: loggingSettings.filter((config) => config.callback_name) } : {}),
