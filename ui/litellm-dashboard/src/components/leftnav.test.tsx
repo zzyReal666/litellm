@@ -284,12 +284,8 @@ describe("Sidebar (leftnav)", () => {
       "Guardrails Monitor",
       "Teams",
       "Internal Users",
-      "Organizations",
       "Access Groups",
       "Budgets",
-      "API Reference",
-      "AI Hub",
-      "Experimental",
       "Settings",
     ];
 
@@ -437,41 +433,19 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.queryByText("Policies")).not.toBeInTheDocument();
     });
 
-    it("should hide the Prompts entry from internal users while keeping other Experimental children", async () => {
+    it("hides the whole developer tools group for internal users and admins while it is temporarily hidden", () => {
       mockUseAuthorized.mockReturnValue(internalAuth);
       renderWithProviders(<Sidebar {...defaultProps} />);
 
-      act(() => {
-        fireEvent.click(screen.getByText("Experimental"));
-      });
-      await waitFor(() => {
-        expect(screen.getByText("API Playground")).toBeInTheDocument();
-      });
-      expect(screen.queryByText("Prompts")).not.toBeInTheDocument();
+      expect(screen.queryByText("Experimental")).not.toBeInTheDocument();
+      expect(screen.queryByText("API Reference")).not.toBeInTheDocument();
     });
 
-    it("should hide Old Usage from internal users while keeping other Experimental children", async () => {
-      mockUseAuthorized.mockReturnValue(internalAuth);
+    it("hides the developer tools group for admins as well", () => {
       renderWithProviders(<Sidebar {...defaultProps} />);
 
-      act(() => {
-        fireEvent.click(screen.getByText("Experimental"));
-      });
-      await waitFor(() => {
-        expect(screen.getByText("API Playground")).toBeInTheDocument();
-      });
-      expect(screen.queryByText("Old Usage")).not.toBeInTheDocument();
-    });
-
-    it("should show Old Usage to admins", async () => {
-      renderWithProviders(<Sidebar {...defaultProps} />);
-
-      act(() => {
-        fireEvent.click(screen.getByText("Experimental"));
-      });
-      await waitFor(() => {
-        expect(screen.getByText("Old Usage")).toBeInTheDocument();
-      });
+      expect(screen.queryByText("Experimental")).not.toBeInTheDocument();
+      expect(screen.queryByText("AI Hub")).not.toBeInTheDocument();
     });
   });
 
@@ -566,7 +540,7 @@ describe("Sidebar (leftnav)", () => {
     });
   });
 
-  it("should show Organizations tab for organization admins", () => {
+  it("hides the Organizations tab while it is temporarily hidden", () => {
     mockUseAuthorized.mockReturnValue({
       userId: "org-admin-user-id",
       accessToken: "test-access-token",
@@ -603,7 +577,7 @@ describe("Sidebar (leftnav)", () => {
 
     renderWithProviders(<Sidebar {...defaultProps} />);
 
-    expect(screen.getByText("Organizations")).toBeInTheDocument();
+    expect(screen.queryByText("Organizations")).not.toBeInTheDocument();
   });
 
   it("shows Projects to an internal user who administers a team", () => {
@@ -696,11 +670,8 @@ describe("Sidebar (leftnav)", () => {
     expect(screen.getByRole("button", { name: "Tools" })).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("links every leaf to its path route, including the ids that differ from their route", () => {
+  it("links every visible leaf to its path route, including the ids that differ from their route", () => {
     renderWithProviders(<Sidebar {...defaultProps} />);
-    act(() => {
-      fireEvent.click(screen.getByText("Experimental"));
-    });
 
     const expectHref = (label: string, href: string) =>
       expect(screen.getByRole("link", { name: label })).toHaveAttribute("href", href);
@@ -708,20 +679,18 @@ describe("Sidebar (leftnav)", () => {
     expectHref("Playground", "/ui/playground");
     expectHref("Models + Endpoints", "/ui/models-and-endpoints");
     expectHref("Usage", "/ui/usage");
-    expectHref("API Reference", "/ui/api-reference");
-    expectHref("Old Usage", "/ui/old-usage");
   });
 
   it("never links a leaf to the legacy ?page= switch", () => {
     renderWithProviders(<Sidebar {...defaultProps} enableProjectsUI />);
-    for (const group of ["Agentic", "Tools", "Experimental", "Settings"]) {
+    for (const group of ["Agentic", "Tools", "Settings"]) {
       act(() => {
         fireEvent.click(screen.getByText(group));
       });
     }
     const hrefs = screen.getAllByRole("link").map((link) => link.getAttribute("href") ?? "");
     expect(hrefs.filter((href) => href.includes("page="))).toHaveLength(0);
-    expect(hrefs.filter((href) => href.startsWith("/ui/")).length).toBeGreaterThan(30);
+    expect(hrefs.filter((href) => href.startsWith("/ui/")).length).toBeGreaterThan(20);
   });
 
   it("hides labels but keeps items reachable (icon + link) when collapsed to the rail", () => {

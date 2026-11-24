@@ -1,6 +1,7 @@
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
+import { isMenuGroupHidden, isMenuItemHidden } from "@/lib/hiddenProductEntries";
 import { canViewProjectsPage, projectReaderRoles } from "@/app/(dashboard)/hooks/projects/projectAccess";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
@@ -178,6 +179,7 @@ const pageIsEnabledForInternalUser = (item: MenuItem, context: MenuVisibilityCon
 };
 
 const menuItemIsVisible = (item: MenuItem, context: MenuVisibilityContext, isAdmin: boolean): boolean => {
+  if (isMenuItemHidden(item.key)) return false;
   if (item.children && item.children.length === 0) return false;
   if (item.key === "llm-playground" && context.isViewOnly) return false;
   const adminVisibility = adminPageVisibility(item, context, isAdmin);
@@ -198,6 +200,7 @@ export const visibleMenuGroups = (groups: readonly MenuGroup[], context: MenuVis
       .filter((item) => menuItemIsVisible(item, context, isAdmin));
 
   return groups
+    .filter((group) => !isMenuGroupHidden(group.groupLabel))
     .filter((group) => !group.roles || group.roles.includes(context.userRole))
     .map((group) => ({ groupLabel: group.groupLabel, items: filterItems(group.items) }))
     .filter((group) => group.items.length > 0);
