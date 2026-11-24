@@ -1651,7 +1651,52 @@
     "fiveMinutesDefault": "5m（默认）",
     "comma-separated-values": "逗号分隔的值",
     "system-messages-first-for-openai": "OpenAI 优先使用 system 消息",
-    "system-messages-first-for-openai-2": "OpenAI 优先使用 system 消息"
+    "system-messages-first-for-openai-2": "OpenAI 优先使用 system 消息",
+    "fieldDescriptions": {
+      "max_in_flight_requests_per_worker": "每个 worker 可同时处理的请求数上限",
+      "max_queued_requests_per_worker": "每个 worker 等待处理的排队请求数上限",
+      "admission_queue_timeout_seconds": "请求在准入队列中的最长等待时间（秒）",
+      "max_parallel_requests": "每个 API 密钥的最大并行请求数",
+      "global_max_parallel_requests": "每个代理实例允许的最大并行请求总数",
+      "user_api_key_cache_max_size": "每个 worker 内存鉴权缓存的最大条目数（密钥、团队、用户等），超出后按策略淘汰旧条目",
+      "max_request_size_mb": "请求体大小上限（MB），超过将被拒绝",
+      "max_batch_file_size_mb": "用于 batch 的 /v1/files 上传文件大小上限（MB），超过将被拒绝",
+      "max_batch_file_records": "每个 batch 输入文件的最大记录数（非空行），按密钥生效，密钥 metadata 可覆盖",
+      "max_batch_file_uploads_per_day": "每个密钥（JWT 调用方按用户）每个 UTC 日允许的 batch 文件上传次数，密钥 metadata 或团队配置可覆盖",
+      "max_file_downloads_per_minute": "每个密钥（JWT 调用方按用户）对同一文件的下载次数上限（每分钟），密钥 metadata 可覆盖",
+      "max_file_size_mb": "/v1/files 任意用途上传的文件大小上限（MB），超过将在转发前被拒绝",
+      "allowed_file_extensions": "/v1/files 上传允许的文件扩展名列表（如 ['.jsonl', '.pdf', '.txt']），按文件名大小写不敏感匹配；其他扩展名会被拒绝",
+      "blocked_file_extensions": "/v1/files 上传禁止的文件扩展名列表（如 ['.exe', '.sh']），按文件名大小写不敏感匹配；已废弃，建议改用 allowed_file_extensions",
+      "max_response_size_mb": "响应大小上限（MB），超过将被拒绝",
+      "proxy_config_reload_interval_seconds": "当启用 store_model_in_db 时，每个 pod 重新加载数据库配置对象（模型、凭据、护栏等）的间隔秒数；值越小多 pod 收敛越快，但数据库压力越大",
+      "cancel_on_disconnect": "客户端断开时取消进行中的上游 LLM 请求（非流式），释放后端容量（如 vLLM GPU 槽位），该请求按 499 失败记录",
+      "pass_through_endpoints": "为供应商特定端点配置透传端点，文档见 https://docs.litellm.ai/docs/proxy/pass_through",
+      "transcribe_media_buckets": "允许非代理管理员密钥通过 Amazon Transcribe 透传端点读取媒体并写入文字稿的 S3 存储桶名称列表",
+      "store_prompts_in_spend_logs": "是否在花费日志中保存请求消息与响应，默认关闭",
+      "disable_auto_add_proxy_admin_to_teams": "默认调用 /team/new 的用户会自动加入新团队并成为团队管理员；开启后代理管理员不再自动加入",
+      "maximum_spend_logs_retention_period": "花费日志的最长保留时间（如 '7d'），超期日志将被删除",
+      "maximum_health_check_retention_period": "健康检查记录的最长保留时间（如 '30d'），checked_at 超期的记录会被清理任务删除",
+      "maximum_daily_tag_spend_retention_period": "按天标签花费聚合数据的最长保留时间（如 '90d'），超过天数的记录会被清理任务删除",
+      "maximum_spend_logs_cleanup_batch_size": "花费日志清理任务单条 DELETE 语句删除的行数，默认 1000",
+      "maximum_spend_logs_cleanup_max_batches": "每次清理任务对单表执行 DELETE 语句的最大次数，默认 500",
+      "maximum_spend_logs_cleanup_run_budget": "单次花费日志清理任务的总时长预算（如 '5m'），所有表共享；超出预算后停止本轮清理",
+      "maximum_spend_logs_cleanup_batch_timeout": "每个清理 DELETE 批次应用的 Postgres statement_timeout 和 lock_timeout（如 '30s'），避免长时间持锁",
+      "mcp_internal_ip_ranges": "自定义 CIDR 网段，用于定义 MCP 访问控制中的内部/私有网络；设置后仅这些网段被视为内部",
+      "mcp_client_id_header": "用于标识调用方 MCP 客户端应用的请求头名称（如 'x-mcp-client'），适用于未认证调用方",
+      "mcp_trusted_proxy_ranges": "受信任反向代理的 CIDR 网段；设置后仅信任这些 IP 转发的 X-Forwarded-For 等来源头",
+      "mcp_xff_num_trusted_hops": "网关上受信任的反向代理/负载均衡层数，用于 X-Forwarded-For 追加；与 mcp_trusted_proxy_ranges 配合使用",
+      "mcp_prefer_client_id_metadata_document": "开启后，对于授权服务器声明支持 Client ID Metadata Document 的网关托管 OAuth2 MCP 服务器，使用该文档标识客户端",
+      "store_model_in_db": "是否将模型与配置存储到数据库并从数据库加载，默认关闭",
+      "forward_client_headers_to_llm_api": "是否将客户端请求头（如 Authorization）转发给 LLM API；Claude Code Max 订阅需要开启",
+      "mcp_required_fields": "MCP 服务器提交需要通过标准检查时必须填写的字段列表（如 ['description', 'source_url', ...]）",
+      "apply_user_budget_to_team_keys": "开启后用户的个人 max_budget 会作用于其所有请求，包括使用团队密钥发起的请求",
+      "budget_exceeded_throttle_percentage": "超出预算且启用「超出预算时限流」的密钥，仍可按其配置 TPM/RPM 的该比例（(0,1]）继续服务",
+      "budget_rollover": "预算重置时是否将超出 max_budget 的花费结转到下一个窗口，而不是抹平；适用于密钥、用户、团队等",
+      "max_ui_session_budget": "每次仪表盘登录会话的美元花费上限，覆盖在仪表盘内发起的 LLM 调用（如试验场、自动路由测试）",
+      "enable_anthropic_prompt_caching": "为 Anthropic、Bedrock、Vertex AI 和 Azure AI 上支持的 Claude 模型自动在系统提示和末尾轮次添加 cache_control；缓存按上游凭据共享",
+      "anthropic_prompt_caching_ttl": "留空使用 Anthropic 默认的 5 分钟；1 小时适合长时间会话，但缓存写入成本翻倍",
+      "openai_system_messages_first": "在 OpenAI 和 Azure OpenAI 的 chat completions 请求中，将 system 与 developer 消息移到 messages 数组最前面并保持相对顺序；OpenAI 提示词缓存按精确前缀匹配，会话中途出现的 system 消息会破坏缓存前缀"
+    }
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -6650,7 +6695,30 @@
       "enableProjectsUIAriaLabel": "启用项目功能",
       "enableChatUIAriaLabel": "启用 Chat 页面",
       "enableChatUILabel": "[BETA] 启用 Chat 页面（页面将刷新）",
-      "enableChatUIDesc": "启用后，将在界面侧边栏显示 Chat 页面，用户可与 LLM 对话，并通过 OAuth 连接自己的 MCP 服务器凭据。"
+      "enableChatUIDesc": "启用后，将在界面侧边栏显示 Chat 页面，用户可与 LLM 对话，并通过 OAuth 连接自己的 MCP 服务器凭据。",
+      "fieldDescriptions": {
+        "disable_model_add_for_internal_users": "开启后内部用户（包括团队管理员和拥有自动路由管理权限的成员）不能通过界面或 API 创建模型和自动路由；代理管理员不受限制，编辑和删除仍可用",
+        "disable_team_admin_delete_team_user": "禁止团队管理员删除其管理团队中的用户，适用于 SCIM 等外部系统管理团队成员关系的场景",
+        "enabled_ui_pages_internal_users": "内部用户（非管理员）在界面侧边栏可见的页面键列表；未设置时按角色默认显示",
+        "require_auth_for_public_ai_hub": "开启后访问公开 AI Hub 需要认证",
+        "allow_public_health_readiness_details": "开启后未认证的 /health/readiness 返回旧的详细负载",
+        "forward_client_headers_to_llm_api": "将客户端请求头（Authorization、anthropic-beta、x-* 自定义头）转发给上游 LLM；Claude Code Max 订阅可借此转发 OAuth token，也可透传自定义/追踪头。与 BYOK 开关相互独立，按需开启",
+        "forward_llm_provider_auth_headers": "将供应商认证头（x-api-key、x-goog-api-key、api-key、ocp-apim-subscription-key）转发给上游 LLM，并覆盖该请求的部署级密钥；适用于 Claude Code BYOK。与客户端头开关相互独立",
+        "disable_agents_for_internal_users": "开启后内部用户不能访问智能体管理接口和界面中的智能体页面",
+        "allow_agents_for_team_admins": "开启后团队管理员不受智能体禁用限制（仅在开启禁用智能体时生效）",
+        "disable_vector_stores_for_internal_users": "开启后内部用户不能访问向量存储管理接口和界面中的向量存储页面",
+        "allow_vector_stores_for_team_admins": "开启后团队管理员不受向量存储禁用限制（仅在开启禁用向量存储时生效）",
+        "scope_user_search_to_org": "开启后用户搜索接口按组织限制结果；关闭时任意已认证用户可搜索全部用户",
+        "disable_custom_api_keys": "开启后用户不能自定义密钥值，所有密钥必须自动生成",
+        "disable_key_generate_for_org_admin": "开启后组织管理员不能通过 /key/generate 生成 API 密钥",
+        "enable_chat_ui": "开启后在界面侧边栏显示 Chat 页面，用户可与 LLM 对话并通过 OAuth 连接自己的 MCP 服务器凭据",
+        "moyai_url": "已连接的 Moyai 部署地址；设置后界面导航中的 Moyai 入口将打开该地址",
+        "team_admin_editable_team_fields": "团队管理员可修改的团队设置字段；包含 'projects' 时允许团队管理员创建项目",
+        "enable_projects_ui": "开启后在界面侧边栏显示项目功能，并在密钥管理中显示项目字段"
+      },
+      "schemaDescription": "界面相关开关的配置说明",
+      "connectedTo": "已连接：{{url}}",
+      "notConnected": "未连接"
     },
     "loggingCallbacksTable": {
       "addCallbackButton": "+ 添加回调",
@@ -14013,7 +14081,13 @@
     "notAppliedTitle": "当前页面所在代理未在运行该功能",
     "notAppliedDescription": "集群已开启拦截，但为当前页面提供服务的代理尚未应用该配置。这通常在更改或重启后约 10 秒内出现。如果持续存在，请检查该代理的日志：它处理的请求没有被拦截。",
     "pageTitle": "联网搜索拦截",
-    "pageDescription": "由已配置的搜索工具处理联网搜索调用，而不是透传给上游，这样没有原生联网搜索的模型也能基于最新结果回答。点击“保存设置”后在所有 Pod 生效（约 10 秒内）。"
+    "pageDescription": "由已配置的搜索工具处理联网搜索调用，而不是透传给上游，这样没有原生联网搜索的模型也能基于最新结果回答。点击“保存设置”后在所有 Pod 生效（约 10 秒内）。",
+    "fieldDescriptions": {
+      "enabled": "启用后，联网搜索工具调用由所选搜索工具在服务端执行，不再透传给上游",
+      "enabled_providers": "要拦截的 LLM 提供商，如 'bedrock'、'vertex_ai'；留空只拦截 Bedrock",
+      "search_tool_name": "执行搜索的已配置搜索工具名称；留空使用第一个可用的",
+      "max_agentic_loops": "一次被拦截请求最多串联多少次后续模型调用；留空使用默认值 3"
+    }
   },
   "lensWorkspace": {
     "demo-data": "演示数据",
@@ -14876,7 +14950,13 @@
   },
   "teamAdminEditableFieldsSettings": {
     "team-admin-editable-fields": "团队管理员可编辑字段",
-    "this-proxy-version-does-not-support-enabling": "该代理版本尚不支持为团队管理员启用任何团队设置字段。"
+    "this-proxy-version-does-not-support-enabling": "该代理版本尚不支持为团队管理员启用任何团队设置字段。",
+    "fieldsEnabled": "{{count}} 个字段已启用",
+    "cannotEdit": "团队管理员不能编辑团队设置",
+    "description": "团队管理员可在其管理的团队上修改的团队设置字段。包含 'projects' 时允许团队管理员为这些团队创建和更新项目；包含 'member_key_budgets' 时允许更新其它成员密钥上的预算字段。留空表示团队管理员完全不能编辑团队设置或管理项目。代理管理员和组织管理员不受影响。",
+    "updated": "团队管理员可编辑字段已更新",
+    "save": "保存",
+    "saving": "正在保存…"
   },
   "sidebarUsageCard": {
     "enterprise-usage": "企业版用量",
@@ -15157,5 +15237,14 @@
     "licenseTypeLabel": "授权类型",
     "licenseTypePermanent": "永久授权",
     "licenseTypeTemporary": "临时授权"
+  },
+  "teamAdminEditAccess": {
+    "fieldLabels": {
+      "tpm_limit": "每分钟 Token 限制（TPM）",
+      "rpm_limit": "每分钟请求限制（RPM）",
+      "max_budget": "最大预算（元）",
+      "projects": "创建和更新项目",
+      "member_key_budgets": "更新团队成员密钥的预算"
+    }
   }
 }

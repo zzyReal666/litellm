@@ -167,12 +167,14 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="enabled"
                   label={labelWithHint(
-                    t("' + NS + '.enableLabel", { defaultValue: "Enable Web Search Interception" }),
-                    t("' + NS + '.enableHint", {
+                    t("webSearchInterception.enableLabel", { defaultValue: "Enable Web Search Interception" }),
+                    t("webSearchInterception.enableHint", {
                       defaultValue: "When enabled, web search tool calls are executed server-side through the selected search tool",
                     }),
                   )}
-                  description={schema?.properties?.enabled?.description}
+                  description={t("webSearchInterception.fieldDescriptions.enabled", {
+                      defaultValue: schema?.properties?.enabled?.description,
+                    })}
                 >
                   {({ value, onChange, onBlur, id }) => (
                     <Switch id={id} checked={value} onCheckedChange={onChange} onBlur={onBlur} disabled={isUpdating} />
@@ -183,12 +185,14 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="enabled_providers"
                   label={labelWithHint(
-                    t("' + NS + '.providersLabel", { defaultValue: "Providers" }),
-                    t("' + NS + '.providersHint", {
+                    t("webSearchInterception.providersLabel", { defaultValue: "Providers" }),
+                    t("webSearchInterception.providersHint", {
                       defaultValue: "Which LLM providers to intercept for. Leave empty to intercept Bedrock only.",
                     }),
                   )}
-                  description={schema?.properties?.enabled_providers?.description}
+                  description={t("webSearchInterception.fieldDescriptions.enabled_providers", {
+                      defaultValue: schema?.properties?.enabled_providers?.description,
+                    })}
                 >
                   {({ value, onChange, id }) => (
                     <MultiSelect
@@ -207,12 +211,14 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="search_tool_name"
                   label={labelWithHint(
-                    t("' + NS + '.searchToolLabel", { defaultValue: "Search Tool" }),
-                    t("' + NS + '.searchToolHint", {
+                    t("webSearchInterception.searchToolLabel", { defaultValue: "Search Tool" }),
+                    t("webSearchInterception.searchToolHint", {
                       defaultValue: "Which configured search tool runs the searches. Leave empty to use the first one available.",
                     }),
                   )}
-                  description={schema?.properties?.search_tool_name?.description}
+                  description={t("webSearchInterception.fieldDescriptions.search_tool_name", {
+                      defaultValue: schema?.properties?.search_tool_name?.description,
+                    })}
                 >
                   {({ value, onChange, id }) => (
                     <SearchSelect
@@ -230,12 +236,14 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
                   control={form.control}
                   name="max_agentic_loops"
                   label={labelWithHint(
-                    t("' + NS + '.maxLoopsLabel", { defaultValue: "Max Agentic Loops" }),
-                    t("' + NS + '.maxLoopsHint", {
+                    t("webSearchInterception.maxLoopsLabel", { defaultValue: "Max Agentic Loops" }),
+                    t("webSearchInterception.maxLoopsHint", {
                       defaultValue: "How many follow-up model calls one intercepted request may chain. Leave empty for the default of 3.",
                     }),
                   )}
-                  description={schema?.properties?.max_agentic_loops?.description}
+                  description={t("webSearchInterception.fieldDescriptions.max_agentic_loops", {
+                      defaultValue: schema?.properties?.max_agentic_loops?.description,
+                    })}
                 >
                   {({ value, onChange, onBlur, id, ref }) => (
                     <Input
@@ -261,7 +269,7 @@ function WebSearchInterceptionForm({ accessToken, initial, schema }: WebSearchIn
               disabled={!isDirty || isUpdating}
             >
               {isUpdating ? <UiLoadingSpinner className="size-4" /> : <Save />}
-              {t("' + NS + '.saveSettings", { defaultValue: "Save Settings" })}
+              {t("webSearchInterception.saveSettings", { defaultValue: "Save Settings" })}
             </Button>
           </div>
         </form>
@@ -278,7 +286,7 @@ export default function WebSearchInterceptionSettings() {
   if (!accessToken) {
     return (
       <div className="p-6 text-center text-muted-foreground">
-        {t("' + NS + '.loginRequired", { defaultValue: "Please log in to configure web search interception settings." })}
+        {t("webSearchInterception.loginRequired", { defaultValue: "Please log in to configure web search interception settings." })}
       </div>
     );
   }
@@ -313,7 +321,7 @@ export default function WebSearchInterceptionSettings() {
           <TriangleAlert />
           <AlertTitle>{t("webSearchInterception.notAppliedTitle", { defaultValue: "Not running on the proxy that answered this page" })}</AlertTitle>
           <AlertDescription>
-            {t("' + NS + '.notAppliedDescription", {
+            {t("webSearchInterception.notAppliedDescription", {
               defaultValue:
                 "Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is expected for about 10 seconds after a change or a restart. If it persists, check that proxy's logs: requests it handles are not being intercepted.",
             })}

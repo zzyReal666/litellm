@@ -43,6 +43,11 @@ export interface generalSettingsItem {
 
 const NUMERIC_INPUT_WIDTH = "w-36";
 
+const localizedFieldDescription = (field: generalSettingsItem): string =>
+  i18n.t(`generalSettings.fieldDescriptions.${field.field_name}`, {
+    defaultValue: field.field_description,
+  });
+
 const toNumericValue = (raw: string): number | null => (raw === "" ? null : Number(raw));
 
 const toListValue = (raw: string): string[] | null => {
@@ -178,7 +183,7 @@ export const PromptCachingPanel: React.FC<{
                 defaultValue: "Automatic Anthropic prompt caching",
               })}
             </p>
-            <p className="mt-1 break-words text-xs text-muted-foreground">{enableSetting.field_description}</p>
+            <p className="mt-1 break-words text-xs text-muted-foreground">{localizedFieldDescription(enableSetting)}</p>
           </div>
           <Switch checked={enabled} onCheckedChange={(checked) => persist(ENABLE_ANTHROPIC_PROMPT_CACHING, checked)} />
         </div>
@@ -189,7 +194,7 @@ export const PromptCachingPanel: React.FC<{
               <p className={`font-medium ${enabled ? "" : "text-muted-foreground"}`}>
                 {t("generalSettings.cacheLifetimeTtl", { defaultValue: "Cache lifetime (TTL)" })}
               </p>
-              <p className="mt-1 break-words text-xs text-muted-foreground">{ttlSetting.field_description}</p>
+              <p className="mt-1 break-words text-xs text-muted-foreground">{localizedFieldDescription(ttlSetting)}</p>
             </div>
             <Select
               disabled={!enabled}
@@ -217,7 +222,7 @@ export const PromptCachingPanel: React.FC<{
           <div className="mt-6 flex items-start justify-between gap-8">
             <div className="min-w-0 max-w-2xl">
               <p className="font-medium">{i18n.t("generalSettings.system-messages-first-for-openai", { defaultValue: "System messages first for OpenAI" })}</p>
-              <p className="mt-1 break-words text-xs text-muted-foreground">{systemFirstSetting.field_description}</p>
+              <p className="mt-1 break-words text-xs text-muted-foreground">{localizedFieldDescription(systemFirstSetting)}</p>
             </div>
             <Switch
               aria-label={i18n.t("generalSettings.system-messages-first-for-openai-2", { defaultValue: "System messages first for OpenAI" })}
@@ -359,7 +364,7 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
                             }}
                             className="mt-1 break-words"
                           >
-                            {value.field_description}
+                            {localizedFieldDescription(value)}
                           </p>
                         </TableCell>
                         <TableCell>

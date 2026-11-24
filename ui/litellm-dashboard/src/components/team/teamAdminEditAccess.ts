@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { z } from "zod";
 import { numberOrNull } from "@/lib/forms/numberOrNull";
 
@@ -52,7 +53,10 @@ const TEAM_ADMIN_FIELD_LABELS: ReadonlyMap<string, string> = new Map([
   ["member_key_budgets", "Update budgets on team members' keys"],
 ]);
 
-export const teamAdminFieldLabel = (field: string): string => TEAM_ADMIN_FIELD_LABELS.get(field) ?? field;
+export const teamAdminFieldLabel = (field: string): string => {
+  const fallback = TEAM_ADMIN_FIELD_LABELS.get(field) ?? field;
+  return i18n.t(`teamAdminEditAccess.fieldLabels.${field}`, { defaultValue: fallback });
+};
 
 export type TeamAdminSettingsValues = { readonly [F in TeamAdminSettingsField]?: string | number | null };
 

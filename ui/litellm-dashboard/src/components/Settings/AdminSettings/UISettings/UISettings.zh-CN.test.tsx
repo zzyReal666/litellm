@@ -128,4 +128,19 @@ describe("UISettings zh-CN", () => {
     expect(screen.getByText("无法加载界面设置")).toBeInTheDocument();
     expect(screen.queryByText("Could not load UI settings")).not.toBeInTheDocument();
   });
+
+  it("renders the schema description in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    mockUseUISettings.mockReturnValue(
+      buildSettingsResponse({
+        data: {
+          field_schema: { description: "Configuration for UI-specific flags", properties: {} },
+          values: {},
+        },
+      }),
+    );
+    renderWithProviders(<UISettings />);
+    expect(await screen.findByText("界面相关开关的配置说明")).toBeInTheDocument();
+    await i18n.changeLanguage("en");
+  });
 });

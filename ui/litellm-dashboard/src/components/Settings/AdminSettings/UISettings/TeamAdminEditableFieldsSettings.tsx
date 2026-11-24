@@ -39,13 +39,21 @@ export default function TeamAdminEditableFieldsSettings() {
           <CardTitle>{i18n.t("teamAdminEditableFieldsSettings.team-admin-editable-fields", { defaultValue: "Team admin editable fields" })}</CardTitle>
           <Badge variant={enabledFields.length > 0 ? "secondary" : "outline"}>
             {enabledFields.length > 0
-              ? `${enabledFields.length} field${enabledFields.length !== 1 ? "s" : ""} enabled`
-              : "Team admins cannot edit team settings"}
+              ? i18n.t("teamAdminEditableFieldsSettings.fieldsEnabled", {
+                  defaultValue: "{{count}} fields enabled",
+                  count: enabledFields.length,
+                })
+              : i18n.t("teamAdminEditableFieldsSettings.cannotEdit", {
+                  defaultValue: "Team admins cannot edit team settings",
+                })}
           </Badge>
         </div>
         <CardDescription>
-          {data?.field_schema?.properties?.team_admin_editable_team_fields?.description ??
-            "Team settings fields a team admin may change on the teams they administer."}
+          {i18n.t("teamAdminEditableFieldsSettings.description", {
+            defaultValue:
+              data?.field_schema?.properties?.team_admin_editable_team_fields?.description ??
+              "Team settings fields a team admin may change on the teams they administer.",
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -85,7 +93,11 @@ function TeamAdminEditableFieldsForm({
     saveSettings(values, {
       onSuccess: () => {
         form.reset(values);
-        toast.success("Team admin editable fields updated successfully");
+        toast.success(
+          i18n.t("teamAdminEditableFieldsSettings.updated", {
+            defaultValue: "Team admin editable fields updated successfully",
+          }),
+        );
       },
       onError: (error) => {
         toast.fromError(error);
@@ -130,7 +142,9 @@ function TeamAdminEditableFieldsForm({
       />
       <div className="flex justify-end">
         <Button type="submit" disabled={isPending || !form.formState.isDirty}>
-          {isPending ? "Saving..." : "Save"}
+          {isPending
+            ? i18n.t("teamAdminEditableFieldsSettings.saving", { defaultValue: "Saving..." })
+            : i18n.t("teamAdminEditableFieldsSettings.save", { defaultValue: "Save" })}
         </Button>
       </div>
     </form>

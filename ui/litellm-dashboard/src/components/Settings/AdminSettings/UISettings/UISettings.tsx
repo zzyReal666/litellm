@@ -49,6 +49,11 @@ function SettingRow({
   );
 }
 
+const uiFieldDescription = (key: string, fallback: string | undefined): string | undefined =>
+  fallback === undefined
+    ? undefined
+    : i18n.t(`settingsPages.uISettings.fieldDescriptions.${key}`, { defaultValue: fallback });
+
 export default function UISettings() {
   const { t } = useTranslation();
   const { accessToken } = useAuthorized();
@@ -330,7 +335,9 @@ export default function UISettings() {
           </Alert>
         ) : (
           <div className="space-y-6">
-            {schema?.description && <p className="text-sm text-foreground">{schema.description}</p>}
+            {schema?.description && (
+              <p className="text-sm text-foreground">{i18n.t("settingsPages.uISettings.schemaDescription", { defaultValue: schema.description })}</p>
+            )}
             {updateError && (
               <Alert variant="error">
                 <AlertTitle>
@@ -344,62 +351,42 @@ export default function UISettings() {
               checked={isDisabledForInternalUsers}
               disabled={isUpdating}
               onCheckedChange={handleToggle}
-              ariaLabel={
-                property?.description ??
-                t("settingsPages.uISettings.disableModelAddLabel", {
-                  defaultValue: "Disable model add for internal users",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.disableModelAddLabel", { defaultValue: "Disable model add for internal users" })}
               label={t("settingsPages.uISettings.disableModelAddLabel", {
                 defaultValue: "Disable model add for internal users",
               })}
-              description={property?.description}
+              description={uiFieldDescription("disable_model_add_for_internal_users", property?.description)}
             />
             <SettingRow
               checked={isDisabledTeamAdminDeleteTeamUser}
               disabled={isUpdating}
               onCheckedChange={handleToggleTeamAdminDelete}
-              ariaLabel={
-                disableTeamAdminDeleteProperty?.description ??
-                t("settingsPages.uISettings.disableTeamAdminDeleteLabel", {
-                  defaultValue: "Disable team admin delete team user",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.disableTeamAdminDeleteLabel", { defaultValue: "Disable team admin delete team user" })}
               label={t("settingsPages.uISettings.disableTeamAdminDeleteLabel", {
                 defaultValue: "Disable team admin delete team user",
               })}
-              description={disableTeamAdminDeleteProperty?.description}
+              description={uiFieldDescription("disable_team_admin_delete_team_user", disableTeamAdminDeleteProperty?.description)}
             />
             <SettingRow
               checked={Boolean(values.require_auth_for_public_ai_hub)}
               disabled={isUpdating}
               onCheckedChange={handleToggleRequireAuthForPublicAIHub}
-              ariaLabel={
-                requireAuthForPublicAIHubProperty?.description ??
-                t("settingsPages.uISettings.requireAuthPublicAIHubLabel", {
-                  defaultValue: "Require authentication for public AI Hub",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.requireAuthPublicAIHubLabel", { defaultValue: "Require authentication for public AI Hub" })}
               label={t("settingsPages.uISettings.requireAuthPublicAIHubLabel", {
                 defaultValue: "Require authentication for public AI Hub",
               })}
-              description={requireAuthForPublicAIHubProperty?.description}
+              description={uiFieldDescription("require_auth_for_public_ai_hub", requireAuthForPublicAIHubProperty?.description)}
             />
             <SettingRow
               checked={Boolean(values.forward_client_headers_to_llm_api)}
               disabled={isUpdating}
               onCheckedChange={handleToggleForwardClientHeaders}
-              ariaLabel={
-                forwardClientHeadersProperty?.description ??
-                t("settingsPages.uISettings.forwardClientHeadersLabel", {
-                  defaultValue: "Forward client headers to LLM API",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.forwardClientHeadersLabel", { defaultValue: "Forward client headers to LLM API" })}
               label={t("settingsPages.uISettings.forwardClientHeadersLabel", {
                 defaultValue: "Forward client headers to LLM API",
               })}
               description={
-                forwardClientHeadersProperty?.description ??
+                uiFieldDescription("forward_client_headers_to_llm_api", forwardClientHeadersProperty?.description) ??
                 t("settingsPages.uISettings.forwardClientHeadersDesc", {
                   defaultValue:
                     "Forwards client headers (Authorization, anthropic-beta, and x-* custom headers) to the upstream LLM. Enable for Claude Code with a Max subscription (forwards the OAuth token) or to pass custom/tracing headers through to the provider. Independent of the BYOK toggle — enable only the one(s) you need.",
@@ -410,17 +397,12 @@ export default function UISettings() {
               checked={Boolean(values.forward_llm_provider_auth_headers)}
               disabled={isUpdating}
               onCheckedChange={handleToggleForwardLLMProviderAuthHeaders}
-              ariaLabel={
-                forwardLLMProviderAuthHeadersProperty?.description ??
-                t("settingsPages.uISettings.forwardLLMProviderAuthHeadersLabel", {
-                  defaultValue: "Forward LLM provider auth headers",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.forwardLLMProviderAuthHeadersLabel", { defaultValue: "Forward LLM provider auth headers" })}
               label={t("settingsPages.uISettings.forwardLLMProviderAuthHeadersLabel", {
                 defaultValue: "Forward LLM provider auth headers",
               })}
               description={
-                forwardLLMProviderAuthHeadersProperty?.description ??
+                uiFieldDescription("forward_llm_provider_auth_headers", forwardLLMProviderAuthHeadersProperty?.description) ??
                 t("settingsPages.uISettings.forwardLLMProviderAuthHeadersDesc", {
                   defaultValue:
                     "Forwards provider auth headers (x-api-key, x-goog-api-key, api-key, ocp-apim-subscription-key) to the upstream LLM, overriding any deployment-configured key for that request. Enable for Claude Code BYOK (clients bring their own API key). Independent of the client-headers toggle — enable only the one(s) you need.",
@@ -432,15 +414,12 @@ export default function UISettings() {
                 checked={Boolean(values.enable_projects_ui)}
                 disabled={isUpdating}
                 onCheckedChange={handleToggleEnableProjectsUI}
-                ariaLabel={
-                  enableProjectsUIProperty.description ??
-                  t("settingsPages.uISettings.enableProjectsUIAriaLabel", { defaultValue: "Enable Projects UI" })
-                }
+                ariaLabel={t("settingsPages.uISettings.enableProjectsUIAriaLabel", { defaultValue: "Enable Projects UI" })}
                 label={t("settingsPages.uISettings.enableProjectsUILabel", {
                   defaultValue: "[BETA] Enable Projects (page will refresh)",
                 })}
                 description={
-                  enableProjectsUIProperty.description ??
+                  uiFieldDescription("enable_projects_ui", enableProjectsUIProperty.description) ??
                   t("settingsPages.uISettings.enableProjectsUIDesc", {
                     defaultValue:
                       "If enabled, shows the Projects feature in the UI sidebar and the project field in key management.",
@@ -452,15 +431,12 @@ export default function UISettings() {
               checked={Boolean(values.enable_chat_ui)}
               disabled={isUpdating}
               onCheckedChange={handleToggleEnableChatUI}
-              ariaLabel={
-                enableChatUIProperty?.description ??
-                t("settingsPages.uISettings.enableChatUIAriaLabel", { defaultValue: "Enable Chat page" })
-              }
+              ariaLabel={t("settingsPages.uISettings.enableChatUIAriaLabel", { defaultValue: "Enable Chat page" })}
               label={t("settingsPages.uISettings.enableChatUILabel", {
                 defaultValue: "[BETA] Enable Chat page (page will refresh)",
               })}
               description={
-                enableChatUIProperty?.description ??
+                uiFieldDescription("enable_chat_ui", enableChatUIProperty?.description) ??
                 t("settingsPages.uISettings.enableChatUIDesc", {
                   defaultValue:
                     "If enabled, shows the Chat page in the UI sidebar, letting users chat with an LLM and connect their own MCP server credentials via OAuth.",
@@ -473,7 +449,12 @@ export default function UISettings() {
               <div className="space-y-1">
                 <p className="text-sm font-medium text-foreground">Moyai</p>
                 <p className="text-sm text-muted-foreground">
-                  {moyaiUrl ? `Connected to ${moyaiUrl}` : "Not connected"}
+                  {moyaiUrl
+                    ? i18n.t("settingsPages.uISettings.connectedTo", {
+                        defaultValue: "Connected to {{url}}",
+                        url: moyaiUrl,
+                      })
+                    : i18n.t("settingsPages.uISettings.notConnected", { defaultValue: "Not connected" })}
                 </p>
               </div>
               {moyaiUrl ? (
@@ -491,29 +472,21 @@ export default function UISettings() {
               checked={isAgentsDisabled}
               disabled={isUpdating}
               onCheckedChange={handleToggleDisableAgents}
-              ariaLabel={
-                disableAgentsProperty?.description ??
-                t("settingsPages.uISettings.disableAgentsLabel", { defaultValue: "Disable agents for internal users" })
-              }
+              ariaLabel={t("settingsPages.uISettings.disableAgentsLabel", { defaultValue: "Disable agents for internal users" })}
               label={t("settingsPages.uISettings.disableAgentsLabel", {
                 defaultValue: "Disable agents for internal users",
               })}
-              description={disableAgentsProperty?.description}
+              description={uiFieldDescription("disable_agents_for_internal_users", disableAgentsProperty?.description)}
             />
             <SettingRow
               checked={Boolean(values.allow_agents_for_team_admins)}
               disabled={isUpdating || !isAgentsDisabled}
               onCheckedChange={handleToggleAllowAgentsTeamAdmins}
-              ariaLabel={
-                allowAgentsTeamAdminsProperty?.description ??
-                t("settingsPages.uISettings.allowAgentsTeamAdminsLabel", {
-                  defaultValue: "Allow agents for team admins",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.allowAgentsTeamAdminsLabel", { defaultValue: "Allow agents for team admins" })}
               label={t("settingsPages.uISettings.allowAgentsTeamAdminsLabel", {
                 defaultValue: "Allow agents for team admins",
               })}
-              description={allowAgentsTeamAdminsProperty?.description}
+              description={uiFieldDescription("allow_agents_for_team_admins", allowAgentsTeamAdminsProperty?.description)}
               indented
               muted={!isAgentsDisabled}
             />
@@ -523,31 +496,21 @@ export default function UISettings() {
               checked={isVectorStoresDisabled}
               disabled={isUpdating}
               onCheckedChange={handleToggleDisableVectorStores}
-              ariaLabel={
-                disableVectorStoresProperty?.description ??
-                t("settingsPages.uISettings.disableVectorStoresLabel", {
-                  defaultValue: "Disable vector stores for internal users",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.disableVectorStoresLabel", { defaultValue: "Disable vector stores for internal users" })}
               label={t("settingsPages.uISettings.disableVectorStoresLabel", {
                 defaultValue: "Disable vector stores for internal users",
               })}
-              description={disableVectorStoresProperty?.description}
+              description={uiFieldDescription("disable_vector_stores_for_internal_users", disableVectorStoresProperty?.description)}
             />
             <SettingRow
               checked={Boolean(values.allow_vector_stores_for_team_admins)}
               disabled={isUpdating || !isVectorStoresDisabled}
               onCheckedChange={handleToggleAllowVectorStoresTeamAdmins}
-              ariaLabel={
-                allowVectorStoresTeamAdminsProperty?.description ??
-                t("settingsPages.uISettings.allowVectorStoresTeamAdminsLabel", {
-                  defaultValue: "Allow vector stores for team admins",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.allowVectorStoresTeamAdminsLabel", { defaultValue: "Allow vector stores for team admins" })}
               label={t("settingsPages.uISettings.allowVectorStoresTeamAdminsLabel", {
                 defaultValue: "Allow vector stores for team admins",
               })}
-              description={allowVectorStoresTeamAdminsProperty?.description}
+              description={uiFieldDescription("allow_vector_stores_for_team_admins", allowVectorStoresTeamAdminsProperty?.description)}
               indented
               muted={!isVectorStoresDisabled}
             />
@@ -557,17 +520,12 @@ export default function UISettings() {
               checked={Boolean(values.scope_user_search_to_org)}
               disabled={isUpdating}
               onCheckedChange={handleToggleScopeUserSearch}
-              ariaLabel={
-                scopeUserSearchProperty?.description ??
-                t("settingsPages.uISettings.scopeUserSearchLabel", {
-                  defaultValue: "Scope user search to organization",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.scopeUserSearchLabel", { defaultValue: "Scope user search to organization" })}
               label={t("settingsPages.uISettings.scopeUserSearchLabel", {
                 defaultValue: "Scope user search to organization",
               })}
               description={
-                scopeUserSearchProperty?.description ??
+                uiFieldDescription("scope_user_search_to_org", scopeUserSearchProperty?.description) ??
                 t("settingsPages.uISettings.scopeUserSearchDesc", {
                   defaultValue:
                     "If enabled, the user search endpoint restricts results by organization. When off, any authenticated user can search all users.",
@@ -580,17 +538,12 @@ export default function UISettings() {
               checked={Boolean(values.disable_custom_api_keys)}
               disabled={isUpdating}
               onCheckedChange={handleToggleDisableCustomApiKeys}
-              ariaLabel={
-                disableCustomApiKeysProperty?.description ??
-                t("settingsPages.uISettings.disableCustomApiKeysLabel", {
-                  defaultValue: "Disable custom Virtual key values",
-                })
-              }
+              ariaLabel={t("settingsPages.uISettings.disableCustomApiKeysLabel", { defaultValue: "Disable custom Virtual key values" })}
               label={t("settingsPages.uISettings.disableCustomApiKeysLabel", {
                 defaultValue: "Disable custom Virtual key values",
               })}
               description={
-                disableCustomApiKeysProperty?.description ??
+                uiFieldDescription("disable_custom_api_keys", disableCustomApiKeysProperty?.description) ??
                 t("settingsPages.uISettings.disableCustomApiKeysDesc", {
                   defaultValue: "If true, users cannot specify custom key values. All keys must be auto-generated.",
                 })
@@ -600,7 +553,7 @@ export default function UISettings() {
             <Separator />
             <PageVisibilitySettings
               enabledPagesInternalUsers={values.enabled_ui_pages_internal_users}
-              enabledPagesPropertyDescription={enabledPagesProperty?.description}
+              enabledPagesPropertyDescription={uiFieldDescription("enabled_ui_pages_internal_users", enabledPagesProperty?.description)}
               isUpdating={isUpdating}
               onUpdate={handleUpdatePageVisibility}
             />

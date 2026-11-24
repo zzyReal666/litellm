@@ -1651,7 +1651,52 @@
     "fiveMinutesDefault": "5m (default)",
     "comma-separated-values": "Comma-separated values",
     "system-messages-first-for-openai": "System messages first for OpenAI",
-    "system-messages-first-for-openai-2": "System messages first for OpenAI"
+    "system-messages-first-for-openai-2": "System messages first for OpenAI",
+    "fieldDescriptions": {
+      "max_in_flight_requests_per_worker": "maximum concurrent requests handled by each worker",
+      "max_queued_requests_per_worker": "maximum requests waiting for a worker slot",
+      "admission_queue_timeout_seconds": "maximum time a request waits for a worker slot",
+      "max_parallel_requests": "maximum parallel requests for each api key",
+      "global_max_parallel_requests": "global max parallel requests to allow for a proxy instance.",
+      "user_api_key_cache_max_size": "max number of entries (virtual keys, teams, users, end users, memberships, ...) each worker keeps in its in-memory auth cache. Defaults to 200. Raise this if you have more active keys than that or auth lookups keep hitting the DB",
+      "max_request_size_mb": "max request size in MB, if a request is larger than this size it will be rejected",
+      "max_batch_file_size_mb": "max batch input file size in MB for /v1/files uploads with purpose=batch, if a file is larger than this size it will be rejected before being forwarded to the provider",
+      "max_batch_file_records": "max records (non-blank lines) per batch input file for /v1/files uploads with purpose=batch, applied per key. A key's metadata can override it and a team's metadata adds a team cap on top, both set by a proxy admin; the lower of the key's value and the team's value wins. Unset means no limit",
+      "max_batch_file_uploads_per_day": "max /v1/files uploads with purpose=batch per key (per user for JWT callers) per UTC day. A key's metadata can override it and a team's metadata adds a shared team cap, both set by a proxy admin. Unset means no limit",
+      "max_file_downloads_per_minute": "max GET /v1/files/{file_id}/content calls per key (per user for JWT callers) per file per minute. A key's metadata can override it and a team's metadata adds a shared team cap, both set by a proxy admin. Unset means no limit",
+      "max_file_size_mb": "max file size in MB for /v1/files uploads, for any purpose, if a file is larger than this size it will be rejected before being forwarded to the provider",
+      "allowed_file_extensions": "the only file extensions (e.g. ['.jsonl', '.pdf', '.txt']) accepted on /v1/files uploads, for any purpose, matched case-insensitively against the uploaded filename. Files with any other extension, or none, are rejected. An empty list rejects every upload. Unset means no allowlist is applied",
+      "blocked_file_extensions": "file extensions (e.g. ['.exe', '.sh']) rejected on /v1/files uploads, for any purpose, matched case-insensitively against the uploaded filename. Deprecated in favour of allowed_file_extensions; still enforced, after the allowlist, when set",
+      "max_response_size_mb": "max response size in MB, if a response is larger than this size it will be rejected",
+      "proxy_config_reload_interval_seconds": "how often (in seconds) each pod reloads config-in-DB objects (models, credentials, guardrails, etc.) when store_model_in_db is enabled; lower values speed up multi-pod convergence at the cost of more DB load. Applied on proxy startup",
+      "cancel_on_disconnect": "cancel the in-flight upstream LLM request (non-streaming) when the client disconnects, freeing backend capacity (e.g. a vLLM GPU slot); the request is logged as a 499 failure",
+      "pass_through_endpoints": "Set-up pass-through endpoints for provider-specific endpoints. Docs - https://docs.litellm.ai/docs/proxy/pass_through",
+      "transcribe_media_buckets": "S3 bucket names that keys other than proxy admins may read media from and write transcripts to through the Amazon Transcribe pass-through. Unset means only proxy admins can start transcription jobs.",
+      "store_prompts_in_spend_logs": "If True, stores request messages and responses in spend logs. Default is False.",
+      "disable_auto_add_proxy_admin_to_teams": "By default, the user calling /team/new is automatically added to the new team as a team admin. If True, proxy admins are no longer auto-added; members explicitly listed in members_with_roles are unaffected. Default is False.",
+      "maximum_spend_logs_retention_period": "Maximum retention period for spend logs (e.g., '7d' for 7 days). Logs older than this will be deleted.",
+      "maximum_health_check_retention_period": "Maximum retention period for health-check rows (e.g., '30d'). Rows whose checked_at is older than this are deleted by the spend log cleanup job, on that job's schedule. Unset means rows are never deleted. Set this well above health_check_interval because /health and the UI read the latest row per model.",
+      "maximum_daily_tag_spend_retention_period": "Maximum retention period for per-day tag spend aggregate rows (e.g., '90d'). Rows whose day is older than this are deleted by the spend log cleanup job, on that job's schedule. Unset means rows are never deleted. Only historical tag usage analytics are affected; tag budgets read the lifetime counter.",
+      "maximum_spend_logs_cleanup_batch_size": "Rows deleted per DELETE statement by the spend log cleanup job. Defaults to 1000.",
+      "maximum_spend_logs_cleanup_max_batches": "Maximum DELETE statements the spend log cleanup job issues per table per run. Defaults to 500.",
+      "maximum_spend_logs_cleanup_run_budget": "Wall-clock budget for one spend log cleanup run (e.g. '5m'), shared across every table it prunes. A run that hits the budget stops and the next run resumes from where it left off. Defaults to '5m'.",
+      "maximum_spend_logs_cleanup_batch_timeout": "Postgres statement_timeout and lock_timeout applied to each spend log cleanup delete batch (e.g. '30s'), so cleanup cannot hold row locks or a connection indefinitely. Defaults to '30s'.",
+      "mcp_internal_ip_ranges": "Custom CIDR ranges that define internal/private networks for MCP access control. When set, only these ranges are treated as internal. Defaults to RFC 1918 private ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8).",
+      "mcp_client_id_header": "Request header whose value names the calling MCP client application (for example 'x-mcp-client') for callers that did not authenticate with a JWT, used only while mcp_allowed_clients is set. The client picks this value itself, so it is a policy control rather than a security boundary; prefer litellm_jwtauth.mcp_client_id_jwt_field where callers use JWTs.",
+      "mcp_trusted_proxy_ranges": "CIDR ranges of trusted reverse proxies. When set, X-Forwarded-For and X-Forwarded-* origin headers are only trusted from these IPs.",
+      "mcp_xff_num_trusted_hops": "Number of trusted reverse proxies/load balancers in front of the gateway that append to X-Forwarded-For. When set (and mcp_trusted_proxy_ranges validates the direct peer), the client IP for MCP access control is read this many entries from the right of the chain instead of the spoofable leftmost value, defeating append-style X-Forwarded-For forgery.",
+      "mcp_prefer_client_id_metadata_document": "When true, a gateway-managed OAuth2 MCP server whose authorization server advertises Client ID Metadata Document support identifies itself with the gateway's public metadata document URL even when that authorization server also offers dynamic client registration. Requires a public HTTPS PROXY_BASE_URL the authorization server can fetch. Default false: dynamic client registration is used whenever the authorization server offers it, and the metadata document only when it does not.",
+      "store_model_in_db": "If True, models and config are stored in and loaded from the database. Default is False.",
+      "forward_client_headers_to_llm_api": "If True, forwards client headers (e.g. Authorization) to the LLM API. Required for Claude Code with Max subscription.",
+      "mcp_required_fields": "List of MCP server fields that must be filled in for a submission to pass standards checks (e.g. ['description', 'source_url', 'alias']).",
+      "apply_user_budget_to_team_keys": "If True, a user's personal max_budget is enforced on every request they make, including requests made with a team-scoped key. Defaults to False, where a team-scoped key is governed only by the team and team-member budgets and the key owner's personal max_budget does not apply (see GitHub issue #12905).",
+      "budget_exceeded_throttle_percentage": "Fraction (0, 1] of a key's configured TPM/RPM that an over-budget key with 'Throttle on budget exceeded' enabled keeps serving at. Leave empty to hard-block over-budget keys.",
+      "budget_rollover": "Carry spend beyond max_budget into the next window when budgets reset, instead of forgiving it. Applies to key, user, team, team member, org, tag and end-user budgets.",
+      "max_ui_session_budget": "USD spend cap for each dashboard login session; covers LLM calls made from the dashboard such as the playground and auto router Test Connection. Each login starts a fresh session with this budget. Clearing restores the $1 default.",
+      "enable_anthropic_prompt_caching": "Auto-adds cache_control to the system prompt and trailing turn for supported Claude models on Anthropic, Bedrock, Vertex AI, and Azure AI. The cache is shared across callers on the same upstream credentials.",
+      "anthropic_prompt_caching_ttl": "Empty uses Anthropic's 5m default. 1h suits long sessions but doubles the cache write cost.",
+      "openai_system_messages_first": "Moves system and developer messages to the front of the messages array on OpenAI and Azure OpenAI chat completions requests, keeping their relative order. OpenAI's prompt cache matches on the exact prefix, so a system message that arrives mid-conversation otherwise breaks the cached prefix on every turn."
+    }
   },
   "guardrails": {
     "guardrailTestPanel": {
@@ -6650,7 +6695,30 @@
       "enableProjectsUIAriaLabel": "Enable Projects UI",
       "enableChatUIAriaLabel": "Enable Chat page",
       "enableChatUILabel": "[BETA] Enable Chat page (page will refresh)",
-      "enableChatUIDesc": "If enabled, shows the Chat page in the UI sidebar, letting users chat with an LLM and connect their own MCP server credentials via OAuth."
+      "enableChatUIDesc": "If enabled, shows the Chat page in the UI sidebar, letting users chat with an LLM and connect their own MCP server credentials via OAuth.",
+      "fieldDescriptions": {
+        "disable_model_add_for_internal_users": "If true, internal users cannot create models or auto routers through the UI or API, including team admins and members with auto-router management permission. Proxy admins are exempt. Editing and deleting existing models are unchanged.",
+        "disable_team_admin_delete_team_user": "Prevents Team Admins from deleting users from the teams they manage. Useful for SCIM provisioning where team membership is defined externally.",
+        "enabled_ui_pages_internal_users": "List of page keys that internal users (non-admins) can see in the UI sidebar. If not set, all pages are visible based on role permissions.",
+        "require_auth_for_public_ai_hub": "If true, requires authentication for accessing the public AI Hub.",
+        "allow_public_health_readiness_details": "If true, returns the legacy detailed payload from the unauthenticated /health/readiness endpoint.",
+        "forward_client_headers_to_llm_api": "Forwards client headers (Authorization, anthropic-beta, and x-* custom headers) to the upstream LLM. Enable for Claude Code with a Max subscription (forwards the OAuth token) or to pass custom/tracing headers through to the provider. Independent of the BYOK toggle — enable only the one(s) you need.",
+        "forward_llm_provider_auth_headers": "Forwards provider auth headers (x-api-key, x-goog-api-key, api-key, ocp-apim-subscription-key) to the upstream LLM, overriding any deployment-configured key for that request. Enable for Claude Code BYOK (clients bring their own API key). Independent of the client-headers toggle — enable only the one(s) you need.",
+        "disable_agents_for_internal_users": "If true, internal users cannot access agent management endpoints or the Agents page in the UI.",
+        "allow_agents_for_team_admins": "If true, team admins are exempt from the agents disable restriction (only takes effect when disable_agents_for_internal_users is true).",
+        "disable_vector_stores_for_internal_users": "If true, internal users cannot access vector store management endpoints or the Vector Stores page in the UI.",
+        "allow_vector_stores_for_team_admins": "If true, team admins are exempt from the vector stores disable restriction (only takes effect when disable_vector_stores_for_internal_users is true).",
+        "scope_user_search_to_org": "If enabled, the user search endpoint (/user/filter/ui) restricts results by organization. When off, any authenticated user can search all users.",
+        "disable_custom_api_keys": "If true, users cannot specify custom key values. All keys must be auto-generated.",
+        "disable_key_generate_for_org_admin": "If true, org admins cannot generate API keys via /key/generate.",
+        "enable_chat_ui": "If true, shows the Chat page in the UI sidebar, letting users chat with an LLM and connect their own MCP server credentials via OAuth.",
+        "moyai_url": "URL of a connected Moyai deployment. When set, the Moyai entry in the UI navigation opens this deployment instead of the Moyai landing page.",
+        "team_admin_editable_team_fields": "Team settings fields a team admin may change on the teams they administer. Include 'projects' to let team admins create and update projects for those teams. Include 'member_key_budgets' to let team admins update budget fields on keys owned by other members of those teams. Empty means team admins cannot edit team settings or manage projects at all. Proxy admins and org admins are not affected.",
+        "enable_projects_ui": "If enabled, shows the Projects feature in the UI sidebar and the project field in key management."
+      },
+      "schemaDescription": "Configuration for UI-specific flags",
+      "connectedTo": "Connected to {{url}}",
+      "notConnected": "Not connected"
     },
     "loggingCallbacksTable": {
       "addCallbackButton": "+ Add Callback",
@@ -14013,7 +14081,13 @@
     "notAppliedTitle": "Not running on the proxy that answered this page",
     "notAppliedDescription": "Interception is switched on for the cluster, but the proxy serving this page has not applied it. That is expected for about 10 seconds after a change or a restart. If it persists, check that proxy's logs: requests it handles are not being intercepted.",
     "pageTitle": "Web Search Interception",
-    "pageDescription": "Serve web search tool calls from a configured search tool instead of passing them upstream, so models without native web search can still answer with fresh results. Click 'Save Settings' to apply changes across all pods (takes effect within 10 seconds)."
+    "pageDescription": "Serve web search tool calls from a configured search tool instead of passing them upstream, so models without native web search can still answer with fresh results. Click 'Save Settings' to apply changes across all pods (takes effect within 10 seconds).",
+    "fieldDescriptions": {
+      "enabled": "Serve web search tool calls from a configured search tool instead of passing them upstream",
+      "enabled_providers": "LLM providers to intercept for (e.g. 'bedrock', 'vertex_ai'). Empty intercepts Bedrock only.",
+      "search_tool_name": "Name of the configured search tool to run searches through. Empty uses the first one available.",
+      "max_agentic_loops": "How many follow-up model calls one intercepted request may chain. Empty applies the default of 3."
+    }
   },
   "lensWorkspace": {
     "demo-data": "Demo data",
@@ -14876,7 +14950,13 @@
   },
   "teamAdminEditableFieldsSettings": {
     "team-admin-editable-fields": "Team admin editable fields",
-    "this-proxy-version-does-not-support-enabling": "This proxy version does not support enabling any team settings fields for team admins yet."
+    "this-proxy-version-does-not-support-enabling": "This proxy version does not support enabling any team settings fields for team admins yet.",
+    "fieldsEnabled": "{{count}} fields enabled",
+    "cannotEdit": "Team admins cannot edit team settings",
+    "description": "Team settings fields a team admin may change on the teams they administer. Include 'projects' to let team admins create and update projects for those teams. Include 'member_key_budgets' to let team admins update budget fields on keys owned by other members of those teams. Empty means team admins cannot edit team settings or manage projects at all. Proxy admins and org admins are not affected.",
+    "updated": "Team admin editable fields updated successfully",
+    "save": "Save",
+    "saving": "Saving..."
   },
   "sidebarUsageCard": {
     "enterprise-usage": "Enterprise usage",
@@ -15157,5 +15237,14 @@
     "licenseTypeLabel": "License type",
     "licenseTypePermanent": "Permanent",
     "licenseTypeTemporary": "Temporary"
+  },
+  "teamAdminEditAccess": {
+    "fieldLabels": {
+      "tpm_limit": "Tokens per minute Limit (TPM)",
+      "rpm_limit": "Requests per minute Limit (RPM)",
+      "max_budget": "Max Budget (CNY)",
+      "projects": "Create and update projects",
+      "member_key_budgets": "Update budgets on team members' keys"
+    }
   }
 }
