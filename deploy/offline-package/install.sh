@@ -344,7 +344,7 @@ load_with_progress() {
 
 images_present() {
   local missing=0 img
-  for img in litellm-zhcn:v1.106.0-zh.32 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1 nginx:1.27-alpine; do
+  for img in litellm-zhcn:v1.106.0-zh.33 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1 nginx:1.27-alpine; do
     docker image inspect "${img}" >/dev/null 2>&1 || missing=1
   done
   return "${missing}"
@@ -381,7 +381,7 @@ step_ok
 begin_step "复制安装文件"
 if [[ "${PKG_DIR}" != "${INSTALL_DIR}" ]]; then
   mkdir -p "${INSTALL_DIR}"
-  copy_items=(docker-compose.yml prometheus.yml scripts bin vendor .env.example install.sh uninstall.sh litellm)
+  copy_items=(docker-compose.yml prometheus.yml scripts bin vendor assets .env.example install.sh uninstall.sh litellm)
   total_files=0
   for item in "${copy_items[@]}"; do [[ -e "${PKG_DIR}/${item}" ]] && total_files=$((total_files + 1)); done
   done_files=0
@@ -574,8 +574,8 @@ step_ok
 begin_step "等待服务就绪"
 code=""
 begin="$(date +%s)"
-estimate=150
-for _ in $(seq 1 60); do
+estimate=360
+for _ in $(seq 1 120); do
   code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${LITELLM_PORT}/health/readiness" || true)"
   elapsed=$(( $(date +%s) - begin ))
   [[ "${code}" == "200" ]] && break
@@ -585,12 +585,14 @@ done
 bar_end
 if [[ "${code}" != "200" ]]; then
   printf '\n'
-  bash "${INSTALL_DIR}/scripts/logs.sh" 2>/dev/null | tail -25 || true
+  docker logs "$(docker ps -aq \
+    --filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}" \
+    --filter "label=com.docker.compose.service=litellm" | head -1)" --tail 25 2>/dev/null || true
   die "就绪检查超时（HTTP ${code}），排查：${INSTALL_DIR}/litellm logs"
 fi
 if [[ "${ENABLE_HTTPS}" -eq 1 ]]; then
   https_code=""
-  for _ in $(seq 1 20); do
+  for _ in $(seq 1 40); do
     https_code="$(curl -sk -o /dev/null -w '%{http_code}' "https://127.0.0.1:${HTTPS_PORT}/health/readiness" || true)"
     [[ "${https_code}" == "200" ]] && break
     sleep 3
