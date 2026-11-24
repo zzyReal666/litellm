@@ -1,6 +1,6 @@
 # 中安云科 AI 安全网关 离线安装包使用教程
 
-版本 v1.1，适用安装包 `litellm-offline-v1.106.0-zh.28.tar.gz`，适用产品版本 v1.106.0-zh.28
+版本 v1.1，适用安装包 `litellm-offline-v1.106.0-zh.29.tar.gz`，适用产品版本 v1.106.0-zh.29
 
 本教程面向实施与运维人员，说明如何在一台全新的 Linux 服务器上使用离线安装包完成部署、激活授权，以及日常启停、日志查看、备份与卸载。全程不需要外网。
 
@@ -70,13 +70,13 @@
 
 ```bash
 cd /opt
-tar xzf litellm-offline-v1.106.0-zh.28.tar.gz
-ls -d litellm-offline-v1.106.0-zh.28
+tar xzf litellm-offline-v1.106.0-zh.29.tar.gz
+ls -d litellm-offline-v1.106.0-zh.29
 ```
 
-命令执行完会得到一个与安装包同名的目录，例如 `litellm-offline-v1.106.0-zh.28`，进入后可以看到完整的安装文件，包括镜像目录 `images`、安装脚本 `install.sh` 和运维命令 `litellm`。
+命令执行完会得到一个与安装包同名的目录，例如 `litellm-offline-v1.106.0-zh.29`，进入后可以看到完整的安装文件，包括镜像目录 `images`、安装脚本 `install.sh` 和运维命令 `litellm`。
 
-解压出的目录名随安装包版本变化。升级到新版本后目录名也会跟着变，例如换成 zh.28 的包解压出来就是 `litellm-offline-v1.106.0-zh.28`。执行后续命令时请按实际解压出来的目录名替换，或者直接用通配符匹配：
+解压出的目录名随安装包版本变化。升级到新版本后目录名也会跟着变，例如换成 zh.29 的包解压出来就是 `litellm-offline-v1.106.0-zh.29`。执行后续命令时请按实际解压出来的目录名替换，或者直接用通配符匹配：
 
 ```bash
 cd /opt/litellm-offline-v1.106.0-zh.*
@@ -84,7 +84,7 @@ cd /opt/litellm-offline-v1.106.0-zh.*
 
 ![解压安装包并查看目录结构](./安装包使用教程-截图/01-extract.png)
 
-如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar xzf litellm-offline-v1.106.0-zh.28.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
+如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar xzf litellm-offline-v1.106.0-zh.29.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
 
 ### 2.1 端口占用检查
 
@@ -105,10 +105,10 @@ free -g
 
 ## 3 执行安装
 
-进入解压目录后执行安装脚本。不带任何参数即进入交互式向导，全程按提示回车或输入即可。下面的目录名以 zh.28 为例，实际请用你解压出来的那个目录名。
+进入解压目录后执行安装脚本。不带任何参数即进入交互式向导，全程按提示回车或输入即可。下面的目录名以 zh.29 为例，实际请用你解压出来的那个目录名。
 
 ```bash
-cd /opt/litellm-offline-v1.106.0-zh.28
+cd /opt/litellm-offline-v1.106.0-zh.29
 sudo ./install.sh
 ```
 
@@ -195,7 +195,7 @@ sudo ./install.sh
 用参数重装（保留数据，仅更新证书配置）：
 
 ```bash
-cd /opt/litellm-offline-v1.106.0-zh.28
+cd /opt/litellm-offline-v1.106.0-zh.29
 sudo ./install.sh --cert /path/to/server.crt --key /path/to/server.key
 ```
 
@@ -213,7 +213,7 @@ cd /opt/litellm && ./litellm restart
 如需关闭 HTTPS 回到纯 HTTP：
 
 ```bash
-cd /opt/litellm-offline-v1.106.0-zh.28
+cd /opt/litellm-offline-v1.106.0-zh.29
 sudo ./install.sh --no-https
 ```
 
@@ -309,8 +309,8 @@ tar czf /root/litellm-certs-$(date +%F).tar.gz certs/
 升级时保留安装目录与数据，只用新包覆盖文件并重启。安装脚本检测到有效 `.env` 会自动沿用，不会重置密码、密钥和授权。
 
 ```bash
-cd /opt && tar xzf litellm-offline-v1.106.0-zh.28.tar.gz
-cd litellm-offline-v1.106.0-zh.28
+cd /opt && tar xzf litellm-offline-v1.106.0-zh.29.tar.gz
+cd litellm-offline-v1.106.0-zh.29
 sudo ./install.sh --skip-images
 ```
 
