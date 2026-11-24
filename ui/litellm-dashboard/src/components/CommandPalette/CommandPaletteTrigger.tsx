@@ -2,6 +2,7 @@
 
 import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
+import i18n from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { routeSegmentForPathname } from "@/utils/uiHref";
 import { paletteScopeForRoute } from "./utils";
@@ -13,7 +14,9 @@ export function CommandPaletteTrigger({ mobile = false }: { mobile?: boolean }) 
   const { open, setOpen } = useCommandPalette();
   const shortcut = useShortcutLabel();
   const isKeysRoute = paletteScopeForRoute(routeSegmentForPathname(pathname)) === "keys";
-  const label = isKeysRoute ? "Search keys…" : "Search or jump to…";
+  const label = isKeysRoute
+    ? i18n.t("commandPalette.triggerKeys", { defaultValue: "Search keys…" })
+    : i18n.t("commandPalette.triggerGlobal", { defaultValue: "Search or jump to…" });
 
   if (mobile) {
     return (
@@ -21,7 +24,7 @@ export function CommandPaletteTrigger({ mobile = false }: { mobile?: boolean }) 
         variant="ghost"
         size="icon"
         className="size-11 md:hidden"
-        aria-label="Search"
+        aria-label={i18n.t("commandPalette.searchAria", { defaultValue: "Search" })}
         aria-expanded={open}
         onClick={() => setOpen(true)}
       >

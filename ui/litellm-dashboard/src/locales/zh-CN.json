@@ -46,7 +46,10 @@
     "adminSettings": "管理员设置",
     "costTracking": "成本追踪",
     "uiTheme": "界面主题",
-    "costOptimization": "成本优化"
+    "costOptimization": "成本优化",
+    "home": "首页",
+    "modelInsights": "模型排行榜",
+    "lens": "链路分析"
   },
   "navbar": {
     "aiGateway": "AI 网关",
@@ -14254,7 +14257,30 @@
     "command-palette": "命令面板",
     "virtual-keys": "虚拟密钥",
     "unable-to-search-keys": "无法搜索密钥",
-    "noResultsFor": "没有匹配「{{query}}」的结果"
+    "noResultsFor": "没有匹配「{{query}}」的结果",
+    "searchAria": "搜索",
+    "triggerGlobal": "搜索或跳转…",
+    "triggerKeys": "搜索密钥…",
+    "typePage": "页面",
+    "typeAction": "操作",
+    "typeKey": "密钥",
+    "groupActions": "操作",
+    "groupPages": "页面",
+    "groupKeys": "密钥",
+    "groupRecentKeys": "最近使用的密钥",
+    "actionSearchKeysTitle": "搜索虚拟密钥",
+    "actionSearchKeysSubtitle": "按别名或 ID 查找密钥",
+    "actionFilterKeysTitle": "在密钥列表中筛选「{{query}}」",
+    "actionFilterKeysSubtitle": "打开虚拟密钥并应用该搜索",
+    "unnamedKey": "未命名密钥",
+    "noKeysMatch": "没有匹配「{{query}}」的密钥",
+    "noRecentKeys": "没有最近使用的密钥",
+    "footerAllPages": "所有页面",
+    "footerOpen": "打开",
+    "footerNavigate": "导航",
+    "footerClose": "关闭",
+    "placeholderPages": "搜索页面或操作…",
+    "placeholderKeys": "按别名或 ID 搜索密钥…"
   },
   "emailEventSettings": {
     "email-notifications": "邮件通知",

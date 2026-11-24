@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import i18n from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { FileText, KeyRound, LoaderCircle, Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -40,6 +41,7 @@ export function CommandPalette({ open, setOpen }: { open: boolean; setOpen: (ope
 }
 
 function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -69,7 +71,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
   const isInitialKeyLoad = keyResults.isFetching && !keyResults.data;
   const isLoadingKeys = scope === "keys" && (isPendingQuery || hasPlaceholderKeyResults || isInitialKeyLoad);
   const visibleGroups = useVisibleMenuGroups();
-  const navItems = useMemo(() => flattenNavItems(visibleGroups), [visibleGroups]);
+  const navItems = useMemo(() => flattenNavItems(visibleGroups, t), [visibleGroups, t]);
   const navMatches = useMemo(
     () => (scope === "global" || trimmedQuery ? matchNavItems(navItems, query) : []),
     [navItems, query, scope, trimmedQuery],
@@ -81,7 +83,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       title: page.label,
       subtitle: page.section,
       icon: page.icon ?? <FileText className="size-4" />,
-      typeLabel: "Page",
+      typeLabel: t("commandPalette.typePage", { defaultValue: "Page" }),
       page,
     }));
 
@@ -91,21 +93,23 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         ...(searchKeysAction
           ? [
               {
-                label: "Actions",
+                label: t("commandPalette.groupActions", { defaultValue: "Actions" }),
                 entries: [
                   {
                     id: "action:search-keys",
                     kind: "search-keys" as const,
-                    title: "Search virtual keys",
-                    subtitle: "Find a key by alias or ID",
+                    title: t("commandPalette.actionSearchKeysTitle", { defaultValue: "Search virtual keys" }),
+                    subtitle: t("commandPalette.actionSearchKeysSubtitle", { defaultValue: "Find a key by alias or ID" }),
                     icon: <KeyRound className="size-4" />,
-                    typeLabel: "Action" as const,
+                    typeLabel: t("commandPalette.typeAction", { defaultValue: "Action" }),
                   },
                 ],
               },
             ]
           : []),
-        ...(pages.length > 0 ? [{ label: "Pages", entries: pages }] : []),
+        ...(pages.length > 0
+        ? [{ label: t("commandPalette.groupPages", { defaultValue: "Pages" }), entries: pages }]
+        : []),
       ];
     }
 
@@ -122,10 +126,10 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       return {
         id: `key:${key.token}`,
         kind: "key",
-        title: key.key_alias || "Unnamed key",
+        title: key.key_alias || t("commandPalette.unnamedKey", { defaultValue: "Unnamed key" }),
         subtitle,
         icon: <KeyRound className="size-4" />,
-        typeLabel: "Key",
+        typeLabel: t("commandPalette.typeKey", { defaultValue: "Key" }),
         key,
       };
     });
@@ -144,7 +148,7 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
       title: `Filter the keys table for “${trimmedQuery}”`,
       subtitle: "Open Virtual Keys with this search applied",
       icon: <Search className="size-4" />,
-      typeLabel: "Action",
+      typeLabel: t("commandPalette.typeAction", { defaultValue: "Action" }),
     };
 
     return [
@@ -255,13 +259,17 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
             autoFocus
             type="text"
             role="combobox"
-            aria-label="Search"
+            aria-label={t("commandPalette.searchAria", { defaultValue: "Search" })}
             aria-expanded="true"
             aria-controls="command-palette-results"
             aria-activedescendant={activeOptionId}
             aria-autocomplete="list"
             className="h-full min-w-0 flex-1 border-0 bg-transparent text-[15px] outline-none placeholder:text-muted-foreground focus:ring-0"
-            placeholder={scope === "keys" ? "Search keys by alias or ID…" : "Search pages and actions…"}
+            placeholder={
+            scope === "keys"
+              ? t("commandPalette.placeholderKeys", { defaultValue: "Search keys by alias or ID…" })
+              : t("commandPalette.placeholderPages", { defaultValue: "Search pages and actions…" })
+          }
             value={query}
             onChange={(event) => {
               setQuery(event.currentTarget.value);
@@ -300,17 +308,22 @@ function CommandPaletteDialog({ setOpen }: { setOpen: (open: boolean) => void })
         <div className="flex h-10 items-center justify-between border-t border-border bg-muted/30 px-3 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <span className="font-medium text-foreground">中安云科 AI 安全网关</span>
-            <span>{scope === "keys" ? "Virtual Keys" : "All pages"}</span>
+            <span>
+          {scope === "keys"
+            ? i18n.t("commandPalette.virtual-keys", { defaultValue: "Virtual Keys" })
+            : t("commandPalette.footerAllPages", { defaultValue: "All pages" })}
+        </span>
           </div>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>↵</kbd> Open
+              <kbd className={shortcutChipClass}>↵</kbd> {t("commandPalette.footerOpen", { defaultValue: "Open" })}
             </span>
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>↑↓</kbd> Navigate
+              <kbd className={shortcutChipClass}>↑↓</kbd>{" "}
+          {t("commandPalette.footerNavigate", { defaultValue: "Navigate" })}
             </span>
             <span className="flex items-center gap-1">
-              <kbd className={shortcutChipClass}>esc</kbd> Close
+              <kbd className={shortcutChipClass}>esc</kbd> {t("commandPalette.footerClose", { defaultValue: "Close" })}
             </span>
           </div>
         </div>

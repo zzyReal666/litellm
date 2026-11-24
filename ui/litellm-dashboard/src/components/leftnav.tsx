@@ -515,6 +515,7 @@ const prettify = (key: string): string =>
     .join(" ");
 
 const NAV_LABEL_KEYS: Record<string, string> = {
+  home: "nav.home",
   "api-keys": "nav.virtualKeys",
   "llm-playground": "nav.playground",
   models: "nav.modelsEndpoints",
@@ -532,6 +533,8 @@ const NAV_LABEL_KEYS: Record<string, string> = {
   "tool-policies": "nav.toolPolicies",
   new_usage: "nav.usage",
   "cost-optimization": "nav.costOptimization",
+  "model-insights": "nav.modelInsights",
+  lens: "nav.lens",
   logs: "nav.logs",
   "guardrails-monitor": "nav.guardrailsMonitor",
   teams: "nav.teams",
@@ -565,13 +568,13 @@ const NAV_GROUP_LABEL_KEYS: Record<string, string> = {
   SETTINGS: "nav.groups.settings",
 };
 
-const itemLabel = (item: MenuItem, t?: TFunction): string => {
+export const itemLabel = (item: MenuItem, t?: TFunction): string => {
   const fallback = labelText(item);
   const key = NAV_LABEL_KEYS[item.key];
   return key && t ? t(key, { defaultValue: fallback }) : fallback;
 };
 
-const sectionLabel = (groupLabel: string, t?: TFunction): string => {
+export const sectionLabel = (groupLabel: string, t?: TFunction): string => {
   const fallback = sectionText(groupLabel);
   const key = NAV_GROUP_LABEL_KEYS[groupLabel];
   return key && t ? t(key, { defaultValue: fallback }) : fallback;

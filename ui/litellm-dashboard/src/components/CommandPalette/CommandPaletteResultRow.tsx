@@ -8,7 +8,7 @@ export interface CommandPaletteRowData {
   title: string;
   subtitle?: ReactNode;
   icon: ReactNode;
-  typeLabel: "Key" | "Page" | "Action";
+  typeLabel: string;
 }
 
 export function CommandPaletteResultRow({

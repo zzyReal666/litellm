@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { labelText, routeOf, sectionText, type MenuGroup } from "@/components/leftnav";
+import type { TFunction } from "i18next";
+import { itemLabel, routeOf, sectionLabel, type MenuGroup } from "@/components/leftnav";
 
 export type PaletteScope = "keys" | "global";
 
@@ -22,7 +23,7 @@ const matchRank = (item: PaletteNavItem, query: string): number => {
   return -1;
 };
 
-export const flattenNavItems = (groups: readonly MenuGroup[]): PaletteNavItem[] =>
+export const flattenNavItems = (groups: readonly MenuGroup[], t?: TFunction): PaletteNavItem[] =>
   groups.flatMap((group) => {
     const flattenItems = (items: MenuGroup["items"]): PaletteNavItem[] =>
       items.flatMap((item) => {
@@ -31,8 +32,8 @@ export const flattenNavItems = (groups: readonly MenuGroup[]): PaletteNavItem[] 
         return [
           {
             key: item.key,
-            label: labelText(item),
-            section: sectionText(group.groupLabel),
+            label: itemLabel(item, t),
+            section: sectionLabel(group.groupLabel, t),
             route: routeOf(item),
             icon: item.icon,
           },

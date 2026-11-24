@@ -46,7 +46,10 @@
     "adminSettings": "Admin Settings",
     "costTracking": "Cost Tracking",
     "uiTheme": "UI Theme",
-    "costOptimization": "Cost Optimization"
+    "costOptimization": "Cost Optimization",
+    "home": "Home",
+    "modelInsights": "Model Insights",
+    "lens": "Lens"
   },
   "navbar": {
     "aiGateway": "AI Gateway",
@@ -14254,7 +14257,30 @@
     "command-palette": "Command palette",
     "virtual-keys": "Virtual Keys",
     "unable-to-search-keys": "Unable to search keys",
-    "noResultsFor": "No results for “{{query}}”"
+    "noResultsFor": "No results for “{{query}}”",
+    "searchAria": "Search",
+    "triggerGlobal": "Search or jump to…",
+    "triggerKeys": "Search keys…",
+    "typePage": "Page",
+    "typeAction": "Action",
+    "typeKey": "Key",
+    "groupActions": "Actions",
+    "groupPages": "Pages",
+    "groupKeys": "Keys",
+    "groupRecentKeys": "Recent keys",
+    "actionSearchKeysTitle": "Search virtual keys",
+    "actionSearchKeysSubtitle": "Find a key by alias or ID",
+    "actionFilterKeysTitle": "Filter keys table “{{query}}”",
+    "actionFilterKeysSubtitle": "Open Virtual Keys with this search applied",
+    "unnamedKey": "Unnamed key",
+    "noKeysMatch": "No keys match “{{query}}”",
+    "noRecentKeys": "No recent keys",
+    "footerAllPages": "All pages",
+    "footerOpen": "Open",
+    "footerNavigate": "Navigate",
+    "footerClose": "Close",
+    "placeholderPages": "Search pages and actions…",
+    "placeholderKeys": "Search keys by alias or ID…"
   },
   "emailEventSettings": {
     "email-notifications": "Email Notifications",
