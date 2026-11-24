@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { toast } from "@/lib/toast";
 
 export function updateExistingKeys<Source extends object>(target: Source, source: object): Source {
@@ -68,7 +69,7 @@ export const formatPerSecondCost = (cost: number): string =>
 
 export const copyToClipboard = async (
   text: string | null | undefined,
-  messageText: string = "Copied to clipboard",
+  messageText: string = i18n.t("common.copiedToClipboard", { defaultValue: "Copied to clipboard" }),
 ): Promise<boolean> => {
   if (!text) return false;
 

@@ -5,6 +5,13 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 vi.mock("@/app/(dashboard)/hooks/teams/useTeams", () => ({
+  useTeams: () => ({
+    data: [
+      { team_id: "team-alpha", team_alias: "Alpha" },
+      { team_id: "team-beta", team_alias: "Beta" },
+    ],
+    isLoading: false,
+  }),
   useInfiniteTeams: () => ({
     data: {
       pages: [
@@ -101,7 +108,8 @@ describe("DefaultUserSettingsForm", () => {
     expect(screen.getByText("100")).toBeInTheDocument();
     expect(screen.getByText("monthly")).toBeInTheDocument();
     expect(screen.getByText("gpt-5.2")).toBeInTheDocument();
-    expect(screen.getByText(/team-alpha/)).toBeInTheDocument();
+    expect(screen.getByText(/Alpha/)).toBeInTheDocument();
+    expect(screen.queryByText(/team-alpha/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save Changes" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Max Budget (CNY)")).not.toBeInTheDocument();
   });

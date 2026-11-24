@@ -77,11 +77,19 @@ export default function OnboardingModal({
     >
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl" initialFocus={copyButtonRef}>
         <DialogHeader>
-          <DialogTitle>{isInvitation ? "Invitation Link" : "Reset Password Link"}</DialogTitle>
+          <DialogTitle>
+            {isInvitation
+              ? i18n.t("onboardingLink.invitationTitle", { defaultValue: "Invitation Link" })
+              : i18n.t("onboardingLink.resetPasswordTitle", { defaultValue: "Reset Password Link" })}
+          </DialogTitle>
           <DialogDescription>
             {isInvitation
-              ? "Copy and send the generated link to onboard this user to the proxy."
-              : "Copy and send the generated link to the user to reset their password."}
+              ? i18n.t("onboardingLink.invitationDescription", {
+                  defaultValue: "Copy and send the generated link to onboard this user to the proxy.",
+                })
+              : i18n.t("onboardingLink.resetPasswordDescription", {
+                  defaultValue: "Copy and send the generated link to the user to reset their password.",
+                })}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">
@@ -91,18 +99,24 @@ export default function OnboardingModal({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={linkFieldId} className="text-xs font-normal text-muted-foreground">
-              {isInvitation ? "Invitation link" : "Reset password link"}
+              {isInvitation
+                ? i18n.t("onboardingLink.invitationLinkLabel", { defaultValue: "Invitation link" })
+                : i18n.t("onboardingLink.resetPasswordLinkLabel", { defaultValue: "Reset password link" })}
             </Label>
             <InputGroup>
               <InputGroupInput id={linkFieldId} readOnly value={invitationUrl} className="font-mono text-xs" />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   ref={copyButtonRef}
-                  aria-label={isInvitation ? "Copy invitation link" : "Copy password reset link"}
+                  aria-label={
+                    isInvitation
+                      ? i18n.t("onboardingLink.copyInvitationAria", { defaultValue: "Copy invitation link" })
+                      : i18n.t("onboardingLink.copyResetAria", { defaultValue: "Copy password reset link" })
+                  }
                   onClick={() => copyToClipboard(invitationUrl)}
                 >
                   <Copy />
-                  Copy
+                  {i18n.t("onboardingLink.copyButton", { defaultValue: "Copy" })}
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>

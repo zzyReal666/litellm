@@ -374,19 +374,24 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
       setActiveAlerts([...activeAlerts, alertName]);
     }
   };
-  const alerts_to_UI_NAME: Record<string, string> = {
-    llm_exceptions: "LLM Exceptions",
-    llm_too_slow: "LLM Responses Too Slow",
-    llm_requests_hanging: "LLM Requests Hanging",
-    budget_alerts: "Budget Alerts (API Keys, Users)",
-    user_spend_thresholds: "User Spend Thresholds (Daily/Monthly)",
-    user_spend_anomalies: "User Spend Anomaly Detection",
-    db_exceptions: "Database Exceptions (Read/Write)",
-    daily_reports: "Weekly/Monthly Spend Reports",
-    outage_alerts: "Outage Alerts",
-    region_outage_alerts: "Region Outage Alerts",
-    model_deprecation_warnings: "Model Deprecation Warnings",
-  };
+  const alerts_to_UI_NAME: Record<string, string> = Object.fromEntries(
+    [
+      ["llm_exceptions", "LLM Exceptions"],
+      ["llm_too_slow", "LLM Responses Too Slow"],
+      ["llm_requests_hanging", "LLM Requests Hanging"],
+      ["budget_alerts", "Budget Alerts (API Keys, Users)"],
+      ["user_spend_thresholds", "User Spend Thresholds (Daily/Monthly)"],
+      ["user_spend_anomalies", "User Spend Anomaly Detection"],
+      ["db_exceptions", "Database Exceptions (Read/Write)"],
+      ["daily_reports", "Weekly/Monthly Spend Reports"],
+      ["outage_alerts", "Outage Alerts"],
+      ["region_outage_alerts", "Region Outage Alerts"],
+      ["model_deprecation_warnings", "Model Deprecation Warnings"],
+    ].map(([key, fallback]) => [
+      key,
+      i18n.t(`settings.alertsToUiName.${key}`, { defaultValue: fallback }),
+    ]),
+  );
 
   useEffect(() => {
     const fetchCallbacks = async () => {

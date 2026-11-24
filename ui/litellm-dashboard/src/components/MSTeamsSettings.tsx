@@ -22,7 +22,7 @@ interface MSTeamsSettingsProps {
 const FIELD_HELP: Record<string, React.ReactNode> = {
   MS_TEAMS_WEBHOOK_URL: (
     <>
-      {i18n.t("mSTeamsSettings.incoming-webhook-url-for-your-teams-channel", { defaultValue: "Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)" })}{" "}<span className="text-destructive"> Required * </span>
+      {i18n.t("mSTeamsSettings.incoming-webhook-url-for-your-teams-channel", { defaultValue: "Incoming webhook URL for your Teams channel (Workflows or incoming webhook connector)" })}{" "}<span className="text-destructive"> {i18n.t("mSTeamsSettings.requiredStar", { defaultValue: "Required *" })} </span>
     </>
   ),
 };
@@ -105,7 +105,7 @@ const MSTeamsSettings: React.FC<MSTeamsSettingsProps> = ({ accessToken, userID, 
                 const isVisible = visibleFields[key] || false;
                 return (
                   <div key={key} className="space-y-1">
-                    <p className="text-sm">{key}</p>
+                    <p className="text-sm">{i18n.t(`mSTeamsSettings.fieldLabels.${key}`, { defaultValue: key })}</p>
                     <InputGroup className="max-w-100">
                       <InputGroupInput
                         name={key}

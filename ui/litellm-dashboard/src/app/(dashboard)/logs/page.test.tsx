@@ -65,12 +65,13 @@ describe("LogsPage", () => {
     useOrganizationsMock.mockReturnValue({ data: [] });
   });
 
-  it("keeps request and audit logs here while traces live in Lens", () => {
+  it("keeps request logs and deleted pages here while the audit tab is temporarily hidden", () => {
     renderAs("Admin");
 
-    for (const label of ["Request Logs", "Audit Logs", "Deleted Keys", "Deleted Teams"]) {
+    for (const label of ["Request Logs", "Deleted Keys", "Deleted Teams"]) {
       expect(screen.getByRole("tab", { name: label })).toBeInTheDocument();
     }
+    expect(screen.queryByRole("tab", { name: "Audit Logs" })).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /Agent Traces/ })).not.toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Request Logs" })).toHaveAttribute("aria-selected", "true");
   });
@@ -81,9 +82,9 @@ describe("LogsPage", () => {
 
     expect(screen.getByTestId("request-logs-panel")).toHaveTextContent("active");
 
-    await user.click(screen.getByRole("tab", { name: "Audit Logs" }));
+    await user.click(screen.getByRole("tab", { name: "Deleted Keys" }));
 
-    expect(await screen.findByTestId("audit-logs-panel")).toHaveTextContent("active");
+    expect(await screen.findByTestId("deleted-keys-page")).toBeInTheDocument();
     expect(screen.getByTestId("request-logs-panel")).toHaveTextContent("inactive");
   });
 
@@ -151,7 +152,7 @@ describe("LogsPage", () => {
 
       await user.click(screen.getByRole("tab", { name: "Deleted Keys" }));
 
-      expect(screen.getByTestId("audit-logs-panel")).toHaveTextContent("inactive");
+      expect(screen.getByTestId("deleted-keys-page")).toBeInTheDocument();
       expect(screen.getByTestId("request-logs-panel")).toHaveTextContent("inactive");
     });
 
@@ -161,7 +162,7 @@ describe("LogsPage", () => {
 
       await user.click(screen.getByRole("tab", { name: "Deleted Teams" }));
 
-      expect(screen.getByTestId("audit-logs-panel")).toHaveTextContent("inactive");
+      expect(screen.getByTestId("request-logs-panel")).toHaveTextContent("inactive");
       expect(screen.getByTestId("deleted-teams-page")).toBeInTheDocument();
     });
 

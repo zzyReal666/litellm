@@ -8,6 +8,7 @@ import Papa from "papaparse";
 import { CheckCircleIcon, XCircleIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { toast } from "@/lib/toast";
+import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 
 interface BulkCreateUsersProps {
@@ -36,12 +37,21 @@ interface UserData {
 
 const PREVIEW_PAGE_SIZE = 5;
 
-const TEMPLATE_COLUMNS = ["user_email", "user_role", "teams", "max_budget", "budget_duration", "models"];
+const TEMPLATE_COLUMNS = ["user_email", "user_role", "teams", "max_budget", "budget_duration", "models"] as const;
+
+const columnLabel = (key: string): string =>
+  i18n.t(`bulkCreateUsers.columnLabels.${key}`, { defaultValue: key });
+
+const internalColumnFor = (header: string): string => {
+  const trimmed = header.trim();
+  const match = TEMPLATE_COLUMNS.find((key) => key === trimmed || columnLabel(key) === trimmed);
+  return match ?? trimmed;
+};
 const TEMPLATE_EXAMPLE_ROW = ["user@example.com", "internal_user", "", "100", "30d", ""];
 const TEMPLATE_FILE_NAME = "bulk_users_template.csv";
 
 const buildTemplateCsv = () =>
-  [TEMPLATE_COLUMNS.join(","), TEMPLATE_EXAMPLE_ROW.join(",")].join("\n") + "\n";
+  [TEMPLATE_COLUMNS.map(columnLabel).join(","), TEMPLATE_EXAMPLE_ROW.join(",")].join("\n") + "\n";
 
 // Define an interface for the UI settings
 interface UISettings {
@@ -168,7 +178,8 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
           return;
         }
 
-        const headers = results.data[0] as string[];
+        const rawHeaders = results.data[0] as string[];
+        const headers = rawHeaders.map(internalColumnFor);
 
         // Check if headers exist
         if (headers.length === 0 || (headers.length === 1 && headers[0] === "")) {
@@ -188,7 +199,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
         if (missingColumns.length > 0) {
           setCsvStructureError(
             t("bulkCreateUsers.csvMissingColumns", {
-              columns: missingColumns.join(", "),
+              columns: missingColumns.map(columnLabel).join(", "),
               defaultValue:
                 "Your CSV is missing these required columns: {{columns}}. Please add these columns to your CSV file.",
             }),
@@ -760,18 +771,18 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-destructive mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">user_email</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("user_email")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colUserEmailDesc", { defaultValue: "User's email address (required)" })}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-destructive mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">user_role</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("user_role")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colUserRoleDesc", {
                               defaultValue:
                                 'User\'s role (one of: "proxy_admin", "proxy_admin_viewer", "internal_user", "internal_user_viewer")',
@@ -781,9 +792,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">teams</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("teams")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colTeamsDesc", {
                               defaultValue: 'Comma-separated team IDs (e.g., "team-1,team-2")',
                             })}
@@ -792,9 +803,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">max_budget</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("max_budget")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colMaxBudgetDesc", {
                               defaultValue: 'Maximum budget as a number (e.g., "100")',
                             })}
@@ -803,9 +814,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">budget_duration</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("budget_duration")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colBudgetDurationDesc", {
                               defaultValue: 'Budget reset period (e.g., "30d", "1mo")',
                             })}
@@ -814,9 +825,9 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
                       </div>
                       <div className="flex items-start">
                         <div className="w-3 h-3 rounded-full bg-border mt-1.5 mr-2 shrink-0"></div>
-                        <div>
-                          <p className="font-medium">models</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium">{columnLabel("models")}</p>
+                          <p className="text-sm text-muted-foreground break-words whitespace-normal">
                             {t("bulkCreateUsers.colModelsDesc", {
                               defaultValue: 'Comma-separated allowed models (e.g., "gpt-3.5-turbo,gpt-4")',
                             })}

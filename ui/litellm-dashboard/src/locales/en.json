@@ -691,7 +691,8 @@
     "createUserSubmitButton": "Create User",
     "notifications": {
       "userCreated": "API user Created",
-      "errorCreatingUser": "Error creating the user"
+      "errorCreatingUser": "Error creating the user",
+      "userAlreadyExists": "A user with this email already exists"
     },
     "userEmailRequired": "User email is required",
     "userEmailInvalid": "Enter a valid email address",
@@ -972,7 +973,11 @@
       "authorizationEndpoint": "Authorization Endpoint",
       "tokenEndpoint": "Token Endpoint",
       "userinfoEndpoint": "Userinfo Endpoint"
-    }
+    },
+    "roleDescProxyAdmin": "admin over litellm proxy, has all permissions",
+    "roleDescAdminViewer": "view all keys, view all spend",
+    "roleDescInternalUser": "view/create/delete their own keys, view their own spend",
+    "roleDescInternalViewer": "view their own keys, view their own spend"
   },
   "teamSsoSettings": {
     "title": "Default Team Settings",
@@ -1388,7 +1393,15 @@
     "missingBudgetRows": "Rows {{rows}} have no max_budget. Those users will be created without a budget limit.",
     "failedRowsSummary": "{{count}} row(s) failed: {{rows}}. Export the error details below to fix them.",
     "downloadErrors": "Download Error Details",
-    "budgetNotProvided": "No budget provided; left empty"
+    "budgetNotProvided": "No budget provided; left empty",
+    "columnLabels": {
+      "user_email": "user_email",
+      "user_role": "user_role",
+      "teams": "teams",
+      "max_budget": "max_budget",
+      "budget_duration": "budget_duration",
+      "models": "models"
+    }
   },
   "cacheDashboard": {
     "tabAnalytics": "Cache Analytics",
@@ -1630,7 +1643,18 @@
     "emailLogoUrlDesc": "(Optional) Customize the Logo that appears in the email, pass a url to your logo",
     "emailSupportContactDesc": "(Optional) Customize the support email address that appears in the email. Default is support@berri.ai",
     "hideCredential": "Hide credential",
-    "showCredential": "Show credential"
+    "showCredential": "Show credential",
+    "fieldLabels": {
+      "SMTP_HOST": "SMTP_HOST",
+      "SMTP_PORT": "SMTP_PORT",
+      "SMTP_USERNAME": "SMTP_USERNAME",
+      "SMTP_PASSWORD": "SMTP_PASSWORD",
+      "SMTP_SENDER_EMAIL": "SMTP_SENDER_EMAIL",
+      "TEST_EMAIL_ADDRESS": "TEST_EMAIL_ADDRESS",
+      "EMAIL_LOGO_URL": "EMAIL_LOGO_URL",
+      "EMAIL_SUPPORT_CONTACT": "EMAIL_SUPPORT_CONTACT",
+      "SMTP_TLS": "SMTP_TLS"
+    }
   },
   "generalSettings": {
     "tabLoadbalancing": "Loadbalancing",
@@ -3301,7 +3325,8 @@
     "emptyValue": "None",
     "on": "On",
     "off": "Off",
-    "copyFailed": "Failed to copy to clipboard"
+    "copyFailed": "Failed to copy to clipboard",
+    "copiedToClipboard": "Copied to clipboard"
   },
   "publicModelHub": {
     "copiedToClipboard": "Copied to clipboard!",
@@ -3450,7 +3475,16 @@
     "userId": "User ID",
     "copyInvitationLink": "Copy invitation link",
     "copyPasswordResetLink": "Copy password reset link",
-    "user-id": "User ID"
+    "user-id": "User ID",
+    "invitationTitle": "Invitation Link",
+    "resetPasswordTitle": "Reset Password Link",
+    "invitationDescription": "Copy and send the generated link to onboard this user to the proxy.",
+    "resetPasswordDescription": "Copy and send the generated link to the user to reset their password.",
+    "invitationLinkLabel": "Invitation link",
+    "resetPasswordLinkLabel": "Reset password link",
+    "copyInvitationAria": "Copy invitation link",
+    "copyResetAria": "Copy password reset link",
+    "copyButton": "Copy"
   },
   "organizations": {
     "enterpriseFeature": "This is a 企业版 feature, and requires a valid key to use. Get a trial key <pricingLink>here</pricingLink>.",
@@ -3722,7 +3756,20 @@
     "tabMsTeamsAlerts": "MS Teams Alerts",
     "webhookUrlSlackCompatible": "Webhook URL (Slack-compatible)",
     "saveChanges": "Save Changes",
-    "alertsDescription": "Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get Slack webhook urls from"
+    "alertsDescription": "Alerts are sent to any Slack-compatible incoming webhook URL (Slack, Rocket.Chat, Mattermost, etc.). Get Slack webhook urls from",
+    "alertsToUiName": {
+      "llm_exceptions": "LLM Exceptions",
+      "llm_too_slow": "LLM Responses Too Slow",
+      "llm_requests_hanging": "LLM Requests Hanging",
+      "budget_alerts": "Budget Alerts (API Keys, Users)",
+      "user_spend_thresholds": "User Spend Thresholds (Daily/Monthly)",
+      "user_spend_anomalies": "User Spend Anomaly Detection",
+      "db_exceptions": "Database Exceptions (Read/Write)",
+      "daily_reports": "Weekly/Monthly Spend Reports",
+      "outage_alerts": "Outage Alerts",
+      "region_outage_alerts": "Region Outage Alerts",
+      "model_deprecation_warnings": "Model Deprecation Warnings"
+    }
   },
   "skillHubTableColumns": {
     "skillName": "Skill Name",
@@ -14251,7 +14298,11 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams Alerting Settings",
     "save-changes": "Save Changes",
     "test-ms-teams-alerts": "Test MS Teams Alerts",
-    "introDescription": "Send 中安云科 AI 安全网关 alerts to a Microsoft Teams channel via an incoming webhook."
+    "introDescription": "Send 中安云科 AI 安全网关 alerts to a Microsoft Teams channel via an incoming webhook.",
+    "requiredStar": "Required *",
+    "fieldLabels": {
+      "MS_TEAMS_WEBHOOK_URL": "MS_TEAMS_WEBHOOK_URL"
+    }
   },
   "contentFilterDisplay": {
     "content-categories": "Content Categories",
@@ -14371,7 +14422,32 @@
     "email-notifications": "Email Notifications",
     "select-which-events-should-trigger-email-not": "Select which events should trigger email notifications.",
     "save-changes": "Save Changes",
-    "reset-to-defaults": "Reset to Defaults"
+    "reset-to-defaults": "Reset to Defaults",
+    "events": {
+      "Virtual Key Created": {
+        "label": "Virtual Key Created",
+        "description": "An email will be sent to the user when a new virtual key is created with their user ID"
+      },
+      "New User Invitation": {
+        "label": "New User Invitation",
+        "description": "An email will be sent to the email address of the user when a new user is created"
+      },
+      "Virtual Key Rotated": {
+        "label": "Virtual Key Rotated",
+        "description": "Receive an email notification when virtual key rotated"
+      },
+      "Soft Budget Crossed": {
+        "label": "Soft Budget Crossed",
+        "description": "Receive an email notification when soft budget crossed"
+      },
+      "Max Budget Alert": {
+        "label": "Max Budget Alert",
+        "description": "Receive an email notification when max budget alert"
+      }
+    },
+    "updateSuccess": "Email event settings updated successfully",
+    "resetSuccess": "Email event settings reset to defaults",
+    "unknownEventDescription": "Receive an email notification when {{event}}"
   },
   "topAgents": {
     "view-activity": "View activity",
@@ -15241,6 +15317,42 @@
       "max_budget": "Max Budget (CNY)",
       "projects": "Create and update projects",
       "member_key_budgets": "Update budgets on team members' keys"
+    }
+  },
+  "alertingSettings": {
+    "fieldDescriptions": {
+      "slack_alerting": "Enable slack alerting for monitoring proxy in production: llm outages, budgets, spend tracking failures.",
+      "daily_report_frequency": "Frequency of receiving deployment latency/failure reports. Default is 12hours. Value is in seconds.",
+      "report_check_interval": "Frequency of checking cache if report should be sent. Background process. Default is once per hour. Value is in seconds.",
+      "budget_alert_ttl": "Cache ttl for budgets alerts. Prevents spamming same alert, each time budget is crossed. Value is in seconds.",
+      "outage_alert_ttl": "Cache ttl for model outage alerts. Sets time-window for errors. Default is 1 minute. Value is in seconds.",
+      "region_outage_alert_ttl": "Cache ttl for provider-region based outage alerts. Alert sent if 2+ models in same region report errors. Sets time-window for errors. Default is 1 minute. Value is in seconds.",
+      "minor_outage_alert_threshold": "The number of errors that count as a model/region minor outage. ('400' error code is not counted).",
+      "major_outage_alert_threshold": "The number of errors that countas a model/region major outage. ('400' error code is not counted).",
+      "max_outage_alert_list_size": "Maximum number of errors to store in cache. For a given model/region. Prevents memory leaks.",
+      "daily_spend_per_user_threshold": "Alert when a user's spend for the current day (UTC) crosses this USD amount. Off by default.",
+      "monthly_spend_per_user_threshold": "Alert when a user's spend for the current calendar month (UTC) crosses this USD amount. Off by default.",
+      "spend_anomaly_multiplier": "Flag a user's spend as anomalous when today's spend exceeds this multiple of their trailing daily average.",
+      "spend_anomaly_baseline_days": "Number of trailing days used to compute a user's daily average spend for anomaly detection.",
+      "spend_anomaly_min_spend": "Minimum spend (USD) a user must reach today before an anomaly alert can fire. Reduces false positives.",
+      "user_spend_check_interval": "How often (in seconds) to check per-user spend thresholds and anomalies. Default is hourly."
+    },
+    "resetField": "Reset {{field}}"
+  },
+  "toast": {
+    "titles": {
+      "error": "Error",
+      "serverError": "Server Error",
+      "requestError": "Request Error",
+      "authenticationError": "Authentication Error",
+      "accessDenied": "Access Denied",
+      "notFound": "Not Found",
+      "alreadyExists": "Already Exists",
+      "validationError": "Validation Error",
+      "rateLimitExceeded": "Rate Limit Exceeded",
+      "serviceUnavailable": "Service Unavailable",
+      "budgetExceeded": "Budget Exceeded",
+      "noDbConnection": "Service Unavailable"
     }
   }
 }

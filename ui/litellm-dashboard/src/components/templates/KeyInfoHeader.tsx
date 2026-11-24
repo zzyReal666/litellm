@@ -1,4 +1,5 @@
 import React from "react";
+import { HIDE_REGENERATE_KEY_BUTTON } from "@/lib/hiddenProductEntries";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -285,16 +286,17 @@ export function KeyInfoHeader({
         </div>
         {canModifyKey && (
           <div className="flex items-center gap-2">
-            {regenerateTooltip ? (
-              <TooltipProvider delay={300}>
-                <Tooltip>
-                  <TooltipTrigger render={regenerateButton} />
-                  <TooltipContent>{regenerateTooltip}</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ) : (
-              regenerateButton
-            )}
+            {!HIDE_REGENERATE_KEY_BUTTON &&
+              (regenerateTooltip ? (
+                <TooltipProvider delay={300}>
+                  <Tooltip>
+                    <TooltipTrigger render={regenerateButton} />
+                    <TooltipContent>{regenerateTooltip}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                regenerateButton
+              ))}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={

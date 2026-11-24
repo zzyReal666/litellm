@@ -691,7 +691,8 @@
     "createUserSubmitButton": "创建用户",
     "notifications": {
       "userCreated": "API 用户已创建",
-      "errorCreatingUser": "创建用户时出错"
+      "errorCreatingUser": "创建用户时出错",
+      "userAlreadyExists": "该邮箱的用户已存在，请直接邀请该用户或更换邮箱"
     },
     "userEmailRequired": "请填写用户邮箱",
     "userEmailInvalid": "请输入有效的邮箱地址",
@@ -972,7 +973,11 @@
       "authorizationEndpoint": "授权端点",
       "tokenEndpoint": "Token 端点",
       "userinfoEndpoint": "用户信息端点"
-    }
+    },
+    "roleDescProxyAdmin": "拥有代理的全部权限，可管理模型、密钥、用户与设置。",
+    "roleDescAdminViewer": "可查看所有密钥与花费，但不能修改配置。",
+    "roleDescInternalUser": "可创建、删除和查看自己的密钥，并查看自己的花费。",
+    "roleDescInternalViewer": "只能查看自己的密钥与花费。"
   },
   "teamSsoSettings": {
     "title": "默认团队设置",
@@ -1388,7 +1393,15 @@
     "missingBudgetRows": "第 {{rows}} 行未填写预算，这些用户创建后不限制预算。",
     "failedRowsSummary": "{{count}} 行失败：{{rows}}。可下载错误明细后修正。",
     "downloadErrors": "下载错误明细",
-    "budgetNotProvided": "未填写，保持为空"
+    "budgetNotProvided": "未填写，保持为空",
+    "columnLabels": {
+      "user_email": "邮箱",
+      "user_role": "用户角色",
+      "teams": "团队",
+      "max_budget": "最大预算",
+      "budget_duration": "预算重置周期",
+      "models": "模型"
+    }
   },
   "cacheDashboard": {
     "tabAnalytics": "缓存分析",
@@ -1630,7 +1643,18 @@
     "emailLogoUrlDesc": "（可选）自定义邮件中显示的 Logo，传入您的 Logo URL",
     "emailSupportContactDesc": "（可选）自定义邮件中显示的支持邮箱地址，默认为 support@berri.ai",
     "hideCredential": "隐藏凭据",
-    "showCredential": "显示凭据"
+    "showCredential": "显示凭据",
+    "fieldLabels": {
+      "SMTP_HOST": "SMTP 主机（SMTP_HOST）",
+      "SMTP_PORT": "SMTP 端口（SMTP_PORT）",
+      "SMTP_USERNAME": "SMTP 用户名（SMTP_USERNAME）",
+      "SMTP_PASSWORD": "SMTP 密码（SMTP_PASSWORD）",
+      "SMTP_SENDER_EMAIL": "发件人邮箱（SMTP_SENDER_EMAIL）",
+      "TEST_EMAIL_ADDRESS": "测试邮箱地址（TEST_EMAIL_ADDRESS）",
+      "EMAIL_LOGO_URL": "邮件 Logo 地址（EMAIL_LOGO_URL）",
+      "EMAIL_SUPPORT_CONTACT": "支持邮箱（EMAIL_SUPPORT_CONTACT）",
+      "SMTP_TLS": "SMTP TLS（SMTP_TLS）"
+    }
   },
   "generalSettings": {
     "tabLoadbalancing": "负载均衡",
@@ -3301,7 +3325,8 @@
     "emptyValue": "暂无",
     "on": "开启",
     "off": "关闭",
-    "copyFailed": "复制到剪贴板失败"
+    "copyFailed": "复制到剪贴板失败",
+    "copiedToClipboard": "已复制到剪贴板"
   },
   "publicModelHub": {
     "copiedToClipboard": "已复制到剪贴板！",
@@ -3450,7 +3475,16 @@
     "userId": "用户 ID",
     "copyInvitationLink": "复制邀请链接",
     "copyPasswordResetLink": "复制密码重置链接",
-    "user-id": "用户 ID"
+    "user-id": "用户 ID",
+    "invitationTitle": "邀请链接",
+    "resetPasswordTitle": "重置密码链接",
+    "invitationDescription": "复制生成的链接并发送给该用户，邀请其加入代理。",
+    "resetPasswordDescription": "复制生成的链接并发送给该用户，用于重置密码。",
+    "invitationLinkLabel": "邀请链接",
+    "resetPasswordLinkLabel": "重置密码链接",
+    "copyInvitationAria": "复制邀请链接",
+    "copyResetAria": "复制重置密码链接",
+    "copyButton": "复制"
   },
   "organizations": {
     "enterpriseFeature": "这是 企业版功能，需要有效的密钥才能使用。获取试用密钥请访问<pricingLink>此处</pricingLink>。",
@@ -3722,7 +3756,20 @@
     "tabMsTeamsAlerts": "MS Teams 告警",
     "webhookUrlSlackCompatible": "Webhook URL（兼容 Slack）",
     "saveChanges": "保存更改",
-    "alertsDescription": "告警会发送到任意兼容 Slack 的 incoming webhook URL（Slack、Rocket.Chat、Mattermost 等）。获取 Slack webhook 地址："
+    "alertsDescription": "告警会发送到任意兼容 Slack 的 incoming webhook URL（Slack、Rocket.Chat、Mattermost 等）。获取 Slack webhook 地址：",
+    "alertsToUiName": {
+      "llm_exceptions": "LLM 异常",
+      "llm_too_slow": "LLM 响应过慢",
+      "llm_requests_hanging": "LLM 请求挂起",
+      "budget_alerts": "预算告警（API 密钥、用户）",
+      "user_spend_thresholds": "用户花费阈值（每日/每月）",
+      "user_spend_anomalies": "用户花费异常检测",
+      "db_exceptions": "数据库异常（读/写）",
+      "daily_reports": "每周/每月花费报告",
+      "outage_alerts": "服务中断告警",
+      "region_outage_alerts": "区域中断告警",
+      "model_deprecation_warnings": "模型弃用提醒"
+    }
   },
   "skillHubTableColumns": {
     "skillName": "技能名称",
@@ -14251,7 +14298,11 @@
     "microsoft-teams-alerting-settings": "Microsoft Teams 告警设置",
     "save-changes": "保存更改",
     "test-ms-teams-alerts": "测试 MS Teams 告警",
-    "introDescription": "通过传入 webhook 将中安云科 AI 安全网关告警发送到 Microsoft Teams 频道。"
+    "introDescription": "通过传入 webhook 将中安云科 AI 安全网关告警发送到 Microsoft Teams 频道。",
+    "requiredStar": "必填 *",
+    "fieldLabels": {
+      "MS_TEAMS_WEBHOOK_URL": "MS Teams Webhook URL（MS_TEAMS_WEBHOOK_URL）"
+    }
   },
   "contentFilterDisplay": {
     "content-categories": "内容类别",
@@ -14371,7 +14422,32 @@
     "email-notifications": "邮件通知",
     "select-which-events-should-trigger-email-not": "选择哪些事件应触发邮件通知。",
     "save-changes": "保存更改",
-    "reset-to-defaults": "恢复默认值"
+    "reset-to-defaults": "恢复默认值",
+    "events": {
+      "Virtual Key Created": {
+        "label": "创建虚拟密钥",
+        "description": "为用户创建新的虚拟密钥时，会向该用户发送邮件通知"
+      },
+      "New User Invitation": {
+        "label": "邀请新用户",
+        "description": "创建新用户时，会向该用户的邮箱发送邀请邮件"
+      },
+      "Virtual Key Rotated": {
+        "label": "轮换虚拟密钥",
+        "description": "虚拟密钥轮换时收到邮件通知"
+      },
+      "Soft Budget Crossed": {
+        "label": "超出软预算",
+        "description": "超出软预算时收到邮件通知"
+      },
+      "Max Budget Alert": {
+        "label": "超出最大预算",
+        "description": "超出最大预算时收到邮件通知"
+      }
+    },
+    "updateSuccess": "邮件事件设置已更新",
+    "resetSuccess": "邮件事件设置已重置为默认值",
+    "unknownEventDescription": "当 {{event}} 时收到邮件通知"
   },
   "topAgents": {
     "view-activity": "查看活动",
@@ -15241,6 +15317,42 @@
       "max_budget": "最大预算（元）",
       "projects": "创建和更新项目",
       "member_key_budgets": "更新团队成员密钥的预算"
+    }
+  },
+  "alertingSettings": {
+    "fieldDescriptions": {
+      "slack_alerting": "启用 Slack 告警，用于监控生产环境的代理状态：LLM 中断、预算、花费追踪失败。",
+      "daily_report_frequency": "接收部署延迟/失败报告的频率，默认 12 小时，单位为秒。",
+      "report_check_interval": "检查是否应发送报告的后台任务频率，默认每小时一次，单位为秒。",
+      "budget_alert_ttl": "预算告警的缓存时间，避免每次预算被超出时重复发送同一告警，单位为秒。",
+      "outage_alert_ttl": "模型中断告警的缓存时间，用于设定错误的时间窗口，默认 1 分钟，单位为秒。",
+      "region_outage_alert_ttl": "按提供商区域统计的中断告警缓存时间；同一区域有 2 个及以上模型报错时发送告警，默认 1 分钟，单位为秒。",
+      "minor_outage_alert_threshold": "判定为模型/区域轻微中断的错误数量（不计入 400 错误码）。",
+      "major_outage_alert_threshold": "判定为模型/区域严重中断的错误数量（不计入 400 错误码）。",
+      "max_outage_alert_list_size": "每个模型/区域在缓存中保存的错误数量上限，用于避免内存泄漏。",
+      "daily_spend_per_user_threshold": "当用户当天（UTC）花费超过该美元金额时发送告警，默认关闭。",
+      "monthly_spend_per_user_threshold": "当用户当月（UTC）花费超过该美元金额时发送告警，默认关闭。",
+      "spend_anomaly_multiplier": "当用户当天花费超过其近期日均花费的该倍数时，标记为异常。",
+      "spend_anomaly_baseline_days": "计算用户日均花费以进行异常检测时使用最近多少天的数据。",
+      "spend_anomaly_min_spend": "触发异常告警前用户当天必须达到的最低花费（美元），用于减少误报。",
+      "user_spend_check_interval": "检查用户花费阈值与异常的时间间隔（秒），默认每小时一次。"
+    },
+    "resetField": "重置 {{field}}"
+  },
+  "toast": {
+    "titles": {
+      "error": "错误",
+      "serverError": "服务器错误",
+      "requestError": "请求错误",
+      "authenticationError": "认证错误",
+      "accessDenied": "权限不足",
+      "notFound": "未找到",
+      "alreadyExists": "已存在",
+      "validationError": "校验失败",
+      "rateLimitExceeded": "超出速率限制",
+      "serviceUnavailable": "服务不可用",
+      "budgetExceeded": "超出预算",
+      "noDbConnection": "服务不可用"
     }
   }
 }

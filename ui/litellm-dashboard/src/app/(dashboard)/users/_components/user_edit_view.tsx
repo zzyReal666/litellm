@@ -22,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useZodForm } from "@/lib/forms/useZodForm";
-import { roleLabel } from "@/utils/roleLabels";
+import { roleDescription, roleLabel } from "@/utils/roleLabels";
 import { CircleHelp } from "lucide-react";
 
 const isBlank = (value: string | number | null | undefined): boolean =>
@@ -265,7 +265,7 @@ export function UserEditView({
   const roleOptions = Object.entries(possibleUIRoles ?? {}).map(([role, { ui_label, description }]) => ({
     value: role,
     label: roleLabel(role, ui_label),
-    description,
+    description: roleDescription(role, description),
   }));
 
   return (

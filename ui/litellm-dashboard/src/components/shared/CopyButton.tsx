@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cva.config";
+import i18n from "@/lib/i18n";
 import { copyToClipboard } from "@/utils/dataUtils";
 import { Check, Copy } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   iconClassName,
   variant = "icon",
   iconOnly = false,
-  copiedLabel = "Copied",
+  copiedLabel = i18n.t("common.copied", { defaultValue: "Copied" }),
 }) => {
   const [copied, setCopied] = useState(false);
   const isAction = variant === "action";

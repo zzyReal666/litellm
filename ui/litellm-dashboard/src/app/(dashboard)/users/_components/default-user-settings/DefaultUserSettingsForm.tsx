@@ -5,9 +5,9 @@ import * as React from "react";
 import { useFieldArray, type Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { roleLabel } from "@/utils/roleLabels";
+import { roleDescription, roleLabel } from "@/utils/roleLabels";
 
-import { useInfiniteTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
+import { useInfiniteTeams, useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { ModelSelect, MODEL_SENTINEL_OPTIONS } from "@/components/ModelSelect/ModelSelect";
 import { toast } from "@/lib/toast";
 import { PaginatedSearchSelect } from "@/components/shared/PaginatedSearchSelect";
@@ -223,9 +223,10 @@ const ViewRow = ({ label, children }: { label: string; children: React.ReactNode
 interface SettingsViewProps {
   values: DefaultUserSettingsFormValues;
   roleOptions: readonly RoleOption[];
+  teamNames: ReadonlyMap<string, string>;
 }
 
-const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
+const SettingsView = ({ values, roleOptions, teamNames }: SettingsViewProps) => {
   const { t } = useTranslation();
   const roleLabel = roleOptions.find((option) => option.value === values.user_role)?.label ?? values.user_role;
   const durationValue = values.budget_duration === "" ? NO_RESET : values.budget_duration;
@@ -261,7 +262,7 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
         ) : (
           values.teams.map((team) => (
             <p key={team.team_id} className="text-sm text-muted-foreground">
-              {team.team_id}
+              {(team.team_id ? teamNames.get(team.team_id) : undefined) ?? team.team_id}
               {team.max_budget_in_team !== "" && (
                 <> · {t("defaultUserSettingsForm.displayValues.teamMaxBudget", { budget: team.max_budget_in_team })}</>
               )}
@@ -473,6 +474,11 @@ export const DefaultUserSettingsForm = ({
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
   const { data, isPending, isError } = useQuery({ queryKey: SETTINGS_QUERY_KEY, queryFn: fetchSettings });
+  const { data: allTeams } = useTeams();
+  const teamNames = React.useMemo(
+    () => new Map((allTeams ?? []).map((team) => [team.team_id, team.team_alias || team.team_id])),
+    [allTeams],
+  );
 
   const roleOptions = React.useMemo<RoleOption[]>(
     () =>
@@ -481,7 +487,7 @@ export const DefaultUserSettingsForm = ({
         .map(([role, meta]) => ({
           value: role,
           label: roleLabel(role, meta.ui_label || role),
-          description: meta.description ?? "",
+          description: roleDescription(role, meta.description ?? ""),
         })),
     [possibleUIRoles],
   );
@@ -525,7 +531,7 @@ export const DefaultUserSettingsForm = ({
           onSaved={() => setIsEditing(false)}
         />
       ) : (
-        <SettingsView values={initialValues} roleOptions={roleOptions} />
+        <SettingsView values={initialValues} roleOptions={roleOptions} teamNames={teamNames} />
       )}
     </SettingsCard>
   );

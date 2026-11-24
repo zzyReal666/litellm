@@ -14,6 +14,9 @@ interface EmailSettingsProps {
   alerts: any[];
 }
 
+const fieldLabel = (key: string): string =>
+  i18n.t(`emailSettings.fieldLabels.${key}`, { defaultValue: key });
+
 const requiredMarker = () => (
   <span className="text-destructive"> {i18n.t("emailSettings.requiredStar", { defaultValue: "Required *" })} </span>
 );
@@ -155,11 +158,10 @@ const EmailSettings: React.FC<EmailSettingsProps> = ({ accessToken, premiumUser,
                   const isVisible = visibleFields[key] || false;
                   return (
                     <div key={key} className="space-y-1">
-                      {isLocked ? (
-                        <p className="text-sm">✨ {key}</p>
-                      ) : (
-                        <p className="text-sm">{key}</p>
-                      )}
+                      <p className="text-sm">
+                        {isLocked ? "✨ " : ""}
+                        {fieldLabel(key)}
+                      </p>
                       <InputGroup className="max-w-100">
                         <InputGroupInput
                           name={key}

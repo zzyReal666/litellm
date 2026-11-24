@@ -95,7 +95,7 @@ describe("LogsPage network access by role", () => {
     expect(requestedUrls().filter((url) => url.includes("/audit"))).toEqual([]);
   });
 
-  it("fetches deleted teams and audit logs for an admin", async () => {
+  it("fetches deleted teams for an admin and never requests the hidden audit logs", async () => {
     const user = userEvent.setup();
     renderAs("Admin");
 
@@ -103,24 +103,10 @@ describe("LogsPage network access by role", () => {
       expect(requestedUrls().some((url) => url.includes("/v2/team/list") && url.includes("status=deleted"))).toBe(true),
     );
 
+    for (const label of ["Deleted Keys", "Deleted Teams", "Request Logs"]) {
+      await user.click(screen.getByRole("tab", { name: label }));
+    }
+
     expect(requestedUrls().filter((url) => url.includes("/audit"))).toEqual([]);
-
-    await user.click(screen.getByRole("tab", { name: "Audit Logs" }));
-
-    await waitFor(() => expect(requestedUrls().some((url) => url.includes("/audit"))).toBe(true));
-  });
-
-  it("leaves the audit request unsent when an admin selects a tab after Audit Logs", async () => {
-    const user = userEvent.setup();
-    renderAs("Admin");
-
-    await user.click(screen.getByRole("tab", { name: "Deleted Teams" }));
-
-    expect(screen.getByRole("tab", { name: "Deleted Teams" })).toHaveAttribute("aria-selected", "true");
-    expect(requestedUrls().filter((url) => url.includes("/audit"))).toEqual([]);
-
-    await user.click(screen.getByRole("tab", { name: "Audit Logs" }));
-
-    await waitFor(() => expect(requestedUrls().some((url) => url.includes("/audit"))).toBe(true));
   });
 });

@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { roleLabel } from "@/utils/roleLabels";
+import { roleDescription, roleLabel } from "@/utils/roleLabels";
 
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { MultiSelect } from "@/components/shared/MultiSelect";
@@ -257,8 +257,21 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
         finishInvite(buildSsoInvitationLink(user_id, userID));
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || error?.message || i18n.t("createUserButton.notifications.errorCreatingUser", { defaultValue: "Error creating the user" });
-      toast.fromError(errorMessage);
+      const rawMessage =
+        error.response?.data?.detail ||
+        error?.message ||
+        i18n.t("createUserButton.notifications.errorCreatingUser", { defaultValue: "Error creating the user" });
+      const errorMessage = typeof rawMessage === "string" ? rawMessage : JSON.stringify(rawMessage);
+      if (/already exists/i.test(errorMessage)) {
+        toast.fromError({
+          message: i18n.t("createUserButton.notifications.userAlreadyExists", {
+            defaultValue: "A user with this email already exists",
+          }),
+          code: "409",
+        });
+      } else {
+        toast.fromError(rawMessage);
+      }
       console.error("Error creating the user:", error);
     }
   };
@@ -266,7 +279,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   const roleOptions = Object.entries(possibleUIRoles ?? {}).map(([role, { ui_label, description }]) => ({
     value: role,
     label: roleLabel(role, ui_label),
-    description,
+    description: roleDescription(role, description),
   }));
 
   const userEmailField = (

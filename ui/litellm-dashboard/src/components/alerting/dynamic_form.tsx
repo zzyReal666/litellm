@@ -92,7 +92,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         <TableRow key={index}>
           <TableCell>
             <p className="text-sm">{value.field_name}</p>
-            <p className="mt-1 text-[0.65rem] italic text-muted-foreground">{value.field_description}</p>
+            <p className="mt-1 text-[0.65rem] italic text-muted-foreground">
+            {i18n.t(`alertingSettings.fieldDescriptions.${value.field_name}`, {
+              defaultValue: value.field_description,
+            })}
+          </p>
           </TableCell>
           {value.premium_field && !premiumUser ? (
             <TableCell>
@@ -119,7 +123,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               type="button"
               variant="ghost"
               size="icon-sm"
-              aria-label={`Reset ${value.field_name}`}
+              aria-label={i18n.t("alertingSettings.resetField", { defaultValue: "Reset {{field}}", field: value.field_name })}
               onClick={() => handleResetField(value.field_name, index)}
               className="text-destructive"
             >

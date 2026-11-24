@@ -50,7 +50,9 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
 
     try {
       await updateEmailEventSettings(accessToken, { settings: eventSettings });
-      toast.success("Email event settings updated successfully");
+      toast.success(
+        i18n.t("emailEventSettings.updateSuccess", { defaultValue: "Email event settings updated successfully" }),
+      );
     } catch (error) {
       console.error("Failed to update email event settings:", error);
       toast.fromError(error);
@@ -62,7 +64,9 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
 
     try {
       await resetEmailEventSettings(accessToken);
-      toast.success("Email event settings reset to defaults");
+      toast.success(
+        i18n.t("emailEventSettings.resetSuccess", { defaultValue: "Email event settings reset to defaults" }),
+      );
       // Refresh settings after reset
       fetchEventSettings();
     } catch (error) {
@@ -71,21 +75,19 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
     }
   };
 
+  const eventLabel = (event: EmailEvent): string =>
+    i18n.t(`emailEventSettings.events.${event}.label`, { defaultValue: event });
+
   // Helper function to get a description for each event type
   const getEventDescription = (event: EmailEvent): string => {
-    // Convert event name to a sentence with more context
-    if (event.includes("Virtual Key Created")) {
-      return "An email will be sent to the user when a new virtual key is created with their user ID";
-    } else if (event.includes("New User Invitation")) {
-      return "An email will be sent to the email address of the user when a new user is created";
-    } else {
-      // Handle any other event type from the API
-      const words = event
-        .split(/(?=[A-Z])/)
-        .join(" ")
-        .toLowerCase();
-      return `Receive an email notification when ${words}`;
+    const known = i18n.t(`emailEventSettings.events.${event}.description`, { defaultValue: "" });
+    if (known !== "") {
+      return known;
     }
+    return i18n.t("emailEventSettings.unknownEventDescription", {
+      defaultValue: "Receive an email notification when {{event}}",
+      event: event.split(/(?=[A-Z])/).join(" ").toLowerCase(),
+    });
   };
 
   return (
@@ -113,7 +115,7 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
                   className="mt-1"
                 />
                 <div className="ml-3">
-                  <p className="text-sm">{setting.event}</p>
+                  <p className="text-sm">{eventLabel(setting.event)}</p>
                   <div className="block text-sm text-muted-foreground">{getEventDescription(setting.event)}</div>
                 </div>
               </div>

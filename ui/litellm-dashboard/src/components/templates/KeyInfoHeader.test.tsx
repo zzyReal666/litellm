@@ -164,9 +164,9 @@ describe("KeyInfoHeader", () => {
   });
 
   describe("action buttons", () => {
-    it("should show Regenerate button and actions dropdown by default", () => {
+    it("hides the Regenerate button while it is temporarily disabled and keeps the actions dropdown", () => {
       render(<KeyInfoHeader data={MOCK_DATA} />);
-      expect(screen.getByRole("button", { name: /regenerate key/i })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /regenerate key/i })).not.toBeInTheDocument();
       expect(screen.getByRole("button", { name: /more key actions/i })).toBeInTheDocument();
     });
 
@@ -176,21 +176,11 @@ describe("KeyInfoHeader", () => {
       expect(screen.queryByRole("button", { name: /more key actions/i })).not.toBeInTheDocument();
     });
 
-    it("should call onRegenerate when Regenerate Key is clicked", async () => {
+    it("does not expose the Regenerate action even when a handler is provided", () => {
       const onRegenerate = vi.fn();
       render(<KeyInfoHeader data={MOCK_DATA} onRegenerate={onRegenerate} />);
-      await userEvent.click(screen.getByRole("button", { name: /regenerate key/i }));
-      expect(onRegenerate).toHaveBeenCalledTimes(1);
-    });
-
-    it("should disable Regenerate button when regenerateDisabled is true", () => {
-      render(<KeyInfoHeader data={MOCK_DATA} regenerateDisabled={true} />);
-      expect(screen.getByRole("button", { name: /regenerate key/i })).toBeDisabled();
-    });
-
-    it("should not disable Regenerate button by default", () => {
-      render(<KeyInfoHeader data={MOCK_DATA} />);
-      expect(screen.getByRole("button", { name: /regenerate key/i })).toBeEnabled();
+      expect(screen.queryByRole("button", { name: /regenerate key/i })).not.toBeInTheDocument();
+      expect(onRegenerate).not.toHaveBeenCalled();
     });
   });
 

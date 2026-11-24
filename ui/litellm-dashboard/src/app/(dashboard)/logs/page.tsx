@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import i18n from "@/lib/i18n";
+import { HIDE_AUDIT_LOGS_TAB } from "@/lib/hiddenProductEntries";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import DeletedKeysPage from "@/components/DeletedKeysPage/DeletedKeysPage";
@@ -35,7 +36,7 @@ export default function LogsPage() {
       <PageTabs value={activeTab} onValueChange={(value: LogsTab) => setActiveTab(value)}>
         <PageTabsList>
           <PageTabsTrigger value="request logs">{i18n.t("logsPage.request-logs", { defaultValue: "Request Logs" })}</PageTabsTrigger>
-          {canViewAuditLogs && <PageTabsTrigger value="audit logs">{i18n.t("logsPage.audit-logs", { defaultValue: "Audit Logs" })}</PageTabsTrigger>}
+          {canViewAuditLogs && !HIDE_AUDIT_LOGS_TAB && <PageTabsTrigger value="audit logs">{i18n.t("logsPage.audit-logs", { defaultValue: "Audit Logs" })}</PageTabsTrigger>}
           <PageTabsTrigger value="deleted keys">{i18n.t("logsPage.deleted-keys", { defaultValue: "Deleted Keys" })}</PageTabsTrigger>
           {canViewDeletedTeams && <PageTabsTrigger value="deleted teams">{i18n.t("logsPage.deleted-teams", { defaultValue: "Deleted Teams" })}</PageTabsTrigger>}
         </PageTabsList>
@@ -49,7 +50,7 @@ export default function LogsPage() {
             isActive={activeTab === "request logs"}
           />
         </PageTabsContent>
-        {canViewAuditLogs && (
+        {canViewAuditLogs && !HIDE_AUDIT_LOGS_TAB && (
           <PageTabsContent value="audit logs" keepMounted>
             <AuditLogsPanel
               accessToken={accessToken}

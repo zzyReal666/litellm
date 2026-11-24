@@ -236,7 +236,7 @@ describe("DynamicForm presentation", () => {
     renderForm();
 
     expect(screen.getByText("daily_report_frequency")).toBeInTheDocument();
-    expect(screen.getByText("How often the report runs")).toBeInTheDocument();
+    expect(screen.getByText(/Frequency of receiving deployment latency/)).toBeInTheDocument();
     expect(screen.getAllByText("In DB")).toHaveLength(2);
     expect(screen.getByText("In Config")).toBeInTheDocument();
     expect(screen.getByText("Not Set")).toBeInTheDocument();
