@@ -76,6 +76,46 @@ interface KeyEditViewProps {
   premiumUser?: boolean;
 }
 
+const NON_NEGATIVE_NUMERIC_FIELDS = [
+  "max_budget",
+  "soft_budget",
+  "tpm_limit",
+  "rpm_limit",
+  "tpd_limit",
+  "max_parallel_requests",
+  "default_estimated_output_tokens",
+] as const;
+
+const parseNonNegativeNumber = (raw: unknown): number | null => {
+  if (raw === null || raw === undefined || String(raw).trim() === "") {
+    return null;
+  }
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+};
+
+const isInvalidNonNegative = (raw: unknown): boolean =>
+  raw !== null &&
+  raw !== undefined &&
+  String(raw).trim() !== "" &&
+  parseNonNegativeNumber(raw) === null;
+
+const JSON_OBJECT_FIELDS = ["model_tpm_limit", "model_rpm_limit"] as const;
+
+const isValidJsonObjectField = (raw: string | null | undefined): boolean => {
+  if (!raw || raw.trim() === "") {
+    return true;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed !== null && typeof parsed === "object";
+  } catch {
+    return false;
+  }
+};
+
+const MAX_KEY_ALIAS_LENGTH = 255;
+
 export function KeyEditView({
   keyData,
   onCancel,
@@ -211,6 +251,45 @@ export function KeyEditView({
   }, [accessToken]);
 
   const handleSubmit = async (values: any) => {
+    if (typeof values.key_alias === "string" && values.key_alias.length > MAX_KEY_ALIAS_LENGTH) {
+      form.setError("key_alias", {
+        message: t("templates.keyEditView.aliasTooLong", {
+          defaultValue: "Key alias must be {{max}} characters or fewer",
+          max: MAX_KEY_ALIAS_LENGTH,
+        }),
+      });
+      form.setFocus("key_alias");
+      return;
+    }
+    const invalidNumericField = NON_NEGATIVE_NUMERIC_FIELDS.find((field) => isInvalidNonNegative(values[field]));
+    if (invalidNumericField !== undefined) {
+      form.setError(invalidNumericField, {
+        message: t("templates.keyEditView.invalidNonNegativeNumber", {
+          defaultValue: "Enter a non-negative number, or leave empty for unlimited",
+        }),
+      });
+      form.setFocus(invalidNumericField);
+      return;
+    }
+    const invalidJsonField = JSON_OBJECT_FIELDS.find((field) => !isValidJsonObjectField(values[field]));
+    if (invalidJsonField !== undefined) {
+      form.setError(invalidJsonField, {
+        message: t("templates.keyEditView.invalidJsonObject", {
+          defaultValue: 'Enter a valid JSON object, for example {"gpt-4": 1000}',
+        }),
+      });
+      form.setFocus(invalidJsonField);
+      return;
+    }
+    if (!isValidJsonObjectField(values.metadata)) {
+      form.setError("metadata", {
+        message: t("templates.keyEditView.metadataInvalidJson", {
+          defaultValue: "Metadata must be a valid JSON object",
+        }),
+      });
+      form.setFocus("metadata");
+      return;
+    }
     try {
       setIsKeySaving(true);
 

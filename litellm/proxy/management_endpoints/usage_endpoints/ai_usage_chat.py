@@ -545,6 +545,29 @@ async def _process_tool_call(
     chat_messages.append({"role": "tool", "tool_call_id": tc.id, "content": tool_result})
 
 
+class _UsageAiError(NamedTuple):
+    code: str
+    message: str
+
+
+def _classify_usage_ai_error(error: Exception) -> _UsageAiError:
+    name: Final = type(error).__name__
+    text: Final = str(error).lower()
+    if name == "AuthenticationError" or "api_key" in text or "api key" in text:
+        return _UsageAiError(
+            code="provider_credentials_missing",
+            message="The AI model has no credentials configured.",
+        )
+    if "llm provider not provided" in text or name == "BadRequestError":
+        return _UsageAiError(
+            code="model_not_callable",
+            message="The selected model is not a callable model group.",
+        )
+    if name == "RateLimitError":
+        return _UsageAiError(code="rate_limited", message="The AI model is rate limited. Try again shortly.")
+    return _UsageAiError(code="internal_error", message="An internal error occurred. Please try again.")
+
+
 async def _stream_final_response(model: str, chat_messages: list[Mapping[str, object]]) -> AsyncIterator[str]:
     """Stream the final LLM response after tool results are appended."""
     yield _sse({"type": "status", "message": "Analyzing results..."})
@@ -602,9 +625,5 @@ async def stream_usage_ai_chat(
 
     except Exception as e:
         verbose_proxy_logger.error("AI usage chat failed: %s", e)
-        yield _sse(
-            {
-                "type": "error",
-                "message": "An internal error occurred. Please try again.",
-            }
-        )
+        classified: Final = _classify_usage_ai_error(e)
+        yield _sse({"type": "error", "code": classified.code, "message": classified.message})

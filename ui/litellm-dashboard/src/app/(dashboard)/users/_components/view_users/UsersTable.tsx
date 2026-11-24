@@ -1,4 +1,6 @@
 "use client";
+import { roleLabel } from "@/utils/roleLabels";
+
 
 import {
   ColumnFiltersState,
@@ -108,7 +110,7 @@ export function UsersTable({
   const roleOptions = useMemo(
     () =>
       Object.entries(possibleUIRoles ?? {}).map(([role, config]) => ({
-        label: config.ui_label || role,
+        label: roleLabel(role, config.ui_label || role),
         value: role,
       })),
     [possibleUIRoles],
@@ -126,7 +128,7 @@ export function UsersTable({
   const formatFilterValue = (columnId: string, value: unknown): string => {
     const raw = String(value);
     if (columnId === "user_role") {
-      return possibleUIRoles?.[raw]?.ui_label || raw;
+      return roleLabel(raw, possibleUIRoles?.[raw]?.ui_label);
     }
     if (columnId === "team") {
       return teams?.find((team) => team.team_id === raw)?.team_alias || raw;

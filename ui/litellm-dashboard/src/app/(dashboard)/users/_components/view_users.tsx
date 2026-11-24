@@ -1,4 +1,6 @@
 import { parseAsString, useQueryState } from "nuqs";
+import { roleLabel } from "@/utils/roleLabels";
+
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -443,7 +445,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           {
             label: t("viewUsers.deleteModal.labelGlobalProxyRole", { defaultValue: "Global Proxy Role" }),
             value:
-              (userToDelete?.user_role && possibleUIRoles?.[userToDelete.user_role]?.ui_label) ||
+              (userToDelete?.user_role && roleLabel(userToDelete.user_role, possibleUIRoles?.[userToDelete.user_role]?.ui_label)) ||
               userToDelete?.user_role ||
               "-",
           },

@@ -45,14 +45,15 @@ const ModelSettingsModal: React.FC<ModelSettingsModalProps> = ({ isVisible, onCa
   }, [isVisible, refetch]);
 
   // Compute initial values from fetched config data
+  const storeModelField = proxyConfigData?.find((field) => field.field_name === "store_model_in_db");
+  const isManagedByConfig = storeModelField?.source === "config" || storeModelField?.editable === false;
+
   const initialValues = useMemo<StoreModelInDBParams>(() => {
     if (!proxyConfigData) {
       return {
         store_model_in_db: false,
       };
     }
-
-    const storeModelField = proxyConfigData.find((field) => field.field_name === "store_model_in_db");
 
     return {
       store_model_in_db: storeModelField?.field_value ?? false,
@@ -134,12 +135,21 @@ const ModelSettingsModal: React.FC<ModelSettingsModalProps> = ({ isVisible, onCa
                       checked={Boolean(value)}
                       onCheckedChange={onChange}
                       onBlur={onBlur}
+                      disabled={isManagedByConfig}
                       className="w-fit"
                     />
                   )
                 }
               </FormField>
             </FieldGroup>
+            {isManagedByConfig && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {t("modelDashboard.modelSettingsModal.managedByConfig", {
+                  defaultValue:
+                    "This setting is managed by the config file. Edit config.yaml, or remove it from the file, to change it.",
+                })}
+              </p>
+            )}
           </form>
         </TooltipProvider>
         <DialogFooter>
@@ -147,7 +157,7 @@ const ModelSettingsModal: React.FC<ModelSettingsModalProps> = ({ isVisible, onCa
             {t("common.cancel", { defaultValue: "Cancel" })}
           </Button>
           <Button
-            disabled={isPending || isLoadingConfig}
+            disabled={isPending || isLoadingConfig || isManagedByConfig}
             aria-busy={isPending}
             onClick={() => void form.handleSubmit(handleFormSubmit)()}
           >

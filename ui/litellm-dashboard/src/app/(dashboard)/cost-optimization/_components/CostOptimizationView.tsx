@@ -1,10 +1,10 @@
 "use client";
 
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import { Page, PageTabs, PageTabsList, PageTabsTrigger } from "@/components/shared/Page";
 import React from "react";
-import { Info, PiggyBank } from "lucide-react";
+import { PiggyBank } from "lucide-react";
 
 import useCan from "@/app/(dashboard)/hooks/useCan";
 import { Alert, AlertDescription } from "@/components/shared/Alert";
@@ -63,25 +63,6 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
             </PageTabsList>
           </PageHeaderControls>
         </PageHeader>
-
-        <div
-          role="alert"
-          className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-lg border border-border bg-muted/50 px-4 py-4"
-        >
-          <Info className="mt-0.5 size-5 text-primary" aria-hidden="true" />
-          <p className="font-medium text-foreground">{t("costOptimization.costOptimizationView.experimentalNotice", { defaultValue: "This is an experimental dashboard" })}</p>
-          <p className="col-start-2 text-sm text-muted-foreground">
-            <Trans
-              i18nKey="costOptimization.costOptimizationView.feedbackPrompt"
-              defaults="Have feedback? Join the discussion <a>here</a>"
-              components={{
-                a: (
-                  <span />
-                ),
-              }}
-            />
-          </p>
-        </div>
 
         {activity.failed && (
           <Alert variant="error">

@@ -1,4 +1,6 @@
 import i18n from "@/lib/i18n";
+import { roleLabel } from "@/utils/roleLabels";
+
 import React, { useId, useState } from "react";
 import { userBulkUpdateUserCall, teamBulkMemberAddCall, Member } from "@/components/networking";
 import { UserEditView } from "./user_edit_view";
@@ -275,7 +277,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground">{user.user_email || i18n.t("bulkEditUsers.noEmail", { defaultValue: "No email" })}</TableCell>
                       <TableCell className="text-xs text-foreground">
-                        {possibleUIRoles?.[user.user_role]?.ui_label || user.user_role}
+                        {user.user_role ? roleLabel(user.user_role, possibleUIRoles?.[user.user_role]?.ui_label) : "-"}
                       </TableCell>
                       <TableCell className={NUMERIC_CELL_CLASS}>
                         <MoneyCell value={user.max_budget} decimals={2} emptyText={i18n.t("bulkEditUsers.unlimited", { defaultValue: "Unlimited" })} showZero />

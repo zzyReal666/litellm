@@ -152,4 +152,28 @@ describe("PromptCompressionTab submit payload", () => {
     expect(await screen.findByText("Enter a valid URL, for example https://headroom.example.com")).toBeInTheDocument();
     expect(createGuardrailCall).not.toHaveBeenCalled();
   });
+
+  it("rejects a name that already exists without calling the proxy", async () => {
+    const user = userEvent.setup();
+    getGuardrailsList.mockResolvedValue({
+      guardrails: [
+        {
+          guardrail_id: "g-1",
+          guardrail_name: "headroom-compression",
+          litellm_params: { guardrail: "headroom", api_base: "https://a.example.com", default_on: true },
+        },
+      ],
+    });
+    render(<PromptCompressionTab accessToken="test-token" />);
+    await screen.findByText("headroom-compression");
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "headroom-compression" } });
+    fireEvent.change(screen.getByLabelText("Headroom API base"), {
+      target: { value: "https://headroom.example.com" },
+    });
+    await user.click(screen.getByRole("button", { name: "Add guardrail" }));
+    expect(
+      await screen.findByText("A guardrail with this name already exists. Choose another name"),
+    ).toBeInTheDocument();
+    expect(createGuardrailCall).not.toHaveBeenCalled();
+  });
 });

@@ -2645,4 +2645,41 @@ describe("KeyEditView", () => {
       expect(await screen.findByRole("switch", { name: /disable global guardrails/i })).toBeInTheDocument();
     });
   });
+
+  describe("edit validation", () => {
+    const renderEditor = (onSubmit: (values: Record<string, unknown>) => Promise<void>) =>
+      renderWithProviders(
+        <KeyEditView
+          keyData={MOCK_KEY_DATA}
+          onCancel={() => {}}
+          onSubmit={onSubmit}
+          accessToken="test-token"
+          userID="test-user"
+          userRole="proxy_admin"
+          premiumUser={true}
+        />,
+      );
+
+    it("blocks submit and shows an error when metadata is not a JSON object", async () => {
+      const onSubmit = vi.fn().mockResolvedValue(undefined);
+      renderEditor(onSubmit);
+      const metadata = await screen.findByLabelText("Metadata");
+      fireEvent.change(metadata, { target: { value: "{not json" } });
+      fireEvent.click(screen.getByText("Save Changes"));
+      expect(await screen.findByText("Metadata must be a valid JSON object")).toBeInTheDocument();
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    it("blocks submit when the key alias is too long", async () => {
+      const onSubmit = vi.fn().mockResolvedValue(undefined);
+      renderEditor(onSubmit);
+      const alias = await screen.findByLabelText("Key Alias");
+      fireEvent.change(alias, { target: { value: "x".repeat(300) } });
+      fireEvent.click(screen.getByText("Save Changes"));
+      expect(
+        await screen.findByText("Key alias must be 255 characters or fewer"),
+      ).toBeInTheDocument();
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+  });
 });

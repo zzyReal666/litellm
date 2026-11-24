@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useZodForm } from "@/lib/forms/useZodForm";
+import { roleLabel } from "@/utils/roleLabels";
 import { CircleHelp } from "lucide-react";
 
 const RATE_LIMIT_ERROR = "Enter a non-negative whole number, or leave empty for unlimited";
@@ -55,14 +56,53 @@ const MCP_SELECTION_SHAPE = z.object({
 // The proxy stores unset user fields as null rather than leaving them out, and
 // antd forwarded whatever it was handed, so nullish is what keeps a loaded user
 // editable at all.
+const metadataValidationMessage = (): string =>
+  i18n.t("userEditView.metadataInvalidJson", { defaultValue: "Metadata must be valid JSON" });
+
+const isValidJsonObject = (raw: string | null | undefined): boolean => {
+  if (!raw || raw.trim() === "") {
+    return true;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed !== null && typeof parsed === "object";
+  } catch {
+    return false;
+  }
+};
+
+const MAX_EMAIL_LENGTH = 254;
+const MAX_ALIAS_LENGTH = 255;
+
 const userEditShape = {
   user_id: z.string().nullish(),
-  user_email: z.string().nullish(),
-  user_alias: z.string().nullish(),
+  user_email: z
+    .string()
+    .max(
+      MAX_EMAIL_LENGTH,
+      i18n.t("userEditView.emailTooLong", {
+        defaultValue: "Email must be {{max}} characters or fewer",
+        max: MAX_EMAIL_LENGTH,
+      }),
+    )
+    .nullish(),
+  user_alias: z
+    .string()
+    .max(
+      MAX_ALIAS_LENGTH,
+      i18n.t("userEditView.aliasTooLong", {
+        defaultValue: "User alias must be {{max}} characters or fewer",
+        max: MAX_ALIAS_LENGTH,
+      }),
+    )
+    .nullish(),
   user_role: z.string().nullish(),
   models: z.array(z.string()),
   budget_duration: z.string().nullish(),
-  metadata: z.string().nullish(),
+  metadata: z
+    .string()
+    .nullish()
+    .refine(isValidJsonObject, { message: metadataValidationMessage() }),
   tpm_limit: rateLimitField,
   rpm_limit: rateLimitField,
   mcp_servers_and_groups: MCP_SELECTION_SHAPE.optional(),
@@ -188,6 +228,8 @@ export function UserEditView({
   const handleSubmit = (values: UserEditFormValues) => {
     const metadata = parseMetadata(values.metadata);
     if (!metadata.ok) {
+      form.setError("metadata", { message: metadataValidationMessage() });
+      form.setFocus("metadata");
       return;
     }
 
@@ -215,7 +257,7 @@ export function UserEditView({
 
   const roleOptions = Object.entries(possibleUIRoles ?? {}).map(([role, { ui_label, description }]) => ({
     value: role,
-    label: ui_label,
+    label: roleLabel(role, ui_label),
     description,
   }));
 
@@ -243,8 +285,11 @@ export function UserEditView({
             control={form.control}
             name="user_role"
             label={labelWithHint(
-              "Global Proxy Role",
-              "This is the role that the user will globally on the proxy. This role is independent of any team/org specific roles.",
+              i18n.t("userEditView.globalProxyRoleLabel", { defaultValue: "Global Proxy Role" }),
+              i18n.t("userEditView.globalProxyRoleTooltip", {
+                defaultValue:
+                  "This is the role that the user will globally on the proxy. This role is independent of any team/org specific roles.",
+              }),
             )}
           >
             {({ id, value, onChange }) => (
@@ -272,8 +317,11 @@ export function UserEditView({
             control={form.control}
             name="models"
             label={labelWithHint(
-              "Personal Models",
-              "Select which models this user can access outside of team-scope. Choose 'All Proxy Models' to grant access to all models available on the proxy.",
+              i18n.t("userEditView.personalModelsLabel", { defaultValue: "Personal Models" }),
+              i18n.t("userEditView.personalModelsTooltip", {
+                defaultValue:
+                  "Select which models this user can access outside of team-scope. Choose 'All Proxy Models' to grant access to all models available on the proxy.",
+              }),
             )}
           >
             {({ value, onChange }) => (
@@ -324,8 +372,10 @@ export function UserEditView({
                 control={form.control}
                 name="tpm_limit"
                 label={labelWithHint(
-                  "TPM Limit",
-                  "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+                  i18n.t("userEditView.tpmLimitLabel", { defaultValue: "TPM Limit" }),
+                  i18n.t("userEditView.tpmLimitTooltip", {
+                    defaultValue: "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+                  }),
                 )}
               >
                 {({ ref, value, onChange, ...control }) => (
@@ -338,7 +388,7 @@ export function UserEditView({
                     value={value ?? ""}
                     onChange={(event) => onChange(event.target.value)}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder="Unlimited"
+                    placeholder={i18n.t("userEditView.unlimitedPlaceholder", { defaultValue: "Unlimited" })}
                   />
                 )}
               </FormField>
@@ -347,8 +397,10 @@ export function UserEditView({
                 control={form.control}
                 name="rpm_limit"
                 label={labelWithHint(
-                  "RPM Limit",
-                  "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+                  i18n.t("userEditView.rpmLimitLabel", { defaultValue: "RPM Limit" }),
+                  i18n.t("userEditView.rpmLimitTooltip", {
+                    defaultValue: "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+                  }),
                 )}
               >
                 {({ ref, value, onChange, ...control }) => (
@@ -361,7 +413,7 @@ export function UserEditView({
                     value={value ?? ""}
                     onChange={(event) => onChange(event.target.value)}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder="Unlimited"
+                    placeholder={i18n.t("userEditView.unlimitedPlaceholder", { defaultValue: "Unlimited" })}
                   />
                 )}
               </FormField>
@@ -394,8 +446,11 @@ export function UserEditView({
                 control={form.control}
                 name="mcp_servers_and_groups"
                 label={labelWithHint(
-                  "MCP Servers / Access Groups",
-                  "Caps which MCP servers, access groups, and tools this user may reach. Every key the user holds is limited to this set.",
+                  i18n.t("userEditView.mcpServersLabel", { defaultValue: "MCP Servers / Access Groups" }),
+                  i18n.t("userEditView.mcpServersTooltip", {
+                    defaultValue:
+                      "Caps which MCP servers, access groups, and tools this user may reach. Every key the user holds is limited to this set.",
+                  }),
                 )}
               >
                 {({ value, onChange }) => (

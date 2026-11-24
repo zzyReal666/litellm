@@ -72,6 +72,28 @@ describe("UserEditView", () => {
     cleanup();
   });
 
+  it("blocks submit and shows an inline error when metadata is invalid JSON", async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    renderWithProviders(<UserEditView {...defaultProps} onSubmit={onSubmit} />);
+    const metadata = await screen.findByLabelText("Metadata");
+    fireEvent.change(metadata, { target: { value: "{invalid json" } });
+    await user.click(screen.getByRole("button", { name: /save changes/i }));
+    expect(await screen.findByText("Metadata must be valid JSON")).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("rejects an email longer than the maximum length", async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    renderWithProviders(<UserEditView {...defaultProps} onSubmit={onSubmit} />);
+    const email = await screen.findByLabelText("Email");
+    fireEvent.change(email, { target: { value: "x".repeat(255) } });
+    await user.click(screen.getByRole("button", { name: /save changes/i }));
+    expect(await screen.findByText("Email must be 254 characters or fewer")).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it("should render", async () => {
     renderWithProviders(<UserEditView {...defaultProps} />);
 

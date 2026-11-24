@@ -49,7 +49,7 @@ describe("Cost Optimization page chrome in Chinese", () => {
     await i18n.changeLanguage("en");
   });
 
-  it("renders the header, the subtitle, the tabs and the notices in Chinese", async () => {
+  it("renders the header, the subtitle and the tabs in Chinese", async () => {
     await i18n.changeLanguage("zh-CN");
     const { container } = renderView();
 
@@ -59,9 +59,6 @@ describe("Cost Optimization page chrome in Chinese", () => {
     expect(screen.getByRole("tab", { name: "提示词压缩" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "提示词缓存" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "自动路由" })).toBeInTheDocument();
-    expect(screen.getByText("这是一个实验性面板")).toBeInTheDocument();
-    expect(screen.getByText(/有反馈？/)).toBeInTheDocument();
-
     const visible = container.textContent ?? "";
     for (const english of ["Cost Optimization", "Overall", "Prompt Compression", "This is an experimental"]) {
       expect(visible).not.toContain(english);

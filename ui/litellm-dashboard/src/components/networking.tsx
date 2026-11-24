@@ -4022,7 +4022,7 @@ export const enrichPolicyTemplateStream = async (
     competitor_variations: Record<string, string[]>;
     guardrailDefinitions: any[];
   }) => void,
-  onError?: (error: string) => void,
+  onError?: (error: string, code?: string) => void,
   options?: { instruction?: string; existingCompetitors?: string[] },
   onStatus?: (message: string) => void,
 ) => {
@@ -4073,7 +4073,7 @@ export const enrichPolicyTemplateStream = async (
         } else if (event.type === "done") {
           onDone(event);
         } else if (event.type === "error") {
-          onError?.(event.message);
+          onError?.(event.message, event.code);
         }
       } catch {
         // skip malformed events
@@ -4096,7 +4096,7 @@ export const usageAiChatStream = async (
   model: string,
   onChunk: (content: string) => void,
   onDone: () => void,
-  onError?: (error: string) => void,
+  onError?: (error: string, code?: string) => void,
   onStatus?: (message: string) => void,
   onToolCall?: (event: UsageAiToolCallEvent) => void,
   signal?: AbortSignal,
@@ -4148,7 +4148,7 @@ export const usageAiChatStream = async (
         } else if (event.type === "done") {
           onDone();
         } else if (event.type === "error") {
-          onError?.(event.message);
+          onError?.(event.message, event.code);
         }
       } catch {
         // skip malformed events

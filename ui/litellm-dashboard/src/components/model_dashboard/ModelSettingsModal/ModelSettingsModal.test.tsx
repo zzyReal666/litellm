@@ -291,4 +291,28 @@ describe("ModelSettingsModal", () => {
       expect(mockToast.success).toHaveBeenCalled();
     });
   });
+
+  it("disables the switch and save button when the setting is managed by the config file", () => {
+    mockUseProxyConfig.mockReturnValue({
+      data: [
+        {
+          field_name: "store_model_in_db",
+          field_type: "Boolean",
+          field_description: "If True, models and config are stored in and loaded from the database.",
+          field_value: true,
+          stored_in_db: false,
+          field_default_value: null,
+          source: "config",
+          editable: false,
+        },
+      ],
+      isLoading: false,
+      refetch: mockRefetch,
+    } as any);
+    renderWithProviders(<ModelSettingsModal {...defaultProps} />);
+    const storeSwitch = screen.getByRole("switch");
+    expect(storeSwitch).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("button", { name: "Save Settings" })).toBeDisabled();
+    expect(screen.getByText(/managed by the config file/i)).toBeInTheDocument();
+  });
 });

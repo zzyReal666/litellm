@@ -1,4 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { roleLabel } from "@/utils/roleLabels";
+
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { FieldGroup } from "@/components/ui/field";
@@ -264,7 +266,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
   const roleOptions = Object.entries(possibleUIRoles ?? {}).map(([role, { ui_label, description }]) => ({
     value: role,
-    label: ui_label,
+    label: roleLabel(role, ui_label),
     description,
   }));
 

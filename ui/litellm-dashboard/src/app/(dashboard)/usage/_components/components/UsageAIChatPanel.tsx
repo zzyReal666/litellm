@@ -1,3 +1,4 @@
+import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import React, { useEffect, useRef, useState } from "react";
@@ -29,6 +30,33 @@ interface ChatMessage {
   content: string;
   toolCalls?: ToolCallStep[];
 }
+
+const usageAiErrorText = (
+  t: TFunction,
+  code: string | undefined,
+): string | undefined => {
+  switch (code) {
+    case "provider_credentials_missing":
+      return t("usagePage.usageAiChatPanel.errorProviderCredentialsMissing", {
+        defaultValue:
+          "The model used by the AI assistant has no API key configured. Configure credentials under Models + Endpoints, or pick a model that already has credentials.",
+      });
+    case "model_not_callable":
+      return t("usagePage.usageAiChatPanel.errorModelNotCallable", {
+        defaultValue: "The selected model cannot be called directly. Pick a model group with configured credentials.",
+      });
+    case "rate_limited":
+      return t("usagePage.usageAiChatPanel.errorRateLimited", {
+        defaultValue: "The AI model is rate limited. Please try again shortly.",
+      });
+    case "internal_error":
+      return t("usagePage.usageAiChatPanel.errorInternal", {
+        defaultValue: "The AI assistant is temporarily unavailable. Please try again later.",
+      });
+    default:
+      return undefined;
+  }
+};
 
 interface UsageAIChatPanelProps {
   open: boolean;
@@ -186,10 +214,20 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
           ]);
           setStreamingContent("");
         },
-        (errorMsg: string) => {
+        (errorMsg: string, errorCode?: string) => {
           setStatusMessage(null);
           setActiveToolCalls([]);
-          setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${errorMsg}` }]);
+          const friendly = usageAiErrorText(t, errorCode);
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: t("usagePage.usageAiChatPanel.errorPrefix", {
+                defaultValue: "Error: {{message}}",
+                message: friendly ?? errorMsg,
+              }),
+            },
+          ]);
           setStreamingContent("");
         },
         (status: string) => {
@@ -210,8 +248,19 @@ const UsageAIChatPanel: React.FC<UsageAIChatPanelProps> = ({ open, onClose, acce
       if (error?.name === "AbortError" || abortController.signal.aborted) {
         return;
       }
-      const errorMsg = error?.message || t("usagePage.usageAiChatPanel.fallbackError", { defaultValue: "Failed to get response. Please try again." });
-      setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${errorMsg}` }]);
+      const errorMsg =
+        error?.message ||
+        t("usagePage.usageAiChatPanel.fallbackError", { defaultValue: "Failed to get response. Please try again." });
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: t("usagePage.usageAiChatPanel.errorPrefix", {
+            defaultValue: "Error: {{message}}",
+            message: errorMsg,
+          }),
+        },
+      ]);
       setStreamingContent("");
     } finally {
       setIsLoading(false);

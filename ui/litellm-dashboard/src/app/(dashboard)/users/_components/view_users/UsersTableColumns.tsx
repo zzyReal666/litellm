@@ -1,4 +1,6 @@
 "use client";
+import { roleLabel } from "@/utils/roleLabels";
+
 
 import i18n from "@/lib/i18n";
 import { ColumnDef } from "@tanstack/react-table";
@@ -202,7 +204,7 @@ export const getUsersTableColumns = ({
       enableSorting: true,
       cell: ({ row }) => (
         <span className="text-sm">
-          {(row.original.user_role && possibleUIRoles?.[row.original.user_role]?.ui_label) || "-"}
+          {row.original.user_role ? roleLabel(row.original.user_role, possibleUIRoles?.[row.original.user_role]?.ui_label) : "-"}
         </span>
       ),
     },

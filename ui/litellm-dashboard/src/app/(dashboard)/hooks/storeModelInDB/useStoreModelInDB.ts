@@ -32,9 +32,13 @@ const performStoreModelInDB = async (
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const errorMessage =
-      errorData?.error?.message || errorData?.message || errorData?.detail || "Failed to update model storage settings";
-    throw new Error(errorMessage);
+    const detail = errorData?.detail;
+    const detailMessage =
+      typeof detail === "string" ? detail : (detail?.error ?? detail?.message ?? undefined);
+    const resolution = typeof detail === "object" && detail !== null ? detail?.resolution : undefined;
+    const baseMessage =
+      errorData?.error?.message || errorData?.message || detailMessage || "Failed to update model storage settings";
+    throw new Error(resolution ? `${baseMessage} ${resolution}` : baseMessage);
   }
 
   const data = await response.json();

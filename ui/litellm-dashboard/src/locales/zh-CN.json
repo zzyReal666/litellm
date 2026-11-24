@@ -3791,7 +3791,15 @@
     "mcpServersLabel": "MCP 服务器 / 访问组",
     "mcpServersTooltip": "限定此用户可访问的 MCP 服务器、访问组和工具。该用户持有的每个密钥都受此范围限制。",
     "modelMaxBudgetHint": "限制此用户在单个模型上的花费，每个模型有独立的重置周期。适用于该用户持有的所有密钥。",
-    "max-budget-cny": "最大预算（人民币）"
+    "max-budget-cny": "最大预算（人民币）",
+    "emailTooLong": "邮箱不能超过 {{max}} 个字符",
+    "aliasTooLong": "用户别名不能超过 {{max}} 个字符",
+    "metadataInvalidJson": "元数据必须是合法的 JSON",
+    "tpmLimitLabel": "TPM 限制",
+    "tpmLimitTooltip": "作用于该用户持有的所有密钥。团队和密钥限制仍作为上限生效。",
+    "rpmLimitLabel": "RPM 限制",
+    "rpmLimitTooltip": "作用于该用户持有的所有密钥。团队和密钥限制仍作为上限生效。",
+    "unlimitedPlaceholder": "无限制"
   },
   "viewUserSpend": {
     "totalSpend": "总花费",
@@ -8441,7 +8449,11 @@
       "errorPrefix": "错误：{{message}}",
       "fallbackError": "获取响应失败，请重试。",
       "loadingModels": "正在加载模型…",
-      "noModelsFound": "未找到模型"
+      "noModelsFound": "未找到模型",
+      "errorProviderCredentialsMissing": "AI 助手所用模型没有配置 API Key。请先在「模型与端点」中为该模型配置凭据，或在提问时选择一个已有凭据的模型。",
+      "errorModelNotCallable": "所选模型无法直接调用，请选择一个已配置凭据的模型分组。",
+      "errorRateLimited": "AI 模型当前被限流，请稍后重试。",
+      "errorInternal": "AI 助手暂时不可用，请稍后重试。"
     },
     "usagePageView": {
       "filterByUser": "按用户筛选",
@@ -10729,7 +10741,8 @@
       "storeModelInDbTooltip": "启用后，模型和配置将存储到数据库并从数据库加载。",
       "updateSuccess": "模型存储设置已成功更新",
       "updateFailed": "保存模型存储设置失败：{{error}}",
-      "loadingSettings": "正在加载模型设置"
+      "loadingSettings": "正在加载模型设置",
+      "managedByConfig": "该设置由配置文件 config.yaml 管理，不能在界面修改。如需变更，请编辑 config.yaml 或从文件中移除该项。"
     },
     "healthChecksTable": {
       "emptyBody": "添加到此代理的模型将在此显示其健康状态。"
@@ -11324,7 +11337,11 @@
       "loggingSettings": "日志设置",
       "metadata": "元数据",
       "saveChanges": "保存更改",
-      "errorFetchingTags": "获取标签时出错：{{error}}"
+      "errorFetchingTags": "获取标签时出错：{{error}}",
+      "aliasTooLong": "密钥别名不能超过 {{max}} 个字符",
+      "invalidNonNegativeNumber": "请输入非负数字，留空表示不限制",
+      "metadataInvalidJson": "元数据必须是合法的 JSON 对象",
+      "invalidJsonObject": "请输入合法的 JSON 对象，例如 {\"gpt-4\": 1000}"
     },
     "keyInfoView": {
       "block": "封禁",
@@ -12336,8 +12353,6 @@
       "keyUsageFailed": "无法加载该时间段的密钥用量。"
     },
     "costOptimizationView": {
-      "experimentalNotice": "这是一个实验性面板",
-      "feedbackPrompt": "有反馈？<a>在此参与讨论</a>",
       "subtitle": "跟踪并配置可为你省钱的机制：提示词压缩与提示词缓存。自动路由位于「模型 + 端点」的「自动路由」标签页",
       "tabAutoRouter": "自动路由",
       "tabOverall": "总览",
@@ -12353,7 +12368,6 @@
       "applyToAllRequests": "应用到所有请求",
       "created": "压缩护栏已创建",
       "description": "Headroom 是中安云科 AI 安全网关原生的护栏，在请求到达模型之前压缩提示词，从而减少输入 Token 费用。被移除的 Token 会计价，并作为压缩节省显示在「用量」标签页。<a>Headroom 配置文档</a>",
-      "enterpriseNotice": "对所有请求启用压缩对所有用户可用。按密钥或团队选择性启用属于 企业版功能。获取试用密钥请点击<a>这里</a>",
       "failedToCreate": "创建压缩护栏失败",
       "failedToLoadGuardrails": "加载压缩护栏失败",
       "title": "Headroom 提示词压缩",
@@ -12367,7 +12381,8 @@
       "addGuardrail": "添加护栏",
       "nameTooLong": "名称不能超过 64 个字符",
       "apiBaseInvalid": "请输入有效的 URL，例如 https://headroom.example.com",
-      "apiBaseTooLong": "API 地址不能超过 200 个字符"
+      "apiBaseTooLong": "API 地址不能超过 200 个字符",
+      "nameExists": "该名称的护栏已存在，请换一个名称"
     },
     "shadowEvalSection": {
       "armBaseline": "基线",

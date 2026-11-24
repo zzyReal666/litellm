@@ -332,7 +332,54 @@ class TestStreamUsageAiChat:
 
             error_events = [e for e in events if e["type"] == "error"]
             assert len(error_events) == 1
+            assert error_events[0]["code"] == "internal_error"
             assert "internal error" in error_events[0]["message"].lower()
+
+    @pytest.mark.asyncio
+    async def test_stream_reports_missing_provider_credentials(self):
+        from litellm.exceptions import AuthenticationError
+
+        with patch(
+            "litellm.proxy.management_endpoints.usage_endpoints.ai_usage_chat.litellm"
+        ) as mock_litellm:
+            mock_litellm.acompletion = AsyncMock(
+                side_effect=AuthenticationError(
+                    message="The api_key client option must be set", llm_provider="openai", model="gpt-4o-mini"
+                )
+            )
+
+            events = []
+            async for event in stream_usage_ai_chat(
+                messages=[{"role": "user", "content": "test"}],
+            ):
+                events.append(json.loads(event.replace("data: ", "").strip()))
+
+            error_events = [e for e in events if e["type"] == "error"]
+            assert error_events[0]["code"] == "provider_credentials_missing"
+
+    @pytest.mark.asyncio
+    async def test_stream_reports_uncallable_model(self):
+        from litellm.exceptions import BadRequestError
+
+        with patch(
+            "litellm.proxy.management_endpoints.usage_endpoints.ai_usage_chat.litellm"
+        ) as mock_litellm:
+            mock_litellm.acompletion = AsyncMock(
+                side_effect=BadRequestError(
+                    message="LLM Provider NOT provided. Pass in the LLM provider you are trying to call.",
+                    llm_provider="",
+                    model="bugtest-model",
+                )
+            )
+
+            events = []
+            async for event in stream_usage_ai_chat(
+                messages=[{"role": "user", "content": "test"}],
+            ):
+                events.append(json.loads(event.replace("data: ", "").strip()))
+
+            error_events = [e for e in events if e["type"] == "error"]
+            assert error_events[0]["code"] == "model_not_callable"
 
     @pytest.mark.asyncio
     async def test_non_admin_enforces_user_id(self):

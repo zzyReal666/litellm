@@ -3791,7 +3791,15 @@
     "mcpServersLabel": "MCP Servers / Access Groups",
     "mcpServersTooltip": "Caps which MCP servers, access groups, and tools this user may reach. Every key the user holds is limited to this set.",
     "modelMaxBudgetHint": "Cap this user's spend on individual models, each with its own reset window. Applies across every key the user holds.",
-    "max-budget-cny": "Max Budget (CNY)"
+    "max-budget-cny": "Max Budget (CNY)",
+    "emailTooLong": "Email must be {{max}} characters or fewer",
+    "aliasTooLong": "User alias must be {{max}} characters or fewer",
+    "metadataInvalidJson": "Metadata must be valid JSON",
+    "tpmLimitLabel": "TPM Limit",
+    "tpmLimitTooltip": "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+    "rpmLimitLabel": "RPM Limit",
+    "rpmLimitTooltip": "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
+    "unlimitedPlaceholder": "Unlimited"
   },
   "viewUserSpend": {
     "totalSpend": "Total Spend",
@@ -8441,7 +8449,11 @@
       "errorPrefix": "Error: {{message}}",
       "fallbackError": "Failed to get response. Please try again.",
       "loadingModels": "Loading models…",
-      "noModelsFound": "No models found"
+      "noModelsFound": "No models found",
+      "errorProviderCredentialsMissing": "The model used by the AI assistant has no API key configured. Configure credentials under Models + Endpoints, or pick a model that already has credentials.",
+      "errorModelNotCallable": "The selected model cannot be called directly. Pick a model group with configured credentials.",
+      "errorRateLimited": "The AI model is rate limited. Please try again shortly.",
+      "errorInternal": "The AI assistant is temporarily unavailable. Please try again later."
     },
     "usagePageView": {
       "filterByUser": "Filter by user",
@@ -10729,7 +10741,8 @@
       "storeModelInDbTooltip": "If enabled, models and config are stored in and loaded from the database.",
       "updateSuccess": "Model storage settings updated successfully",
       "updateFailed": "Failed to save model storage settings: {{error}}",
-      "loadingSettings": "Loading model settings"
+      "loadingSettings": "Loading model settings",
+      "managedByConfig": "This setting is managed by the config file. Edit config.yaml, or remove the setting from the file, to change it."
     },
     "healthChecksTable": {
       "emptyBody": "Models added to this proxy will show their health here."
@@ -11324,7 +11337,11 @@
       "loggingSettings": "Logging Settings",
       "metadata": "Metadata",
       "saveChanges": "Save Changes",
-      "errorFetchingTags": "Error fetching tags: {{error}}"
+      "errorFetchingTags": "Error fetching tags: {{error}}",
+      "aliasTooLong": "Key alias must be {{max}} characters or fewer",
+      "invalidNonNegativeNumber": "Enter a non-negative number, or leave empty for unlimited",
+      "metadataInvalidJson": "Metadata must be a valid JSON object",
+      "invalidJsonObject": "Enter a valid JSON object, for example {\"gpt-4\": 1000}"
     },
     "keyInfoView": {
       "block": "Block",
@@ -12336,8 +12353,6 @@
       "keyUsageFailed": "Could not load key usage for this range."
     },
     "costOptimizationView": {
-      "experimentalNotice": "This is an experimental dashboard",
-      "feedbackPrompt": "Have feedback? Join the discussion <a>here</a>",
       "subtitle": "Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab",
       "tabAutoRouter": "Auto-Router",
       "tabOverall": "Overall",
@@ -12353,7 +12368,6 @@
       "applyToAllRequests": "Apply to all requests",
       "created": "Compression guardrail created",
       "description": "Headroom is a native 中安云科 AI 安全网关 guardrail that compresses your prompts before they reach the model, so you pay for fewer input tokens. The tokens it removes are priced and shown on the Usage tab as compression savings. <a>Headroom setup docs</a>",
-      "enterpriseNotice": "Applying compression to all requests is available to all users. Enabling it selectively per key or team is a 企业版 feature. Get a trial key <a>here</a>",
       "failedToCreate": "Failed to create compression guardrail",
       "failedToLoadGuardrails": "Failed to load compression guardrails",
       "title": "Headroom prompt compression",
@@ -12367,7 +12381,8 @@
       "addGuardrail": "Add guardrail",
       "nameTooLong": "Name must be 64 characters or fewer",
       "apiBaseInvalid": "Enter a valid URL, for example https://headroom.example.com",
-      "apiBaseTooLong": "API base must be 200 characters or fewer"
+      "apiBaseTooLong": "API base must be 200 characters or fewer",
+      "nameExists": "A guardrail with this name already exists. Choose another name"
     },
     "shadowEvalSection": {
       "armBaseline": "Baseline",

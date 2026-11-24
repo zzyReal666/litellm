@@ -1,4 +1,6 @@
 import i18n from "@/lib/i18n";
+import { roleLabel } from "@/utils/roleLabels";
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -462,7 +464,7 @@ export default function UserInfoView({
           { label: i18n.t("viewUsers.userInfoView.userIdLabel", { defaultValue: "User ID" }), value: userData.user_id, code: true },
           {
             label: i18n.t("viewUsers.deleteModal.labelGlobalProxyRole", { defaultValue: "Global Proxy Role" }),
-            value: (userData.user_role && possibleUIRoles?.[userData.user_role]?.ui_label) || userData.user_role || "-",
+            value: userData.user_role ? roleLabel(userData.user_role, possibleUIRoles?.[userData.user_role]?.ui_label) : "-",
           },
           {
             label: i18n.t("viewUsers.deleteModal.labelTotalSpend", { defaultValue: "Total Spend (CNY)" }),

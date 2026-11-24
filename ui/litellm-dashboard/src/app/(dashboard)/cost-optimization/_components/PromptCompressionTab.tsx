@@ -109,6 +109,14 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
     if (!accessToken) {
       return;
     }
+    if (guardrails.some((guardrail) => guardrail.guardrail_name === values.name)) {
+      form.setError("name", {
+        message: t("costOptimization.promptCompressionTab.nameExists", {
+          defaultValue: "A compression guardrail with this name already exists",
+        }),
+      });
+      return;
+    }
     setIsSaving(true);
     try {
       await createGuardrailCall(
@@ -126,10 +134,16 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
       await loadGuardrails();
     } catch (error) {
       console.error("Failed to create compression guardrail:", error);
+      const reason = error instanceof Error ? error.message : String(error);
+      const isDuplicateName = /unique constraint|guardrail_name|already exists|duplicate/i.test(reason);
       toast.fromError(
-        t("costOptimization.promptCompressionTab.failedToCreate", {
-          defaultValue: "Failed to create compression guardrail",
-        }),
+        isDuplicateName
+          ? t("costOptimization.promptCompressionTab.nameExists", {
+              defaultValue: "A compression guardrail with this name already exists",
+            })
+          : t("costOptimization.promptCompressionTab.failedToCreate", {
+              defaultValue: "Failed to create compression guardrail",
+            }),
       );
     } finally {
       setIsSaving(false);
@@ -246,17 +260,6 @@ const PromptCompressionTab: React.FC<PromptCompressionTabProps> = ({ accessToken
                   )}
                 </FormField>
               </FieldGroup>
-              <div className="mt-6 mb-4 rounded-lg border border-warning/20 bg-warning/10 p-3">
-                <p className="text-sm text-warning">
-                  <Trans
-                    i18nKey="costOptimization.promptCompressionTab.enterpriseNotice"
-                    defaults="Applying compression to all requests is available to all users. Enabling it selectively per key or team is a 企业版 feature. Get a trial key <a>here</a>"
-                    components={{
-                      a: <span />,
-                    }}
-                  />
-                </p>
-              </div>
               <div className="flex justify-end">
                 <Button type="submit" disabled={isSaving}>
                   {isSaving && <UiLoadingSpinner className="size-4" />}

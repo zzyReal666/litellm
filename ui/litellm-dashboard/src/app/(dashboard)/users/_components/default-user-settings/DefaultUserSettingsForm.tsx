@@ -5,6 +5,8 @@ import * as React from "react";
 import { useFieldArray, type Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+import { roleLabel } from "@/utils/roleLabels";
+
 import { useInfiniteTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { ModelSelect, MODEL_SENTINEL_OPTIONS } from "@/components/ModelSelect/ModelSelect";
 import { toast } from "@/lib/toast";
@@ -175,7 +177,10 @@ const TeamsField = ({ control }: { control: SettingsControl }) => {
             >
               {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                 <Select
-                  items={TEAM_ROLE_OPTIONS}
+                  items={TEAM_ROLE_OPTIONS.map((option) => ({
+                value: option.value,
+                label: t(option.labelKey, { defaultValue: option.label }),
+              }))}
                   value={value}
                   onValueChange={(selected) => onChange(selected ?? "user")}
                 >
@@ -260,7 +265,11 @@ const SettingsView = ({ values, roleOptions }: SettingsViewProps) => {
               {team.max_budget_in_team !== "" && (
                 <> · {t("defaultUserSettingsForm.displayValues.teamMaxBudget", { budget: team.max_budget_in_team })}</>
               )}
-              <> · {team.user_role}</>
+              <> ·{" "}
+                {team.user_role === "admin"
+                  ? t("defaultUserSettings.displayValues.adminRoleOption", { defaultValue: "Admin" })
+                  : t("defaultUserSettings.displayValues.userRoleOption", { defaultValue: "User" })}
+              </>
             </p>
           ))
         )}
@@ -279,6 +288,14 @@ interface SettingsFormProps {
 
 const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, onSaved }: SettingsFormProps) => {
   const { t } = useTranslation();
+  const budgetDurationItems = React.useMemo(
+    () =>
+      BUDGET_DURATION_OPTIONS.map((option) => ({
+        value: option.value,
+        label: t(option.labelKey, { defaultValue: option.label }),
+      })),
+    [t],
+  );
   const queryClient = useQueryClient();
   const form = useZodForm(defaultUserSettingsSchema, { defaultValues: initialValues });
   const { isDirty } = form.formState;
@@ -362,7 +379,7 @@ const SettingsForm = ({ initialValues, roleOptions, updateSettings, onCancel, on
         >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
-              items={BUDGET_DURATION_OPTIONS}
+              items={budgetDurationItems}
               value={value === "" ? NO_RESET : value}
               onValueChange={(selected) => onChange(selected === null || selected === NO_RESET ? "" : selected)}
             >
@@ -461,7 +478,11 @@ export const DefaultUserSettingsForm = ({
     () =>
       Object.entries(possibleUIRoles ?? {})
         .filter(([role]) => role.includes("internal_user"))
-        .map(([role, meta]) => ({ value: role, label: meta.ui_label || role, description: meta.description ?? "" })),
+        .map(([role, meta]) => ({
+          value: role,
+          label: roleLabel(role, meta.ui_label || role),
+          description: meta.description ?? "",
+        })),
     [possibleUIRoles],
   );
 
