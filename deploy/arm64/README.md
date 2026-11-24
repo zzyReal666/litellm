@@ -45,6 +45,10 @@ cd deploy/arm64
   --out ~/Downloads
 ```
 
+arm64 上前端 `next build` 默认 2G 堆不够用（本机 2G 上限时 OOM），
+`build-bundle.sh` 会自动生成一份只给 ui-builder 阶段加 `NODE_OPTIONS=--max-old-space-size=6144`
+的 Dockerfile 再构建，不改仓库里的 Dockerfile。
+
 产物：`dist/litellm-offline-v1.106.0-zh.28-arm64.tar.gz`（`dist/` 已在 .gitignore 内）
 
 2026-11-24 在本机（Apple M5，OrbStack arm64）产出的包：

@@ -89,12 +89,44 @@ require_arm() {
   [[ "${arch}" == "arm64" ]] || { echo "镜像 $1 架构为 ${arch}，不是 arm64" >&2; exit 1; }
 }
 
+prepare_arm_dockerfile() {
+  local src="${REPO}/Dockerfile" out
+  if grep -q 'NODE_OPTIONS' "${src}"; then
+    printf '%s\n' "${src}"
+    return 0
+  fi
+  out="$(mktemp "${TMPDIR:-/tmp}/Dockerfile.arm64.XXXXXX")"
+  python3 - "${src}" "${out}" <<'PY'
+import sys
+
+src, out = sys.argv[1:3]
+text = open(src, encoding="utf-8").read()
+marker = "npm_config_audit=false"
+if marker in text:
+    text = text.replace(marker, marker + " \\\n    NODE_OPTIONS=--max-old-space-size=6144", 1)
+else:
+    lines = text.splitlines(keepends=True)
+    for i, line in enumerate(lines):
+        if line.startswith("FROM --platform=$BUILDPLATFORM"):
+            lines.insert(i + 1, "ENV NODE_OPTIONS=--max-old-space-size=6144\n")
+            break
+    else:
+        lines.insert(0, "ENV NODE_OPTIONS=--max-old-space-size=6144\n")
+    text = "".join(lines)
+open(out, "w", encoding="utf-8").write(text)
+PY
+  printf '%s\n' "${out}"
+}
+
 if [[ "${SKIP_LITELLM}" -eq 0 ]]; then
   echo "==> 构建 litellm-zhcn:${VERSION} (linux/arm64)"
+  arm_dockerfile="$(prepare_arm_dockerfile)"
   docker buildx build --platform linux/arm64 --load \
+    -f "${arm_dockerfile}" \
     -t "litellm-zhcn:${VERSION}" \
     --build-arg "LITELLM_RELEASE_TAG=${VERSION}" \
     "${REPO}"
+  [[ "${arm_dockerfile}" == "${REPO}/Dockerfile" ]] || rm -f "${arm_dockerfile}"
 fi
 require_arm "litellm-zhcn:${VERSION}"
 
