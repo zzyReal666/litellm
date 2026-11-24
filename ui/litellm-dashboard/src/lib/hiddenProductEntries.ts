@@ -1,6 +1,6 @@
 /**
  * 临时隐藏的产品入口。放开某个入口时，从这里删除对应值即可，
- * 详细清单与放开步骤见 Doc4zzy（文档for张忠源）/临时隐藏功能清单-20261124.md。
+ * 详细清单与放开步骤见 Doc4zzy（文档for张忠源）/06-研发记录与版本变更/临时隐藏功能清单-20261124.md。
  */
 export const HIDDEN_MENU_GROUP_LABELS: ReadonlySet<string> = new Set(["DEVELOPER TOOLS"]);
 

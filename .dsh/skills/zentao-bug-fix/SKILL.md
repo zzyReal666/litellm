@@ -6,7 +6,7 @@ whenToUse: 当用户提到「禅道提了新 bug」「测试组反馈」「批�
 
 # 禅道 Bug 闭环处理
 
-本技能把「拉取 Bug → 列清单 → 复现 → 修复 → 测试 → 部署验证 → 出包 → 报告 → 提交」固化为可重复流程。完整说明见仓库文档 `Doc4zzy（文档for张忠源）/禅道Bug处理标准流程与Skill使用说明.md`，模板见本目录 `references/checklists.md`。
+本技能把「拉取 Bug → 列清单 → 复现 → 修复 → 测试 → 部署验证 → 出包 → 报告 → 提交」固化为可重复流程。完整说明见仓库文档 `Doc4zzy（文档for张忠源）/05-测试与质量/禅道Bug处理标准流程与Skill使用说明.md`，模板见本目录 `references/checklists.md`。
 
 ## 开始前
 
@@ -20,7 +20,7 @@ whenToUse: 当用户提到「禅道提了新 bug」「测试组反馈」「批�
 1. 用 `qa/ai-gateway-playwright/tools/zentao_scrape45c.mjs` 抓取禅道产品 45 的 Bug 列表（注意脚本里的账号、密码、socks5 代理需按本机环境替换）。输出 `/tmp/bugs45c.json`。
 2. 用 `qa/ai-gateway-playwright/tools/zentao_bugdetails.mjs` 抓详情（把脚本里的 ID 过滤改成 `>= 本批起始 ID`），输出 `/tmp/bug_details.json`。禅道详情经常为空，标题是主要线索，必须实机推断现象与期望。
 3. 与上一轮清单对比，得到新增/重新激活的 ID 集合；新 Bug 按模块分组。
-4. 产出清单文档（追加到 `Doc4zzy（文档for张忠源）/测试组Bug清单-*.md`），每条包含：ID、模块、标题、状态、推断表现、期望行为、处理结论。模板见 `references/checklists.md`。
+4. 产出清单文档（追加到 `Doc4zzy（文档for张忠源）/05-测试与质量/测试组Bug清单-*.md`），每条包含：ID、模块、标题、状态、推断表现、期望行为、处理结论。模板见 `references/checklists.md`。
 
 ## 阶段二：复现与定性
 

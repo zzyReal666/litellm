@@ -47,7 +47,7 @@
 
 在浏览器地址栏输入 `<网关地址>/ui/`，回车后进入登录页
 
-![](ai-gateway-manual-zh24/01-1-login-empty.png)
+![](截图素材/ai-gateway-manual-zh24/01-1-login-empty.png)
 
 页面包含两个输入框：
 
@@ -62,19 +62,19 @@
 
 在用户名框中填写你的账号
 
-![](ai-gateway-manual-zh24/01-2-login-user.png)
+![](截图素材/ai-gateway-manual-zh24/01-2-login-user.png)
 
 **步骤三：输入密码**
 
 在密码框中填写密码，输入内容以圆点显示
 
-![](ai-gateway-manual-zh24/01-3-login-password.png)
+![](截图素材/ai-gateway-manual-zh24/01-3-login-password.png)
 
 **步骤四：点击登录**
 
 点击 `登录` 按钮，验证通过后进入管理后台首页
 
-![](ai-gateway-manual-zh24/01-4-after-login.png)
+![](截图素材/ai-gateway-manual-zh24/01-4-after-login.png)
 
 连续多次输错密码不会自动锁定账号，但会记录到审计日志。忘记密码请联系管理员在「内部用户」页面生成重置密码链接
 
@@ -122,7 +122,7 @@
 
 左侧菜单 `AI 网关` 分组下点击 **模型与端点**，进入模型管理页面，地址为 `<网关地址>/ui/models-and-endpoints/`
 
-![](ai-gateway-manual-zh24/02-1-models-list.png)
+![](截图素材/ai-gateway-manual-zh24/02-1-models-list.png)
 
 页面顶部有十个标签页：
 
@@ -159,7 +159,7 @@
 
 点击页面顶部的 `添加模型` 标签页
 
-![](ai-gateway-manual-zh24/02-2-model-form-empty.png)
+![](截图素材/ai-gateway-manual-zh24/02-2-model-form-empty.png)
 
 表单从上到下依次为：提供商、网关模型名称、模型映射、模式、凭据、附加模型信息设置、高级设置，底部为 `测试连接` 与 `添加模型`
 
@@ -167,7 +167,7 @@
 
 点击「提供商」下拉框，在弹出的列表中搜索并选择上游服务商，例如 Deepseek
 
-![](ai-gateway-manual-zh24/02-3-model-provider-open.png)
+![](截图素材/ai-gateway-manual-zh24/02-3-model-provider-open.png)
 
 提供商决定后续可选的模型清单与默认接口地址。列表按字母排序，可直接输入关键字筛选
 
@@ -175,7 +175,7 @@
 
 选中后，下拉框显示已选提供商
 
-![](ai-gateway-manual-zh24/02-4-model-provider-selected.png)
+![](截图素材/ai-gateway-manual-zh24/02-4-model-provider-selected.png)
 
 **步骤四：选择网关模型名称**
 
@@ -185,13 +185,13 @@
 - `所有 Deepseek 模型（通配）`：通配该提供商下的全部模型
 - 具体模型名，如 `deepseek/deepseek-v4-flash`、`deepseek/deepseek-v4-pro`
 
-![](ai-gateway-manual-zh24/02-5-model-select-open.png)
+![](截图素材/ai-gateway-manual-zh24/02-5-model-select-open.png)
 
 **步骤五：确认模型名称**
 
 选中后，网关模型名称显示为所选模型
 
-![](ai-gateway-manual-zh24/02-6-model-selected.png)
+![](截图素材/ai-gateway-manual-zh24/02-6-model-selected.png)
 
 「网关模型名称」的含义是：中安云科 AI 安全网关发送给上游 LLM API 的真实模型名。这一项决定请求实际落到哪个上游模型
 
@@ -199,7 +199,7 @@
 
 在「模型映射」区域填写公开模型名称
 
-![](ai-gateway-manual-zh24/02-7-model-public-name.png)
+![](截图素材/ai-gateway-manual-zh24/02-7-model-public-name.png)
 
 「模型映射」把对外的公开名称映射到上游模型名，字段说明：
 
@@ -214,7 +214,7 @@
 
 在「凭据」区域填写上游提供商的密钥，输入内容以圆点显示
 
-![](ai-gateway-manual-zh24/02-8-model-apikey.png)
+![](截图素材/ai-gateway-manual-zh24/02-8-model-apikey.png)
 
 凭据区域字段说明：
 
@@ -229,7 +229,7 @@
 
 点击 `高级设置` 展开进阶配置
 
-![](ai-gateway-manual-zh24/02-9-model-advanced.png)
+![](截图素材/ai-gateway-manual-zh24/02-9-model-advanced.png)
 
 高级设置中的字段：
 
@@ -257,7 +257,7 @@
 
 左侧菜单 `AI 网关` 分组下点击 **安全护栏**，地址为 `<网关地址>/ui/guardrails/`
 
-![](ai-gateway-manual-zh24/03-1-guardrails-list.png)
+![](截图素材/ai-gateway-manual-zh24/03-1-guardrails-list.png)
 
 页面顶部有两个标签页：`护栏库` 与 `测试 Playground`。后者用于在不影响线上请求的情况下试跑护栏效果
 
@@ -280,7 +280,7 @@
 
 点击页面右上角 `+ 添加新护栏`
 
-![](ai-gateway-manual-zh24/03-2-guardrail-menu.png)
+![](截图素材/ai-gateway-manual-zh24/03-2-guardrail-menu.png)
 
 弹出两个选项：
 
@@ -293,13 +293,13 @@
 
 点击 `添加提供商护栏`，进入两步式表单的第一步「基本信息」
 
-![](ai-gateway-manual-zh24/03-3-guardrail-step1.png)
+![](截图素材/ai-gateway-manual-zh24/03-3-guardrail-step1.png)
 
 **步骤三：填写护栏名称**
 
 在「护栏名称」中填写名称，建议与用途一致，例如 `headroom-compression`
 
-![](ai-gateway-manual-zh24/03-4-guardrail-name.png)
+![](截图素材/ai-gateway-manual-zh24/03-4-guardrail-name.png)
 
 第一步「基本信息」字段说明：
 
@@ -317,17 +317,17 @@
 
 点击「护栏提供商」下拉框，在列表中搜索并选择 Headroom
 
-![](ai-gateway-manual-zh24/03-5-guardrail-provider-open.png)
+![](截图素材/ai-gateway-manual-zh24/03-5-guardrail-provider-open.png)
 
 选择后，表单会按该提供商展示对应的配置项
 
-![](ai-gateway-manual-zh24/03-6-guardrail-provider-selected.png)
+![](截图素材/ai-gateway-manual-zh24/03-6-guardrail-provider-selected.png)
 
 **步骤五：进入提供商配置**
 
 点击 `下一步`，进入第二步「提供商配置」
 
-![](ai-gateway-manual-zh24/03-7-guardrail-step2.png)
+![](截图素材/ai-gateway-manual-zh24/03-7-guardrail-step2.png)
 
 这一步填写该提供商所需的连接参数，不同提供商字段不同。确认无误后点击 `创建护栏` 完成创建，也可以点 `上一步` 返回修改基本信息
 
@@ -337,7 +337,7 @@
 
 进入 `可观测性` 分组下的 **成本优化**，切换到 `提示词压缩` 标签页
 
-![](ai-gateway-manual-zh24/03-8-headroom-config.png)
+![](截图素材/ai-gateway-manual-zh24/03-8-headroom-config.png)
 
 页面说明为：Headroom 是中安云科 AI 安全网关原生的护栏，在请求到达模型之前压缩提示词，从而减少输入 Token 费用。被移除的 Token 会计价，并作为压缩节省显示在「用量」标签页
 
@@ -357,7 +357,7 @@
 
 左侧菜单 `AI 网关` 分组下点击 **虚拟密钥**，地址为 `<网关地址>/ui/api-keys/`
 
-![](ai-gateway-manual-zh24/04-1-keys-list.png)
+![](截图素材/ai-gateway-manual-zh24/04-1-keys-list.png)
 
 表格字段：
 
@@ -379,7 +379,7 @@
 
 点击页面右上角 `+ 新建密钥`
 
-![](ai-gateway-manual-zh24/04-2-key-form-empty.png)
+![](截图素材/ai-gateway-manual-zh24/04-2-key-form-empty.png)
 
 表单分为密钥归属、密钥详情、可选设置、高级设置几个区域
 
@@ -387,7 +387,7 @@
 
 在「密钥名称」中填写别名，建议体现业务与用途，例如「订单系统-key1」
 
-![](ai-gateway-manual-zh24/04-3-key-name.png)
+![](截图素材/ai-gateway-manual-zh24/04-3-key-name.png)
 
 「密钥归属」区域字段：
 
@@ -409,13 +409,13 @@
 
 点击「模型」下拉框，选择允许该密钥访问的模型，或选择「所有代理模型」放开全部
 
-![](ai-gateway-manual-zh24/04-4-key-model.png)
+![](截图素材/ai-gateway-manual-zh24/04-4-key-model.png)
 
 **步骤四：设置预算**
 
 在「最大预算（元）」中填写消费上限
 
-![](ai-gateway-manual-zh24/04-5-key-budget.png)
+![](截图素材/ai-gateway-manual-zh24/04-5-key-budget.png)
 
 预算相关字段：
 
@@ -431,7 +431,7 @@
 
 填写 TPM 与 RPM 等限流参数
 
-![](ai-gateway-manual-zh24/04-6-key-limits.png)
+![](截图素材/ai-gateway-manual-zh24/04-6-key-limits.png)
 
 限流相关字段：
 
@@ -463,7 +463,7 @@
 
 点击 `创建密钥`，成功后弹出保存窗口
 
-![](ai-gateway-manual-zh24/04-7-key-saved.png)
+![](截图素材/ai-gateway-manual-zh24/04-7-key-saved.png)
 
 窗口提示：请将此密钥保存在安全且可访问的位置，出于安全原因你将无法再次查看它。如果丢失需要重新生成
 
@@ -485,7 +485,7 @@
 
 左侧菜单 `访问控制` 分组下点击 **团队**，地址为 `<网关地址>/ui/teams/`
 
-![](ai-gateway-manual-zh24/05-1-teams-list.png)
+![](截图素材/ai-gateway-manual-zh24/05-1-teams-list.png)
 
 页面标题为「团队」，说明为「管理团队、成员及其对模型和预算的访问权限」
 
@@ -516,13 +516,13 @@
 
 点击右上角 `创建团队`
 
-![](ai-gateway-manual-zh24/05-2-team-form-empty.png)
+![](截图素材/ai-gateway-manual-zh24/05-2-team-form-empty.png)
 
 **步骤二：填写团队名称**
 
 在「团队名称」中填写名称，建议与组织架构一致，例如「研发中心」
 
-![](ai-gateway-manual-zh24/05-3-team-name.png)
+![](截图素材/ai-gateway-manual-zh24/05-3-team-name.png)
 
 基础字段说明：
 
@@ -536,7 +536,7 @@
 
 在「最大预算（人民币）」中填写团队整体消费上限
 
-![](ai-gateway-manual-zh24/05-4-team-budget.png)
+![](截图素材/ai-gateway-manual-zh24/05-4-team-budget.png)
 
 预算与限流字段：
 
@@ -553,7 +553,7 @@
 
 填写 TPM 与 RPM
 
-![](ai-gateway-manual-zh24/05-5-team-limits.png)
+![](截图素材/ai-gateway-manual-zh24/05-5-team-limits.png)
 
 | 字段 | 含义 |
 |---|---|
@@ -564,7 +564,7 @@
 
 点击「附加设置」展开进阶配置
 
-![](ai-gateway-manual-zh24/05-6-team-advanced.png)
+![](截图素材/ai-gateway-manual-zh24/05-6-team-advanced.png)
 
 附加设置字段：
 
@@ -598,7 +598,7 @@
 
 左侧菜单 `访问控制` 分组下点击 **内部用户**，地址为 `<网关地址>/ui/users/`
 
-![](ai-gateway-manual-zh24/06-1-users-list.png)
+![](截图素材/ai-gateway-manual-zh24/06-1-users-list.png)
 
 顶部有两个标签页：`用户` 与 `默认用户设置`，后者配置新用户的默认角色与默认预算
 
@@ -625,7 +625,7 @@
 
 点击右上角 `+ 邀请用户`
 
-![](ai-gateway-manual-zh24/06-2-user-form-empty.png)
+![](截图素材/ai-gateway-manual-zh24/06-2-user-form-empty.png)
 
 表单顶部说明为「创建可拥有密钥的用户」，并提示仅当配置了邮件集成（SMTP、Resend 或 SendGrid）时，新用户才会收到邮件邀请
 
@@ -633,7 +633,7 @@
 
 在「用户邮箱」中填写新用户邮箱，该邮箱同时作为登录账号
 
-![](ai-gateway-manual-zh24/06-3-user-email.png)
+![](截图素材/ai-gateway-manual-zh24/06-3-user-email.png)
 
 表单字段说明：
 
@@ -650,7 +650,7 @@
 
 点击「个人密钥创建」展开模型授权配置
 
-![](ai-gateway-manual-zh24/06-4-user-personal-key.png)
+![](截图素材/ai-gateway-manual-zh24/06-4-user-personal-key.png)
 
 该折叠区包含：
 
@@ -693,7 +693,7 @@
 
 左侧菜单 `可观测性` 分组下点击 **用量**，地址为 `<网关地址>/ui/usage/`
 
-![](ai-gateway-manual-zh24/07-1-usage-overview.png)
+![](截图素材/ai-gateway-manual-zh24/07-1-usage-overview.png)
 
 顶部控制区：
 
@@ -732,7 +732,7 @@ Overview 指标卡片：
 
 切换到 `模型活动` 标签页
 
-![](ai-gateway-manual-zh24/07-2-usage-model.png)
+![](截图素材/ai-gateway-manual-zh24/07-2-usage-model.png)
 
 该页按模型列出调用次数、Token 用量、消费金额与占比，用于判断哪个模型成本最高
 
@@ -740,7 +740,7 @@ Overview 指标卡片：
 
 切换到 `密钥活动` 标签页
 
-![](ai-gateway-manual-zh24/07-3-usage-key.png)
+![](截图素材/ai-gateway-manual-zh24/07-3-usage-key.png)
 
 该页按密钥列出消费金额与占比，配合密钥别名可定位具体业务系统
 
@@ -748,7 +748,7 @@ Overview 指标卡片：
 
 点击 `导出数据`，弹出导出窗口
 
-![](ai-gateway-manual-zh24/07-4-export-dialog.png)
+![](截图素材/ai-gateway-manual-zh24/07-4-export-dialog.png)
 
 | 字段 | 含义 |
 |---|---|
@@ -763,7 +763,7 @@ Overview 指标卡片：
 
 左侧菜单 `可观测性` 分组下点击 **日志**，地址为 `<网关地址>/ui/logs/`
 
-![](ai-gateway-manual-zh24/08-1-logs-list.png)
+![](截图素材/ai-gateway-manual-zh24/08-1-logs-list.png)
 
 顶部四个标签页：
 
@@ -812,7 +812,7 @@ Overview 指标卡片：
 
 点击 `筛选`
 
-![](ai-gateway-manual-zh24/08-2-logs-filters-empty.png)
+![](截图素材/ai-gateway-manual-zh24/08-2-logs-filters-empty.png)
 
 筛选字段说明：
 
@@ -837,7 +837,7 @@ Overview 指标卡片：
 
 选择需要过滤的字段，例如按模型过滤
 
-![](ai-gateway-manual-zh24/08-3-logs-filters-filled.png)
+![](截图素材/ai-gateway-manual-zh24/08-3-logs-filters-filled.png)
 
 填好后点 `应用筛选` 生效，点 `重置` 清空条件，点 `关闭` 收起面板
 
@@ -845,7 +845,7 @@ Overview 指标卡片：
 
 点击任意一条日志，从右侧滑出详情抽屉
 
-![](ai-gateway-manual-zh24/08-4-log-detail.png)
+![](截图素材/ai-gateway-manual-zh24/08-4-log-detail.png)
 
 详情分几块：
 
@@ -872,7 +872,7 @@ Overview 指标卡片：
 
 #### 4.3.1 总览
 
-![](ai-gateway-manual-zh24/09-1-cost-overview.png)
+![](截图素材/ai-gateway-manual-zh24/09-1-cost-overview.png)
 
 | 字段 | 含义 |
 |---|---|
@@ -891,7 +891,7 @@ Overview 指标卡片：
 
 #### 4.3.3 提示词缓存
 
-![](ai-gateway-manual-zh24/09-2-cost-cache.png)
+![](截图素材/ai-gateway-manual-zh24/09-2-cost-cache.png)
 
 | 字段 | 含义 |
 |---|---|
@@ -904,7 +904,7 @@ Overview 指标卡片：
 
 #### 4.3.4 自动路由
 
-![](ai-gateway-manual-zh24/09-3-cost-route.png)
+![](截图素材/ai-gateway-manual-zh24/09-3-cost-route.png)
 
 自动路由按规则把请求分发到不同模型，例如简单问题走便宜模型、复杂问题走强模型。该页展示路由规则的命中情况与节省效果，规则创建在「模型与端点」的 `自动路由` 标签页完成
 
@@ -916,7 +916,7 @@ Overview 指标卡片：
 
 左侧菜单最下方 `设置` 分组下点击 **设置**，进入授权信息页面，地址为 `<网关地址>/ui/product-license/`
 
-![](ai-gateway-manual-zh24/10-1-license.png)
+![](截图素材/ai-gateway-manual-zh24/10-1-license.png)
 
 页面顶部显示产品名称与版本，右侧徽标显示授权状态
 
