@@ -1,3 +1,5 @@
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
@@ -23,14 +25,18 @@ import { useZodForm } from "@/lib/forms/useZodForm";
 import { roleLabel } from "@/utils/roleLabels";
 import { CircleHelp } from "lucide-react";
 
-const RATE_LIMIT_ERROR = "Enter a non-negative whole number, or leave empty for unlimited";
 const isBlank = (value: string | number | null | undefined): boolean =>
   value === null || value === undefined || String(value).trim() === "";
-const rateLimitField = z
-  .union([z.string(), z.number()])
-  .nullish()
-  .transform((value) => (isBlank(value) ? null : Number(value)))
-  .pipe(z.number({ error: RATE_LIMIT_ERROR }).int(RATE_LIMIT_ERROR).nonnegative(RATE_LIMIT_ERROR).nullable());
+const rateLimitField = (t: TFunction) => {
+  const message = t("userEditView.rateLimitValidationMessage", {
+    defaultValue: "Enter a non-negative whole number, or leave empty for unlimited",
+  });
+  return z
+    .union([z.string(), z.number()])
+    .nullish()
+    .transform((value) => (isBlank(value) ? null : Number(value)))
+    .pipe(z.number({ error: message }).int(message).nonnegative(message).nullable());
+};
 
 interface UserEditViewProps {
   userData: any;
@@ -103,15 +109,15 @@ const userEditShape = {
     .string()
     .nullish()
     .refine(isValidJsonObject, { message: metadataValidationMessage() }),
-  tpm_limit: rateLimitField,
-  rpm_limit: rateLimitField,
   mcp_servers_and_groups: MCP_SELECTION_SHAPE.optional(),
   mcp_tool_permissions: z.record(z.string(), z.array(z.string())).optional(),
 };
 
-const userEditSchema = (unlimitedBudget: boolean) =>
+const userEditSchema = (unlimitedBudget: boolean, t: TFunction) =>
   z.object({
     ...userEditShape,
+    tpm_limit: rateLimitField(t),
+    rpm_limit: rateLimitField(t),
     max_budget: z
       .union([z.string(), z.number()])
       .nullish()
@@ -201,13 +207,14 @@ export function UserEditView({
   objectPermission,
   premiumUser = false,
 }: UserEditViewProps) {
+  const { t } = useTranslation();
   const canEditMcpPermissions = !isBulkEdit && all_admin_roles.includes(userRole || "");
   const [unlimitedBudget, setUnlimitedBudget] = useState(false);
   const [modelMaxBudget, setModelMaxBudget] = useSeededState<ModelMaxBudget>(
     userData.user_id,
     () => userData.user_info?.model_max_budget ?? {},
   );
-  const schema = useMemo(() => userEditSchema(unlimitedBudget), [unlimitedBudget]);
+  const schema = useMemo(() => userEditSchema(unlimitedBudget, t), [unlimitedBudget, t]);
   const form = useZodForm(schema, {
     defaultValues: toFormValues(userData, objectPermission, isBulkEdit, canEditMcpPermissions),
   });

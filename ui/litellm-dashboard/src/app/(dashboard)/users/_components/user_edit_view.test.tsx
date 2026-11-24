@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import { renderWithProviders, testQueryClient } from "../../../../../tests/test-utils";
 import { UserEditView } from "./user_edit_view";
 import * as networking from "@/components/networking";
@@ -68,7 +69,8 @@ describe("UserEditView", () => {
     vi.mocked(networking.fetchMCPToolsets).mockResolvedValue([]);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
     cleanup();
   });
 
@@ -612,6 +614,26 @@ describe("UserEditView", () => {
       expect(
         await screen.findByText("Enter a non-negative whole number, or leave empty for unlimited"),
       ).toBeInTheDocument();
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+
+    it("shows the rate-limit validation message in Chinese", async () => {
+      await i18n.changeLanguage("zh-CN");
+      const onSubmit = vi.fn();
+      renderWithProviders(<UserEditView {...defaultProps} userData={userDataWithRateLimits()} onSubmit={onSubmit} />);
+
+      fireEvent.change(await screen.findByRole("spinbutton", { name: /TPM/i }), {
+        target: { value: "-1" },
+      });
+      const submitButton = screen.getByRole("button", { name: /保存更改|save changes/i }) as HTMLButtonElement;
+      const form = submitButton.form;
+      if (!form) {
+        throw new Error("User edit form was not rendered");
+      }
+      fireEvent.submit(form);
+
+      expect(await screen.findByText("请输入非负整数，留空表示不限制")).toBeInTheDocument();
       expect(onSubmit).not.toHaveBeenCalled();
     });
 
