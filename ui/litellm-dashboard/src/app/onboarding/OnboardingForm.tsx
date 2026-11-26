@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useOnboardingCredentials, useClaimOnboardingToken } from "@/app/(dashboard)/hooks/onboarding/useOnboarding";
 import { getProxyBaseUrl } from "@/components/networking";
+import i18n from "@/lib/i18n";
 import { clearTokenCookies, storeLoginToken } from "@/utils/cookieUtils";
 import { OnboardingLoadingView } from "./OnboardingLoadingView";
 import { OnboardingErrorView } from "./OnboardingErrorView";
@@ -41,7 +42,11 @@ export function OnboardingForm({ variant }: OnboardingFormProps) {
       {
         onSuccess: (data: { token?: string }) => {
           if (!data?.token) {
-            setClaimError("Failed to start session. Please try again.");
+            setClaimError(
+              i18n.t("onboardingForm.failedToStartSession", {
+                defaultValue: "Failed to start session. Please try again.",
+              }),
+            );
             return;
           }
           // Invite signup is a principal-change boundary — the prior admin's
@@ -54,7 +59,10 @@ export function OnboardingForm({ variant }: OnboardingFormProps) {
           window.location.href = proxyBaseUrl ? `${proxyBaseUrl}/ui/?login=success` : "/ui/?login=success";
         },
         onError: (error: Error) => {
-          setClaimError(error.message || "Failed to submit. Please try again.");
+          setClaimError(
+            error.message ||
+              i18n.t("onboardingForm.failedToSubmit", { defaultValue: "Failed to submit. Please try again." }),
+          );
         },
       },
     );

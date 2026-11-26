@@ -21,17 +21,22 @@ type OnboardingFormBodyProps = {
   onSubmit: (values: { password: string }) => void;
 };
 
-const onboardingSchema = z.object({
-  password: z.string().min(1, "password required to sign up"),
-});
+const buildOnboardingSchema = () =>
+  z.object({
+    password: z
+      .string()
+      .min(1, i18n.t("onboardingFormBody.passwordRequired", { defaultValue: "Password is required to sign up" })),
+  });
 
-type OnboardingFormValues = z.infer<typeof onboardingSchema>;
+type OnboardingFormValues = z.infer<ReturnType<typeof buildOnboardingSchema>>;
 
 export function OnboardingFormBody({ variant, userEmail, isPending, claimError, onSubmit }: OnboardingFormBodyProps) {
-  const form = useZodForm(onboardingSchema, { defaultValues: { password: "" } });
+  const form = useZodForm(buildOnboardingSchema(), { defaultValues: { password: "" } });
   const emailFieldId = React.useId();
   const isResetPassword = variant === "reset_password";
-  const actionLabel = isResetPassword ? "Reset Password" : "Sign Up";
+  const actionLabel = isResetPassword
+    ? i18n.t("onboardingFormBody.resetPassword", { defaultValue: "Reset Password" })
+    : i18n.t("onboardingFormBody.signUp", { defaultValue: "Sign Up" });
 
   const handleSubmit = (values: OnboardingFormValues) => onSubmit({ password: values.password });
 
@@ -39,18 +44,24 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
     <div className="mx-auto w-full max-w-md mt-10">
       <Card>
         <CardContent>
-          <h5 className="text-center mb-5 text-base font-semibold text-foreground">🚅 中安云科 AI 安全网关</h5>
+          <h5 className="text-center mb-5 text-base font-semibold text-foreground">
+            {i18n.t("onboardingFormBody.productName", { defaultValue: "🚅 中安云科 AI 安全网关" })}
+          </h5>
           <h3 className="text-2xl font-semibold text-foreground">{actionLabel}</h3>
           <p className="text-sm text-foreground">
             {isResetPassword
-              ? "Reset your password to access Admin UI."
-              : "Claim your user account to login to Admin UI."}
+              ? i18n.t("onboardingFormBody.resetPasswordDescription", {
+                  defaultValue: "Reset your password to access Admin UI.",
+                })
+              : i18n.t("onboardingFormBody.claimDescription", {
+                  defaultValue: "Claim your user account to login to Admin UI.",
+                })}
           </p>
 
           {variant === "signup" && (
             <Alert className="mt-4" variant="info">
               <Info />
-              <AlertTitle>SSO</AlertTitle>
+              <AlertTitle>{i18n.t("onboardingFormBody.ssoTitle", { defaultValue: "SSO" })}</AlertTitle>
               <AlertDescription>
                 <div className="flex justify-between items-center">
                   <span>{i18n.t("onboardingFormBody.sso-is-under-the-enterprise-tier", { defaultValue: "SSO is under the Enterprise Tier." })}</span>
@@ -70,8 +81,14 @@ export function OnboardingFormBody({ variant, userEmail, isPending, claimError, 
               <FormField
                 control={form.control}
                 name="password"
-                label="Password"
-                description={isResetPassword ? "Enter your new password" : "Create a password for your account"}
+                label={i18n.t("onboardingFormBody.password", { defaultValue: "Password" })}
+                description={
+                  isResetPassword
+                    ? i18n.t("onboardingFormBody.enterNewPassword", { defaultValue: "Enter your new password" })
+                    : i18n.t("onboardingFormBody.createPassword", {
+                        defaultValue: "Create a password for your account",
+                      })
+                }
               >
                 {({ ref, ...field }) => <PasswordInput {...field} ref={ref} />}
               </FormField>

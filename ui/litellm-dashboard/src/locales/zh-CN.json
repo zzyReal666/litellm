@@ -14990,7 +14990,17 @@
   },
   "onboardingFormBody": {
     "sso-is-under-the-enterprise-tier": "SSO 属于企业版功能。",
-    "email-address": "邮箱地址"
+    "email-address": "邮箱地址",
+    "productName": "🚅 中安云科 AI 安全网关",
+    "signUp": "注册",
+    "resetPassword": "重置密码",
+    "claimDescription": "认领您的用户账号以登录管理后台。",
+    "resetPasswordDescription": "重置密码以访问管理后台。",
+    "ssoTitle": "SSO",
+    "password": "密码",
+    "enterNewPassword": "请输入新密码",
+    "createPassword": "为您的账号设置密码",
+    "passwordRequired": "请设置登录密码"
   },
   "dashboardHeader": {
     "more-options": "更多选项",
@@ -15354,5 +15364,10 @@
       "budgetExceeded": "超出预算",
       "noDbConnection": "服务不可用"
     }
+  },
+  "onboardingForm": {
+    "failedToStartSession": "会话建立失败，请重试。",
+    "failedToSubmit": "提交失败，请重试。",
+    "loading": "加载中…"
   }
 }

@@ -14990,7 +14990,17 @@
   },
   "onboardingFormBody": {
     "sso-is-under-the-enterprise-tier": "SSO is under the Enterprise Tier.",
-    "email-address": "Email Address"
+    "email-address": "Email Address",
+    "productName": "🚅 中安云科 AI 安全网关",
+    "signUp": "Sign Up",
+    "resetPassword": "Reset Password",
+    "claimDescription": "Claim your user account to login to Admin UI.",
+    "resetPasswordDescription": "Reset your password to access Admin UI.",
+    "ssoTitle": "SSO",
+    "password": "Password",
+    "enterNewPassword": "Enter your new password",
+    "createPassword": "Create a password for your account",
+    "passwordRequired": "Password is required to sign up"
   },
   "dashboardHeader": {
     "more-options": "More options",
@@ -15354,5 +15364,10 @@
       "budgetExceeded": "Budget Exceeded",
       "noDbConnection": "Service Unavailable"
     }
+  },
+  "onboardingForm": {
+    "failedToStartSession": "Failed to start session. Please try again.",
+    "failedToSubmit": "Failed to submit. Please try again.",
+    "loading": "Loading..."
   }
 }

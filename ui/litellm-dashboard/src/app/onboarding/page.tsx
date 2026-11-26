@@ -1,6 +1,7 @@
 "use client";
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import i18n from "@/lib/i18n";
 import { OnboardingForm } from "./OnboardingForm";
 
 function OnboardingContent() {
@@ -12,7 +13,9 @@ function OnboardingContent() {
 
 export default function Onboarding() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
+        {i18n.t("onboardingForm.loading", { defaultValue: "Loading..." })}
+      </div>}>
       <OnboardingContent />
     </Suspense>
   );
