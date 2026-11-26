@@ -1,0 +1,21 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const BASE = env.AIG_BASE_URL;
+const INVITE = "e7fd580d-a972-413e-abd7-508602abf84c";
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const out = {};
+const check = async (url, label) => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, ignoreHTTPSErrors: true });
+  await page.addInitScript(() => localStorage.setItem("litellm_ui_language", "zh-CN"));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await page.waitForTimeout(2500);
+  const text = await page.evaluate(() => document.body.innerText);
+  await page.screenshot({ path: `/tmp/onboarding_${label}.png`, fullPage: true });
+  const english = text.split("\n").map(l=>l.trim()).filter(l => l && /[A-Za-z]{3,}/.test(l) && !/[\u4e00-\u9fff]/.test(l) && !/^(SSO|Admin UI)$/.test(l));
+  return { text: text.slice(0, 800), english };
+};
+out.signup = await check(`${BASE}/ui/onboarding?invitation_id=${INVITE}`, "signup");
+out.reset = await check(`${BASE}/ui/onboarding?invitation_id=${INVITE}&action=reset_password`, "reset");
+console.log(JSON.stringify(out, null, 1).slice(0, 4000));
+await browser.close();
