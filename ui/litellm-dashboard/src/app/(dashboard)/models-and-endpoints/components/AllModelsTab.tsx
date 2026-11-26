@@ -21,6 +21,7 @@ import { Info } from "lucide-react";
 import { createParser, parseAsInteger, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import { useCallback, useMemo, useState } from "react";
 
+import { ConfigType, useProxyConfig } from "@/app/(dashboard)/hooks/proxyConfig/useProxyConfig";
 import { useModelsInfo } from "../../hooks/models/useModels";
 import { transformModelData } from "../utils/modelDataTransformer";
 import {
@@ -107,6 +108,9 @@ const AllModelsTab = ({
     [tableState.sort_by, tableState.sort_order],
   );
   const [isModelSettingsModalVisible, setIsModelSettingsModalVisible] = useState(false);
+  const { data: generalSettings } = useProxyConfig(ConfigType.GENERAL_SETTINGS);
+  const storeModelField = generalSettings?.find((field) => field.field_name === "store_model_in_db");
+  const isModelSettingsManagedByConfig = storeModelField?.source === "config" || storeModelField?.editable === false;
   const [deleteModalModelId, setDeleteModalModelId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [pausingModelId, setPausingModelId] = useState<string | null>(null);
@@ -324,6 +328,7 @@ const AllModelsTab = ({
           viewMode={modelViewMode}
           onViewModeChange={handleViewModeChange}
           onOpenModelSettings={handleOpenModelSettings}
+          showModelSettings={!isModelSettingsManagedByConfig}
           availableModelGroups={availableModelGroups}
           availableModelAccessGroups={availableModelAccessGroups}
           userRole={userRole}

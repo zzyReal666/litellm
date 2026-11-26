@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import BulkEditUserModal from "./BulkEditUsers";
 import BulkCreateUsersButton from "@/components/bulk_create_users_button";
+import { HIDE_BULK_INVITE_USERS } from "@/lib/hiddenProductEntries";
 import { CreateUserButton } from "@/components/CreateUserButton";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -352,7 +353,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                 />
               )}
 
-              {isProxyAdmin && (
+              {isProxyAdmin && !HIDE_BULK_INVITE_USERS && (
                 <BulkCreateUsersButton accessToken={accessToken} teams={teams} possibleUIRoles={possibleUIRoles} />
               )}
 

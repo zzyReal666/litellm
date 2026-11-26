@@ -1,4 +1,5 @@
 import i18n from "@/lib/i18n";
+import { boundedAmountField } from "@/lib/forms/rateLimitField";
 import { useTranslation } from "react-i18next";
 import { ChevronRight } from "lucide-react";
 import React from "react";
@@ -17,9 +18,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 const budgetShape = {
   budget_id: z.string().min(1, i18n.t("budgets.budgetModal.budgetIdRequired", { defaultValue: "Please input a human-friendly name for the budget" })),
-  tpm_limit: z.number().nullish(),
-  rpm_limit: z.number().nullish(),
-  tpd_limit: z.number().nullish(),
+  tpm_limit: boundedAmountField(i18n),
+  rpm_limit: boundedAmountField(i18n),
+  tpd_limit: boundedAmountField(i18n),
   max_budget: z.number().nullish(),
   budget_duration: z.string().nullish(),
 };
@@ -29,9 +30,9 @@ const budgetSchema = z.object(budgetShape);
 type BudgetFormValues = z.output<typeof budgetSchema>;
 
 const BUDGET_DURATION_OPTIONS = [
-  { value: "24h", label: "daily" },
-  { value: "7d", label: "weekly" },
-  { value: "30d", label: "monthly" },
+  { value: "24h", labelKey: "budgets.editBudgetModal.daily", label: "daily" },
+  { value: "7d", labelKey: "budgets.editBudgetModal.weekly", label: "weekly" },
+  { value: "30d", labelKey: "budgets.editBudgetModal.monthly", label: "monthly" },
 ];
 
 interface BudgetModalProps {
@@ -153,14 +154,21 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ isModalVisible, setIsModalVis
                 </FormField>
                 <FormField className="mt-8" control={form.control} name="budget_duration" label={t("budgets.budgetModal.resetBudgetLabel", { defaultValue: "Reset Budget" })}>
                   {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
-                    <Select items={BUDGET_DURATION_OPTIONS} value={value ?? null} onValueChange={onChange}>
+                    <Select
+                  items={BUDGET_DURATION_OPTIONS.map((option) => ({
+                    value: option.value,
+                    label: t(option.labelKey, { defaultValue: option.label }),
+                  }))}
+                  value={value ?? null}
+                  onValueChange={onChange}
+                >
                       <SelectTrigger id={id} aria-invalid={ariaInvalid} aria-describedby={ariaDescribedBy}>
                         <SelectValue placeholder="n/a" />
                       </SelectTrigger>
                       <SelectContent>
                         {BUDGET_DURATION_OPTIONS.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
-                            {option.label}
+                            {t(option.labelKey, { defaultValue: option.label })}
                           </SelectItem>
                         ))}
                       </SelectContent>

@@ -375,6 +375,7 @@ export default function AgentBuilderView({
       // /model/new returns the row with `model_id` at the top level.
       // Prefer that id over name-matching so we land on the just-created
       // agent even when its public name collides with another team's.
+      toast.success(t("playground.agentBuilderView.agentCreated", { defaultValue: "Agent created successfully" }));
       const createdId: string | null = response?.model_id ?? response?.model_info?.id ?? null;
       const list = await loadAgents();
       const created = createdId

@@ -67,6 +67,7 @@ interface TeamProps {
 
 import DeleteResourceModal from "./common_components/DeleteResourceModal";
 import { teamCreateCall } from "./networking";
+import { rateLimitField, rateLimitInputField } from "@/lib/forms/rateLimitField";
 import { normalizeTeamModelSelection } from "./team/teamModelAccess";
 import { ModelSelect } from "./ModelSelect/ModelSelect";
 
@@ -84,15 +85,15 @@ const teamCreateFieldsSchema = z.object({
   models: z.array(z.string()).optional(),
   max_budget: numericInputSchema,
   budget_duration: z.string().nullish(),
-  tpm_limit: numericInputSchema,
-  rpm_limit: numericInputSchema,
-  tpd_limit: numericInputSchema,
+  tpm_limit: rateLimitInputField(i18n),
+  rpm_limit: rateLimitInputField(i18n),
+  tpd_limit: rateLimitInputField(i18n),
   metadata: metadataPairsSchema.optional(),
   team_id: z.string().optional(),
   team_member_budget: z.number().optional(),
   team_member_key_duration: z.string().optional(),
-  team_member_rpm_limit: numericInputSchema,
-  team_member_tpm_limit: numericInputSchema,
+  team_member_rpm_limit: rateLimitInputField(i18n),
+  team_member_tpm_limit: rateLimitInputField(i18n),
   secret_manager_settings: z.string().optional(),
   guardrails: z.array(z.string()).optional(),
   disable_global_guardrails: z.boolean().optional(),

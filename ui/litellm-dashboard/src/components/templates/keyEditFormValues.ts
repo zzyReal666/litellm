@@ -1,4 +1,6 @@
 import { z } from "zod";
+import i18n from "@/lib/i18n";
+import { rateLimitInputField } from "@/lib/forms/rateLimitField";
 
 import { KeyResponse } from "../key_team_helpers/key_list";
 import { extractLoggingSettings, formatMetadataForDisplay, stripTagsFromMetadata } from "../key_info_utils";
@@ -128,11 +130,11 @@ export const keyEditFormSchema = z.object({
   max_budget: z.custom<number | string | null | undefined>().optional(),
   soft_budget: z.custom<number | string | null | undefined>().optional(),
   budget_duration: z.custom<string | null | undefined>().optional(),
-  tpm_limit: z.custom<number | string | null | undefined>().optional(),
+  tpm_limit: rateLimitInputField(i18n),
   tpm_limit_type: z.custom<string | null | undefined>().optional(),
-  rpm_limit: z.custom<number | string | null | undefined>().optional(),
+  rpm_limit: rateLimitInputField(i18n),
   rpm_limit_type: z.custom<string | null | undefined>().optional(),
-  tpd_limit: z.custom<number | string | null | undefined>().optional(),
+  tpd_limit: rateLimitInputField(i18n),
   throttle_on_budget_exceeded: z.custom<boolean | undefined>().optional(),
   enable_prompt_caching: z.custom<boolean | undefined>().optional(),
   max_parallel_requests: z.custom<number | string | null | undefined>().optional(),

@@ -9,30 +9,59 @@ interface ExportTypeSelectorProps {
   entityType: EntityType;
 }
 
+const entityLabel = (entityType: EntityType): string =>
+  i18n.t(`entityUsageExport.entityTypes.${entityType}`, { defaultValue: entityType });
+
 const ExportTypeSelector: React.FC<ExportTypeSelectorProps> = ({ value, onChange, entityType }) => {
+  const entity = entityLabel(entityType);
   const allScopes: { value: ExportType; title: string; description: string }[] = [
     {
       value: "daily",
-      title: `Day-by-day breakdown by ${entityType}`,
-      description: `Daily metrics for each ${entityType}`,
+      title: i18n.t("entityUsageExport.typeSelector.dailyTitle", {
+        defaultValue: "Day-by-day breakdown by {{entity}}",
+        entity,
+      }),
+      description: i18n.t("entityUsageExport.typeSelector.dailyDescription", {
+        defaultValue: "Daily metrics for each {{entity}}",
+        entity,
+      }),
     },
     {
       value: "daily_with_keys",
-      title: `Day-by-day breakdown by ${entityType} and key`,
-      description: `Daily metrics for each ${entityType}, split by API key`,
+      title: i18n.t("entityUsageExport.typeSelector.dailyWithKeysTitle", {
+        defaultValue: "Day-by-day breakdown by {{entity}} and key",
+        entity,
+      }),
+      description: i18n.t("entityUsageExport.typeSelector.dailyWithKeysDescription", {
+        defaultValue: "Daily metrics for each {{entity}}, split by API key",
+        entity,
+      }),
     },
     {
       value: "daily_with_models",
-      title: `Day-by-day by ${entityType} and model`,
-      description: "Daily metrics split by model",
+      title: i18n.t("entityUsageExport.typeSelector.dailyWithModelsTitle", {
+        defaultValue: "Day-by-day by {{entity}} and model",
+        entity,
+      }),
+      description: i18n.t("entityUsageExport.typeSelector.dailyWithModelsDescription", {
+        defaultValue: "Daily metrics split by model",
+      }),
     },
     {
       value: "daily_with_users",
-      title: `Day-by-day breakdown by ${entityType} and user`,
-      description: `Daily metrics for each ${entityType}, split by key owner`,
+      title: i18n.t("entityUsageExport.typeSelector.dailyWithUsersTitle", {
+        defaultValue: "Day-by-day breakdown by {{entity}} and user",
+        entity,
+      }),
+      description: i18n.t("entityUsageExport.typeSelector.dailyWithUsersDescription", {
+        defaultValue: "Daily metrics for each {{entity}}, split by key owner",
+        entity,
+      }),
     },
   ];
-  const scopes = allScopes.filter((scope) => scope.value !== "daily_with_users" || entityType !== "user");
+  const scopes = allScopes.filter(
+    (scope) => scope.value !== "daily_with_users" || entityType !== "user",
+  );
 
   return (
     <div>

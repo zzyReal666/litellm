@@ -61,6 +61,7 @@ interface AllModelsTableProps {
   viewMode: ModelViewMode;
   onViewModeChange: (viewMode: ModelViewMode) => void;
   onOpenModelSettings: () => void;
+  showModelSettings?: boolean;
   availableModelGroups: string[];
   availableModelAccessGroups: string[];
   userRole: string;
@@ -111,6 +112,7 @@ export function AllModelsTable({
   viewMode,
   onViewModeChange,
   onOpenModelSettings,
+  showModelSettings = true,
   availableModelGroups,
   availableModelAccessGroups,
   userRole,
@@ -278,16 +280,18 @@ export function AllModelsTable({
 
             <ToolbarSeparator className="mx-0.5" />
 
-            <Button
-              variant="outline"
-              size="icon-sm"
-              aria-label={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
-              title={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
-              data-testid="models-settings-trigger"
-              onClick={onOpenModelSettings}
-            >
-              <Settings />
-            </Button>
+            {showModelSettings && (
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
+                title={i18n.t("pages.allModelsTab.modelSettings", { defaultValue: "Model Settings" })}
+                data-testid="models-settings-trigger"
+                onClick={onOpenModelSettings}
+              >
+                <Settings />
+              </Button>
+            )}
           </DataTableToolbar>
           <DataTableFilterDrawer
             table={table}

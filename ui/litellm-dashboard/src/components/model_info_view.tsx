@@ -441,7 +441,16 @@ export default function ModelInfoView({
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating model:", error);
-      toast.fromError(error);
+      const rawMessage = error instanceof Error ? error.message : String(error);
+      if (/enterprise/i.test(rawMessage) && /license/i.test(rawMessage)) {
+        toast.fromError(
+          i18n.t("modelInfoView.enterpriseLicenseRequired", {
+            defaultValue: "This feature requires an enterprise license. Contact your administrator.",
+          }),
+        );
+      } else {
+        toast.fromError(error);
+      }
     } finally {
       setIsSaving(false);
     }

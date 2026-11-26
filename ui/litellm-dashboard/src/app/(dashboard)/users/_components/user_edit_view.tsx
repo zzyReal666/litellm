@@ -22,21 +22,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useZodForm } from "@/lib/forms/useZodForm";
+import { rateLimitField } from "@/lib/forms/rateLimitField";
 import { roleDescription, roleLabel } from "@/utils/roleLabels";
 import { CircleHelp } from "lucide-react";
 
 const isBlank = (value: string | number | null | undefined): boolean =>
   value === null || value === undefined || String(value).trim() === "";
-const rateLimitField = (t: TFunction) => {
-  const message = t("userEditView.rateLimitValidationMessage", {
-    defaultValue: "Enter a non-negative whole number, or leave empty for unlimited",
-  });
-  return z
-    .union([z.string(), z.number()])
-    .nullish()
-    .transform((value) => (isBlank(value) ? null : Number(value)))
-    .pipe(z.number({ error: message }).int(message).nonnegative(message).nullable());
-};
+
 
 interface UserEditViewProps {
   userData: any;
@@ -180,7 +172,7 @@ const parseMetadata = (metadata: string | null | undefined): ParsedMetadata => {
   }
 };
 
-const changedLimit = (value: number | null, stored: number | null | undefined): number | null | undefined =>
+const changedLimit = (value: number | null | undefined, stored: number | null | undefined): number | null | undefined =>
   value === (stored ?? null) ? undefined : value;
 
 const labelWithHint = (label: string, hint: string): React.ReactNode => (

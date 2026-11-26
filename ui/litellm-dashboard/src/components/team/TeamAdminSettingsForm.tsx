@@ -2,6 +2,7 @@
 
 import { Save } from "lucide-react";
 import i18n from "@/lib/i18n";
+import { rateLimitField, rateLimitInputField } from "@/lib/forms/rateLimitField";
 import { useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,10 +23,11 @@ import {
 } from "./teamAdminEditAccess";
 
 const numericInputSchema = z.union([z.string(), z.number()]).nullish();
+const rateLimitInput = () => rateLimitInputField(i18n);
 
 const teamAdminSettingsSchema = z.object({
-  tpm_limit: numericInputSchema,
-  rpm_limit: numericInputSchema,
+  tpm_limit: rateLimitInput(),
+  rpm_limit: rateLimitInput(),
   max_budget: numericInputSchema,
 });
 

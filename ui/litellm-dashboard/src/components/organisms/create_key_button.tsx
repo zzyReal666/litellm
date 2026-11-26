@@ -1,4 +1,6 @@
 "use client";
+import i18n from "@/lib/i18n";
+import { rateLimitValidator } from "@/lib/forms/rateLimitField";
 import { keyKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { useProjects } from "@/app/(dashboard)/hooks/projects/useProjects";
@@ -127,8 +129,13 @@ const requiredRule = (required: boolean, message: string) => ({
 });
 
 const ceilingRule = (ceiling: number | null | undefined, message: (limit: number) => string) => ({
-  validate: (value: unknown) =>
-    value && ceiling !== null && ceiling !== undefined && (value as number) > ceiling ? message(ceiling) : true,
+  validate: (value: unknown) => {
+    const rateLimitError = rateLimitValidator(i18n)(value);
+    if (rateLimitError !== true) {
+      return rateLimitError;
+    }
+    return value && ceiling !== null && ceiling !== undefined && (value as number) > ceiling ? message(ceiling) : true;
+  },
 });
 
 interface McpToolPermissionsFieldProps {

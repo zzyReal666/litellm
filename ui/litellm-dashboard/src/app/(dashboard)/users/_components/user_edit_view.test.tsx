@@ -597,7 +597,7 @@ describe("UserEditView", () => {
       expect(typeof onSubmit.mock.calls[0][0].rpm_limit).toBe("number");
     });
 
-    it.each(["-1", "1.5"])("rejects an invalid TPM limit of %s", async (value) => {
+    it.each(["-1", "1.5", "5555555555555555555555555555"])("rejects an invalid TPM limit of %s", async (value) => {
       const onSubmit = vi.fn();
       renderWithProviders(<UserEditView {...defaultProps} userData={userDataWithRateLimits()} onSubmit={onSubmit} />);
 

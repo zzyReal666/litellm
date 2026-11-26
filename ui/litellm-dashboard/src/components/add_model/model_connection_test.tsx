@@ -303,20 +303,28 @@ ${formattedBody}
             {curlCommand ||
               t("addModel.modelConnectionTest.noRequestData", { defaultValue: "No request data available" })}
           </pre>
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-2"
-            onClick={() =>
-              void copyToClipboard(
-                curlCommand,
-                t("addModel.modelConnectionTest.copiedToClipboard", { defaultValue: "Copied to clipboard" }),
-              )
-            }
-          >
-            <Copy data-icon="inline-start" />
-            {t("addModel.modelConnectionTest.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
-          </Button>
+          {curlCommand ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-2"
+              onClick={() =>
+                void copyToClipboard(
+                  curlCommand,
+                  t("addModel.modelConnectionTest.copiedToClipboard", { defaultValue: "Copied to clipboard" }),
+                )
+              }
+            >
+              <Copy data-icon="inline-start" />
+              {t("addModel.modelConnectionTest.copyToClipboard", { defaultValue: "Copy to Clipboard" })}
+            </Button>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("addModel.modelConnectionTest.noRequestDataCopyHint", {
+                defaultValue: "This failure produced no request data to copy",
+              })}
+            </p>
+          )}
         </div>
       )}
 

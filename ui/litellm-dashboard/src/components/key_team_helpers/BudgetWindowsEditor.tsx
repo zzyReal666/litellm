@@ -70,7 +70,10 @@ export function BudgetWindowsEditor({ value, onChange }: BudgetWindowsEditorProp
           <div key={idx} style={{ marginBottom: 12 }}>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <Select
-                items={BUDGET_WINDOW_OPTIONS}
+                items={BUDGET_WINDOW_OPTIONS.map((option) => ({
+                  value: option.value,
+                  label: t(option.labelKey, { defaultValue: option.label }),
+                }))}
                 value={window.budget_duration}
                 onValueChange={(v: string | null) => v && updateWindow(idx, "budget_duration", v)}
               >

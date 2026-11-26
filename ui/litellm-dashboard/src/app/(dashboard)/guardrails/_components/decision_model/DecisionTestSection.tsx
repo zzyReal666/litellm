@@ -89,7 +89,7 @@ const DecisionTestSection: React.FC<DecisionTestSectionProps> = ({ accessToken, 
   return (
     <div className="space-y-3 border-t border-border pt-4">
       <div className="space-y-1">
-        <FieldLabel>Test</FieldLabel>
+        <FieldLabel>{i18n.t("common.test", { defaultValue: "Test" })}</FieldLabel>
         <p className="m-0 text-xs text-muted-foreground">
           {i18n.t("decisionTestSection.try-your-questions-on-a-sample-input-before", {
             defaultValue:

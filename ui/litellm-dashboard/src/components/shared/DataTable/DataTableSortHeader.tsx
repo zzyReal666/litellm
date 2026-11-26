@@ -5,6 +5,7 @@ import type { Column, SortDirection, Table } from "@tanstack/react-table";
 import { Check, ChevronDown, ChevronsUpDown, ChevronUp, X } from "lucide-react";
 import type * as React from "react";
 
+import i18n from "@/lib/i18n";
 import { cn } from "@/lib/cva.config";
 
 export type DataTableSortVariant = "header-cycle" | "dropdown-tristate";
@@ -51,7 +52,7 @@ export function DataTableSortHeader<TData, TValue>({
               <button
                 type="button"
                 data-testid={`sort-trigger-${column.id}`}
-                aria-label={`Sort options for ${column.id}`}
+                aria-label={i18n.t("dataTable.sortOptionsFor", { defaultValue: "Sort options for {{column}}", column: column.id })}
                 onClick={(event) => event.stopPropagation()}
                 className={cn(
                   "inline-flex size-6 items-center justify-center rounded-md hover:bg-muted",
@@ -66,13 +67,16 @@ export function DataTableSortHeader<TData, TValue>({
             <Menu.Positioner side="bottom" align="start" sideOffset={4} className="isolate z-popup">
               <Menu.Popup className="min-w-[9rem] rounded-md bg-popover p-1 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden">
                 <Menu.Item className={MENU_ITEM_CLASS} onClick={() => column.toggleSorting(false)}>
-                  <ChevronUp className="size-3.5" /> Ascending
+                  <ChevronUp className="size-3.5" />
+                  {i18n.t("dataTable.sortAscending", { defaultValue: "Ascending" })}
                 </Menu.Item>
                 <Menu.Item className={MENU_ITEM_CLASS} onClick={() => column.toggleSorting(true)}>
-                  <ChevronDown className="size-3.5" /> Descending
+                  <ChevronDown className="size-3.5" />
+                  {i18n.t("dataTable.sortDescending", { defaultValue: "Descending" })}
                 </Menu.Item>
                 <Menu.Item className={MENU_ITEM_CLASS} onClick={() => column.clearSorting()}>
-                  <X className="size-3.5" /> Reset
+                  <X className="size-3.5" />
+                  {i18n.t("dataTable.sortReset", { defaultValue: "Reset" })}
                 </Menu.Item>
               </Menu.Popup>
             </Menu.Positioner>

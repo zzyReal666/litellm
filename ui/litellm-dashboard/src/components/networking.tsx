@@ -690,12 +690,6 @@ export const modelCreateCall = async (accessToken: string, formValues: Model) =>
       },
     });
 
-    // Close any existing messages before showing new ones
-    toast.dismiss();
-
-    // Sequential success messages
-    toast.success(`Model ${formValues.model_name} created successfully`);
-
     return data;
   } catch (error) {
     console.error("Failed to create key:", error);
@@ -2721,7 +2715,7 @@ export const modelPatchUpdateCall = async (
       const errorData = await response.text();
       handleError(errorData);
       console.error("Error update from the server:", errorData);
-      throw new Error("Network response was not ok");
+      throw new Error(extractProxyErrorMessage(errorData) || `HTTP ${response.status}`);
     }
     const data = await response.json();
     return data;

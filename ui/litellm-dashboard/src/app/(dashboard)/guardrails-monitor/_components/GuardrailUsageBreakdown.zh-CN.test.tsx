@@ -48,7 +48,9 @@ describe("GuardrailUsageBreakdown in Chinese", () => {
     render(<GuardrailUsageBreakdown detail={detail} />);
 
     expect(screen.getByText("用量与费用")).toBeInTheDocument();
-    expect(screen.getByText("提供商为此护栏上报的可计费单位，以及 LiteLLM 为它们定价的结果")).toBeInTheDocument();
+    expect(
+      screen.getByText("提供商为此护栏上报的可计费单位，以及中安云科 AI 安全网关为它们定价的结果"),
+    ).toBeInTheDocument();
 
     const cost = screen.getByRole("group", { name: "费用" });
     expect(cost).toHaveTextContent("¥0.1800");
@@ -73,7 +75,7 @@ describe("GuardrailUsageBreakdown in Chinese", () => {
 
     const dialog = await screen.findByRole("dialog", { name: "此费用是如何计算的" });
     expect(within(dialog).getByText("已定价单位数 × 每单位价格 = 费用，按计数器分别计算")).toBeInTheDocument();
-    expect(within(dialog).getByText("每单位价格来自 LiteLLM 内置的费用表。")).toBeInTheDocument();
+    expect(within(dialog).getByText("每单位价格来自中安云科 AI 安全网关内置的费用表。")).toBeInTheDocument();
   });
 
   it("says the period has no billable units in Chinese", async () => {

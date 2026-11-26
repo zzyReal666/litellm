@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/combobox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { guardrailValueLabel } from "./guardrail_display_labels";
 
 // Helper functions
 export const formatEntityName = (name: string) => {
@@ -200,6 +201,7 @@ export const PiiEntityList: React.FC<PiiEntityListProps> = ({
                 </div>
                 <div className="w-32">
                   <Select
+                    items={actions.map((action) => ({ label: guardrailValueLabel(action), value: action }))}
                     value={isSelected ? selectedActions[entity] || "MASK" : "MASK"}
                     onValueChange={(value: string | null) => value && onActionSelect(entity, value)}
                     disabled={!isSelected}
@@ -215,7 +217,7 @@ export const PiiEntityList: React.FC<PiiEntityListProps> = ({
                         <SelectItem key={action} value={action}>
                           <span className="flex items-center">
                             {getActionIcon(action)}
-                            {action}
+                            {guardrailValueLabel(action)}
                           </span>
                         </SelectItem>
                       ))}

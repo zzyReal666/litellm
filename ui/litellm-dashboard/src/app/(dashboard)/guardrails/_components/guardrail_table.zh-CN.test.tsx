@@ -37,12 +37,13 @@ describe("GuardrailTable in zh-CN", () => {
     }
   });
 
-  it("renders the default-on status badge in Chinese and keeps provider brand names untranslated", async () => {
+  it("renders localized mode and status labels while keeping provider brand names untranslated", async () => {
     await i18n.changeLanguage("zh-CN");
     render(<GuardrailTable guardrailsList={[makeGuardrail()]} {...baseProps} />);
 
     expect(screen.getByText("Presidio PII")).toBeInTheDocument();
-    expect(screen.getByText("pre_call")).toBeInTheDocument();
+    expect(screen.getByText("调用前")).toBeInTheDocument();
+    expect(screen.queryByText("pre_call")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "打开护栏操作" })).toBeInTheDocument();
   });
 

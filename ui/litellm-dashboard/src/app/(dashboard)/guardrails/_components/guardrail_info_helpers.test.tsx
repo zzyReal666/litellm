@@ -256,8 +256,11 @@ describe("guardrail_info_helpers", () => {
       expect(format({ tags: {}, default: null })).toBe("");
     });
 
-    it("localizes the tag-based suffix through the supplied translator", () => {
-      expect(formatGuardrailMode({ default: "pre_call" }, i18n.getFixedT("zh-CN"))).toBe("pre_call （基于标签）");
+    it("localizes mode labels and the tag-based suffix through the supplied translator", () => {
+      expect(formatGuardrailMode({ default: "pre_call" }, i18n.getFixedT("zh-CN"))).toBe("调用前 （基于标签）");
+      expect(formatGuardrailMode(["pre_call", "during_call", "post_call"], i18n.getFixedT("zh-CN"))).toBe(
+        "调用前, 调用中, 调用后",
+      );
     });
   });
 

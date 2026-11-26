@@ -16,6 +16,7 @@ import { DEBOUNCE_WAIT_MS } from "@/utils/debounceConstants";
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { ColumnFiltersState, OnChangeFn, PaginationState, SortingState } from "@tanstack/react-table";
 import { Download } from "lucide-react";
+import { HIDE_TEAM_EXPORT_CSV } from "@/lib/hiddenProductEntries";
 import React, { useCallback, useMemo, useState } from "react";
 
 import { Team } from "../key_team_helpers/key_list";
@@ -183,18 +184,20 @@ export function TeamsTable({ userRole, userID, onSelectTeam, onEditTeam, onDelet
             filterLabels={FILTER_LABELS}
             formatFilterValue={formatFilterValue}
           >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportCsv}
-              disabled={isExporting}
-              data-testid="teams-export-csv"
-            >
-              <Download />
-              {isExporting
-                ? t("usageExport.entityUsageExportModal.exporting", { defaultValue: "Exporting..." })
-                : t("cloudzeroExportModal.exportCsvButton", { defaultValue: "Export CSV" })}
-            </Button>
+            {!HIDE_TEAM_EXPORT_CSV && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportCsv}
+                disabled={isExporting}
+                data-testid="teams-export-csv"
+              >
+                <Download />
+                {isExporting
+                  ? t("usageExport.entityUsageExportModal.exporting", { defaultValue: "Exporting..." })
+                  : t("cloudzeroExportModal.exportCsvButton", { defaultValue: "Export CSV" })}
+              </Button>
+            )}
           </DataTableToolbar>
           <DataTableFilterDrawer
             table={table}

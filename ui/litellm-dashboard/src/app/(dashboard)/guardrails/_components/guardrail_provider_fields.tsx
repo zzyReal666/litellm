@@ -16,6 +16,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import i18n from "@/lib/i18n";
+import {
+  providerParamDescription,
+  providerParamFieldLabel,
+  providerParamOptionLabel,
+} from "./guardrail_display_labels";
 import { toast } from "@/lib/toast";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
 import {
@@ -57,11 +62,6 @@ interface ProviderParamsResponse {
   [provider: string]: { [key: string]: ProviderParam };
 }
 
-const BOOLEAN_ITEMS = [
-  { label: i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }) }), value: true },
-  { label: i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" }), value: false },
-];
-
 const isSecretKey = (fieldKey: string): boolean =>
   fieldKey.includes("password") || fieldKey.includes("secret") || fieldKey.includes("key");
 
@@ -72,7 +72,12 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> =>
 // blocked until the value parses to a plain JSON object (or is cleared).
 const jsonObjectRule = (fieldKey: string): GuardrailFieldRules => ({
   validate: (value: unknown) =>
-    value === undefined || isPlainObject(value) ? true : `${fieldKey} must be a valid JSON object`,
+    value === undefined || isPlainObject(value)
+      ? true
+      : i18n.t("guardrails.guardrailProviderFields.invalidJsonObjectField", {
+          fieldKey: providerParamFieldLabel(fieldKey),
+          defaultValue: "{{fieldKey}} must be a valid JSON object",
+        }),
 });
 
 // Commits a parsed object (or undefined for a cleared field) to the form on
@@ -107,7 +112,7 @@ const fieldRules = (field: ProviderParam, fieldKey: string): GuardrailFieldRules
   return field.required
     ? requiredRule(
         i18n.t("guardrails.guardrailProviderFields.fieldRequired", {
-          fieldKey,
+          fieldKey: providerParamFieldLabel(fieldKey),
           defaultValue: "{{fieldKey}} is required",
         }),
       )
@@ -117,27 +122,33 @@ const fieldRules = (field: ProviderParam, fieldKey: string): GuardrailFieldRules
 interface ProviderFieldInputProps {
   descriptor: ProviderParam;
   fieldKey: string;
+  providerKey: string | null;
   control: GuardrailFieldControlProps;
 }
 
-const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fieldKey, control }) => {
+const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fieldKey, providerKey, control }) => {
   const { t } = useTranslation();
   const { id, value, onChange, onBlur, ref, name, ...aria } = control;
+  const description = providerParamDescription(providerKey, fieldKey, descriptor.description);
+  const optionItems = (descriptor.options ?? []).map((option) => ({
+    label: providerParamOptionLabel(option),
+    value: option,
+  }));
+  const booleanItems = [
+    { label: t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: "True" }), value: true },
+    { label: t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" }), value: false },
+  ];
 
   if (descriptor.type === "select" && descriptor.options) {
     return (
-      <Select
-        items={descriptor.options.map((option) => ({ label: option, value: option }))}
-        value={asText(value) || null}
-        onValueChange={(next: string | null) => onChange(next)}
-      >
+      <Select items={optionItems} value={asText(value) || null} onValueChange={(next: string | null) => onChange(next)}>
         <SelectTrigger id={id} className="w-full" {...aria}>
-          <SelectValue placeholder={descriptor.description} />
+          <SelectValue placeholder={description} />
         </SelectTrigger>
         <SelectContent>
-          {descriptor.options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {option}
+          {optionItems.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
             </SelectItem>
           ))}
         </SelectContent>
@@ -149,10 +160,10 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
     return (
       <MultiSelect
         id={id}
-        options={descriptor.options.map((option) => ({ label: option, value: option }))}
+        options={optionItems}
         value={asStringArray(value)}
         onValueChange={onChange}
-        placeholder={descriptor.description}
+        placeholder={description}
       />
     );
   }
@@ -160,20 +171,19 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
   if (descriptor.type === "bool" || descriptor.type === "boolean") {
     return (
       <Select
-        items={BOOLEAN_ITEMS}
+        items={booleanItems}
         value={typeof value === "boolean" ? value : null}
         onValueChange={(next: boolean | null) => onChange(next)}
       >
         <SelectTrigger id={id} className="w-full" {...aria}>
-          <SelectValue placeholder={descriptor.description} />
+          <SelectValue placeholder={description} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={true}>
-            {i18n.t("guardrails.guardrailProviderFields.trueLabel", { defaultValue: t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }) })}
-          </SelectItem>
-          <SelectItem value={false}>
-            {i18n.t("guardrails.guardrailProviderFields.falseLabel", { defaultValue: "False" })}
-          </SelectItem>
+          {booleanItems.map((item) => (
+            <SelectItem key={String(item.value)} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     );
@@ -207,7 +217,7 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
         id={id}
         name={name}
         ref={ref}
-        placeholder={descriptor.description}
+        placeholder={description}
         value={objectValue}
         onChange={(event) => onChange(event.target.value)}
         onBlur={(event) => {
@@ -225,7 +235,7 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
         id={id}
         name={name}
         step={1}
-        placeholder={descriptor.description}
+        placeholder={description}
         value={asText(value)}
         onChange={onChange}
         onBlur={onBlur}
@@ -240,7 +250,7 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
         id={id}
         name={name}
         ref={ref}
-        placeholder={descriptor.description}
+        placeholder={description}
         value={asText(value)}
         onChange={onChange}
         onBlur={onBlur}
@@ -254,7 +264,7 @@ const ProviderFieldInput: React.FC<ProviderFieldInputProps> = ({ descriptor, fie
       id={id}
       name={name}
       ref={ref}
-      placeholder={descriptor.description}
+      placeholder={description}
       value={asText(value)}
       onChange={onChange}
       onBlur={onBlur}
@@ -387,7 +397,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
       if (field.type === "nested" && field.fields) {
         return (
           <div key={fullFieldKey}>
-            <div className="mb-2 font-medium">{fieldKey}</div>
+            <div className="mb-2 font-medium">{providerParamFieldLabel(fieldKey)}</div>
             <FieldGroup className="ml-4 border-l-2 border-border pl-4">
               {renderFields(field.fields, fullFieldKey, fieldValue)}
             </FieldGroup>
@@ -398,16 +408,26 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
       const resolvedInitialValue =
         fieldValue !== undefined ? fieldValue : field.default_value ?? (field.type === "percentage" ? 0.5 : undefined);
 
+      const fieldLabel = providerParamFieldLabel(fieldKey);
+      const fieldDescription = providerParamDescription(providerKey, fieldKey, field.description);
+
       return (
         <GuardrailField
           key={fullFieldKey}
           control={control}
           name={fullFieldKey}
-          label={labelWithHint(fieldKey, field.description)}
+          label={fieldDescription === undefined ? fieldLabel : labelWithHint(fieldLabel, fieldDescription)}
           rules={fieldRules(field, fieldKey)}
           defaultValue={resolvedInitialValue}
         >
-          {(fieldControl) => <ProviderFieldInput descriptor={field} fieldKey={fieldKey} control={fieldControl} />}
+          {(fieldControl) => (
+            <ProviderFieldInput
+              descriptor={field}
+              fieldKey={fieldKey}
+              providerKey={providerKey}
+              control={fieldControl}
+            />
+          )}
         </GuardrailField>
       );
     });

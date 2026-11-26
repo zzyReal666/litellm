@@ -1,6 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import i18n from "@/lib/i18n";
 import { GuardrailField, labelWithHint, type GuardrailFormControl } from "./GuardrailFormField";
+import { guardrailModeLabel } from "./guardrail_display_labels";
 import {
   formatGuardrailStreamScope,
   getStreamScopeOptions,
@@ -32,7 +33,10 @@ export const StreamScopeFields = ({
         return (
           <div key={mode} className="space-y-1">
             <label htmlFor={`stream-scope-${mode}`} className="block text-sm font-medium text-foreground">
-              {i18n.t("guardrails.streamScopeFields.appliesTo", { defaultValue: "{{mode}} applies to", mode })}
+              {i18n.t("guardrails.streamScopeFields.appliesTo", {
+                defaultValue: "{{mode}} applies to",
+                mode: guardrailModeLabel(mode),
+              })}
             </label>
             <Select
               items={streamScopeOptions}

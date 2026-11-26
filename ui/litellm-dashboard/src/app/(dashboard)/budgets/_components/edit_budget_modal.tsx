@@ -1,7 +1,9 @@
 import { ChevronRight } from "lucide-react";
 import i18n from "@/lib/i18n";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { boundedAmountField } from "@/lib/forms/rateLimitField";
+import { useZodForm } from "@/lib/forms/useZodForm";
 import { useTranslation } from "react-i18next";
 import { useUpdateBudget } from "@/app/(dashboard)/hooks/budgets/useBudgets";
 import { budgetItem } from "@/app/(dashboard)/hooks/budgets/useBudgets";
@@ -43,7 +45,15 @@ interface EditBudgetModalProps {
 const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIsModalVisible, existingBudget }) => {
   const { t } = useTranslation();
   const [optionalSettingsOpen, setOptionalSettingsOpen] = React.useState(false);
-  const form = useForm<EditBudgetFormValues>({ defaultValues: toFormValues(existingBudget) });
+  const editBudgetSchema = z.object({
+    budget_id: z.string(),
+    tpm_limit: boundedAmountField(i18n),
+    rpm_limit: boundedAmountField(i18n),
+    tpd_limit: boundedAmountField(i18n),
+    max_budget: z.number().nullish(),
+    budget_duration: z.string().nullish(),
+  });
+  const form = useZodForm(editBudgetSchema, { defaultValues: toFormValues(existingBudget) });
   const updateBudget = useUpdateBudget();
 
   useEffect(() => {

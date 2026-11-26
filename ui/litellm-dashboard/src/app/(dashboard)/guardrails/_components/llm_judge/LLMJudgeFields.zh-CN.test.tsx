@@ -19,14 +19,14 @@ describe("LLMJudgeFields in zh-CN", () => {
     await i18n.changeLanguage("en");
   });
 
-  it("renders the judge description, including the emphasised Judge Model, in Chinese", async () => {
+  it("renders the judge description, including the emphasised judge model, in Chinese", async () => {
     await i18n.changeLanguage("zh-CN");
     render(<Harness />);
 
     expect(screen.getByText(/每次 LLM 响应后/)).toBeInTheDocument();
     expect(screen.getByText(/若加权平均分低于阈值，响应将被拦截（或记录）。/)).toBeInTheDocument();
     expect(
-      screen.getByText((_, element) => element?.tagName === "STRONG" && element.textContent === "Judge Model"),
+      screen.getByText((_, element) => element?.tagName === "STRONG" && element.textContent === "评审模型"),
     ).toBeInTheDocument();
   });
 

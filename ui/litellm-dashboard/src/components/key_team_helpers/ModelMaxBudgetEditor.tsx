@@ -193,7 +193,10 @@ export function ModelMaxBudgetEditor({
                 />
               </InputGroup>
               <Select
-                items={MODEL_BUDGET_PERIOD_OPTIONS}
+                items={MODEL_BUDGET_PERIOD_OPTIONS.map((option) => ({
+                  value: option.value,
+                  label: t(option.labelKey, { defaultValue: option.label }),
+                }))}
                 value={entry.timePeriod}
                 onValueChange={(period: string | null) => period && updateEntry(entry.id, { timePeriod: period })}
               >

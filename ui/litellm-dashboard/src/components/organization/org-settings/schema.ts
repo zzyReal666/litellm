@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidRateLimitValue } from "@/lib/forms/rateLimitField";
 
 const isBlank = (value: string): boolean => value.trim() === "";
 
@@ -13,7 +14,13 @@ const isJsonObject = (value: string): boolean => {
 
 const wholeNumberOrEmpty = z
   .string()
-  .refine((value) => isBlank(value) || /^\d+$/.test(value.trim()), "Must be a non-negative whole number");
+  .refine(
+    (value) => isBlank(value) || /^\d+$/.test(value.trim()),
+    "Must be a non-negative whole number",
+  )
+  .refine((value) => isBlank(value) || isValidRateLimitValue(value.trim()), {
+    message: "The number is too large to save",
+  });
 
 const amountOrEmpty = z
   .string()

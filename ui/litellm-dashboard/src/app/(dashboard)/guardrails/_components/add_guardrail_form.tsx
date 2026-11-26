@@ -37,6 +37,7 @@ import {
   type LoggingOnlyScopeChoice,
 } from "./guardrail_info_helpers";
 import { StreamScopeFormField } from "./StreamScopeFields";
+import { guardrailModeLabel } from "./guardrail_display_labels";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { FieldGroup } from "@/components/ui/field";
@@ -85,31 +86,6 @@ import PiiConfiguration from "./pii_configuration";
 import ToolPermissionRulesEditor, { ToolPermissionConfig } from "./tool_permission/ToolPermissionRulesEditor";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { buildGuardrailCreateErrorReport } from "./guardrailCreateError";
-
-// Define human-friendly descriptions for each mode
-const modeDescriptions = {
-  pre_call: i18n.t("guardrails.addGuardrailForm.modeDesc.pre_call", {
-    defaultValue: "Before LLM Call - Runs before the LLM call and checks the input (Recommended)",
-  }),
-  during_call: i18n.t("guardrails.addGuardrailForm.modeDesc.during_call", {
-    defaultValue: "During LLM Call - Runs in parallel with the LLM call, with response held until check completes",
-  }),
-  post_call: i18n.t("guardrails.addGuardrailForm.modeDesc.post_call", {
-    defaultValue: "After LLM Call - Runs after the LLM call and checks only the output",
-  }),
-  logging_only: i18n.t("guardrails.addGuardrailForm.modeDesc.logging_only", {
-    defaultValue: "Logging Only - Only runs on logging callbacks without affecting the LLM call",
-  }),
-  pre_mcp_call: i18n.t("guardrails.addGuardrailForm.modePreMcpCall", {
-    defaultValue: "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
-  }),
-  during_mcp_call: i18n.t("guardrails.addGuardrailForm.modeDuringMcpCall", {
-    defaultValue: "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
-  }),
-  post_mcp_call: i18n.t("guardrails.addGuardrailForm.modeDesc.post_mcp_call", {
-    defaultValue: "After MCP Tool Call - Runs after MCP tool execution and checks the tool result",
-  }),
-};
 
 interface GuardrailPreset {
   provider: string;
@@ -214,11 +190,6 @@ const INITIAL_VALUES: GuardrailFormValues = {
   stream_scope_by_mode: {},
 };
 
-const ALWAYS_ON_ITEMS = [
-  { label: i18n.t("common.yes", { defaultValue: "Yes" }), value: true },
-  { label: i18n.t("common.no", { defaultValue: "No" }), value: false },
-];
-
 const DEFAULT_MODES = ["pre_call", "during_call", "post_call", "logging_only"];
 
 const CALL_TYPE_ITEMS = [{ label: "/v1/realtime", value: "realtime" }];
@@ -249,6 +220,33 @@ interface ProviderParamsResponse {
 
 const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, accessToken, onSuccess, preset }) => {
   const { t } = useTranslation();
+  const modeDescriptions: Record<string, string> = {
+    pre_call: t("guardrails.addGuardrailForm.modeDesc.pre_call", {
+      defaultValue: "Before LLM Call - Runs before the LLM call and checks the input (Recommended)",
+    }),
+    during_call: t("guardrails.addGuardrailForm.modeDesc.during_call", {
+      defaultValue: "During LLM Call - Runs in parallel with the LLM call, with response held until check completes",
+    }),
+    post_call: t("guardrails.addGuardrailForm.modeDesc.post_call", {
+      defaultValue: "After LLM Call - Runs after the LLM call and checks only the output",
+    }),
+    logging_only: t("guardrails.addGuardrailForm.modeDesc.logging_only", {
+      defaultValue: "Logging Only - Only runs on logging callbacks without affecting the LLM call",
+    }),
+    pre_mcp_call: t("guardrails.addGuardrailForm.modeDesc.pre_mcp_call", {
+      defaultValue: "Before MCP Tool Call - Runs before MCP tool execution and validates tool calls",
+    }),
+    during_mcp_call: t("guardrails.addGuardrailForm.modeDesc.during_mcp_call", {
+      defaultValue: "During MCP Tool Call - Runs in parallel with MCP tool execution for monitoring",
+    }),
+    post_mcp_call: t("guardrails.addGuardrailForm.modeDesc.post_mcp_call", {
+      defaultValue: "After MCP Tool Call - Runs after MCP tool execution and checks the tool result",
+    }),
+  };
+  const alwaysOnItems = [
+    { label: t("common.yes", { defaultValue: "Yes" }), value: true },
+    { label: t("common.no", { defaultValue: "No" }), value: false },
+  ];
   const form = useForm<GuardrailFormValues>({ defaultValues: INITIAL_VALUES });
   const watchedMode = useWatch({ control: form.control, name: "mode" });
   const [loading, setLoading] = useState(false);
@@ -938,9 +936,9 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
             <MultiSelect
               id={id}
               options={supportedModes.map((mode) => ({
-                label: mode,
+                label: guardrailModeLabel(mode),
                 value: mode,
-                description: modeDescriptions[mode as keyof typeof modeDescriptions],
+                description: modeDescriptions[mode],
               }))}
               value={asStringArray(value)}
               onValueChange={onChange}
@@ -963,7 +961,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
         >
           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
             <Select
-              items={ALWAYS_ON_ITEMS}
+              items={alwaysOnItems}
               value={typeof value === "boolean" ? value : null}
               onValueChange={(next: boolean | null) => onChange(next)}
             >
@@ -1109,6 +1107,7 @@ const AddGuardrailForm: React.FC<AddGuardrailFormProps> = ({ visible, onClose, a
         optionalParams={providerFields.optional_params}
         parentFieldKey="optional_params"
         control={form.control}
+        providerKey={providerKey}
       />
     );
   };

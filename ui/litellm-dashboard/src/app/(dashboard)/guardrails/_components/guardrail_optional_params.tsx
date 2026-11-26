@@ -1,5 +1,6 @@
 import i18n from "@/lib/i18n";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { MultiSelect } from "@/components/shared/MultiSelect";
 import { PasswordInput } from "@/components/shared/PasswordInput";
 import NumericalInput from "@/components/shared/numerical_input";
@@ -15,6 +16,12 @@ import {
   type GuardrailFieldControlProps,
   type GuardrailFormControl,
 } from "./GuardrailFormField";
+import {
+  providerParamDescription,
+  providerParamFieldLabel,
+  providerParamOptionLabel,
+  untranslatedDescription,
+} from "./guardrail_display_labels";
 
 interface ProviderParam {
   param: string;
@@ -33,6 +40,7 @@ interface GuardrailOptionalParamsProps {
   parentFieldKey: string;
   control: GuardrailFormControl;
   values?: Record<string, unknown>;
+  providerKey?: string | null;
 }
 
 interface DictFieldProps {
@@ -40,12 +48,8 @@ interface DictFieldProps {
   fullFieldKey: string;
   control: GuardrailFormControl;
   value: unknown;
+  providerKey: string | null;
 }
-
-const BOOLEAN_ITEMS = [
-  { label: i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" }), value: true },
-  { label: i18n.t("guardrails.guardrailOptionalParams.boolFalse", { defaultValue: "False" }), value: false },
-];
 
 const isSecretKey = (fieldKey: string): boolean =>
   fieldKey.includes("password") || fieldKey.includes("secret") || fieldKey.includes("key");
@@ -56,15 +60,20 @@ const toNumberValue = (raw: unknown): unknown => {
   return isNaN(num) ? raw : num;
 };
 
-const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder: string }> = ({
+const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder?: string }> = ({
   control,
   placeholder,
 }) => {
+  const { t } = useTranslation();
   const { id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy } = control;
+  const booleanItems = [
+    { label: t("guardrails.guardrailOptionalParams.boolTrue", { defaultValue: "True" }), value: true },
+    { label: t("guardrails.guardrailOptionalParams.boolFalse", { defaultValue: "False" }), value: false },
+  ];
 
   return (
     <Select
-      items={BOOLEAN_ITEMS}
+      items={booleanItems}
       value={typeof value === "boolean" ? value : null}
       onValueChange={(next: boolean | null) => onChange(next)}
     >
@@ -72,18 +81,17 @@ const BooleanSelect: React.FC<{ control: GuardrailFieldControlProps; placeholder
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={true}>
-          {i18n.t("mcpTools.mCPToolArgumentsForm.booleanTrue", { defaultValue: "True" })}
-        </SelectItem>
-        <SelectItem value={false}>
-          {i18n.t("guardrails.guardrailOptionalParams.boolFalse", { defaultValue: "False" })}
-        </SelectItem>
+        {booleanItems.map((item) => (
+          <SelectItem key={String(item.value)} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
 };
 
-const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, value }) => {
+const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, value, providerKey }) => {
   const [selectedEntries, setSelectedEntries] = React.useState<Array<{ key: string; id: string }>>([]);
   const [availableKeys, setAvailableKeys] = React.useState<string[]>(field.dict_key_options || []);
 
@@ -138,7 +146,10 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
                     id={fieldControl.id}
                     name={fieldControl.name}
                     step={1}
-                    placeholder={`Enter ${entry.key} value`}
+                    placeholder={i18n.t("guardrails.guardrailOptionalParams.enterValue", {
+                      key: providerParamFieldLabel(entry.key),
+                      defaultValue: "Enter {{key}} value",
+                    })}
                     value={asText(fieldControl.value)}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                       fieldControl.onChange(toNumberValue(event.target.value))
@@ -151,7 +162,15 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
               }
 
               if (field.dict_value_type === "boolean") {
-                return <BooleanSelect control={fieldControl} placeholder={`Select ${entry.key} value`} />;
+                return (
+                  <BooleanSelect
+                    control={fieldControl}
+                    placeholder={i18n.t("guardrails.guardrailOptionalParams.selectValue", {
+                      key: providerParamFieldLabel(entry.key),
+                      defaultValue: "Select {{key}} value",
+                    })}
+                  />
+                );
               }
 
               return (
@@ -159,7 +178,10 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
                   id={fieldControl.id}
                   name={fieldControl.name}
                   ref={fieldControl.ref}
-                  placeholder={`Enter ${entry.key} value`}
+                  placeholder={i18n.t("guardrails.guardrailOptionalParams.enterValue", {
+                    key: providerParamFieldLabel(entry.key),
+                    defaultValue: "Enter {{key}} value",
+                  })}
                   value={asText(fieldControl.value)}
                   onChange={fieldControl.onChange}
                   onBlur={fieldControl.onBlur}
@@ -175,7 +197,7 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
             className="text-destructive hover:text-destructive/80"
             onClick={() => removeEntry(entry.id, entry.key)}
           >
-            Remove
+            {i18n.t("common.remove", { defaultValue: "Remove" })}
           </Button>
         </div>
       ))}
@@ -217,26 +239,28 @@ const DictField: React.FC<DictFieldProps> = ({ field, fullFieldKey, control, val
 interface OptionalParamInputProps {
   descriptor: ProviderParam;
   fieldKey: string;
+  providerKey: string | null;
   control: GuardrailFieldControlProps;
 }
 
-const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fieldKey, control }) => {
+const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fieldKey, providerKey, control }) => {
   const { id, value, onChange, onBlur, ref, name, ...aria } = control;
+  const description = providerParamDescription(providerKey, fieldKey, descriptor.description);
+  const optionItems = (descriptor.options ?? []).map((option) => ({
+    label: providerParamOptionLabel(option),
+    value: option,
+  }));
 
   if (descriptor.type === "select" && descriptor.options) {
     return (
-      <Select
-        items={descriptor.options.map((option) => ({ label: option, value: option }))}
-        value={asText(value) || null}
-        onValueChange={(next: string | null) => onChange(next)}
-      >
+      <Select items={optionItems} value={asText(value) || null} onValueChange={(next: string | null) => onChange(next)}>
         <SelectTrigger id={id} className="w-full" {...aria}>
-          <SelectValue placeholder={descriptor.description} />
+          <SelectValue placeholder={description} />
         </SelectTrigger>
         <SelectContent>
-          {descriptor.options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {option}
+          {optionItems.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
             </SelectItem>
           ))}
         </SelectContent>
@@ -248,16 +272,16 @@ const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fie
     return (
       <MultiSelect
         id={id}
-        options={descriptor.options.map((option) => ({ label: option, value: option }))}
+        options={optionItems}
         value={asStringArray(value)}
         onValueChange={onChange}
-        placeholder={descriptor.description}
+        placeholder={description}
       />
     );
   }
 
   if (descriptor.type === "bool" || descriptor.type === "boolean") {
-    return <BooleanSelect control={control} placeholder={descriptor.description} />;
+    return <BooleanSelect control={control} placeholder={description} />;
   }
 
   if (descriptor.type === "number") {
@@ -266,7 +290,7 @@ const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fie
         id={id}
         name={name}
         step={1}
-        placeholder={descriptor.description}
+        placeholder={description}
         value={asText(value)}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(toNumberValue(event.target.value))}
         onBlur={onBlur}
@@ -281,7 +305,7 @@ const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fie
         id={id}
         name={name}
         ref={ref}
-        placeholder={descriptor.description}
+        placeholder={description}
         value={asText(value)}
         onChange={onChange}
         onBlur={onBlur}
@@ -295,7 +319,7 @@ const OptionalParamInput: React.FC<OptionalParamInputProps> = ({ descriptor, fie
       id={id}
       name={name}
       ref={ref}
-      placeholder={descriptor.description}
+      placeholder={description}
       value={asText(value)}
       onChange={onChange}
       onBlur={onBlur}
@@ -309,17 +333,26 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
   parentFieldKey,
   control,
   values,
+  providerKey = null,
 }) => {
   const renderField = (fieldKey: string, field: ProviderParam) => {
     const fullFieldKey = `${parentFieldKey}.${fieldKey}`;
     const value = values?.[fieldKey];
+    const fieldLabel = providerParamFieldLabel(fieldKey);
     // Handle dict fields separately since they manage their own fields
     if (field.type === "dict" && field.dict_key_options) {
+      const dictDescription = providerParamDescription(providerKey, fullFieldKey, field.description);
       return (
         <div key={fullFieldKey} className="mb-8 rounded-lg border border-border bg-muted/40 p-6">
-          <div className="mb-4 text-base font-medium text-foreground">{fieldKey}</div>
-          <p className="mb-4 text-sm text-muted-foreground">{field.description}</p>
-          <DictField field={field} fullFieldKey={fullFieldKey} control={control} value={value} />
+          <div className="mb-4 text-base font-medium text-foreground">{fieldLabel}</div>
+          {dictDescription !== undefined && <p className="mb-4 text-sm text-muted-foreground">{dictDescription}</p>}
+          <DictField
+            field={field}
+            fullFieldKey={fullFieldKey}
+            control={control}
+            value={value}
+            providerKey={providerKey}
+          />
         </div>
       );
     }
@@ -329,21 +362,28 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
         <GuardrailField
           control={control}
           name={fullFieldKey}
-          label={<span className="text-base">{fieldKey}</span>}
-          description={field.description}
+          label={<span className="text-base">{fieldLabel}</span>}
+          description={providerParamDescription(providerKey, fullFieldKey, field.description)}
           rules={
             field.required
               ? requiredRule(
                   i18n.t("guardrails.guardrailOptionalParams.fieldRequired", {
                     defaultValue: "{{fieldKey}} is required",
-                    fieldKey,
+                    fieldKey: fieldLabel,
                   }),
                 )
               : undefined
           }
           defaultValue={value !== undefined ? value : field.default_value}
         >
-          {(fieldControl) => <OptionalParamInput descriptor={field} fieldKey={fieldKey} control={fieldControl} />}
+          {(fieldControl) => (
+            <OptionalParamInput
+              descriptor={field}
+              fieldKey={fieldKey}
+              providerKey={providerKey}
+              control={fieldControl}
+            />
+          )}
         </GuardrailField>
       </div>
     );
@@ -360,7 +400,7 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
           {i18n.t("guardrailOptionalParams.optional-parameters", { defaultValue: "Optional Parameters" })}
         </h3>
         <p className="text-sm text-muted-foreground">
-          {optionalParams.description ||
+          {untranslatedDescription(optionalParams.description) ||
             i18n.t("guardrails.guardrailOptionalParams.defaultDescription", {
               defaultValue: "Configure additional settings for this guardrail provider",
             })}

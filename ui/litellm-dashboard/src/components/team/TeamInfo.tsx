@@ -1,4 +1,5 @@
 import i18n from "@/lib/i18n";
+import { rateLimitField, rateLimitInputField } from "@/lib/forms/rateLimitField";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import type { components } from "@/lib/http/schema";
 import useCan from "@/app/(dashboard)/hooks/useCan";
@@ -370,8 +371,8 @@ const teamUpdateFieldsSchema = z.object({
   team_member_budget: numericInputSchema,
   team_member_budget_duration: z.string().nullish(),
   team_member_key_duration: z.string().optional(),
-  team_member_tpm_limit: numericInputSchema,
-  team_member_rpm_limit: numericInputSchema,
+  team_member_tpm_limit: rateLimitInputField(i18n),
+  team_member_rpm_limit: rateLimitInputField(i18n),
   team_member_max_budget_alert_emails: z
     .array(z.object({ threshold: z.number().nullable(), emails: z.string() }))
     .superRefine((rows, ctx) => {
@@ -465,13 +466,13 @@ const EMPTY_TEAM_UPDATE_VALUES: TeamUpdateFormValues = {
   team_member_budget: undefined,
   team_member_budget_duration: undefined,
   team_member_key_duration: undefined,
-  team_member_tpm_limit: undefined,
-  team_member_rpm_limit: undefined,
+  team_member_tpm_limit: null,
+  team_member_rpm_limit: null,
   team_member_max_budget_alert_emails: [],
   budget_duration: undefined,
-  tpm_limit: undefined,
-  rpm_limit: undefined,
-  tpd_limit: undefined,
+  tpm_limit: null,
+  rpm_limit: null,
+  tpd_limit: null,
   modelLimits: [],
   default_estimated_output_tokens: undefined,
   default_estimated_output_tokens_per_model: "",
@@ -516,8 +517,8 @@ const toTeamFormValues = (info: TeamInfoRecord, effectiveGuardrails: string[]): 
   team_member_budget: info.team_member_budget_table?.max_budget,
   team_member_budget_duration: info.team_member_budget_table?.budget_duration,
   team_member_key_duration: info.metadata?.team_member_key_duration,
-  team_member_tpm_limit: info.team_member_budget_table?.tpm_limit,
-  team_member_rpm_limit: info.team_member_budget_table?.rpm_limit,
+  team_member_tpm_limit: info.team_member_budget_table?.tpm_limit ?? null,
+  team_member_rpm_limit: info.team_member_budget_table?.rpm_limit ?? null,
   team_member_max_budget_alert_emails: [...teamMemberBudgetAlertRowsFromMetadata(info.metadata)],
   budget_duration: info.budget_duration,
   tpm_limit: info.tpm_limit,
@@ -1300,10 +1301,13 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
     }
   };
 
-  const tabItems = [
+  const tabLabel = (key: string): string =>
+  i18n.t(`teamPage.teamInfo.tabs.${key}`, { defaultValue: TEAM_INFO_TAB_LABELS[key] });
+
+const tabItems = [
     {
       key: TEAM_INFO_TAB_KEYS.OVERVIEW,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.OVERVIEW],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.OVERVIEW),
       children: (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card className="block p-6">
@@ -1440,17 +1444,17 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
     },
     {
       key: TEAM_INFO_TAB_KEYS.MY_USER,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.MY_USER],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.MY_USER),
       children: <MyUserTab teamId={teamId} />,
     },
     {
       key: TEAM_INFO_TAB_KEYS.VIRTUAL_KEYS,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.VIRTUAL_KEYS],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.VIRTUAL_KEYS),
       children: <TeamVirtualKeysTable teamId={teamId} teamAlias={info.team_alias} organization={organization} />,
     },
     {
       key: TEAM_INFO_TAB_KEYS.MEMBERS,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.MEMBERS],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.MEMBERS),
       children: (
         <TeamMembersComponent
           teamData={teamData}
@@ -1466,12 +1470,12 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
     },
     {
       key: TEAM_INFO_TAB_KEYS.MEMBER_PERMISSIONS,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.MEMBER_PERMISSIONS],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.MEMBER_PERMISSIONS),
       children: <MemberPermissions teamId={teamId} accessToken={accessToken} canEditTeam={canEditTeam} />,
     },
     {
       key: TEAM_INFO_TAB_KEYS.SETTINGS,
-      label: TEAM_INFO_TAB_LABELS[TEAM_INFO_TAB_KEYS.SETTINGS],
+      label: tabLabel(TEAM_INFO_TAB_KEYS.SETTINGS),
       children: (
         <Card className="block p-6 overflow-y-auto max-h-[65vh]">
           <div className="flex justify-between items-center mb-4">

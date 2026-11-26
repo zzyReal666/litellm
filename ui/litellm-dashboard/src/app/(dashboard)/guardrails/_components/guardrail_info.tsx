@@ -31,6 +31,7 @@ import {
 import ContentFilterManager from "./content_filter/ContentFilterManager";
 import CustomCodeModal, { EditGuardrailData } from "./custom_code/CustomCodeModal";
 import { GuardrailModeCard } from "./GuardrailModeDisplay";
+import { guardrailValueLabel } from "./guardrail_display_labels";
 import { GuardrailReadOnlyDetails } from "./GuardrailReadOnlyDetails";
 import {
   getGuardrailLogoAndName,
@@ -49,11 +50,6 @@ import GuardrailOptionalParams from "./guardrail_optional_params";
 import GuardrailProviderFields from "./guardrail_provider_fields";
 import PiiConfiguration from "./pii_configuration";
 import ToolPermissionRulesEditor, { ToolPermissionConfig } from "./tool_permission/ToolPermissionRulesEditor";
-
-const DEFAULT_ON_ITEMS = [
-  { label: i18n.t("guardrails.guardrailInfo.defaultOnOptionYes", { defaultValue: "Yes" }), value: true },
-  { label: i18n.t("guardrails.guardrailInfo.defaultOnOptionNo", { defaultValue: "No" }), value: false },
-];
 
 const SectionHeading: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="my-6 flex items-center gap-3">
@@ -78,6 +74,10 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({
   onGuardrailUpdated,
 }) => {
   const { t } = useTranslation();
+  const defaultOnItems = [
+    { label: t("guardrails.guardrailInfo.defaultOnOptionYes", { defaultValue: "Yes" }), value: true },
+    { label: t("guardrails.guardrailInfo.defaultOnOptionNo", { defaultValue: "No" }), value: false },
+  ];
   const [guardrailData, setGuardrailData] = useState<any>(null);
   const [guardrailProviderSpecificParams, setGuardrailProviderSpecificParams] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -481,7 +481,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({
                               }`}
                             >
                               {value === "MASK" ? <EyeOff className="size-3.5" /> : <Ban className="size-3.5" />}
-                              {String(value)}
+                              {guardrailValueLabel(String(value))}
                             </span>
                           </p>
                         </div>
@@ -605,7 +605,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({
                         >
                           {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": describedBy }) => (
                             <Select
-                              items={DEFAULT_ON_ITEMS}
+                              items={defaultOnItems}
                               value={typeof value === "boolean" ? value : null}
                               onValueChange={(next: boolean | null) => onChange(next)}
                             >
@@ -747,6 +747,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({
                                     parentFieldKey="optional_params"
                                     control={form.control}
                                     values={guardrailData.litellm_params}
+                                    providerKey={providerKey}
                                   />
                                 );
                               })()}
