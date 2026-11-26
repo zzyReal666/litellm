@@ -20,6 +20,20 @@ describe("temporarily hidden navigation entries", () => {
     expect(flatKeys(groups)).not.toContain("organizations");
   });
 
+  it("drops the temporarily hidden product entries", () => {
+    const keys = flatKeys(visibleMenuGroups(menuGroups, adminContext));
+
+    for (const hiddenKey of ["agentic", "mcp-servers", "skills", "policies", "tools"]) {
+      expect(keys).not.toContain(hiddenKey);
+    }
+  });
+
+  it("keeps the remaining product entries visible", () => {
+    const keys = flatKeys(visibleMenuGroups(menuGroups, adminContext));
+
+    expect(keys).toEqual(expect.arrayContaining(["home", "api-keys", "models", "guardrails", "logs"]));
+  });
+
   it("keeps the remaining access control entries visible", () => {
     const keys = flatKeys(visibleMenuGroups(menuGroups, adminContext));
 

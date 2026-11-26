@@ -1,4 +1,5 @@
 import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
+import { isMenuItemHidden } from "@/lib/hiddenProductEntries";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import i18n from "@/lib/i18n";
 import { renderWithProviders } from "../../tests/test-utils";
@@ -269,32 +270,36 @@ describe("Sidebar (leftnav)", () => {
   it("renders all top-level (non-nested) tabs for admin", () => {
     renderWithProviders(<Sidebar {...defaultProps} />);
 
-    const topLevelLabels = [
-      "Home",
-      "Virtual Keys",
-      "Playground",
-      "Models + Endpoints",
-      "Agentic",
-      "MCP Servers",
-      "Guardrails",
-      "Policies",
-      "Tools",
-      "Usage",
-      "Logs",
-      "Guardrails Monitor",
-      "Teams",
-      "Internal Users",
-      "Access Groups",
-      "Budgets",
-      "Settings",
+    const topLevelLabels: ReadonlyArray<readonly [string, string]> = [
+      ["home", "Home"],
+      ["api-keys", "Virtual Keys"],
+      ["llm-playground", "Playground"],
+      ["models", "Models + Endpoints"],
+      ["agentic", "Agentic"],
+      ["mcp-servers", "MCP Servers"],
+      ["guardrails", "Guardrails"],
+      ["policies", "Policies"],
+      ["tools", "Tools"],
+      ["new_usage", "Usage"],
+      ["logs", "Logs"],
+      ["guardrails-monitor", "Guardrails Monitor"],
+      ["teams", "Teams"],
+      ["users", "Internal Users"],
+      ["access-groups", "Access Groups"],
+      ["budgets", "Budgets"],
+      ["settings", "Settings"],
     ];
 
-    topLevelLabels.forEach((label) => {
-      expect(screen.getByText(label)).toBeInTheDocument();
-    });
+    for (const [key, label] of topLevelLabels) {
+      if (isMenuItemHidden(key)) {
+        expect(screen.queryByText(label)).not.toBeInTheDocument();
+      } else {
+        expect(screen.getByText(label)).toBeInTheDocument();
+      }
+    }
   });
 
-  it("expands a nested tab to reveal its children (Tools > Search Tools)", async () => {
+  it.skipIf(isMenuItemHidden("tools"))("expands a nested tab to reveal its children (Tools > Search Tools)", async () => {
     renderWithProviders(<Sidebar {...defaultProps} />);
 
     expect(screen.queryByText("Search Tools")).not.toBeInTheDocument();
@@ -305,7 +310,7 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.getByText("Search Tools")).toBeInTheDocument();
     });
   });
-  it("reports whether a nested tab is expanded", async () => {
+  it.skipIf(isMenuItemHidden("tools"))("reports whether a nested tab is expanded", async () => {
     renderWithProviders(<Sidebar {...defaultProps} />);
 
     const toggle = screen.getByText("Tools").closest("button")!;
@@ -364,7 +369,7 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.getByText("Models + Endpoints")).toBeInTheDocument();
     });
 
-    it("shows Agents (under Agentic) to Admin Viewer (read-only)", async () => {
+    it.skipIf(isMenuItemHidden("agentic"))("shows Agents (under Agentic) to Admin Viewer (read-only)", async () => {
       mockUseAuthorized.mockReturnValue(adminViewerAuth);
       renderWithProviders(<Sidebar {...defaultProps} />);
       // Agents is now nested under the "Agentic" submenu — expand parent
@@ -401,7 +406,7 @@ describe("Sidebar (leftnav)", () => {
       mockUseAuthorized.mockReset();
     });
 
-    it("should hide Tool Policies from internal users while keeping other Tools children", async () => {
+    it.skipIf(isMenuItemHidden("tools"))("should hide Tool Policies from internal users while keeping other Tools children", async () => {
       mockUseAuthorized.mockReturnValue(internalAuth);
       renderWithProviders(<Sidebar {...defaultProps} />);
 
@@ -414,7 +419,7 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.queryByText("Tool Policies")).not.toBeInTheDocument();
     });
 
-    it("should show Tool Policies to admins", async () => {
+    it.skipIf(isMenuItemHidden("tools"))("should show Tool Policies to admins", async () => {
       renderWithProviders(<Sidebar {...defaultProps} />);
 
       act(() => {
@@ -471,7 +476,7 @@ describe("Sidebar (leftnav)", () => {
       mockUseAuthorized.mockReset();
     });
 
-    it("hides Workflow Runs and Memory from an internal user under Agentic", async () => {
+    it.skipIf(isMenuItemHidden("agentic"))("hides Workflow Runs and Memory from an internal user under Agentic", async () => {
       mockUseAuthorized.mockReturnValue(authFor("internal"));
       renderWithProviders(<Sidebar {...defaultProps} />);
 
@@ -504,14 +509,14 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.queryByText("Memory")).not.toBeInTheDocument();
     });
 
-    it("keeps the Agentic group for an internal user, who can still see Agents", () => {
+    it.skipIf(isMenuItemHidden("agentic"))("keeps the Agentic group for an internal user, who can still see Agents", () => {
       mockUseAuthorized.mockReturnValue(authFor("internal"));
       renderWithProviders(<Sidebar {...defaultProps} />);
 
       expect(screen.getByText("Agentic")).toBeInTheDocument();
     });
 
-    it("shows Workflow Runs and Memory to admins", async () => {
+    it.skipIf(isMenuItemHidden("agentic"))("shows Workflow Runs and Memory to admins", async () => {
       renderWithProviders(<Sidebar {...defaultProps} />);
 
       act(() => {
@@ -663,7 +668,7 @@ describe("Sidebar (leftnav)", () => {
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("data-active", "true");
   });
 
-  it("expands the parent group of the current nested route and marks the child active", () => {
+  it.skipIf(isMenuItemHidden("tools"))("expands the parent group of the current nested route and marks the child active", () => {
     navState.pathname = "/ui/search-tools";
     renderWithProviders(<Sidebar {...defaultProps} />);
     expect(screen.getByRole("link", { name: "Search Tools" })).toHaveAttribute("data-active", "true");
@@ -681,7 +686,7 @@ describe("Sidebar (leftnav)", () => {
     expectHref("Usage", "/ui/usage");
   });
 
-  it("never links a leaf to the legacy ?page= switch", () => {
+  it.skipIf(isMenuItemHidden("agentic") || isMenuItemHidden("tools"))("never links a leaf to the legacy ?page= switch", () => {
     renderWithProviders(<Sidebar {...defaultProps} enableProjectsUI />);
     for (const group of ["Agentic", "Tools", "Settings"]) {
       act(() => {

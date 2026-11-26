@@ -4,7 +4,14 @@
  */
 export const HIDDEN_MENU_GROUP_LABELS: ReadonlySet<string> = new Set(["DEVELOPER TOOLS"]);
 
-export const HIDDEN_MENU_ITEM_KEYS: ReadonlySet<string> = new Set(["organizations"]);
+export const HIDDEN_MENU_ITEM_KEYS: ReadonlySet<string> = new Set([
+  "organizations",
+  "agentic",
+  "mcp-servers",
+  "skills",
+  "policies",
+  "tools",
+]);
 
 export const HIDE_REGENERATE_KEY_BUTTON: boolean = true;
 
