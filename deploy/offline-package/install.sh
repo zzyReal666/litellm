@@ -344,7 +344,7 @@ load_with_progress() {
 
 images_present() {
   local missing=0 img
-  for img in litellm-zhcn:v1.106.0-zh.34 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1 nginx:1.27-alpine; do
+  for img in litellm-zhcn:v1.106.0-zh.35 headroom-offline:v1.106.0-zh.7 postgres:16.4 redis:7.4.2-alpine prom/prometheus:v2.55.1 nginx:1.27-alpine; do
     docker image inspect "${img}" >/dev/null 2>&1 || missing=1
   done
   return "${missing}"
