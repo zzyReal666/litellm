@@ -334,6 +334,29 @@ sudo ./install.sh --skip-images
 
 `--purge` 与 `--all` 会一并删除 `certs/` 下的证书。如果证书来自企业 CA 且希望重装后继续使用，卸载前先把 `certs/` 备份出来，重装后覆盖回去并重启即可，否则重装会重新生成自签证书，客户端需要重新信任。
 
+### 9.3 干净重装
+
+交付前的测试数据清理、换机部署或安装包升级验证，建议完全卸载后重新安装，避免旧数据、旧镜像和旧证书干扰：
+
+```bash
+# 1. 卸载前备份需要保留的数据（可选）
+cd /opt/litellm
+./litellm backup
+cp -a backups certs data/license .env /root/
+
+# 2. 完全卸载，只保留 /opt 下的安装包
+./litellm uninstall --all
+
+# 3. 校验安装包后重新解压安装
+cd /opt
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+cd litellm-offline-v1.106.0-zh.39
+sudo ./install.sh
+```
+
+`--all` 只删除该实例自己的安装目录、容器与镜像，不会删除 `/opt` 下的安装包，也不影响同机其它实例。重新安装完成后数据为空，需要重新创建管理员、导入授权并在界面配置模型；如需恢复旧数据，用 `./litellm restore` 导入第 1 步备份的 SQL 文件，再把 `certs/`、`data/license/` 与 `.env` 覆盖回新安装目录后重启。
+
 ## 10 常见问题
 
 **安装时提示端口已被占用。** 说明该端口有其它服务在监听，向导会直接要求重新输入，换一个端口即可，依赖端口冲突时同样处理。已经部署过一套网关的机器，再次安装必须改用新的端口和项目名。

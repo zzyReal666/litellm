@@ -31,10 +31,12 @@ Linux x86_64（systemd），root 权限，磁盘至少 20G，内存至少 6G。
 解压后用 root 执行安装脚本，不带参数即进入交互式向导：
 
 ```bash
-tar xzf litellm-offline-v1.106.0-zh.13.tar.gz
-cd litellm-offline-v1.106.0-zh.13
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+cd litellm-offline-v1.106.0-zh.39
 sudo ./install.sh
 ```
+`sha256sum -c` 用于确认安装包没有在传输或拷贝中损坏，输出 OK 再继续。
 
 向导会依次询问并在有默认值时提示回车采用：
 
@@ -193,12 +195,25 @@ docker logs litellm-litellm-1 --tail 100 | grep "Headroom: compressed"
 /opt/litellm/scripts/restore-db.sh 恢复数据库
 ```
 
+## 干净重装
+需要重装或换机部署时，推荐先完全卸载再重新安装，避免旧数据与旧镜像干扰：
+```bash
+cd /opt
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+cd litellm-offline-v1.106.0-zh.39
+sudo ./uninstall.sh --all
+sudo ./install.sh
+```
+`--all` 会删除旧的 /opt/litellm，保留安装包本身；重新安装后数据为空，需要重新导入授权、创建管理员。卸载前如需保留数据，先执行 `./litellm backup` 并把 `backups/`、`data/license/`、`.env` 拷到安装目录之外。
+
 ## 卸载
 
 ```bash
 sudo ./uninstall.sh                  停止并移除容器，保留数据与镜像
 sudo ./uninstall.sh --purge          同时删除 data 与 .env
 sudo ./uninstall.sh --remove-images  同时删除全部镜像
+sudo ./uninstall.sh --all            完全卸载，容器、网络、数据、.env、镜像与安装目录一并清除
 ```
 
 ## 模型与价格
@@ -244,8 +259,8 @@ assets/favicon.png   浏览器标签图标（128x128）
 ==> 加载镜像
 ==> docker load -i /opt/litellm-b/images/headroom-offline-v1.106.0-zh.7.tar
 Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.13.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.13
+==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.39.tar
+Loaded image: litellm-zhcn:v1.106.0-zh.39
 ==> docker load -i /opt/litellm-b/images/postgres-16.4.tar
 Loaded image: postgres:16.4
 ==> docker load -i /opt/litellm-b/images/prometheus-v2.55.1.tar
@@ -290,7 +305,7 @@ preflight ok: ROOT=/opt/litellm-b
 ---- compose ps ----
 NAME                     IMAGE                            COMMAND                  SERVICE      CREATED         STATUS                                     PORTS
 litellm-b-headroom-1     headroom-offline:v1.106.0-zh.7   "headroom proxy"         headroom     9 seconds ago   Created                                    
-litellm-b-litellm-1      litellm-zhcn:v1.106.0-zh.13      "docker/prod_entrypo…"   litellm      7 seconds ago   Created                                    
+litellm-b-litellm-1      litellm-zhcn:v1.106.0-zh.39      "docker/prod_entrypo…"   litellm      7 seconds ago   Created                                    
 litellm-b-prometheus-1   prom/prometheus:v2.55.1          "/bin/prometheus --c…"   prometheus   9 seconds ago   Up Less than a second                      0.0.0.0:9190->9090/tcp, [::]:9190->9090/tcp
 litellm-b_db             postgres:16.4                    "docker-entrypoint.s…"   db           9 seconds ago   Up Less than a second (health: starting)   127.0.0.1:55432->5432/tcp
 litellm-b_redis          redis:7.4.2-alpine               "docker-entrypoint.s…"   redis        9 seconds ago   Created                                    
@@ -299,15 +314,15 @@ litellm-b_redis          redis:7.4.2-alpine               "docker-entrypoint.s�
 
 ## 升级与回滚
 
-- 升级：停止服务，替换安装包里的镜像 tar 与 docker-compose.yml，执行 ==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/headroom-offline-v1.106.0-zh.7.tar
+- 升级：停止服务，替换安装包里的镜像 tar 与 docker-compose.yml，执行 ==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/headroom-offline-v1.106.0-zh.7.tar
 Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/litellm-zhcn-v1.106.0-zh.13.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.13
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/postgres-16.4.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/litellm-zhcn-v1.106.0-zh.39.tar
+Loaded image: litellm-zhcn:v1.106.0-zh.39
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/postgres-16.4.tar
 Loaded image: postgres:16.4
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/prometheus-v2.55.1.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/prometheus-v2.55.1.tar
 Loaded image: prom/prometheus:v2.55.1
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.13/images/redis-7.4.2-alpine.tar
+==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/redis-7.4.2-alpine.tar
 Loaded image: redis:7.4.2-alpine
 ==> 已加载镜像列表（请与 docker-compose.yml 中 image 字段核对）
 REPOSITORY                                                          TAG                            IMAGE ID       SIZE
