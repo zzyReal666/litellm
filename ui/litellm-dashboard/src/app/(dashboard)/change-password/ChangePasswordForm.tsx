@@ -19,6 +19,7 @@ import { useZodForm } from "@/lib/forms/useZodForm";
 import { toast } from "@/lib/toast";
 import { revokeSessionAndClearClientState } from "@/app/(dashboard)/hooks/useLogout";
 import { getLoginUrl } from "@/utils/returnUrlUtils";
+import { localizePasswordError } from "@/utils/passwordPolicyError";
 
 const changePasswordSchema = z
   .object({
@@ -71,33 +72,6 @@ export function ChangePasswordForm() {
       form.reset();
     } catch (error) {
       const message = extractProxyErrorMessage(error);
-      const localizePasswordError = (raw: string): string => {
-        const lower = raw.toLowerCase();
-        if (lower.includes("current password")) {
-          return t("changePassword.currentPasswordIncorrect", { defaultValue: "Current password is incorrect" });
-        }
-        if (lower.includes("no password set")) {
-          return t("changePassword.noPasswordSet", {
-            defaultValue: "This account has no password set, so there is no password to change",
-          });
-        }
-        if (lower.includes("must be different from the current password")) {
-          return t("changePassword.newPasswordSameAsCurrent", {
-            defaultValue: "The new password must be different from the current password",
-          });
-        }
-        if (lower.includes("password does not meet the required policy")) {
-          return t("changePassword.passwordPolicyViolated", {
-            defaultValue: "The new password does not meet the password policy",
-          });
-        }
-        if (lower.includes("breached")) {
-          return t("changePassword.passwordBreached", {
-            defaultValue: "This password has appeared in a known data breach, choose another one",
-          });
-        }
-        return raw;
-      };
       const localized = localizePasswordError(message);
       if (/current password/i.test(message)) {
         form.setError("currentPassword", { type: "server", message: localized });

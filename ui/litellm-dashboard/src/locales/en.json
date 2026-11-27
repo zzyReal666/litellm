@@ -14329,11 +14329,11 @@
     "confirmPasswordHint": "Re-enter the new password so we can catch typos.",
     "newPasswordDifferent": "New password must be different from the current password",
     "passwordUpdatedReloginHint": "Password updated. Please sign in again with your new password.",
-    "currentPasswordIncorrect": "Current password is incorrect",
-    "noPasswordSet": "This account has no password set, so there is no password to change",
-    "newPasswordSameAsCurrent": "The new password must be different from the current password",
+    "currentPasswordIncorrect": "Current password is incorrect.",
+    "noPasswordSet": "This account has no password set, so there is no password to change.",
+    "newPasswordSameAsCurrent": "New password must be different from the current password.",
     "passwordPolicyViolated": "The new password does not meet the password policy",
-    "passwordBreached": "This password has appeared in a known data breach, choose another one"
+    "passwordBreached": "This password appears in known data breaches and cannot be used. Please choose a different password."
   },
   "webSearchInterception": {
     "toastSaved": "Settings updated successfully. Changes will be applied across all pods within 10 seconds.",
@@ -15644,6 +15644,16 @@
       "dailyWithModelsDescription": "Daily metrics split by model",
       "dailyWithUsersTitle": "Day-by-day breakdown by {{entity}} and user",
       "dailyWithUsersDescription": "Daily metrics for each {{entity}}, split by key owner"
+    }
+  },
+  "passwordPolicy": {
+    "policyViolated": "The new password does not meet the password policy",
+    "clauses": {
+      "minLength": "at least {{count}} characters long",
+      "uppercase": "an uppercase letter",
+      "lowercase": "a lowercase letter",
+      "number": "a number",
+      "specialCharacter": "a special character"
     }
   }
 }

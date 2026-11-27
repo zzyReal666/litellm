@@ -15645,5 +15645,15 @@
       "dailyWithUsersTitle": "按{{entity}}与用户逐日明细",
       "dailyWithUsersDescription": "每个{{entity}}的每日指标，并按密钥所有者拆分"
     }
+  },
+  "passwordPolicy": {
+    "policyViolated": "新密码不符合密码策略要求",
+    "clauses": {
+      "minLength": "长度至少 {{count}} 个字符",
+      "uppercase": "包含大写字母",
+      "lowercase": "包含小写字母",
+      "number": "包含数字",
+      "specialCharacter": "包含特殊字符"
+    }
   }
 }

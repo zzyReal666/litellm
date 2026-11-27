@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import i18n from "@/lib/i18n";
 import ChangePasswordForm from "./ChangePasswordForm";
 
 const mockChangePasswordCall = vi.fn();
@@ -98,6 +99,32 @@ describe("ChangePasswordForm", () => {
 
     expect(await screen.findByText("Current password is incorrect.")).toBeInTheDocument();
     expect(mockToastSuccess).not.toHaveBeenCalled();
+  });
+
+
+  it("lists the unmet password rules instead of a generic policy message", async () => {
+    await i18n.changeLanguage("zh-CN");
+    mockChangePasswordCall.mockRejectedValue(
+      new Error(
+        "{'error': 'Password does not meet the required policy: must be at least 12 characters long, include an uppercase letter, include a number, include a special character.'}",
+      ),
+    );
+    render(<ChangePasswordForm />);
+
+    fireEvent.change(screen.getByLabelText(/当前密码|Current Password/), { target: { value: "OldP@ssw0rd-2026" } });
+    fireEvent.change(screen.getByLabelText(/^新密码|^New Password/), { target: { value: "weak" } });
+    fireEvent.change(screen.getByLabelText(/确认新密码|Confirm New Password/), { target: { value: "weak" } });
+    fireEvent.click(screen.getByRole("button", { name: /修改密码|Change Password/ }));
+
+    expect(await screen.findByText(/新密码不符合密码策略要求/)).toBeInTheDocument();
+    expect(screen.getByText(/长度至少 12 个字符/)).toBeInTheDocument();
+    expect(screen.getByText(/包含大写字母/)).toBeInTheDocument();
+    expect(screen.getByText(/包含数字/)).toBeInTheDocument();
+    expect(screen.getByText(/包含特殊字符/)).toBeInTheDocument();
+  });
+
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
   });
 
   describe("forced password reset", () => {

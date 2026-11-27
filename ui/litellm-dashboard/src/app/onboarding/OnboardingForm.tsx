@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useOnboardingCredentials, useClaimOnboardingToken } from "@/app/(dashboard)/hooks/onboarding/useOnboarding";
 import { getProxyBaseUrl } from "@/components/networking";
 import i18n from "@/lib/i18n";
+import { localizePasswordError } from "@/utils/passwordPolicyError";
 import { clearTokenCookies, storeLoginToken } from "@/utils/cookieUtils";
 import { OnboardingLoadingView } from "./OnboardingLoadingView";
 import { OnboardingErrorView } from "./OnboardingErrorView";
@@ -60,8 +61,9 @@ export function OnboardingForm({ variant }: OnboardingFormProps) {
         },
         onError: (error: Error) => {
           setClaimError(
-            error.message ||
-              i18n.t("onboardingForm.failedToSubmit", { defaultValue: "Failed to submit. Please try again." }),
+            error.message
+              ? localizePasswordError(error.message)
+              : i18n.t("onboardingForm.failedToSubmit", { defaultValue: "Failed to submit. Please try again." }),
           );
         },
       },
