@@ -6,7 +6,40 @@
 
 安装包自带产品运行所需的一切：六个容器镜像、Docker 引擎、Docker Compose 二进制、编排文件、初始化脚本和运维命令。目标机只需要一个干净的 64 位 Linux 系统。
 
-本版本默认启用 HTTPS。安装完成后管理界面通过 `https://<本机IP>/ui` 访问，HTTP 自动跳转到 HTTPS，网关自身只监听本机回环地址，无法绕过 HTTPS 直连。
+主线流程是安装与授权：解压安装包、执行安装向导、确认服务状态、导入厂商签发的授权文件。安装向导默认启用 HTTPS，但 HTTPS 证书与流式响应属于可选配置，不影响主流程，统一放在第 11 章说明。
+
+## 目录
+
+- 1 概述
+  - 1.1 环境要求
+  - 1.2 安装包结构
+  - 1.3 安装后的目录结构
+- 2 安装前准备
+  - 2.1 端口占用检查
+  - 2.2 磁盘与内存检查
+- 3 执行安装
+  - 3.1 向导第 1 至 3 步：目录、端口、账号
+  - 3.2 向导第 4 步：上游模型 Key
+  - 3.3 向导第 5 步：HTTPS 访问（可选）
+  - 3.4 向导第 6 步：安装确认
+- 4 安装过程说明
+- 5 安装结果确认
+- 6 授权激活
+- 7 授权信息查看
+- 8 日常运维
+  - 8.1 日志与排障
+  - 8.2 数据备份
+- 9 升级与卸载
+  - 9.1 升级
+  - 9.2 卸载
+  - 9.3 常见安装报错
+  - 9.4 干净重装
+- 10 常见问题
+- 11 可选配置：HTTPS 与流式响应
+  - 11.1 HTTPS 访问与证书管理
+  - 11.2 流式响应说明
+- 附录 A 安装参数速查
+- 附录 B 运维命令速查
 
 ## 1 概述
 
@@ -16,7 +49,7 @@
 | --- | --- |
 | 操作系统 | Linux x86_64，使用 systemd（麒麟 V10、CentOS 7 以上、Ubuntu 18.04 以上均可） |
 | CPU 与内存 | 2 核 4 GiB 起，建议 4 核 8 GiB |
-| 磁盘 | 至少 20 GiB 可用空间，安装包约 1.4 GiB，解压后约 3.8 GiB，镜像加载占用约 2.3 GiB |
+| 磁盘 | 至少 20 GiB 可用空间，安装包约 1.5 GiB，解压后约 4 GiB，镜像加载占用约 2.3 GiB |
 | 权限 | root，或具备 sudo 权限的账号 |
 | 网络 | 无需外网，管理界面与模型调用走内网即可 |
 | 端口 | 默认占用 443 HTTPS 管理界面、80 HTTP 跳转、9090 监控；4000 网关、5432、6379、8787 仅本机回环 |
@@ -25,42 +58,126 @@
 
 ### 1.2 安装包结构
 
-解压后的安装包目录如下，文件名与层级和实际包一致。
+解压后的安装包目录如下，文件名与层级和实际包一致，排列顺序与实际目录的 `ll -a` 输出一致。
 
-| 路径 | 说明 |
-| --- | --- |
-| `install.sh` | 安装入口，不带参数为交互式向导 |
-| `litellm` | 安装完成后的运维入口，提供启停、状态、日志、备份等命令 |
-| `uninstall.sh` | 卸载脚本，支持保留数据、清空数据、完全卸载三种模式 |
-| `docker-compose.yml` | 容器编排定义，含授权状态与证书目录挂载 |
-| `prometheus.yml` | Prometheus 指标采集配置 |
-| `config/config.yaml` | 模型存库模式的配置 |
-| `config/nginx.conf` | HTTPS 反向代理配置，启用 HTTPS 时挂载给 nginx 容器 |
-| `images/` | 六个容器镜像 tar 包：网关、nginx、压缩服务、数据库、缓存、监控 |
-| `scripts/` | 启动、停止、状态、备份恢复、模型初始化、创建管理员等运维脚本 |
-| `bin/docker-compose` | Compose v2 静态二进制，目标机无需安装插件 |
-| `vendor/docker/` | Docker 26.0.1 静态二进制与 systemd 配置 |
-| `assets/` | 界面 Logo 与浏览器图标，含 `logo.png` 与 `favicon.png` |
-| `.env.example` | 环境变量模板，安装时据此生成 `.env` |
-| `README-安装说明.md` | 随包说明，与本教程互为补充 |
+```text
+litellm-offline-v1.106.0-zh.39/
+├── .env.example
+├── README-安装说明.md
+├── assets/
+│   ├── favicon.png
+│   └── logo.png
+├── bin/
+│   └── docker-compose
+├── config/
+│   ├── config.yaml
+│   └── nginx.conf
+├── docker-compose.yml
+├── images/
+│   ├── headroom-offline-v1.106.0-zh.7.tar
+│   ├── litellm-zhcn-v1.106.0-zh.39.tar
+│   ├── nginx-1.27-alpine.tar
+│   ├── postgres-16.4.tar
+│   ├── prometheus-v2.55.1.tar
+│   └── redis-7.4.2-alpine.tar
+├── install.sh
+├── litellm
+├── prometheus.yml
+├── scripts/
+│   ├── _lib.sh
+│   ├── backup-db.sh
+│   ├── create-ui-admin.sh
+│   ├── enable-coordination-redis.sh
+│   ├── install-docker.sh
+│   ├── load-images.sh
+│   ├── logs.sh
+│   ├── preflight.sh
+│   ├── reload-litellm-env.sh
+│   ├── restart.sh
+│   ├── restore-db.sh
+│   ├── seed-models.sh
+│   ├── setup-compression.sh
+│   ├── start.sh
+│   ├── status.sh
+│   ├── stop.sh
+│   └── update-compose-refs.sh
+├── uninstall.sh
+└── vendor/
+    └── docker/
+        ├── daemon.json
+        ├── docker-26.0.1.tgz
+        └── docker.service
+```
+
+关键文件说明：
+
+- `.env.example`：环境变量模板，安装时据此生成 `.env`
+- `install.sh`：安装入口，不带参数为交互式向导
+- `litellm`：安装完成后的运维入口，提供启停、状态、日志、备份等命令
+- `uninstall.sh`：卸载脚本，支持保留数据、清空数据、完全卸载三种模式
+- `docker-compose.yml`：容器编排定义，含授权状态与证书目录挂载
+- `images/`：六个容器镜像 tar 包：网关、nginx、压缩服务、数据库、缓存、监控
+- `scripts/`：启动、停止、状态、备份恢复、模型初始化、创建管理员等运维脚本
+- `bin/docker-compose`：Compose v2 静态二进制，目标机无需安装插件
+- `vendor/docker/`：Docker 26.0.1 静态二进制与 systemd 配置
+- `assets/`：界面 Logo 与浏览器图标
+- `README-安装说明.md`：随包说明，与本教程互为补充
 
 安装包里没有 `certs` 目录，这是正常的。证书在安装过程中启用 HTTPS 时才生成，位置在安装目录下，见下一节。
 
 ### 1.3 安装后的目录结构
 
-安装完成后，安装目录（默认 `/opt/litellm`）比安装包多出运行所需的数据与配置。
+安装完成后，安装目录（默认 `/opt/litellm`）比安装包多出运行所需的数据与配置，排列顺序同样与实际目录的 `ll -a` 输出一致。
 
-| 路径 | 说明 |
-| --- | --- |
-| `.env` | 运行配置与密钥，权限 600，含管理员账号、主密钥、数据库密码、HTTPS 端口 |
-| `certs/` | 启用 HTTPS 时的证书与私钥，`server.crt` 与 `server.key`；未启用 HTTPS 时不生成 |
-| `config/` | `config.yaml` 与 `nginx.conf` |
-| `data/` | 持久化数据，含 `postgres`、`redis`、`prometheus`、`headroom`、`license` 五个子目录 |
-| `backups/` | `litellm backup` 生成的数据库备份 |
-| `assets/` | 界面 Logo，可替换为自己的图片后重启生效 |
-| `images/` | 空目录，镜像加载后不保留 tar 文件 |
-| `scripts/`、`bin/`、`vendor/` | 运维脚本与内置工具，与安装包一致 |
-| `litellm`、`uninstall.sh`、`docker-compose.yml` | 运维、卸载与编排入口，与安装包一致 |
+```text
+/opt/litellm/
+├── .env
+├── .env.example
+├── README-安装说明.md
+├── assets/
+│   ├── favicon.png
+│   └── logo.png
+├── backups/
+├── bin/
+│   └── docker-compose
+├── certs/
+│   ├── server.crt
+│   └── server.key
+├── config/
+│   ├── config.yaml
+│   └── nginx.conf
+├── data/
+│   ├── headroom/
+│   ├── license/
+│   │   └── license.zayk
+│   ├── postgres/
+│   ├── prometheus/
+│   └── redis/
+├── docker-compose.yml
+├── images/
+├── install.sh
+├── litellm
+├── prometheus.yml
+├── scripts/
+│   └── ...（与安装包内 17 个脚本相同）
+├── uninstall.sh
+└── vendor/
+    └── docker/
+        ├── daemon.json
+        ├── docker-26.0.1.tgz
+        └── docker.service
+```
+
+关键目录说明：
+
+- `.env`：运行配置与密钥，权限 600，含管理员账号、主密钥、数据库密码、HTTPS 端口
+- `certs/`：启用 HTTPS 时的证书与私钥；未启用 HTTPS 时不生成
+- `config/`：`config.yaml` 与 `nginx.conf`，安装脚本修改前会保留一份 `.bak` 备份
+- `data/`：持久化数据，含 `postgres`、`redis`、`prometheus`、`headroom`、`license` 五个子目录
+- `data/postgres/`：数据库文件，升级或调整配置前先执行 `./litellm backup`
+- `backups/`：`./litellm backup` 生成的数据库备份
+- `images/`：镜像加载后不保留 tar 文件，目录为空
+- `assets/`：界面 Logo，可替换为自己的图片后重启生效
 
 卸载时 `--purge` 与 `--all` 会删除 `data/`、`certs/` 与 `.env`，需要保留授权与证书时请先备份。
 
@@ -70,11 +187,9 @@
 
 ```bash
 cd /opt
-sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
 tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 ls -d litellm-offline-v1.106.0-zh.39
 ```
-`sha256sum -c` 读取随包提供的 `.sha256` 文件核对安装包完整性，输出 OK 再解压；不通过说明包在传输中损坏，需要重新拷贝。解压命令带 `-v`，执行后会滚动打印正在解压的文件名，这是正常现象，请等它跑完。安装包 1.5 GiB，机械盘或网络盘上可能需要几分钟，期间不要关闭窗口或中断，否则解压目录会残留不完整的镜像，导致下一步加载镜像报错。
 
 命令执行完会得到一个与安装包同名的目录，例如 `litellm-offline-v1.106.0-zh.39`，进入后可以看到完整的安装文件，包括镜像目录 `images`、安装脚本 `install.sh` 和运维命令 `litellm`。
 
@@ -86,7 +201,7 @@ cd /opt/litellm-offline-v1.106.0-zh.*
 
 ![解压安装包并查看目录结构](./安装包使用教程-截图/01-extract.png)
 
-如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
+如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz -C /data`。解压后的目录约 4 GiB，请确认目标分区有足够空间。
 
 ### 2.1 端口占用检查
 
@@ -128,13 +243,13 @@ sudo ./install.sh
 
 第 4 步，上游模型 Key。填入 DeepSeek API Key 时，安装完成后会自动创建 deepseek-flash、deepseek-v4-pro 等模型分组，价格按官方峰谷价写入。留空则跳过，装好后在管理界面添加。
 
-### 3.3 向导第 5 步：HTTPS 访问
+### 3.3 向导第 5 步：HTTPS 访问（可选）
 
 ![安装向导：HTTPS 访问配置](./安装包使用教程-截图/03-wizard-2.png)
 
-第 5 步是本次版本新增的 HTTPS 配置，默认启用。
+第 5 步询问是否启用 HTTPS，默认启用。HTTPS 不是安装与授权主流程的必要条件，这里按默认值继续即可；需要自定义证书、端口或关闭 HTTPS 时，配置方法统一在第 11 章说明。
 
-首先询问是否启用 HTTPS。选择启用后依次输入 HTTPS 端口与 HTTP 跳转端口，默认 443 与 80。随后询问是否使用已有证书：
+选择启用后依次输入 HTTPS 端口与 HTTP 跳转端口，默认 443 与 80。随后询问是否使用已有证书：
 
 - 选择否，脚本自动生成自签证书，有效期 10 年，SAN 包含本机 IP、127.0.0.1 与主机名，保存在安装目录 `certs/` 下。浏览器首次访问会提示证书不受信任，选择继续访问即可。
 - 选择是，需要输入证书与私钥文件路径，证书须为 PEM 格式并包含完整证书链，私钥不能加密。适合由企业 CA 签发证书的正式环境。
@@ -143,7 +258,7 @@ sudo ./install.sh
 
 如目标机 80 或 443 已被其它服务占用，向导会提示重新输入，此时可改用 9443、9080 等端口，页面链接与跳转会带上实际端口。
 
-如不需要 HTTPS，在这一步选择否。关闭后网关监听 `0.0.0.0:4000`，仅提供 HTTP 访问，生产环境不建议。
+如不需要 HTTPS，在这一步选择否；关闭后仅提供 HTTP 访问，生产环境不建议，证书与端口的具体配置见 11.1 节。
 
 ### 3.4 向导第 6 步：安装确认
 
@@ -179,57 +294,11 @@ sudo ./install.sh
 
 ## 5 安装结果确认
 
-安装结束时终端会打印访问地址、管理账号、管理密码、主密钥和后续操作提示。启用 HTTPS 时访问地址为 `https://<本机IP>/ui`，并提示当前使用自签证书。这些信息只显示一次，同时保存在安装目录的 `.env` 文件里，请立即记录并妥善保管。
+安装结束时终端会打印访问地址、管理账号、管理密码、主密钥和后续操作提示。安装向导默认启用 HTTPS，此时访问地址为 `https://<本机IP>/ui`，并提示当前使用自签证书；证书替换与关闭 HTTPS 见第 11 章。这些信息只显示一次，同时保存在安装目录的 `.env` 文件里，请立即记录并妥善保管。
 
 ![litellm status 与 litellm info](./安装包使用教程-截图/06-status.png)
 
 `./litellm status` 会打印六个容器状态并做一次存活探针（启用 HTTPS 时额外的 nginx 容器也在列表中）。`./litellm info` 打印访问地址、账号和授权状态查询地址，启用 HTTPS 时显示 https 地址。
-
-### 5.1 HTTPS 访问与证书管理
-
-启用 HTTPS 后，浏览器访问 `https://<本机IP>/ui`。使用自签证书时首次访问会提示连接不安全，选择继续访问即可，这不影响功能与数据安全，只是浏览器无法验证证书签发者。
-
-要消除提示，按客户端环境二选一：
-
-- 导入信任：把安装目录下的 `certs/server.crt` 导入客户端受信任的根证书颁发机构。Windows 双击证书选择“安装证书”，放入“受信任的根证书颁发机构”；macOS 用“钥匙串访问”导入后把该证书设为“始终信任”；Linux 放到 `/usr/local/share/ca-certificates/` 后执行 `update-ca-certificates`。
-- 改用正式证书：由企业 CA 签发后按下面任一方式替换。
-
-用参数重装（保留数据，仅更新证书配置）：
-
-```bash
-cd /opt/litellm-offline-v1.106.0-zh.39
-sudo ./install.sh --cert /path/to/server.crt --key /path/to/server.key
-```
-
-手工替换后重启：
-
-```bash
-cp /path/to/server.crt /opt/litellm/certs/server.crt
-cp /path/to/server.key /opt/litellm/certs/server.key
-chmod 600 /opt/litellm/certs/server.key
-cd /opt/litellm && ./litellm restart
-```
-
-证书要求 PEM 格式，证书文件包含完整证书链，私钥不加密。更换证书后浏览器需要重新确认或重新导入。
-
-如需关闭 HTTPS 回到纯 HTTP：
-
-```bash
-cd /opt/litellm-offline-v1.106.0-zh.39
-sudo ./install.sh --no-https
-```
-
-如需更换端口：
-
-```bash
-sudo ./install.sh --https-port 9443 --http-port 9080
-```
-
-非 443 端口时，HTTP 跳转与页面链接会自动带上 HTTPS 端口。
-
-### 5.2 流式响应说明
-
-nginx 已关闭响应缓冲，模型调用的流式输出逐 token 返回，不会等生成完成再一次性下发。管理界面的试验场、业务侧 SSE 接口行为与直连网关一致。
 
 ## 6 授权激活
 
@@ -318,7 +387,7 @@ sudo ./install.sh --skip-images
 
 升级前建议先 `./litellm backup`。升级完成后 `./litellm status` 确认容器全部为 healthy，启用 HTTPS 的实例应为六个。
 
-从旧版本升级到本版本时，安装向导会询问是否启用 HTTPS。已启用 HTTPS 的实例升级后保留原有证书与端口配置，无需重新信任；选择关闭 HTTPS 则回到 `0.0.0.0:4000` 的 HTTP 访问。
+从旧版本升级到本版本时，安装向导会询问是否启用 HTTPS。已启用 HTTPS 的实例升级后保留原有证书与端口配置，无需重新信任；选择关闭 HTTPS 则回到 `0.0.0.0:4000` 的 HTTP 访问。需要调整证书或端口时见第 11 章。
 
 ### 9.2 卸载
 
@@ -389,7 +458,7 @@ sudo ./install.sh
 
 **如何只重启网关容器。** 执行 `./litellm restart litellm`，只重启网关本身，数据库、缓存与 nginx 保持运行。
 
-**用 https 打开管理界面，浏览器提示证书不受信任。** 安装包默认生成自签证书，浏览器无法验证签发者，属于预期行为。选择继续访问即可；要彻底消除提示，把 `certs/server.crt` 导入客户端受信任根证书，或改用企业 CA 签发的证书，详见 5.1 节。
+**用 https 打开管理界面，浏览器提示证书不受信任。** 安装包默认生成自签证书，浏览器无法验证签发者，属于预期行为。选择继续访问即可；要彻底消除提示，把 `certs/server.crt` 导入客户端受信任根证书，或改用企业 CA 签发的证书，详见 11.1 节。
 
 **https://本机IP:4000 打不开。** 本版本启用 HTTPS 后网关只监听 `127.0.0.1:4000`，不再是外部访问入口。对外请使用 `https://本机IP/ui`；自定义 HTTPS 端口时使用 `https://本机IP:端口/ui`。
 
@@ -398,6 +467,56 @@ sudo ./install.sh
 **重装后浏览器又提示证书不受信任。** 重装会重新生成自签证书，客户端之前信任的是旧证书。导入新的 `certs/server.crt`，或卸载前备份 `certs/` 并在重装后覆盖回去。
 
 **如何确认 HTTPS 是否生效。** 执行 `curl -kI https://<本机IP>/health/readiness` 返回 200，同时 `curl -I http://<本机IP>/ui` 返回 301 跳转到 https，即表示反向代理工作正常。
+
+## 11 可选配置：HTTPS 与流式响应
+
+本章内容不属于安装与授权主流程，按需配置即可。
+
+### 11.1 HTTPS 访问与证书管理
+
+启用 HTTPS 后，浏览器访问 `https://<本机IP>/ui`。使用自签证书时首次访问会提示连接不安全，选择继续访问即可，这不影响功能与数据安全，只是浏览器无法验证证书签发者。
+
+要消除提示，按客户端环境二选一：
+
+- 导入信任：把安装目录下的 `certs/server.crt` 导入客户端受信任的根证书颁发机构。Windows 双击证书选择“安装证书”，放入“受信任的根证书颁发机构”；macOS 用“钥匙串访问”导入后把该证书设为“始终信任”；Linux 放到 `/usr/local/share/ca-certificates/` 后执行 `update-ca-certificates`。
+- 改用正式证书：由企业 CA 签发后按下面任一方式替换。
+
+用参数重装（保留数据，仅更新证书配置）：
+
+```bash
+cd /opt/litellm-offline-v1.106.0-zh.39
+sudo ./install.sh --cert /path/to/server.crt --key /path/to/server.key
+```
+
+手工替换后重启：
+
+```bash
+cp /path/to/server.crt /opt/litellm/certs/server.crt
+cp /path/to/server.key /opt/litellm/certs/server.key
+chmod 600 /opt/litellm/certs/server.key
+cd /opt/litellm && ./litellm restart
+```
+
+证书要求 PEM 格式，证书文件包含完整证书链，私钥不加密。更换证书后浏览器需要重新确认或重新导入。
+
+如需关闭 HTTPS 回到纯 HTTP：
+
+```bash
+cd /opt/litellm-offline-v1.106.0-zh.39
+sudo ./install.sh --no-https
+```
+
+如需更换端口：
+
+```bash
+sudo ./install.sh --https-port 9443 --http-port 9080
+```
+
+非 443 端口时，HTTP 跳转与页面链接会自动带上 HTTPS 端口。
+
+### 11.2 流式响应说明
+
+nginx 已关闭响应缓冲，模型调用的流式输出逐 token 返回，不会等生成完成再一次性下发。管理界面的试验场、业务侧 SSE 接口行为与直连网关一致。
 
 ## 附录 A 安装参数速查
 
