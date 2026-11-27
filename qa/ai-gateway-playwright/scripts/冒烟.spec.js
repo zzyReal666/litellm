@@ -6,7 +6,8 @@ test("冒烟：登录后可访问九个被测页面", async ({ page }) => {
 
   await test.step("1. 登录管理界面", async () => {
     await login(page);
-    await expect(page).toHaveURL(/login=success/);
+    await expect(page).toHaveURL((url) => !url.toString().includes("/login"));
+    await expect(page.getByText("内部用户").first()).toBeVisible();
   });
 
   await test.step("1.1 面包屑标题为中文", async () => {

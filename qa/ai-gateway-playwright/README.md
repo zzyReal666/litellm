@@ -12,6 +12,7 @@ ai-gateway-playwright/
 └── scripts/
     ├── helpers.js            # 登录、页面跳转、Toast 等待、唯一命名等公共能力
     ├── 冒烟.spec.js           # 登录 + 九个页面可访问
+    ├── 回归zh40.spec.js       # zh.30 至 zh.40 修复项回归（隐藏入口、数值校验、密码策略、压缩护栏）
     ├── 模型端点管理.spec.js
     ├── 压缩护栏管理.spec.js
     ├── 虚拟密钥管理.spec.js
@@ -51,6 +52,26 @@ AIG_PASS=安装时设置的管理员密码
 
 注意：被测环境必须已导入授权，未授权时界面只会跳转到授权激活页，所有用例都会失败。
 
+## 账号准备
+
+用例需要一个具备管理员权限的账号。被测环境重装或改密后，先更新 `.env` 里的 `AIG_USER` 与 `AIG_PASS`。没有可用密码时，用安装目录的主密钥创建自动化账号：
+
+```bash
+# 1. 创建用户（角色 proxy_admin）
+curl -sk -X POST http://127.0.0.1:4000/user/new \
+  -H "Authorization: Bearer $LITELLM_MASTER_KEY" -H "Content-Type: application/json" \
+  -d '{"user_email":"qa-auto@sinocipher.local","user_role":"proxy_admin","auto_create_key":false}'
+
+# 2. 管理员给该账号设置密码（password_reset_required 会置为 true，登录后需先改密）
+curl -sk -X POST http://127.0.0.1:4000/user/update \
+  -H "Authorization: Bearer $LITELLM_MASTER_KEY" -H "Content-Type: application/json" \
+  -d '{"user_id":"<用户ID>","password":"<密码>"}'
+
+# 3. 清掉强制改密标记，避免登录后被跳到修改密码页
+docker exec -i litellm_db psql -U litellm -d litellm \
+  -c "update \"LiteLLM_UserTable\" set password_reset_required = false where user_email = 'qa-auto@sinocipher.local';"
+```
+
 ## 运行
 
 ```bash
@@ -65,7 +86,16 @@ npx playwright test --headed
 
 # 只跑冒烟
 npx playwright test scripts/冒烟.spec.js
+
+# 只跑当前版本的修复项回归
+npx playwright test scripts/回归zh40.spec.js
 ```
+
+## 用例状态
+
+`回归zh40.spec.js` 与 `冒烟.spec.js` 在当前测试环境（https://192.168.7.112，zh.40）全绿。
+
+其余按功能页拆分的用例写于旧版本界面，部分断言与现在的列名、弹窗文案、删除确认输入不一致，且未适配临时隐藏的入口（批量邀请、团队导出、链路分析等）。执行这些用例前需要按当前界面更新选择器；`压缩护栏管理.spec.js` 的删除流程已补上「输入护栏名称确认」，内置护栏断言需要环境已初始化压缩护栏（未授权安装会跳过创建）。
 
 默认使用系统 Chrome。若用 Playwright chromium：
 

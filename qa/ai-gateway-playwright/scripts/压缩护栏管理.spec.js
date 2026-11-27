@@ -10,8 +10,9 @@ async function deleteGuardrailIfPresent(page, guardrailName) {
   if ((await row.count()) === 0) return;
   await row.getByRole("button", { name: "打开护栏操作" }).click();
   await page.getByRole("menuitem", { name: "删除", exact: true }).click();
-  const dialog = page.getByRole("dialog").filter({ hasText: "删除护栏" });
+  const dialog = page.getByRole("dialog").filter({ hasText: /删除护栏|Delete Guardrail/ });
   await expect(dialog).toBeVisible();
+  await dialog.getByPlaceholder(guardrailName).fill(guardrailName);
   await dialog.getByRole("button", { name: "删除", exact: true }).click();
   await expect(row).toHaveCount(0);
 }
@@ -78,7 +79,7 @@ test("压缩护栏管理：内置护栏展示与自定义护栏增删闭环", as
       const row = page.locator("tbody tr").filter({ hasText: guardrailName }).first();
       await row.getByRole("button", { name: "打开护栏操作" }).click();
       await page.getByRole("menuitem", { name: "删除", exact: true }).click();
-      const dialog = page.getByRole("dialog").filter({ hasText: "删除护栏" });
+      const dialog = page.getByRole("dialog").filter({ hasText: /删除护栏|Delete Guardrail/ });
       await expect(dialog).toBeVisible();
       await expect(dialog).toContainText(guardrailName);
       await expect(dialog).toContainText(/确定删除护栏|Are you sure you want to delete guardrail/);

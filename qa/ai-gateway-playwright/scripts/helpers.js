@@ -42,12 +42,22 @@ export async function login(page, options = {}) {
   await page.locator('input[name="username"]').fill(user);
   await page.locator('input[name="password"]').fill(pass);
   await page.locator('button[type="submit"]').first().click();
-  await page.waitForURL(/login=success|home/, { timeout: 60000 });
+  await page.waitForURL((url) => !url.toString().includes("/login"), { timeout: 60000 });
   await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle").catch(() => undefined);
+  await page.waitForTimeout(1000);
 }
 
 export async function gotoPage(page, path, marker) {
-  await page.goto(`${BASE_URL}${path}`, { waitUntil: "domcontentloaded" });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await page.goto(`${BASE_URL}${path}`, { waitUntil: "domcontentloaded" });
+      break;
+    } catch (error) {
+      if (attempt === 2) throw error;
+      await page.waitForTimeout(800);
+    }
+  }
   await page.waitForTimeout(1500);
   if (marker) {
     await expect(marker).toBeVisible({ timeout: 30000 });
