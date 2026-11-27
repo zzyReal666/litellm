@@ -1,0 +1,32 @@
+import { chromium } from "playwright-core";
+import fs from "node:fs";
+const env = Object.fromEntries(fs.readFileSync(".env","utf8").split("\n").filter(l=>l.includes("=")).map(l=>[l.split("=")[0].trim(), l.split("=").slice(1).join("=").trim()]));
+const BASE = env.AIG_BASE_URL;
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1500, height: 1100 }, ignoreHTTPSErrors: true });
+const out = {};
+await page.addInitScript(() => localStorage.setItem("litellm_ui_language","zh-CN"));
+await page.goto(`${BASE}/ui/login`, { waitUntil: "domcontentloaded" });
+await page.locator('input[name="username"]').fill(env.AIG_USER);
+await page.locator('input[name="password"]').fill(env.AIG_PASS);
+await page.locator('button[type="submit"]').first().click();
+await page.waitForURL((u)=>!u.toString().includes("/login"), { timeout: 30000 });
+await page.waitForTimeout(1600);
+await page.goto(`${BASE}/ui/change-password`, { waitUntil: "networkidle" });
+await page.waitForTimeout(2200);
+const inputs = page.locator('input[type="password"]');
+if (await inputs.count() >= 3) {
+  await inputs.nth(0).fill(env.AIG_PASS);
+  await inputs.nth(1).fill("weak");
+  await inputs.nth(2).fill("weak");
+  await page.getByRole("button", { name: /修改密码|保存/ }).first().click();
+  await page.waitForTimeout(3000);
+  const text = await page.evaluate(() => document.body.innerText);
+  out.policyMessage = text.split("\n").map(l=>l.trim()).filter(l=>/密码|字符|字母|数字|策略/.test(l)).slice(0, 10);
+  out.hasDetails = /长度至少\s*12\s*个字符/.test(text) && /包含大写字母/.test(text) && /包含特殊字符/.test(text);
+  out.genericOnly = /新密码不符合密码策略要求/.test(text) && !out.hasDetails;
+  fs.writeFileSync("/tmp/verify_v37_policy.txt", text);
+}
+fs.writeFileSync("/tmp/verify_v37.json", JSON.stringify(out,null,1));
+console.log(JSON.stringify(out,null,1).slice(0,1500));
+await browser.close();
