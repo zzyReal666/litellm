@@ -195,6 +195,20 @@ docker logs litellm-litellm-1 --tail 100 | grep "Headroom: compressed"
 /opt/litellm/scripts/restore-db.sh 恢复数据库
 ```
 
+## 常见问题
+
+安装到「加载镜像」步骤报 `unexpected EOF` 或 `镜像加载失败`，通常是解压安装包的过程被中断（断电、重启、SSH 断开），解压目录里留下了不完整的镜像 tar。处理方法：删除解压目录，重新解压并核对每个镜像大小与包内一致，再执行安装：
+
+```bash
+cd /opt
+rm -rf litellm-offline-v1.106.0-zh.39
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar -xzf litellm-offline-v1.106.0-zh.39.tar.gz
+ls -l litellm-offline-v1.106.0-zh.39/images/
+```
+
+解压后 `images/` 下应有 6 个 tar，其中 litellm 镜像约 2.1G、headroom 约 1.2G，明显偏小说明解压不完整，需要重新解压。
+
 ## 干净重装
 需要重装或换机部署时，推荐先完全卸载再重新安装，避免旧数据与旧镜像干扰：
 ```bash

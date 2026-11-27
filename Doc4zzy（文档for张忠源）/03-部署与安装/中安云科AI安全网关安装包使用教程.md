@@ -334,7 +334,19 @@ sudo ./install.sh --skip-images
 
 `--purge` 与 `--all` 会一并删除 `certs/` 下的证书。如果证书来自企业 CA 且希望重装后继续使用，卸载前先把 `certs/` 备份出来，重装后覆盖回去并重启即可，否则重装会重新生成自签证书，客户端需要重新信任。
 
-### 9.3 干净重装
+### 9.3 常见安装报错
+
+安装到「加载镜像」步骤报 `unexpected EOF` 或 `镜像加载失败`，先检查解压目录 `images/` 下的 tar 大小是否与安装包一致，常见原因是解压过程被中断（断电、重启、SSH 断开），只写入了部分镜像。处理方式：删除解压目录，校验安装包后重新解压，确认 litellm 镜像约 2.1 GiB、headroom 约 1.2 GiB 再重新执行安装。
+
+```bash
+cd /opt
+rm -rf litellm-offline-v1.106.0-zh.39
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar -xzf litellm-offline-v1.106.0-zh.39.tar.gz
+ls -l litellm-offline-v1.106.0-zh.39/images/
+```
+
+### 9.4 干净重装
 
 交付前的测试数据清理、换机部署或安装包升级验证，建议完全卸载后重新安装，避免旧数据、旧镜像和旧证书干扰：
 
