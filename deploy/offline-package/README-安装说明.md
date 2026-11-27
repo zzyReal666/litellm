@@ -171,7 +171,7 @@ docker logs litellm-headroom-1 --tail 50     # 压缩服务日志
 sudo /opt/litellm/scripts/setup-compression.sh
 ```
 
-压缩省下的 token 会在管理界面「成本优化 → 总览」里作为 compression savings 展示。
+压缩省下的 token 会在管理界面「成本优化 → 总览」里作为 compression savings 展示。在管理界面「成本优化 → 提示词压缩」里新建护栏时不需要填写 API Key，安装包已给网关容器注入 `HEADROOM_API_KEY`（取值与 `HEADROOM_PROXY_TOKEN` 相同）；如果改用「新增护栏」页面手动创建，填同一个令牌或留空依赖该环境变量即可。
 
 注意压缩只作用于对话历史：系统消息、最后一条用户消息、以及 assistant 消息按
 LiteLLM 的压缩策略受保护、保持原文，避免改写当前指令或模型自己的输出。所以单轮

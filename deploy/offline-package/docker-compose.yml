@@ -21,6 +21,8 @@ services:
       LITELLM_PRODUCT_NAME: ${LITELLM_PRODUCT_NAME:-AI}
       LITELLM_PRODUCT_CODE: ${LITELLM_PRODUCT_CODE:-SC-AIG}
       LITELLM_FAVICON_URL: /app/assets/favicon.png
+      # headroom 护栏不填写 api_key 时从这里取，与 headroom 服务的令牌一致
+      HEADROOM_API_KEY: ${HEADROOM_PROXY_TOKEN}
     env_file:
       - .env
     depends_on:

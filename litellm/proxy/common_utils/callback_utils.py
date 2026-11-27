@@ -1,3 +1,4 @@
+from urllib.parse import quote
 import copy
 import json
 import os
@@ -464,6 +465,10 @@ def get_remaining_tokens_and_requests_from_request_data(data: dict) -> dict[str,
     return headers
 
 
+def _latin1_safe_header_value(value: str) -> str:
+    return "".join(char if ord(char) < 128 else quote(char, safe="") for char in value)
+
+
 def _serialize_scan_metadata_header(entries: Iterable[object], *, max_length: int) -> str | None:
     """Compact JSON list of scan metadata entries, dropping trailing entries so the header fits in max_length."""
     encoded: Final = tuple(json.dumps(entry, separators=(",", ":")) for entry in entries)
@@ -526,7 +531,8 @@ def get_logging_caching_headers(request_data: dict) -> dict | None:
     elif is_trusted_pillar_metadata and "pillar_flagged" in _metadata:
         headers["x-pillar-flagged"] = str(_metadata["pillar_flagged"]).lower()
 
-    return headers
+    # HTTP 头只能携带 latin-1；护栏/策略名允许中文，非 ASCII 字符做百分号编码
+    return {key: _latin1_safe_header_value(value) for key, value in headers.items()}
 
 
 LITELLM_PROXY_INTERNAL_METADATA_KEYS: Final = frozenset(

@@ -762,3 +762,31 @@ def test_initialize_callbacks_on_proxy_accepts_instance_non_list_value(probe_con
 
     assert len(litellm.callbacks) == 1
     assert isinstance(litellm.callbacks[0], CustomLogger)
+
+
+def test_logging_caching_headers_encode_non_ascii_guardrail_names_for_latin1_transport():
+    request_data: Final[dict[str, object]] = {
+        "litellm_metadata": {
+            "applied_guardrails": ["测试压缩配置"],
+            "applied_policies": ["默认策略"],
+            "policy_sources": {"默认策略": "team_default"},
+        }
+    }
+
+    headers: Final = get_logging_caching_headers(request_data)
+    assert headers is not None
+
+    for value in headers.values():
+        value.encode("latin-1")
+
+    assert headers["x-litellm-applied-guardrails"] == "%E6%B5%8B%E8%AF%95%E5%8E%8B%E7%BC%A9%E9%85%8D%E7%BD%AE"
+    assert headers["x-litellm-policy-sources"] == "%E9%BB%98%E8%AE%A4%E7%AD%96%E7%95%A5=team_default"
+
+
+def test_logging_caching_headers_leave_ascii_names_unchanged():
+    request_data: Final[dict[str, object]] = {"litellm_metadata": {"applied_guardrails": ["pii_blocker"]}}
+
+    headers: Final = get_logging_caching_headers(request_data)
+
+    assert headers is not None
+    assert headers["x-litellm-applied-guardrails"] == "pii_blocker"
