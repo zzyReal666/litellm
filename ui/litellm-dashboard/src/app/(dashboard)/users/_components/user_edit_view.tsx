@@ -282,7 +282,15 @@ export function UserEditView({
             </FormField>
           )}
 
-          <FormField control={form.control} name="user_alias" label={i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}>
+          <FormField
+            control={form.control}
+            name="user_alias"
+            label={i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}
+            description={i18n.t("userEditView.userAliasLimit", {
+              defaultValue: "Up to {{max}} characters",
+              max: MAX_ALIAS_LENGTH,
+            })}
+          >
             {({ ref, value, onChange, ...control }) => (
               <Input
                 {...control}

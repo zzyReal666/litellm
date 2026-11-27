@@ -4105,7 +4105,8 @@
     "rpmLimitLabel": "RPM 限制",
     "rpmLimitTooltip": "作用于该用户持有的所有密钥。团队和密钥限制仍作为上限生效。",
     "unlimitedPlaceholder": "无限制",
-    "rateLimitValidationMessage": "请输入非负整数，留空表示不限制"
+    "rateLimitValidationMessage": "请输入非负整数，留空表示不限制",
+    "userAliasLimit": "最多 {{max}} 个字符"
   },
   "viewUserSpend": {
     "totalSpend": "总花费",

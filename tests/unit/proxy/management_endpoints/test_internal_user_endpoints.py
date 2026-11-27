@@ -12,6 +12,7 @@ import httpx
 import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
+from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
@@ -5172,3 +5173,14 @@ async def test_user_update_without_password_revokes_nothing(_admin_prisma, mocke
     await _update_single_user_helper(user_request=user_request, user_api_key_dict=admin_caller)
 
     revoke_mock.assert_not_awaited()
+
+
+def test_update_user_alias_rejects_more_than_255_characters() -> None:
+    with pytest.raises(ValidationError):
+        UpdateUserRequest(user_id="test_user", user_alias="a" * 256)
+
+
+def test_update_user_alias_accepts_255_characters() -> None:
+    request = UpdateUserRequest(user_id="test_user", user_alias="a" * 255)
+
+    assert request.user_alias == "a" * 255

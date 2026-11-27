@@ -23,7 +23,7 @@ describe("temporarily hidden navigation entries", () => {
   it("drops the temporarily hidden product entries", () => {
     const keys = flatKeys(visibleMenuGroups(menuGroups, adminContext));
 
-    for (const hiddenKey of ["agentic", "mcp-servers", "skills", "policies", "tools"]) {
+    for (const hiddenKey of ["agentic", "mcp-servers", "skills", "policies", "tools", "lens"]) {
       expect(keys).not.toContain(hiddenKey);
     }
   });

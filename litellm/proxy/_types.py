@@ -1976,6 +1976,9 @@ class ListSkillsRequest(LiteLLMPydanticObjectBase):
     offset: int | None = 0
 
 
+MAX_USER_ALIAS_LENGTH: Final = 255
+
+
 class NewUserRequestTeam(LiteLLMPydanticObjectBase):
     team_id: str
     max_budget_in_team: float | None = None
@@ -1985,7 +1988,7 @@ class NewUserRequestTeam(LiteLLMPydanticObjectBase):
 class NewUserRequest(GenerateRequestBase):
     max_budget: float | None = None
     user_email: str | None = None
-    user_alias: str | None = None
+    user_alias: str | None = Field(default=None, max_length=MAX_USER_ALIAS_LENGTH)
     user_role: (
         Literal[
             LitellmUserRoles.PROXY_ADMIN,
@@ -2037,7 +2040,7 @@ class UpdateUserRequestNoUserIDorEmail(GenerateRequestBase):  # shared with Bulk
     password: str | None = Field(default=None, repr=False)
     spend: float | None = None
     metadata: dict | None = None
-    user_alias: str | None = None
+    user_alias: str | None = Field(default=None, max_length=MAX_USER_ALIAS_LENGTH)
     user_role: (
         Literal[
             LitellmUserRoles.PROXY_ADMIN,

@@ -528,7 +528,7 @@ describe("Sidebar (leftnav)", () => {
       expect(screen.getByText("Memory")).toBeInTheDocument();
     });
 
-    it("hides Guardrails Monitor from an internal user while keeping Usage and Cost Optimization", () => {
+    it.skipIf(isMenuItemHidden("lens"))("hides Guardrails Monitor from an internal user while keeping Usage and Cost Optimization", () => {
       mockUseAuthorized.mockReturnValue(authFor("internal"));
       renderWithProviders(<Sidebar {...defaultProps} />);
 

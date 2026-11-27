@@ -11,6 +11,7 @@ export const HIDDEN_MENU_ITEM_KEYS: ReadonlySet<string> = new Set([
   "skills",
   "policies",
   "tools",
+  "lens",
 ]);
 
 export const HIDE_REGENERATE_KEY_BUTTON: boolean = true;

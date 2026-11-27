@@ -4105,7 +4105,8 @@
     "rpmLimitLabel": "RPM Limit",
     "rpmLimitTooltip": "Applies across all keys owned by this user. Team and key limits still apply as ceilings.",
     "unlimitedPlaceholder": "Unlimited",
-    "rateLimitValidationMessage": "Enter a non-negative whole number, or leave empty for unlimited"
+    "rateLimitValidationMessage": "Enter a non-negative whole number, or leave empty for unlimited",
+    "userAliasLimit": "Up to {{max}} characters"
   },
   "viewUserSpend": {
     "totalSpend": "Total Spend",
