@@ -32,11 +32,11 @@ Linux x86_64（systemd），root 权限，磁盘至少 20G，内存至少 6G。
 
 ```bash
 sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 cd litellm-offline-v1.106.0-zh.39
 sudo ./install.sh
 ```
-`sha256sum -c` 用于确认安装包没有在传输或拷贝中损坏，输出 OK 再继续。
+`sha256sum -c` 用于确认安装包没有在传输或拷贝中损坏，输出 OK 再继续。解压命令带 `-v`，执行后会滚动打印正在解压的文件，这是正常现象；安装包 1.5G，机械盘或网络盘上可能需要几分钟，期间请不要中断，避免解压不完整导致后面加载镜像失败。
 
 向导会依次询问并在有默认值时提示回车采用：
 
@@ -203,7 +203,7 @@ docker logs litellm-litellm-1 --tail 100 | grep "Headroom: compressed"
 cd /opt
 rm -rf litellm-offline-v1.106.0-zh.39
 sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar -xzf litellm-offline-v1.106.0-zh.39.tar.gz
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 ls -l litellm-offline-v1.106.0-zh.39/images/
 ```
 
@@ -214,7 +214,7 @@ ls -l litellm-offline-v1.106.0-zh.39/images/
 ```bash
 cd /opt
 sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 cd litellm-offline-v1.106.0-zh.39
 sudo ./uninstall.sh --all
 sudo ./install.sh

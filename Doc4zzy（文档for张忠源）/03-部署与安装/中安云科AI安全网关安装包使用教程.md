@@ -70,9 +70,11 @@
 
 ```bash
 cd /opt
-tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 ls -d litellm-offline-v1.106.0-zh.39
 ```
+`sha256sum -c` 读取随包提供的 `.sha256` 文件核对安装包完整性，输出 OK 再解压；不通过说明包在传输中损坏，需要重新拷贝。解压命令带 `-v`，执行后会滚动打印正在解压的文件名，这是正常现象，请等它跑完。安装包 1.5 GiB，机械盘或网络盘上可能需要几分钟，期间不要关闭窗口或中断，否则解压目录会残留不完整的镜像，导致下一步加载镜像报错。
 
 命令执行完会得到一个与安装包同名的目录，例如 `litellm-offline-v1.106.0-zh.39`，进入后可以看到完整的安装文件，包括镜像目录 `images`、安装脚本 `install.sh` 和运维命令 `litellm`。
 
@@ -84,7 +86,7 @@ cd /opt/litellm-offline-v1.106.0-zh.*
 
 ![解压安装包并查看目录结构](./安装包使用教程-截图/01-extract.png)
 
-如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar xzf litellm-offline-v1.106.0-zh.39.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
+如需解压到其它位置，用 `-C` 指定目标目录，例如 `tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz -C /data`。解压后的目录约 3.8 GiB，请确认目标分区有足够空间。
 
 ### 2.1 端口占用检查
 
@@ -309,7 +311,7 @@ tar czf /root/litellm-certs-$(date +%F).tar.gz certs/
 升级时保留安装目录与数据，只用新包覆盖文件并重启。安装脚本检测到有效 `.env` 会自动沿用，不会重置密码、密钥和授权。
 
 ```bash
-cd /opt && tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+cd /opt && tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 cd litellm-offline-v1.106.0-zh.39
 sudo ./install.sh --skip-images
 ```
@@ -342,7 +344,7 @@ sudo ./install.sh --skip-images
 cd /opt
 rm -rf litellm-offline-v1.106.0-zh.39
 sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar -xzf litellm-offline-v1.106.0-zh.39.tar.gz
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 ls -l litellm-offline-v1.106.0-zh.39/images/
 ```
 
@@ -362,7 +364,7 @@ cp -a backups certs data/license .env /root/
 # 3. 校验安装包后重新解压安装
 cd /opt
 sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar xzf litellm-offline-v1.106.0-zh.39.tar.gz
+tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
 cd litellm-offline-v1.106.0-zh.39
 sudo ./install.sh
 ```
