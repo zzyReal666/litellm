@@ -1,6 +1,6 @@
 # 中安云科 AI 安全网关 离线安装包（基于 LiteLLM 中文版）
 
-版本：v1.106.0-zh.39，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
+版本：v1.106.0-zh.40，含 Docker 镜像、编排文件、一键安装与卸载脚本，目标机无需外网。
 
 ## 包内容
 
@@ -31,9 +31,9 @@ Linux x86_64（systemd），root 权限，磁盘至少 20G，内存至少 6G。
 解压后用 root 执行安装脚本，不带参数即进入交互式向导：
 
 ```bash
-sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
-cd litellm-offline-v1.106.0-zh.39
+sha256sum -c litellm-offline-v1.106.0-zh.40.sha256
+tar -zxvf litellm-offline-v1.106.0-zh.40.tar.gz
+cd litellm-offline-v1.106.0-zh.40
 sudo ./install.sh
 ```
 `sha256sum -c` 用于确认安装包没有在传输或拷贝中损坏，输出 OK 再继续。解压命令带 `-v`，执行后会滚动打印正在解压的文件，这是正常现象；安装包 1.5G，机械盘或网络盘上可能需要几分钟，期间请不要中断，避免解压不完整导致后面加载镜像失败。
@@ -201,21 +201,21 @@ docker logs litellm-litellm-1 --tail 100 | grep "Headroom: compressed"
 
 ```bash
 cd /opt
-rm -rf litellm-offline-v1.106.0-zh.39
-sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
-ls -l litellm-offline-v1.106.0-zh.39/images/
+rm -rf litellm-offline-v1.106.0-zh.40
+sha256sum -c litellm-offline-v1.106.0-zh.40.sha256
+tar -zxvf litellm-offline-v1.106.0-zh.40.tar.gz
+ls -l litellm-offline-v1.106.0-zh.40/images/
 ```
 
-解压后 `images/` 下应有 6 个 tar，其中 litellm 镜像约 2.1G、headroom 约 1.2G，明显偏小说明解压不完整，需要重新解压。
+解压后 `images/` 下应有 6 个 tar，其中 litellm 镜像约 2.1G、headroom 约 1.9G，明显偏小说明解压不完整，需要重新解压。
 
 ## 干净重装
 需要重装或换机部署时，推荐先完全卸载再重新安装，避免旧数据与旧镜像干扰：
 ```bash
 cd /opt
-sha256sum -c litellm-offline-v1.106.0-zh.39.sha256
-tar -zxvf litellm-offline-v1.106.0-zh.39.tar.gz
-cd litellm-offline-v1.106.0-zh.39
+sha256sum -c litellm-offline-v1.106.0-zh.40.sha256
+tar -zxvf litellm-offline-v1.106.0-zh.40.tar.gz
+cd litellm-offline-v1.106.0-zh.40
 sudo ./uninstall.sh --all
 sudo ./install.sh
 ```
@@ -271,10 +271,10 @@ assets/favicon.png   浏览器标签图标（128x128）
 ==> 安装到 /opt/litellm-b
 ==> 生成 .env
 ==> 加载镜像
-==> docker load -i /opt/litellm-b/images/headroom-offline-v1.106.0-zh.7.tar
-Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.39.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.39
+==> docker load -i /opt/litellm-b/images/headroom-offline-v1.106.0-zh.8.tar
+Loaded image: headroom-offline:v1.106.0-zh.8
+==> docker load -i /opt/litellm-b/images/litellm-zhcn-v1.106.0-zh.40.tar
+Loaded image: litellm-zhcn:v1.106.0-zh.40
 ==> docker load -i /opt/litellm-b/images/postgres-16.4.tar
 Loaded image: postgres:16.4
 ==> docker load -i /opt/litellm-b/images/prometheus-v2.55.1.tar
@@ -282,125 +282,22 @@ Loaded image: prom/prometheus:v2.55.1
 ==> docker load -i /opt/litellm-b/images/redis-7.4.2-alpine.tar
 Loaded image: redis:7.4.2-alpine
 ==> 已加载镜像列表（请与 docker-compose.yml 中 image 字段核对）
-REPOSITORY                                                          TAG                            IMAGE ID       SIZE
-litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   1.58GB
-litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   1.58GB
-litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   1.49GB
-litellm-zhcn                                                        v1.106.0-zh.8                  e5c4f6f74ee0   1.47GB
-<none>                                                              <none>                         c1fb6e9d9d58   1.47GB
-headroom-offline                                                    v1.106.0-zh.7                  200fd83e3a0b   1.27GB
-litellm-zhcn                                                        v1.106.0-zh.7                  eac0ac37e824   1.47GB
-<none>                                                              <none>                         5604e8fd8102   1.47GB
-litellm-zhcn                                                        v1.106.0-zh.1                  c76637bd14ba   1.45GB
-<none>                                                              <none>                         859500623e8c   6.27GB
-<none>                                                              <none>                         5e1c47b8a651   131MB
-<none>                                                              <none>                         6dc05a9c7b14   6.27GB
-<none>                                                              <none>                         f1c2518967e8   2.97GB
-<none>                                                              <none>                         ce1d0f3606a0   663MB
-ghcr.io/headroomlabs-ai/headroom                                    latest                         17ef7765e687   671MB
-cgr.dev/chainguard/wolfi-base                                       <none>                         071774ea60a7   16.7MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-9cbf0074                c346e671eac5   101MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-v19.3.0                 c346e671eac5   101MB
-zerotrust-frontend                                                  latest                         2994e00833e5   63.9MB
-zerotrust-backend                                                   latest                         3aaf76b1c830   285MB
-<none>                                                              <none>                         533697c6ecd3   65.5MB
-<none>                                                              <none>                         b97550bc364c   285MB
-ziti-quickstart-amd64                                               latest                         d004cd30ed30   248MB
-keycloak-local                                                      26.1.4                         4a2f8120b513   371MB
-openziti/zac                                                        latest                         24deec8cfb4f   754MB
-docker.m.daocloud.io/library/busybox                                latest                         c6348fa86ba0   4.45MB
-==> 启动服务
-ok: chown data/prometheus -> 65534:65534
-ok: chown data/headroom -> 1000:1000
-preflight ok: ROOT=/opt/litellm-b
----- compose ps ----
-NAME                     IMAGE                            COMMAND                  SERVICE      CREATED         STATUS                                     PORTS
-litellm-b-headroom-1     headroom-offline:v1.106.0-zh.7   "headroom proxy"         headroom     9 seconds ago   Created                                    
-litellm-b-litellm-1      litellm-zhcn:v1.106.0-zh.39      "docker/prod_entrypo…"   litellm      7 seconds ago   Created                                    
-litellm-b-prometheus-1   prom/prometheus:v2.55.1          "/bin/prometheus --c…"   prometheus   9 seconds ago   Up Less than a second                      0.0.0.0:9190->9090/tcp, [::]:9190->9090/tcp
-litellm-b_db             postgres:16.4                    "docker-entrypoint.s…"   db           9 seconds ago   Up Less than a second (health: starting)   127.0.0.1:55432->5432/tcp
-litellm-b_redis          redis:7.4.2-alpine               "docker-entrypoint.s…"   redis        9 seconds ago   Created                                    
+REPOSITORY          TAG               IMAGE ID       SIZE
+litellm-zhcn        v1.106.0-zh.40    <image-id>     2.16GB
+headroom-offline    v1.106.0-zh.8     <image-id>     1.88GB
+postgres            16.4              <image-id>     420MB
+redis               7.4.2-alpine      <image-id>     41MB
+prom/prometheus     v2.55.1           <image-id>     278MB
+nginx               1.27-alpine       <image-id>     48MB
 ---- litellm logs (tail) ----
 ---- db logs (tail) ----
-
-## 升级与回滚
-
-- 升级：停止服务，替换安装包里的镜像 tar 与 docker-compose.yml，执行 ==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/headroom-offline-v1.106.0-zh.7.tar
-Loaded image: headroom-offline:v1.106.0-zh.7
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/litellm-zhcn-v1.106.0-zh.39.tar
-Loaded image: litellm-zhcn:v1.106.0-zh.39
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/postgres-16.4.tar
-Loaded image: postgres:16.4
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/prometheus-v2.55.1.tar
-Loaded image: prom/prometheus:v2.55.1
-==> docker load -i /root/pkgbuild/litellm-offline-v1.106.0-zh.39/images/redis-7.4.2-alpine.tar
-Loaded image: redis:7.4.2-alpine
-==> 已加载镜像列表（请与 docker-compose.yml 中 image 字段核对）
-REPOSITORY                                                          TAG                            IMAGE ID       SIZE
-litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   1.58GB
-litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   1.58GB
-litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   1.51GB
-litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   1.49GB
-litellm-zhcn                                                        v1.106.0-zh.8                  e5c4f6f74ee0   1.47GB
-<none>                                                              <none>                         c1fb6e9d9d58   1.47GB
-headroom-offline                                                    v1.106.0-zh.7                  200fd83e3a0b   1.27GB
-litellm-zhcn                                                        v1.106.0-zh.7                  eac0ac37e824   1.47GB
-<none>                                                              <none>                         5604e8fd8102   1.47GB
-litellm-zhcn                                                        v1.106.0-zh.1                  c76637bd14ba   1.45GB
-<none>                                                              <none>                         859500623e8c   6.27GB
-<none>                                                              <none>                         5e1c47b8a651   131MB
-<none>                                                              <none>                         6dc05a9c7b14   6.27GB
-<none>                                                              <none>                         f1c2518967e8   2.97GB
-<none>                                                              <none>                         ce1d0f3606a0   663MB
-ghcr.io/headroomlabs-ai/headroom                                    latest                         17ef7765e687   671MB
-cgr.dev/chainguard/wolfi-base                                       <none>                         071774ea60a7   16.7MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-9cbf0074                c346e671eac5   101MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-v19.3.0                 c346e671eac5   101MB
-zerotrust-frontend                                                  latest                         2994e00833e5   63.9MB
-zerotrust-backend                                                   latest                         3aaf76b1c830   285MB
-<none>                                                              <none>                         533697c6ecd3   65.5MB
-<none>                                                              <none>                         b97550bc364c   285MB
-ziti-quickstart-amd64                                               latest                         d004cd30ed30   248MB
-keycloak-local                                                      26.1.4                         4a2f8120b513   371MB
-openziti/zac                                                        latest                         24deec8cfb4f   754MB
-docker.m.daocloud.io/library/busybox                                latest                         c6348fa86ba0   4.45MB 后 ---- compose ps ----
----- litellm logs (tail) ----
----- db logs (tail) ----
-- 回滚：把 docker-compose.yml 里的 image 标签改回旧版本（镜像需仍在 REPOSITORY                                                          TAG                            IMAGE ID       CREATED         SIZE
-litellm-zhcn                                                        v1.101.0-license-test-sc-aig   3c2e4b43dc98   5 hours ago     1.58GB
-litellm-zhcn                                                        v1.101.0-license-test          b1a80cf7128c   3 days ago      1.58GB
-litellm-zhcn                                                        v1.106.0-zh.13                 14a714523904   7 days ago      1.51GB
-litellm-zhcn                                                        v1.106.0-zh.11                 4219490f1492   7 days ago      1.51GB
-litellm-zhcn                                                        v1.106.0-zh.10                 12ffcb3d4897   8 days ago      1.51GB
-litellm-zhcn                                                        v1.106.0-zh.9                  1f72c992f4e1   8 days ago      1.49GB
-litellm-zhcn                                                        v1.106.0-zh.8                  e5c4f6f74ee0   8 days ago      1.47GB
-<none>                                                              <none>                         c1fb6e9d9d58   8 days ago      1.47GB
-headroom-offline                                                    v1.106.0-zh.7                  200fd83e3a0b   11 days ago     1.27GB
-litellm-zhcn                                                        v1.106.0-zh.7                  eac0ac37e824   11 days ago     1.47GB
-<none>                                                              <none>                         5604e8fd8102   11 days ago     1.47GB
-litellm-zhcn                                                        v1.106.0-zh.1                  c76637bd14ba   13 days ago     1.45GB
-<none>                                                              <none>                         859500623e8c   13 days ago     6.27GB
-<none>                                                              <none>                         5e1c47b8a651   13 days ago     131MB
-<none>                                                              <none>                         6dc05a9c7b14   13 days ago     6.27GB
-<none>                                                              <none>                         f1c2518967e8   13 days ago     2.97GB
-<none>                                                              <none>                         ce1d0f3606a0   13 days ago     663MB
-ghcr.io/headroomlabs-ai/headroom                                    latest                         17ef7765e687   2 weeks ago     671MB
-cgr.dev/chainguard/wolfi-base                                       <none>                         071774ea60a7   6 weeks ago     16.7MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-9cbf0074                c346e671eac5   2 months ago    101MB
-registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper   x86_64-v19.3.0                 c346e671eac5   2 months ago    101MB
-zerotrust-frontend                                                  latest                         2994e00833e5   3 months ago    63.9MB
-zerotrust-backend                                                   latest                         3aaf76b1c830   3 months ago    285MB
-<none>                                                              <none>                         533697c6ecd3   3 months ago    65.5MB
-<none>                                                              <none>                         b97550bc364c   3 months ago    285MB
-ziti-quickstart-amd64                                               latest                         d004cd30ed30   3 months ago    248MB
-keycloak-local                                                      26.1.4                         4a2f8120b513   3 months ago    371MB
-openziti/zac                                                        latest                         24deec8cfb4f   4 months ago    754MB
-docker.m.daocloud.io/library/busybox                                latest                         c6348fa86ba0   5 months ago    4.45MB
+- 回滚：把 docker-compose.yml 里的 image 标签改回旧版本（镜像需仍在 REPOSITORY          TAG               IMAGE ID       SIZE
+litellm-zhcn        v1.106.0-zh.40    <image-id>     2.16GB
+headroom-offline    v1.106.0-zh.8     <image-id>     1.88GB
+postgres            16.4              <image-id>     420MB
+redis               7.4.2-alpine      <image-id>     41MB
+prom/prometheus     v2.55.1           <image-id>     278MB
+nginx               1.27-alpine       <image-id>     48MB
 docker.m.daocloud.io/library/alpine                                 3.20                           bf8527eb54c3   6 months ago    7.81MB
 ghcr.io/astral-sh/uv                                                <none>                         cb2ad5e30ff0   6 months ago    58.5MB
 redis                                                               7.4.2-alpine                   8f5c54441eb9   22 months ago   41.4MB

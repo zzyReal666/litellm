@@ -2,7 +2,7 @@ name: ${COMPOSE_PROJECT_NAME:-litellm}
 
 services:
   litellm:
-    image: litellm-zhcn:v1.106.0-zh.39
+    image: litellm-zhcn:v1.106.0-zh.40
     restart: unless-stopped
     cap_add: [ALL]
     ports:
@@ -63,7 +63,7 @@ services:
       - litellm
 
   headroom:
-    image: headroom-offline:v1.106.0-zh.7
+    image: headroom-offline:v1.106.0-zh.8
     restart: unless-stopped
     cap_add: [ALL]
     environment:
