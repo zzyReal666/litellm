@@ -164,6 +164,28 @@ export const buildGuardrailCreateErrorReport = (error: unknown, t: Translate): G
   }
 
   const reason = fallbackReason(error);
+  if (/requires an API base URL/i.test(reason)) {
+    const problem: GuardrailCreateProblem = {
+      fieldLabel: t("guardrails.addGuardrailForm.errorField.apiBase", { defaultValue: "API base" }),
+      reason: t("guardrails.addGuardrailForm.headroomApiBaseRequired", {
+        defaultValue: "Headroom needs the compression service API base URL in the provider configuration",
+      }),
+      suggestion: "required",
+      formField: "api_base",
+    };
+    return {
+      problems: [problem],
+      message: t("guardrails.addGuardrailForm.createErrorSummary", {
+        defaultValue: "Failed to create guardrail. {{details}}",
+        details: t("guardrails.addGuardrailForm.createErrorDetail", {
+          defaultValue: "{{field}}: {{reason}}. Suggestion: {{suggestion}}",
+          field: problem.fieldLabel,
+          reason: problem.reason,
+          suggestion: suggestionText("required", t),
+        }),
+      }),
+    };
+  }
   return {
     problems: [],
     message:

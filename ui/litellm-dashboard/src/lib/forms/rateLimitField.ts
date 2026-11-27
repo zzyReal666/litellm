@@ -64,5 +64,22 @@ export const boundedAmountField = (source: TranslateSource) => {
     .pipe(z.number({ error: message }).nonnegative(message).max(MAX_RATE_LIMIT, message).nullable().optional());
 };
 
+export const boundedAmountInputField = (source: TranslateSource) => {
+  const message = messageFor(source);
+  return z
+    .union([z.string(), z.number()])
+    .nullish()
+    .refine(
+      (value) => {
+        if (isBlank(value)) {
+          return true;
+        }
+        const numeric = Number(value);
+        return Number.isFinite(numeric) && numeric >= 0 && numeric <= MAX_RATE_LIMIT;
+      },
+      { message },
+    );
+};
+
 export const rateLimitValidator = (source: TranslateSource) => (value: unknown): true | string =>
   isValidRateLimitValue(value) ? true : messageFor(source);

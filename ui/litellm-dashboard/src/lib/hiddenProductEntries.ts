@@ -21,6 +21,8 @@ export const HIDE_BULK_INVITE_USERS: boolean = true;
 
 export const HIDE_TEAM_EXPORT_CSV: boolean = true;
 
+export const HIDE_MODEL_TEAM_FIELD: boolean = true;
+
 export const isMenuGroupHidden = (groupLabel: string): boolean => HIDDEN_MENU_GROUP_LABELS.has(groupLabel);
 
 export const isMenuItemHidden = (itemKey: string): boolean => HIDDEN_MENU_ITEM_KEYS.has(itemKey);

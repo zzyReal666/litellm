@@ -2600,7 +2600,8 @@
       },
       "stepDecisionModelConfig": "Decision Model Configuration",
       "endSessionPlaceholder": "e.g. 3",
-      "noAccessToken": "No access token available"
+      "noAccessToken": "No access token available",
+      "headroomApiBaseRequired": "Headroom needs the compression service API base URL in the provider configuration"
     },
     "guardrailOptionalParams": {
       "title": "Optional Parameters",

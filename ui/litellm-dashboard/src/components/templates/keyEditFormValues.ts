@@ -1,6 +1,6 @@
 import { z } from "zod";
 import i18n from "@/lib/i18n";
-import { rateLimitInputField } from "@/lib/forms/rateLimitField";
+import { boundedAmountInputField, rateLimitInputField } from "@/lib/forms/rateLimitField";
 
 import { KeyResponse } from "../key_team_helpers/key_list";
 import { extractLoggingSettings, formatMetadataForDisplay, stripTagsFromMetadata } from "../key_info_utils";
@@ -127,8 +127,8 @@ export const keyEditFormSchema = z.object({
   key_alias: z.custom<string | undefined>().optional(),
   models: z.custom<string[] | undefined>().optional(),
   allowed_routes: z.custom<string | undefined>().optional(),
-  max_budget: z.custom<number | string | null | undefined>().optional(),
-  soft_budget: z.custom<number | string | null | undefined>().optional(),
+  max_budget: boundedAmountInputField(i18n),
+  soft_budget: boundedAmountInputField(i18n),
   budget_duration: z.custom<string | null | undefined>().optional(),
   tpm_limit: rateLimitInputField(i18n),
   tpm_limit_type: z.custom<string | null | undefined>().optional(),

@@ -2600,7 +2600,8 @@
       },
       "stepDecisionModelConfig": "决策模型配置",
       "endSessionPlaceholder": "例如 3",
-      "noAccessToken": "无可用访问令牌"
+      "noAccessToken": "无可用访问令牌",
+      "headroomApiBaseRequired": "Headroom 压缩服务需要填写提供商配置中的 API 基础地址（api_base）"
     },
     "guardrailOptionalParams": {
       "title": "可选参数",

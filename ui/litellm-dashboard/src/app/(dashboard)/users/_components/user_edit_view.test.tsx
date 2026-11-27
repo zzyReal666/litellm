@@ -637,6 +637,23 @@ describe("UserEditView", () => {
       expect(onSubmit).not.toHaveBeenCalled();
     });
 
+    it("shows the rate-limit error while typing an oversized value, before saving", async () => {
+      renderWithProviders(<UserEditView {...defaultProps} userData={userDataWithRateLimits()} onSubmit={vi.fn()} />);
+
+      fireEvent.change(await screen.findByRole("spinbutton", { name: /tpm limit/i }), {
+        target: { value: "111111111111111111111111111111" },
+      });
+
+      expect(await screen.findByText("Enter a non-negative whole number, or leave empty for unlimited")).toBeInTheDocument();
+    });
+
+    it("caps the user alias input at the stored maximum length", async () => {
+      renderWithProviders(<UserEditView {...defaultProps} userData={userDataWithRateLimits()} onSubmit={vi.fn()} />);
+
+      const aliasInput = await screen.findByRole("textbox", { name: /user alias/i });
+      expect(aliasInput).toHaveAttribute("maxlength", "255");
+    });
+
     it("hides both rate-limit inputs in bulk edit mode", async () => {
       renderWithProviders(<UserEditView {...defaultProps} userData={userDataWithRateLimits()} isBulkEdit={true} />);
 

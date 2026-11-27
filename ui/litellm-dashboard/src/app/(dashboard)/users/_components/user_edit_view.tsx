@@ -211,6 +211,12 @@ export function UserEditView({
     defaultValues: toFormValues(userData, objectPermission, isBulkEdit, canEditMcpPermissions),
   });
 
+  const revalidateField = (name: "tpm_limit" | "rpm_limit" | "user_alias") => {
+    window.setTimeout(() => {
+      void form.trigger(name);
+    }, 0);
+  };
+
   React.useEffect(() => {
     const maxBudget = userData.user_info?.max_budget;
     setUnlimitedBudget(maxBudget === null || maxBudget === undefined);
@@ -277,7 +283,18 @@ export function UserEditView({
           )}
 
           <FormField control={form.control} name="user_alias" label={i18n.t("userEditView.userAliasLabel", { defaultValue: "User Alias" })}>
-            {({ ref, value, ...control }) => <Input {...control} ref={ref} value={value ?? ""} />}
+            {({ ref, value, onChange, ...control }) => (
+              <Input
+                {...control}
+                ref={ref}
+                value={value ?? ""}
+                maxLength={MAX_ALIAS_LENGTH}
+                onChange={(event) => {
+                  onChange(event);
+                  revalidateField("user_alias");
+                }}
+              />
+            )}
           </FormField>
 
           <FormField
@@ -385,7 +402,10 @@ export function UserEditView({
                     min={0}
                     step={1}
                     value={value ?? ""}
-                    onChange={(event) => onChange(event.target.value)}
+                    onChange={(event) => {
+                      onChange(event.target.value);
+                      revalidateField("tpm_limit");
+                    }}
                     onWheel={(event) => event.currentTarget.blur()}
                     placeholder={i18n.t("userEditView.unlimitedPlaceholder", { defaultValue: "Unlimited" })}
                   />
@@ -410,7 +430,10 @@ export function UserEditView({
                     min={0}
                     step={1}
                     value={value ?? ""}
-                    onChange={(event) => onChange(event.target.value)}
+                    onChange={(event) => {
+                      onChange(event.target.value);
+                      revalidateField("rpm_limit");
+                    }}
                     onWheel={(event) => event.currentTarget.blur()}
                     placeholder={i18n.t("userEditView.unlimitedPlaceholder", { defaultValue: "Unlimited" })}
                   />

@@ -1,4 +1,5 @@
 "use client";
+import { HIDE_MODEL_TEAM_FIELD } from "@/lib/hiddenProductEntries";
 
 import i18n from "@/lib/i18n";
 import { useTranslation } from "react-i18next";
@@ -906,49 +907,51 @@ const ModelInfoEditForm: React.FC<ModelInfoEditFormProps> = ({
               )}
             </div>
 
-            <div>
-              <FieldLabel>{withRequirement(i18n.t("modelInfoView.fieldTeam", { defaultValue: "Team" }), false)}</FieldLabel>
-              {isEditing ? (
-                <FormField control={form.control} name="team_id">
-                  {({ id, value, onChange, onBlur }) => {
-                    const selected = value as string | undefined;
-                    const items = (teams ?? []).map((team) => ({
-                      value: team.team_id,
-                      label: team.team_alias ? `${team.team_alias} (${team.team_id})` : team.team_id,
-                    }));
-                    const noTeam = i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" });
-                    return (
-                      <Select
-                        items={[{ value: NO_TEAM_VALUE, label: noTeam }, ...items]}
-                        value={selected === undefined ? null : selected || NO_TEAM_VALUE}
-                        onValueChange={(next: string | null) => onChange(next === NO_TEAM_VALUE ? "" : next ?? "")}
-                      >
-                        <SelectTrigger id={id} className="w-full" onBlur={onBlur}>
-                          <SelectValue
-                            placeholder={i18n.t("modelTeamSelect.select-a-team", { defaultValue: "Select a team" })}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={NO_TEAM_VALUE}>{noTeam}</SelectItem>
-                          {items.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                              {item.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    );
-                  }}
-                </FormField>
-              ) : (
-                <Display>
-                  {teamAlias
-                    ? `${teamAlias} (${localModelData.model_info?.team_id})`
-                    : localModelData.model_info?.team_id ||
-                      i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" })}
-                </Display>
-              )}
-            </div>
+            {!HIDE_MODEL_TEAM_FIELD && (
+              <div>
+                <FieldLabel>{withRequirement(i18n.t("modelInfoView.fieldTeam", { defaultValue: "Team" }), false)}</FieldLabel>
+                {isEditing ? (
+                  <FormField control={form.control} name="team_id">
+                    {({ id, value, onChange, onBlur }) => {
+                      const selected = value as string | undefined;
+                      const items = (teams ?? []).map((team) => ({
+                        value: team.team_id,
+                        label: team.team_alias ? `${team.team_alias} (${team.team_id})` : team.team_id,
+                      }));
+                      const noTeam = i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" });
+                      return (
+                        <Select
+                          items={[{ value: NO_TEAM_VALUE, label: noTeam }, ...items]}
+                          value={selected === undefined ? null : selected || NO_TEAM_VALUE}
+                          onValueChange={(next: string | null) => onChange(next === NO_TEAM_VALUE ? "" : next ?? "")}
+                        >
+                          <SelectTrigger id={id} className="w-full" onBlur={onBlur}>
+                            <SelectValue
+                              placeholder={i18n.t("modelTeamSelect.select-a-team", { defaultValue: "Select a team" })}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={NO_TEAM_VALUE}>{noTeam}</SelectItem>
+                            {items.map((item) => (
+                              <SelectItem key={item.value} value={item.value}>
+                                {item.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      );
+                    }}
+                  </FormField>
+                ) : (
+                  <Display>
+                    {teamAlias
+                      ? `${teamAlias} (${localModelData.model_info?.team_id})`
+                      : localModelData.model_info?.team_id ||
+                        i18n.t("modelInfoView.noTeam", { defaultValue: "No Team" })}
+                  </Display>
+                )}
+              </div>
+            )}
           </div>
 
           {isEditing && (

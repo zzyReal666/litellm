@@ -133,11 +133,13 @@ export const KeyBudgetNumberField = ({
   name,
   label,
   placeholder,
+  onValueChange,
 }: {
   control: Control<KeyEditFormValues>;
   name: "max_budget" | "soft_budget";
   label: string;
   placeholder: string;
+  onValueChange?: () => void;
 }) => (
   <FormField control={control} name={name} label={label}>
     {({ ref: _ref, ...field }) => (
@@ -147,6 +149,10 @@ export const KeyBudgetNumberField = ({
         step={0.01}
         style={{ width: "100%" }}
         placeholder={placeholder}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          field.onChange(event);
+          onValueChange?.();
+        }}
       />
     )}
   </FormField>

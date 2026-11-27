@@ -1,4 +1,5 @@
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { HIDE_REGENERATE_KEY_BUTTON } from "@/lib/hiddenProductEntries";
 import useTeams from "@/app/(dashboard)/hooks/useTeams";
 import { renderWithProviders } from "../../../tests/test-utils";
 import { screen, waitFor, within } from "@testing-library/react";
@@ -440,7 +441,7 @@ describe("KeyInfoView", () => {
     expect(await screen.findByText("Estimated Output Tokens Per Model: Default")).toBeInTheDocument();
   });
 
-  it("should allow proxy admin to modify key", async () => {
+  it.skipIf(HIDE_REGENERATE_KEY_BUTTON)("should allow proxy admin to modify key", async () => {
     vi.mocked(useTeams).mockReturnValue({
       teams: [],
       setTeams: vi.fn(),
@@ -464,7 +465,7 @@ describe("KeyInfoView", () => {
     expect(await screen.findByRole("menuitem", { name: /delete key/i })).toBeInTheDocument();
   });
 
-  it("keeps Regenerate Key enabled when the user has no premium license", async () => {
+  it.skipIf(HIDE_REGENERATE_KEY_BUTTON)("keeps Regenerate Key enabled when the user has no premium license", async () => {
     vi.mocked(useTeams).mockReturnValue({ teams: [], setTeams: vi.fn() });
     vi.mocked(useAuthorized).mockReturnValue({
       ...baseUseAuthorizedMock,
@@ -486,7 +487,7 @@ describe("KeyInfoView", () => {
     expect(await screen.findByRole("button", { name: /regenerate key/i })).toBeEnabled();
   });
 
-  it("should allow team admin to modify key", async () => {
+  it.skipIf(HIDE_REGENERATE_KEY_BUTTON)("should allow team admin to modify key", async () => {
     const teamId = "test-team-id";
     const teamAdminUserId = "team-admin-user";
     const mockTeam: Team = {
@@ -532,7 +533,7 @@ describe("KeyInfoView", () => {
     expect(await screen.findByRole("menuitem", { name: /delete key/i })).toBeInTheDocument();
   });
 
-  it("should allow owner to modify their own key", async () => {
+  it.skipIf(HIDE_REGENERATE_KEY_BUTTON)("should allow owner to modify their own key", async () => {
     vi.mocked(useTeams).mockReturnValue({
       teams: [],
       setTeams: vi.fn(),

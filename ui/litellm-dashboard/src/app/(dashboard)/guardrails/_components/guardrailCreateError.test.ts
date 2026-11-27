@@ -8,6 +8,24 @@ const t = i18n.getFixedT("zh-CN");
 const fastApiError = (detail: unknown): Error => new Error(JSON.stringify({ detail }));
 
 describe("buildGuardrailCreateErrorReport", () => {
+  it("turns the headroom api-base rejection into a Chinese, actionable error", () => {
+    const report = buildGuardrailCreateErrorReport(
+      new Error(
+        JSON.stringify({
+          detail:
+            "Guardrail configuration error: Headroom guardrail requires an API base URL. Set `api_base` in the guardrail config or HEADROOM_API_BASE env var.",
+        }),
+      ),
+      t,
+    );
+
+    expect(report.problems).toHaveLength(1);
+    expect(report.problems[0].formField).toBe("api_base");
+    expect(report.problems[0].reason).toContain("API 基础地址");
+    expect(report.message).toContain("API 基础地址");
+    expect(report.message).not.toContain("Headroom guardrail requires an API base URL");
+  });
+
   it("names the failing field, its reason and a fix suggestion from a 422 response", () => {
     const report = buildGuardrailCreateErrorReport(
       fastApiError([

@@ -135,6 +135,12 @@ export function KeyEditView({
   const form = useZodForm<KeyEditFormValues, KeyEditFormValues>(keyEditFormSchema, {
     defaultValues: toKeyEditFormValues(keyData),
   });
+
+  const revalidateField = (name: keyof KeyEditFormValues) => {
+    window.setTimeout(() => {
+      void form.trigger(name);
+    }, 0);
+  };
   const [promptsList, setPromptsList] = useState<string[]>([]);
   const [tagsList, setTagsList] = useState<Record<string, Tag>>({});
   const team = teams?.find((team) => team.team_id === keyData.team_id);
@@ -522,6 +528,7 @@ export function KeyEditView({
           <KeyBudgetNumberField
             control={form.control}
             name="max_budget"
+            onValueChange={() => revalidateField("max_budget")}
             label={t("templates.keyEditView.maxBudget", { defaultValue: "Max Budget (USD)" })}
             placeholder={t("templates.keyEditView.enterNumericalValue", { defaultValue: "Enter a numerical value" })}
           />
@@ -529,6 +536,7 @@ export function KeyEditView({
           <KeyBudgetNumberField
             control={form.control}
             name="soft_budget"
+            onValueChange={() => revalidateField("soft_budget")}
             label={t("templates.keyEditView.softBudgetLabel", { defaultValue: "Soft Budget (USD)" })}
             placeholder={t("templates.keyEditView.softBudgetPlaceholder", {
               defaultValue: "Get alerts when spend crosses this value, without blocking requests",
@@ -598,7 +606,17 @@ export function KeyEditView({
             name="tpm_limit"
             label={t("templates.keyEditView.tpmLimit", { defaultValue: "TPM Limit" })}
           >
-            {({ ref: _ref, ...field }) => <NumericalInput {...field} value={field.value ?? ""} min={0} />}
+            {({ ref: _ref, ...field }) => (
+              <NumericalInput
+                {...field}
+                value={field.value ?? ""}
+                min={0}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  field.onChange(event);
+                  revalidateField("tpm_limit");
+                }}
+              />
+            )}
           </FormField>
 
           <FormField control={form.control} name="tpm_limit_type">
@@ -619,7 +637,17 @@ export function KeyEditView({
             name="rpm_limit"
             label={t("templates.keyEditView.rpmLimit", { defaultValue: "RPM Limit" })}
           >
-            {({ ref: _ref, ...field }) => <NumericalInput {...field} value={field.value ?? ""} min={0} />}
+            {({ ref: _ref, ...field }) => (
+              <NumericalInput
+                {...field}
+                value={field.value ?? ""}
+                min={0}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  field.onChange(event);
+                  revalidateField("rpm_limit");
+                }}
+              />
+            )}
           </FormField>
 
           <FormField control={form.control} name="rpm_limit_type">
